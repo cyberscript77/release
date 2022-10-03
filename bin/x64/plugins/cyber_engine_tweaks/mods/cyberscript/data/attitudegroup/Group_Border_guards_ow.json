@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Border_guards_ow",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_border_guards",
+    ".name": "gorder_guards_ow",
+    ".isState": false
+  }
+}

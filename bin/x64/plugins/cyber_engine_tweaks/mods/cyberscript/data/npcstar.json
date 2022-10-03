@@ -1,0 +1,287 @@
+[{
+        "scoreunlock": 20,
+        "fixer": "fixer_wakako",
+        "id": 242,
+        "name": "Brick",
+		"tweak":"Character.Brick"
+    }, {
+        "scoreunlock": 30,
+         "fixer": "fixer_nash",
+        "id": 256,
+        "name": "Carol",
+		"tweak":"Character.Carol"
+    }, {
+        "scoreunlock": 0,
+         "fixer": "fixer_dakota",
+        "id": 261,
+        "name": "Cassidy",
+		"tweak":"Character.Cassidy"
+    }, {
+        "scoreunlock": 20,
+         "fixer": "fixer_rogue",
+        "id": 467,
+        "name": "Denny",
+		"tweak":"Character.Denny"
+    }, {
+        "scoreunlock": 10,
+         "fixer": "fixer_regina",
+        "id": 605,
+        "name": "Hanako",
+		"tweak":"Character.Hanako"
+    }, {
+        "scoreunlock": 20,
+         "fixer": "fixer_rogue",
+        "id": 623,
+        "name": "Henry",
+		"tweak":"Character.Henry"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_rita",
+        "id": 674,
+        "name": "Judy",
+		"tweak":"Character.Judy"
+    }, {
+        "scoreunlock": 45,
+         "fixer": "fixer_rogue",
+        "id": 697,
+        "name": "Kerry",
+		"tweak":"Character.Kerry"
+    }, {
+        "scoreunlock": 0,
+         "fixer": "fixer_dakota",
+        "id": 1209,
+        "name": "Mia",
+		"tweak":"Character.Mia"
+    }, {
+        "scoreunlock": 45,
+         "fixer": "fixer_regina",
+        "id": 1210,
+        "name": "Michiko",
+		"tweak":"Character.Michiko"
+    }, {
+        "scoreunlock": 0,
+         "fixer": "fixer_captain",
+        "id": 1211,
+        "name": "Mikey",
+		"tweak":"Character.Mikey"
+    }, {
+        "scoreunlock": 30,
+         "fixer": "fixer_rogue",
+        "id": 1672,
+        "name": "Nix",
+		"tweak":"Character.Nix"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_padre",
+        "id": 1739,
+        "name": "Padre",
+		"tweak":"Character.Padre"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_regina",
+        "id": 1949,
+        "name": "Reginald",
+		"tweak":"Character.Reginald"
+    }, {
+        "scoreunlock": 50,
+         "fixer": "fixer_rogue",
+        "id": 1958,
+        "name": "Rogue",
+		"tweak":"Character.Rogue"
+    }, {
+        "scoreunlock": 10,
+        "fixer": "fixer_wakako",
+        "id": 1969,
+        "name": "Royce",
+		"tweak":"Character.Royce"
+    }, {
+        "scoreunlock": 45,
+         "fixer": "fixer_regina",
+        "id": 1972,
+        "name": "Saburo",
+		"tweak":"Character.Saburo"
+    }, {
+        "scoreunlock": 0,
+         "fixer": "fixer_nash",
+        "id": 1977,
+        "name": "Santiago",
+		"tweak":"Character.Santiago"
+    }, {
+        "scoreunlock": 20,
+         "fixer": "fixer_dakota",
+        "id": 1982,
+        "name": "Saul",
+		"tweak":"Character.Saul"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_dino",
+        "id": 9849,
+        "name": "Blue Moon",
+		"tweak":"Character.sq017_blue_moon"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_dino",
+        "id": 9867,
+        "name": "Purple Force",
+		"tweak":"Character.sq017_purple_force"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_dino",
+        "id": 9868,
+        "name": "Red Menace",
+		"tweak":"Character.sq017_red_menace"
+    }, {
+        "scoreunlock": 10,
+         "fixer": "fixer_wakako",
+        "id": 322,
+        "name": "Claire",
+		"tweak":"Character.Claire"
+    }, {
+        "scoreunlock": 10,
+         "fixer": "fixer_dakota",
+        "id": 196,
+        "name": "Bob",
+		"tweak":"Character.Bob"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_dino",
+        "id": 540,
+        "name": "Elizabeth_Peralez",
+		"tweak":"Character.Elizabeth_Peralez"
+    }, {
+        "scoreunlock": 0,
+         "fixer": "fixer_wakako",
+        "id": 541,
+        "name": "Emmerick",
+		"tweak":"Character.Emmerick"
+    }, {
+        "scoreunlock": 10,
+         "fixer": "fixer_captain",
+        "id": 576,
+        "name": "Grayson",
+		"tweak":"Character.Grayson"
+    }, {
+        "scoreunlock": 30,
+         "fixer": "fixer_captain",
+        "id": 622,
+        "name": "Haru_Kasai",
+		"tweak":"Character.Haru_Kasai"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_dino",
+        "id": 665,
+        "name": "Jefferson_Peralez",
+		"tweak":"Character.Jefferson_Peralez"
+    }, {
+        "scoreunlock": 45,
+         "fixer": "fixer_rita",
+        "id": 925,
+        "name": "Lizzy_Wizzy",
+		"tweak":"Character.Lizzy_Wizzy"
+    }, {
+        "scoreunlock": 30,
+         "fixer": "fixer_wakako",
+        "id": 1048,
+        "name": "Maiko",
+		"tweak":"Character.Maiko"
+    }, {
+        "scoreunlock": 20,
+         "fixer": "fixer_padre",
+        "id": 1251,
+        "name": "Misty",
+		"tweak":"Character.Misty"
+    }, {
+        "scoreunlock": 10,
+         "fixer": "fixer_dakota",
+        "id": 1252,
+        "name": "Mitch",
+		"tweak":"Character.Mitch"
+    }, {
+        "scoreunlock": 40,
+         "fixer": "fixer_rogue",
+        "id": 1658,
+        "name": "Nancy",
+		"tweak":"Character.Nancy"
+    }, {
+        "scoreunlock": 20,
+         "fixer": "fixer_wakako",
+        "id": 1715,
+        "name": "Ogawa",
+		"tweak":"Character.Ogawa"
+    }, {
+        "scoreunlock": 20,
+         "fixer": "fixer_padre",
+        "id": 1105,
+        "name": "Mama_Welles",
+		"tweak":"Character.Mama_Welles"
+    }, {
+        "scoreunlock": 0,
+        "fixer": "fixer_patricia",
+        "id": 532,
+        "name": "DumDum",
+		"tweak":"Character.DumDum"
+    },
+	{
+        "scoreunlock": 40,
+         "fixer": "fixer_wakako",
+        "id": 11434,
+        "name": "Wakako Okada",
+		"tweak":"Character.wakako_okada"
+    },
+		{
+        "scoreunlock": 40,
+         "fixer": "fixer_jean",
+        "id": 11434,
+        "name": "Wakako Okada",
+		"tweak":"Character.mq006_jean"
+    },
+		{
+        "scoreunlock": 40,
+         "fixer": "fixer_meredith",
+        "id": 11434,
+        "name": "Test",
+		"tweak":"Character.mq006_jean"
+    },
+	{
+        "scoreunlock": 40,
+         "fixer": "fixer_kangtao",
+        "id": 11434,
+        "name": "Test",
+		"tweak":"Character.mq006_jean"
+    },
+	{
+        "scoreunlock": 40,
+         "fixer": "fixer_michiko",
+        "id": 11434,
+        "name": "Test",
+		"tweak":"Character.mq006_jean"
+    },
+	{
+        "scoreunlock": 40,
+         "fixer": "fixer_delamain",
+        "id": 11434,
+        "name": "Test",
+		"tweak":"Character.mq006_jean"
+    },
+	{
+        "scoreunlock": 40,
+         "fixer": "fixer_fred",
+        "id": 11434,
+        "name": "Test",
+		"tweak":"Character.mq006_jean"
+    },
+	{
+        "scoreunlock": 40,
+         "fixer": "fixer_maxtac",
+        "id": 11434,
+        "name": "Test",
+		"tweak":"Character.mq006_jean"
+    },
+	{
+        "scoreunlock": 40,
+         "fixer": "fixer_traumateam",
+        "id": 11434,
+        "name": "Test",
+		"tweak":"Character.mq006_jean"
+    }
+]

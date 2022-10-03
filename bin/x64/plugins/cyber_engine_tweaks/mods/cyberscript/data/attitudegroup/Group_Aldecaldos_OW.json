@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Aldecaldos_OW",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Aldecaldos",
+    ".name": "aldecaldos_ow",
+    ".isState": false
+  }
+}

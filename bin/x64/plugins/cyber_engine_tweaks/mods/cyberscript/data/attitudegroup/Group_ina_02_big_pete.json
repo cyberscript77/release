@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_ina_02_big_pete",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "ina_02_big_pete",
+    ".isState": false
+  }
+}

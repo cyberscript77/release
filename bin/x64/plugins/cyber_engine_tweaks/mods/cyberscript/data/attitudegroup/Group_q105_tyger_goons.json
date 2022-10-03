@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_q105_tyger_goons",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_EnemyNautral",
+    ".name": "q105_tyger_goons",
+    ".isState": false
+  }
+}

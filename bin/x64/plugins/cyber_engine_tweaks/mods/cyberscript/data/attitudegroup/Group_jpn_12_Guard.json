@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_jpn_12_Guard",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Militech_OW",
+    ".name": "jpn_12_guard",
+    ".isState": false
+  }
+}

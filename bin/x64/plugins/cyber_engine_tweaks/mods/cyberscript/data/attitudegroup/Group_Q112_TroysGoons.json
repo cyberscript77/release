@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Q112_TroysGoons",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Civilian",
+    ".name": "q112_troys_goons",
+    ".isState": false
+  }
+}

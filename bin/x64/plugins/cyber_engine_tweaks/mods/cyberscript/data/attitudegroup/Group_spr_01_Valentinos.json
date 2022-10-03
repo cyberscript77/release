@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_spr_01_Valentinos",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Valentinos_OW",
+    ".name": "spr_01_Valentinos",
+    ".isState": false
+  }
+}

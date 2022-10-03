@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_mq031_6th",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_EnemyHostile",
+    ".name": "mq031_6th",
+    ".isState": false
+  }
+}

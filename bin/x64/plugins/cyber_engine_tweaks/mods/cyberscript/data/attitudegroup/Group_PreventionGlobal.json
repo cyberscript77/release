@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_PreventionGlobal",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "preventionGlobal",
+    ".isState": false
+  }
+}

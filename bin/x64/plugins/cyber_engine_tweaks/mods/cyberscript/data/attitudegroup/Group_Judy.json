@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Judy",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Friendly",
+    ".name": "judy",
+    ".isState": false
+  }
+}

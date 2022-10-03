@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_ina_07_Maelstrom",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "ina_07_maelstrom",
+    ".isState": false
+  }
+}

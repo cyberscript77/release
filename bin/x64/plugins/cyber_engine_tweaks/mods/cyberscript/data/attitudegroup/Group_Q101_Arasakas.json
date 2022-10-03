@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Q101_Arasakas",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Hostile",
+    ".name": "Q101_Arasakas",
+    ".isState": false
+  }
+}

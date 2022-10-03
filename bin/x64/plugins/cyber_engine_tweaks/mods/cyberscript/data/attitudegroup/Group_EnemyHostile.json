@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_EnemyHostile",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Hostile",
+    ".name": "enemyHostile",
+    ".isState": false
+  }
+}

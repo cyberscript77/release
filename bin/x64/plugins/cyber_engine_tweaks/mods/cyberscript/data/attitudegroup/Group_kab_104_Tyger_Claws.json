@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_kab_104_Tyger_Claws",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_TygerClaws_OW",
+    ".name": "kab_104_tyger_claws",
+    ".isState": false
+  }
+}

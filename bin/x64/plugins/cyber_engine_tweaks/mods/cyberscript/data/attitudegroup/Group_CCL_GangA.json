@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_CCL_GangA",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "ccl_gang_a",
+    ".isState": false
+  }
+}

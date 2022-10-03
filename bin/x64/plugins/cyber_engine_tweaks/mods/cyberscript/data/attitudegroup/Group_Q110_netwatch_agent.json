@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Q110_netwatch_agent",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "q110_netwatch_agent",
+    ".isState": false
+  }
+}

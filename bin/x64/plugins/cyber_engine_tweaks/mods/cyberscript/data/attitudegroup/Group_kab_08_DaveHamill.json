@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_kab_08_DaveHamill",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "kab_08_davehamill",
+    ".isState": false
+  }
+}

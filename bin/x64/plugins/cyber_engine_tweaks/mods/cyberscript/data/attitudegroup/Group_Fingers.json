@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Fingers",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Friendly",
+    ".name": "fingers",
+    ".isState": false
+  }
+}

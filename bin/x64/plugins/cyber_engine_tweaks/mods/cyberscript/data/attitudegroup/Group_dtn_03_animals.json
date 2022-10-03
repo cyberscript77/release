@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_dtn_03_animals",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Animals",
+    ".name": "dtn_03_animals",
+    ".isState": false
+  }
+}
