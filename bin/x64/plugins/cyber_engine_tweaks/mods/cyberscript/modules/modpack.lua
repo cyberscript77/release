@@ -90,12 +90,14 @@ function exportCompiledDatapackFolder(directories,msg)
 		local k = directories
 		local file = io.open("cache/"..k..".lua", "w")	
 		--file:write('debugPrint(10,'..k..' Cache Loaded) return ')
+		if(file ~= nil) then
 		file:write('return ')
 		file:write(exportDatapackArray(arrayDatapack[k]))
 		file:close()
 		
 		logme(1,k)
 		logme(1,getLang("datapack_datapack_created")..msg)
+		end
 	
 end
 
@@ -817,13 +819,7 @@ end
 		}
 	}
 	
-	local desc = io.open("changelog.json")
-	lines = desc:read("*a")
-	if(lines ~= "") then
-		local update = trydecodeJSOn(lines,desc,"changelog.json")
-		table.insert(arrayHelp,update)
-	end
-	desc:close()
+
 	if(#currentSave.arrayHousing ==0) then
 		currentSave.arrayHousing = arrayHousing
 		else

@@ -1573,19 +1573,19 @@ function newWindows()
 		
 		
 		
-		if ImGui.Button(getLang("ui_menu_online"), menuBTNX, menuBTNY) then
-			openanpage("multi")
-		end
-		ImGui.SameLine()
+		-- if ImGui.Button(getLang("ui_menu_online"), menuBTNX, menuBTNY) then
+			-- openanpage("multi")
+		-- end
+		-- ImGui.SameLine()
 		
-		if ImGui.Button(getLang("editor"), menuBTNX, menuBTNY) then
+		if ImGui.Button(getLang("editor"), menuBTNX*2, menuBTNY) then
 			openanpage("editor")
 		end
 		ImGui.EndChild()
 		elseif getcurrentpage() == "editor" then
 		openEditor = true
-		elseif getcurrentpage() == "multi" then
-		openNetContract = true
+		-- elseif getcurrentpage() == "multi" then
+		-- openNetContract = true
 	end
 	ImGui.EndChild()
 end
