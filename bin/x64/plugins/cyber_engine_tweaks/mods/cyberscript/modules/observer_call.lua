@@ -676,7 +676,8 @@ function SetOverrider()
 	
 	Override('DoubleJumpDecisions','EnterCondition',function(this,stateContext,scriptInterface, wrappedMethod)
 		
-		DoubleJumpDecisions_EnterCondition(this,stateContext,scriptInterface, wrappedMethod)
+		local value = DoubleJumpDecisions_EnterCondition(this,stateContext,scriptInterface, wrappedMethod)
+		return value
 	end)
 	
 	Override('LocomotionAirEvents','OnUpdate',function(this,timeDelta, stateContext, scriptInterface, wrappedMethod)

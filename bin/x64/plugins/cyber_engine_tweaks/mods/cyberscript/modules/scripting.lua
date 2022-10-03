@@ -679,8 +679,10 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 			if(ExecPauseMenu == false and getUserSetting("AutoRefreshDatapack") == true) then
 				ExecPauseMenu =  true
 				
+				loadModule()
 				CheckandUpdateDatapack()
 				LoadDataPackCache()
+				
 				
 			end
 			else
@@ -2030,9 +2032,9 @@ function checkSpeakDialog()
 end
 
 function checkFixer()
-	
+
 	if (arrayQuest2 ~= nil ) then
-		
+			
 		
 		if phonedFixer == false then
 			if curPos ~= nil then
@@ -2046,8 +2048,9 @@ function checkFixer()
 		-- pcall(function() 
 		if(currentfixer ~= nil) then
 			
-			
+		
 			if(checkTriggerRequirement(currentfixer.requirement,currentfixer.trigger)) then
+				
 				
 				
 				
@@ -2086,6 +2089,8 @@ function checkFixer()
 					end
 					
 				end
+				
+				
 				
 				if(currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 and fixerIsSpawn == false) then
 					debugPrint(4,"fixer Ok")
@@ -2828,15 +2833,12 @@ function getMissionByTrigger()
 		possibleQuest = {}
 		
 		for key,value in pairs(arrayQuest2) do --actualcode
-			
-			
-			-- debugPrint(4,tostring(QuestManager.isVisited(key)))
+
 			if(checkQuestStatutByTag(key, nil) == true or checkQuestStatutByTag(key, -1) == true) then
 				local quest = arrayQuest2[key].quest
-				debugPrint(4,key)
-			--	debugPrint(4,tostring(HaveTriggerCondition(quest)))
+
 				if(HaveTriggerCondition(quest))then
-				debugPrint(4,key.."is triggerable")
+				
 					--------debugPrint(4,"trigger")
 					
 					--if(possibleQuest[quest] ~= nil) then

@@ -459,7 +459,8 @@ function refreshUIWidget()
 					-- control.ink.root:SetOpacity(control.data.opacity)
 					-- control.ink.root:SetRotation(control.data.rotation)
 						if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"visible")) or (table.contains(control.data.dynamic,"default"))   then 
-						control.ink:GetRootWidget():SetVisible(control.data.visible)
+						print("test "..GameDump(control.ink:GetRootWidget()))
+						if control.ink:GetRootWidget() ~=nil then print("tes") control.ink:GetRootWidget():SetVisible(control.data.visible) end
 						end
 					-- control.ink.root:SetTranslation(Vector2.new({ X = translationwidth, Y = translationheight }))
 					-- control.ink.root:SetPadding(inkMargin.new(control.data.padding))
@@ -1543,7 +1544,7 @@ function makeNativeSettings()
 ---IMGUI UI---
 function newWindows()
 	
-	if not ImGui.Begin(getLang("ui_menu")) then return end
+	if not ImGui.Begin(getLang("CyberScript")) then return end
 	ImGui.SetNextWindowPos(800, 800, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(menuWindowsX, menuWindowsY, ImGuiCond.Appearing) -- set window size w, h
 	ImGui.SetWindowSize(menuWindowsX, menuWindowsY)

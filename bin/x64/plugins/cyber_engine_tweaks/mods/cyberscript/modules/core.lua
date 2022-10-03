@@ -474,8 +474,6 @@ function initCore() --Setup session, external observer and trigger mod core load
 	
 	
 	
-	if GetMod('ImmersiveFirstPerson') then GetMod('ImmersiveFirstPerson').api.Disable() debugPrint(1,getLang("immersivepersonenabled")) end
-	
 	
 	
 	
