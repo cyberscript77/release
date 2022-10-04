@@ -19,13 +19,14 @@ function QuestThreadManager()
 				end
 			--quest trigger
 			if(getScoreKey(currentQuest.tag,"Score") == 1)then
+			
 				if(canDoTriggerAction) then
 					if(DoedTriggerAction == false) then
 					DoedTriggerAction = true
 					doTriggerAction(currentQuest)
 					
 					canDoTriggerAction = false
-					debugPrint(2,"Quest Trigger ACtion")
+					
 					end
 					
 					
@@ -373,7 +374,7 @@ function resetQuest()
 	
 	currentSave.arrayPlayerData.CurrentQuest = nil
 	currentSave.arrayPlayerData.CurrentQuestStatut = nil
-	updatePlayerData(currentSave.arrayPlayerData)
+	
 	
 	
 	canDoTriggerAction = false
@@ -431,7 +432,7 @@ function closeQuest(quest)
 	currentSave.arrayPlayerData.CurrentQuest = nil
 	currentSave.arrayPlayerData.CurrentQuestStatut = nil
 	currentSave.arrayPlayerData.CurrentQuestState = nil
-	updatePlayerData(currentSave.arrayPlayerData)
+
 	debugPrint(2,"closed quest")
 	canDoTriggerAction = false
 	canDoStartAction = false

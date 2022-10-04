@@ -460,7 +460,7 @@ function refreshUIWidget()
 					-- control.ink.root:SetRotation(control.data.rotation)
 						if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"visible")) or (table.contains(control.data.dynamic,"default"))   then 
 						print("test "..GameDump(control.ink:GetRootWidget()))
-						if control.ink:GetRootWidget() ~=nil then print("tes") control.ink:GetRootWidget():SetVisible(control.data.visible) end
+						if control.ink:GetRootWidget().name ~=nil then control.ink:GetRootWidget():SetVisible(control.data.visible) end
 						end
 					-- control.ink.root:SetTranslation(Vector2.new({ X = translationwidth, Y = translationheight }))
 					-- control.ink.root:SetPadding(inkMargin.new(control.data.padding))

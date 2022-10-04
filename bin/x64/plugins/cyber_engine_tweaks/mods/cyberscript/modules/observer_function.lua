@@ -893,7 +893,7 @@ print("hot reload test")
 		
 		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
 			
-			debugPrint(10,"flib sort mod is enabled, custom shard is disabled")
+			logme(1,"flib sort mod is enabled, custom shard is disabled")
 			else
 			local counter = 0
 			local groupData

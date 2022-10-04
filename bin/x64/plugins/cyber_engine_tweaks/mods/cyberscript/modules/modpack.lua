@@ -784,6 +784,7 @@ end
 	arrayCharacterArchive = {}
 	
 	if(arrayDatapack ~= nil) then
+	
 	try {
 		function()
 			for k,v in pairs(arrayDatapack) do
@@ -973,6 +974,7 @@ end
 							arrayQuest2[value.tag].quest = value
 							arrayQuest2[value.tag].file = path
 							arrayQuest2[value.tag].datapack = datapackname
+							
 						end
 						elseif(objtype == "node") then
 						for key, value in pairs(tabl) do 
@@ -1183,13 +1185,16 @@ end
 						end
 					end
 				end
+			
+			logme(1,'creating cache for datatpack: '.." "..objtype.." "..datapackname.." path : "..rootpath)
 			end,
 			catch {
 				function(error)
-					debugPrint(1,'Error during creating cache for datatpack: '..error.." "..objtype.." "..datapackname.." path : "..rootpath)
+					logme(1,'Error during creating cache for datatpack: '..error.." "..objtype.." "..datapackname.." path : "..rootpath)
 					RecoverDatapack()
 				end
 			}
+			
 		}
 		
 	end

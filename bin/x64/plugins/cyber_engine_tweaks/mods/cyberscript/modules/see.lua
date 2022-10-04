@@ -7635,22 +7635,22 @@ end
 			local sound = getSoundByNameNamespace(action.value,action.datapack)
 			if(sound ~= nil) then
 				local path = cyberscript.soundpath..sound.path
-				PlaySound(action.value,path,action.channel,action.volume)
+				--PlaySound(action.value,path,action.channel,action.volume)
 				else
 				error("No sound founded")
 			end
 		end
 		if(action.name == "pause_sound_channel") then 
-			Pause(action.channel)
+			--Pause(action.channel)
 		end
 		if(action.name == "resume_sound_channel") then 
-			Resume(action.channel)
+			--Resume(action.channel)
 		end
 		if(action.name == "stop_sound_channel") then 
-			Stop(action.channel)
+			--Stop(action.channel)
 		end
 		if(action.name == "setGameVolume") then 
-			SetSoundSettingValue(action.value, action.score)
+			--SetSoundSettingValue(action.value, action.score)
 		end
 	end
 	

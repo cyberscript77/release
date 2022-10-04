@@ -264,8 +264,9 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 		
 	ObserveAfter("ShardsMenuGameController", "PopulateData", function(this)
-		
+		Cron.NextTick(function()
 		ShardsMenuGameController_PopulateData(this)
+		end)
 	end)
 	
 	ObserveAfter('WorldMapMenuGameController', 'OnSelectedDistrictChanged', function(this,oldDistrict,newDistrict)
