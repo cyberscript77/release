@@ -45,6 +45,7 @@ function QuestJournalUI.Initialize()
 	
 	if getUserSetting("enableCustomQuest") == true then
 		Cron.NextTick(function()
+		
 			getMissionByTrigger()
 			
 			local questToOpen
@@ -69,7 +70,7 @@ function QuestJournalUI.Initialize()
 			for _, questDef in ipairs(QuestManager.GetQuests()) do
 				local questState = QuestManager.GetQuestState(questDef.id)
 				local questEntry = QuestManager.GetQuestEntry(questDef.id)
-				
+				print(questDef.id)
 				if(QuestManager.IsQuestActive(questDef.id) or QuestManager.IsQuestComplete(questDef.id)) then 
 					
 					if QuestManager.isVisited(questDef.id) then
@@ -146,6 +147,7 @@ function QuestJournalUI.Initialize()
 	ObserveAfter('questLogGameController', 'OnRequestChangeTrackedObjective', function(self, e)
 		
 		Cron.NextTick(function()
+		
 		if e.quest then
 			if QuestManager.IsKnownQuest(e.quest.id) then
 				e.objective = QuestManager.GetFirstObjectiveEntry(e.quest.id)
@@ -209,10 +211,15 @@ function QuestJournalUI.Initialize()
 			local questDef = QuestManager.GetQuest(questId)
 			
 			inkTextRef.SetText(self.title, getLang(questDef.title))
-			
-    		local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.' .. QuestManager.getDistrictName(questDef.metadata.district))
-    		inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
-    		inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
+			if(questDef.metadata.district < 119) then
+				local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.' .. QuestManager.getDistrictName(questDef.metadata.district))
+				inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
+				inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
+			else
+				local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.program_generic')
+				inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
+				inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
+			end
 		end
 	end)
 	end)
