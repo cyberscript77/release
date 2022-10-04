@@ -649,55 +649,29 @@ end
 	
 	
 	
-	
+--obsolete	
 function setScore(tag,key,score)
 	
 	
-	if(type(score) == "number") then
-	
-		if(currentSave.Variable[tag] == nil) then
-		
-		
-		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = 0
-		
-		end 
-		
-		currentSave.Variable[tag][key] = score
-
-	end
+	 setVariable(tag,key,score)
 end
-
+--obsolete
 function getScoreKey(tag,key)
-	local score = currentSave.Variable[tag]
 	
-	if(score ~= nil) then
-	
-		return currentSave.Variable[tag][key]
-	
-	end
+	return getVariableKey(tag,key)
 	
 	
 end
-
+--obsolete
 function getScoreKeyWithDefault(tag,key,default)
-	local score = currentSave.Variable[tag]
 	
-	if(score ~= nil) then
-	
-		return currentSave.Variable[tag][key]
-	else
-		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = default
-		return currentSave.Variable[tag][key]
-	end
-	
+	return getVariableKeyWithDefault(tag,key,default)
 	
 end
-
+--obsolete
 function getScore(tag)
 	
-	return currentSave.Variable[tag]
+	return getVariable(tag)
 		
 	
 end

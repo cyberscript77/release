@@ -588,11 +588,12 @@ function GangAffinityCalculator()
 					local npcScore = affinity.npcscore[z]
 					
 					
-					local score = getScoreKey(npcScore.Names,"Score")
+					local score = getVariableKey("Affinity",npcScore.Names)
 					if(score == nil) then score = 0 end
 					
 					score = score + npcScore.value
-					setScore(npcScore.Names,"Score",score)
+					
+					 setVariable("Affinity",npcScore.Names,score)
 				--	debugPrint(10,"added score "..tostring(score).." to NPC "..npcScore.Names)
 				
 			end

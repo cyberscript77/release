@@ -3081,4 +3081,19 @@
 		"helper": "This action will hide Hacking Progression bar",
 		"helperTitle": "UI : Hide Hacking Progression bar"
 	},
+	{
+		"name": "setup_gang_player_affinity",
+		"helper": "This action will Setup player affinity toward NPC and gang based on player fact. Based on the file 'data/gameaffinity.json' ",
+		"helperTitle": "Gang : Setup Player Affinity"
+	},
+	{
+		"name": "setup_gang_rival_affinity",
+		"helper": "This action will  Setup Gang affinity toward their default Rival.",
+		"helperTitle": "Gang : Setup Rival Affinity"
+	},
+	{
+		"name": "setup_gang_district_affinity",
+		"helper": "This action will  Setup Gang affinity toward their default district.",
+		"helperTitle": "Gang : Setup District Affinity"
+	},
 ]

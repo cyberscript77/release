@@ -3591,13 +3591,13 @@ print("hot reload test")
 	function BrowserController_OnPageSpawned(thos, widget, userData)
 		
 		GameController["BrowserController"]  = thos
-		if(CurrentAddress == "CyberScript") then
-			inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod");
-		end
+		-- if(CurrentAddress == "CyberScript") then
+			-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod");
+		-- end
 		
-		if(CurrentAddress == "CyberScript" and BrowserCybserscript ~= nil) then
-			inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/"..BrowserCybserscript);
-		end
+		-- if(CurrentAddress == "CyberScript" and BrowserCybserscript ~= nil) then
+			-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/"..BrowserCybserscript);
+		-- end
 		
 		if(CurrentAddress == "CyberScriptWeb") then
 			inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/search");
@@ -5143,29 +5143,29 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 			local gameCon = gameController
 			
 			
-			local widget = SComputerMenuButtonWidgetPackage.new()
-			widget.libraryID = widgetsData[2].libraryID 
-			widget.widgetTweakDBID = widgetsData[2].widgetTweakDBID 
-			widget.widget = widgetsData[2].widget 
-			widget.widgetName = widgetsData[2].widgetName 
-			widget.placement = widgetsData[2].placement 
-			widget.isValid = widgetsData[2].isValid 
-			widget.displayName = widgetsData[2].displayName 
-			widget.ownerID = widgetsData[2].ownerID 
-			widget.ownerIDClassName = widgetsData[2].ownerIDClassName 
-			widget.customData = widgetsData[2].customData 
-			widget.isWidgetInactive = widgetsData[2].isWidgetInactive 
-			widget.widgetState = widgetsData[2].widgetState 
-			widget.iconID = widgetsData[2].iconID 
-			widget.bckgroundTextureID = widgetsData[2].bckgroundTextureID 
-			widget.iconTextureID = widgetsData[2].iconTextureID 
-			widget.textData = widgetsData[2].textData 
-			widget.counter = widgetsData[2].counter 
-			widget.displayName = "CyberScript"
-			widget.widgetName = "CyberScript"
-			local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
-			thos:AddMenuButtonWidget(widgeto, widget, gameController)
-			thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
+			-- local widget = SComputerMenuButtonWidgetPackage.new()
+			-- widget.libraryID = widgetsData[2].libraryID 
+			-- widget.widgetTweakDBID = widgetsData[2].widgetTweakDBID 
+			-- widget.widget = widgetsData[2].widget 
+			-- widget.widgetName = widgetsData[2].widgetName 
+			-- widget.placement = widgetsData[2].placement 
+			-- widget.isValid = widgetsData[2].isValid 
+			-- widget.displayName = widgetsData[2].displayName 
+			-- widget.ownerID = widgetsData[2].ownerID 
+			-- widget.ownerIDClassName = widgetsData[2].ownerIDClassName 
+			-- widget.customData = widgetsData[2].customData 
+			-- widget.isWidgetInactive = widgetsData[2].isWidgetInactive 
+			-- widget.widgetState = widgetsData[2].widgetState 
+			-- widget.iconID = widgetsData[2].iconID 
+			-- widget.bckgroundTextureID = widgetsData[2].bckgroundTextureID 
+			-- widget.iconTextureID = widgetsData[2].iconTextureID 
+			-- widget.textData = widgetsData[2].textData 
+			-- widget.counter = widgetsData[2].counter 
+			-- widget.displayName = "CyberScript"
+			-- widget.widgetName = "CyberScript"
+			-- local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
+			-- thos:AddMenuButtonWidget(widgeto, widget, gameController)
+			-- thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
 		end
 		
 		
@@ -5799,16 +5799,16 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	---Scanner
 	
 	function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
-		if(elementName == "CyberScript") then
-			local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
-			thos:GetMainLayoutController():ShowInternet("CyberScript")
+		-- if(elementName == "CyberScript") then
+			-- local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
+			-- thos:GetMainLayoutController():ShowInternet("CyberScript")
 			
-			thos:RequestMainMenuButtonWidgetsUpdate()
-			CurrentAddress = "CyberScript"
-			BrowserCybserscript = "loading"
-			else
-			wrappedMethod(elementName)
-		end
+			-- thos:RequestMainMenuButtonWidgetsUpdate()
+			-- CurrentAddress = "CyberScript"
+			-- BrowserCybserscript = "loading"
+			-- else
+			-- wrappedMethod(elementName)
+		-- end
 		
 		if(elementName == "CyberScriptWeb") then
 			local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()

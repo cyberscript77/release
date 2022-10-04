@@ -9723,8 +9723,14 @@ end
 		if(action.name == "update_mod_setting") then
 			updateUserSetting(action.tag,action.value)
 		end
-		if(action.name == "launch_gang_affinity_calculator") then
+		if(action.name == "setup_gang_player_affinity") then
 			GangAffinityCalculator()
+		end
+		if(action.name == "setup_gang_rival_affinity") then
+			initGangRelation()
+		end
+		if(action.name == "setup_gang_district_affinity") then
+			initGangDistrictScore()
 		end
 		if(action.name == "open_interface") then
 			currentInterface = arrayInterfaces[action.tag].ui
