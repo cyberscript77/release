@@ -275,6 +275,7 @@ function editorWindows()
 				DatapackBuilder()
 				
 				VariableEditor()
+				debugTab()
 				SettingTab()
 			end)
 			if status == false then
@@ -6168,67 +6169,25 @@ function SettingTab()
 		end
 		
 		
-		ImGui.Spacing()
-		ImGui.Spacing()
-		ImGui.Spacing()
-		ImGui.Text(getLang("editor_Setting_RunningScript"))
+	
 		
-		if ImGui.Button(getLang("editor_Setting_ScriptRunToggle")) then
-			autoScript = not autoScript
-		end
-		ImGui.Text(getLang("editor_Setting_ScriptAutoMode")..tostring(autoScript))
 		
-		if ImGui.Button(getLang("editor_Setting_ResetScript")) then
-			workerTable = {}
-			despawnAll()
-		end
-		ImGui.Spacing()
-		ImGui.Spacing()
 		
-		if ImGui.Button(getLang("editor_Setting_ScriptManualStep")) then
-			CompileCachedThread()
-			ScriptExecutionEngine()
-		end
-		pcall(function()
-			for k,v in pairs(workerTable) do 
+		if ImGui.Button("TP to Custom MapPin") then
+			
+			if(ActivecustomMappin ~= nil) then
 				
-				if ImGui.TreeNode(k) then
-					
-					local index = workerTable[k]["index"]
-					
-					local list = workerTable[k]["action"]
-					
-					local parent = workerTable[k]["parent"]
-					
-					local source = workerTable[k]["source"]
-					
-					local pending = workerTable[k]["pending"]
-					
-					local started = workerTable[k]["started"]
-					
-					local disabled = workerTable[k]["disabled"]
-					
-					local quest = workerTable[k]["quest"]
-					
-					local executortag = workerTable[k]["executortag"]
-					ImGui.Text("index : "..index)
-					ImGui.Text("list : "..#list)
-					ImGui.Text("parent : "..parent)
-					ImGui.Text("source : "..source)
-					ImGui.Text("pending : "..tostring(pending))
-					ImGui.Text("started : "..tostring(started))
-					ImGui.Text("disabled : "..tostring(disabled))
-					
-					if quest ~= nil then
-						ImGui.Text("quest : "..tostring(quest))
-					end
-					ImGui.Text("Executor Tag : "..executortag)
-					ImGui.Text("Current Action : "..list[index].name)
-					ImGui.TreePop()
-				end
+				local pos = ActivecustomMappin:GetWorldPosition()
+				Game.TeleportPlayerToPosition(pos.x,pos.y,pos.z)
 			end
-		end)
+		end
+		pox = ImGui.InputInt("X", pox)
+		poy = ImGui.InputInt("Y", poy)
+		poz = ImGui.InputInt("Z", poz)
 		
+		if ImGui.Button("TP to XYZ") then
+			Game.TeleportPlayerToPosition(pox,poy,poz)
+		end
 		
 		
 		
@@ -6518,8 +6477,6 @@ end
 
 
 
-
-
 function VariableEditor()
 	
 	
@@ -6562,60 +6519,60 @@ function VariableEditor()
 			if (editorCurrentVariableSearch == "" or (editorCurrentVariableSearch ~= "" and (string.match(variabletag,editorCurrentVariableSearch)))) then
 				if ImGui.TreeNode(variabletag)  then
 					for key,value in pairs (variable) do
-					
-						if (editorCurrentVariableKeySearch == "" or (editorCurrentVariableKeySearch ~= "" and (string.match(key,editorCurrentVariableKeySearch)))) then
-					
-							if ImGui.TreeNode(key)  then
 						
-						if(type(value) == "string") then
-						currentSave.Variable[variabletag][key] = ImGui.InputText("##("..type(value)..") "..variabletag..key,value, 100, ImGuiInputTextFlags.AutoSelectAll)
+						if (editorCurrentVariableKeySearch == "" or (editorCurrentVariableKeySearch ~= "" and (string.match(key,editorCurrentVariableKeySearch)))) then
+							
+							if ImGui.TreeNode(key)  then
+								
+								if(type(value) == "string") then
+									currentSave.Variable[variabletag][key] = ImGui.InputText("##("..type(value)..") "..variabletag..key,value, 100, ImGuiInputTextFlags.AutoSelectAll)
+								end
+								if(type(value) == "number") then
+									currentSave.Variable[variabletag][key] = ImGui.InputFloat("##("..type(value)..") "..variabletag..key,value, 1, 10,"%.2f", ImGuiInputTextFlags.None)
+								end
+								if(type(value) == "boolean") then
+									currentSave.Variable[variabletag][key] = ImGui.Checkbox("##("..type(value)..") "..variabletag..key, currentSave.Variable[variabletag][key])
+								end
+								if(type(value) == "table") then
+									currentSave.Variable[variabletag][key] = ImGui.Text("It's an object, can't be edit like this :( ")
+									ImGui.SameLine()
+									if ImGui.Button(getLang("Dump in log and console")) then
+										
+										
+										
+										print("Editor Variable Dump for "..variabletag.." "..key.." : "..dump(currentSave.Variable[variabletag][key]))
+										spdlog.error("Editor Variable Dump for "..variabletag.." "..key.." : "..dump(currentSave.Variable[variabletag][key]))
+										
+										
+									end
+								end
+								if(type(value) == "userdata") then
+									currentSave.Variable[variabletag][key] = ImGui.Text("It's an Game Object, can't be edit like this :( ")
+									ImGui.SameLine()
+									if ImGui.Button(getLang("Dump in log and console")) then
+										
+										
+										
+										print("Editor Variable Game Dump for "..variabletag.." "..key.." : "..GameDump(currentSave.Variable[variabletag][key]))
+										spdlog.error("Editor Variable Game Dump for "..variabletag.." "..key.." : "..GameDump(currentSave.Variable[variabletag][key]))
+										
+										
+									end
+								end
+								ImGui.Spacing()
+								if ImGui.Button(getLang("editor_reset")) then
+									
+									
+									
+									currentSave.Variable[variabletag][key] = nil
+									
+									
+								end
+								ImGui.TreePop()
+							end
 						end
-						if(type(value) == "number") then
-						currentSave.Variable[variabletag][key] = ImGui.InputFloat("##("..type(value)..") "..variabletag..key,value, 1, 10,"%.2f", ImGuiInputTextFlags.None)
-						end
-						if(type(value) == "boolean") then
-						currentSave.Variable[variabletag][key] = ImGui.Checkbox("##("..type(value)..") "..variabletag..key, currentSave.Variable[variabletag][key])
-						end
-						if(type(value) == "table") then
-						currentSave.Variable[variabletag][key] = ImGui.Text("It's an object, can't be edit like this :( ")
-						ImGui.SameLine()
-						if ImGui.Button(getLang("Dump in log and console")) then
-							
-							
-							
-							print("Editor Variable Dump for "..variabletag.." "..key.." : "..dump(currentSave.Variable[variabletag][key]))
-							spdlog.error("Editor Variable Dump for "..variabletag.." "..key.." : "..dump(currentSave.Variable[variabletag][key]))
-							
-							
-						end
-						end
-						if(type(value) == "userdata") then
-						currentSave.Variable[variabletag][key] = ImGui.Text("It's an Game Object, can't be edit like this :( ")
-						ImGui.SameLine()
-						if ImGui.Button(getLang("Dump in log and console")) then
-							
-							
-							
-							print("Editor Variable Game Dump for "..variabletag.." "..key.." : "..GameDump(currentSave.Variable[variabletag][key]))
-							spdlog.error("Editor Variable Game Dump for "..variabletag.." "..key.." : "..GameDump(currentSave.Variable[variabletag][key]))
-							
-							
-						end
-						end
-						ImGui.Spacing()
-						if ImGui.Button(getLang("editor_reset")) then
-							
-							
-							
-							currentSave.Variable[variabletag][key] = nil
-							
-							
-						end
-						ImGui.TreePop()
 					end
-						end
-					end
-				ImGui.TreePop()
+					ImGui.TreePop()
 				end
 			end
 		end
@@ -6632,12 +6589,550 @@ end
 
 
 
-
-
-
-
-
-
+function debugTab()
+	
+	if ImGui.BeginTabItem("Debug & Tools") then
+		
+				if ImGui.BeginTabBar("DebugTabsBar", ImGuiTabBarFlags.NoTooltip) then
+				
+					if ImGui.BeginTabItem("Current Looked Entity") then
+						local status, result =  pcall(function()
+							if objLook ~= nil then
+								ImGui.Indent()
+								
+								local entity = objLook
+								-- Functions
+								IGE.DrawNodeTree("GetEntityID", "entEntityID", entity:GetEntityID(), 
+								function(entEntityID) entEntityIDDraw(entEntityID) end)
+								
+								if ImGui.Button("Destroy") then
+									entity:Dispose()
+								end
+								
+								
+								if entity:IsPlayer() then
+									IGE.DisplayObjectArray("GetPlayerCurrentWorkspotTags", "CName", entity:GetPlayerCurrentWorkspotTags(),
+									function(key, value) CNameDraw("Tag", value) end)
+								end
+								
+								if entity:IsVehicle() then
+									ImGui.Text("Entity is an vehicle")
+									ImGui.Spacing()
+									ImGui.Text("Available Seats Slot: ")
+									
+									local seatstable = GetSeats(entity)
+									
+									if #seatstable > 0 then
+										for i=1, #seatstable do 
+											ImGui.Text(seatstable[i])
+											ImGui.Spacing()
+										end
+									end
+									else
+									ImGui.Text("Entity is not an vehicule")
+									ImGui.Spacing()
+								end
+								
+								local obj = getEntityFromManagerById(entity:GetEntityID())
+								
+								if obj.id ~= nil then
+									ImGui.Text("This entity has been registered as Entity in CyberScript with tag "..obj.tag)
+									ImGui.Spacing()
+									
+									ImGui.Text("This entity has been registered as AV ?"..tostring(obj.isAV))
+									ImGui.Spacing()
+									if ImGui.Button("dump") then
+										debugPrint(10,tostring(dump(obj)))
+									end
+									local group = getEntityGroupfromEntityTag(obj.tag)
+									
+									if group ~= nil then
+										ImGui.Text("This entity has been registered in the Group "..group.tag)
+									end
+								end
+								
+								CNameDraw("GetCurrentAppearanceName", entity:GetCurrentAppearanceName())
+								CNameDraw("GetCurrentContext", entity:GetCurrentContext())
+								CNameDraw("GetDisplayName", entity:GetDisplayName())
+								ImGui.Text("GetTweakDBDisplayName: "..entity:GetTweakDBDisplayName(true))
+								ImGui.Text("GetTweakDBFullDisplayName:"..entity:GetTweakDBFullDisplayName(true))
+								
+								
+								
+								IGE.DisplayVector4("GetWorldPosition", entity:GetWorldPosition())
+								IGE.ObjectToText("GetWorldOrientation", entity:GetWorldOrientation())
+								IGE.DisplayVector4("GetWorldForward", entity:GetWorldForward())
+								
+								IGE.DisplayVector4("GetWorldRight", entity:GetWorldRight())
+								IGE.DisplayVector4("GetWorldUp", entity:GetWorldUp())
+								IGE.ObjectToText("GetWorldYaw", entity:GetWorldYaw())
+								-- IGE.ObjectToText("IsAttached", entity:IsAttached()) -- Good way to tell if object has been deleted!
+								-- IGE.ObjectToText("IsControlledByAnotherClient", entity:IsControlledByAnotherClient())
+								-- IGE.ObjectToText("IsControlledByAnyPeer", entity:IsControlledByAnyPeer())
+								-- IGE.ObjectToText("IsControlledBylocalPeer", entity:IsControlledBylocalPeer())
+								-- IGE.ObjectToText("ShouldEnableRemoteLayer", entity:ShouldEnableRemoteLayer())
+								-- IGE.ObjectToText("HasDirectActionsActive", entity:HasDirectActionsActive())
+								-- IGE.ObjectToText("CanRevealRemoteActionsWheel", entity:CanRevealRemoteActionsWheel())
+								-- IGE.ObjectToText("ShouldRegisterToHUD", entity:ShouldRegisterToHUD())
+								-- IGE.ObjectToText("GetIsIconic", entity:GetIsIconic())
+								-- IGE.ObjectToText("GetContentScale", entity:GetContentScale())
+								-- IGE.ObjectToText("IsExplosive", entity:IsExplosive())
+								-- IGE.ObjectToText("IsFastTravelPoint", entity:IsFastTravelPoint())
+								-- IGE.ObjectToText("HasAnySlaveDevices", entity:HasAnySlaveDevices())
+								-- IGE.ObjectToText("IsBodyDisposalPossible", entity:IsBodyDisposalPossible())
+								-- IGE.ObjectToText("IsReplicated", entity:IsReplicated())
+								
+								
+								ImGui.Unindent()
+								
+								
+								posstep =  ImGui.DragFloat("##post", posstep, 0.1, 0.1, 10, "%.3f Position Step")
+								rotstep =  ImGui.DragFloat("##rost", rotstep, 0.1, 0.1, 10, "%.3f Rotation Step")
+								
+								
+								
+								moveX =  ImGui.DragFloat("##x", moveX, posstep, -9999, 9999, "%.3f X")
+								
+								
+								
+								moveY = ImGui.DragFloat("##y", moveY, posstep, -9999, 9999, "%.3f Y")
+								
+								
+								moveZ = ImGui.DragFloat("##z", moveZ, posstep, -9999, 9999, "%.3f Z")
+								
+								
+								moveYaw =  ImGui.DragFloat("##yaw", moveYaw, rotstep, -9999, 9999, "%.3f YAW")
+								
+								
+								movePitch = ImGui.DragFloat("##pitch", movePitch, rotstep, -9999, 9999, "%.3f PITCH")
+								
+								
+								moveRoll = ImGui.DragFloat("##roll", moveRoll, rotstep, -9999, 9999, "%.3f ROLL")
+								
+								
+								
+								
+								
+								
+								
+								if ImGui.Button("change position", 300, 0) then
+									local positu =  entity:GetWorldPosition()
+									local qat = entity:GetWorldOrientation()
+									local angless = GetSingleton('Quaternion'):ToEulerAngles(qat)
+									positu.x = positu.x + moveX
+									positu.y = positu.y + moveY
+									positu.z = positu.z + moveZ
+									
+									
+									local cmd = NewObject('handle:AITeleportCommand')
+									
+									cmd.doNavTest = false
+									cmd.rotation = angless
+									cmd.position = positu 
+									
+									
+									executeCmd(entity, cmd)
+									
+								end
+								
+								if ImGui.Button("change angle", 300, 0) then
+									local qat = entity:GetWorldOrientation()
+									local angless = GetSingleton('Quaternion'):ToEulerAngles(qat)
+									
+									angless.yaw = angless.yaw + moveYaw
+									angless.pitch = angless.pitch + movePitch
+									angless.roll = angless.roll + moveRoll
+									
+									local cmd = NewObject('handle:AITeleportCommand')
+									
+									cmd.doNavTest = false
+									cmd.rotation = angless
+									cmd.position = entity:GetWorldPosition() 
+									
+									
+									executeCmd(entity, cmd)
+									
+									
+								end
+								
+								
+								
+							end
+							
+						end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Current CS Quest") then
+						local status, result = pcall(function()
+							
+							if currentQuest ~= nil then
+								ImGui.Text("title : "..currentQuest.title)
+								ImGui.Text("content : "..currentQuest.content)
+								ImGui.Text("tag : "..currentQuest.tag)
+								ImGui.Text("recommandedlevel : "..currentQuest.recommandedlevel)
+								ImGui.Text("questtype : "..currentQuest.questtype)
+								ImGui.Text("district : "..currentQuest.district)
+								ImGui.Text("isNPCD : "..tostring(currentQuest.isNPCD))
+								ImGui.Text("recurrent : "..tostring(currentQuest.recurrent))
+								ImGui.Text("State : "..tostring(getScoreKey(currentQuest.tag,"Score")))
+								for k,v in pairs(currentQuest.trigger_condition) do
+									ImGui.Text(v.name)
+								end
+								
+								if ImGui.TreeNode("trigger_action") then
+									for i=1, #currentQuest.trigger_action do
+										ImGui.Text(currentQuest.trigger_action[i].name)
+									end
+									ImGui.TreePop()
+								end
+								
+								if ImGui.TreeNode("objectives") then
+									for i=1, #currentQuest.objectives do
+										
+										local objective = currentQuest.objectives[i]
+										
+										if ImGui.TreeNode(objective.title.." ( "..objective.tag.." )") then
+											ImGui.Text("state : "..tostring(QuestManager.GetObjectiveState(objective.tag).state))
+											ImGui.Text("isoptionnal : "..tostring(objective.isoptionnal))
+											ImGui.Text("isActive : "..tostring(QuestManager.GetObjectiveState(objective.tag).isActive))
+											ImGui.Text("isComplete : "..tostring(QuestManager.GetObjectiveState(objective.tag).isComplete))
+											ImGui.Text("isTracked : "..tostring(QuestManager.GetObjectiveState(objective.tag).isTracked))
+											ImGui.TreePop()
+										end
+									end
+									ImGui.TreePop()
+								end
+								else
+								ImGui.Text("No current Quest")
+							end
+						end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Current Bounty") then
+						local status, result = pcall(function()
+							
+							if currentScannerItem ~= nil then
+								ImGui.Text("primaryname : "..currentScannerItem.primaryname)
+								ImGui.Text("secondaryname : "..currentScannerItem.secondaryname)
+								ImGui.Text("entityname : "..currentScannerItem.entityname)
+								ImGui.Text("level : "..tostring(currentScannerItem.level))
+								ImGui.Text("rarity : "..tostring(currentScannerItem.rarity))
+								ImGui.Text("attitude : "..tostring(currentScannerItem.attitude))
+								ImGui.Text("Desc : "..currentScannerItem.text)
+								if currentScannerItem.bounty ~= nil then
+									
+									ImGui.Text("reward : "..tostring(currentScannerItem.bounty.reward))
+									ImGui.Text("streetreward : "..tostring(currentScannerItem.bounty.streetreward))
+									ImGui.Text("danger : "..tostring(currentScannerItem.bounty.danger))
+									ImGui.Text("issuedby : "..tostring(currentScannerItem.bounty.issuedby))
+									
+									
+									for i,v in ipairs(currentScannerItem.bounty.transgressions) do
+										ImGui.Text(v)
+										end
+									
+									for i,v in ipairs(currentScannerItem.bounty.customtransgressions) do
+										ImGui.Text(v)
+									end
+								end
+								
+								else
+								ImGui.Text("No current Bounty")
+							end
+						end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Script Execution Engine") then
+						ImGui.TextColored(0.79, 0.40, 0.29, 1, "tick is .."..tostring(tick))
+						ImGui.TextColored(0.79, 0.40, 0.29, 1, "Current Controller is .."..tostring(currentController))
+						if ImGui.Button("Toggle automatic thread running") then
+							autoScript = not autoScript
+						end
+						ImGui.Text("Automatic Mode : "..tostring(autoScript))
+						
+						if ImGui.Button("Reset pending actions (Script)") then
+							workerTable = {}
+							despawnAll()
+						end
+						ImGui.Spacing()
+						ImGui.Spacing()
+						
+						if ImGui.Button("Manual script Step") then
+							CompileCachedThread()
+							ScriptExecutionEngine()
+						end
+						
+						local status, result =  pcall(function()
+							for k,v in pairs(workerTable) do 
+								
+								if ImGui.TreeNode(k) then
+									
+									local index = workerTable[k]["index"]
+									
+									local list = workerTable[k]["action"]
+									
+									local parent = workerTable[k]["parent"]
+									
+									local source = workerTable[k]["source"]
+									
+									local pending = workerTable[k]["pending"]
+									
+									local started = workerTable[k]["started"]
+									
+									local disabled = workerTable[k]["disabled"]
+									
+									local quest = workerTable[k]["quest"]
+									
+									local executortag = workerTable[k]["executortag"]
+									ImGui.Text("index : "..index)
+									ImGui.Text("list : "..#list)
+									ImGui.Text("parent : "..parent)
+									ImGui.Text("source : "..source)
+									ImGui.Text("pending : "..tostring(pending))
+									ImGui.Text("started : "..tostring(started))
+									ImGui.Text("disabled : "..tostring(disabled))
+									
+									if quest ~= nil then
+										ImGui.Text("quest : "..tostring(quest))
+									end
+									ImGui.Text("Executor Tag : "..executortag)
+									if(list[index] ~= nil) then
+									ImGui.Text("Current Action : "..list[index].name)
+									end
+									ImGui.TreePop()
+								end
+							end
+						end)
+						
+						if status == false then
+						
+						
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Mod Data") then
+						local status, result =  pcall(function()
+							
+							if ImGui.TreeNode("Group") then
+								for k,v in pairs(cyberscript.GroupManager) do
+									
+									local group = v
+									if ImGui.TreeNode(group.tag) then
+									
+										ImGui.Text("Tag : "..group.tag)
+								
+										ImGui.Text("Entities : "..#group.entities)
+										
+									ImGui.TreePop()
+									end
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							
+							if ImGui.TreeNode("Entities") then
+								for k,v in pairs(cyberscript.EntityManager) do
+									
+									local enti = v
+									if ImGui.TreeNode(enti.tag) then
+									
+										for key,prop in pairs(enti) do
+										
+											ImGui.Text(key.." : "..tostring(prop))
+										
+										end
+										
+									ImGui.TreePop()
+									end
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.TreeNode("Items Spawned") then
+								for i,v in ipairs(currentItemSpawned) do
+									
+									local enti = v
+									if ImGui.TreeNode(enti.tag) then
+									
+										for key,prop in pairs(enti) do
+										
+											ImGui.Text(key.." : "..tostring(prop))
+										
+										end
+										
+									ImGui.TreePop()
+									end
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.TreeNode("Setting") then
+								for k,v in pairs(currentSave.arrayUserSetting) do
+									
+									
+									if ImGui.TreeNode(k) then
+									
+										ImGui.Text("Value : "..tostring(v))
+										
+									ImGui.TreePop()
+									end
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.TreeNode("Interact Group") then
+								for k,v in ipairs(currentInteractGroup) do
+									
+									local enti = v
+									ImGui.Text(v)
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.Button("Refresh Interact Group")  then
+								
+								getInteractGroup()
+							end
+							
+							ImGui.Separator()
+							ImGui.Text("Possible Interact : "..#possibleInteract)
+							ImGui.Text("Possible Interact Display : "..#possibleInteractDisplay)
+							ImGui.Separator()
+							
+							if ImGui.Button("Dump Currentsave data")  then
+								
+								local sessionFile = io.open('currentsave.txt', 'w')
+								sessionFile:write(dump(currentSave))
+								sessionFile:close()
+							end
+							
+							
+							if ImGui.Button("Dump arrayDatapack data")  then
+								
+								local sessionFile = io.open('arrayDatapack.lua', 'w')
+								sessionFile:write(dump(arrayDatapack))
+								sessionFile:close()
+							end
+							
+							if ImGui.Button("Dump HUD key")  then
+								
+								local sessionFile = io.open('displayHUD.txt', 'w')
+								for k,v in pairs(displayHUD) do
+									sessionFile:write(k, "\n")
+								end
+								sessionFile:close()
+							end
+							
+							
+						end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Mod Log") then
+						
+						local status, result = pcall(function()
+							
+							
+							logrecordlevel = ImGui.InputInt(getLang("Record at Log Level"), logrecordlevel, 1,10, ImGuiInputTextFlags.None)
+							ImGui.Spacing()
+							
+							logLevel = ImGui.InputInt(getLang("Log Level"), logLevel, 1,10, ImGuiInputTextFlags.None)
+							ImGui.Spacing()
+							logFilter = ImGui.InputText(getLang("Log Filter"), logFilter, 100, ImGuiInputTextFlags.AutoSelectAll)
+							ImGui.Spacing()
+							if ImGui.Button("Clear log and log file") then
+								logTable = {}
+								logf:close()
+								io.open("cyberscript.log", "w"):close()
+								logf = io.open("cyberscript.log", "a")
+							end
+							ImGui.Spacing()
+							ImGui.Separator()
+							ImGui.Spacing()
+							
+							
+							ImGui.BeginChild("log", 1500, 600)
+							
+							for i,v in ipairs(logTable) do
+								if(v.level <= logLevel and (logFilter == nil or logFilter == "" or (logFilter ~= nil and logFilter ~= "" and string.match(v.msg, logFilter)))) then
+									ImGui.Text("[Level:"..v.level.."]"..v.datestring..":"..v.msg)
+								end
+							end
+							
+							ImGui.EndChild()
+							
+							
+						end)
+								
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						ImGui.EndTabItem()
+						
+					end
+				
+				ImGui.EndTabBar()
+				end
+					
+	ImGui.EndTabItem()
+	end
+		
+	
+	
+	
+end
 
 
 
@@ -7741,29 +8236,29 @@ function NewItemsWindows()
 				currentEditorItems.entityId = spawnItem(currentEditorItems, poss, angless)
 				
 				Cron.After(0.7, function()
-				
-				local entity = Game.FindEntityByID(currentEditorItems.entityId)
-				local components = checkForValidComponents(entity)
-				if components then
-					local visualScale = checkDefaultScale(components)
-					currentEditorItems.defaultScale = {
-						x = visualScale.x * 100,
-						y = visualScale.x * 100,
-						z = visualScale.x * 100,
-					}
-					currentEditorItems.scale = {
-						x = visualScale.x * 100,
-						y = visualScale.y * 100,
-						z = visualScale.z * 100,
-					}
-				end
-				
-				table.insert(currentItemSpawned,currentEditorItems)
-				
-				
-				currentEditorItems = {}
-				
-				openNewItems = false
+					
+					local entity = Game.FindEntityByID(currentEditorItems.entityId)
+					local components = checkForValidComponents(entity)
+					if components then
+						local visualScale = checkDefaultScale(components)
+						currentEditorItems.defaultScale = {
+							x = visualScale.x * 100,
+							y = visualScale.x * 100,
+							z = visualScale.x * 100,
+						}
+						currentEditorItems.scale = {
+							x = visualScale.x * 100,
+							y = visualScale.y * 100,
+							z = visualScale.z * 100,
+						}
+					end
+					
+					table.insert(currentItemSpawned,currentEditorItems)
+					
+					
+					currentEditorItems = {}
+					
+					openNewItems = false
 				end)
 			end
 			
@@ -7926,7 +8421,7 @@ function EditItemsWindows()
 		
 		
 		
-	
+		
 		print(tostring(currentEditorItems.scale == nil ))
 		if(components) then
 			
@@ -7973,10 +8468,10 @@ function EditItemsWindows()
 			
 			if scaleChanged then
 				Cron.After(0.7, function()
-				local entityid = currentEditorItems.entityId
-				local entity = Game.FindEntityByID(entityid)
-				local components = checkForValidComponents(entity)
-				setItemScale(entity, currentEditorItems, currentEditorItems.scale,proportionalMode)
+					local entityid = currentEditorItems.entityId
+					local entity = Game.FindEntityByID(entityid)
+					local components = checkForValidComponents(entity)
+					setItemScale(entity, currentEditorItems, currentEditorItems.scale,proportionalMode)
 				end)
 			end
 			

@@ -6010,14 +6010,19 @@ end
 
 
 function listenPlayerInput(action)
-
+	
 		actionName = Game.NameToString(action:GetName(action))
 		actionType = action:GetType(action).value
 		actionValue = action:GetValue(action)
+		-- logme(1,actionName)
+		-- logme(1,actionType)
+		-- logme(1,currentController)
+		
+		
 		
 		if actionName == "PhoneInteract" and actionType == "BUTTON_RELEASED" and currentPhoneCall ~= nil   then 
-local audioEvent = SoundStopEvent.new()
-audioEvent.soundName = "ui_phone_incoming_call"
+			local audioEvent = SoundStopEvent.new()
+			audioEvent.soundName = "ui_phone_incoming_call"
 			Game.GetPlayer():QueueEvent(audioEvent)
 			
 			runActionList(currentPhoneCall.answer_action,"phone_call","interact",false,"player")
@@ -6028,8 +6033,8 @@ audioEvent.soundName = "ui_phone_incoming_call"
 		
 		if actionName == "PhoneReject" and actionType == "BUTTON_HOLD_COMPLETE" and currentPhoneCall ~= nil   then 
 
-local audioEvent = SoundStopEvent.new()
-audioEvent.soundName = "ui_phone_incoming_call"
+			local audioEvent = SoundStopEvent.new()
+			audioEvent.soundName = "ui_phone_incoming_call"
 			Game.GetPlayer():QueueEvent(audioEvent)
 			
 			runActionList(currentPhoneCall.rejected_action,"phone_call","interact",false,"player")
@@ -6043,10 +6048,10 @@ audioEvent.soundName = "ui_phone_incoming_call"
 			hideInteract()
 			--debugPrint(2,"tosto")
 		end
-		if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and inputInAction == false and currentHelp == nil  then 
-			inputInAction = true
-			--debugPrint(2,"toto")
+		if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and currentHelp == nil  then 
+			
 			cycleInteract()
+			
 		end
 		
 		if currentHelp ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "activate_secondary" or actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then

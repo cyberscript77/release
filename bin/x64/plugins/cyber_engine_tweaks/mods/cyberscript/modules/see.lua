@@ -11553,22 +11553,7 @@ end
 			
 		end
 		
-		if(action.name == "toggle_corpo_ui") then
-			
-			if(GameController["hudCorpoController"] ~= nil) then
-				local root = GameController["hudCorpoController"].root
-				
-				
-				
-				root:SetVisible(action.value)
-				print("yep")
-				else
-				
-				print("noep")
-				
-			end
-			
-		end
+	
 		
 		if(action.name == "bound_scene_to_braindance") then
 			
@@ -12539,7 +12524,7 @@ function GenerateTextFromContextValues(context, v)
 				if(v.key == "appearance") then
 					
 					
-					value = enti:GetCurrentAppearanceName()
+					value = Game.NameToString(enti:GetCurrentAppearanceName())
 				
 				end
 				
@@ -12553,14 +12538,21 @@ function GenerateTextFromContextValues(context, v)
 				if(v.key == "context") then
 					
 					
-					value = enti:GetCurrentContext()
+					value = Game.NameToString(enti:GetCurrentContext())
 				
 				end
 				
 				if(v.key == "displayname") then
 					
 					
-					value = enti:GetDisplayName()
+					value = Game.NameToString(enti:GetDisplayName())
+				
+				end
+				
+				if(v.key == "fullname") then
+					
+					
+					value = enti:GetTweakDBFullDisplayName(false)
 				
 				end
 				
@@ -12569,9 +12561,11 @@ function GenerateTextFromContextValues(context, v)
 				
 					value = tostring(group)
 				end
-				
+				else
+				print("Context : No Entity Founded")
 			end
-		
+		else
+				print("Context : No Entity Founded")
 		end
 	end
 		

@@ -1186,7 +1186,7 @@ end
 					end
 				end
 			
-			logme(1,'creating cache for datatpack: '.." "..objtype.." "..datapackname.." path : "..rootpath)
+			
 			end,
 			catch {
 				function(error)
