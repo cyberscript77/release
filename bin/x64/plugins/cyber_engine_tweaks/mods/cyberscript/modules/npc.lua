@@ -880,6 +880,13 @@ entity5.tweak = "selection5"
 
 cyberscript.EntityManager[entity.tag] = entity
 
+local entity = {}
+entity.id = nil
+entity.tag = "last_killed"
+entity.tweak = "None"
+
+cyberscript.EntityManager[entity.tag] = entity
+
 local group = {}
 
 group.tag = "AMMCompanion"

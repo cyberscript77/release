@@ -446,15 +446,15 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 					else
 					
 					if cyberscript.EntityManager["lookatnpc"].isquest == nil then cyberscript.EntityManager["lookatnpc"].isquest = false end
-					cyberscript.EntityManager["lookatnpc"].id = nil
 					
-					cyberscript.EntityManager["lookatnpc"].id = objLook:GetEntityID()
 					objLook:MarkAsQuest(cyberscript.EntityManager["lookatnpc"].isquest)
-					
+					cyberscript.EntityManager["lookatnpc"].tweak = obj.tweak
 					
 				end
 				
-				
+				cyberscript.EntityManager["lookatnpc"].id = nil
+					
+				cyberscript.EntityManager["lookatnpc"].id = objLook:GetEntityID()
 				
 				
 				
@@ -1041,6 +1041,8 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	end
 	if (tick % 100 == 0) then --every 1 second
 		if(lastTargetKilled ~= nil)then
+			cyberscript.EntityManager["last_killed"].id = nil
+			cyberscript.EntityManager["last_killed"].tweak = "none"
 			lastTargetKilled = nil
 		end
 	end

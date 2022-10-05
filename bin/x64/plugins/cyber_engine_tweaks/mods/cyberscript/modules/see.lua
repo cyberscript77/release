@@ -377,30 +377,15 @@ function scriptcheckTrigger(trigger)
 			end
 			
 			if(trigger.name == "last_killed_entity_is_registred") then
-				if lastTargetKilled ~= nil then
-					tarName = lastTargetKilled:ToString()
-					appName = Game.NameToString(lastTargetKilled:GetCurrentAppearanceName())
-					dipName = lastTargetKilled:GetDisplayName()
-					local entid = lastTargetKilled:GetEntityID()
-					local entity = getEntityFromManagerById(entid)
-					if(entity.id ~= nil) then
+				if cyberscript.EntityManager["last_killed"].id ~= nil then
+				
+				
 						result = true
-					end
+				
 				end
 			end
 			
-			if(trigger.name == "last_killed_entity_is") then
-				if lastTargetKilled ~= nil then
-					tarName = lastTargetKilled:ToString()
-					appName = Game.NameToString(lastTargetKilled:GetCurrentAppearanceName())
-					dipName = lastTargetKilled:GetDisplayName()
-					local entid = lastTargetKilled:GetEntityID()
-					
-					if(entid.tag  == trigger.tag) then
-						result = true
-					end
-				end
-			end
+			
 			
 			if(trigger.name == "if_entities_around_you") then
 				player = Game.GetPlayer()

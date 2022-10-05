@@ -3813,11 +3813,30 @@ print("hot reload test")
 	function NPCPuppet_SendAfterDeathOrDefeatEvent(target)
 		if target ~= nil and target.shouldDie and ((target.myKiller ~= nil and target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash) or target.wasJustKilledOrDefeated) then
 			
+			local obj = getEntityFromManagerById(target:GetEntityID())
+				
+			if(obj.id ~= nil) then
+			
+				cyberscript.EntityManager["last_killed"].tweak =  obj.tweak
+			else
+				cyberscript.EntityManager["last_killed"].tweak = "none"
+			end
+			
+			if cyberscript.EntityManager["last_killed"].isquest == nil then cyberscript.EntityManager["last_killed"].isquest = false end
+			
+			cyberscript.EntityManager["last_killed"].id = nil
+		
+			cyberscript.EntityManager["last_killed"].id = target:GetEntityID()
+			
+			target:MarkAsQuest(cyberscript.EntityManager["last_killed"].isquest)
+				
+				
 			lastTargetKilled = target
-			debugPrint(10,"last killed target")
 			
 			else
 			lastTargetKilled = nil
+			cyberscript.EntityManager["last_killed"].id = nil
+			cyberscript.EntityManager["last_killed"].tweak = "none"
 		end
 	end
 	
