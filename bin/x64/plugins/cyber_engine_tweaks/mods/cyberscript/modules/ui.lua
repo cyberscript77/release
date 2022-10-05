@@ -38,6 +38,11 @@ function windowsManager() -- manage and toggle UI windows
 				if(openEditTrigger) then
 					TriggerEditWindows()	
 				end
+				
+				if(openQuestGraph) then
+					QuestGraph()	
+				end
+				
 				if(openEditActionTrigger) then
 					TriggerActionEditWindows()	
 				end

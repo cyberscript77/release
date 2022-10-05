@@ -170,7 +170,7 @@ function editorWindows()
 	
 	
 	
-	CPS:setThemeBegin()
+
 	
 	ImGui.SetNextWindowPos(300, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(1200, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -301,7 +301,7 @@ function editorWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -544,7 +544,12 @@ function QuestTabs()
 		
 		if(activeEditedQuest.tag ~= nil and activeEditedQuest.tag ~= "")then
 			
+			if ImGui.Button(getLang("Show Graph")) then
 			
+				openQuestGraph = true
+			
+			
+			end
 			
 			
 			if ImGui.Button(getLang("editor_save_for_build")) then
@@ -605,6 +610,339 @@ function QuestTabs()
 		ImGui.EndTabItem()
 	end
 end
+
+function QuestGraph()
+	
+	if(activeEditedQuest.tag ~= nil) then
+		
+		
+	
+	ImGui.SetNextWindowPos(300, 150, ImGuiCond.Appearing) -- set window position x, y
+	ImGui.SetNextWindowSize(1200, 800, ImGuiCond.Appearing) -- set window size w, h
+	
+
+	
+	
+	
+	if ImGui.Begin(getLang("Quest Graph")) then
+	
+		if ImGui.Button(getLang("Close")) then
+			
+			openQuestGraph = false
+			
+			
+		end
+	
+	
+	ImGui.Text("Name : "..activeEditedQuest.title)
+	ImGui.Text("Description : "..activeEditedQuest.content)
+	ImGui.Text("Tag : "..activeEditedQuest.tag)
+	
+	for k,v in pairs(EgameJournalQuestType) do
+		if activeEditedQuest.questtype == EgameJournalQuestType[k] then
+		
+			ImGui.Text("Type : "..k)
+		
+		end
+	
+	end
+	
+	ImGui.Text("Recommanded Level : "..activeEditedQuest.recommandedlevel)
+	
+	local recurrent = "True"
+	if(activeEditedQuest.recurrent == false) then recurrent = "False" end
+	
+	ImGui.Text("Recurent : "..recurrent)
+	
+	for k,v in pairs(EgamedataDistrict) do
+				
+				if activeEditedQuest.district == EgamedataDistrict[k] then
+		
+					ImGui.Text("District : "..k)
+		
+				end
+				
+				
+	end
+	
+	ImGui.Text("This quest is available when : ")
+	local requirement = ""
+	for iparent,parent in ipairs(activeEditedQuest.trigger_condition_requirement) do
+	
+		for ichildren,children in pairs(parent) do
+	
+		
+			local text = "Unknown Trigger"
+				
+			for i,value in ipairs(triggertemplate) do
+				
+				if(value.name == activeEditedQuest.trigger_condition[children].name) then
+						
+						text = value.helper
+						
+				
+				end
+				
+			end
+			
+			requirement = requirement..text
+			
+			if(activeEditedQuest.trigger_condition_requirement[iparent][ichildren+1] ~= nil) then
+		
+			requirement = requirement.. "\n AND \n"
+			
+			else
+			
+			requirement = requirement.. "\n"
+		
+			end
+		
+		end
+		
+		if(activeEditedQuest.trigger_condition_requirement[iparent+1] ~= nil) then
+		
+			requirement = requirement.. "\n OR \n"
+		
+		end
+	
+	
+	
+	end
+	ImGui.Text(requirement)
+	
+	
+	
+	
+	ImGui.Separator()
+	ImGui.Text("Objectives Graph")
+	ImGui.Separator()
+	
+	
+	
+	ImGui.PushStyleColor(ImGuiCol.ChildBg,  0.81960784313725,	0.81960784313725,	0.81960784313725, 0.2)
+	if ImGui.BeginChild("graphquest", 1100, 400, true) then
+	
+	ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
+	if ImGui.BeginChild("graphquestStart", 150, 30, true) then
+		
+		
+		ImGui.PushStyleColor(ImGuiCol.Text,  0, 1, 0.054901960784314, 1)
+		ImGui.Text("Start OF THE QUEST")
+		ImGui.PopStyleColor()
+	
+		
+		
+	end
+	ImGui.EndChild()
+	ImGui.PopStyleColor()
+	
+	ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+	ImGui.SameLine()
+	ImGui.Text("-")
+	ImGui.SameLine()
+	ImGui.Text("-")
+	ImGui.SameLine()
+	ImGui.Text(">")
+	ImGui.SameLine()
+	ImGui.PopStyleColor()
+	
+	
+	nextObj(activeEditedQuest.objectives[1])
+	
+	
+	ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+	ImGui.SameLine()
+	ImGui.Text("-")
+	ImGui.SameLine()
+	ImGui.Text("-")
+	ImGui.SameLine()
+	ImGui.Text(">")
+	ImGui.SameLine()
+	ImGui.PopStyleColor()
+	
+	ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
+	if ImGui.BeginChild("graphquestEnd", 150, 30, true) then
+	
+	ImGui.PushStyleColor(ImGuiCol.Text, 0.71372549019608,0.0,0.0, 1)
+	ImGui.Text("END OF THE QUEST")
+	ImGui.PopStyleColor()
+	
+		
+	end	
+	
+	ImGui.EndChild()
+	ImGui.PopStyleColor()
+	
+	
+		
+	end
+	ImGui.EndChild()
+	ImGui.PopStyleColor()
+	
+	
+	end
+	
+	ImGui.End()
+	
+	end
+	
+end
+
+
+function nextObj(objective)
+
+
+		ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 0)
+		ImGui.BeginChild("##"..objective.title.."container", 200, 400, true,ImGuiWindowFlags.AlwaysHorizontalScrollbar) 
+		
+		
+		if(objective.isoptionnal ~= true) then
+		ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+		ImGui.SameLine()
+		ImGui.Text("-")
+		ImGui.SameLine()
+		ImGui.Text("-")
+		ImGui.SameLine()
+		ImGui.Text(">")
+		ImGui.SameLine()
+		ImGui.PopStyleColor()
+		else
+		ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+		ImGui.Spacing()
+		ImGui.Text("|")
+		ImGui.Spacing()
+		ImGui.Text("|")
+		ImGui.Spacing()
+		ImGui.Text("V")
+		ImGui.Spacing()
+		ImGui.PopStyleColor()
+		end
+		
+		
+		
+		
+		if objective.isoptionnal == true then
+			ImGui.PushStyleColor(ImGuiCol.ChildBg,  0.1921568627451,0.77254901960784,0.31372549019608, 0.5)
+			else
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, 0.1921568627451,0.65882352941176,0.77254901960784, 0.5)
+		end
+		if ImGui.BeginChild(objective.title, 190, 200, true) then
+			if ImGui.BeginChild(objective.title.."child", 190, 190, false) then
+			ImGui.Text(objective.title)
+			
+			ImGui.Separator()
+			
+			ImGui.Text("Tag : "..objective.tag)
+			ImGui.Text("State : "..objective.state)
+			ImGui.Text("is Optionnal : "..tostring(objective.isoptionnal))
+			
+			ImGui.Text("This objective is finished when : ")
+			local requirementobj = ""
+			for iparent,parent in ipairs(objective.requirement) do
+			
+				for ichildren,children in pairs(parent) do
+			
+				
+					local text = "Unknown Trigger"
+						
+					for i,value in ipairs(triggertemplate) do
+						
+						if(value.name == objective.trigger[children].name) then
+								
+								text = value.helper
+								
+						
+						end
+						
+					end
+					
+					requirementobj = requirementobj..text
+					
+					if(objective.requirement[iparent][ichildren+1] ~= nil) then
+				
+					requirementobj = requirementobj.. "\n AND \n"
+					
+					else
+					
+					requirementobj = requirementobj.. "\n"
+				
+					end
+				
+				end
+				
+				if(objective.requirement[iparent+1] ~= nil) then
+				
+					requirementobj = requirementobj.. "\n OR \n"
+				
+				end
+			
+			
+			
+			end
+			ImGui.Text(requirementobj)
+	
+		
+			end
+			ImGui.EndChild()
+		
+		end
+		ImGui.EndChild()
+		ImGui.PopStyleColor()
+	
+		if(objective.unlock ~= nil and #objective.unlock > 0) then
+		
+			
+			for i,v in ipairs(objective.unlock) do
+			
+				
+				for i,o in ipairs(activeEditedQuest.objectives) do
+				
+					if(o.tag == v) then
+						if(activeEditedQuest.objectives[i].isoptionnal ~= true) then
+							ImGui.EndChild()
+							ImGui.PopStyleColor()
+							ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+							ImGui.SameLine()
+							ImGui.Text("-")
+							ImGui.SameLine()
+							ImGui.Text("-")
+							ImGui.SameLine()
+							ImGui.Text(">")
+							ImGui.SameLine()
+							ImGui.PopStyleColor()
+							nextObj(activeEditedQuest.objectives[i])
+							else
+							ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+							ImGui.Spacing()
+							ImGui.Text("|")
+							ImGui.Spacing()
+							ImGui.Text("|")
+							ImGui.Spacing()
+							ImGui.Text("V")
+							ImGui.Spacing()
+							ImGui.PopStyleColor()
+							nextObj(activeEditedQuest.objectives[i])
+							ImGui.EndChild()
+							ImGui.PopStyleColor()
+
+						end
+						
+					end
+				end
+			
+			
+			end
+		
+	else
+	
+		ImGui.EndChild()
+		ImGui.PopStyleColor()
+	
+		end
+		
+
+end
+
 
 
 function DialogTabs()
@@ -1149,9 +1487,6 @@ function PhoneDialogTabs()
 	
 	
 end
-
-
-
 
 
 function InteractTabs()
@@ -7142,7 +7477,7 @@ end
 --Windows
 function TriggerEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(100, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(300, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7196,14 +7531,14 @@ function TriggerEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
 
 function TriggerNewWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(100, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(300, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7256,7 +7591,7 @@ function TriggerNewWindows()
 		
 		ImGui.PopStyleVar(2)
 		ImGui.End()
-		CPS:setThemeEnd()
+		
 		
 		
 	end
@@ -7264,7 +7599,7 @@ end
 
 function TriggerActionEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(100, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(300, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7320,7 +7655,7 @@ function TriggerActionEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -7329,7 +7664,7 @@ end
 
 function SubTriggerEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(100, 200, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7368,7 +7703,7 @@ function SubTriggerEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -7376,7 +7711,7 @@ end
 
 function ActionEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(0, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(700, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7426,14 +7761,14 @@ function ActionEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
 
 function ActionNewWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(0, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(700, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7487,7 +7822,7 @@ function ActionNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -7495,7 +7830,7 @@ end
 
 function ActionSubEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(0, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(700, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7557,7 +7892,7 @@ function ActionSubEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -7607,7 +7942,7 @@ function orderedPairs(t)
 end
 
 function RoomNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7720,12 +8055,12 @@ function RoomNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 function SceneStepNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7793,11 +8128,11 @@ function SceneStepNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function SceneStepEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7873,11 +8208,11 @@ function SceneStepEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function RoomEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7998,12 +8333,12 @@ function RoomEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 function OptionsNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8112,11 +8447,11 @@ function OptionsNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function NewItemsWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8278,12 +8613,12 @@ function NewItemsWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 function EditItemsWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8523,13 +8858,13 @@ function EditItemsWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 function EditTemplatePositionWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8639,11 +8974,11 @@ function EditTemplatePositionWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function OptionsEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8752,12 +9087,12 @@ function OptionsEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function ControlsEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9154,7 +9489,7 @@ function ControlsEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -9162,7 +9497,7 @@ end
 
 
 function ObjectiveNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9271,11 +9606,11 @@ function ObjectiveNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function ObjectiveEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9386,14 +9721,14 @@ function ObjectiveEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 
 function ConversationNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9477,11 +9812,11 @@ function ConversationNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function ConversationEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9566,14 +9901,14 @@ function ConversationEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 
 function MessageNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9675,11 +10010,11 @@ function MessageNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function MessageEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9779,13 +10114,13 @@ function MessageEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 function ChoiceNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9874,13 +10209,13 @@ function ChoiceNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 function ChoiceEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9969,7 +10304,7 @@ function ChoiceEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
@@ -13411,7 +13746,7 @@ end
 function openJson()
 	
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(1200, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -13607,8 +13942,7 @@ function openJson()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
-

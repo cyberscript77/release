@@ -68,7 +68,19 @@ function QuestThreadManager()
 						
 						if(result == true and workerTable[objectif.tag.."_action"] == nil) then
 					--	debugPrint(2,objectif.tag.." ACtion")
-					
+							
+							
+							if(objectif.unlock ~= nil and #objectif.unlock > 0) then
+							
+								for i,v in ipairs(objectif.unlock) do
+								
+									QuestManager.MarkObjectiveAsActive(v)
+								
+								end
+							
+							end
+							
+							
 							local action ={}
 							action.name = "quest_notification"
 							action.title =  currentQuest.title

@@ -70,7 +70,7 @@ function QuestJournalUI.Initialize()
 			for _, questDef in ipairs(QuestManager.GetQuests()) do
 				local questState = QuestManager.GetQuestState(questDef.id)
 				local questEntry = QuestManager.GetQuestEntry(questDef.id)
-				print(questDef.id)
+				
 				if(QuestManager.IsQuestActive(questDef.id) or QuestManager.IsQuestComplete(questDef.id)) then 
 					
 					if QuestManager.isVisited(questDef.id) then
