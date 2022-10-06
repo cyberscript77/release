@@ -2201,7 +2201,7 @@ function checkNPC()
 		
 		checkContext(npc)
 	
-		if(check3DPos(playerpos, npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and  getEntityFromManager(currentfixer.Tag).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
+		if(check3DPos(playerpos, npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and getEntityFromManager(k).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
 			--if the npc is not spawned
 			
 			local tweakDBnpc =  npc.tweakDB
