@@ -12232,6 +12232,12 @@ function GeneratefromContext(context)
 	for k,v in pairs(context.values)do
 		
 		if v.trigger == nil or checkTriggerRequirement(v.requirement,v.trigger)then
+		
+			if(v.action ~= nil and #v.action > 0) then
+				
+					runActionList(v.action, k, "see", false,"see",false)					
+			end
+		
 			if(v.type ~= "object" and v.type ~= "list") then
 				local value = GenerateTextFromContextValues(context, v)
 				text = text:gsub("##"..k, value) 
@@ -12478,16 +12484,24 @@ function GenerateTextFromContextValues(context, v)
 				if(v.key == "position") then
 					
 					local pos = enti:GetWorldPosition()
+					local obj = {}
 					
-					value = pos[prop]
+					obj.x = pos.x
+					obj.y = pos.y
+					obj.z = pos.z
+					value = obj[prop]
 				
 				end
 				
 				if(v.key == "forward") then
 					
 					local pos = enti:GetWorldForward()
+					local obj = {}
 					
-					value = pos[prop]
+					obj.x = pos.x
+					obj.y = pos.y
+					obj.z = pos.z
+					value = obj[prop]
 				
 				end
 				
@@ -12495,7 +12509,14 @@ function GenerateTextFromContextValues(context, v)
 					
 					local qat = enti:GetWorldOrientation()
 					local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-					value = angle[prop]
+					local obj = {}
+					
+					obj.yaw = angle.yaw
+					obj.pitch = angle.pitch
+					obj.roll = angle.roll
+					
+					value = obj[prop]
+					
 				
 				end
 				
@@ -12982,6 +13003,11 @@ function GenerateTextFromContextValues(context, v)
 		value = v.value
 		
 	end
+	
+	if(v.type == "trigger") then
+			value = checkTrigger(v.trigger)
+	end
+	
 	
 	if(v.type == "list") then
 		local list = {}

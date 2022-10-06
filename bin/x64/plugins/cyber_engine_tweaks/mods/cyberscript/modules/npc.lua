@@ -11,6 +11,141 @@ local vehiculeRegion = true
 if spawnRegion then 
 	
 	
+	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation)
+		
+	
+		
+		if (('string' == type(chara)) and (string.match(tostring(chara), "AMM_Character.") == nil or (string.match(tostring(chara), "AMM_Character.") ~= nil and AMM ~= nil)  )  )then
+			--debugPrint(2,appearance)
+			
+			if ('string' == type(chara)) and string.match(chara, "Vehicle.") then
+				
+				error(getLang("npc_spawnnpc_error_vehicle"))
+				
+				
+				else
+				
+				local player = Game.GetPlayer()
+				local worldpos = player:GetWorldTransform()
+				
+				range = 5
+				
+				if isprevention then
+					range = 10
+				end
+				
+				--local vec4 = getBehindPosition(player,range)
+				
+			--	worldpos:SetPosition(worldpos, vec4)	
+				
+				local twk = TweakDBID.new(chara)
+				
+				local NPC = nil 
+				
+				
+				if isprevention == false then
+					
+					local postp = Vector4.new( x, y, z,1)
+					
+					worldpos:SetPosition(worldpos, postp)	
+					
+					if(isitem == nil or isitem == false)then
+						if(appearance ~= "" and appearance ~= "none") then
+							NPC = exEntitySpawner.SpawnRecord(chara, worldpos,appearance)
+							else
+							NPC = exEntitySpawner.SpawnRecord(chara, worldpos)
+						end
+						else
+						
+						
+						if(appearance ~= "" and appearance ~= "none") then
+							NPC = exEntitySpawner.Spawn(chara, worldpos,appearance)
+							else
+							NPC = exEntitySpawner.Spawn(chara, worldpos)
+							print("ent :"..chara)
+						end
+						print("ent :"..chara)
+					end
+					
+				else
+					local spawnlvl = spawnlevel * -1
+					local postp = Vector4.new( x, y, z,1)
+					
+					worldpos:SetPosition(worldpos, postp)	
+					
+					if(rotation ~= nil) then
+					
+					local rostp =  EulerAngles.new(rotation.roll,rotation.pitch,rotation.yaw)
+					
+					worldpos:SetOrientationEuler(worldpos, rostp)	
+					
+					end
+					
+					NPC = Game.GetPreventionSpawnSystem():RequestSpawn(twk,spawnlvl,worldpos)
+					--	print(GameDump(worldpos))
+						
+					
+					
+				end
+				
+				if(NPC ~= nil) then
+				local entity = {}
+					entity.id = NPC
+					entity.tag = tag
+					entity.tweak = chara
+					entity.isprevention = isprevention
+					if(scriptlevel == nil) then
+						entity.scriptlevel = 0
+						else
+						entity.scriptlevel = scriptlevel
+					end
+					entity.isMP = isMPplayer
+					
+					if(isitem == nil or isitem == false) then
+						
+						local npgc = getNPCByTweakId(chara)
+						if(npgc ~= nil) then
+						entity.name = npgc.Names
+						else
+						entity.name = tag
+						end
+						else
+						
+						entity.name = tag
+						
+					end
+					
+					if(isMPplayer ~= nil and isMPplayer == true)then
+						entity.name = tag
+					end
+					cyberscript.EntityManager[tag]=entity
+					
+				
+				-- Cron.After(0.5, function()
+					
+					
+					-- if isprevention == true then
+							-- local postp = Vector4.new( x, y, z,1)
+							-- teleportTo(Game.FindEntityByID(NPC), postp, 1,false)
+					-- end
+					
+					
+					
+					
+				-- end)
+				end
+			end
+			
+			else
+			
+			debugPrint(10,getLang("npc_spawnnpc_error_amm"))
+			
+		end
+	end
+	
+	
+	
+	
 	--Other player spawn management
 	
 	function spawnOtherPlayer(chara, tag, x, y ,z, spawnlevel)
@@ -259,140 +394,6 @@ if spawnRegion then
 		
 		
 	end
-	
-	
-	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation)
-		
-	
-		
-		if (('string' == type(chara)) and (string.match(tostring(chara), "AMM_Character.") == nil or (string.match(tostring(chara), "AMM_Character.") ~= nil and AMM ~= nil)  )  )then
-			--debugPrint(2,appearance)
-			
-			if ('string' == type(chara)) and string.match(chara, "Vehicle.") then
-				
-				error(getLang("npc_spawnnpc_error_vehicle"))
-				
-				
-				else
-				
-				local player = Game.GetPlayer()
-				local worldpos = player:GetWorldTransform()
-				
-				range = 5
-				
-				if isprevention then
-					range = 10
-				end
-				
-				--local vec4 = getBehindPosition(player,range)
-				
-			--	worldpos:SetPosition(worldpos, vec4)	
-				
-				local twk = TweakDBID.new(chara)
-				
-				local NPC = nil 
-				
-				
-				if isprevention == false then
-					
-					local postp = Vector4.new( x, y, z,1)
-					
-					worldpos:SetPosition(worldpos, postp)	
-					
-					if(isitem == nil or isitem == false)then
-						if(appearance ~= "" and appearance ~= "none") then
-							NPC = exEntitySpawner.SpawnRecord(chara, worldpos,appearance)
-							else
-							NPC = exEntitySpawner.SpawnRecord(chara, worldpos)
-						end
-						else
-						
-						
-						if(appearance ~= "" and appearance ~= "none") then
-							NPC = exEntitySpawner.Spawn(chara, worldpos,appearance)
-							else
-							NPC = exEntitySpawner.Spawn(chara, worldpos)
-							print("ent :"..chara)
-						end
-						print("ent :"..chara)
-					end
-					
-				else
-					local spawnlvl = spawnlevel * -1
-					local postp = Vector4.new( x, y, z,1)
-					
-					worldpos:SetPosition(worldpos, postp)	
-					
-					if(rotation ~= nil) then
-					
-					local rostp =  EulerAngles.new(rotation.roll,rotation.pitch,rotation.yaw)
-					
-					worldpos:SetOrientationEuler(worldpos, rostp)	
-					
-					end
-					
-					NPC = Game.GetPreventionSpawnSystem():RequestSpawn(twk,spawnlvl,worldpos)
-					--	print(GameDump(worldpos))
-						
-					
-					
-				end
-				
-				if(NPC ~= nil) then
-				local entity = {}
-					entity.id = NPC
-					entity.tag = tag
-					entity.tweak = chara
-					entity.isprevention = isprevention
-					if(scriptlevel == nil) then
-						entity.scriptlevel = 0
-						else
-						entity.scriptlevel = scriptlevel
-					end
-					entity.isMP = isMPplayer
-					
-					if(isitem == nil or isitem == false) then
-						
-						local npgc = getNPCByTweakId(chara)
-						if(npgc ~= nil) then
-						entity.name = npgc.Names
-						else
-						entity.name = tag
-						end
-						else
-						
-						entity.name = tag
-						
-					end
-					
-					if(isMPplayer ~= nil and isMPplayer == true)then
-						entity.name = tag
-					end
-					cyberscript.EntityManager[tag]=entity
-					
-				
-				-- Cron.After(0.5, function()
-					
-					
-					-- if isprevention == true then
-							-- local postp = Vector4.new( x, y, z,1)
-							-- teleportTo(Game.FindEntityByID(NPC), postp, 1,false)
-					-- end
-					
-					
-					
-					
-				-- end)
-				end
-			end
-			
-			else
-			
-			debugPrint(10,getLang("npc_spawnnpc_error_amm"))
-			
-		end
-	end
-	
 	
 	
 	

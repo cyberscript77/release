@@ -2253,6 +2253,7 @@ selecAction = ""
 currentParentItem = {}
 
 activeEditedQuest = {} -- 0
+questgraph = {}
 activeEditedInteract = {} --1 
 activeEditedDialog = {}--2
 activeEditedFixer = {} --3

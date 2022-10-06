@@ -545,9 +545,14 @@ function QuestTabs()
 		if(activeEditedQuest.tag ~= nil and activeEditedQuest.tag ~= "")then
 			
 			if ImGui.Button(getLang("Show Graph")) then
+				
+			
+		
+				makeGraphdata()
+				
 			
 				openQuestGraph = true
-			
+				
 			
 			end
 			
@@ -611,9 +616,211 @@ function QuestTabs()
 	end
 end
 
+function makeGraphdata()
+	
+		
+				questgraph = activeEditedQuest
+				
+				for k,v in pairs(EgameJournalQuestType) do
+				if questgraph.questtype == EgameJournalQuestType[k] then
+				
+					questgraph.questtype  = k 
+				
+				end
+				end
+				
+				
+				if(questgraph.recurrent == false) then questgraph.recurrent = "False" else questgraph.recurrent = "True" end
+				
+				for k,v in pairs(EgamedataDistrict) do
+					
+					if questgraph.district == EgamedataDistrict[k] then
+			
+						questgraph.district = k
+			
+					end
+				
+				end
+				
+				questgraph.requirement = ""
+				for iparent,parent in ipairs(questgraph.trigger_condition_requirement) do
+				
+					for ichildren,children in pairs(parent) do
+				
+					
+						local text =  "- "..children.." : ".."Unknown Trigger"
+							
+						for i,value in ipairs(triggertemplate) do
+							
+							if(value.name == questgraph.trigger_condition[children].name) then
+									
+									text = "- "..children.." : "..value.helper
+									
+							
+							end
+							
+						end
+						
+						questgraph.requirement = questgraph.requirement..text
+						
+						if(questgraph.trigger_condition_requirement[iparent][ichildren+1] ~= nil) then
+					
+						questgraph.requirement = questgraph.requirement.. "\n AND \n"
+						
+						else
+						
+						questgraph.requirement = questgraph.requirement.. "\n"
+					
+						end
+					
+					end
+					
+					if(questgraph.trigger_condition_requirement[iparent+1] ~= nil) then
+					
+						questgraph.requirement = questgraph.requirement.. "\n OR \n"
+					
+					end
+				end
+				
+				local objectivekey = {}
+				for i,v in ipairs(questgraph.objectives) do
+	
+					objectivekey[v.tag] = v
+				
+				end
+				
+				questgraph.children = SortTreeObjective(questgraph.objectives[1],objectivekey,1,1)
+				
+				local maxcolumn = 1
+				local maxrow = 1
+				
+				
+				for i,v in ipairs(questgraph.objectives) do
+					
+					if(v.column > maxcolumn) then
+					
+					maxcolumn = v.column
+					
+					end
+					
+					if(v.row > maxrow) then
+					
+					maxrow = v.row
+					
+					end
+				
+				end
+				
+				questgraph.column = maxcolumn
+				questgraph.row = maxrow
+				
+				
+				
+				local file = assert(io.open("graphdata.json", "w"))
+				local stringg = JSON:encode_pretty(questgraph)
+				--debug--debugPrint(2,stringg)
+				file:write(stringg)
+				file:close()
+				
+	
+end
+
+
+
+
+function SortTreeObjective(objective, objectivekey,row,column)
+	local tableObj = objective
+	
+	
+	
+	tableObj.row = row
+	tableObj.column = column
+	
+	for k,v in pairs(EgameJournalEntryStateRename) do
+					
+					if tableObj.state == EgameJournalEntryStateRename[k] then
+			
+						tableObj.statedisplay = k
+			
+					end
+				
+	end
+	
+	local actions = ""
+	for k,v in ipairs(tableObj.action) do
+	
+		
+		actions = actions..v.name.."\n"
+	
+	
+	end
+	
+	tableObj.actionsdisplay =actions
+	
+	tableObj.requirementtext = ""
+	for iparent,parent in ipairs(tableObj.requirement) do
+			
+		for ichildren,children in pairs(parent) do
+	
+		
+			local text = "- "..children.." : ".."Unknown Trigger"
+				
+			for i,value in ipairs(triggertemplate) do
+				
+				if(value.name == tableObj.trigger[children].name) then
+						
+						text = "- "..children.." : "..value.helper
+						
+				
+				end
+				
+			end
+			
+			tableObj.requirementtext = tableObj.requirementtext..text
+			
+			if(tableObj.requirement[iparent][ichildren+1] ~= nil) then
+		
+				tableObj.requirementtext = tableObj.requirementtext.. "\n AND \n"
+			
+			else
+			
+				tableObj.requirementtext = tableObj.requirementtext.. "\n"
+		
+			end
+		
+		end
+		
+		if(tableObj.requirement[iparent+1] ~= nil) then
+		
+			tableObj.requirementtext = tableObj.requirementtext.. "\n OR \n"
+		
+		end
+	
+	
+	
+	end
+					
+	tableObj.children = {}
+				
+	if(tableObj.unlock ~= nil and #tableObj.unlock >0) then
+		local newrow = row
+		for i,child in ipairs(tableObj.unlock) do
+			
+			local children = SortTreeObjective(objectivekey[child],objectivekey,newrow,column+1)
+			
+			table.insert(tableObj.children,children)
+			newrow = newrow+i
+		end
+	
+	end
+	
+	return tableObj
+end
+
+
 function QuestGraph()
 	
-	if(activeEditedQuest.tag ~= nil) then
+	if(questgraph.tag ~= nil) then
 		
 		
 	
@@ -629,278 +836,102 @@ function QuestGraph()
 		if ImGui.Button(getLang("Close")) then
 			
 			openQuestGraph = false
+			questgraph = {}
 			
+		end
+		
+		
+		if ImGui.Button(getLang("Refresh")) then
+			
+			makeGraphdata()
 			
 		end
 	
 	
-	ImGui.Text("Name : "..activeEditedQuest.title)
-	ImGui.Text("Description : "..activeEditedQuest.content)
-	ImGui.Text("Tag : "..activeEditedQuest.tag)
+	ImGui.Text("Name : "..questgraph.title)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Tag : "..questgraph.tag)
 	
-	for k,v in pairs(EgameJournalQuestType) do
-		if activeEditedQuest.questtype == EgameJournalQuestType[k] then
-		
-			ImGui.Text("Type : "..k)
-		
-		end
+	ImGui.Spacing()
+	ImGui.Text("Description : "..questgraph.content)
+	ImGui.Spacing()
 	
-	end
+	ImGui.Text("Type : "..questgraph.questtype)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Recommanded Level : "..questgraph.recommandedlevel)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Recurent : "..questgraph.recurrent)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("District : "..questgraph.district)
 	
-	ImGui.Text("Recommanded Level : "..activeEditedQuest.recommandedlevel)
-	
-	local recurrent = "True"
-	if(activeEditedQuest.recurrent == false) then recurrent = "False" end
-	
-	ImGui.Text("Recurent : "..recurrent)
-	
-	for k,v in pairs(EgamedataDistrict) do
-				
-				if activeEditedQuest.district == EgamedataDistrict[k] then
-		
-					ImGui.Text("District : "..k)
-		
-				end
-				
-				
-	end
+	ImGui.Spacing()
 	
 	ImGui.Text("This quest is available when : ")
-	local requirement = ""
-	for iparent,parent in ipairs(activeEditedQuest.trigger_condition_requirement) do
 	
-		for ichildren,children in pairs(parent) do
-	
-		
-			local text = "Unknown Trigger"
-				
-			for i,value in ipairs(triggertemplate) do
-				
-				if(value.name == activeEditedQuest.trigger_condition[children].name) then
-						
-						text = value.helper
-						
-				
-				end
-				
-			end
-			
-			requirement = requirement..text
-			
-			if(activeEditedQuest.trigger_condition_requirement[iparent][ichildren+1] ~= nil) then
-		
-			requirement = requirement.. "\n AND \n"
-			
-			else
-			
-			requirement = requirement.. "\n"
-		
-			end
-		
-		end
-		
-		if(activeEditedQuest.trigger_condition_requirement[iparent+1] ~= nil) then
-		
-			requirement = requirement.. "\n OR \n"
-		
-		end
-	
-	
-	
-	end
-	ImGui.Text(requirement)
-	
-	
-	
+	ImGui.Text(questgraph.requirement)
 	
 	ImGui.Separator()
+	
 	ImGui.Text("Objectives Graph")
+	ImGui.Separator()
+	ImGui.SetWindowFontScale(1.1)
+	ImGui.Text("Legend : ")
+	ImGui.SameLine()
+	ImGui.PushStyleColor(ImGuiCol.Text,  0.1921568627451,0.77254901960784,0.31372549019608, 1)
+	ImGui.Text("Optionnal")
+	ImGui.PopStyleColor()
+	ImGui.SameLine()
+	ImGui.PushStyleColor(ImGuiCol.Text, 0.1921568627451,0.65882352941176,0.77254901960784, 1)
+	ImGui.Text("Required")
+	ImGui.PopStyleColor()
+	ImGui.SetWindowFontScale(1)
 	ImGui.Separator()
 	
 	
 	
 	ImGui.PushStyleColor(ImGuiCol.ChildBg,  0.81960784313725,	0.81960784313725,	0.81960784313725, 0.2)
-	if ImGui.BeginChild("graphquest", 1100, 400, true) then
-	
-	ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
-	if ImGui.BeginChild("graphquestStart", 150, 30, true) then
-		
-		
-		ImGui.PushStyleColor(ImGuiCol.Text,  0, 1, 0.054901960784314, 1)
-		ImGui.Text("Start OF THE QUEST")
-		ImGui.PopStyleColor()
+	if ImGui.BeginChild("graphquest", 1150, 300, true) then
 	
 		
 		
-	end
-	ImGui.EndChild()
-	ImGui.PopStyleColor()
-	
-	ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
-	ImGui.SameLine()
-	ImGui.Text("-")
-	ImGui.SameLine()
-	ImGui.Text("-")
-	ImGui.SameLine()
-	ImGui.Text(">")
-	ImGui.SameLine()
-	ImGui.PopStyleColor()
-	
-	
-	nextObj(activeEditedQuest.objectives[1])
-	
-	
-	ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
-	ImGui.SameLine()
-	ImGui.Text("-")
-	ImGui.SameLine()
-	ImGui.Text("-")
-	ImGui.SameLine()
-	ImGui.Text(">")
-	ImGui.SameLine()
-	ImGui.PopStyleColor()
-	
-	ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
-	if ImGui.BeginChild("graphquestEnd", 150, 30, true) then
-	
-	ImGui.PushStyleColor(ImGuiCol.Text, 0.71372549019608,0.0,0.0, 1)
-	ImGui.Text("END OF THE QUEST")
-	ImGui.PopStyleColor()
-	
-		
-	end	
-	
-	ImGui.EndChild()
-	ImGui.PopStyleColor()
-	
-	
-		
-	end
-	ImGui.EndChild()
-	ImGui.PopStyleColor()
-	
-	
-	end
-	
-	ImGui.End()
-	
-	end
-	
-end
-
-
-function nextObj(objective)
-
-
-		ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 0)
-		ImGui.BeginChild("##"..objective.title.."container", 200, 400, true,ImGuiWindowFlags.AlwaysHorizontalScrollbar) 
-		
-		
-		if(objective.isoptionnal ~= true) then
-		ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
-		ImGui.SameLine()
-		ImGui.Text("-")
-		ImGui.SameLine()
-		ImGui.Text("-")
-		ImGui.SameLine()
-		ImGui.Text(">")
-		ImGui.SameLine()
-		ImGui.PopStyleColor()
-		else
-		ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
-		ImGui.Spacing()
-		ImGui.Text("|")
-		ImGui.Spacing()
-		ImGui.Text("|")
-		ImGui.Spacing()
-		ImGui.Text("V")
-		ImGui.Spacing()
-		ImGui.PopStyleColor()
-		end
-		
-		
-		
-		
-		if objective.isoptionnal == true then
-			ImGui.PushStyleColor(ImGuiCol.ChildBg,  0.1921568627451,0.77254901960784,0.31372549019608, 0.5)
-			else
-			ImGui.PushStyleColor(ImGuiCol.ChildBg, 0.1921568627451,0.65882352941176,0.77254901960784, 0.5)
-		end
-		if ImGui.BeginChild(objective.title, 190, 200, true) then
-			if ImGui.BeginChild(objective.title.."child", 190, 190, false) then
-			ImGui.Text(objective.title)
+		local flags = ImGuiTableFlags.ScrollX + ImGuiTableFlags.ScrollY 
+		if ImGui.BeginTable("Table1", questgraph.column,flags,1100,250) then
 			
-			ImGui.Separator()
 			
-			ImGui.Text("Tag : "..objective.tag)
-			ImGui.Text("State : "..objective.state)
-			ImGui.Text("is Optionnal : "..tostring(objective.isoptionnal))
 			
-			ImGui.Text("This objective is finished when : ")
-			local requirementobj = ""
-			for iparent,parent in ipairs(objective.requirement) do
-			
-				for ichildren,children in pairs(parent) do
-			
+			for y=1,questgraph.row do
 				
-					local text = "Unknown Trigger"
+				for x=1,questgraph.column+1 do
+					
+					for index,v in ipairs(questgraph.objectives) do
 						
-					for i,value in ipairs(triggertemplate) do
+					
 						
-						if(value.name == objective.trigger[children].name) then
+						if(v.row == y and v.column+1 == x) then
+							if(index == 1) then
+						
+							ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
+							if ImGui.BeginChild("graphquestStart", 150, 30, true) then
 								
-								text = value.helper
 								
-						
-						end
-						
-					end
-					
-					requirementobj = requirementobj..text
-					
-					if(objective.requirement[iparent][ichildren+1] ~= nil) then
-				
-					requirementobj = requirementobj.. "\n AND \n"
-					
-					else
-					
-					requirementobj = requirementobj.. "\n"
-				
-					end
-				
-				end
-				
-				if(objective.requirement[iparent+1] ~= nil) then
-				
-					requirementobj = requirementobj.. "\n OR \n"
-				
-				end
-			
-			
-			
-			end
-			ImGui.Text(requirementobj)
-	
-		
-			end
-			ImGui.EndChild()
-		
-		end
-		ImGui.EndChild()
-		ImGui.PopStyleColor()
-	
-		if(objective.unlock ~= nil and #objective.unlock > 0) then
-		
-			
-			for i,v in ipairs(objective.unlock) do
-			
-				
-				for i,o in ipairs(activeEditedQuest.objectives) do
-				
-					if(o.tag == v) then
-						if(activeEditedQuest.objectives[i].isoptionnal ~= true) then
+								ImGui.PushStyleColor(ImGuiCol.Text,  0, 1, 0.054901960784314, 1)
+								ImGui.Text("Start OF THE QUEST")
+								ImGui.PopStyleColor()
+							
+								
+								
+							end
 							ImGui.EndChild()
 							ImGui.PopStyleColor()
+							
 							ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
 							ImGui.SameLine()
 							ImGui.Text("-")
@@ -910,37 +941,150 @@ function nextObj(objective)
 							ImGui.Text(">")
 							ImGui.SameLine()
 							ImGui.PopStyleColor()
-							nextObj(activeEditedQuest.objectives[i])
-							else
-							ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
-							ImGui.Spacing()
-							ImGui.Text("|")
-							ImGui.Spacing()
-							ImGui.Text("|")
-							ImGui.Spacing()
-							ImGui.Text("V")
-							ImGui.Spacing()
-							ImGui.PopStyleColor()
-							nextObj(activeEditedQuest.objectives[i])
-							ImGui.EndChild()
-							ImGui.PopStyleColor()
-
+							
+							end
+							 nextObj(v,1,index)
+							 if(index == #questgraph.objectives ) then
+						
+						ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+						ImGui.SameLine()
+						ImGui.Text("-")
+						ImGui.SameLine()
+						ImGui.Text("-")
+						ImGui.SameLine()
+						ImGui.Text(">")
+						ImGui.SameLine()
+						ImGui.PopStyleColor()
+						
+						ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
+						if ImGui.BeginChild("graphquestEnd", 150, 30, true) then
+						
+						ImGui.PushStyleColor(ImGuiCol.Text, 0.71372549019608,0.0,0.0, 1)
+						ImGui.Text("END OF THE QUEST")
+						ImGui.PopStyleColor()
+						
+							
+						end	
+						
+						ImGui.EndChild()
+						ImGui.PopStyleColor()
+						
+						
+						end
+							
 						end
 						
+						
+						
+						
+					
 					end
+					ImGui.TableNextColumn()      
+				
 				end
+				
+				ImGui.TableNextRow()  
+			
+			end
 			
 			
 			end
+		ImGui.EndTable()
+		--nextObj(questgraph.objectives[1],1)
 		
-	else
+		
+		
+		
+		
+		
+		end
+	ImGui.EndChild()
+	ImGui.PopStyleColor()
+	ImGui.Separator()
 	
-		ImGui.EndChild()
-		ImGui.PopStyleColor()
+			
+	end
 	
+	ImGui.End()
+	
+	end
+	
+end
+
+
+function nextObj(objective,layer,index)
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		if objective.isoptionnal == true then
+			ImGui.PushStyleColor(ImGuiCol.ChildBg,  0.1921568627451,0.77254901960784,0.31372549019608, 0.5)
+			else
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, 0.1921568627451,0.65882352941176,0.77254901960784, 0.5)
 		end
 		
-
+		
+		if ImGui.BeginChild(objective.title, 190, 50, true) then
+			if ImGui.BeginChild(objective.title.."child", 190, 30, false) then
+				ImGui.Text(objective.title)
+				ImGui.SameLine()
+				
+				if ImGui.Button("+", 20, 0) then
+					currentSelectObjective = {}
+					currentSelectObjective = activeEditedQuest.objectives[index]
+					currentSelectObjective.index = index
+					currentSelectObjective.parent = "objectives"
+					currentSelectObjective.tagprefix = objective.tag.."_"
+					
+					
+					
+					
+					
+					openEditObjective = true
+				end
+				
+				
+				
+				
+				
+			end
+			ImGui.EndChild()
+			local tab1hov = ImGui.IsItemHovered()
+			if tab1hov then
+				
+				ImGui.BeginTooltip()
+			
+				ImGui.SameLine(20)
+				ImGui.BeginGroup()
+				ImGui.BeginChild("ToolTipMain", 400, 800, true,ImGuiWindowFlags.AlwaysAutoResize )
+				
+				ImGui.Text("Tag : "..objective.tag)
+				ImGui.Text("State : "..objective.statedisplay)
+				ImGui.Text("is Optionnal : "..tostring(objective.isoptionnal))
+				ImGui.Text("This objective is finished when : ")
+				ImGui.Text(splitByChunk(objective.requirementtext, 40))
+				ImGui.Spacing()
+				ImGui.Text("Actions : ")
+				ImGui.Text(objective.actionsdisplay)
+				
+				
+				ImGui.EndChild()
+				ImGui.EndGroup()
+				ImGui.EndTooltip()
+			end
+		end
+		ImGui.EndChild()
+		
+		ImGui.PopStyleColor()
+		
+		
+	
 end
 
 
@@ -9691,12 +9835,7 @@ function ObjectiveEditWindows()
 				end
 				
 				
-				if ImGui.Button("Close", 300, 0) then
-					
-					currentSelectObjective = {}
-					
-					openEditObjective = false
-				end
+				
 				
 				
 				end
@@ -9709,7 +9848,12 @@ function ObjectiveEditWindows()
 			
 		end
 		
-		
+		if ImGui.Button("Close", 300, 0) then
+					
+					currentSelectObjective = {}
+					
+					openEditObjective = false
+			end
 		
 		
 		
@@ -10881,6 +11025,7 @@ function actionNode(title,obj,key)
 	
 	if ImGui.TreeNode(title) then
 		
+		if( #obj[key] > 0) then
 		for i = 1, #obj[key] do 
 			
 			if ImGui.Button(obj[key][i].name.." ("..tostring(i)..")", 300, 0) then
@@ -10895,6 +11040,7 @@ function actionNode(title,obj,key)
 				
 			end
 			
+		end
 		end
 		
 		if ImGui.Button("(Add new)", 300, 0) then

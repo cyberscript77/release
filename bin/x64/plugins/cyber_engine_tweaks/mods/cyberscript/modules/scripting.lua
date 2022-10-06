@@ -36,7 +36,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	loadCustomPlace()
 	itemMover()
 	curRot = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
-
+	
 	districtState = lang.Friendly
 	getCurrentDistrict2()
 	
@@ -141,21 +141,21 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	if(GameController["MinimapContainerController"] ~= nil and displayHUD["default_minimap_root"] == nil ) then
 		
 		displayHUD["default_minimap_root"] = GameController["MinimapContainerController"]:GetRootWidget()
-
+		
 		displayHUD["default_minimap_container"] = GameController["MinimapContainerController"]:GetRootWidget():GetWidgetByIndex(4)
-	
+		
 	end
 	
 	if(GameController["healthbarWidgetGameController"] ~= nil and displayHUD["default_healthbar"] == nil ) then
 		
 		displayHUD["default_healthbar"] = GameController["healthbarWidgetGameController"]:GetRootWidget()
-	
+		
 	end
 	
 	if(GameController["StaminabarWidgetGameController"] ~= nil and displayHUD["default_staminabar"] == nil ) then
 		
 		displayHUD["default_staminabar"] = GameController["StaminabarWidgetGameController"]:GetRootWidget()
-	
+		
 	end
 	
 	if(GameController["HotkeysWidgetController"] ~= nil and displayHUD["default_hotkey"] == nil ) then
@@ -170,21 +170,21 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	
 	
 	if(GameController["BraindanceGameControllerRoot"] ~= nil and displayHUD["main_root_default"] == nil ) then
-			
-			print("setting HUD")
-			spdlog.error(GameDump(GameController["BraindanceGameControllerRoot"]))
-			
-			local rootContainerHUD = GameController["BraindanceGameControllerRoot"]
-			rootContainerHUD:SetVisible(true)
-			
-			
-			local cscontainer = rootContainerHUD:GetWidget(CName("default_cs")) 
-			local makenew = false
-			local hudprocessing = false
-			spdlog.error(GameDump(cscontainer))
 		
-			
-			if(cscontainer == nil) or (cscontainer:GetName() ~= CName("default_cs")) then
+		print("setting HUD")
+		spdlog.error(GameDump(GameController["BraindanceGameControllerRoot"]))
+		
+		local rootContainerHUD = GameController["BraindanceGameControllerRoot"]
+		rootContainerHUD:SetVisible(true)
+		
+		
+		local cscontainer = rootContainerHUD:GetWidget(CName("default_cs")) 
+		local makenew = false
+		local hudprocessing = false
+		spdlog.error(GameDump(cscontainer))
+		
+		
+		if(cscontainer == nil) or (cscontainer:GetName() ~= CName("default_cs")) then
 			print("No container")
 			CName.add("default_cs")
 			local cscontainer = nil
@@ -198,25 +198,85 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 			spdlog.error(GameDump(cscontainer))
 			spdlog.error(NameToString(cscontainer:GetName()))
 			
+		end
+		
+		
+		
+		displayHUD["main_root_default"] = cscontainer
+		
+		
+		
+		if(makenew == true) then
+			print("redo HUD")
+			hudprocessing = true
+			for k,v in pairs(arrayHUD) do
+				local hud = v.hud
+				if(hud.type == "container") then
+					displayHUD[k] = inkCanvas.new()
+					displayHUD[k]:SetName(CName.new(hud.tag))
+					displayHUD[k]:SetAnchor(inkEAnchor.Fill)
+					displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
+					debugPrint(10,"create "..hud.tag)
+					
+				end
 			end
 			
 			
+			for k,v in pairs(arrayHUD) do
+				local hud = v.hud
+				if(hud.type == "container") then
+					if(hud.container == nil or hud.container == "default" or  hud.container == "") then
+						displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
+						else
+						displayHUD[k]:Reparent(displayHUD[hud.container], -1)
+					end
+					
+					
+				end
+			end
 			
-			displayHUD["main_root_default"] = cscontainer
+			for k,v in pairs(arrayHUD) do
+				local hud = v.hud
+				if(hud.type == "widget") then
+					displayHUD[k] = inkText.new()
+					displayHUD[k]:SetName(CName.new(hud.tag))
+					displayHUD[k]:SetMargin(inkMargin.new({ top = hud.margin.top, left = hud.margin.left}))
+					displayHUD[k]:SetFontFamily(hud.fontfamily)
+					displayHUD[k]:SetFontStyle(hud.fontstyle)
+					displayHUD[k]:SetFontSize(hud.fontsize)
+					displayHUD[k]:SetTintColor(gamecolor(hud.color.red,hud.color.green,hud.color.blue,1))
+					displayHUD[k]:SetVisible(hud.visible)
+					displayHUD[k]:SetHorizontalAlignment(textHorizontalAlignment.Center)
+					displayHUD[k]:SetVerticalAlignment(textVerticalAlignment.Center)
+					
+					if(hud.container == nil or hud.container == "default" or hud.container == "") then
+						displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
+						else
+						displayHUD[k]:Reparent(displayHUD[hud.container], -1)
+					end
+					debugPrint(10,"create "..hud.tag)
+				end
+				
+			end
 			
-			
-			
-			if(makenew == true) then
-			print("redo HUD")
-			hudprocessing = true
+			print("HUD created")
+			else
+			if hudprocessing == false then
+				print("recreate HUD")
+				displayHUD["main_root_default"]:RemoveAllChildren()
+				
+				
 				for k,v in pairs(arrayHUD) do
 					local hud = v.hud
 					if(hud.type == "container") then
+						
+						
 						displayHUD[k] = inkCanvas.new()
 						displayHUD[k]:SetName(CName.new(hud.tag))
 						displayHUD[k]:SetAnchor(inkEAnchor.Fill)
 						displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
 						debugPrint(10,"create "..hud.tag)
+						
 						
 					end
 				end
@@ -238,6 +298,8 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				for k,v in pairs(arrayHUD) do
 					local hud = v.hud
 					if(hud.type == "widget") then
+						
+						
 						displayHUD[k] = inkText.new()
 						displayHUD[k]:SetName(CName.new(hud.tag))
 						displayHUD[k]:SetMargin(inkMargin.new({ top = hud.margin.top, left = hud.margin.left}))
@@ -257,76 +319,14 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 						debugPrint(10,"create "..hud.tag)
 					end
 					
-				end
-				
-				print("HUD created")
-				else
-				if hudprocessing == false then
-				print("recreate HUD")
-				displayHUD["main_root_default"]:RemoveAllChildren()
-
-
-				for k,v in pairs(arrayHUD) do
-					local hud = v.hud
-					if(hud.type == "container") then
 					
-						
-							displayHUD[k] = inkCanvas.new()
-							displayHUD[k]:SetName(CName.new(hud.tag))
-							displayHUD[k]:SetAnchor(inkEAnchor.Fill)
-							displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
-							debugPrint(10,"create "..hud.tag)
-						
-						
-					end
-				end
-				
-				
-				for k,v in pairs(arrayHUD) do
-					local hud = v.hud
-					if(hud.type == "container") then
-						if(hud.container == nil or hud.container == "default" or  hud.container == "") then
-							displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
-							else
-							displayHUD[k]:Reparent(displayHUD[hud.container], -1)
-						end
-						
-						
-					end
-				end
-				
-				for k,v in pairs(arrayHUD) do
-					local hud = v.hud
-					if(hud.type == "widget") then
-						
-						
-							displayHUD[k] = inkText.new()
-							displayHUD[k]:SetName(CName.new(hud.tag))
-							displayHUD[k]:SetMargin(inkMargin.new({ top = hud.margin.top, left = hud.margin.left}))
-							displayHUD[k]:SetFontFamily(hud.fontfamily)
-							displayHUD[k]:SetFontStyle(hud.fontstyle)
-							displayHUD[k]:SetFontSize(hud.fontsize)
-							displayHUD[k]:SetTintColor(gamecolor(hud.color.red,hud.color.green,hud.color.blue,1))
-							displayHUD[k]:SetVisible(hud.visible)
-							displayHUD[k]:SetHorizontalAlignment(textHorizontalAlignment.Center)
-							displayHUD[k]:SetVerticalAlignment(textVerticalAlignment.Center)
-							
-							if(hud.container == nil or hud.container == "default" or hud.container == "") then
-								displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
-								else
-								displayHUD[k]:Reparent(displayHUD[hud.container], -1)
-							end
-							debugPrint(10,"create "..hud.tag)
-						end
-					
-						
 					
 					
 				end
 				
 				print("HUD initialised")
-				end
 			end
+		end
 	end
 	
 	
@@ -453,7 +453,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				end
 				
 				cyberscript.EntityManager["lookatnpc"].id = nil
-					
+				
 				cyberscript.EntityManager["lookatnpc"].id = objLook:GetEntityID()
 				
 				
@@ -500,7 +500,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		setVariable("current_place","room_name","")
 	end
 	
-
+	
 	--Quest
 	if(currentSave.arrayPlayerData.CurrentQuest ~= nil) then
 		haveMission = true
@@ -545,9 +545,9 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				
 				else
 				if(obj.id == nil) then
-				cyberscript.EntityManager["current_car"].id = nil
+					cyberscript.EntityManager["current_car"].id = nil
 					
-				cyberscript.EntityManager["current_car"].id = vehicule:GetEntityID()
+					cyberscript.EntityManager["current_car"].id = vehicule:GetEntityID()
 				end
 			end
 		end
@@ -556,7 +556,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		
 		
 		cyberscript.EntityManager["current_car"].id = nil
-			
+		
 	end
 	
 	--AV
@@ -1053,7 +1053,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		
 		
 		
-	
+		
 		if activeMetroDisplay == true then
 			MetroCurrentTime = MetroCurrentTime - 1
 			debugPrint(10,MetroCurrentTime)
@@ -1086,30 +1086,30 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	end
 	if (tick % 3600 == 0) then --every 3 second
 		-- if(GameController["BraindanceGameController"] == nil or GameController["TutorialPopupGameController"]== nil or GameController["IncomingCallGameController"]==nil or GameController["ChattersGameController"]==nil or GameController["SubtitlesGameController"] == nil or GameController["MessengerDialogViewController"]==nil or LinkController==nil) then
-			-- Game.GetPlayer():SetWarningMessage(getLang("missingcontroller"))
-			-- if(GameController["BraindanceGameController"] == nil)then
-				-- debugPrint(1,"CyberScript : BraindanceGameController is missing !")
-			-- end
-			-- if(GameController["TutorialPopupGameController"] == nil)then
-				-- debugPrint(1,"CyberScript : TutorialPopupGameController is missing !")
-			-- end
-			-- if(GameController["IncomingCallGameController"] == nil)then
-				-- debugPrint(1,"CyberScript : IncomingCallGameController is missing !")
-			-- end
-			-- if(GameController["ShardNotificationController"] == nil)then
-				-- debugPrint(1,"CyberScript : ShardNotificationController is missing !")
-			-- end
-			-- if(GameController["ChattersGameController"] == nil)then
-				-- debugPrint(1,"CyberScript : ChattersGameController is missing !")
-			-- end
-			
-			-- if(GameController["MessengerDialogViewController"] == nil)then
-				-- debugPrint(1,"CyberScript : MessengerDialogViewController is missing !")
-			-- end
-			-- if(LinkController == nil)then
-				-- debugPrint(1,"CyberScript : LinkController is missing !")
-			-- end
-			
+		-- Game.GetPlayer():SetWarningMessage(getLang("missingcontroller"))
+		-- if(GameController["BraindanceGameController"] == nil)then
+		-- debugPrint(1,"CyberScript : BraindanceGameController is missing !")
+		-- end
+		-- if(GameController["TutorialPopupGameController"] == nil)then
+		-- debugPrint(1,"CyberScript : TutorialPopupGameController is missing !")
+		-- end
+		-- if(GameController["IncomingCallGameController"] == nil)then
+		-- debugPrint(1,"CyberScript : IncomingCallGameController is missing !")
+		-- end
+		-- if(GameController["ShardNotificationController"] == nil)then
+		-- debugPrint(1,"CyberScript : ShardNotificationController is missing !")
+		-- end
+		-- if(GameController["ChattersGameController"] == nil)then
+		-- debugPrint(1,"CyberScript : ChattersGameController is missing !")
+		-- end
+		
+		-- if(GameController["MessengerDialogViewController"] == nil)then
+		-- debugPrint(1,"CyberScript : MessengerDialogViewController is missing !")
+		-- end
+		-- if(LinkController == nil)then
+		-- debugPrint(1,"CyberScript : LinkController is missing !")
+		-- end
+		
 		-- end
 	end
 	if(tick % 18000 == 0) then
@@ -1195,165 +1195,165 @@ function ScriptExecutionEngine()
 		for i,v in ipairs(workerTableKey) do 
 			local k = workerTableKey[i]
 			if(workerTable[k] ~= nil) then
-			
-			if(GameUI.IsMenu() == false or (workerTable[k]["bypassMenu"] ~= nil and workerTable[k]["bypassMenu"] == true)) then
-				local index = workerTable[k]["index"]
-				local list = workerTable[k]["action"]
-				local parent = workerTable[k]["parent"]
-				local pending = workerTable[k]["pending"]
 				
-				-- debugPrint(4,k)
-				-- debugPrint(4,list)
-				-- debugPrint(4,index)
-				
-				if(workerTable[k]["index"] > #workerTable[k]["action"] and workerTable[k]["pending"] == false and workerTable[k]["started"] == true) then
+				if(GameUI.IsMenu() == false or (workerTable[k]["bypassMenu"] ~= nil and workerTable[k]["bypassMenu"] == true)) then
+					local index = workerTable[k]["index"]
+					local list = workerTable[k]["action"]
+					local parent = workerTable[k]["parent"]
+					local pending = workerTable[k]["pending"]
 					
-					if workerTable[k]["parent"] ~= nil and workerTable[k]["parent"] ~= ""then
+					-- debugPrint(4,k)
+					-- debugPrint(4,list)
+					-- debugPrint(4,index)
+					
+					if(workerTable[k]["index"] > #workerTable[k]["action"] and workerTable[k]["pending"] == false and workerTable[k]["started"] == true) then
 						
-						if(workerTable[workerTable[k]["parent"]] ~= nil) then
-							workerTable[workerTable[k]["parent"]]["pending"] = false
+						if workerTable[k]["parent"] ~= nil and workerTable[k]["parent"] ~= ""then
 							
-							workerTable[workerTable[k]["parent"]]["index"] = workerTable[workerTable[k]["parent"]]["index"] + 1
-						end
-					end
-					
-					if workerTable[k]["children"] == "" then
-						
-						--
-						
-						if(workerTable[k].quest == nil)then
-							workerTable[k] = nil
-							workerTableKey[i] = nil
-							else
-							workerTable[k].disabled = true
+							if(workerTable[workerTable[k]["parent"]] ~= nil) then
+								workerTable[workerTable[k]["parent"]]["pending"] = false
+								
+								workerTable[workerTable[k]["parent"]]["index"] = workerTable[workerTable[k]["parent"]]["index"] + 1
+							end
 						end
 						
-						else
-						
-						if workerTable[workerTable[k]["children"]] == nil then
+						if workerTable[k]["children"] == "" then
 							
-							--workerTable[k] = nil
-							--workerTableKey[i] = nil
-							--		workerTable[k].disabled = true
-							if(workerTable[k].quest == nil or workerTable[k].quest == false)then
+							--
+							
+							if(workerTable[k].quest == nil)then
 								workerTable[k] = nil
 								workerTableKey[i] = nil
 								else
 								workerTable[k].disabled = true
 							end
-						end
-						
-					end
-					
-					
-				end
-				
-				if(workerTable[k] ~= nil) then
-					
-					if(index <= #list and workerTable[k].disabled == false) then
-						workerTable[k]["started"] = true
-						if(pending == false) then
 							
-							if(workerTable[k]["index"] ~= nil) then
+							else
+							
+							if workerTable[workerTable[k]["children"]] == nil then
 								
-								if(list[index].name == "goto") then
-									
-									if(list[index].parent == true) then
-										debugPrint(4,"Go to"..list[index].index.." of "..parent)
-										
-										workerTable[parent]["index"] = list[index].index-1
-										workerTable[k]["index"] = workerTable[k]["index"]+1
-										workerTable[parent]["pending"] =  false
-										k = parent
-										else
-										debugPrint(4,"Go to"..list[index].index.." of "..k)
-										
-										
-										workerTable[k]["index"] = list[index].index 
-									end
-									
-									else
-									local isfinish = false
-									
-									
-									local action = list[index]
-									local status, retval = pcall(executeAction,action,k,parent,workerTable[k]["index"],workerTable[k]["source"],workerTable[k]["executortag"])
-									
-									
-									
-									if status == false then
-									
-										
-										debugPrint(1,getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((list[index]))).." tag "..k.." parent "..parent.." index "..workerTable[k]["index"])
-										spdlog.error(getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((list[index]))).." tag "..k.." parent "..parent.." index "..workerTable[k]["index"])
-										--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
-										workerTable[k] =  nil
-										else
-										isfinish = retval
-										
-									end
-										
-								
-									
-									
-								
-									if(workerTable[k] ~= nil) then
-										if(isfinish == true) then
-											
-											
-											workerTable[k]["index"] = workerTable[k]["index"]+1
-											
-											--debugPrint(4,"action finished")
-											workerTable[k]["pending"] = false
-											
-											else
-											
-											workerTable[k]["pending"] = true
-											
-											
-											
-											
-										end
-										
-										
-									end
-									
-								end
-								
-								else
-								
-								--	workerTable[k] =  nil
-								--workerTable[k].disabled = true
-								--	workerTableKey[i] = nil
-								if(workerTable[k].quest == nil)then
+								--workerTable[k] = nil
+								--workerTableKey[i] = nil
+								--		workerTable[k].disabled = true
+								if(workerTable[k].quest == nil or workerTable[k].quest == false)then
 									workerTable[k] = nil
 									workerTableKey[i] = nil
 									else
 									workerTable[k].disabled = true
 								end
 							end
-							else
-							
-							
-							local actionisgood = checkWaitingAction(list[index],k,parent,index)
-							
-							workerTable[k]["pending"] = (actionisgood ~= pending)
-							
-							if(workerTable[k]["pending"] == false) then
-								
-								workerTable[k]["index"] = workerTable[k]["index"]+1
-							end
-							
-							
-							
 							
 						end
 						
 						
 					end
+					
+					if(workerTable[k] ~= nil) then
+						
+						if(index <= #list and workerTable[k].disabled == false) then
+							workerTable[k]["started"] = true
+							if(pending == false) then
+								
+								if(workerTable[k]["index"] ~= nil) then
+									
+									if(list[index].name == "goto") then
+										
+										if(list[index].parent == true) then
+											debugPrint(4,"Go to"..list[index].index.." of "..parent)
+											
+											workerTable[parent]["index"] = list[index].index-1
+											workerTable[k]["index"] = workerTable[k]["index"]+1
+											workerTable[parent]["pending"] =  false
+											k = parent
+											else
+											debugPrint(4,"Go to"..list[index].index.." of "..k)
+											
+											
+											workerTable[k]["index"] = list[index].index 
+										end
+										
+										else
+										local isfinish = false
+										
+										
+										local action = list[index]
+										local status, retval = pcall(executeAction,action,k,parent,workerTable[k]["index"],workerTable[k]["source"],workerTable[k]["executortag"])
+										
+										
+										
+										if status == false then
+											
+											
+											debugPrint(1,getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((list[index]))).." tag "..k.." parent "..parent.." index "..workerTable[k]["index"])
+											spdlog.error(getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((list[index]))).." tag "..k.." parent "..parent.." index "..workerTable[k]["index"])
+											--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
+											workerTable[k] =  nil
+											else
+											isfinish = retval
+											
+										end
+										
+										
+										
+										
+										
+										if(workerTable[k] ~= nil) then
+											if(isfinish == true) then
+												
+												
+												workerTable[k]["index"] = workerTable[k]["index"]+1
+												
+												--debugPrint(4,"action finished")
+												workerTable[k]["pending"] = false
+												
+												else
+												
+												workerTable[k]["pending"] = true
+												
+												
+												
+												
+											end
+											
+											
+										end
+										
+									end
+									
+									else
+									
+									--	workerTable[k] =  nil
+									--workerTable[k].disabled = true
+									--	workerTableKey[i] = nil
+									if(workerTable[k].quest == nil)then
+										workerTable[k] = nil
+										workerTableKey[i] = nil
+										else
+										workerTable[k].disabled = true
+									end
+								end
+								else
+								
+								
+								local actionisgood = checkWaitingAction(list[index],k,parent,index)
+								
+								workerTable[k]["pending"] = (actionisgood ~= pending)
+								
+								if(workerTable[k]["pending"] == false) then
+									
+									workerTable[k]["index"] = workerTable[k]["index"]+1
+								end
+								
+								
+								
+								
+							end
+							
+							
+						end
+					end
+					
 				end
-				
-			end
 			end
 			
 		end
@@ -1439,7 +1439,7 @@ function checkWaitingAction(action,tag,parent,index)
 			
 			result = true
 			
-		else
+			else
 			local fadeincursor = tonumber(action.tick)
 			
 			
@@ -1474,7 +1474,7 @@ function checkWaitingAction(action,tag,parent,index)
 			
 			result = true
 			
-		else
+			else
 			local fadeoutcursor = tonumber(action.tick)
 			
 			
@@ -1504,8 +1504,8 @@ function checkWaitingAction(action,tag,parent,index)
 		
 		
 		
-	result = (waiting == false)
-	--print("wait_for_framework "..tostring(waiting).." "..tostring(result))
+		result = (waiting == false)
+		--print("wait_for_framework "..tostring(waiting).." "..tostring(result))
 		
 	end
 	
@@ -1540,23 +1540,23 @@ function checkWaitingAction(action,tag,parent,index)
 	end
 	
 	if(action.name == "finish_mission") then
-	
+		
 		if currentQuest ~= nil and currentQuest.tag == action.tag then
+			
+			result = true
+			canDoEndAction = true
+			
+			else
+			
+			if currentQuest == nil or (currentQuest ~= nil and currentQuest.tag ~= action.tag) then
 				
-				result = true
-				canDoEndAction = true
+				result = false
 				
-		else
-			 
-				 if currentQuest == nil or (currentQuest ~= nil and currentQuest.tag ~= action.tag) then
-					 
-					result = false
 				
-					 
-				end
-		 
+			end
+			
 		end
-	
+		
 	end
 	
 	return result
@@ -1793,7 +1793,7 @@ function doEvent(tag)
 		--testTriggerRequirement(event.requirement,event.trigger)
 		
 		if(checkTriggerRequirement(event.requirement,event.trigger))then
-		
+			
 			--debugPrint(10,"CyberScript : Doing event : "..event.name)
 			
 			--	doActionof(event.action,"interact")
@@ -1976,9 +1976,9 @@ function checkAmbush()
 			end
 			
 			-- if(#ambushevent > 0) then
-				-- local tag = math.random(1,#ambushevent)
-				-- debugPrint(4,"doing ambush "..tag)
-				-- doEvent(ambushevent[tag])
+			-- local tag = math.random(1,#ambushevent)
+			-- debugPrint(4,"doing ambush "..tag)
+			-- doEvent(ambushevent[tag])
 			-- end
 			
 			
@@ -1998,7 +1998,7 @@ function checkSpeakDialog()
 	if currentStar ~= nil then
 		--if string.match(currentStar.Names,targName) then
 		
-	
+		
 		
 		if tostring(TweakDBID.new(currentStar.TweakIDs)) == tostring(objLook:GetRecordID()) then
 			
@@ -2012,16 +2012,16 @@ function checkSpeakDialog()
 			end
 			else
 			if(currentDialogHub ~= nil) then
-			openSpeakDialogWindow = false	
-			startSpeak =false
-			isdialogactivehub = false
-			removeDialog()
-			currentDialogHub = nil
-			debugPrint(4,"totot")
+				openSpeakDialogWindow = false	
+				startSpeak =false
+				isdialogactivehub = false
+				removeDialog()
+				currentDialogHub = nil
+				debugPrint(4,"totot")
 			end
 		end
 		
-	
+		
 	end
 	
 	if objLook == nil then
@@ -2034,161 +2034,119 @@ function checkSpeakDialog()
 end
 
 function checkFixer()
-
-	if (arrayQuest2 ~= nil ) then
-			
-		
-		if phonedFixer == false then
-			if curPos ~= nil then
-				--	debugPrint(4,curPos)
-				currentfixer = checkWithFixer(curPos)
-			end
+	
+	
+	
+	
+	if phonedFixer == false then
+		if curPos ~= nil then
+			--	debugPrint(4,curPos)
+			currentfixer = checkWithFixer(curPos)
 		end
+	end
+	
+	
+	
+	-- pcall(function() 
+	if(currentfixer ~= nil) then --if fixer si founded
 		
 		
-		
-		-- pcall(function() 
-		if(currentfixer ~= nil) then
+		if(checkTriggerRequirement(currentfixer.requirement,currentfixer.trigger)) then --check that fixer can be spawn
 			
-		
-			if(checkTriggerRequirement(currentfixer.requirement,currentfixer.trigger)) then
+			
+			
+			if(currentfixer.npcexist == false) then --if fixer doesnt exist
 				
-				
-				
-				
-				if(currentfixer.npcexist == false) then
+				if(fixerCanSpawn == true)then
 					
-					if(fixerCanSpawn == true)then
+					
+					
+					local obj = getEntityFromManager(currentfixer.Tag)
+					
+					
+					
+					
+					if(obj.id == nil) then -- if there is no entity
 						
 						
+						local twkVehi = TweakDBID.new(currentfixer.NPCId)
+						
+						
+						spawnNPC(currentfixer.NPCId,"", currentfixer.Tag, currentfixer.LOC_X, currentfixer.LOC_Y, currentfixer.LOC_Z, 42, true, false, nil, false, nil)
 						
 						local obj = getEntityFromManager(currentfixer.Tag)
+						local enti = Game.FindEntityByID(obj.id)
+						lookAtPlayer(enti, 999999999)
+						
+						setFriendAgainst(currentfixer.Tag, "player")
 						
 						
+						fixerCanSpawn = false
+						fixerIsSpawn = true
 						
-						
-						if(obj.tag == nil) then
+						if(currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 and fixerIsSpawn == false) then
 							
 							
-							local twkVehi = TweakDBID.new(currentfixer.NPCId)
+							runActionList(currentfixer.spawn_action, currentfixer.Tag.."_Spawn",nil,nil,currentfixer.Tag)
 							
-							spawnEntity(currentfixer.NPCId,currentfixer.Tag,currentfixer.LOC_X, currentfixer.LOC_Y, currentfixer.LOC_Z, 5, false, false)
-							
-							
-							Cron.After(1, function()
-								local obj = getEntityFromManager(currentfixer.Tag)
-								local enti = Game.FindEntityByID(obj.id)
-								lookAtPlayer(enti, 999999999)
-								currentfixer.Id = enti
-							end)
-							
-							
-							fixerCanSpawn = false
-							
-							debugPrint(4,oldfixer)
 						end
 						
+						
+						oldfixer = currentfixer.Tag
 					end
-					
 				end
-				
-				
-				
-				if(currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 and fixerIsSpawn == false) then
-					debugPrint(4,"fixer Ok")
-					--doActionof(currentfixer.action,"interact")
-					
-					runActionList(currentfixer.spawn_action, currentfixer.Tag.."_Spawn",nil,nil,currentfixer.Tag)
-					--fixerIsSpawn = true
-				end
-				
-				fixerIsSpawn = true
-				oldfixer = currentfixer.Tag
-				
-				
-				
-				
-				
-			end
-			
-			
-			--	local dbPnjId = getNPCById(currentfixer.NPCId)
-			
-			local tarbName = ""
-			
-			if objLook ~= nil then
-				
-				tarbName =  objLook:ToString()
-				
-			end
-			
-			if(string.match(tarbName, "NPCPuppet"))then
-				--debugPrint(4,tostring(TweakDBID.new(dbPnjId.TweakIDs)))
-				--debugPrint(4,tostring(objLook:GetRecordID()))
-				--if string.match(currentfixer.Name,targName) then
-				if objLook ~= nil and currentfixer ~= nil and objLook:GetEntityID() == currentfixer.Id and tostring(TweakDBID.new(currentfixer.NPCId)) == tostring(objLook:GetRecordID()) then
-					
-					
-					local handle = objLook
-					local NPC = handle:GetAIControllerComponent()
-					local targetTeam = handle:GetAttitudeAgent()
-					
-					local SetState = NewObject('handle:AIRole')
-					--SetState:SetFollowTarget(Game:GetPlayerSystem():GetLocalPlayerControlledGameObject())
-					SetState:OnRoleSet(handle)
-					SetState.followerRef = Game.CreateEntityReference("#player", {})
-					targetTeam:SetAttitudeGroup(CName.new("player"))
-					SetState.attitudeGroupName = CName.new("player")
-					
-					Game['senseComponent::ShouldIgnoreIfPlayerCompanion;EntityEntity'](handle, Game:GetPlayer())
-					Game['NPCPuppet::ChangeStanceState;GameObjectgamedataNPCStanceState'](handle, "Relaxed")
-					NPC:SetAIRole(SetState)
-					handle.movePolicies:Toggle(true)
-					--local get_godmode = Game.GetGodModeSystem()
-					--get_godmode:AddGodMode(objLook,"Immortal", CName.new("Default"))	
-					
-					
-				end		
-				
-			end
 			else
-			
-			
-			if fixerIsSpawn == true then
-				debugPrint(4,"oldfixer")
-				if(oldfixer ~= nil)then
 					
-					despawnEntity(oldfixer)
+					fixerIsSpawn = true
 					
-					
-				end
 				
-				local oldFixer = getFixerByTag(oldfixer)
-				
-				if(oldFixer ~= nil and oldFixer.despawn_action ~= nil and #oldFixer.despawn_action >0) then
-					
-					--doActionof(currentfixer.action,"interact")
-					runActionList(oldFixer.despawn_action, oldFixer.Tag.."_Despawn",nil, nil,currentfixer.Tag)
-					
-					
-					
-				end
-				
-				fixerIsSpawn = false
-				fixerCanSpawn = true
-				
-				Game.ChangeZoneIndicatorPublic()
-				QuestNotOpen = false
-			
 			end
 			
+			
+			
+			
+			
+			
+		
+			
+		end
+		
+	else -- if we move away from fixer so currentfixer is nil
+		
+		
+		if fixerIsSpawn == true then
+			
+			if(oldfixer ~= nil)then
+				
+				despawnEntity(oldfixer)
+				
+				
+			end
+			
+			local oldFixer = getFixerByTag(oldfixer)
+			
+			if(oldFixer ~= nil and oldFixer.despawn_action ~= nil and #oldFixer.despawn_action >0) then
+				
+				--doActionof(currentfixer.action,"interact")
+				runActionList(oldFixer.despawn_action, oldFixer.Tag.."_Despawn",nil, nil,currentfixer.Tag)
+				
+				
+				
+			end
+			
+			fixerIsSpawn = false
+			fixerCanSpawn = true
+			
+			Game.ChangeZoneIndicatorPublic()
 			
 			
 		end
 		
-		-- end)
+		
 		
 	end
+	
+	
 	
 	
 end
@@ -2196,32 +2154,39 @@ end
 
 function checkContext(item)
 	if(item.context ~= nil) then
+		
+		if(isArray(item.context))then
+			for i,v in ipairs(item.context) do
 				
-			if(isArray(item.context))then
-				for i,v in ipairs(item.context) do
+				if(checkTriggerRequirement(v.requirement,v.trigger))then
 					
-					if(checkTriggerRequirement(v.requirement,v.trigger))then
-						for k,u in pairs(v.prop) do
-							local path =  splitDot(k, ".")
-							setValueToTablePath(item, path, GeneratefromContext(u))
-							
-						end
+					if(v.action ~= nil and #v.action > 0) then
+						
+						runActionList(v.action, item.tag, "see", false,"see",false)					
 					end
-				end
-			else
-				if(checkTriggerRequirement(item.context.requirement,item.context.trigger))then
-					for k,u in pairs(item.context.prop) do
-						
-						
+					
+					
+					for k,u in pairs(v.prop) do
 						local path =  splitDot(k, ".")
-						
-						
 						setValueToTablePath(item, path, GeneratefromContext(u))
+						
 					end
 				end
 			end
-
+			else
+			if(checkTriggerRequirement(item.context.requirement,item.context.trigger))then
+				for k,u in pairs(item.context.prop) do
+					
+					
+					local path =  splitDot(k, ".")
+					
+					
+					setValueToTablePath(item, path, GeneratefromContext(u))
+				end
+			end
 		end
+		
+	end
 end
 
 function checkNPC()
@@ -2229,39 +2194,37 @@ function checkNPC()
 	
 	local playerpos= Game.GetPlayer():GetWorldPosition()
 	
-		for k,v in pairs(arrayCustomNPC) do
+	for k,v in pairs(arrayCustomNPC) do
+		
+		local npc = arrayCustomNPC[k].npc
+		
+		
+		checkContext(npc)
+	
+		if(check3DPos(playerpos, npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and  getEntityFromManager(currentfixer.Tag).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
+			--if the npc is not spawned
 			
-			local npc = arrayCustomNPC[k].npc
+			local tweakDBnpc =  npc.tweakDB
 			
-			
-			checkContext(npc)
-			
-			--testTriggerRequirement(npc.requirement,npc.triggers)
-			--spdlog.error(npc.tag)
-			if(check3DPos(playerpos, npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and npc.isspawn==false and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
+			if(tweakDBnpc== "district") then
 				
+				local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
 				
-				local tweakDBnpc =  npc.tweakDB
-				
-				if(tweakDBnpc== "district") then
-					
-					local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
-					
-					if(#gangs == 0) then
+				if(#gangs == 0) then
 					
 					break
 					
-					end
+				end
+				
+				local gang = getFactionByTag(gangs[1].tag)
+				
+				if(#gang.SpawnableNPC > 0) then
+					local index = math.random(1,#gang.SpawnableNPC)
 					
-					local gang = getFactionByTag(gangs[1].tag)
-					
-					if(#gang.SpawnableNPC > 0) then
-						local index = math.random(1,#gang.SpawnableNPC)
-						
-						tweakDBnpc = gang.SpawnableNPC[index]
+					tweakDBnpc = gang.SpawnableNPC[index]
 					else
 					break
-					end
+				end
 				
 				elseif (tweakDBnpc== "subdistrict") then
 				
@@ -2271,34 +2234,34 @@ function checkNPC()
 					if i > 1 then
 						
 						
-					gangs = getGangfromDistrict(test,20)
-					
+						gangs = getGangfromDistrict(test,20)
+						
 						if(#gangs == 0) then
 							
-						break
-						
+							break
+							
 						end
 					end
 				end
+				
+				local gang = getFactionByTag(gangs[1].tag)
+				
+				if(#gang.SpawnableNPC > 0) then
+					local index = math.random(1,#gang.SpawnableNPC)
 					
-					local gang = getFactionByTag(gangs[1].tag)
-					
-					if(#gang.SpawnableNPC > 0) then
-						local index = math.random(1,#gang.SpawnableNPC)
-						
-						tweakDBnpc = gang.SpawnableNPC[index]
+					tweakDBnpc = gang.SpawnableNPC[index]
 					else
 					break
-					end
+				end
 				
 				if(tweakDBnpc== "districttag") then
 					
 					gangs = getGangfromDistrict(npc.locationtag,20)
 					
 					if(#gangs == 0) then
-					
-					break
-					
+						
+						break
+						
 					end
 					
 					local gang = getFactionByTag(gangs[1].tag)
@@ -2307,14 +2270,14 @@ function checkNPC()
 						local index = math.random(1,#gang.SpawnableNPC)
 						
 						tweakDBnpc = gang.SpawnableNPC[index]
-					else
-					break
+						else
+						break
 					end
-				
-				elseif (tweakDBnpc== "subdistricttag") then
-				
-				local gangs = {}
-				
+					
+					elseif (tweakDBnpc== "subdistricttag") then
+					
+					local gangs = {}
+					
 					gangs = getGangfromDistrict(npc.locationtag,20)
 					
 					local gang = getFactionByTag(gangs[1].tag)
@@ -2323,46 +2286,46 @@ function checkNPC()
 						local index = math.random(1,#gang.SpawnableNPC)
 						
 						tweakDBnpc = gang.SpawnableNPC[index]
-					else
-					break
+						else
+						break
 					end
-						
-						
-						
-						
-					end
+					
+					
+					
+					
 				end
+			end
+			
+			
+			if(npc.location.value ~= nil and npc.locationtag ~= nil and (tweakDBnpc== "district" or tweakDBnpc== "subdistrict" or tweakDBnpc== "districttag" or tweakDBnpc== "subdistricttag")) then
 				
 				
-				if(npc.location.value ~= nil and npc.locationtag ~= nil and (tweakDBnpc== "district" or tweakDBnpc== "subdistrict" or tweakDBnpc== "districttag" or tweakDBnpc== "subdistricttag")) then
 				
-					
-					
-					
-					
+				
+				
 				if(npc.location.value == "poi_near") then
 					
-						local district = npc.locationtag
-						
-							
-						local currentpoi = nil
-						
-						if(tweakDBnpc== "district")then
+					local district = npc.locationtag
+					
+					
+					local currentpoi = nil
+					
+					if(tweakDBnpc== "district")then
 						
 						district = currentDistricts2.Tag
 						
-						end
-						
-						if(tweakDBnpc== "subdistrict")then
+					end
+					
+					if(tweakDBnpc== "subdistrict")then
 						
 						district = currentDistricts2.districtLabels[2]
 						
-						end
+					end
 					
 					
 					
-				
-				
+					
+					
 					
 					for k,v in pairs(arrayPOI) do
 						
@@ -2374,244 +2337,232 @@ function checkNPC()
 								local location = v.poi.locations[y]
 								
 								
-									if((location.subdistrict == district or location.district == district) and check3DPos(curPos, location.x, location.y,location.z,npc.location.range,20)) then
-										
-										currentpoi = location
-										break;
-										
-									end
+								if((location.subdistrict == district or location.district == district) and check3DPos(curPos, location.x, location.y,location.z,npc.location.range,20)) then
 									
-									
-									
+									currentpoi = location
+									break;
 									
 								end
 								
+								
+								
+								
 							end
 							
-							
+						end
+						
+						
 						
 						
 					end
-				
-			
+					
+					
 					
 					if(currentpoi ~= nil) then
-						if(npc.useBetaSpawn == true) then
-												
-							spawnEntity(tweakDBnpc, npc.tag,  currentpoi.x ,  currentpoi.y , currentpoi.z, 90, true, false, true)
-							
-							else
-							spawnEntity(tweakDBnpc, npc.tag,  currentpoi.x ,  currentpoi.y , currentpoi.z, 90, true, false, false)
-						end
+						spawnNPC(tweakDBnpc,"", npc.Tag, currentpoi.x, currentpoi.y, currentpoi.z, 42, true, false, nil, false, npc.rotation)
 					end
 				end
 				
 				else
 				
+				spawnNPC(tweakDBnpc,"", npc.Tag, npc.location.x, npc.location.y, npc.location.z, 42, true, false, nil, false, npc.rotation)
 				
-				if(npc.useBetaSpawn == true) then
-										
-					spawnEntity(tweakDBnpc, npc.tag,  npc.location.x ,  npc.location.y , npc.location.z, 90, true, false, true)
+				
+				
+				
+				
+			end
+			
+			npc.isspawn=true
+			npc.init=false
+			
+			
+			elseif(npc.isspawn==true) then -- already spawn
+			
+			local obj = getEntityFromManager(k)
+			
+			if(obj.id ~= nil) then 
+				local enti = Game.FindEntityByID(obj.id)	
+				
+				
+				if(enti ~= nil) then--entity exist 
 					
-					else
-					spawnEntity(tweakDBnpc, npc.tag,  npc.location.x ,  npc.location.y , npc.location.z, 90, true, false, false)
-				end
-				
-				
-				
-				
-				end
-				
-				npc.isspawn=true
-				npc.init=false
-				
-				
-				elseif(npc.isspawn==true) then
-				
-				local obj = getEntityFromManager(arrayCustomNPC[k].npc.tag)
-				
-				if(obj.id ~= nil) then
-					local enti = Game.FindEntityByID(obj.id)	
-					
-					
-					if(enti ~= nil) then
+					if((check3DPos(Game.GetPlayer():GetWorldPosition(), npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and npc.spawnforced == false) or npc.spawnforced == true) then --ifplayer is in the location
 						
-						if((check3DPos(Game.GetPlayer():GetWorldPosition(), npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and npc.spawnforced == false) or npc.spawnforced == true) then
+						if(arrayCustomNPC[k].npc.init==false) then --if not initiaded
 							
-							if(arrayCustomNPC[k].npc.init==false) then
+							local npc = arrayCustomNPC[k].npc
+							
+							if(npc.appeareance ~= nil or npc.appeareance ~= "" and arrayCustomNPC[k].npc.appearancesetted == false) then
 								
-								local npc = arrayCustomNPC[k].npc
-								
-								if(npc.appeareance ~= nil or npc.appeareance ~= "" and arrayCustomNPC[k].npc.appearancesetted == false) then
+								local obj = getEntityFromManager(npc.tag)
+								local enti = Game.FindEntityByID(obj.id)
+								if(enti ~= nil) then
 									
-									local obj = getEntityFromManager(npc.tag)
-									local enti = Game.FindEntityByID(obj.id)
-									if(enti ~= nil) then
-										
-										--getAppearance(enti)
-										setAppearance(enti,npc.appeareance)
-										arrayCustomNPC[k].npc.appearancesetted = true
-									end
-									
-									
-								end
-								
-								if(npc.spawnEdited == nil or npc.spawnEdited == false) then
-									
-									local newnpcspawn = {}
-									
-									local rotateaction = {}
-									
-									rotateaction.name = "rotate_entity_to_entity"
-									rotateaction.tag = "this"
-									rotateaction.entity = "player"
-									
-									table.insert(newnpcspawn,rotateaction)
-									
-									local wait01action = {}
-									
-									wait01action.name = "wait_second"
-									wait01action.value = "1"
-									
-									table.insert(newnpcspawn,wait01action)
-									
-									local lookataction = {}
-									
-									lookataction.name = "look_at_entity_entity"
-									lookataction.tag = "this"
-									lookataction.entity = "player"
-									
-									
-									
-									table.insert(newnpcspawn,lookataction)
-									
-									table.insert(newnpcspawn,wait01action)
-									
-									if(#npc.spawnaction > 0) then
-										
-										for i=1,#npc.spawnaction do
-											
-											table.insert(newnpcspawn,npc.spawnaction[i])
-											
-										end
-										
-										
-									end
-									
-									npc.spawnaction = newnpcspawn
-									arrayCustomNPC[k].npc.spawnEdited = true
-								end
-								
-								if(workerTable[npc.tag.."_spawn"] == nil and #npc.spawnaction > 0 and npc.dospawnaction == true) then
-									
-									
-									
-									runActionList(npc.spawnaction, npc.tag.."_spawn", "interact",false,npc.tag)
-									
-								end
-								
-								if(workerTable[npc.tag.."_routine"] == nil and #npc.routineaction > 0 and npc.doroutineaction == true) then
-									runActionList(npc.routineaction, npc.tag.."_routine", "interact",false,npc.tag)
-									
+									--getAppearance(enti)
+									setAppearance(enti,npc.appeareance)
+									arrayCustomNPC[k].npc.appearancesetted = true
 								end
 								
 								
-								arrayCustomNPC[k].npc.init = true
-								
-								else
-								
-								
-								
-								if(workerTable[npc.tag.."_routine"] == nil and npc.repeat_routine == true and #npc.routineaction > 0 and npc.doroutineaction == true) then
-									runActionList(npc.routineaction, npc.tag.."_routine", "interact",false,npc.tag)
-								--	debugPrint(4,"doing routine of "..npc.name)
-									
-								end
-								
-								
-								if (workerTable[npc.tag.."_death"] == nil and npc.deathaction ~= nil and #npc.deathaction > 0 and (enti:IsDead() == true or enti:IsActive() == false) and npc.dodeathaction == true)then
-									runActionList(npc.deathaction, npc.tag.."_death", "interact",false,npc.tag)
-									
-									npc.dodeathaction= false
-								end
 							end
 							
+							-- if(npc.spawnEdited == nil or npc.spawnEdited == false) then
+								
+								-- local newnpcspawn = {}
+								
+								-- local rotateaction = {}
+								
+								-- rotateaction.name = "rotate_entity_to_entity"
+								-- rotateaction.tag = "this"
+								-- rotateaction.entity = "player"
+								
+								-- table.insert(newnpcspawn,rotateaction)
+								
+								-- local wait01action = {}
+								
+								-- wait01action.name = "wait_second"
+								-- wait01action.value = "1"
+								
+								-- table.insert(newnpcspawn,wait01action)
+								
+								-- local lookataction = {}
+								
+								-- lookataction.name = "look_at_entity_entity"
+								-- lookataction.tag = "this"
+								-- lookataction.entity = "player"
+								
+								
+								
+								-- table.insert(newnpcspawn,lookataction)
+								
+								-- table.insert(newnpcspawn,wait01action)
+								
+								-- if(#npc.spawnaction > 0) then
+									
+									-- for i=1,#npc.spawnaction do
+										
+										-- table.insert(newnpcspawn,npc.spawnaction[i])
+										
+									-- end
+									
+									
+								-- end
+								
+								-- npc.spawnaction = newnpcspawn
+								-- arrayCustomNPC[k].npc.spawnEdited = true
+							-- end
+							
+							if(workerTable[npc.tag.."_spawn"] == nil and #npc.spawnaction > 0 and npc.dospawnaction == true) then
+								
+								
+								
+								runActionList(npc.spawnaction, npc.tag.."_spawn", "interact",false,npc.tag)
+								
+							end
+							
+							if(workerTable[npc.tag.."_routine"] == nil and #npc.routineaction > 0 and npc.doroutineaction == true) then
+								runActionList(npc.routineaction, npc.tag.."_routine", "interact",false,npc.tag)
+								
+							end
+							
+							
+							arrayCustomNPC[k].npc.init = true
 							
 							else
 							
 							
-							if(npc.auto_despawn == true) then
+							
+							if(workerTable[npc.tag.."_routine"] == nil and npc.repeat_routine == true and #npc.routineaction > 0 and npc.doroutineaction == true) then
+								runActionList(npc.routineaction, npc.tag.."_routine", "interact",false,npc.tag)
+								--	debugPrint(4,"doing routine of "..npc.name)
 								
-								arrayCustomNPC[k].npc.isspawn=false
-								arrayCustomNPC[k].npc.init=false
-								arrayCustomNPC[k].npc.appearancesetted = nil
+							end
+							
+							
+							if (workerTable[npc.tag.."_death"] == nil and npc.deathaction ~= nil and #npc.deathaction > 0 and (enti:IsDead() == true or enti:IsActive() == false) and npc.dodeathaction == true)then
+								runActionList(npc.deathaction, npc.tag.."_death", "interact",false,npc.tag)
 								
-								if(workerTable[npc.tag.."_spawn"] ~= nil) then
-									
-									workerTable[npc.tag.."_spawn"] = nil
-									
-								end
+								npc.dodeathaction= false
+							end
+						end
+						
+						
+						else
+						
+						
+						if(npc.auto_despawn == true) then
+							
+							arrayCustomNPC[k].npc.isspawn=false
+							arrayCustomNPC[k].npc.init=false
+							arrayCustomNPC[k].npc.appearancesetted = nil
+							
+							if(workerTable[npc.tag.."_spawn"] ~= nil) then
 								
-								if(workerTable[npc.tag.."_routine"] ~= nil) then
-									
-									workerTable[npc.tag.."_routine"] = nil
-									
-								end
+								workerTable[npc.tag.."_spawn"] = nil
 								
-								if(workerTable[npc.tag.."_death"] ~= nil) then
-									
-									workerTable[npc.tag.."_death"] = nil
-									
-								end
+							end
+							
+							if(workerTable[npc.tag.."_routine"] ~= nil) then
 								
-								despawnEntity(npc.tag)
+								workerTable[npc.tag.."_routine"] = nil
 								
-								if(workerTable[npc.tag.."_despawn"] == nil and #npc.despawnaction > 0 and npc.dospawnaction == true) then
-									runActionList(npc.despawnaction, npc.tag.."_despawn", "interact",false,npc.tag)
-									
-								end
+							end
+							
+							if(workerTable[npc.tag.."_death"] ~= nil) then
+								
+								workerTable[npc.tag.."_death"] = nil
+								
+							end
+							
+							despawnEntity(npc.tag)
+							
+							if(workerTable[npc.tag.."_despawn"] == nil and #npc.despawnaction > 0 and npc.dospawnaction == true) then
+								runActionList(npc.despawnaction, npc.tag.."_despawn", "interact",false,npc.tag)
 								
 							end
 							
 						end
 						
 					end
+					
 				end
-				
-				
-				
 			end
 			
 			
 			
-			
-			
 		end
+		
+		
+		
+		
+		
+	end
 	
 	
 end
 
 function checkValue(operator,value1,value2)
-return (
-	(value1 ~= nil and value2 ~= nil and 
-		(
-		(operator == "<" and value1 < value2) or 
-		(operator == "<=" and value1 <= value2) or
-		(operator == ">" and value1 > value2) or
-		(operator == ">=" and value1 >= value2) or
-		(operator == "!=" and value1 ~= value2) or 
-		(operator == "=" and value1 == value2)
-		)
-	) or
-	(operator == "empty" and value1 == nil) or
-	(operator == "notempty" and value1 ~= nil)
-	
-	or
-	(operator == "nothing" and value1 == nil) or
-	(operator == "notnothing" and value1 ~= nil)
-
+	return (
+		(value1 ~= nil and value2 ~= nil and 
+			(
+				(operator == "<" and value1 < value2) or 
+				(operator == "<=" and value1 <= value2) or
+				(operator == ">" and value1 > value2) or
+				(operator == ">=" and value1 >= value2) or
+				(operator == "!=" and value1 ~= value2) or 
+				(operator == "=" and value1 == value2)
+			)
+		) or
+		(operator == "empty" and value1 == nil) or
+		(operator == "notempty" and value1 ~= nil)
 		
-)
+		or
+		(operator == "nothing" and value1 == nil) or
+		(operator == "notnothing" and value1 ~= nil)
+		
+		
+	)
 end
 
 --Get List
@@ -2624,17 +2575,17 @@ function getInteractGroup()
 	
 	for key,value in pairs(arrayInteract) do --actualcode
 		
-	
+		
 		local interact2 = arrayInteract[key].interact
 		local canadd = true
 		
 		for i=1,#currentInteractGroup do
-		
+			
 			if(currentInteractGroup[i] == interact2.group)  then
 				canadd = false
-		
+				
 			end
-		
+			
 		end
 		
 		if(canadd == true) then
@@ -2668,12 +2619,12 @@ function getTriggeredActions()
 		--testTriggerRequirement(interact2.requirement,interact2.trigger)
 		if(checkTriggerRequirement(interact2.requirement,interact2.trigger)) and (interact2.group == currentInteractGroup[currentInteractGroupIndex] or key == "open_datapack_group_ui") then
 			
-		--debugPrint(4,"check for "..interact2.name.." "..tostring(checkTriggerRequirement(interact2.requirement,interact2.trigger)))
+			--debugPrint(4,"check for "..interact2.name.." "..tostring(checkTriggerRequirement(interact2.requirement,interact2.trigger)))
 			table.insert(possibleinteractchunk, interact2)
-		else
+			else
 			
 			if(#currentInputHintList > 0) then
-		
+				
 				for i = 1, #currentInputHintList do
 					
 					if(currentInputHintList[i].tag == interact2.tag) then
@@ -2681,13 +2632,13 @@ function getTriggeredActions()
 						currentInputHintList[i] = nil
 					end
 					
-				
+					
 				end
-			
-			
+				
+				
 			end
-		
-	end
+			
+		end
 	end
 	local chunk = {}
 	local count = 1
@@ -2745,13 +2696,13 @@ end
 function getTriggeredActionsDisplay()
 	
 	-- if(#currentInputHintList > 0) then
-		
-		-- for i = 1, #currentInputHintList do
-		
-			-- hideCustomHints(currentInputHintList[i].tag)
-		
-		-- end
-		
+	
+	-- for i = 1, #currentInputHintList do
+	
+	-- hideCustomHints(currentInputHintList[i].tag)
+	
+	-- end
+	
 	-- end
 	
 	
@@ -2768,7 +2719,7 @@ function getTriggeredActionsDisplay()
 				or 
 				(currentHouse ~= nil and (possibleInteract[i][z].display == "place"
 					or possibleInteract[i][z].display == "place_main" or 
-					possibleInteract[i][z].display == "event_interact")))) then
+				possibleInteract[i][z].display == "event_interact")))) then
 				table.insert(possibleinteractchunk,possibleInteract[i][z])
 			end
 			
@@ -2831,74 +2782,74 @@ function getMissionByTrigger()
 	
 	--find new mission
 	
+	
+	possibleQuest = {}
+	
+	for key,value in pairs(arrayQuest2) do --actualcode
 		
-		possibleQuest = {}
-		
-		for key,value in pairs(arrayQuest2) do --actualcode
-
-			if(checkQuestStatutByTag(key, nil) == true or checkQuestStatutByTag(key, -1) == true) then
-				local quest = arrayQuest2[key].quest
-
-				if(HaveTriggerCondition(quest))then
-				
-					--------debugPrint(4,"trigger")
-					
-					--if(possibleQuest[quest] ~= nil) then
-					
-					table.insert(possibleQuest, quest)
-					
-					if(QuestManager.GetQuestState(quest.tag).isActive == false) then
-					
-						if(quest.unlock_action ~= nil and #quest.unlock_action > 0) then
-							runActionList(quest.unlock_action,quest.tag.."_unlockaction","quest",true,"see_engine",true)
-						end
-						
-						
-						QuestManager.MarkQuestAsActive(quest.tag)
-						
-						
-					end
-					--end
-					
-					else
-					--debugPrint(4,tostring(QuestManager.isVisited(key)))
-					if not QuestManager.isVisited(key) then
-						QuestManager.MarkQuestAsInactive(key)
-						--debugPrint(4,"remove"..key)
-					end
-				end
-					
-			else
-					if(checkQuestStatutByTag(key, 3) == true) then
-						--QuestManager.MarkQuestAsInactive(key)
-						QuestManager.MarkQuestASucceeded(key)
-					end
+		if(checkQuestStatutByTag(key, nil) == true or checkQuestStatutByTag(key, -1) == true) then
+			local quest = arrayQuest2[key].quest
 			
+			if(HaveTriggerCondition(quest))then
+				
+				--------debugPrint(4,"trigger")
+				
+				--if(possibleQuest[quest] ~= nil) then
+				
+				table.insert(possibleQuest, quest)
+				
+				if(QuestManager.GetQuestState(quest.tag).isActive == false) then
+					
+					if(quest.unlock_action ~= nil and #quest.unlock_action > 0) then
+						runActionList(quest.unlock_action,quest.tag.."_unlockaction","quest",true,"see_engine",true)
+					end
+					
+					
+					QuestManager.MarkQuestAsActive(quest.tag)
+					
+					
+				end
+				--end
+				
+				else
+				--debugPrint(4,tostring(QuestManager.isVisited(key)))
+				if not QuestManager.isVisited(key) then
+					QuestManager.MarkQuestAsInactive(key)
+					--debugPrint(4,"remove"..key)
+				end
+			end
+			
+			else
+			if(checkQuestStatutByTag(key, 3) == true) then
+				--QuestManager.MarkQuestAsInactive(key)
+				QuestManager.MarkQuestASucceeded(key)
 			end
 			
 		end
 		
-		
-		
+	end
+	
+	
+	
 	
 	
 	
 	takenQuest = {}
-		
+	
 	for key,value in pairs(arrayQuest2) do --actualcode
-			local statuQue = checkQuestStatutByTag(key, 0) or checkQuestStatutByTag(key, 1) or checkQuestStatutByTag(key, 2)
-			
-		if( statuQue== true) then
+		local statuQue = checkQuestStatutByTag(key, 0) or checkQuestStatutByTag(key, 1) or checkQuestStatutByTag(key, 2)
 		
+		if( statuQue== true) then
+			
 			local quest = arrayQuest2[key].quest
 			
-				
 			
-				
-				--if(possibleQuest[quest] ~= nil) then
-				--table.insert(takenQuest, quest)
-				QuestManager.MarkQuestAsActive(quest.tag)
-				--end
+			
+			
+			--if(possibleQuest[quest] ~= nil) then
+			--table.insert(takenQuest, quest)
+			QuestManager.MarkQuestAsActive(quest.tag)
+			--end
 			
 		end
 		
@@ -2946,11 +2897,11 @@ end
 
 function getShardByTag(tag)
 	
-
+	
 	if(arrayShard[tag] ~= nil)then
-			
-			return arrayShard[tag].shard
-			
+		
+		return arrayShard[tag].shard
+		
 	end
 	return nil
 	
@@ -2959,11 +2910,11 @@ end
 function getCustomNPCByTag(tag)
 	
 	
-		if(arrayCustomNPC[tag] ~= nil)then
-			
-			return arrayCustomNPC[tag].npc
-			
-		end
+	if(arrayCustomNPC[tag] ~= nil)then
+		
+		return arrayCustomNPC[tag].npc
+		
+	end
 	return nil
 	
 end
@@ -2997,11 +2948,11 @@ end
 
 function getPhoneConversationByTag(tag)
 	
-		if(arrayPhoneConversation[tag] ~= tag)then
-			
-			return arrayPhoneConversation[tag].conv
-			
-		end
+	if(arrayPhoneConversation[tag] ~= tag)then
+		
+		return arrayPhoneConversation[tag].conv
+		
+	end
 	
 	return nil
 	
@@ -3011,7 +2962,7 @@ function getPath(tag)
 	
 	
 	if(arrayPath[tag] ~= nil) then
-	return arrayPath[tag].gamepath
+		return arrayPath[tag].gamepath
 	end
 	return nil
 	
@@ -3021,7 +2972,7 @@ function getPOI(tag)
 	
 	
 	if(arrayPOI[tag] ~= nil) then
-	return arrayPOI[tag].poi
+		return arrayPOI[tag].poi
 	end
 	return nil
 	
@@ -3032,97 +2983,97 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 	local currentpoilist = {}
 	local frompos = curPos
 	if(frompositionx ~= nil and frompositiony ~= nil and frompositionz ~= nil) then
-	
-	frompos.x = frompositionx
-	frompos.y = frompositiony
-	frompos.z = frompositionz
-	
+		
+		frompos.x = frompositionx
+		frompos.y = frompositiony
+		frompos.z = frompositionz
+		
 	end
 	
 	for k,v in pairs(arrayPOI) do
-							
-							
+		
+		
+		
+		
+		if
+			(#v.poi.locations > 0) then	
 			
-			
-			if
-				(#v.poi.locations > 0) then	
+			for y=1,#v.poi.locations do
 				
-				for y=1,#v.poi.locations do
-					
-					local location = v.poi.locations[y]
-					
-					-- debugPrint(4,"TEST POI ---")
-					-- debugPrint(4,"tag : "..tostring((
-									-- ((tag == nil or tag == "" or (v.poi.tag ~= nil and v.poi.tag == tag)) and locationtag == false) or
-									-- ((tag == nil or tag == "" or (location.Tag ~= nil and location.Tag == tag)) and locationtag == true)
-								-- )))
-								
-					-- debugPrint(4,"district : "..tostring((district == nil or district == "" or (district ~= nil and location.district == district))))
-					-- debugPrint(4,"subdistrict : "..tostring((subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict))))
-					
-					-- debugPrint(4,"iscar : "..tostring((iscar == nil or (iscar ~= nil and location.inVehicule == iscar))))
-					-- debugPrint(4,"poitype : "..tostring((poitype == nil or poitype == 1 or (poitype == v.poi.isFor))))
-					-- debugPrint(4,"fromposition : "..tostring((fromposition == false or	(fromposition == true and check3DPos(curPos, location.x, location.y, location.z, range)))))
-					-- debugPrint(4,"TEST POI ---")
-							
-							if
-							(
-								(
-									((tag == nil or tag == "" or (v.poi.tag ~= nil and v.poi.tag == tag)) and locationtag == false) or
-									((tag == nil or tag == "" or (location.Tag ~= nil and location.Tag == tag)) and locationtag == true)
-								)
-								
-								and
-								
-								(district == nil or district == "" or (district ~= nil and location.district == district)) and
-								(subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict)) and
-								(iscar == nil or (iscar ~= nil and location.inVehicule == iscar)) and
-								
-								
-								(poitype == nil or 
-								
-									(
-										(isArray(poitype) == false and isArray(v.poi.isFor) == false and (poitype == 1 or (poitype == v.poi.isFor))) or
-										(isArray(poitype) == true and isArray(v.poi.isFor) == false and table.contains(poitype,v.poi.isFor)) or
-										(isArray(poitype) == false and isArray(v.poi.isFor) == true and table.contains(v.poi.isFor,poitype)) or
-										(isArray(poitype) == true and isArray(v.poi.isFor) == true and table.compare(poitype, v.poi.isFor))
-									)
-									
-								) and
-							
-							
-							(fromposition == false or	(fromposition == true and check3DPos(frompos, location.x, location.y, location.z, range)))
-							
-							
-							)
-							then
-								
-								
-									
-								
-									table.insert(currentpoilist,v.poi.locations[y])
-									
-									
-									
-															
-								
-							
-								
-							end
-							
-							
+				local location = v.poi.locations[y]
+				
+				-- debugPrint(4,"TEST POI ---")
+				-- debugPrint(4,"tag : "..tostring((
+				-- ((tag == nil or tag == "" or (v.poi.tag ~= nil and v.poi.tag == tag)) and locationtag == false) or
+				-- ((tag == nil or tag == "" or (location.Tag ~= nil and location.Tag == tag)) and locationtag == true)
+				-- )))
+				
+				-- debugPrint(4,"district : "..tostring((district == nil or district == "" or (district ~= nil and location.district == district))))
+				-- debugPrint(4,"subdistrict : "..tostring((subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict))))
+				
+				-- debugPrint(4,"iscar : "..tostring((iscar == nil or (iscar ~= nil and location.inVehicule == iscar))))
+				-- debugPrint(4,"poitype : "..tostring((poitype == nil or poitype == 1 or (poitype == v.poi.isFor))))
+				-- debugPrint(4,"fromposition : "..tostring((fromposition == false or	(fromposition == true and check3DPos(curPos, location.x, location.y, location.z, range)))))
+				-- debugPrint(4,"TEST POI ---")
+				
+				if
+					(
+						(
+							((tag == nil or tag == "" or (v.poi.tag ~= nil and v.poi.tag == tag)) and locationtag == false) or
+							((tag == nil or tag == "" or (location.Tag ~= nil and location.Tag == tag)) and locationtag == true)
+						)
 						
+						and
+						
+						(district == nil or district == "" or (district ~= nil and location.district == district)) and
+						(subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict)) and
+						(iscar == nil or (iscar ~= nil and location.inVehicule == iscar)) and
+						
+						
+						(poitype == nil or 
+							
+							(
+								(isArray(poitype) == false and isArray(v.poi.isFor) == false and (poitype == 1 or (poitype == v.poi.isFor))) or
+								(isArray(poitype) == true and isArray(v.poi.isFor) == false and table.contains(poitype,v.poi.isFor)) or
+								(isArray(poitype) == false and isArray(v.poi.isFor) == true and table.contains(v.poi.isFor,poitype)) or
+								(isArray(poitype) == true and isArray(v.poi.isFor) == true and table.compare(poitype, v.poi.isFor))
+							)
+							
+						) and
+						
+						
+						(fromposition == false or	(fromposition == true and check3DPos(frompos, location.x, location.y, location.z, range)))
+						
+						
+					)
+					then
+					
+					
+					
+					
+					table.insert(currentpoilist,v.poi.locations[y])
+					
+					
+					
+					
+					
 					
 					
 				end
 				
 				
+				
+				
+				
 			end
 			
+			
 		end
+		
+	end
 	
 	if(#currentpoilist > 0) then
-	
+		
 		local currentpoi = nil
 		currentpoi = currentpoilist[math.random(#currentpoilist)]
 		
@@ -3274,21 +3225,21 @@ function checkQuestStatutByTag(tag, statut)
 	
 	
 	if(currentSave.Variable[tag] ~= nil) then
-	
+		
 		
 		
 		if( currentSave.Variable[tag]["Score"] == statut) then
 			result = true
 		end
 		
-	else
-	
+		else
+		
 		if(currentSave.Variable[tag] == statut) then
-		
-			result = true
-		
-		end
 			
+			result = true
+			
+		end
+		
 	end
 	
 	return result
@@ -3299,7 +3250,7 @@ function getCircuit(tag)
 	
 	
 	if(arrayCircuit[tag] ~= nil) then
-	return arrayCircuit[tag].circuit
+		return arrayCircuit[tag].circuit
 	end
 	
 	
@@ -3309,26 +3260,26 @@ function getNode(tag)
 	
 	
 	if(arrayNode[tag] ~= nil) then
-	return arrayNode[tag].node
+		return arrayNode[tag].node
 	end
-		
-		
-		
-		
-		
-		
-	end
+	
+	
+	
+	
+	
+	
+end
 
 function getRadioByTag(tag)
 	
-		
-			
-			if(arrayRadio[tag] ~= nil)then
-				return arrayRadio[tag].radio
-			end
-		
-		
-		return nil
+	
+	
+	if(arrayRadio[tag] ~= nil)then
+		return arrayRadio[tag].radio
+	end
+	
+	
+	return nil
 	
 end	
 
@@ -3344,14 +3295,14 @@ function getPNJ (tab, val)
         if value.ID == val then
 			
             return value
-        end
-    end
-
+		end
+	end
+	
     return false
 end
 
 function getGameTime()
-
+	
 	local temp = {}
 	local gameTime = Game.GetTimeSystem():GetGameTime()
 	
@@ -3361,18 +3312,18 @@ function getGameTime()
 	temp.day = GetSingleton('GameTime'):Days(gameTime)
 	
 	return temp
-
+	
 end
 
 function getDistrictfromEnum(enum)
 	
 	for i = 1, #arrayDistricts do
 		if arrayDistricts[i].EnumName:upper() == Game.GetLocalizedText(enum):upper() then
-				return arrayDistricts[i]
-				
-				
-		end
+			return arrayDistricts[i]
 			
+			
+		end
+		
 	end
 	
 end
@@ -3380,15 +3331,15 @@ end
 function getDistrictBySubfromEnum(enum)
 	
 	for i = 1, #arrayDistricts do
-	if(#arrayDistricts[i].SubDistrict > 0) then
-		for j=1,#arrayDistricts[i].SubDistrict do
-			if arrayDistricts[i].SubDistrict[j]:upper() == Game.GetLocalizedText(enum):upper() then
+		if(#arrayDistricts[i].SubDistrict > 0) then
+			for j=1,#arrayDistricts[i].SubDistrict do
+				if arrayDistricts[i].SubDistrict[j]:upper() == Game.GetLocalizedText(enum):upper() then
 					return arrayDistricts[i]
 					
 					
+				end
 			end
-		end
-	end	
+		end	
 	end
 	
 end
@@ -3396,17 +3347,17 @@ end
 function getDistrictByTag(district)
 	
 	for i = 1, #arrayDistricts do
-	if(arrayDistricts[i].Tag == district) then
-		
-		
-					return arrayDistricts[i]
-					
-					
-		
+		if(arrayDistricts[i].Tag == district) then
+			
+			
+			return arrayDistricts[i]
+			
+			
+			
 		end
 	end	
 end
-	
+
 function getMappinByGroup(group)
 	local mapLot = {}
 	
@@ -3420,20 +3371,20 @@ function getMappinByGroup(group)
 end
 
 function GetPlayerGender()
-  -- True = Female / False = Male
-  if string.find(tostring(Game.GetPlayer():GetResolvedGenderName()), "Female") then
+	-- True = Female / False = Male
+	if string.find(tostring(Game.GetPlayer():GetResolvedGenderName()), "Female") then
 		return "female"
-	else
+		else
 		return "male"
 	end
 end
 
 function GetEntityGender(entity)
-  -- True = Female / False = Male
-  debugPrint(4,tostring(Game.NameToString(entity:GetBodyType())))
-  if string.find(tostring(Game.NameToString(entity:GetBodyType())), "oman") then
+	-- True = Female / False = Male
+	debugPrint(4,tostring(Game.NameToString(entity:GetBodyType())))
+	if string.find(tostring(Game.NameToString(entity:GetBodyType())), "oman") then
 		return "female"
-	else
+		else
 		return "male"
 	end
 end
@@ -3449,17 +3400,17 @@ function getQuestByTag(tag)
 	return quest
 	
 	
-	end
-	
+end
+
 function getQuestStatut(tag)
 	
 	
 	
 	local score = getScoreKey(tag,"Score")
-			
+	
 	if(score ~= nil) then
-			return score
-			
+		return score
+		
 	end
 	
 	return nil
@@ -3470,15 +3421,15 @@ end
 function getMarketScoreByTag(tag)
 	
 	local result = nil
-
-	for i=1,#arrayMarket do
 	
+	for i=1,#arrayMarket do
+		
 		if(arrayMarket[i].tag == tag) then
-		return arrayMarket[i]
+			return arrayMarket[i]
 		end
 		
 		
-	
+		
 	end
 	
 	return result
@@ -3493,7 +3444,7 @@ function getScorebyTag(tag)
 	if(score == nil)then
 		score = 0
 	end
-			
+	
 	
 	
 	return score
@@ -3530,21 +3481,21 @@ function getVIPfromfactionbyscore(factiontag)
 	
 	if(#faction.VIP > 0) then
 		for i=1,#faction.VIP do 
-		
-			if(faction.VIP[i].score <= playerscore) then
 			
+			if(faction.VIP[i].score <= playerscore) then
+				
 				local npc = getNPCByName(faction.VIP[i].name)
 				
 				table.insert(tempvip,npc.TweakIDs)
-		
+				
 			end
-		
-		
+			
+			
 		end
 	end
 	
 	if(#tempvip == 0) then
-	debugPrint(10,getLang("scripting_novip01")..factiontag..getLang("scripting_novip02")..playerscore)
+		debugPrint(10,getLang("scripting_novip01")..factiontag..getLang("scripting_novip02")..playerscore)
 	end
 	
 	return tempvip
@@ -3566,9 +3517,9 @@ function getGangfromDistrict(district,minimum)
 			else
 			
 			if(currentSave.Variable[k][district] == nil) then
-			
+				
 				currentSave.Variable[k][district] = 0
-		
+				
 			end
 			
 		end
@@ -3589,10 +3540,10 @@ function getGangRivalsFromGang(gang)
 	if(currentSave.Variable[gang] ~= nil) then
 		for k,v in pairs(currentSave.Variable[gang]) do
 			if(k ~= "Score") then
-					local factionscore= {}
-					factionscore.tag = k
-					factionscore.score =getFactionRelation(gang,k)
-					table.insert(factiontable,factionscore)
+				local factionscore= {}
+				factionscore.tag = k
+				factionscore.score =getFactionRelation(gang,k)
+				table.insert(factiontable,factionscore)
 			end
 		end
 	end
@@ -3619,9 +3570,9 @@ function getGangRivalfromDistrict(gang,district,minimum)
 			else
 			
 			if(currentSave.Variable[k][district] == nil) then
-			
+				
 				currentSave.Variable[k][district] = 0
-		
+				
 			end
 			
 		end
@@ -3639,7 +3590,7 @@ function getGangRivalfromDistrict(gang,district,minimum)
 		factionscore.tag = districttable[i].tag
 		factionscore.score = getFactionRelation(gang,districttable[i].tag)
 		table.insert(factiontable,factionscore)
-	
+		
 	end
 	
 	
@@ -3672,9 +3623,9 @@ function getGangfromDistrictAndSubdistrict(district,minimum)
 			else
 			
 			if(currentSave.Variable[k][mydistrict.Tag] == nil) then
-			
+				
 				currentSave.Variable[k][mydistrict.Tag] = 0
-		
+				
 			end
 			
 		end
@@ -3684,7 +3635,7 @@ function getGangfromDistrictAndSubdistrict(district,minimum)
 	end
 	
 	
-
+	
 	
 	table.sort(factiontable, function(a,b) return a.score > b.score end)
 	
@@ -3705,7 +3656,7 @@ function getGangAffinityfromDistrictAndSubdistrict(district,minimum)
 		
 		if(currentSave.Variable[k][mydistrict.Tag] ~= nil and currentSave.Variable[k][mydistrict.Tag] >= minimum) then
 			
-		
+			
 			local obj = {}
 			obj.tag = k
 			obj.score = getScorebyTag(k)
@@ -3717,9 +3668,9 @@ function getGangAffinityfromDistrictAndSubdistrict(district,minimum)
 			else
 			
 			if(currentSave.Variable[k][mydistrict.Tag] == nil) then
-			
+				
 				currentSave.Variable[k][mydistrict.Tag] = 0
-		
+				
 			end
 			
 		end
@@ -3729,30 +3680,30 @@ function getGangAffinityfromDistrictAndSubdistrict(district,minimum)
 	end
 	
 	for i=1,#mydistrict.SubDistrict do
-	
-	local subdist = mydistrict.SubDistrict[i]
-	debugPrint(4,subdist)
+		
+		local subdist = mydistrict.SubDistrict[i]
+		debugPrint(4,subdist)
 		for k,v in pairs(currentSave.Variable) do
 			
 			
 			if(currentSave.Variable[k][subdist] ~= nil and currentSave.Variable[k][subdist] >= minimum) then
-			for i=1,#factiontable do
-				if(factiontable[i].tag == k) then
-				
-					factiontable[i].score =  factiontable[i].score + getScorebyTag(k)
-				else
+				for i=1,#factiontable do
+					if(factiontable[i].tag == k) then
+						
+						factiontable[i].score =  factiontable[i].score + getScorebyTag(k)
+						else
+						
+						local obj = {}
+						obj.tag = k
+						obj.score = getScorebyTag(k)
+						table.insert(factiontable,obj)
+						debugPrint(4,k)
+						
+					end
 					
-					local obj = {}
-					obj.tag = k
-					obj.score = getScorebyTag(k)
-					table.insert(factiontable,obj)
-					debugPrint(4,k)
+					
 					
 				end
-				
-				
-				
-			end
 			end
 			
 			
@@ -3868,9 +3819,9 @@ function getItemByHouseTagandTagFromManager(tag,housetag)
 			if enti.HouseTag == housetag and enti.Tag == tag then
 				
 				
-					
-					return i
-					
+				
+				return i
+				
 				
 				
 			end
@@ -3926,11 +3877,11 @@ end
 function getItemFromArrayHousing(tag,X,Y,Z,HouseTag,ItemPath)
 	if(#currentSave.arrayHousing > 0) then
 		for i=1,#currentSave.arrayHousing do
-		
+			
 			if(currentSave.arrayHousing[i].Tag == tag and currentSave.arrayHousing[i].X == X and currentSave.arrayHousing[i].Y == Y and currentSave.arrayHousing[i].Z == Z and currentSave.arrayHousing[i].HouseTag == HouseTag and currentSave.arrayHousing[i].ItemPath == ItemPath) then
 				return currentSave.arrayHousing[i]
 			end
-		
+			
 		end
 	end
 	return nil
@@ -3941,13 +3892,13 @@ function getItemCountInCart(tag)
 	local count = 0
 	
 	for i=1,#ItemsCart do
-	
-	if(ItemsCart[i].tag == tag) then
-	
-	count = count + 1
-	
-	end
-	
+		
+		if(ItemsCart[i].tag == tag) then
+			
+			count = count + 1
+			
+		end
+		
 	end
 	
 	
@@ -3959,13 +3910,13 @@ function getEntityFromManager(tag)
 	local obj = {}
 	obj.id = nil
 	
-		
+	
 	local enti = cyberscript.EntityManager[tag]
 	if(enti ~= nil) then
 		obj = enti
 	end
-		
-		
+	
+	
 	
 	
 	if(tag == "lookat" and objLook ~= nil) then
@@ -3976,11 +3927,11 @@ function getEntityFromManager(tag)
 		
 		local enti = cyberscript.EntityManager["lookat"]
 		if(enti ~= nil) and type(enti.id) ~= "number" then
-		
+			
 			if(enti.id ~= nil and enti.id.hash == objLook:GetEntityID().hash) then
 				obj = enti
 			end
-	
+			
 		end	
 		
 		
@@ -3989,8 +3940,8 @@ function getEntityFromManager(tag)
 			obj.tag = "lookat"
 			obj.tweak = nil
 			
-		else
-	--		obj.tag = "lookat"
+			else
+			--		obj.tag = "lookat"
 		end
 		
 		
@@ -3999,28 +3950,28 @@ function getEntityFromManager(tag)
 	if(tag == "mounted_vehicle" ) then
 		
 		if Game['GetMountedVehicle;GameObject'](Game.GetPlayer()) ~= nil then
-						
-		
-	
-		
-				local enti = cyberscript.EntityManager["mounted_vehicle"]
-				if (enti ~= nil) and type(enti.id) ~= "number" then
-				
-					if(enti.id ~= nil and enti.id.hash == Game['GetMountedVehicle;GameObject'](Game.GetPlayer()):GetEntityID().hash) then
-						obj = enti
-					end
 			
-				end	
-		
-		
-		if(obj.id == nil) then
-			obj.id = Game['GetMountedVehicle;GameObject'](Game.GetPlayer()):GetEntityID()
-			obj.tag = "mounted_vehicle"
-			obj.tweak = nil
-		else
-	--		obj.tag = "lookat"
-		end
-		
+			
+			
+			
+			local enti = cyberscript.EntityManager["mounted_vehicle"]
+			if (enti ~= nil) and type(enti.id) ~= "number" then
+				
+				if(enti.id ~= nil and enti.id.hash == Game['GetMountedVehicle;GameObject'](Game.GetPlayer()):GetEntityID().hash) then
+					obj = enti
+				end
+				
+			end	
+			
+			
+			if(obj.id == nil) then
+				obj.id = Game['GetMountedVehicle;GameObject'](Game.GetPlayer()):GetEntityID()
+				obj.tag = "mounted_vehicle"
+				obj.tweak = nil
+				else
+				--		obj.tag = "lookat"
+			end
+			
 		end
 	end
 	
@@ -4032,13 +3983,13 @@ end
 function getTrueEntityFromManager(tag)
 	
 	
-		
-		local enti = cyberscript.EntityManager[tag]
-		if((enti ~= nil) and enti.tag == tag) then
-			return enti
-		end
-		
-		
+	
+	local enti = cyberscript.EntityManager[tag]
+	if((enti ~= nil) and enti.tag == tag) then
+		return enti
+	end
+	
+	
 	
 	
 end
@@ -4047,11 +3998,11 @@ function setEntityFromManager(tag,obju)
 	
 	
 	
-		
-		cyberscript.EntityManager[tag] = obju
-		
-		
-		
+	
+	cyberscript.EntityManager[tag] = obju
+	
+	
+	
 	
 	
 	
@@ -4101,24 +4052,24 @@ end
 
 
 function getScannerdataFromEntityOrGroupOfEntity(entity)
-
+	
 	if (ScannerInfoManager[entity.tag] ~= nil) then
 		return ScannerInfoManager[entity.tag]
 		
-	else
+		else
 		local group= getEntityGroupfromEntityTag(entity.tag)
 		if group ~= nil then
-		
+			
 			if (ScannerInfoManager[group.tag] ~= nil) then
 				return ScannerInfoManager[group.tag]
 			end
 		end
-			
+		
 	end
 	
 	return nil
-
-
+	
+	
 end
 
 function getGroupfromManager(tag)
@@ -4171,14 +4122,14 @@ end
 function getCustomNPCbyTag(tag)
 	
 	
+	
+	if (arrayCustomNPC[tag] ~= nil) then
 		
-		if (arrayCustomNPC[tag] ~= nil) then
-			
-			return arrayCustomNPC[tag].npc
-			
-		end
+		return arrayCustomNPC[tag].npc
 		
-		
+	end
+	
+	
 	
 	return nil
 	
@@ -4188,18 +4139,18 @@ function getInkWidget(tag)
 	
 	
 	for k, interface in pairs(currentInterfaceWidget) do
-	
+		
 		for i,control in ipairs(interface.controls) do
 			
 			if(control.tag == tag) then
-			
+				
 				return control
-			
+				
 			end
-		
+			
 		end
-	
-	
+		
+		
 	end
 	
 end
@@ -4208,17 +4159,17 @@ function getInkWidgetControl(uitag,tag)
 	
 	
 	if(currentInterfaceWidget[uitag] ~= nil) then
-	
+		
 		for i,control in ipairs(currentInterfaceWidget[uitag].controls) do
 			
 			if(control.tag == tag) then
-			
+				
 				return control
-			
+				
 			end
-		
+			
 		end
-	
+		
 	end
 	
 	
@@ -4227,17 +4178,17 @@ end
 function GetInterfaceChildren(interface,tag)
 	
 	
-
 	
-		for i,control in ipairs(interface.controls) do
-			
-			if(control.tag == tag) then
-			
-				return control
-			
-			end
+	
+	for i,control in ipairs(interface.controls) do
 		
+		if(control.tag == tag) then
+			
+			return control
+			
 		end
+		
+	end
 	
 	
 	
@@ -4248,17 +4199,17 @@ end
 function RemoveInterfaceChildren(interface,tag)
 	
 	
-
 	
-		for i,control in ipairs(interface.controls) do
-			
-			if(control.tag == tag) then
-			
-				control = nil
-			
-			end
+	
+	for i,control in ipairs(interface.controls) do
 		
+		if(control.tag == tag) then
+			
+			control = nil
+			
 		end
+		
+	end
 	
 	
 	
@@ -4304,7 +4255,7 @@ end
 function getRoomByTag(tag, housetag)
 	
 	for i=1,#arrayHouse[housetag].house.rooms do
-	
+		
 		if(arrayHouse[housetag].house.rooms[i].tag == tag) then
 			return arrayHouse[housetag].house.rooms[i]
 		end
@@ -4315,18 +4266,18 @@ end
 function getHouseStatut(houseTag)
 	
 	
-	 return getScoreKey(houseTag,"Statut")
+	return getScoreKey(houseTag,"Statut")
 	
 	
 end
 
 function getHouseProperties(houseTag)
 	
-		
-		return getScore(houseTag)
-		
-		
-		
+	
+	return getScore(houseTag)
+	
+	
+	
 end
 
 function getNPCById(npcId)
@@ -4416,18 +4367,18 @@ end
 function getFixerByTag(tag)
 	
 	
+	
+	if arrayFixer[tag] ~= nil then
 		
-		if arrayFixer[tag] ~= nil then
-			
-			local fixer = arrayFixer[tag].fixer
-			checkContext(fixer)
-			
-			
-			
-			return fixer
-		end
+		local fixer = arrayFixer[tag].fixer
+		checkContext(fixer)
 		
-		return nil
+		
+		
+		return fixer
+	end
+	
+	return nil
 end
 
 function getSoundByName(name)
@@ -4456,13 +4407,13 @@ function getLang(text)
 	return text
 	
 end
-	
+
 function getCustomScorebyTag(tag)
 	
 	return getScore(tag)
 	
 end
-	
+
 function getPlayerItemsbyTag(tag)
 	
 	for i=1,#currentSave.arrayPlayerItems do
@@ -4478,7 +4429,7 @@ end
 function getSoundByNameNamespace(name,namespace)
 	
 	for k,v in pairs(arraySound) do
-	
+		
 		if k == name and v.sound.namespace == namespace then
 			
 			debugPrint(4,"sound founded")
@@ -4511,13 +4462,13 @@ end
 function getTextureByTag(tag)
 	
 	
+	
+	if arrayTexture[tag] ~= nil then
 		
-		if arrayTexture[tag] ~= nil then
-			
-			
-			
-			return arrayTexture[tag].texture
-		end
 		
-		return nil
+		
+		return arrayTexture[tag].texture
+	end
+	
+	return nil
 end
