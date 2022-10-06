@@ -1040,11 +1040,11 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		
 	end
 	if (tick % 100 == 0) then --every 1 second
-		if(lastTargetKilled ~= nil)then
-			cyberscript.EntityManager["last_killed"].id = nil
-			cyberscript.EntityManager["last_killed"].tweak = "none"
-			lastTargetKilled = nil
-		end
+		-- if(lastTargetKilled ~= nil)then
+			-- cyberscript.EntityManager["last_killed"].id = nil
+			-- cyberscript.EntityManager["last_killed"].tweak = "none"
+			-- lastTargetKilled = nil
+		-- end
 	end
 	
 	if (tick % 60 == 0) then --every 1 second
