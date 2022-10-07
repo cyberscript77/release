@@ -3811,10 +3811,21 @@ print("hot reload test")
 	
 	
 	function NPCPuppet_SendAfterDeathOrDefeatEvent(target)
-		if target ~= nil and target.shouldDie and ((target.myKiller ~= nil and target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash) or target.wasJustKilledOrDefeated) then
+		-- print("target.shouldDie".." "..tostring(target.shouldDie))
+		-- print("target.myKiller ~= nil".." "..tostring(target.myKiller ~= nil))
+		-- print("target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash".." "..tostring(target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash))
+		-- print("target.wasJustKilledOrDefeated".." "..tostring(target.wasJustKilledOrDefeated))
+		
+		local obj = getEntityFromManagerById(target:GetEntityID())
+			if(obj.id ~= nil) then
 			
-			local obj = getEntityFromManagerById(target:GetEntityID())
-				
+			-- print("mykill "..obj.tag)
+			
+			end
+			
+		
+		if target ~= nil and ((target.myKiller ~= nil and target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash) or target.wasJustKilledOrDefeated) then
+			
 			if(obj.id ~= nil) then
 			
 				cyberscript.EntityManager["last_killed"].tweak =  obj.tweak
@@ -3830,13 +3841,9 @@ print("hot reload test")
 			
 			target:MarkAsQuest(cyberscript.EntityManager["last_killed"].isquest)
 				
-				
+			-- print("LAST KILLED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 			lastTargetKilled = target
 			
-			else
-			lastTargetKilled = nil
-			cyberscript.EntityManager["last_killed"].id = nil
-			cyberscript.EntityManager["last_killed"].tweak = "none"
 		end
 	end
 	

@@ -10,6 +10,13 @@ function checkTrigger(trigger)
 	
 	if status == false then
 		
+		if(trigger.output == true) then 
+		
+			print(trigger.name)
+			print(dump(trigger))
+			print(tostring(result))
+			spdlog.error(dump(action))
+		end
 		
 		debugPrint(1,getLang("see_trigger_error") .. result.." Trigger : "..tostring(JSON:encode_pretty(trigger)))
 		
@@ -6006,7 +6013,7 @@ end
 				local instructions = {}
 					
 					
-					for i,value in action.value do 
+					for i,value in ipairs(action.value) do 
 						
 						local ts = Game.GetTransactionSystem()
 						local tid = TweakDBID.new(value)
@@ -6014,13 +6021,19 @@ end
 						local result = ts:GiveItem(enti, itemid, 1)
 						
 						
-						
-						
-						
-						
-						
-						
 						table.insert(instructions, DropInstruction.Create(itemid, 1))
+				
+					
+					-- if (RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Part and RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Weapon) then
+						
+					-- else
+						-- print(RPGManager.GetItemCategory(itemid))
+						-- Game.GetLootManager():SpawnItemDrop(enti,itemid,Vector4.new(action.x,action.y,action.z+1,1))
+					-- end
+						
+						
+						
+						
 						
 					
 						
@@ -6044,6 +6057,9 @@ end
 					
 					if (RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Part or RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Weapon   ) then
 						table.insert(instructions, DropInstruction.Create(itemid, 1))
+						print("test"..action.x)
+						print("test"..action.y)
+						print("test"..action.z)
 						Game.GetLootManager():SpawnItemDropOfManyItems(Game.GetPlayerSystem():GetLocalPlayerControlledGameObject(), instructions, "playerDropBag",Vector4.new(action.x,action.y,action.z,1))
 					else
 						Game.GetLootManager():SpawnItemDrop(enti,itemid,Vector4.new(action.x,action.y,action.z+1,1))
@@ -12489,7 +12505,10 @@ function GenerateTextFromContextValues(context, v)
 					obj.x = pos.x
 					obj.y = pos.y
 					obj.z = pos.z
-					value = obj[prop]
+					
+					print(dump(obj))
+					
+					value = obj[v.prop]
 				
 				end
 				
@@ -12501,7 +12520,7 @@ function GenerateTextFromContextValues(context, v)
 					obj.x = pos.x
 					obj.y = pos.y
 					obj.z = pos.z
-					value = obj[prop]
+					value = obj[v.prop]
 				
 				end
 				
@@ -12515,7 +12534,7 @@ function GenerateTextFromContextValues(context, v)
 					obj.pitch = angle.pitch
 					obj.roll = angle.roll
 					
-					value = obj[prop]
+					value = obj[v.prop]
 					
 				
 				end

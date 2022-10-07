@@ -715,12 +715,7 @@ function makeGraphdata()
 				questgraph.row = maxrow
 				
 				
-				
-				local file = assert(io.open("graphdata.json", "w"))
-				local stringg = JSON:encode_pretty(questgraph)
-				--debug--debugPrint(2,stringg)
-				file:write(stringg)
-				file:close()
+			
 				
 	
 end
@@ -840,10 +835,21 @@ function QuestGraph()
 			
 		end
 		
-		
+		ImGui.SameLine()
 		if ImGui.Button(getLang("Refresh")) then
 			
 			makeGraphdata()
+			
+		end
+		ImGui.SameLine()
+		if ImGui.Button(getLang("Export")) then
+			
+				
+				local file = assert(io.open("graphdata.json", "w"))
+				local stringg = JSON:encode_pretty(questgraph)
+				--debug--debugPrint(2,stringg)
+				file:write(stringg)
+				file:close()
 			
 		end
 	
@@ -893,7 +899,31 @@ function QuestGraph()
 	ImGui.Text("Required")
 	ImGui.PopStyleColor()
 	ImGui.SetWindowFontScale(1)
+	if ImGui.Button("Add objectives", 300, 0) then
+		currentSelectObjective = {}
+			currentSelectObjective.parent = "objectives"
+			currentSelectObjective.tagprefix = obj.tag.."_"
+			
+			
+			currentSelectObjective.title = ""
+			currentSelectObjective.tag = ""
+			currentSelectObjective.state = EgameJournalEntryState.Active
+			currentSelectObjective.isoptionnal = false
+			
+			
+			currentSelectObjective["trigger"] = {}
+			currentSelectObjective["requirement"] = {}
+			currentSelectObjective["action"] = {}
+			currentSelectObjective["failaction"] = {}
+			currentSelectObjective["resume_action"] = {}
+			currentSelectObjective["unlock"] = {}
+			
+			
+			
+			openNewObjective = true
+		end
 	ImGui.Separator()
+	
 	
 	
 	
@@ -9659,6 +9689,7 @@ function ObjectiveNewWindows()
 		currentSelectObjective.title = ImGui.InputText("Title", currentSelectObjective.title, 100, ImGuiInputTextFlags.AutoSelectAll)
 		currentSelectObjective.tag = ImGui.InputText(getLang("editor_tag"), currentSelectObjective.tag, 100, ImGuiInputTextFlags.AutoSelectAll)
 		
+		listStringNode("Unlock Objectives","Unlock Objectives when completed",currentSelectObjective,"unlock",false)
 		
 		if ImGui.BeginCombo("State :", defaultJournalEntryState) then
 			
@@ -9715,17 +9746,12 @@ function ObjectiveNewWindows()
 					
 					
 					currentSelectObjective = {}
-					
+					makeGraphdata()
 					openNewObjective = false
 				end
 				
 				
-				if ImGui.Button("Close", 300, 0) then
-					
-					currentSelectObjective = {}
-					
-					openNewObjective = false
-				end
+			
 				
 				
 				end
@@ -9739,7 +9765,12 @@ function ObjectiveNewWindows()
 		end
 		
 		
-		
+			if ImGui.Button("Close", 300, 0) then
+					
+					currentSelectObjective = {}
+					makeGraphdata()
+					openNewObjective = false
+				end
 		
 		
 		
@@ -9772,7 +9803,8 @@ function ObjectiveEditWindows()
 		currentSelectObjective.title = ImGui.InputText("Title", currentSelectObjective.title, 100, ImGuiInputTextFlags.AutoSelectAll)
 		currentSelectObjective.tag = ImGui.InputText(getLang("editor_tag"), currentSelectObjective.tag, 100, ImGuiInputTextFlags.AutoSelectAll)
 		
-		
+		listStringNode("Unlock Objectives","Unlock Objectives when completed",currentSelectObjective,"unlock",false)
+				
 		if ImGui.BeginCombo("State :", defaultJournalEntryState) then
 			
 			
@@ -9851,7 +9883,7 @@ function ObjectiveEditWindows()
 		if ImGui.Button("Close", 300, 0) then
 					
 					currentSelectObjective = {}
-					
+					makeGraphdata()
 					openEditObjective = false
 			end
 		
@@ -10569,6 +10601,7 @@ function ObjectiveNode(obj)
 			currentSelectObjective["action"] = {}
 			currentSelectObjective["failaction"] = {}
 			currentSelectObjective["resume_action"] = {}
+			currentSelectObjective["unlock"] = {}
 			
 			
 			
