@@ -612,6 +612,7 @@ function inGameInit() -- init some function after save loaded
 	local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
 	blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
 	Game.SetTimeDilation(0)
+	Game.GetSettingsSystem():GetVar("/gameplay/performance", "CrowdDensity"):SetValue("High")
 	debugPrint(1,getLang("seestarted"))
 end
 function shutdownManager() -- setup some function at shutdown
@@ -698,6 +699,8 @@ end
 -- ------------------------------------------------------------------
 
 registerForEvent("onInit", function()
+	
+	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	JSON = dofile("external/json.lua")
 	
 	Observe('PlayerPuppet', 'OnAction',function(_,action)
@@ -709,9 +712,11 @@ registerForEvent("onInit", function()
 	loadExternal()
 	cyberscript.var = dofile('modules/var.lua')
 	cyberscript.observercontroller = dofile('modules/observer_call.lua')
+
 	resetVar()
 	ModInitialisation()
 	setupCore()
+	
 end)
 registerForEvent('onDraw', function()
 	
@@ -728,6 +733,7 @@ registerForEvent("onUpdate", function(delta)
 			Game.GetPlayer():SetWarningMessage(getLang("CyberScript : Hot Reload in progress..."))
 			loadModule()
 			Game.GetPlayer():SetWarningMessage(getLang("CyberScript : Hot Reload finished !"))
+			TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 		else
 	
 		if saveLocationEnabled then
@@ -759,7 +765,7 @@ registerForEvent("onOverlayClose", function()
 	overlayOpen = false
 end)
 registerForEvent("onTweak", function()
-
+	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	TweakManager()
 	
 end)

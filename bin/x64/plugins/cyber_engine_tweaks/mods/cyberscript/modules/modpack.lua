@@ -1358,7 +1358,7 @@ end
 		
 		--debugPrint("Importing District...")
 		
-		local f = assert(io.open("data/fasttravel.json"))
+		local f = assert(io.open("data/fasttravelmarkref.json"))
 		
 		lines = f:read("*a")
 		
@@ -1366,7 +1366,7 @@ end
 		
 		tableDis = {}
 		
-		tableDis = trydecodeJSOn(lines,f,"data/fasttravel.json")
+		tableDis = trydecodeJSOn(lines,f,"data/fasttravelmarkref.json")
 		
 		
 		

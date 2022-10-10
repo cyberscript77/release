@@ -127,7 +127,37 @@ editorCurrentVariableSearch = ""
 editorCurrentVariableKeySearch = ""
 PlayerisHitten = false
 
-datapackObjectType = { "circuit","dialog","event","faction","fixer","function","housing","help","interact","interfaces","lang","mission","node","npc","phone_dialog","place","poi","radio","shard","sound","texture","scene","housing_template","hud","setting","codex","webpage","redmod","archive","character"}
+datapackObjectType = { 
+	"character",
+	"circuit",
+	"codex",
+	"dialog",
+	"event",
+	"faction",
+	"fixer",
+	"function",
+	"help",
+	"housing",
+	"housing_template",
+	"hud",
+	"interact",
+	"interfaces",
+	"lang",
+	"mission",
+	"node",
+	"npc",
+	"phone_dialog",
+	"place",
+	"poi",
+	"radio",
+	"scene",
+	"setting",
+	"shard",
+	"sound",
+	"texture",
+	"webpage"
+	
+	}
 cacheupdate = false
 passwordView =ImGuiInputTextFlags.Password
 menuName = "CyberScript"

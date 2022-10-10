@@ -704,7 +704,7 @@ function despawnEntity(tag)
 local obj = getEntityFromManager(tag)
 
 local enti = Game.FindEntityByID(obj.id)
-
+cyberscript.EntityManager[tag]=nil
 if enti ~= nil then
 
 -- else
@@ -732,7 +732,7 @@ if enti ~= nil then
 
 enti:Dispose()
 
-cyberscript.EntityManager[tag]=nil
+
 
 end
 
@@ -747,20 +747,20 @@ end
 end
 
 
-function Despawn(objLook)
-if objLook:IsVehicle() == false then
+function Despawn(entity)
+if entity:IsVehicle() == false then
 --not needed
 else
 
-local vehicule = objLook:GetVehiclePS()
+local vehicule = entity:GetVehiclePS()
 vehicule:SetHasExploded(true)
 
 end
 
 
-local enti = Game.FindEntityByID(objLook)
-Game.GetPreventionSpawnSystem():RequestDespawn(objLook:GetEntityID())
-objlook:Dispose()
+local enti = Game.FindEntityByID(entity)
+cyberscript.EntityManager[k] = nil
+entity:Dispose()
 
 end
 

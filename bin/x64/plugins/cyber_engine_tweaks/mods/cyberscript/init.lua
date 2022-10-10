@@ -139,7 +139,7 @@ function loadModule()
 	cyberscript.scripting = dofile('modules/scripting.lua')
 	cyberscript.observer = dofile('modules/observer_function.lua')
 	cyberscript.ui = dofile('modules/ui.lua')
-	
+	cyberscript.api = dofile('modules/api.lua')
 	
 	--external library
 
@@ -148,4 +148,4 @@ end
 
 
 
-return quest_mod
+return cyberscript

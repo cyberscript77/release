@@ -506,7 +506,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		haveMission = true
 		canTakeContract = false
 	end
-	
+	checkNPC()
 	--Vehicle
 	local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 	if (inVehicule) then
@@ -1069,8 +1069,9 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		playRadio()
 	end
 	if (tick % 180 == 0) then --every 3 second
+		TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 		getOsTimeHHmm()
-		checkNPC()
+		
 		
 		
 		if(npcStarSpawn) then
@@ -2053,13 +2054,9 @@ function checkFixer()
 		
 		if(checkTriggerRequirement(currentfixer.requirement,currentfixer.trigger)) then --check that fixer can be spawn
 			
-			
-			
-			if(currentfixer.npcexist == false) then --if fixer doesnt exist
-				
-				if(fixerCanSpawn == true)then
-					
-					
+			print(currentfixer.Tag)
+			oldfixer = currentfixer
+		
 					
 					local obj = getEntityFromManager(currentfixer.Tag)
 					
@@ -2067,23 +2064,20 @@ function checkFixer()
 					
 					
 					if(obj.id == nil) then -- if there is no entity
-						
+							print("spawn")
 						
 						local twkVehi = TweakDBID.new(currentfixer.NPCId)
 						
 						
 						spawnNPC(currentfixer.NPCId,"", currentfixer.Tag, currentfixer.LOC_X, currentfixer.LOC_Y, currentfixer.LOC_Z, 42, true, false, nil, false, nil)
 						
-						local obj = getEntityFromManager(currentfixer.Tag)
-						local enti = Game.FindEntityByID(obj.id)
-						lookAtPlayer(enti, 999999999)
+						-- local obj = getEntityFromManager(currentfixer.Tag)
+						-- local enti = Game.FindEntityByID(obj.id)
+						-- lookAtPlayer(enti, 999999999)
 						
-						setFriendAgainst(currentfixer.Tag, "player")
+						-- setFriendAgainst(currentfixer.Tag, "player")
 						
-						
-						fixerCanSpawn = false
-						fixerIsSpawn = true
-						
+					
 						if(currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 and fixerIsSpawn == false) then
 							
 							
@@ -2092,15 +2086,10 @@ function checkFixer()
 						end
 						
 						
-						oldfixer = currentfixer.Tag
-					end
-				end
-			else
-					
-					fixerIsSpawn = true
-					
+						
+					end	
 				
-			end
+			
 			
 			
 			
@@ -2112,20 +2101,25 @@ function checkFixer()
 		end
 		
 	else -- if we move away from fixer so currentfixer is nil
-		
-		
-		if fixerIsSpawn == true then
+	
+			print(dump(oldfixer))
 			
-			if(oldfixer ~= nil)then
-				
-				despawnEntity(oldfixer)
-				
-				
-			end
+			Game.ChangeZoneIndicatorPublic()
 			
-			local oldFixer = getFixerByTag(oldfixer)
+			if(oldfixer ~= nil) then
+				
+		print("despawn")
+			local obj = getEntityFromManager(oldfixer.Tag)
+					
+					
+					
+					
+			if(obj.id ~= nil) then
+			despawnEntity(oldfixer.Tag)
 			
-			if(oldFixer ~= nil and oldFixer.despawn_action ~= nil and #oldFixer.despawn_action >0) then
+			
+			
+			if(oldfixer ~= nil and oldfixer.despawn_action ~= nil and #oldfixer.despawn_action >0) then
 				
 				--doActionof(currentfixer.action,"interact")
 				runActionList(oldFixer.despawn_action, oldFixer.Tag.."_Despawn",nil, nil,currentfixer.Tag)
@@ -2134,15 +2128,12 @@ function checkFixer()
 				
 			end
 			
-			fixerIsSpawn = false
-			fixerCanSpawn = true
-			
-			Game.ChangeZoneIndicatorPublic()
+		
 			
 			
 		end
 		
-		
+			end
 		
 	end
 	
@@ -2200,10 +2191,13 @@ function checkNPC()
 		
 		
 		checkContext(npc)
+		
+		
+		local obj = getEntityFromManager(k)
 	
 		if(check3DPos(playerpos, npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and getEntityFromManager(k).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
 			--if the npc is not spawned
-			
+		
 			local tweakDBnpc =  npc.tweakDB
 			
 			if(tweakDBnpc== "district") then
@@ -2359,13 +2353,13 @@ function checkNPC()
 					
 					
 					if(currentpoi ~= nil) then
-						spawnNPC(tweakDBnpc,"", npc.Tag, currentpoi.x, currentpoi.y, currentpoi.z, 42, true, false, nil, false, npc.rotation)
+						spawnNPC(tweakDBnpc,"", npc.tag, currentpoi.x, currentpoi.y, currentpoi.z, 42, true, false, nil, false, npc.rotation)
 					end
 				end
 				
 				else
 				
-				spawnNPC(tweakDBnpc,"", npc.Tag, npc.location.x, npc.location.y, npc.location.z, 42, true, false, nil, false, npc.rotation)
+				spawnNPC(tweakDBnpc,"", npc.tag, npc.location.x, npc.location.y, npc.location.z, 42, true, false, nil, false, npc.rotation)
 				
 				
 				
@@ -2377,11 +2371,11 @@ function checkNPC()
 			npc.init=false
 			
 			
-			elseif(npc.isspawn==true) then -- already spawn
+			else
+		
 			
-			local obj = getEntityFromManager(k)
 			
-			if(obj.id ~= nil) then 
+			if(obj ~= nil and obj.id ~= nil) then 
 				local enti = Game.FindEntityByID(obj.id)	
 				
 				
@@ -2516,7 +2510,7 @@ function checkNPC()
 							end
 							
 							despawnEntity(npc.tag)
-							
+								
 							if(workerTable[npc.tag.."_despawn"] == nil and #npc.despawnaction > 0 and npc.dospawnaction == true) then
 								runActionList(npc.despawnaction, npc.tag.."_despawn", "interact",false,npc.tag)
 								
@@ -2531,8 +2525,8 @@ function checkNPC()
 			
 			
 			
-		end
 		
+		end
 		
 		
 		

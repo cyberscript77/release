@@ -6040,7 +6040,7 @@ function listenPlayerInput(action)
 		actionName = Game.NameToString(action:GetName(action))
 		actionType = action:GetType(action).value
 		actionValue = action:GetValue(action)
-		-- logme(1,actionName)
+		--logme(1,actionName)
 		-- logme(1,actionType)
 		-- logme(1,currentController)
 		
@@ -6145,7 +6145,7 @@ function listenPlayerInput(action)
 				
 				
 				
-				if((string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "up_button"))and actionType == "BUTTON_RELEASED") then
+				if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "up_button"))and actionType == "BUTTON_RELEASED") then
 					
 					
 					if(currentDialogHub.index == nil) then
@@ -6163,7 +6163,7 @@ function listenPlayerInput(action)
 				
 				
 				
-				if((string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "down_button"))and actionType == "BUTTON_RELEASED") then
+				if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "down_button"))and actionType == "BUTTON_RELEASED") then
 					if(currentDialogHub.index == nil) then
 						currentDialogHub.index = 1
 					end

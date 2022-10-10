@@ -869,7 +869,7 @@ function checkNearFastTravel(curPos)
 		local FT = arrayFastTravel[i]
 		debugPrint(2,curPos.x)
 		debugPrint(2,curPos.y)
-		if(checkPos(curPos, FT.X, FT.Y,10)) then 
+		if(checkPos(curPos, FT.x, FT.y,10)) then 
 			
 			return true
 			

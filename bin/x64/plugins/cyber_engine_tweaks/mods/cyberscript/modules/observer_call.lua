@@ -755,56 +755,63 @@ function SetOverrider()
 	-- end)
 
 	
-	Override("RipperdocIdPanel", "SetName", function(this,vendorName,wrappedMethod)
-		RipperdocIdPanel_SetName(this,vendorName,wrappedMethod)
-	end)
+	-- Override("RipperdocIdPanel", "SetName", function(this,vendorName,wrappedMethod)
+		-- RipperdocIdPanel_SetName(this,vendorName,wrappedMethod)
+	-- end)
 	
-	Override("VendorHubMenuGameController", "SetupTopBar", function(this,wrappedMethod)
-		VendorHubMenuGameController_SetupTopBar(this,wrappedMethod)
-	end)
+	-- Override("VendorHubMenuGameController", "SetupTopBar", function(this,wrappedMethod)
+		-- VendorHubMenuGameController_SetupTopBar(this,wrappedMethod)
+	-- end)
 	
-	Override("FullscreenVendorGameController", "PopulateVendorInventory", function(this,wrappedMethod)
+	-- Override("FullscreenVendorGameController", "PopulateVendorInventory", function(this,wrappedMethod)
 		
-		FullscreenVendorGameController_PopulateVendorInventory(this,wrappedMethod)
-	end)
+		-- FullscreenVendorGameController_PopulateVendorInventory(this,wrappedMethod)
+	-- end)
 	
 	
 	---Scanner
-	Override('ScannervehicleGameController', 'OnVehicleInfoChanged', function(this, value,wrappedMethod)
-		ScannervehicleGameController_OnVehicleInfoChanged(this, value,wrappedMethod)
-	end)
+	-- ObserveAfter('ScannervehicleGameController', 'OnVehicleInfoChanged', function(this, value,wrappedMethod)
+		-- ScannervehicleGameController_OnVehicleInfoChanged(this, value,wrappedMethod)
+		-- print("OnVehicleInfoChanged")
+	-- end)
 	
 	
-	Override('ScannerNPCHeaderGameController', 'OnNameChanged', function(this, value,wrappedMethod)
-		ScannerNPCHeaderGameController_OnNameChanged(this, value,wrappedMethod)
+	-- ObserveAfter('ScannerNPCHeaderGameController', 'OnNameChanged', function(this, value,wrappedMethod)
+		-- ScannerNPCHeaderGameController_OnNameChanged(this, value,wrappedMethod)
+		-- print("OnNameChanged")
+	-- end)
+	
+	-- ObserveAfter('ScannerNPCHeaderGameController', 'OnLevelChanged', function(this, value,wrappedMethod)
+		 -- ScannerNPCHeaderGameController_OnLevelChanged(this, value,wrappedMethod)
+		 -- print("OnLevelChanged")
+	-- end)
+	
+	-- ObserveAfter('ScannerNPCHeaderGameController', 'OnAttitudeChange', function(this, value,wrappedMethod)
+		 -- ScannerNPCHeaderGameController_OnAttitudeChange(this, value,wrappedMethod)
+		 -- print("OnAttitudeChange")
 		
-	end)
+	-- end)
 	
-	Override('ScannerNPCHeaderGameController', 'OnLevelChanged', function(this, value,wrappedMethod)
-		 ScannerNPCHeaderGameController_OnLevelChanged(this, value,wrappedMethod)
-	end)
-	
-	Override('ScannerNPCHeaderGameController', 'OnAttitudeChange', function(this, value,wrappedMethod)
-		 ScannerNPCHeaderGameController_OnAttitudeChange(this, value,wrappedMethod)
-		
-	end)
-	
-	Override('ScannerNPCBodyGameController', 'OnFactionChanged', function(this, value,wrappedMethod)
-		ScannerNPCBodyGameController_OnFactionChanged(this, value,wrappedMethod)
-	end)
+	-- ObserveAfter('ScannerNPCBodyGameController', 'OnFactionChanged', function(this, value,wrappedMethod)
+		-- ScannerNPCBodyGameController_OnFactionChanged(this, value,wrappedMethod)
+		-- print("OnFactionChanged")
+	-- end)
 	
 	
-	Override('ScannerNPCBodyGameController', 'OnRarityChanged', function(this, value,wrappedMethod)
-		 ScannerNPCBodyGameController_OnRarityChanged(this, value,wrappedMethod)
-	end)
+	-- ObserveAfter('ScannerNPCBodyGameController', 'OnRarityChanged', function(this, value,wrappedMethod)
+		 -- ScannerNPCBodyGameController_OnRarityChanged(this, value,wrappedMethod)
+		 -- print("OnRarityChanged")
+	-- end)
 	
-	Override('ScannerBountySystemGameController', 'OnBountySystemChanged', function(this, value,wrappedMethod)
-		ScannerBountySystemGameController_OnBountySystemChanged(this, value,wrappedMethod)
-	end)
+	-- ObserveAfter('ScannerBountySystemGameController', 'OnBountySystemChanged', function(this, value,wrappedMethod)
+		-- ScannerBountySystemGameController_OnBountySystemChanged(this, value,wrappedMethod)
+		-- print("OnBountySystemChanged")
+	-- end)
 	
-	Override('scannerDetailsGameController', 'RefreshLayout', function(this,wrappedMethod)
-		cannerDetailsGameController_RefreshLayout(this,wrappedMethod)
-	end)
+	-- ObserveAfter('scannerDetailsGameController', 'RefreshLayout', function(this,wrappedMethod)
+		-- ScannerDetailsGameController_RefreshLayout(this,wrappedMethod)
+		-- print("RefreshLayout")
+	-- end)
 	
 	
 	---Scanner
