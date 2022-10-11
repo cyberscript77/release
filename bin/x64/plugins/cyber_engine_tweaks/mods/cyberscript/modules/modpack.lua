@@ -168,7 +168,7 @@ function ImportDataPack()
 		
 	end
 	
-	arrayDatapack["default"].enabled =  true
+	
 	end
 
 
@@ -232,7 +232,7 @@ function CheckandUpdateDatapack()
 	local directories = {}
 	
 	if(arrayDatapack["default"] ~= nil) then 
-	arrayDatapack["default"].enabled = true
+	
 	end
 	
 	if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil  ) then
@@ -259,11 +259,7 @@ function CheckandUpdateDatapack()
 		
 		
 		
-		if(k == "default" and arrayDatapack[k] ~= nil ) then
-			
-			arrayDatapack[k].enabled = true
-			
-		end
+	
 		
 		local jsondesc = nil
 		
@@ -317,7 +313,7 @@ function CheckandUpdateDatapack()
 			local isenabled = false
 			haveupdate = true
 			
-			if(k == "default" or (arrayDatapack[k] ~= nil and arrayDatapack[k].enabled == true)) then
+			if((arrayDatapack[k] ~= nil and arrayDatapack[k].enabled == true)) then
 				
 				isenabled = true
 				
@@ -373,7 +369,7 @@ function CheckandUpdateDatapack()
 	for k,v in pairs(arrayDatapack) do
 		
 		local status, retval = pcall(function()
-		if('table' == type(v) and k ~= "default") then
+		if('table' == type(v)) then
 			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil) then
 			
 				nativeSettings.addSwitch("/CMDT", k, "index :"..i, arrayDatapack[k].enabled, arrayDatapack[k].enabled, function(state)
@@ -386,14 +382,8 @@ function CheckandUpdateDatapack()
 				end)
 			end
 			i = i +1
-			else
-			
-			if('table' == type(v) and k == "default") then
-			
-			EnableDatapack(k)
-			
-			end
 		end
+			
 		end)
 		
 		if status == false then

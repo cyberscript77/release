@@ -8123,6 +8123,12 @@ end
 		
 		-- end
 		-- end
+		
+		if(action.name == "reset_spawncount") then
+			
+			spawntablecount = {}
+			
+		end
 		if(action.name == "set_entity_highlight") then
 			local obj = getEntityFromManager(action.tag)
 			local enti = Game.FindEntityByID(obj.id)
