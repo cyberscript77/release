@@ -81,12 +81,46 @@ if spawnRegion then
 					
 					end
 					
-					NPC = Game.GetPreventionSpawnSystem():RequestSpawn(twk,spawnlvl,worldpos)
-					--	print(GameDump(worldpos))
+					if(spawntablecount[chara] == nil or spawntablecount[chara] < 1) then
+
+					local action = {}
+					action.position = "relative_to_entity"
+					action.position_tag = "player"
+					action.position_way = "behind"
+					action.position_distance = 10
+					action.x = 0
+					action.y = 0
+					action.z = 0
+					local pos  = getPositionFromParameter(action)
+					postp = Vector4.new( pos.x, pos.y, pos.z,1)
+
+					worldpos:SetPosition(worldpos, postp)	
+					Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
+					spawntablecount[chara] = 1
+
+							
+					Cron.After(1, function()
+						Game.GetPreventionSpawnSystem():RequestDespawnPreventionLevel(-6666)
+						spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation)
 						
+
+					end)
+									
+					else
+					NPC = Game.GetPreventionSpawnSystem():RequestSpawn(twk,spawnlevel * -1,worldpos)
+					spawntablecount[chara] = spawntablecount[chara] + 1
+					end
+
+
+
+					end
 					
 					
-				end
+					
+					
+					
+					
+				
 				
 				if(NPC ~= nil) then
 				local entity = {}
@@ -2875,7 +2909,37 @@ else
 NPC = exEntitySpawner.SpawnRecord(chara, worldpos)
 end
 else
+if(spawntablecount[chara] == nil or spawntablecount[chara] < 1) then
+
+local action = {}
+action.position = "relative_to_entity"
+action.position_tag = "player"
+action.position_way = "behind"
+action.position_distance = 10
+action.x = 0
+action.y = 0
+action.z = 0
+local pos  = getPositionFromParameter(action)
+postp = Vector4.new( pos.x, pos.y, pos.z,1)
+
+worldpos:SetPosition(worldpos, postp)	
+Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
+spawntablecount[chara] = 1
+
+		
+Cron.After(1, function()
+	Game.GetPreventionSpawnSystem():RequestDespawnPreventionLevel(-6666)
+	spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second)
+	
+
+end)
+				
+else
 NPC = Game.GetPreventionSpawnSystem():RequestSpawn(twk,spawnlevel * -1,worldpos)
+spawntablecount[chara] = spawntablecount[chara] + 1
+end
+
+
 
 end
 
@@ -2895,7 +2959,6 @@ entity.name = chara
 entity.isprevention = spawn_system == 3
 entity.fromgarage = spawn_system == 1
 entity.isMP = isMP
-spdlog.error("mark11111")
 if(isMP ~= nil and isMP == true)then
 entity.name = tag
 end

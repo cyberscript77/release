@@ -126,7 +126,7 @@ displayHUD = {}
 editorCurrentVariableSearch = ""
 editorCurrentVariableKeySearch = ""
 PlayerisHitten = false
-
+spawntablecount = {}
 datapackObjectType = { 
 	"character",
 	"circuit",

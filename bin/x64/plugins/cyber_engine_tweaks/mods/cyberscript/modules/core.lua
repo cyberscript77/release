@@ -612,7 +612,10 @@ function inGameInit() -- init some function after save loaded
 	local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
 	blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
 	Game.SetTimeDilation(0)
+
+pcall(function()
 	Game.GetSettingsSystem():GetVar("/gameplay/performance", "CrowdDensity"):SetValue("High")
+end)
 	debugPrint(1,getLang("seestarted"))
 end
 function shutdownManager() -- setup some function at shutdown
@@ -654,7 +657,7 @@ function TweakManager() -- Load vehicles and change some TweakDB
 	local encdo = lines
 	local tableDis = {}
 	tableDis =json.decode(lines)
-	
+	vehiclelist = tableDis
 	f:close()
 	
 	local unlockableVehicles = TweakDB:GetFlat(TweakDBID.new('Vehicle.vehicle_list.list'))

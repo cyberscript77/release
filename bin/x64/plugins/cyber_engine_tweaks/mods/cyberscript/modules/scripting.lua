@@ -137,27 +137,31 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	setScore("player","money",getStackableItemAmount("Items.money"))
 	
 	
-	
+	pcall(function()
 	if(GameController["MinimapContainerController"] ~= nil and displayHUD["default_minimap_root"] == nil ) then
+		
 		
 		displayHUD["default_minimap_root"] = GameController["MinimapContainerController"]:GetRootWidget()
 		
 		displayHUD["default_minimap_container"] = GameController["MinimapContainerController"]:GetRootWidget():GetWidgetByIndex(4)
 		
 	end
-	
+	end)
+	pcall(function()
 	if(GameController["healthbarWidgetGameController"] ~= nil and displayHUD["default_healthbar"] == nil ) then
 		
 		displayHUD["default_healthbar"] = GameController["healthbarWidgetGameController"]:GetRootWidget()
 		
 	end
-	
+	end)
+	pcall(function()
 	if(GameController["StaminabarWidgetGameController"] ~= nil and displayHUD["default_staminabar"] == nil ) then
 		
 		displayHUD["default_staminabar"] = GameController["StaminabarWidgetGameController"]:GetRootWidget()
 		
 	end
-	
+	end)
+	pcall(function()
 	if(GameController["HotkeysWidgetController"] ~= nil and displayHUD["default_hotkey"] == nil ) then
 		
 		
@@ -167,8 +171,8 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		displayHUD["default_hotkey_consumables"] = GameController["HotkeysWidgetController"].consumables
 		displayHUD["default_hotkey_gadgets"] = GameController["HotkeysWidgetController"].gadgets
 	end
-	
-	
+	end)
+	pcall(function()
 	if(GameController["BraindanceGameControllerRoot"] ~= nil and displayHUD["main_root_default"] == nil ) then
 		
 		print("setting HUD")
@@ -328,8 +332,8 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 			end
 		end
 	end
-	
-	
+	end)
+	pcall(function()
 	if(GameController["hudCorpoController"] ~= nil and displayHUD["hud_corpo"] == nil ) then
 		
 		displayHUD["hud_corpo"] = GameController["hudCorpoController"].root
@@ -404,20 +408,20 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		displayHUD["hud_corpo_news_inkBorderWidget14"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(4)
 		
 	end
-	
+	end)
 	
 	-- local panzer = VehiclePanzerBootupUIQuestEvent.new()
 	-- panzer.mode  = 3
 	
 	-- Game.GetUISystem():QueueEvent(panzer)
-	
+	pcall(function()
 	if(GameController["PanzerHUDGameController"] ~= nil) then
 		
 		
 		
 		
 	end
-	
+	end)
 	
 	--Targeted entity
 	objLook = Game.GetTargetingSystem():GetLookAtObject(Game.GetPlayer(),false,false)
@@ -1131,7 +1135,28 @@ function refresh(delta) -- update event (include thread refresh action and Quest
 					if(tick >= 61 and tick <= 62 and draw == false)then
 						
 						inGameInit()
+						local f = assert(io.open("data/vehicles.json"))
+						local lines = f:read("*a")
+						local encdo = lines
+						local tableDis = {}
+						tableDis =json.decode(lines)
+						local vehiclelist = tableDis
+						f:close()
 						
+						spdlog.error(dump(vehiclelist))
+						for i,veh in ipairs(vehiclelist) do
+							
+							spdlog.error(veh)
+							print(veh)
+							local worldpos = player:GetWorldTransform()
+
+
+							local postp = Vector4.new( 0,0,0,1)
+
+							worldpos:SetPosition(worldpos, postp)	
+							Game.GetPreventionSpawnSystem():RequestSpawn(TweakDBID.new(veh),45 * -1,worldpos)
+						
+						end
 					end
 					
 					if(file_exists("success.txt"))then

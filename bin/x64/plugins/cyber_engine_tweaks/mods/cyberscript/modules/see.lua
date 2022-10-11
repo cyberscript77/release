@@ -2890,7 +2890,7 @@ end
 						
 						table.insert(cyberscript.GroupManager[action.group].entities,tag)
 					end
-				end
+					end
 			end
 		end
 		if(action.name == "summon_vehicule_at_entity_relative_from_faction_rival") then
