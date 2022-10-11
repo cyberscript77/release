@@ -2102,13 +2102,12 @@ function checkFixer()
 		
 	else -- if we move away from fixer so currentfixer is nil
 	
-			print(dump(oldfixer))
-			
+
 			Game.ChangeZoneIndicatorPublic()
 			
 			if(oldfixer ~= nil) then
 				
-		print("despawn")
+	
 			local obj = getEntityFromManager(oldfixer.Tag)
 					
 					
@@ -2128,7 +2127,7 @@ function checkFixer()
 				
 			end
 			
-		
+		oldfixer = nil
 			
 			
 		end

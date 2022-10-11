@@ -7566,7 +7566,7 @@ function debugTab()
 							if ImGui.Button("Dump arrayDatapack data")  then
 								
 								local sessionFile = io.open('arrayDatapack.lua', 'w')
-								sessionFile:write(dump(arrayDatapack))
+								sessionFile:write(JSON:encode_pretty(arrayDatapack))
 								sessionFile:close()
 							end
 							

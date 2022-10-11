@@ -371,8 +371,11 @@ function CheckandUpdateDatapack()
 	
 	local i = 1
 	for k,v in pairs(arrayDatapack) do
+		
+		local status, retval = pcall(function()
 		if('table' == type(v) and k ~= "default") then
 			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil) then
+			
 				nativeSettings.addSwitch("/CMDT", k, "index :"..i, arrayDatapack[k].enabled, arrayDatapack[k].enabled, function(state)
 					if (state == false) then
 						
@@ -391,10 +394,23 @@ function CheckandUpdateDatapack()
 			
 			end
 		end
+		end)
+		
+		if status == false then
+											
+											
+								
+											--spdlog.error(getLang("Modpack Setting Error") .. retval.." Modpack : "..k.."value : "..tostring(arrayDatapack[k].enabled))
+											--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
+											
+										end
+										
+		
+		end
 	end
 	
 	buildnativesetting()
-	end
+	
 	
 	end
 end
