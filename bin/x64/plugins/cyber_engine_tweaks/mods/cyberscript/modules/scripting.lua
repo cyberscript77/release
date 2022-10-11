@@ -2193,8 +2193,8 @@ function checkNPC()
 		
 		
 		local obj = getEntityFromManager(k)
-	
-		if(check3DPos(playerpos, npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and getEntityFromManager(k).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
+		if(npc.workinglocation.x ~= nil and npc.workinglocation.y ~= nil and npc.workinglocation.z~= nil)then
+		if( check3DPos(playerpos, npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and getEntityFromManager(k).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
 			--if the npc is not spawned
 		
 			local tweakDBnpc =  npc.tweakDB
@@ -2527,7 +2527,9 @@ function checkNPC()
 		
 		end
 		
-		
+		else
+		print("error for npc working location. NPC : "..k)
+		end
 		
 		
 	end

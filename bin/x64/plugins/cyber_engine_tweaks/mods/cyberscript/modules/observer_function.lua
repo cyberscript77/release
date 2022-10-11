@@ -5385,28 +5385,36 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	---Scanner
 	function ScannervehicleGameController_OnVehicleInfoChanged(thos, value,wrappedMethod)
+	
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
 			if(entity.id ~= nil) and (getScannerdataFromEntityOrGroupOfEntity(entity) ~= nil) then
+			
 				if(ScannerInfoManager[entity.tag].primaryname ~= nil) then
 					local vehicleInfoData = ScannerVehicleInfo.new()
 					vehicleInfoData = FromVariant(value)
 					
-					
-					
 					if vehicleInfoData ~= nil then
+						local text = ""..ScannerInfoManager[entity.tag].text
+						
+						if string.match(text,"cyberscript_scanner_") then
+						text = text:gsub("cyberscript_scanner_", " ") 
+						inkTextRef.SetText(thos.vehicleInfoText, text)
+						
+						thos.isValidVehicleInfo = true
 						
 						
+						
+						else
 						if(Game.GetLocalizedText(vehicleInfoData:GetVehicleInfo()) ~= nil) then 
 							
 							inkTextRef:SetLocalizedTextScript(thos.vehicleInfoText, vehicleInfoData:GetVehicleInfo())
 							
 						end
 						thos.isValidVehicleInfo = true
-						else
-						inkTextRef.SetText(thos.vehicleInfoText, ScannerInfoManager[entity.tag].text)
-						thos.isValidVehicleInfo = true
+						
+						
 					end
 					thos:UpdateGlobalVisibility()
 					
@@ -5424,6 +5432,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 			wrappedMethod(value)
 			
 		end
+	end
 	end
 	
 	
@@ -5762,7 +5771,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 					thos:GetRootWidget():SetVisible(false)
 					table.insert(thos.asyncSpawnRequests,thos:AsyncSpawnFromLocal(inkWidgetRef.Get(thos.quickhackContainer), "QuickHackDescription"))
 					
-					
+					print(tostring(thos.scannedObjectType))
 					if(thos.scannedObjectType == ScannerObjectType.PUPPET) then
 						thos:GetRootWidget():SetVisible(true)
 						thos:AsyncSpawnScannerModule("ScannerNPCHeaderWidget")
@@ -5782,6 +5791,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 						thos:AsyncSpawnScannerModule("ScannerVulnerabilitiesWidget")
 						thos:AsyncSpawnScannerModule("ScannerRequirementsWidget")
 						thos:AsyncSpawnScannerModule("ScannerDeviceDescriptionWidget")
+								
 						
 						elseif(thos.scannedObjectType == ScannerObjectType.VEHICLE) then
 						
@@ -5793,6 +5803,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 						thos:GetRootWidget():SetVisible(true)
 						thos:AsyncSpawnScannerModule("ScannerDeviceHeaderWidget")
 						thos:AsyncSpawnScannerModule("ScannerDeviceDescriptionWidget")
+								
 						inkWidgetRef:SetVisible(thos.toggleDescirptionHackPart, false)
 						
 					end
@@ -5810,13 +5821,14 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 				else
 				
 				wrappedMethod()
+				print("tossss")
 				
 			end
 			
 			else
 			
 			wrappedMethod()
-			
+			print("tossss")
 		end
 		
 	end

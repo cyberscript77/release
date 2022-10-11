@@ -9221,7 +9221,7 @@ end
 			ScannerInfoManager[action.tag].rarity = action.rarity
 			ScannerInfoManager[action.tag].faction = action.faction
 			ScannerInfoManager[action.tag].networkstate = ""
-			ScannerInfoManager[action.tag].text = getLang(action.text)
+			ScannerInfoManager[action.tag].text = getLang("cyberscript_scanner_"..action.text)
 			print(action.text)
 			ScannerInfoManager[action.tag].attitude = action.attitude
 			
