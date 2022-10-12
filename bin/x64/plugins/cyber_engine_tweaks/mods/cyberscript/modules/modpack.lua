@@ -370,7 +370,7 @@ function CheckandUpdateDatapack()
 		
 		local status, retval = pcall(function()
 		if('table' == type(v)) then
-			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil) then
+			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil and (table_contains(arrayDatapack[k].metadata.flags,"essential",false) == false)) then
 			
 				nativeSettings.addSwitch("/CMDT", k, "index :"..i, arrayDatapack[k].enabled, arrayDatapack[k].enabled, function(state)
 					if (state == false) then
@@ -381,6 +381,11 @@ function CheckandUpdateDatapack()
 					end
 				end)
 			end
+			
+			if((table_contains(arrayDatapack[k].metadata.flags,"essential",false) == true)) then
+				EnableDatapack(k)
+			end
+			
 			i = i +1
 		end
 			
@@ -932,8 +937,14 @@ end
 						end
 						elseif(objtype == "housing") then
 						for key, value in pairs(tabl) do 
+						
+						
+							
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							
+							if isArray(value) then
+							print("isArray "..path)
 							if(#value > 0) then
 								for i=1,#value do
 									local obj = value[i]
@@ -942,6 +953,95 @@ end
 									table.insert(arrayHousing,obj)
 								end
 							end
+							
+							else
+							
+							if(value.customIncluded ~= nil) then --amm template
+								print("Cyberscript : AMM housing founded : "..path..". Converting to CS Housing..")
+								local statutfile = true
+								
+								for i,prop in ipairs(value.props) do
+									
+									-- local status,result = pcall(function()
+									
+									local csprop = {}
+									csprop.HouseTag = prop.tag
+									
+									
+									local testtt = amm_entities[prop.entity_id]
+									if(testttt ~= nil) then
+									
+									csprop.Tag = amm_entities[prop.entity_id].entity_path
+									csprop.Id = prop.tag.."_"..amm_entities[prop.entity_id].entity_path.."_"..prop.uid
+									
+									else
+									
+									csprop.Tag = prop.tag
+									csprop.Id = prop.tag.."_".."unknown".."_"..prop.uid
+									
+									end
+									csprop.Title = prop.name
+									csprop.ItemPath = prop.template_path
+									csprop.appearance = prop.app
+									
+									local pos = loadstring("return "..prop.pos, '')()
+									-- local validJson, userData = pcall(function() return json.decode(prop.pos)end)
+									-- if(validJson) then pos = userData end
+									
+									csprop.X = pos.x
+									csprop.Y = pos.y
+									csprop.Z = pos.z
+									csprop.Yaw = pos.yaw
+									csprop.Pitch = pos.pitch
+									csprop.Roll = pos.roll
+									csprop.scale =loadstring("return "..prop.scale, '')()
+								
+									-- local validJson, userData = pcall(function() return json.decode(prop.scale) end)
+									-- if(validJson) then csprop.scale = userData end
+									
+									for y,light in ipairs(value.lights) do
+										
+										if(light.uid == prop.uid) then
+											
+											csprop.color = loadstring("return "..light.color, '')() 
+											csprop.angles = loadstring("return "..light.angles, '')() 
+											
+											
+											
+											csprop.radius = light.radius
+											csprop.intensity = light.intensity
+											
+										
+										end
+								
+									end
+									
+									csprop.datapack = datapackname
+									csprop.file = path
+									
+									table.insert(arrayHousing,csprop)
+									-- end)
+									
+									-- if(status == false) then
+									
+									-- print("Cyberscript : AMM housing : "..path.." Props UID:"..value.props.uid..". Convertion failed ! Error :"..result)
+									
+									-- end
+								end
+								
+								
+								if(statutfile == true) then print("Cyberscript : AMM housing : "..path..". Convertion successfull !") else print("Cyberscript : AMM housing : "..path..". Convertion failed !") end
+								
+								
+							
+								
+							
+							end
+							
+							
+							end
+							
+							
 						end
 						elseif(objtype == "interact") then
 						for key, value in pairs(tabl) do 

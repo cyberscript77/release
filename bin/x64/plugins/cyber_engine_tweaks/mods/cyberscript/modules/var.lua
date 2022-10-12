@@ -2311,7 +2311,7 @@ local f = assert(io.open("data/triggertemplate.json"))
 lines = f:read("*a")
 
 encdo = lines
-
+f:close()
 triggertemplate = {}
 
 triggertemplate = trydecodeJSOn(encdo, f ,"data/triggertemplate.json")
@@ -2320,8 +2320,52 @@ triggertemplate = trydecodeJSOn(encdo, f ,"data/triggertemplate.json")
 controltypelist = {"button","label","area","scrollarea","vertical_area","image"}
 controltypevaluelist = {"text","number","score","variable"}
 
-f:close()
 
+
+
+
+
+
+local f = assert(io.open("external/amm_entities.json"))
+
+lines = f:read("*a")
+
+encdo = lines
+amm_entities = {}
+
+local test = trydecodeJSOn(encdo, f ,"external/amm_entities.json")
+
+for i,v in ipairs(test) do
+	
+	amm_entities[v.entity_id] = v
+	
+	
+
+end
+
+spdlog.error("amm_entities : "..dump(amm_entities))
+
+
+
+
+local f = assert(io.open("external/amm_component.json"))
+
+lines = f:read("*a")
+
+encdo = lines
+amm_component = {}
+
+local test =  trydecodeJSOn(encdo, f ,"external/amm_component.json")
+
+for i,v in ipairs(test) do
+	
+	amm_component[v.cname] = v
+	
+
+end
+
+
+spdlog.error("amm_component : "..dump(amm_component))
 
 arraytriggertemplate = {}
 

@@ -732,8 +732,13 @@ function getVariableKeyWithDefault(tag,key,default)
 	local score = currentSave.Variable[tag]
 	
 	if(score ~= nil) then
-	
-		return currentSave.Variable[tag][key]
+		 score = currentSave.Variable[tag][key]
+		 if(score ~= nil) then
+			return currentSave.Variable[tag][key]
+		else
+			currentSave.Variable[tag][key] = default
+			return currentSave.Variable[tag][key]
+		 end
 	else
 		currentSave.Variable[tag] = {}
 		currentSave.Variable[tag][key] = default

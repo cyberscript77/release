@@ -395,3 +395,124 @@ function despawnItemFromMultiHouse()
 		debugPrint(2,"despawning not ok")
 	end
 end
+
+
+function currentHouseApplyTemplate(tag,x,y,z)
+
+if(currentHouse ~=nil and arrayHousingTemplate[tag] ~= nil) then
+				local template = arrayHousingTemplate[tag].template
+				
+				if(#template.items > 0) then
+					
+					
+					
+					
+					for i,v in ipairs(template.items) do
+						
+						local obj = {}
+						obj.Id = v.Id
+						obj.Tag = v.Tag
+						obj.HouseTag = currentHouse.tag
+						obj.ItemPath = v.ItemPath
+						obj.X = template.center.x + x +v.X
+						obj.Y = template.center.y + y + v.Y
+						obj.Z = template.center.z + z + v.Z
+						obj.Yaw = v.Yaw
+						obj.Pitch = v.Pitch
+						obj.Roll = v.Roll
+						obj.Title = v.Title
+						obj.fromTemplate = true
+						obj.template = template.tag
+						
+						
+						saveHousing(obj)
+						
+						local housing = getHousing(obj.Tag,obj.X,obj.Y,obj.Z)
+						obj.Id = housing.Id
+						
+						local poss = Vector4.new( obj.X, obj.Y,  obj.Z,1)
+						
+						
+						local angless = EulerAngles.new(obj.Roll, obj.Pitch,  obj.Yaw)
+						
+						
+						obj.entityId = spawnItem(obj, poss, angless)
+						local entity = Game.FindEntityByID(spawnedItem.entityId)
+						local components = checkForValidComponents(entity)
+						if components then
+							local visualScale = checkDefaultScale(components)
+							obj.defaultScale = {
+								x = visualScale.x * 100,
+								y = visualScale.x * 100,
+								z = visualScale.x * 100,
+							}
+							obj.scale = {
+								x = visualScale.x * 100,
+								y = visualScale.y * 100,
+								z = visualScale.z * 100,
+							}
+						end
+						
+						table.insert(currentItemSpawned,obj)
+						
+					end
+					
+					
+				end
+				
+			end
+	
+	
+end
+
+
+function currentHouseClearTemplate(tag)
+
+if(currentHouse ~=nil) then
+				
+				if(#currentItemSpawned > 0) then
+					
+					for i=1,#currentItemSpawned do
+						
+						if(currentItemSpawned[i].fromTemplate ~= nil and currentItemSpawned[i].fromTemplate == true and currentItemSpawned[i].template == tag) then
+							deleteHousing(currentItemSpawned[i].Id)
+							despawnItemFromId(currentItemSpawned[i].Id)
+							
+						end
+						
+						
+					end
+					
+					
+				end
+				
+			end
+	
+	
+end
+
+
+function currentHouseClearAllTemplate()
+
+if(currentHouse ~=nil) then
+				
+				if(#currentItemSpawned > 0) then
+					
+					for i=1,#currentItemSpawned do
+						
+						if(currentItemSpawned[i].fromTemplate ~= nil and currentItemSpawned[i].fromTemplate == true) then
+							deleteHousing(currentItemSpawned[i].Id)
+							despawnItemFromId(currentItemSpawned[i].Id)
+							
+						end
+						
+						
+					end
+					
+					
+				end
+				
+			end
+	
+	
+end
