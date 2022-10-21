@@ -7667,7 +7667,7 @@ function debugTab()
 							ImGui.Separator()
 							
 							
-							if ImGui.TreeNode("Entitiesxxx") then
+							if ImGui.TreeNode("Entities") then
 								for k,v in pairs(cyberscript.EntityManager) do
 									
 									local enti = v

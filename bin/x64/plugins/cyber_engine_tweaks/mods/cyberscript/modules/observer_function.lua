@@ -6461,8 +6461,11 @@ function listenPlayerInput(action)
 		actionName = Game.NameToString(action:GetName(action))
 		actionType = action:GetType(action).value
 		actionValue = action:GetValue(action)
-		--logme(1,actionName)
+		-- if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
+			
+		-- logme(1,actionName)
 		-- logme(1,actionType)
+		-- end
 		-- logme(1,currentController)
 		
 		
@@ -6548,16 +6551,18 @@ function listenPlayerInput(action)
 		end
 		
 		
-		if(actionType == "BUTTON_RELEASED" and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
+		if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
 			----printactionName)+
 			-- --debugPrint(2,actionName)
 			-- --debugPrint(2,actionType)
+			 logme(1,actionName)
+			logme(1,actionType)
 			local inputHitted = false
 			if(isdialogactivehub == true ) then
 				
 				local inputIndex = 0
 				
-				if(string.find(tostring(actionName), "hoice1_Release")and actionType == "BUTTON_RELEASED" and (currentDialogHub.dial.options[currentDialogHub.index].locked == nil or currentDialogHub.dial.options[currentDialogHub.index].locked == false)) then
+				if(string.find(tostring(actionName), "hoice1_Release")and (actionType == "BUTTON_RELEASED") and (currentDialogHub.dial.options[currentDialogHub.index].locked == nil or currentDialogHub.dial.options[currentDialogHub.index].locked == false)) then
 					ClickOnDialog(currentDialogHub.dial.options[currentDialogHub.index],currentDialogHub.dial.speaker.value,currentDialogHub.dial.speaker.way)
 					
 					
@@ -6566,7 +6571,7 @@ function listenPlayerInput(action)
 				
 				
 				
-				if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "up_button"))and actionType == "BUTTON_RELEASED") then
+				if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "up_button"))and (actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED")) then
 					
 					
 					if(currentDialogHub.index == nil) then
@@ -6584,7 +6589,7 @@ function listenPlayerInput(action)
 				
 				
 				
-				if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "down_button"))and actionType == "BUTTON_RELEASED") then
+				if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "down_button"))and (actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED")) then
 					if(currentDialogHub.index == nil) then
 						currentDialogHub.index = 1
 					end
