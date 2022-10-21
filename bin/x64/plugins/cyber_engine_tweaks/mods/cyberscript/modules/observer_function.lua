@@ -3814,7 +3814,7 @@ print("hot reload test")
 					
 					local textc02 = inkText.new()
 					textc02:SetName(CName.new("text_house_clear_desc"))
-					textinkhouseprice:SetText(splitByChunk(currentstep.desc,50))
+					textc02:SetText(splitByChunk(currentstep.desc,50))
 					
 					textc02:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
 					textc02:SetFontStyle('Medium')
