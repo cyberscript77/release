@@ -274,7 +274,7 @@ function updateHousing(item)
 	local res = false 
 	for i=1,#currentSave.arrayHousing do
 	
-		if(currentSave.arrayHousing[i].Id == item.Id) then
+		if(currentSave.arrayHousing[i].Tag == item.Tag) then
 			currentSave.arrayHousing[i].X = item.X
 			currentSave.arrayHousing[i].Y = item.Y
 			currentSave.arrayHousing[i].Z = item.Z
@@ -295,18 +295,8 @@ function getHousing(tag,x,y,z)
 	for i = 1, #currentSave.arrayHousing do
 	
 	local item = currentSave.arrayHousing[i]
-		debugPrint(4,item.Tag)
-		debugPrint(4,tag)
 		
-		debugPrint(4,item.X)
-		debugPrint(4,x)
-		
-		debugPrint(4,item.Y)
-		debugPrint(4,y)
-		
-		debugPrint(4,item.Z)
-		debugPrint(4,z)
-	if(tostring(item.X) == tostring(x) and tostring(item.Y) == tostring(y) and tostring(item.Z) == tostring(z) and tostring(item.Tag) == tostring(tag)) then
+	if(tostring(item.Tag) == tostring(tag)) then
 		debugPrint(4,item.Tag)
 		return item
 	

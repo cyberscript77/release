@@ -11,6 +11,36 @@ function SetObserver()
 		 ComputerMainLayoutWidgetController_OnScreenSaverSpawned(this,widget,userData)
 
 	end)
+	ObserveAfter("ComputerMainLayoutWidgetController", "OnMailsMenuSpawned", function(this,widget,userData)
+		
+		 ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
+
+	end)
+	
+	
+	ObserveAfter("ComputerMainLayoutWidgetController", "ShowMails", function(this)
+		
+		 ComputerInkGameController_ShowMails(this)
+
+	end)
+	
+	ObserveAfter("ComputerMenuWidgetController", "InitializeFiles", function(this,gameController,widgetsData)
+		ComputerMenuWidgetController_InitializeFiles(this,gameController,widgetsData)
+		
+
+	end)
+	
+	ObserveAfter("ComputerMenuWidgetController", "InitializeFilesThumbnails", function(this,gameController,widgetsData)
+		ComputerMenuWidgetController_InitializeFilesThumbnails(this,gameController,widgetsData)
+		
+
+	end)
+	
+	ObserveAfter("ComputerDocumentWidgetController", "Initialize", function(this,gameController,widgetsData)
+		ComputerDocumentWidgetController_Initialize(this,gameController,widgetsData)
+		
+
+	end)
 	
 	ObserveAfter("FullscreenVendorGameController", "PopulateVendorInventory", function(this)
 	 FullscreenVendorGameController_PopulateVendorInventory(this)

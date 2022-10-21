@@ -775,6 +775,7 @@ end
 	arrayEvent = {}
 	arrayCodex = {}
 	arrayWebpage = {}
+	arrayEmail = {}
 	
 	arrayFunction = {}
 	arrayHousing = {}
@@ -832,17 +833,7 @@ end
 	}
 	
 
-	if(#currentSave.arrayHousing ==0) then
-		currentSave.arrayHousing = arrayHousing
-		else
-		for i=1,#arrayHousing do
-			local obj = getItemFromArrayHousing(arrayHousing[i].Tag,arrayHousing[i].X,arrayHousing[i].Y,arrayHousing[i].Z,arrayHousing[i].HouseTag,arrayHousing[i].ItemPath)
-			if(obj == nil) then
-				table.insert(currentSave.arrayHousing, arrayHousing[i])
-				--debugPrint(1,"Added item ino your housing")
-			end
-		end
-	end
+	
 	
 	initPath()
 	
@@ -938,31 +929,35 @@ end
 						elseif(objtype == "housing") then
 						for key, value in pairs(tabl) do 
 						
-						
+							
 							
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							if isArray(value) then
-							print("isArray "..path)
-							if(#value > 0) then
-								for i=1,#value do
-									local obj = value[i]
-									obj.datapack = datapackname
-									obj.file = path
-									table.insert(arrayHousing,obj)
-								end
-							end
 							
-							else
 							
 							if(value.customIncluded ~= nil) then --amm template
 								print("Cyberscript : AMM housing founded : "..path..". Converting to CS Housing..")
 								local statutfile = true
 								
+								local newobj = {}
+								newobj.target = value.props[1].tag
+								newobj.trigger = {}
+								newobj.tag = value.props[1].tag
+								newobj.trigger.auto = {}
+								newobj.trigger.auto.name = "auto"
+								newobj.requirement = {}
+								local requirement = { "auto" }
+								
+								table.insert(newobj.requirement,requirement)
+								
+								newobj.items = {}
+								newobj.gameid = "fb721b23723385bfd5cb959ad14961d6"
+								
+								
 								for i,prop in ipairs(value.props) do
 									
-									-- local status,result = pcall(function()
+									
 									
 									local csprop = {}
 									csprop.HouseTag = prop.tag
@@ -971,13 +966,13 @@ end
 									local testtt = amm_entities[prop.entity_id]
 									if(testttt ~= nil) then
 									
-									csprop.Tag = amm_entities[prop.entity_id].entity_path
-									csprop.Id = prop.tag.."_"..amm_entities[prop.entity_id].entity_path.."_"..prop.uid
+										csprop.Tag = amm_entities[prop.entity_id].entity_path
+										csprop.Id = prop.tag.."_"..amm_entities[prop.entity_id].entity_path.."_"..prop.uid
 									
 									else
 									
-									csprop.Tag = prop.tag
-									csprop.Id = prop.tag.."_".."unknown".."_"..prop.uid
+										csprop.Tag = prop.tag
+										csprop.Id = prop.tag.."_".."unknown".."_"..prop.uid
 									
 									end
 									csprop.Title = prop.name
@@ -985,19 +980,17 @@ end
 									csprop.appearance = prop.app
 									
 									local pos = loadstring("return "..prop.pos, '')()
-									-- local validJson, userData = pcall(function() return json.decode(prop.pos)end)
-									-- if(validJson) then pos = userData end
-									
+								
 									csprop.X = pos.x
 									csprop.Y = pos.y
 									csprop.Z = pos.z
+									
 									csprop.Yaw = pos.yaw
 									csprop.Pitch = pos.pitch
 									csprop.Roll = pos.roll
+									csprop.gameid = "fb721b23723385bfd5cb959ad14961d6"
 									csprop.scale =loadstring("return "..prop.scale, '')()
 								
-									-- local validJson, userData = pcall(function() return json.decode(prop.scale) end)
-									-- if(validJson) then csprop.scale = userData end
 									
 									for y,light in ipairs(value.lights) do
 										
@@ -1016,30 +1009,42 @@ end
 								
 									end
 									
-									csprop.datapack = datapackname
-									csprop.file = path
 									
-									table.insert(arrayHousing,csprop)
-									-- end)
 									
-									-- if(status == false) then
+									table.insert(newobj.items,csprop)
 									
-									-- print("Cyberscript : AMM housing : "..path.." Props UID:"..value.props.uid..". Convertion failed ! Error :"..result)
-									
-									-- end
 								end
 								
 								
+								
+								arrayHousing[newobj.tag] = {}
+								arrayHousing[newobj.tag].housing = newobj
+								arrayHousing[newobj.tag].file = path
+								arrayHousing[newobj.tag].datapack = datapackname
+								
 								if(statutfile == true) then print("Cyberscript : AMM housing : "..path..". Convertion successfull !") else print("Cyberscript : AMM housing : "..path..". Convertion failed !") end
 								
+								else
 								
+								if(value.tag ~= nil) then
+								print(value.tag)
+								arrayHousing[value.tag] = {}
+								arrayHousing[value.tag].housing = value
+								arrayHousing[value.tag].file = path
+								arrayHousing[value.tag].datapack = datapackname
+								
+								else
+								
+								print("Cyberscript : old housing format founded : "..path..". Not Loaded, apply modification to allow the loading.")
+								
+								end
 							
 								
 							
 							end
 							
 							
-							end
+							
 							
 							
 						end
@@ -1279,6 +1284,16 @@ end
 							arrayWebpage[value.tag].entry = value
 							arrayWebpage[value.tag].file = path
 							arrayWebpage[value.tag].datapack = datapackname
+						end
+						elseif(objtype == "email") then
+						for key, value in pairs(tabl) do 
+							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							rootpath = path
+							
+							arrayEmail[value.tag] = {}
+							arrayEmail[value.tag].entry = value
+							arrayEmail[value.tag].file = path
+							arrayEmail[value.tag].datapack = datapackname
 						end
 						elseif(objtype == "character") then
 						for key, value in pairs(tabl) do 

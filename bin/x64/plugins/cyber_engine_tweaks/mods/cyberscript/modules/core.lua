@@ -740,7 +740,7 @@ registerForEvent("onUpdate", function(delta)
 		else
 	
 		if saveLocationEnabled then
-			savePath(recordRotation,recordRelative)
+			savePath(recordRotation,recordRelative,recordRotationOnly)
 		end
 		if playLocationEnabled then
 			playPath()

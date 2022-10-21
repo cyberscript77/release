@@ -127,6 +127,7 @@ editorCurrentVariableSearch = ""
 editorCurrentVariableKeySearch = ""
 PlayerisHitten = false
 spawntablecount = {}
+cachedespawn = {}
 datapackObjectType = { 
 	"character",
 	"circuit",
@@ -155,7 +156,8 @@ datapackObjectType = {
 	"shard",
 	"sound",
 	"texture",
-	"webpage"
+	"webpage",
+	"email"
 	
 	}
 cacheupdate = false
@@ -167,6 +169,7 @@ onlineInstanceCreation = false
 onlineGuildCreation = false
 onlineInstanceUpdate = false
 onlineGuildUpdate = false
+togglehousing = true
 onlineInstancePlaceCreation = false
 onlineShootMessage = false
 CreateInstance={}
@@ -366,6 +369,8 @@ menuWindowsX = 400
 menuWindowsY = 200
 currentHousingTemplate = nil
 currentHousingTemplatetag = ""
+currentHousing = nil
+							currentHousingtag=""
 menuFrameX = 400
 menuFrameY = 200
 
@@ -1659,6 +1664,7 @@ arrayMymissions = {}
 editorPathTarget = nil
 arrayMarket = {}
 recordRotation = false
+recordRotationOnly = false
 recordRelative = false
 recordInitialPosition = {}
 arrayMarketItem = {}
@@ -2159,6 +2165,8 @@ rotstep = 0.1
 openNewRoom = false
 openEditRoom = false
 
+
+
 loadQuest = {}
 loadInteract = {}
 loadPlace = {}
@@ -2179,6 +2187,7 @@ loadPOI = {}
 loadShard = {}
 loadPhoneDialog = {}
 loadScene = {}
+loadHousing = {}
 
 loadQuesttag = ""
 loadInteracttag = ""
@@ -2200,6 +2209,7 @@ loadHelptag =""
 loadShardtag = ""
 loadPhoneDialogtag = ""
 loadScenetag = ""
+loadHousingtag = ""
 
 placetype = "House"
 newRequirementItem = ""
@@ -2284,6 +2294,7 @@ currentParentItem = {}
 
 activeEditedQuest = {} -- 0
 questgraph = {}
+choicegraph = {}
 activeEditedInteract = {} --1 
 activeEditedDialog = {}--2
 activeEditedFixer = {} --3
@@ -2304,7 +2315,7 @@ activeEditedCustomNPC = {} --5
 activeEditedShard = {} --5
 activeEditedPhoneDialog = {} --5
 activeEditedScene = {} --4
-
+activeEditedHousing = {} 
 
 local f = assert(io.open("data/triggertemplate.json"))
 

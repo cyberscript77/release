@@ -65,7 +65,7 @@ function TrackObjective()
 						local quest = getQuestByTag(trackedQuestId)
 					
 						
-						if(quest ~= nil and getScoreKey(quest.tag,"Score") <= 3 and currentQuest == nil ) then
+						if(quest ~= nil and (getScoreKey(quest.tag,"Score") == nil or getScoreKey(quest.tag,"Score") <= 3) and currentQuest == nil ) then
 							
 							--untrackQuest()
 							

@@ -17,8 +17,82 @@ print("hot reload test")
 
 	end
 	
+	function ComputerMenuWidgetController_InitializeFiles(this,gameController,widgetsData)
+	
+		-- for i,v in ipairs(widgetsData) do
+		
+		-- spdlog.error(GameDump(v))
+		
+		-- end
+	
+	end
+	function ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
+	
+	 -- spdlog.error(GameDump(this.mailsMenu))
+	 -- print("mark1")
+	 -- this.mailsMenu:SetVisible(false)
+	
+	end
+	function ComputerInkGameController_ShowMails(this)
+	
+	-- print("mark3")
+	end
+	
+	function ComputerDocumentWidgetController_Initialize(this,gameController,widgetsData)
+		
+		-- print("mark4")
+		
+		-- this.titleWidget:SetText("Donk is bonl")
+		
+	end
+	function ComputerMenuWidgetController_InitializeFilesThumbnails(this,gameController,widgetsData)
+		
+	-- this.thumbnailsListWidget:SetVisible(true)
+		-- local mymail = SDocumentThumbnailWidgetPackage.new()
+		-- mymail.displayName = "Donk no bonk"
+		-- mymail.libraryID="mailThumbnail"
+		
+		-- mymail.widgetName = "cyberscript_01"
+		-- mymail.placement = 0
+		-- mymail.orientation= 0
+		-- mymail.isWidgetInactive=false
+		-- mymail.widgetState = 0
+		-- mymail.iconID=nil
+		-- mymail.documentType = 1
+		-- mymail.wasRead = false
+		-- mymail.isOpened = false
+		-- mymail.folderName = "Q101 new email"
+		
+		-- local docaddress =  SDocumentAdress.new()
+		-- docaddress.folderID=7
+		-- docaddress.documentID=0 
+		-- mymail.documentAdress  = docaddress
+		
+		 
+		
+		-- local questinfo = gamedeviceQuestInfo.new()
+		-- questinfo.isHighlighted = true
+		-- questinfo.factName  = "donknobonk"
+		-- mymail.questInfo = questinfo
+		
+		
+		
+	
+		
+		
+   
+    -- local screenDef = gameController:GetScreenDefinition()
+    -- local spawnData = AsyncSpawnData.new()
+    -- spawnData:Initialize(this, "OnDocumentThumbnailWidgetSpawned", widgetData, gameController)
+    -- this:AddFileThumbnailWidgetData(widgetData, gameController)
+	
+		
+	
+	
+	end
+	
 	function FullscreenVendorGameController_PopulateVendorInventory(thos)
-	print("selll02")
+	-- print("selll02")
 	end
 	
 	
@@ -2672,8 +2746,9 @@ print("hot reload test")
 					
 			for k,wpage in pairs(arrayWebpage) do 
 				
+				if(checkTriggerRequirement(wpage.entry.requirement,wpage.entry.trigger))then
 					table.insert(templist,wpage)
-					
+				end
 			end
 			
 			

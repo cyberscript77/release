@@ -86,8 +86,8 @@ if spawnRegion then
 					local action = {}
 					action.position = "relative_to_entity"
 					action.position_tag = "player"
-					action.position_way = "behind"
-					action.position_distance = 10
+					action.position_way = "forward"
+					action.position_distance = 2
 					action.x = 0
 					action.y = 0
 					action.z = 0
@@ -95,12 +95,12 @@ if spawnRegion then
 					postp = Vector4.new( pos.x, pos.y, pos.z,1)
 
 					worldpos:SetPosition(worldpos, postp)	
-					Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
+					local mycache  = Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
 					spawntablecount[chara] = 1
-
+					table.insert(cachedespawn,mycache)
 							
 					Cron.After(1, function()
-						Game.GetPreventionSpawnSystem():RequestDespawnPreventionLevel(-6666)
+						
 						spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation)
 						
 
@@ -869,6 +869,13 @@ cyberscript.EntityManager[entity.tag] = entity
 local entity = {}
 entity.id = nil
 entity.tag = "lookatnpc"
+entity.tweak = "None"
+
+cyberscript.EntityManager[entity.tag] = entity
+
+local entity = {}
+entity.id = nil
+entity.tag = "lookatentity"
 entity.tweak = "None"
 
 cyberscript.EntityManager[entity.tag] = entity
@@ -2914,7 +2921,7 @@ if(spawntablecount[chara] == nil or spawntablecount[chara] < 1) then
 local action = {}
 action.position = "relative_to_entity"
 action.position_tag = "player"
-action.position_way = "behind"
+action.position_way = "forward"
 action.position_distance = 10
 action.x = 0
 action.y = 0
@@ -2923,12 +2930,13 @@ local pos  = getPositionFromParameter(action)
 postp = Vector4.new( pos.x, pos.y, pos.z,1)
 
 worldpos:SetPosition(worldpos, postp)	
-Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
+local mycache = Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
 spawntablecount[chara] = 1
-
+table.insert(cachedespawn,mycache)
 		
 Cron.After(1, function()
-	Game.GetPreventionSpawnSystem():RequestDespawnPreventionLevel(-6666)
+	
+	
 	spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second)
 	
 

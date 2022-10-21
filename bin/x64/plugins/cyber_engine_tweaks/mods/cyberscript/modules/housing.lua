@@ -13,110 +13,174 @@ function spawnItem(spawnIteme, pos, angle)
 	error()
 	end
 end
+
+
 function spawnItemFromHouseTag(houseTag)
 	local itemsof = {}
-	for i = 1, #currentSave.arrayHousing do
-		local item = currentSave.arrayHousing[i]
-		if item.HouseTag == houseTag then
-			table.insert(itemsof,item)
-		end
-	end
-	if(#itemsof > 0) then
-		for i = 1, #itemsof do
-			local item = itemsof[i]
-			local postion = Vector4.new(item.X, item.Y, item.Z, 1)
-			local angle = EulerAngles.new(item.Roll,item.Pitch,item.Yaw)
-			item.entityId = spawnItem(item, postion, angle)
-			table.insert(currentItemSpawned,item)
-			Cron.After(0.5, function()
-				debugPrint(10,"Spawning item ok")
-			end)
-		end
-	end
-end
-function spawnItemFromHouseMultiTag()
-	local itemsof = {}
-	for i = 1, #ActualPlayerMultiData.currentPropsItems do
-		local item = ActualPlayerMultiData.currentPropsItems[i]
-			table.insert(itemsof,item)
-	end
-	if(#itemsof > 0) then
-		for i = 1, #itemsof do
-			local isnew = true
-			local itemmulti = itemsof[i]
-			if(#currentItemMultiSpawned > 0)then
-			for y = 1, #currentItemMultiSpawned do
-				local item = currentItemMultiSpawned[y]
-				if(item.Tag == itemmulti.Tag) then
-				isnew = false
-					if(item.LastUpdateDate ~= itemmulti.LastUpdateDate) then
-						debugPrint(2,"Updating item")
-						local entityid = item.entityId
-						local test = Game.FindEntityByID(item.entityId)
-						if(test ~= nil) then 
-							Game.GetTeleportationFacility():Teleport(Game.FindEntityByID(item.entityId), Vector4.new(itemmulti.X, itemmulti.Y, itemmulti.Z, 1), EulerAngles.new(itemmulti.Roll,itemmulti.Pitch,itemmulti.Yaw))
-						 else
-							 local postion = Vector4.new(itemmulti.X, itemmulti.Y, itemmulti.Z, 1)
-							local angle = EulerAngles.new(itemmulti.Roll,itemmulti.Pitch,itemmulti.Yaw)
-						 	entityid = spawnItem(itemmulti, postion, angle)
+	
+	-- for each housing in arrayhousing, we check that items is already registred in user arrayhousing (means the user move it or edit it)
+	-- if exist, we replace the item by user value and save it in itemsof
+	-- if not we spawn it as arrayhousing do
+	-- then for each item in user save, if it not in items of (means not already spawn) we hceck the housetag then try to spawn it
+	
+	
+	-- when the user will move an housing item, it will add the new version in save
+	
+	
+	
+	
+	for k,v in pairs(arrayHousing) do
+		
+		checkContext(v)
+		
+		if(v.housing.target == houseTag) then
+		
+			
+			
+			if(checkTriggerRequirement(v.housing.requirement,v.housing.trigger))then
+			
+				for i,items in ipairs(v.housing.items) do
+					checkContext(items)
+					
+					local fromuser = getItemFromUserHousing(items.Tag,items.X,items.Y,items.Z,items.HouseTag,items.ItemPath)
+					
+					if fromuser ~= nil then items = fromuser table.insert(itemsof,fromuser) end
+					
+					if(items.trigger ~= nil and items.requirement ~= nil) then
+						if(checkTriggerRequirement(items.requirement,items.trigger))then
+							
+							local item = items
+							local postion = Vector4.new(item.X, item.Y, item.Z, 1)
+							local angle = EulerAngles.new(item.Roll,item.Pitch,item.Yaw)
+							item.entityId = spawnItem(item, postion, angle)
+							item.from = k
+							item.fromTemplate = false
+							table.insert(currentItemSpawned,item)
+							
+							
 						end
-						currentItemMultiSpawned[y] = itemsof[i]
-						currentItemMultiSpawned[y].entityId = entityid
-						if(selectedItemMulti ~= nil) then
-							if(selectedItemMulti.Tag == currentItemMultiSpawned[y].Tag) then
-								selectedItemMulti.entityId = currentItemMultiSpawned[y]
-							end
-						end
-						Cron.After(0.5, function()
-							debugPrint(2,"Updating item ok")
-						end)
+					
+					else
+						
+						local item = items
+						local postion = Vector4.new(item.X, item.Y, item.Z, 1)
+						local angle = EulerAngles.new(item.Roll,item.Pitch,item.Yaw)
+						item.entityId = spawnItem(item, postion, angle)
+						item.from = k
+						item.fromTemplate = false
+						table.insert(currentItemSpawned,item)
+					
 					end
+				
 				end
+			
 			end
-			else
-			isnew = true
-			debugPrint(2,"nex2")
-			end
-		if(isnew == true) then
-				local postion = Vector4.new(itemsof[i].X, itemsof[i].Y, itemsof[i].Z, 1)
-				local angle = EulerAngles.new(itemsof[i].Roll,itemsof[i].Pitch,itemsof[i].Yaw)
-						debugPrint(2,"Spawning item")
-				itemsof[i].entityId = spawnItem(itemmulti, postion, angle)
-				table.insert(currentItemMultiSpawned,itemsof[i])
-				Cron.After(0.5, function()
-					debugPrint(2,"Spawning item ok")
-				end)
-			end
+		
+		
 		end
-		local toremove ={}
-		for i = 1, #currentItemMultiSpawned do
-			local exist = false
-			local item = currentItemMultiSpawned[i]
-			for y = 1, #itemsof do
-				local itemmulti = itemsof[y]
-				if(item.Tag == itemmulti.Tag) then
-					exist = true
-				end
-			end
-			if(exist == false) then
-				local entityid = item.entityId
-				local test = Game.FindEntityByID(item.entityId)
-						if(test ~= nil) then 
-						test:GetEntity():Destroy()
-						end
-						debugPrint(2,"Delete item")
-				table.insert(toremove,i)
-			end
-		end
-		if(#toremove > 0) then
-			for i = 1, #toremove do
-				table.remove(currentItemMultiSpawned,toremove[i])
-				debugPrint(2,"delete item ok")
-			end
-		end
+		
+		
+		
 	end
-	ItemOfHouseMultiSpawned = true
+	
+	for i,items in ipairs(currentSave.arrayHousing) do
+					checkContext(items)
+					local already_span = table_contains(itemsof,items,false)
+					
+					if already_span == false and items.HouseTag == houseTag then
+					
+					if(items.trigger ~= nil and items.requirement ~= nil) then
+						if(checkTriggerRequirement(items.requirement,items.trigger))then
+							
+							local item = items
+							local postion = Vector4.new(item.X, item.Y, item.Z, 1)
+							local angle = EulerAngles.new(item.Roll,item.Pitch,item.Yaw)
+							item.entityId = spawnItem(item, postion, angle)
+							item.from = "save"
+							item.fromTemplate = false
+							table.insert(currentItemSpawned,item)
+							
+							
+						end
+					
+					else
+						
+						local item = items
+						local postion = Vector4.new(item.X, item.Y, item.Z, 1)
+						local angle = EulerAngles.new(item.Roll,item.Pitch,item.Yaw)
+						item.entityId = spawnItem(item, postion, angle)
+						item.from = "save"
+						item.fromTemplate = false
+						table.insert(currentItemSpawned,item)
+					
+					end
+				
+				end
+	end
+	
 end
+
+
+function spawnItemFromHousingTag(houseTag, housingTag)
+	local itemsof = {}
+	for k,v in pairs(arrayHousing) do
+		
+		checkContext(v.housing)
+		
+		if(v.housing.target == houseTag and k == houseTag) then
+		
+			
+			
+			if(checkTriggerRequirement(v.housing.requirement,v.housing.trigger))then
+			
+				for i,items in ipairs(v.housing.items) do
+					checkContext(items)
+					
+					local fromuser = getItemFromUserHousing(items.Tag,items.X,items.Y,items.Z,items.HouseTag,items.ItemPath)
+					
+					if fromuser ~= nil then items = fromhouse end
+					
+					if(items.trigger ~= nil and items.requirement ~= nil) then
+						if(checkTriggerRequirement(items.requirement,items.trigger))then
+							
+							local item = items
+							local postion = Vector4.new(item.X, item.Y, item.Z, 1)
+							local angle = EulerAngles.new(item.Roll,item.Pitch,item.Yaw)
+							item.entityId = spawnItem(item, postion, angle)
+							item.from = k
+							item.fromTemplate = false
+							table.insert(currentItemSpawned,item)
+							
+							
+						end
+					
+					else
+						
+						local item = items
+						local postion = Vector4.new(item.X, item.Y, item.Z, 1)
+						local angle = EulerAngles.new(item.Roll,item.Pitch,item.Yaw)
+						item.entityId = spawnItem(item, postion, angle)
+						item.from = k
+						item.fromTemplate = false
+						table.insert(currentItemSpawned,item)
+					
+					end
+				
+				end
+			
+			end
+		
+		
+		end
+		
+		
+		
+	end
+	
+	
+end
+
+
 
 function setItemScale(entity, obj, values, proportional)
  local components = checkForValidComponents(entity)
@@ -232,42 +296,43 @@ function updateItemPosition(obj, pos, angle,test)
 		local entityid = obj.entityId
 		local testitem = Game.FindEntityByID(entityid)
 		if(testitem ~= nil) then 
-		testitem:GetEntity():Destroy()
-		end
-            local transform = Game.GetPlayer():GetWorldTransform()
-            transform:SetOrientation(GetSingleton('EulerAngles'):ToQuat(angle))
-            transform:SetPosition(pos)
-			local housingitem = getHousing(obj.Tag,obj.X,obj.Y,obj.Z)
+			testitem:GetEntity():Destroy()
+			print("Destroy")
+		
+			local transform = Game.GetPlayer():GetWorldTransform()
+           
+			transform:SetPosition(pos)
+			transform:SetOrientationEuler(angle)
+			obj.entityId = exEntitySpawner.Spawn(obj.ItemPath, transform)
+			
+			
+			obj.X = pos.x
+			obj.Y = pos.y
+			obj.Z = pos.z
+			obj.Roll = angle.roll
+			obj.Pitch = angle.pitch
+			obj.Yaw = angle.yaw
+			
+			
 			if(housingitem ~= nil) then
-				housingitem.X = pos.x
-				housingitem.Y = pos.y
-				housingitem.Z = pos.z
-				housingitem.Roll = angle.roll
-				housingitem.Pitch = angle.pitch
-				housingitem.Yaw = angle.yaw
-				obj.X = pos.x
-				obj.Y = pos.y
-				obj.Z = pos.z
-				obj.Roll = angle.roll
-				obj.Pitch = angle.pitch
-				obj.Yaw = angle.yaw
-				local res = updateHousing(housingitem)
-				if(res == true) then
-					local transform = Game.GetPlayer():GetWorldTransform()
-					transform:SetPosition(pos)
-					transform:SetOrientationEuler(angle)
-					obj.entityId = exEntitySpawner.Spawn(obj.ItemPath, transform)
-					else
-					debugPrint(2,"error")
-				end
+				
+			
+				updateHousing(obj)
+				print("update")	
+				else
+				
+				saveHousing(obj)
+				print("save")	
 			end
+		end
        else
 		pcall(function ()
             Game.GetTeleportationFacility():Teleport(Game.FindEntityByID(obj.entityId), pos,  angle)
+			print("tp")	
         end)
         end
 		else 
-		debugPrint(2,"noID")	
+		print("noID")	
 	end
 end
 function updateItemPositionMulti(obj, pos, angle,test)
@@ -352,7 +417,7 @@ function despawnItemFromHouse()
 				despawnItem(currentItemSpawned[i].entityId)
 				Cron.After(0.5, function()
 					currentItemSpawned = {}
-					debugPrint(2,"despawning item ok")
+					debugPrint(10,"despawning item ok")
 				end)
 			end
 		end
@@ -389,7 +454,7 @@ function despawnItemFromMultiHouse()
 		end
 		Cron.After(0.5, function()
 					currentItemMultiSpawned = {}
-					debugPrint(1,"despawning item ok")
+					debugPrint(10,"despawning item ok")
 		end)
 		else
 		debugPrint(2,"despawning not ok")
@@ -474,7 +539,7 @@ if(currentHouse ~=nil) then
 					
 					for i=1,#currentItemSpawned do
 						
-						if(currentItemSpawned[i].fromTemplate ~= nil and currentItemSpawned[i].fromTemplate == true and currentItemSpawned[i].template == tag) then
+						if(currentItemSpawned[i] ~= nil and currentItemSpawned[i].fromTemplate ~= nil and currentItemSpawned[i].fromTemplate == true and currentItemSpawned[i].template == tag) then
 							deleteHousing(currentItemSpawned[i].Id)
 							despawnItemFromId(currentItemSpawned[i].Id)
 							
@@ -500,7 +565,66 @@ if(currentHouse ~=nil) then
 					
 					for i=1,#currentItemSpawned do
 						
-						if(currentItemSpawned[i].fromTemplate ~= nil and currentItemSpawned[i].fromTemplate == true) then
+						if(currentItemSpawned[i] ~= nil and currentItemSpawned[i].fromTemplate ~= nil and currentItemSpawned[i].fromTemplate == true) then
+							deleteHousing(currentItemSpawned[i].Id)
+							despawnItemFromId(currentItemSpawned[i].Id)
+							
+						end
+						
+						
+					end
+					
+					
+				end
+				
+			end
+	
+	
+end
+
+
+
+
+
+
+
+function currentHouseClearHousing(tag)
+
+if(currentHouse ~=nil) then
+				
+				if(#currentItemSpawned > 0) then
+					
+					for i,item in ipairs(currentItemSpawned) do
+						spdlog.error(tostring(i))
+						spdlog.error(dump(item))
+						--print(tostring(currentItemSpawned))
+						if(item ~= nil and (item.fromTemplate == nil or item.fromTemplate == false ) and item.from == tag) then
+							deleteHousing(item.Id)
+							despawnItemFromId(item.Id)
+							
+						end
+						
+						
+					end
+					
+					
+				end
+				
+			end
+	
+	
+end
+
+
+function currentHouseClearAllHousing()
+
+if(currentHouse ~=nil) then
+				
+				if(#currentItemSpawned > 0) then
+					
+					for i=1,#currentItemSpawned do
+						
+						if(currentItemSpawned[i] ~= nil and currentItemSpawned[i].fromTemplate == false) then
 							deleteHousing(currentItemSpawned[i].Id)
 							despawnItemFromId(currentItemSpawned[i].Id)
 							

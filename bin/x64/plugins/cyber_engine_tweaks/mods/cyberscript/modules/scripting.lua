@@ -40,6 +40,28 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	districtState = lang.Friendly
 	getCurrentDistrict2()
 	
+	
+	if(cachedespawn ~= nil and #cachedespawn > 0) then
+	
+	for i,v in ipairs(cachedespawn) do
+	local enti = Game.FindEntityByID(v)
+	if(enti ~= nil and enti:IsAttached() == true) then
+	
+		Game.GetPreventionSpawnSystem():RequestDespawn(v)
+	
+		
+		enti:Dispose()
+		cachedespawn[i] = nil
+		
+	end
+	
+	
+	end
+	
+	
+	
+	end
+	
 	if(currentDistricts2 ~= nil)then
 		
 		setVariable("current_district","tag", currentDistricts2.Tag)
@@ -442,12 +464,18 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				local obj = getEntityFromManagerById(objLook:GetEntityID())
 				
 				if(obj.id ~= nil) then
+					cyberscript.EntityManager["lookatentity"].id = nil
+					cyberscript.EntityManager["lookatentity"].tweak = "None"
+					cyberscript.EntityManager["lookatentity"].id = objLook:GetEntityID()
+					cyberscript.EntityManager["lookatentity"].tweak = obj.tweak
+					
 					
 					if obj.isquest == nil then obj.isquest = false end
 					
 					objLook:MarkAsQuest(obj.isquest)
 					
 					else
+					cyberscript.EntityManager["lookatentity"].id = nil
 					
 					if cyberscript.EntityManager["lookatnpc"].isquest == nil then cyberscript.EntityManager["lookatnpc"].isquest = false end
 					
@@ -478,7 +506,8 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		cyberscript.EntityManager["lookatnpc"].id = nil
 		cyberscript.EntityManager["lookatnpc"].tweak = "None"
 		currentScannerItem = nil
-		
+		cyberscript.EntityManager["lookatentity"].id = nil
+		cyberscript.EntityManager["lookatentity"].tweak = "None"
 		openCompanion = false
 		objLookIsVehicule = false
 	end
@@ -1135,28 +1164,7 @@ function refresh(delta) -- update event (include thread refresh action and Quest
 					if(tick >= 61 and tick <= 62 and draw == false)then
 						
 						inGameInit()
-						local f = assert(io.open("data/vehicles.json"))
-						local lines = f:read("*a")
-						local encdo = lines
-						local tableDis = {}
-						tableDis =json.decode(lines)
-						local vehiclelist = tableDis
-						f:close()
 						
-						spdlog.error(dump(vehiclelist))
-						for i,veh in ipairs(vehiclelist) do
-							
-							spdlog.error(veh)
-							print(veh)
-							local worldpos = player:GetWorldTransform()
-
-
-							local postp = Vector4.new( 0,0,0,1)
-
-							worldpos:SetPosition(worldpos, postp)	
-							Game.GetPreventionSpawnSystem():RequestSpawn(TweakDBID.new(veh),45 * -1,worldpos)
-						
-						end
 					end
 					
 					if(file_exists("success.txt"))then
@@ -3894,16 +3902,16 @@ function getItemEntityFromManagerByPlayerLookinAt()
 	
 end
 
-function getItemFromArrayHousing(tag,X,Y,Z,HouseTag,ItemPath)
-	if(#currentSave.arrayHousing > 0) then
+function getItemFromUserHousing(tag,X,Y,Z,HouseTag,ItemPath)
+	
 		for i=1,#currentSave.arrayHousing do
 			
-			if(currentSave.arrayHousing[i].Tag == tag and currentSave.arrayHousing[i].X == X and currentSave.arrayHousing[i].Y == Y and currentSave.arrayHousing[i].Z == Z and currentSave.arrayHousing[i].HouseTag == HouseTag and currentSave.arrayHousing[i].ItemPath == ItemPath) then
+			if(currentSave.arrayHousing[i].Tag == tag and currentSave.arrayHousing[i].HouseTag == HouseTag and currentSave.arrayHousing[i].ItemPath == ItemPath) then
 				return currentSave.arrayHousing[i]
 			end
 			
 		end
-	end
+	
 	return nil
 end
 

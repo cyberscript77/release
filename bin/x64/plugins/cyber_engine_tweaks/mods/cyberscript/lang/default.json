@@ -710,6 +710,8 @@
 	"editor_Housing": "Housing",
 
 	"editor_Housing_Export": "Export Housing and items",
+	
+	"editor_Housing_Export_Current": "Export Current place items",
 
 	"editor_Housing_Save": "Save Housing and items for Datapack",
 
@@ -1285,7 +1287,7 @@
 	"ui_setting_cheat_debug_log": "Enable CyberScript Log Windows",
 	"ui_setting_cheat_disable_fall_damage":"Disable Fall Damage and Animation",
 
-
+	"ui_setting_customsetting":"CyberScript Custom Setting",
 
 
 	"ui_multi_msg_tellto": "Send a Message To ",
@@ -1530,20 +1532,20 @@
 	"ui_keystone_friend_join": "Join Friend's Instance",
 	"ui_keystone_friend_delete": "Delete Friend",
 	"ui_keystone_friend_block": "Block Friend",
-
+	
 
 	
 	"editor_Housing_template_set_center_player_pos": "Set Template Anchor Point from Player Position",
-	"editor_Housing_template_export": "Export Template",
+	"editor_Housing_template_export": "Export Template in JSON",
 	"editor_Housing_template_save": "Save Template for Datapack Building",
 	"editor_Housing_load_template": "Load Template",
 	"editor_Housing_apply_template": "Apply Template",
 	"editor_Housing_clear_template": "Clear Template",
-	"editor_Housing_edit_template": "Edit Template Position",
-	"editor_Housing_template_test": "Test Template ",
+	"editor_Housing_edit_template": "Edit Template Anchor Position",
+	"editor_Housing_template_test": "Import Template to CyberScript (Test)",
 	"editor_Housing_clear_all" : "Delete All Items",
 	
-	"editor_Housing_apply_template": "Apply Template to Current Multiplayer Place",
+	"editor_Housing_apply_template_multi": "Apply Template to Current Multiplayer Place",
 	"editor_Housing_clear_all_multi": "Clear Multiplayer Place Items (BE CAREFUL, it delele all !)",
 	
 	

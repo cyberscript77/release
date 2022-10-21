@@ -8846,6 +8846,9 @@ end
 		if(action.name == "set_timedilation") then
 			Game.SetTimeDilation(action.value)
 		end
+		if(action.name == "set_timedilation_for_entity") then
+			TimeDilationHelper.SetIndividualTimeDilation(Game.FindEntityByID(action.tag), "see_engine", action.value, 99999, "", "");
+		end
 		if(action.name == "change_camera_position") then
 			local fppComp = Game.GetPlayer():GetFPPCameraComponent()
 			fppComp:SetLocalPosition(Vector4:new(action.x, action.y, action.z, 1.0))
@@ -10048,18 +10051,13 @@ end
 			startHub:SetStartMenu(action.value)
 			Game.GetUISystem():QueueEvent(startHub)
 		end
-		if(action.name == "open_map_menu_to_position") then
-			local startHub = OpenMenuRequest.new()
-				startHub.menuName = "world_map"
-			 local userData = MapMenuUserData.new()
-			userData.moveTo = Vector3.new(action.x, action.y, action.z)
-			startHub.eventData.userData = userData;
-			startHub.eventData.overrideDefaultUserData = true;
-			startHub.isMainMenu = true
-			
-			
+		
+		if(action.name == "open_menu") then
+			local startHub = StartHubMenuEvent.new()
+			startHub:SetStartMenu(action.value)
 			Game.GetUISystem():QueueEvent(startHub)
 		end
+		
 		if(action.name == "close_menu") then
 			local closeHub = ForceCloseHubMenuEvent.new()
 			Game.GetUISystem():QueueEvent(closeHub)
@@ -10076,6 +10074,20 @@ end
 		end
 		if(action.name == "unlock_conversation" or action.name == "unlock_message") then
 			setScore(action.tag,"unlocked",1)
+		end
+		
+		if(action.name == "open_map_menu_to_position") then
+			local startHub = StartHubMenuEvent.new()
+			
+			local userData = MapMenuUserData.new()
+			userData.moveTo = Vector3.new(action.x, action.y, action.z)
+			
+			startHub:SetStartMenu("world_map",nil,userData)
+			Game.GetUISystem():QueueEvent(startHub)
+			
+			
+			
+			Game.GetUISystem():QueueEvent(startHub)
 		end
 		
 		if(action.name == "show_hack_animation") then

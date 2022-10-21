@@ -411,6 +411,7 @@ function isHostileDistrict()
 		else
 				
 				
+				if(currentDistricts2.districtLabels ~= nil) then
 				local gangs = getGangfromDistrict(currentDistricts2.districtLabels[1],20)
 				if(#gangs > 0 ) then
 				for i=1,#gangs do
@@ -425,7 +426,7 @@ function isHostileDistrict()
 				end
 				end
 				
-				
+				end
 	end
 			
 	

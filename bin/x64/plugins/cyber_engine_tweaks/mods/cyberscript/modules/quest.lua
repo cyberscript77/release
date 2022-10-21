@@ -468,7 +468,7 @@ function HaveTriggerCondition(quest)
 	result = checkTriggerRequirement(quest.trigger_condition_requirement,quest.trigger_condition)
 	----debugPrint(2,askTriggerRequirement(quest.trigger_condition_requirement,quest.trigger_condition))
 	if(result)then
-		----debugPrint(2,quest.title.." is okk")
+		print(quest.title.." is okk")
 	end
 	return result
 end
