@@ -7775,6 +7775,13 @@ function debugTab()
 							end
 							
 							
+							if ImGui.Button("Dump Variable table")  then
+							
+							local sessionFile = io.open('variableboard.txt', 'w')
+								sessionFile:write(dump(currentSave.Variable))
+								sessionFile:close()
+							
+							end
 						end)
 						
 						if status == false then
