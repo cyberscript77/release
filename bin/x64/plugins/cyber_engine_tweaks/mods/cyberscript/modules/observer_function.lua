@@ -16,7 +16,7 @@ print("hot reload test")
 		end
 
 	end
-	
+	 
 	function ComputerMenuWidgetController_InitializeFiles(this,gameController,widgetsData)
 	
 		-- for i,v in ipairs(widgetsData) do
@@ -5209,8 +5209,33 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	-- end)
 	function PreventionSpawnSystem_SpawnCallback(thos,spawnedObject,wrappedMethod)
+	
+		if(cachedespawn ~= nil and #cachedespawn > 0) then
+			
+			for i,v in ipairs(cachedespawn) do
+				local enti = Game.FindEntityByID(v)
+				if(enti ~= nil and spawnedObject:GetEntityID() == v and enti:IsAttached() == true) then
+				
+					Game.GetPreventionSpawnSystem():RequestDespawn(v)
+				
+					
+					enti:Dispose()
+					cachedespawn[i] = nil
+					print("Kill the Shit")
+				end
+			
+			
+			end
+			
+		
+		
+		end
+	
 		local obj = getEntityFromManagerById(spawnedObject:GetEntityID())
 		if(obj.tag == nil ) then
+		
+		
+			
 		
 			wrappedMethod(spawnedObject)
 		

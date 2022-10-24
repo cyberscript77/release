@@ -546,7 +546,10 @@ function initCore() --Setup session, external observer and trigger mod core load
 	CheckandUpdateDatapack()
 	LoadDataPackCache()
 	SaveLoading()
-	initEditor()
+	if file_exists("modules/editor.lua") then
+		initEditor()
+	end
+	
 	
 	debugPrint(1,getLang("CyberScriptinit"))
 	tick = 0

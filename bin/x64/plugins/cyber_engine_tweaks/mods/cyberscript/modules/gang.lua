@@ -122,6 +122,7 @@ function checkAttitudeByGangScore(enti)
 	local lookedgang = nil
 	
 	if(enti ~= nil) then
+		pcall(function() 
 		local targeName = enti:ToString()
 		if(string.match(targeName, "NPCPuppet"))then 
 			local targetAttAgent = enti:GetAttitudeAgent()
@@ -159,8 +160,8 @@ function checkAttitudeByGangScore(enti)
 		
 		
 		
+		end)
 	end
-	
 	return isAlly,isAllyscore,lookedgang
 	
 end

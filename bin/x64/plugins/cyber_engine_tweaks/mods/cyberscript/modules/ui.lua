@@ -30,7 +30,12 @@ function windowsManager() -- manage and toggle UI windows
 			if debugOptions == true then
 				debugWindows()
 			end	
-			newWindows()
+			
+			
+			if file_exists("modules/editor.lua") then
+				newWindows()
+			end
+			
 			
 			if(openEditor) then
 				editorWindows()

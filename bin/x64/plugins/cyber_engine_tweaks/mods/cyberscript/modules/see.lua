@@ -12517,10 +12517,10 @@ function GenerateTextFromContextValues(context, v)
 					value = tostring(group)
 				end
 				else
-				print("Context : No Entity Founded")
+				--spdlog.error("Context : No Entity Founded for "..v.tag)
 			end
 		else
-				print("Context : No Entity Founded")
+					--spdlog.error("Context : No Entity Founded for "..v.tag)
 		end
 	end
 		
