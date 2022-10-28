@@ -8,6 +8,12 @@ function api.spawn(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isM
 	
 end
 
+function api.spawnVehicle(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second)
+	
+	
+	
+	spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second)
+end
 
 function api.despawn(tag) 
 	
