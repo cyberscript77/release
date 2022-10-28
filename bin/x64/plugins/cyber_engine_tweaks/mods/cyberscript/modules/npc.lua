@@ -96,8 +96,13 @@ if spawnRegion then
 
 					worldpos:SetPosition(worldpos, postp)	
 					local mycache  = Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
+					
 					spawntablecount[chara] = 1
-					table.insert(cachedespawn,mycache)
+					print("cache "..tostring(chara))
+					cachedespawn[tostring(chara)] = {}
+					cachedespawn[tostring(chara)].id = nil
+					
+					
 							
 					Cron.After(1, function()
 						
@@ -108,6 +113,11 @@ if spawnRegion then
 									
 					else
 					NPC = Game.GetPreventionSpawnSystem():RequestSpawn(twk,spawnlevel * -1,worldpos)
+					cachedespawn[tostring(chara)] = {}
+					cachedespawn[tostring(chara)].id = NPC
+					cachedespawn[tostring(chara)].ready = 1
+					print(tostring(NPC.hash))
+					
 					spawntablecount[chara] = spawntablecount[chara] + 1
 					end
 
@@ -125,6 +135,7 @@ if spawnRegion then
 				if(NPC ~= nil) then
 				local entity = {}
 					entity.id = NPC
+					
 					entity.tag = tag
 					entity.tweak = chara
 					entity.isprevention = isprevention
@@ -863,20 +874,21 @@ local entity = {}
 entity.id = Game.GetPlayer():GetEntityID()
 entity.tag = "player"
 entity.tweak = "player"
-
+entity.lock = true
 cyberscript.EntityManager[entity.tag] = entity
 
 local entity = {}
 entity.id = nil
 entity.tag = "lookatnpc"
 entity.tweak = "None"
-
+entity.lock = true
 cyberscript.EntityManager[entity.tag] = entity
 
 local entity = {}
 entity.id = nil
 entity.tag = "lookatentity"
 entity.tweak = "None"
+entity.lock = true
 
 cyberscript.EntityManager[entity.tag] = entity
 
@@ -884,7 +896,7 @@ local entity = {}
 entity.id = nil
 entity.tag = "current_car"
 entity.tweak = "None"
-
+entity.lock = true
 cyberscript.EntityManager[entity.tag] = entity
 
 local entity1 = {}

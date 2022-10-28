@@ -41,26 +41,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	getCurrentDistrict2()
 	
 	
-	if(cachedespawn ~= nil and #cachedespawn > 0) then
 	
-	for i,v in ipairs(cachedespawn) do
-	local enti = Game.FindEntityByID(v)
-	if(enti ~= nil and enti:IsAttached() == true) then
-	
-		Game.GetPreventionSpawnSystem():RequestDespawn(v)
-	
-		
-		enti:Dispose()
-		cachedespawn[i] = nil
-		
-	end
-	
-	
-	end
-	
-	
-	
-	end
 	
 	if(currentDistricts2 ~= nil)then
 		
@@ -447,7 +428,12 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	
 	--Targeted entity
 	objLook = Game.GetTargetingSystem():GetLookAtObject(Game.GetPlayer(),false,false)
+	
 	if(objLook ~= nil) then
+	
+
+	
+	
 		if(objLook ~= nil) then
 			tarName = objLook:ToString()
 			--	debugPrint(10,tostring(objLook:GetHighLevelStateFromBlackboard()))
@@ -511,6 +497,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		openCompanion = false
 		objLookIsVehicule = false
 	end
+	
 	
 	--house
 	if(currentHouse ~= nil) then
@@ -1085,7 +1072,19 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		doTriggeredEvent()	
 		
 		
+		for k,v in pairs(cyberscript.EntityManager) do
+			if v.lock == false then	
+				enti = Game.FindEntityByID(v.id)
+				if(enti ~= nil and enti:isAttached() == false) then
+				
+					despawnEntity(v.tag)
+				end
+			
+			
+			end
 		
+		
+		end
 		
 		if activeMetroDisplay == true then
 			MetroCurrentTime = MetroCurrentTime - 1
@@ -1098,7 +1097,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		checkFixer()
 		
 	end
-	if (tick % 120 == 0) then --every 0.5 second
+	if (tick % 120 == 0) then --every 2 second
 		playRadio()
 	end
 	if (tick % 180 == 0) then --every 3 second

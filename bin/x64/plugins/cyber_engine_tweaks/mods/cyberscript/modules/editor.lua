@@ -7672,7 +7672,7 @@ function debugTab()
 									
 									local enti = v
 									if ImGui.TreeNode(enti.tag) then
-									
+										ImGui.Text("hash".." : "..tostring(enti.id.hash))
 										for key,prop in pairs(enti) do
 										
 											ImGui.Text(key.." : "..tostring(prop))

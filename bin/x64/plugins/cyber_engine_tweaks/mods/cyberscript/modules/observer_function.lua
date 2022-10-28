@@ -5209,25 +5209,36 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	-- end)
 	function PreventionSpawnSystem_SpawnCallback(thos,spawnedObject,wrappedMethod)
-	
-		if(cachedespawn ~= nil and #cachedespawn > 0) then
-			
-			for i,v in ipairs(cachedespawn) do
-				local enti = Game.FindEntityByID(v)
-				if(enti ~= nil and spawnedObject:GetEntityID() == v and enti:IsAttached() == true) then
-				
-					Game.GetPreventionSpawnSystem():RequestDespawn(v)
-				
-					
-					enti:Dispose()
-					cachedespawn[i] = nil
-					print("Kill the Shit")
+		
+		
+		print("spawned "..tostring(spawnedObject:GetEntityID().hash))
+		
+		
+		for k,v in pairs(cachedespawn) do
+			local tweak = TweakDBID.new(k)
+		
+			if(tweak == spawnedObject:GetRecordID()) then
+		
+				if((v.id == nil or v.id.hash ~= spawnedObject:GetEntityID().hash) and getEntityFromManagerById(spawnedObject:GetEntityID())~= nil) then
+							--print("yes2 for "..tostring(v.id.hash))
+							if (v.count == nil) then
+							v.count = 0
+							end
+							--print("Kill the NPC "..tostring(spawnedObject:GetEntityID().hash))
+							--Game.GetPreventionSpawnSystem():RequestDespawn(spawnedObject:GetEntityID())
+							 
+							
+							spawnedObject:Dispose()
+							v.count = v.count +1
+							--cachedespawn[i] = nil
+							if (v.count == 2) then
+							cachedespawn[k] = nil
+							end
 				end
 			
 			
-			end
 			
-		
+			end
 		
 		end
 	
@@ -5236,7 +5247,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		
 		
 			
-		
+			
 			wrappedMethod(spawnedObject)
 		
 		
