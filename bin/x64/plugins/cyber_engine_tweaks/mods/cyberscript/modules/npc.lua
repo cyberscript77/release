@@ -62,9 +62,9 @@ if spawnRegion then
 							NPC = exEntitySpawner.Spawn(chara, worldpos,appearance)
 							else
 							NPC = exEntitySpawner.Spawn(chara, worldpos)
-							print("ent :"..chara)
+							--print("ent :"..chara)
 						end
-						print("ent :"..chara)
+						--print("ent :"..chara)
 					end
 					
 					else
@@ -98,7 +98,7 @@ if spawnRegion then
 						local mycache  = Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
 						
 						spawntablecount[chara] = 1
-						print("cache "..tostring(chara))
+						--print("cache "..tostring(chara))
 						cachedespawn[tostring(chara)] = {}
 						cachedespawn[tostring(chara)].id = nil
 						
@@ -116,7 +116,7 @@ if spawnRegion then
 						cachedespawn[tostring(chara)] = {}
 						cachedespawn[tostring(chara)].id = NPC
 						cachedespawn[tostring(chara)].ready = 1
-						print(tostring(NPC.hash))
+						--print(tostring(NPC.hash))
 						
 						spawntablecount[chara] = spawntablecount[chara] + 1
 					end
@@ -2783,7 +2783,8 @@ if vehiculeRegion then
 			
 			isAV = isAV or false
 			
-			
+			local NPC = nil 
+				
 			local param = isAV
 			
 			if(spawn_system == 1) then
@@ -2916,8 +2917,7 @@ if vehiculeRegion then
 				
 				local twk = TweakDBID.new(chara)
 				
-				local NPC = nil 
-				
+		
 				
 				if spawn_system == 2 then
 					
@@ -2947,7 +2947,8 @@ if vehiculeRegion then
 						local mycache = Game.GetPreventionSpawnSystem():RequestSpawn(twk,-6666,worldpos)
 						
 						spawntablecount[chara] = 1
-						print("cache "..tostring(chara))
+						-- print("cache "..tostring(chara))
+						-- print("cache "..tostring(mycache.hash))
 						cachedespawn[tostring(chara)] = {}
 						cachedespawn[tostring(chara)].id = nil
 						
@@ -2964,8 +2965,8 @@ if vehiculeRegion then
 						cachedespawn[tostring(chara)] = {}
 						cachedespawn[tostring(chara)].id = NPC
 						cachedespawn[tostring(chara)].ready = 1
-						print(tostring(NPC.hash))
-						
+						-- print("nocache "..tostring(chara))
+						-- print("nocache "..tostring(NPC.hash))
 						spawntablecount[chara] = spawntablecount[chara] + 1
 						end
 					end
@@ -2980,7 +2981,7 @@ if vehiculeRegion then
 			
 			if(NPC ~= nil) then
 			local entity = {}
-			
+			--print("check "..tostring(NPC.hash))
 			entity.id = NPC
 			entity.tag = tag
 			entity.tweak = chara

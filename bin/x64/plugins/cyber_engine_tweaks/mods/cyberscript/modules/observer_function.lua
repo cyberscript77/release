@@ -5211,28 +5211,41 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	function PreventionSpawnSystem_SpawnCallback(thos,spawnedObject,wrappedMethod)
 		
 		
-		print("spawned "..tostring(spawnedObject:GetEntityID().hash))
-		
+		--print("spawned "..tostring(spawnedObject:GetEntityID().hash))
+	
 		
 		for k,v in pairs(cachedespawn) do
 			local tweak = TweakDBID.new(k)
 		
 			if(tweak == spawnedObject:GetRecordID()) then
-		
+				
+				local obj = getEntityFromManagerById(spawnedObject:GetEntityID())
+			
 				if((v.id == nil or v.id.hash ~= spawnedObject:GetEntityID().hash) and getEntityFromManagerById(spawnedObject:GetEntityID())~= nil) then
-							--print("yes2 for "..tostring(v.id.hash))
+							
+							local entity = getEntityFromManagerById(spawnedObject:GetEntityID())
+							
 							if (v.count == nil) then
-							v.count = 0
+								v.count = 0
 							end
 							--print("Kill the NPC "..tostring(spawnedObject:GetEntityID().hash))
 							--Game.GetPreventionSpawnSystem():RequestDespawn(spawnedObject:GetEntityID())
 							 
 							
 							spawnedObject:Dispose()
-							v.count = v.count +1
+							
 							--cachedespawn[i] = nil
-							if (v.count == 2) then
-							cachedespawn[k] = nil
+							if(entity.fromgarage ~= nil ) then
+							
+								if (v.count == 0) then
+									cachedespawn[k] = nil
+								end
+							
+							else
+								v.count = v.count +1
+								if (v.count == 2) then
+									cachedespawn[k] = nil
+								end
 							end
 				end
 			
@@ -5246,7 +5259,6 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		if(obj.tag == nil ) then
 		
 		
-			
 			
 			wrappedMethod(spawnedObject)
 		
@@ -6591,8 +6603,8 @@ function listenPlayerInput(action)
 			----printactionName)+
 			-- --debugPrint(2,actionName)
 			-- --debugPrint(2,actionType)
-			 logme(1,actionName)
-			logme(1,actionType)
+			 -- logme(1,actionName)
+			-- logme(1,actionType)
 			local inputHitted = false
 			if(isdialogactivehub == true ) then
 				
