@@ -2553,7 +2553,7 @@ end
 			VehicleFollowEntity(action.vehicle, action.tag)
 		end
 		if(action.name == "vehicle_chase_entity") then
-			VehicleChaseEntity(action.vehicle, action.tag)
+			VehicleChaseEntity(action.vehicle, action.tag, action.min,action.max,action.startspeed)
 		end
 		if(action.name == "change_av_velocity") then
 			AVVelocity = action.value
@@ -8847,7 +8847,17 @@ end
 			Game.SetTimeDilation(action.value)
 		end
 		if(action.name == "set_timedilation_for_entity") then
-			TimeDilationHelper.SetIndividualTimeDilation(Game.FindEntityByID(action.tag), "see_engine", action.value, 99999, "", "");
+		
+			local obj = getEntityFromManager(action.tag)
+			if(obj ~= nil ) then
+			local enti = Game.FindEntityByID(obj.id)
+			
+			if enti ~= nil then
+		
+			TimeDilationHelper.SetIndividualTimeDilation(enti, "see_engine", action.value, 99999, "", "");
+			
+			end
+			end
 		end
 		if(action.name == "change_camera_position") then
 			local fppComp = Game.GetPlayer():GetFPPCameraComponent()
@@ -12721,6 +12731,17 @@ function GenerateTextFromContextValues(context, v)
 	if(v.type == "variable") then
 		value = getVariableKey(v.variable,v.key)
 		
+		if(isArray(value))then
+			if(v.index == nil) then
+				local index = math.random(1,#value)
+				
+				value = value[index]
+				
+				
+			else
+				value = value[v.index]
+			end
+		end
 		
 	end
 		

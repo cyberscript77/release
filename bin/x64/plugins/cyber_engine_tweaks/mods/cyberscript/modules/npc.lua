@@ -3592,7 +3592,7 @@ if vehiculeRegion then
 			
 			end
 			
-			function VehicleChaseEntity(vehiculetag, entitytag)
+			function VehicleChaseEntity(vehiculetag, entitytag, mindistance,maxdistance,startspeed)
 			
 			local entity = Game.GetPlayer()
 			
@@ -3630,25 +3630,25 @@ if vehiculeRegion then
 			end
 			
 			
-			local distance = 4
-			if(vehicule ~= nil) then
+			-- local distance = 4
+			-- if(vehicule ~= nil) then
 			
-			if string.find(tostring(vehicule:GetClassName()),"vehicleBikeBaseObject") ~= nil then
-			distance = distance*2
-			end
+			-- if string.find(tostring(vehicule:GetClassName()),"vehicleBikeBaseObject") ~= nil then
+			-- distance = distance*2
+			-- end
 			
 			local cmd = NewObject("handle:AIVehicleChaseCommand")
 			cmd.target = entity
-			cmd.distanceMin = distance
-			cmd.distanceMax = 6.00
+			cmd.distanceMin = mindistance
+			cmd.distanceMax = maxdistance
+			cmd.forcedStartSpeed = startspeed
 			
-			
-			
-			local AINPCCommandEvent = NewObject("handle:AINPCCommandEvent")
-			AINPCCommandEvent.command = cmd
+	
+			local AICommandEvent = NewObject("handle:AICommandEvent")
+			AICommandEvent.command = cmd
 			vehicule:QueueEvent(AINPCCommandEvent)
 			end
-			end
+			
 			
 			
 			function VehicleDoors(vehiculetag, action)

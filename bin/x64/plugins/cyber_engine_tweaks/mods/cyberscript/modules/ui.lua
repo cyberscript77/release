@@ -1051,7 +1051,7 @@ end
 
 if setting.type == "toggle" then
 nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
-	setVariable(setting.variable.tag,setting.variable.key,value)
+	setVariable(setting.target.tag,setting.target.key,value)
  	runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
  	
  end)
@@ -1060,7 +1060,7 @@ end
 if setting.type == "sliderInt" then
  nativeSettings.addRangeInt("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 
-	setScore(setting.variable.tag,setting.variable.key,value)
+	setScore(setting.target.tag,setting.target.key,value)
  	runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
  	
  end)
@@ -1070,7 +1070,7 @@ end
 if setting.type == "sliderFloat" then
  nativeSettings.addRangeFloat("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step,"%.2f", getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 
-	setScore(setting.variable.tag,setting.variable.key,value)
+	setScore(setting.target.tag,setting.target.key,value)
  	runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
  	
  end)

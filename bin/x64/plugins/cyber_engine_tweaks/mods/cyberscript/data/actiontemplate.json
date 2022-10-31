@@ -2192,7 +2192,10 @@
 		"name": "vehicle_chase_entity",
 		"tag": "judy01||player",
 		"vehicle": "myvehiculetag",
-		"helper": "This action will make the vehicule chase an entity",
+		"min":5,
+		"max":10,
+		"startspeed":50,
+		"helper": "This action will make the vehicule chase an entity. Min equal minimum distance, max equal maximum distance",
 		"helperTitle": "Vehicule : Chase a entity"
 	},
 	{
@@ -3095,5 +3098,12 @@
 		"name": "setup_gang_district_affinity",
 		"helper": "This action will  Setup Gang affinity toward their default district.",
 		"helperTitle": "Gang : Setup District Affinity"
+	},
+	{
+		"name": "set_timedilation_for_entity",
+		"tag": "judy01||player",
+		"value":5,
+		"helper": "This action will change time dilatation for NPC",
+		"helperTitle": "Entity : Set Time Dilatation"
 	},
 ]

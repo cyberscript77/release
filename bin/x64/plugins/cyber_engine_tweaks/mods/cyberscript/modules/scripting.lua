@@ -2225,8 +2225,11 @@ function checkNPC()
 		
 		
 		local obj = getEntityFromManager(k)
-		if(npc.workinglocation.x ~= nil and npc.workinglocation.y ~= nil and npc.workinglocation.z~= nil)then
-		if( check3DPos(playerpos, npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and getEntityFromManager(k).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
+		
+		local npcpostion = getPositionFromParameter(npc.location)
+		
+		if(npcpostion.x ~= nil and npcpostion.y ~= nil and npcpostion.z~= nil)then
+		if( check3DPos(playerpos, npcpostion.x,  npcpostion.y,  npcpostion.z, npc.location.player_range) and getEntityFromManager(k).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
 			--if the npc is not spawned
 		
 			local tweakDBnpc =  npc.tweakDB
@@ -2322,81 +2325,7 @@ function checkNPC()
 			end
 			
 			
-			if(npc.location.value ~= nil and npc.locationtag ~= nil and (tweakDBnpc== "district" or tweakDBnpc== "subdistrict" or tweakDBnpc== "districttag" or tweakDBnpc== "subdistricttag")) then
-				
-				
-				
-				
-				
-				if(npc.location.value == "poi_near") then
-					
-					local district = npc.locationtag
-					
-					
-					local currentpoi = nil
-					
-					if(tweakDBnpc== "district")then
-						
-						district = currentDistricts2.Tag
-						
-					end
-					
-					if(tweakDBnpc== "subdistrict")then
-						
-						district = currentDistricts2.districtLabels[2]
-						
-					end
-					
-					
-					
-					
-					
-					
-					for k,v in pairs(arrayPOI) do
-						
-						if(#v.poi.locations > 0) then
-							
-							
-							for y=1,#v.poi.locations do
-								
-								local location = v.poi.locations[y]
-								
-								
-								if((location.subdistrict == district or location.district == district) and check3DPos(curPos, location.x, location.y,location.z,npc.location.range,20)) then
-									
-									currentpoi = location
-									break;
-									
-								end
-								
-								
-								
-								
-							end
-							
-						end
-						
-						
-						
-						
-					end
-					
-					
-					
-					if(currentpoi ~= nil) then
-						spawnNPC(tweakDBnpc,"", npc.tag, currentpoi.x, currentpoi.y, currentpoi.z, 42, true, false, nil, false, npc.rotation)
-					end
-				end
-				
-				else
-				
-				spawnNPC(tweakDBnpc,"", npc.tag, npc.location.x, npc.location.y, npc.location.z, 42, true, false, nil, false, npc.rotation)
-				
-				
-				
-				
-				
-			end
+			spawnNPC(tweakDBnpc,"", npc.tag, npcpostion.x, npcpostion.y, npcpostion.z, 42, true, false, nil, false, npc.rotation)
 			
 			npc.isspawn=true
 			npc.init=false
@@ -2412,7 +2341,7 @@ function checkNPC()
 				
 				if(enti ~= nil) then--entity exist 
 					
-					if((check3DPos(Game.GetPlayer():GetWorldPosition(), npc.workinglocation.x,  npc.workinglocation.y,  npc.workinglocation.z, npc.workinglocation.radius) and npc.spawnforced == false) or npc.spawnforced == true) then --ifplayer is in the location
+					if((check3DPos(Game.GetPlayer():GetWorldPosition(), npcpostion.x,  npcpostion.y,  npcpostion.z, npc.location.player_range) and npc.spawnforced == false) or npc.spawnforced == true) then --ifplayer is in the location
 						
 						if(arrayCustomNPC[k].npc.init==false) then --if not initiaded
 							
@@ -2431,52 +2360,6 @@ function checkNPC()
 								
 								
 							end
-							
-							-- if(npc.spawnEdited == nil or npc.spawnEdited == false) then
-								
-								-- local newnpcspawn = {}
-								
-								-- local rotateaction = {}
-								
-								-- rotateaction.name = "rotate_entity_to_entity"
-								-- rotateaction.tag = "this"
-								-- rotateaction.entity = "player"
-								
-								-- table.insert(newnpcspawn,rotateaction)
-								
-								-- local wait01action = {}
-								
-								-- wait01action.name = "wait_second"
-								-- wait01action.value = "1"
-								
-								-- table.insert(newnpcspawn,wait01action)
-								
-								-- local lookataction = {}
-								
-								-- lookataction.name = "look_at_entity_entity"
-								-- lookataction.tag = "this"
-								-- lookataction.entity = "player"
-								
-								
-								
-								-- table.insert(newnpcspawn,lookataction)
-								
-								-- table.insert(newnpcspawn,wait01action)
-								
-								-- if(#npc.spawnaction > 0) then
-									
-									-- for i=1,#npc.spawnaction do
-										
-										-- table.insert(newnpcspawn,npc.spawnaction[i])
-										
-									-- end
-									
-									
-								-- end
-								
-								-- npc.spawnaction = newnpcspawn
-								-- arrayCustomNPC[k].npc.spawnEdited = true
-							-- end
 							
 							if(workerTable[npc.tag.."_spawn"] == nil and #npc.spawnaction > 0 and npc.dospawnaction == true) then
 								
