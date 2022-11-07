@@ -3644,7 +3644,7 @@ if vehiculeRegion then
 			cmd.forcedStartSpeed = startspeed
 			
 	
-			local AICommandEvent = NewObject("handle:AICommandEvent")
+			local AICommandEvent = NewObject("handle:AINPCCommandEvent")
 			AICommandEvent.command = cmd
 			vehicule:QueueEvent(AINPCCommandEvent)
 			end
