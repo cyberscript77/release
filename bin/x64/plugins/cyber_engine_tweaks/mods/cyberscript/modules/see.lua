@@ -10,6 +10,13 @@ function checkTrigger(trigger)
 	
 	if status == false then
 		
+		if(trigger.output == true) then 
+		
+			print(trigger.name)
+			print(dump(trigger))
+			print(tostring(result))
+			spdlog.error(dump(action))
+		end
 		
 		debugPrint(1,getLang("see_trigger_error") .. result.." Trigger : "..tostring(JSON:encode_pretty(trigger)))
 		
@@ -377,30 +384,15 @@ function scriptcheckTrigger(trigger)
 			end
 			
 			if(trigger.name == "last_killed_entity_is_registred") then
-				if lastTargetKilled ~= nil then
-					tarName = lastTargetKilled:ToString()
-					appName = Game.NameToString(lastTargetKilled:GetCurrentAppearanceName())
-					dipName = lastTargetKilled:GetDisplayName()
-					local entid = lastTargetKilled:GetEntityID()
-					local entity = getEntityFromManagerById(entid)
-					if(entity.id ~= nil) then
+				if cyberscript.EntityManager["last_killed"].id ~= nil then
+				
+				
 						result = true
-					end
+				
 				end
 			end
 			
-			if(trigger.name == "last_killed_entity_is") then
-				if lastTargetKilled ~= nil then
-					tarName = lastTargetKilled:ToString()
-					appName = Game.NameToString(lastTargetKilled:GetCurrentAppearanceName())
-					dipName = lastTargetKilled:GetDisplayName()
-					local entid = lastTargetKilled:GetEntityID()
-					
-					if(entid.tag  == trigger.tag) then
-						result = true
-					end
-				end
-			end
+			
 			
 			if(trigger.name == "if_entities_around_you") then
 				player = Game.GetPlayer()
@@ -2561,7 +2553,7 @@ end
 			VehicleFollowEntity(action.vehicle, action.tag)
 		end
 		if(action.name == "vehicle_chase_entity") then
-			VehicleChaseEntity(action.vehicle, action.tag)
+			VehicleChaseEntity(action.vehicle, action.tag, action.min,action.max,action.startspeed)
 		end
 		if(action.name == "change_av_velocity") then
 			AVVelocity = action.value
@@ -2898,7 +2890,7 @@ end
 						
 						table.insert(cyberscript.GroupManager[action.group].entities,tag)
 					end
-				end
+					end
 			end
 		end
 		if(action.name == "summon_vehicule_at_entity_relative_from_faction_rival") then
@@ -4183,120 +4175,20 @@ end
 		
 		if(action.name == "current_place_apply_template") then
 			
-			if(currentHouse ~=nil and arrayHousingTemplate[action.tag] ~= nil) then
-				local template = arrayHousingTemplate[action.tag].template
-				
-				if(#template.items > 0) then
-					
-					
-					
-					
-					for i,v in ipairs(template.items) do
-						
-						local obj = {}
-						obj.Id = v.Id
-						obj.Tag = v.Tag
-						obj.HouseTag = currentHouse.tag
-						obj.ItemPath = v.ItemPath
-						obj.X = template.center.x + action.x +v.X
-						obj.Y = template.center.y + action.y + v.Y
-						obj.Z = template.center.z + action.z + v.Z
-						obj.Yaw = v.Yaw
-						obj.Pitch = v.Pitch
-						obj.Roll = v.Roll
-						obj.Title = v.Title
-						obj.fromTemplate = true
-						obj.template = template.tag
-						
-						
-						saveHousing(obj)
-						
-						local housing = getHousing(obj.Tag,obj.X,obj.Y,obj.Z)
-						obj.Id = housing.Id
-						
-						local poss = Vector4.new( obj.X, obj.Y,  obj.Z,1)
-						
-						
-						local angless = EulerAngles.new(obj.Roll, obj.Pitch,  obj.Yaw)
-						
-						
-						obj.entityId = spawnItem(obj, poss, angless)
-						local entity = Game.FindEntityByID(spawnedItem.entityId)
-						local components = checkForValidComponents(entity)
-						if components then
-							local visualScale = checkDefaultScale(components)
-							obj.defaultScale = {
-								x = visualScale.x * 100,
-								y = visualScale.x * 100,
-								z = visualScale.x * 100,
-							}
-							obj.scale = {
-								x = visualScale.x * 100,
-								y = visualScale.y * 100,
-								z = visualScale.z * 100,
-							}
-						end
-						
-						table.insert(currentItemSpawned,obj)
-						
-					end
-					
-					
-				end
-				
-			end
-			
+			currentHouseApplyTemplate(action.tag,action.x,action.y,action.z)
 			
 		end
 		
 		if(action.name == "current_place_clear_all_template") then
-			
-			if(currentHouse ~=nil) then
-				
-				if(#currentItemSpawned > 0) then
-					
-					for i=1,#currentItemSpawned do
-						
-						if(currentItemSpawned[i].fromTemplate ~= nil and currentItemSpawned[i].fromTemplate == true) then
-							deleteHousing(currentItemSpawned[i].Id)
-							despawnItemFromId(currentItemSpawned[i].Id)
-							
-						end
-						
-						
-					end
-					
-					
-				end
-				
-			end
-			
+			currentHouseClearAllTemplate()
 			
 		end
 		
 		
 		if(action.name == "current_place_clear_template") then
 			
-			if(currentHouse ~=nil) then
-				
-				if(#currentItemSpawned > 0) then
-					
-					for i=1,#currentItemSpawned do
-						
-						if(currentItemSpawned[i].fromTemplate ~= nil and currentItemSpawned[i].fromTemplate == true and currentItemSpawned[i].template == action.tag) then
-							deleteHousing(currentItemSpawned[i].Id)
-							despawnItemFromId(currentItemSpawned[i].Id)
-							
-						end
-						
-						
-					end
-					
-					
-				end
-				
-			end
 			
+			currentHouseClearTemplate(action.tag)
 			
 		end
 		
@@ -6021,7 +5913,7 @@ end
 				local instructions = {}
 					
 					
-					for i,value in action.value do 
+					for i,value in ipairs(action.value) do 
 						
 						local ts = Game.GetTransactionSystem()
 						local tid = TweakDBID.new(value)
@@ -6029,13 +5921,19 @@ end
 						local result = ts:GiveItem(enti, itemid, 1)
 						
 						
-						
-						
-						
-						
-						
-						
 						table.insert(instructions, DropInstruction.Create(itemid, 1))
+				
+					
+					-- if (RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Part and RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Weapon) then
+						
+					-- else
+						-- print(RPGManager.GetItemCategory(itemid))
+						-- Game.GetLootManager():SpawnItemDrop(enti,itemid,Vector4.new(action.x,action.y,action.z+1,1))
+					-- end
+						
+						
+						
+						
 						
 					
 						
@@ -6059,6 +5957,9 @@ end
 					
 					if (RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Part or RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Weapon   ) then
 						table.insert(instructions, DropInstruction.Create(itemid, 1))
+						print("test"..action.x)
+						print("test"..action.y)
+						print("test"..action.z)
 						Game.GetLootManager():SpawnItemDropOfManyItems(Game.GetPlayerSystem():GetLocalPlayerControlledGameObject(), instructions, "playerDropBag",Vector4.new(action.x,action.y,action.z,1))
 					else
 						Game.GetLootManager():SpawnItemDrop(enti,itemid,Vector4.new(action.x,action.y,action.z+1,1))
@@ -7635,22 +7536,22 @@ end
 			local sound = getSoundByNameNamespace(action.value,action.datapack)
 			if(sound ~= nil) then
 				local path = cyberscript.soundpath..sound.path
-				PlaySound(action.value,path,action.channel,action.volume)
+				--PlaySound(action.value,path,action.channel,action.volume)
 				else
 				error("No sound founded")
 			end
 		end
 		if(action.name == "pause_sound_channel") then 
-			Pause(action.channel)
+			--Pause(action.channel)
 		end
 		if(action.name == "resume_sound_channel") then 
-			Resume(action.channel)
+			--Resume(action.channel)
 		end
 		if(action.name == "stop_sound_channel") then 
-			Stop(action.channel)
+			--Stop(action.channel)
 		end
 		if(action.name == "setGameVolume") then 
-			SetSoundSettingValue(action.value, action.score)
+			--SetSoundSettingValue(action.value, action.score)
 		end
 	end
 	
@@ -8122,6 +8023,12 @@ end
 		
 		-- end
 		-- end
+		
+		if(action.name == "reset_spawncount") then
+			
+			spawntablecount = {}
+			
+		end
 		if(action.name == "set_entity_highlight") then
 			local obj = getEntityFromManager(action.tag)
 			local enti = Game.FindEntityByID(obj.id)
@@ -8939,6 +8846,19 @@ end
 		if(action.name == "set_timedilation") then
 			Game.SetTimeDilation(action.value)
 		end
+		if(action.name == "set_timedilation_for_entity") then
+		
+			local obj = getEntityFromManager(action.tag)
+			if(obj ~= nil ) then
+			local enti = Game.FindEntityByID(obj.id)
+			
+			if enti ~= nil then
+		
+			TimeDilationHelper.SetIndividualTimeDilation(enti, "see_engine", action.value, 99999, "", "");
+			
+			end
+			end
+		end
 		if(action.name == "change_camera_position") then
 			local fppComp = Game.GetPlayer():GetFPPCameraComponent()
 			fppComp:SetLocalPosition(Vector4:new(action.x, action.y, action.z, 1.0))
@@ -9220,7 +9140,7 @@ end
 			ScannerInfoManager[action.tag].rarity = action.rarity
 			ScannerInfoManager[action.tag].faction = action.faction
 			ScannerInfoManager[action.tag].networkstate = ""
-			ScannerInfoManager[action.tag].text = getLang(action.text)
+			ScannerInfoManager[action.tag].text = getLang("cyberscript_scanner_"..action.text)
 			print(action.text)
 			ScannerInfoManager[action.tag].attitude = action.attitude
 			
@@ -9723,8 +9643,14 @@ end
 		if(action.name == "update_mod_setting") then
 			updateUserSetting(action.tag,action.value)
 		end
-		if(action.name == "launch_gang_affinity_calculator") then
+		if(action.name == "setup_gang_player_affinity") then
 			GangAffinityCalculator()
+		end
+		if(action.name == "setup_gang_rival_affinity") then
+			initGangRelation()
+		end
+		if(action.name == "setup_gang_district_affinity") then
+			initGangDistrictScore()
 		end
 		if(action.name == "open_interface") then
 			currentInterface = arrayInterfaces[action.tag].ui
@@ -10135,6 +10061,13 @@ end
 			startHub:SetStartMenu(action.value)
 			Game.GetUISystem():QueueEvent(startHub)
 		end
+		
+		if(action.name == "open_menu") then
+			local startHub = StartHubMenuEvent.new()
+			startHub:SetStartMenu(action.value)
+			Game.GetUISystem():QueueEvent(startHub)
+		end
+		
 		if(action.name == "close_menu") then
 			local closeHub = ForceCloseHubMenuEvent.new()
 			Game.GetUISystem():QueueEvent(closeHub)
@@ -10151,6 +10084,20 @@ end
 		end
 		if(action.name == "unlock_conversation" or action.name == "unlock_message") then
 			setScore(action.tag,"unlocked",1)
+		end
+		
+		if(action.name == "open_map_menu_to_position") then
+			local startHub = StartHubMenuEvent.new()
+			
+			local userData = MapMenuUserData.new()
+			userData.moveTo = Vector3.new(action.x, action.y, action.z)
+			
+			startHub:SetStartMenu("world_map",nil,userData)
+			Game.GetUISystem():QueueEvent(startHub)
+			
+			
+			
+			Game.GetUISystem():QueueEvent(startHub)
 		end
 		
 		if(action.name == "show_hack_animation") then
@@ -11547,22 +11494,7 @@ end
 			
 		end
 		
-		if(action.name == "toggle_corpo_ui") then
-			
-			if(GameController["hudCorpoController"] ~= nil) then
-				local root = GameController["hudCorpoController"].root
-				
-				
-				
-				root:SetVisible(action.value)
-				print("yep")
-				else
-				
-				print("noep")
-				
-			end
-			
-		end
+	
 		
 		if(action.name == "bound_scene_to_braindance") then
 			
@@ -12256,6 +12188,12 @@ function GeneratefromContext(context)
 	for k,v in pairs(context.values)do
 		
 		if v.trigger == nil or checkTriggerRequirement(v.requirement,v.trigger)then
+		
+			if(v.action ~= nil and #v.action > 0) then
+				
+					runActionList(v.action, k, "see", false,"see",false)					
+			end
+		
 			if(v.type ~= "object" and v.type ~= "list") then
 				local value = GenerateTextFromContextValues(context, v)
 				text = text:gsub("##"..k, value) 
@@ -12502,16 +12440,27 @@ function GenerateTextFromContextValues(context, v)
 				if(v.key == "position") then
 					
 					local pos = enti:GetWorldPosition()
+					local obj = {}
 					
-					value = pos[prop]
+					obj.x = pos.x
+					obj.y = pos.y
+					obj.z = pos.z
+					
+					print(dump(obj))
+					
+					value = obj[v.prop]
 				
 				end
 				
 				if(v.key == "forward") then
 					
 					local pos = enti:GetWorldForward()
+					local obj = {}
 					
-					value = pos[prop]
+					obj.x = pos.x
+					obj.y = pos.y
+					obj.z = pos.z
+					value = obj[v.prop]
 				
 				end
 				
@@ -12519,7 +12468,14 @@ function GenerateTextFromContextValues(context, v)
 					
 					local qat = enti:GetWorldOrientation()
 					local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-					value = angle[prop]
+					local obj = {}
+					
+					obj.yaw = angle.yaw
+					obj.pitch = angle.pitch
+					obj.roll = angle.roll
+					
+					value = obj[v.prop]
+					
 				
 				end
 				
@@ -12533,7 +12489,7 @@ function GenerateTextFromContextValues(context, v)
 				if(v.key == "appearance") then
 					
 					
-					value = enti:GetCurrentAppearanceName()
+					value = Game.NameToString(enti:GetCurrentAppearanceName())
 				
 				end
 				
@@ -12547,14 +12503,21 @@ function GenerateTextFromContextValues(context, v)
 				if(v.key == "context") then
 					
 					
-					value = enti:GetCurrentContext()
+					value = Game.NameToString(enti:GetCurrentContext())
 				
 				end
 				
 				if(v.key == "displayname") then
 					
 					
-					value = enti:GetDisplayName()
+					value = Game.NameToString(enti:GetDisplayName())
+				
+				end
+				
+				if(v.key == "fullname") then
+					
+					
+					value = enti:GetTweakDBFullDisplayName(false)
 				
 				end
 				
@@ -12563,9 +12526,11 @@ function GenerateTextFromContextValues(context, v)
 				
 					value = tostring(group)
 				end
-				
+				else
+				--spdlog.error("Context : No Entity Founded for "..v.tag)
 			end
-		
+		else
+					--spdlog.error("Context : No Entity Founded for "..v.tag)
 		end
 	end
 		
@@ -12766,6 +12731,17 @@ function GenerateTextFromContextValues(context, v)
 	if(v.type == "variable") then
 		value = getVariableKey(v.variable,v.key)
 		
+		if(isArray(value))then
+			if(v.index == nil) then
+				local index = math.random(1,#value)
+				
+				value = value[index]
+				
+				
+			else
+				value = value[v.index]
+			end
+		end
 		
 	end
 		
@@ -12997,6 +12973,11 @@ function GenerateTextFromContextValues(context, v)
 		value = v.value
 		
 	end
+	
+	if(v.type == "trigger") then
+			value = checkTrigger(v.trigger)
+	end
+	
 	
 	if(v.type == "list") then
 		local list = {}

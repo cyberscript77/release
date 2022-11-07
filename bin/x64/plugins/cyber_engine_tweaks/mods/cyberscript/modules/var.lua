@@ -126,8 +126,40 @@ displayHUD = {}
 editorCurrentVariableSearch = ""
 editorCurrentVariableKeySearch = ""
 PlayerisHitten = false
-
-datapackObjectType = { "circuit","dialog","event","faction","fixer","function","housing","help","interact","interfaces","lang","mission","node","npc","phone_dialog","place","poi","radio","shard","sound","texture","scene","housing_template","hud","setting","codex","webpage","redmod","archive","character"}
+spawntablecount = {}
+cachedespawn = {}
+datapackObjectType = { 
+	"character",
+	"circuit",
+	"codex",
+	"dialog",
+	"event",
+	"faction",
+	"fixer",
+	"function",
+	"help",
+	"housing",
+	"housing_template",
+	"hud",
+	"interact",
+	"interfaces",
+	"lang",
+	"mission",
+	"node",
+	"npc",
+	"phone_dialog",
+	"place",
+	"poi",
+	"radio",
+	"scene",
+	"setting",
+	"shard",
+	"sound",
+	"texture",
+	"webpage",
+	"email"
+	
+	}
 cacheupdate = false
 passwordView =ImGuiInputTextFlags.Password
 menuName = "CyberScript"
@@ -137,6 +169,7 @@ onlineInstanceCreation = false
 onlineGuildCreation = false
 onlineInstanceUpdate = false
 onlineGuildUpdate = false
+togglehousing = true
 onlineInstancePlaceCreation = false
 onlineShootMessage = false
 CreateInstance={}
@@ -336,6 +369,8 @@ menuWindowsX = 400
 menuWindowsY = 200
 currentHousingTemplate = nil
 currentHousingTemplatetag = ""
+currentHousing = nil
+							currentHousingtag=""
 menuFrameX = 400
 menuFrameY = 200
 
@@ -1629,6 +1664,7 @@ arrayMymissions = {}
 editorPathTarget = nil
 arrayMarket = {}
 recordRotation = false
+recordRotationOnly = false
 recordRelative = false
 recordInitialPosition = {}
 arrayMarketItem = {}
@@ -2129,6 +2165,8 @@ rotstep = 0.1
 openNewRoom = false
 openEditRoom = false
 
+
+
 loadQuest = {}
 loadInteract = {}
 loadPlace = {}
@@ -2149,6 +2187,7 @@ loadPOI = {}
 loadShard = {}
 loadPhoneDialog = {}
 loadScene = {}
+loadHousing = {}
 
 loadQuesttag = ""
 loadInteracttag = ""
@@ -2170,6 +2209,7 @@ loadHelptag =""
 loadShardtag = ""
 loadPhoneDialogtag = ""
 loadScenetag = ""
+loadHousingtag = ""
 
 placetype = "House"
 newRequirementItem = ""
@@ -2253,6 +2293,8 @@ selecAction = ""
 currentParentItem = {}
 
 activeEditedQuest = {} -- 0
+questgraph = {}
+choicegraph = {}
 activeEditedInteract = {} --1 
 activeEditedDialog = {}--2
 activeEditedFixer = {} --3
@@ -2273,14 +2315,14 @@ activeEditedCustomNPC = {} --5
 activeEditedShard = {} --5
 activeEditedPhoneDialog = {} --5
 activeEditedScene = {} --4
-
+activeEditedHousing = {} 
 
 local f = assert(io.open("data/triggertemplate.json"))
 
 lines = f:read("*a")
 
 encdo = lines
-
+f:close()
 triggertemplate = {}
 
 triggertemplate = trydecodeJSOn(encdo, f ,"data/triggertemplate.json")
@@ -2289,8 +2331,52 @@ triggertemplate = trydecodeJSOn(encdo, f ,"data/triggertemplate.json")
 controltypelist = {"button","label","area","scrollarea","vertical_area","image"}
 controltypevaluelist = {"text","number","score","variable"}
 
-f:close()
 
+
+
+
+
+
+local f = assert(io.open("external/amm_entities.json"))
+
+lines = f:read("*a")
+
+encdo = lines
+amm_entities = {}
+
+local test = trydecodeJSOn(encdo, f ,"external/amm_entities.json")
+
+for i,v in ipairs(test) do
+	
+	amm_entities[v.entity_id] = v
+	
+	
+
+end
+
+spdlog.error("amm_entities : "..dump(amm_entities))
+
+
+
+
+local f = assert(io.open("external/amm_component.json"))
+
+lines = f:read("*a")
+
+encdo = lines
+amm_component = {}
+
+local test =  trydecodeJSOn(encdo, f ,"external/amm_component.json")
+
+for i,v in ipairs(test) do
+	
+	amm_component[v.cname] = v
+	
+
+end
+
+
+spdlog.error("amm_component : "..dump(amm_component))
 
 arraytriggertemplate = {}
 

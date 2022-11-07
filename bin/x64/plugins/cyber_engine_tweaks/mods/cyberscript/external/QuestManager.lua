@@ -35,6 +35,14 @@ EgameJournalEntryState =
    Failed = 4
 }
 
+EgameJournalEntryStateRename = 
+{
+   Undefined = 0,
+   Locked = 1,
+   Unlocked = 2,
+   Succeeded = 3,
+   Failed = 4
+}
 
 EgamedataDistrict = 
 {

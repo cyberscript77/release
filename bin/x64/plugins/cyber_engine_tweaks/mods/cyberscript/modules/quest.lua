@@ -19,13 +19,14 @@ function QuestThreadManager()
 				end
 			--quest trigger
 			if(getScoreKey(currentQuest.tag,"Score") == 1)then
+			
 				if(canDoTriggerAction) then
 					if(DoedTriggerAction == false) then
 					DoedTriggerAction = true
 					doTriggerAction(currentQuest)
 					
 					canDoTriggerAction = false
-					debugPrint(2,"Quest Trigger ACtion")
+					
 					end
 					
 					
@@ -67,7 +68,19 @@ function QuestThreadManager()
 						
 						if(result == true and workerTable[objectif.tag.."_action"] == nil) then
 					--	debugPrint(2,objectif.tag.." ACtion")
-					
+							
+							
+							if(objectif.unlock ~= nil and #objectif.unlock > 0) then
+							
+								for i,v in ipairs(objectif.unlock) do
+								
+									QuestManager.MarkObjectiveAsActive(v)
+								
+								end
+							
+							end
+							
+							
 							local action ={}
 							action.name = "quest_notification"
 							action.title =  currentQuest.title
@@ -373,7 +386,7 @@ function resetQuest()
 	
 	currentSave.arrayPlayerData.CurrentQuest = nil
 	currentSave.arrayPlayerData.CurrentQuestStatut = nil
-	updatePlayerData(currentSave.arrayPlayerData)
+	
 	
 	
 	canDoTriggerAction = false
@@ -431,7 +444,7 @@ function closeQuest(quest)
 	currentSave.arrayPlayerData.CurrentQuest = nil
 	currentSave.arrayPlayerData.CurrentQuestStatut = nil
 	currentSave.arrayPlayerData.CurrentQuestState = nil
-	updatePlayerData(currentSave.arrayPlayerData)
+
 	debugPrint(2,"closed quest")
 	canDoTriggerAction = false
 	canDoStartAction = false
@@ -455,7 +468,7 @@ function HaveTriggerCondition(quest)
 	result = checkTriggerRequirement(quest.trigger_condition_requirement,quest.trigger_condition)
 	----debugPrint(2,askTriggerRequirement(quest.trigger_condition_requirement,quest.trigger_condition))
 	if(result)then
-		----debugPrint(2,quest.title.." is okk")
+		print(quest.title.." is okk")
 	end
 	return result
 end

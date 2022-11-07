@@ -122,6 +122,7 @@ function checkAttitudeByGangScore(enti)
 	local lookedgang = nil
 	
 	if(enti ~= nil) then
+		pcall(function() 
 		local targeName = enti:ToString()
 		if(string.match(targeName, "NPCPuppet"))then 
 			local targetAttAgent = enti:GetAttitudeAgent()
@@ -159,8 +160,8 @@ function checkAttitudeByGangScore(enti)
 		
 		
 		
+		end)
 	end
-	
 	return isAlly,isAllyscore,lookedgang
 	
 end
@@ -393,7 +394,7 @@ function isHostileDistrict()
 	local score = 0
 	
 	
-	if(#currentDistricts2.districtLabels > 1) then
+	if(currentDistricts2.districtLabels ~= nil and #currentDistricts2.districtLabels > 1) then
 			
 				local gangs = getGangfromDistrict(currentDistricts2.districtLabels[2],20)
 				
@@ -411,6 +412,7 @@ function isHostileDistrict()
 		else
 				
 				
+				if(currentDistricts2.districtLabels ~= nil) then
 				local gangs = getGangfromDistrict(currentDistricts2.districtLabels[1],20)
 				if(#gangs > 0 ) then
 				for i=1,#gangs do
@@ -425,7 +427,7 @@ function isHostileDistrict()
 				end
 				end
 				
-				
+				end
 	end
 			
 	
@@ -588,11 +590,12 @@ function GangAffinityCalculator()
 					local npcScore = affinity.npcscore[z]
 					
 					
-					local score = getScoreKey(npcScore.Names,"Score")
+					local score = getVariableKey("Affinity",npcScore.Names)
 					if(score == nil) then score = 0 end
 					
 					score = score + npcScore.value
-					setScore(npcScore.Names,"Score",score)
+					
+					 setVariable("Affinity",npcScore.Names,score)
 				--	debugPrint(10,"added score "..tostring(score).." to NPC "..npcScore.Names)
 				
 			end

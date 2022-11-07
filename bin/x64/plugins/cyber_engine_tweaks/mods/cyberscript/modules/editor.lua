@@ -170,7 +170,7 @@ function editorWindows()
 	
 	
 	
-	CPS:setThemeBegin()
+
 	
 	ImGui.SetNextWindowPos(300, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(1200, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -186,7 +186,7 @@ function editorWindows()
 		if ImGui.BeginTabBar("EditorTabs", ImGuiTabBarFlags.NoTooltip) then
 			
 			MainTabs()
-			local status, retval =pcall(function()
+			-- local status, retval =pcall(function()
 				if ImGui.BeginTabItem(getLang("editor_Story")) then
 					
 					if ImGui.BeginTabBar("QuestsTabsTabsBar", ImGuiTabBarFlags.NoTooltip) then
@@ -227,9 +227,9 @@ function editorWindows()
 						
 						PlaceTabs()
 						
-						if(currentHouse ~= nil) then
-							ItemTabs()
-						end
+						
+						ItemTabs()
+						
 						
 						EventTabs()
 						
@@ -275,18 +275,19 @@ function editorWindows()
 				DatapackBuilder()
 				
 				VariableEditor()
+				debugTab()
 				SettingTab()
-			end)
-			if status == false then
+			-- end)
+			-- if status == false then
 				
 				
-				debugPrint(10,getLang("editor_error") .. retval)
-				spdlog.error(getLang("editor_error") .. retval)
-				Game.GetPlayer():SetWarningMessage(getLang("editor_error_msg"))
+				-- debugPrint(1,getLang("editor_error") .. retval)
+				-- spdlog.error(getLang("editor_error") .. retval)
+				-- Game.GetPlayer():SetWarningMessage(getLang("editor_error_msg"))
 				
 				
 				
-			end
+			-- end
 			
 			ImGui.EndTabBar()
 		end
@@ -300,7 +301,7 @@ function editorWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -543,7 +544,17 @@ function QuestTabs()
 		
 		if(activeEditedQuest.tag ~= nil and activeEditedQuest.tag ~= "")then
 			
+			if ImGui.Button(getLang("Show Graph")) then
+				
 			
+		
+				makeGraphdata()
+				
+			
+				openQuestGraph = true
+				
+			
+			end
 			
 			
 			if ImGui.Button(getLang("editor_save_for_build")) then
@@ -572,7 +583,7 @@ function QuestTabs()
 			if ImGui.Button(getLang("editor_export")) then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedQuest.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedQuest.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedQuest)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -604,6 +615,737 @@ function QuestTabs()
 		ImGui.EndTabItem()
 	end
 end
+
+function makeGraphdata()
+	
+		
+				questgraph = activeEditedQuest
+				
+				for k,v in pairs(EgameJournalQuestType) do
+				if questgraph.questtype == EgameJournalQuestType[k] then
+				
+					questgraph.questtype  = k 
+				
+				end
+				end
+				
+				
+				if(questgraph.recurrent == false) then questgraph.recurrent = "False" else questgraph.recurrent = "True" end
+				
+				for k,v in pairs(EgamedataDistrict) do
+					
+					if questgraph.district == EgamedataDistrict[k] then
+			
+						questgraph.district = k
+			
+					end
+				
+				end
+				
+				questgraph.requirement = ""
+				for iparent,parent in ipairs(questgraph.trigger_condition_requirement) do
+				
+					for ichildren,children in pairs(parent) do
+				
+					
+						local text =  "- "..children.." : ".."Unknown Trigger"
+							
+						for i,value in ipairs(triggertemplate) do
+							
+							if(value.name == questgraph.trigger_condition[children].name) then
+									
+									text = "- "..children.." : "..value.helper
+									
+							
+							end
+							
+						end
+						
+						questgraph.requirement = questgraph.requirement..text
+						
+						if(questgraph.trigger_condition_requirement[iparent][ichildren+1] ~= nil) then
+					
+						questgraph.requirement = questgraph.requirement.. "\n AND \n"
+						
+						else
+						
+						questgraph.requirement = questgraph.requirement.. "\n"
+					
+						end
+					
+					end
+					
+					if(questgraph.trigger_condition_requirement[iparent+1] ~= nil) then
+					
+						questgraph.requirement = questgraph.requirement.. "\n OR \n"
+					
+					end
+				end
+				
+				local objectivekey = {}
+				for i,v in ipairs(questgraph.objectives) do
+	
+					objectivekey[v.tag] = v
+				
+				end
+				
+				questgraph.children = SortTreeObjective(questgraph.objectives[1],objectivekey,1,1)
+				
+				local maxcolumn = 1
+				local maxrow = 1
+				
+				
+				for i,v in ipairs(questgraph.objectives) do
+					
+					if(v.column > maxcolumn) then
+					
+					maxcolumn = v.column
+					
+					end
+					
+					if(v.row > maxrow) then
+					
+					maxrow = v.row
+					
+					end
+				
+				end
+				
+				questgraph.column = maxcolumn
+				questgraph.row = maxrow
+				
+				
+			
+				
+	
+end
+
+
+
+
+function SortTreeObjective(objective, objectivekey,row,column)
+	local tableObj = objective
+	
+	
+	
+	tableObj.row = row
+	tableObj.column = column
+	
+	for k,v in pairs(EgameJournalEntryStateRename) do
+					
+					if tableObj.state == EgameJournalEntryStateRename[k] then
+			
+						tableObj.statedisplay = k
+			
+					end
+				
+	end
+	
+	local actions = ""
+	for k,v in ipairs(tableObj.action) do
+	
+		
+		actions = actions..v.name.."\n"
+	
+	
+	end
+	
+	tableObj.actionsdisplay =actions
+	
+	tableObj.requirementtext = ""
+	for iparent,parent in ipairs(tableObj.requirement) do
+			
+		for ichildren,children in pairs(parent) do
+	
+		
+			local text = "- "..children.." : ".."Unknown Trigger"
+				
+			for i,value in ipairs(triggertemplate) do
+				
+				if(value.name == tableObj.trigger[children].name) then
+						
+						text = "- "..children.." : "..value.helper
+						
+				
+				end
+				
+			end
+			
+			tableObj.requirementtext = tableObj.requirementtext..text
+			
+			if(tableObj.requirement[iparent][ichildren+1] ~= nil) then
+		
+				tableObj.requirementtext = tableObj.requirementtext.. "\n AND \n"
+			
+			else
+			
+				tableObj.requirementtext = tableObj.requirementtext.. "\n"
+		
+			end
+		
+		end
+		
+		if(tableObj.requirement[iparent+1] ~= nil) then
+		
+			tableObj.requirementtext = tableObj.requirementtext.. "\n OR \n"
+		
+		end
+	
+	
+	
+	end
+					
+	tableObj.children = {}
+				
+	if(tableObj.unlock ~= nil and #tableObj.unlock >0) then
+		local newrow = row
+		for i,child in ipairs(tableObj.unlock) do
+			
+			local children = SortTreeObjective(objectivekey[child],objectivekey,newrow,column+1)
+			
+			table.insert(tableObj.children,children)
+			newrow = newrow+i
+		end
+	
+	end
+	
+	return tableObj
+end
+
+
+function QuestGraph()
+	
+	if(questgraph.tag ~= nil) then
+		
+		
+	
+	ImGui.SetNextWindowPos(300, 150, ImGuiCond.Appearing) -- set window position x, y
+	ImGui.SetNextWindowSize(1200, 800, ImGuiCond.Appearing) -- set window size w, h
+	
+
+	
+	
+	
+	if ImGui.Begin(getLang("Quest Graph")) then
+	
+		if ImGui.Button(getLang("Close")) then
+			
+			openQuestGraph = false
+			questgraph = {}
+			
+		end
+		
+		ImGui.SameLine()
+		if ImGui.Button(getLang("Refresh")) then
+			
+			makeGraphdata()
+			
+		end
+		ImGui.SameLine()
+		if ImGui.Button(getLang("Export")) then
+			
+				
+				local file = assert(io.open("graphdata.json", "w"))
+				local stringg = JSON:encode_pretty(questgraph)
+				--debug--debugPrint(2,stringg)
+				file:write(stringg)
+				file:close()
+			
+		end
+	
+	
+	ImGui.Text("Name : "..questgraph.title)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Tag : "..questgraph.tag)
+	
+	ImGui.Spacing()
+	ImGui.Text("Description : "..questgraph.content)
+	ImGui.Spacing()
+	
+	ImGui.Text("Type : "..questgraph.questtype)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Recommanded Level : "..questgraph.recommandedlevel)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Recurent : "..questgraph.recurrent)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("District : "..questgraph.district)
+	
+	ImGui.Spacing()
+	
+	ImGui.Text("This quest is available when : ")
+	
+	ImGui.Text(questgraph.requirement)
+	
+	ImGui.Separator()
+	
+	ImGui.Text("Objectives Graph")
+	ImGui.Separator()
+	ImGui.SetWindowFontScale(1.1)
+	ImGui.Text("Legend : ")
+	ImGui.SameLine()
+	ImGui.PushStyleColor(ImGuiCol.Text,  0.1921568627451,0.77254901960784,0.31372549019608, 1)
+	ImGui.Text("Optionnal")
+	ImGui.PopStyleColor()
+	ImGui.SameLine()
+	ImGui.PushStyleColor(ImGuiCol.Text, 0.1921568627451,0.65882352941176,0.77254901960784, 1)
+	ImGui.Text("Required")
+	ImGui.PopStyleColor()
+	ImGui.SetWindowFontScale(1)
+	if ImGui.Button("Add objectives", 300, 0) then
+		currentSelectObjective = {}
+			currentSelectObjective.parent = "objectives"
+			currentSelectObjective.tagprefix = obj.tag.."_"
+			
+			
+			currentSelectObjective.title = ""
+			currentSelectObjective.tag = ""
+			currentSelectObjective.state = EgameJournalEntryState.Active
+			currentSelectObjective.isoptionnal = false
+			
+			
+			currentSelectObjective["trigger"] = {}
+			currentSelectObjective["requirement"] = {}
+			currentSelectObjective["action"] = {}
+			currentSelectObjective["failaction"] = {}
+			currentSelectObjective["resume_action"] = {}
+			currentSelectObjective["unlock"] = {}
+			
+			
+			
+			openNewObjective = true
+		end
+	ImGui.Separator()
+	
+	
+	
+	
+	ImGui.PushStyleColor(ImGuiCol.ChildBg,  0.81960784313725,	0.81960784313725,	0.81960784313725, 0.2)
+	if ImGui.BeginChild("graphquest", 1150, 300, true) then
+	
+		
+		
+		local flags = ImGuiTableFlags.ScrollX + ImGuiTableFlags.ScrollY 
+		if ImGui.BeginTable("Table1", questgraph.column,flags,1100,250) then
+			
+			
+			
+			for y=1,questgraph.row do
+				
+				for x=1,questgraph.column+1 do
+					
+					for index,v in ipairs(questgraph.objectives) do
+						
+					
+						
+						if(v.row == y and v.column+1 == x) then
+							if(index == 1) then
+						
+							ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
+							if ImGui.BeginChild("graphquestStart", 150, 30, true) then
+								
+								
+								ImGui.PushStyleColor(ImGuiCol.Text,  0, 1, 0.054901960784314, 1)
+								ImGui.Text("Start OF THE QUEST")
+								ImGui.PopStyleColor()
+							
+								
+								
+							end
+							ImGui.EndChild()
+							ImGui.PopStyleColor()
+							
+							ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+							ImGui.SameLine()
+							ImGui.Text("-")
+							ImGui.SameLine()
+							ImGui.Text("-")
+							ImGui.SameLine()
+							ImGui.Text(">")
+							ImGui.SameLine()
+							ImGui.PopStyleColor()
+							
+							end
+							 nextObj(v,1,index)
+							 if(index == #questgraph.objectives ) then
+						
+						ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+						ImGui.SameLine()
+						ImGui.Text("-")
+						ImGui.SameLine()
+						ImGui.Text("-")
+						ImGui.SameLine()
+						ImGui.Text(">")
+						ImGui.SameLine()
+						ImGui.PopStyleColor()
+						
+						ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
+						if ImGui.BeginChild("graphquestEnd", 150, 30, true) then
+						
+						ImGui.PushStyleColor(ImGuiCol.Text, 0.71372549019608,0.0,0.0, 1)
+						ImGui.Text("END OF THE QUEST")
+						ImGui.PopStyleColor()
+						
+							
+						end	
+						
+						ImGui.EndChild()
+						ImGui.PopStyleColor()
+						
+						
+						end
+							
+						end
+						
+						
+						
+						
+					
+					end
+					ImGui.TableNextColumn()      
+				
+				end
+				
+				ImGui.TableNextRow()  
+			
+			end
+			
+			
+			end
+		ImGui.EndTable()
+		--nextObj(questgraph.objectives[1],1)
+		
+		
+		
+		
+		
+		
+		end
+	ImGui.EndChild()
+	ImGui.PopStyleColor()
+	ImGui.Separator()
+	
+			
+	end
+	
+	ImGui.End()
+	
+	end
+	
+end
+
+
+function ChoiceGraph()
+	
+	if(choicegraph.tag ~= nil) then
+		
+		
+	
+	ImGui.SetNextWindowPos(300, 150, ImGuiCond.Appearing) -- set window position x, y
+	ImGui.SetNextWindowSize(1200, 800, ImGuiCond.Appearing) -- set window size w, h
+	
+
+	
+	
+	
+	if ImGui.Begin(getLang("Choice Graph")) then
+	
+		if ImGui.Button(getLang("Close")) then
+			
+			openChoiceGraph = false
+			choicegraph = {}
+			
+		end
+		
+		ImGui.SameLine()
+		if ImGui.Button(getLang("Refresh")) then
+			
+			makeGraphdata()
+			
+		end
+		ImGui.SameLine()
+		if ImGui.Button(getLang("Export")) then
+			
+				
+				local file = assert(io.open("choicegraphdata.json", "w"))
+				local stringg = JSON:encode_pretty(choicegraph)
+				--debug--debugPrint(2,stringg)
+				file:write(stringg)
+				file:close()
+			
+		end
+	
+	
+	ImGui.Text("Name : "..choicegraph.title)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Tag : "..choicegraph.tag)
+	
+	ImGui.Spacing()
+	ImGui.Text("Description : "..choicegraph.content)
+	ImGui.Spacing()
+	
+	ImGui.Text("Type : "..choicegraph.questtype)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Recommanded Level : "..questgraph.recommandedlevel)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("Recurent : "..questgraph.recurrent)
+	ImGui.SameLine()
+	ImGui.Text(" | ")
+	ImGui.SameLine()
+	ImGui.Text("District : "..questgraph.district)
+	
+	ImGui.Spacing()
+	
+	ImGui.Text("This quest is available when : ")
+	
+	ImGui.Text(questgraph.requirement)
+	
+	ImGui.Separator()
+	
+	ImGui.Text("Objectives Graph")
+	ImGui.Separator()
+	ImGui.SetWindowFontScale(1.1)
+	ImGui.Text("Legend : ")
+	ImGui.SameLine()
+	ImGui.PushStyleColor(ImGuiCol.Text,  0.1921568627451,0.77254901960784,0.31372549019608, 1)
+	ImGui.Text("Optionnal")
+	ImGui.PopStyleColor()
+	ImGui.SameLine()
+	ImGui.PushStyleColor(ImGuiCol.Text, 0.1921568627451,0.65882352941176,0.77254901960784, 1)
+	ImGui.Text("Required")
+	ImGui.PopStyleColor()
+	ImGui.SetWindowFontScale(1)
+	if ImGui.Button("Add objectives", 300, 0) then
+		currentSelectObjective = {}
+			currentSelectObjective.parent = "objectives"
+			currentSelectObjective.tagprefix = obj.tag.."_"
+			
+			
+			currentSelectObjective.title = ""
+			currentSelectObjective.tag = ""
+			currentSelectObjective.state = EgameJournalEntryState.Active
+			currentSelectObjective.isoptionnal = false
+			
+			
+			currentSelectObjective["trigger"] = {}
+			currentSelectObjective["requirement"] = {}
+			currentSelectObjective["action"] = {}
+			currentSelectObjective["failaction"] = {}
+			currentSelectObjective["resume_action"] = {}
+			currentSelectObjective["unlock"] = {}
+			
+			
+			
+			openNewObjective = true
+		end
+	ImGui.Separator()
+	
+	
+	
+	
+	ImGui.PushStyleColor(ImGuiCol.ChildBg,  0.81960784313725,	0.81960784313725,	0.81960784313725, 0.2)
+	if ImGui.BeginChild("graphquest", 1150, 300, true) then
+	
+		
+		
+		local flags = ImGuiTableFlags.ScrollX + ImGuiTableFlags.ScrollY 
+		if ImGui.BeginTable("Table1", questgraph.column,flags,1100,250) then
+			
+			
+			
+			for y=1,questgraph.row do
+				
+				for x=1,questgraph.column+1 do
+					
+					for index,v in ipairs(questgraph.objectives) do
+						
+					
+						
+						if(v.row == y and v.column+1 == x) then
+							if(index == 1) then
+						
+							ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
+							if ImGui.BeginChild("graphquestStart", 150, 30, true) then
+								
+								
+								ImGui.PushStyleColor(ImGuiCol.Text,  0, 1, 0.054901960784314, 1)
+								ImGui.Text("Start OF THE QUEST")
+								ImGui.PopStyleColor()
+							
+								
+								
+							end
+							ImGui.EndChild()
+							ImGui.PopStyleColor()
+							
+							ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+							ImGui.SameLine()
+							ImGui.Text("-")
+							ImGui.SameLine()
+							ImGui.Text("-")
+							ImGui.SameLine()
+							ImGui.Text(">")
+							ImGui.SameLine()
+							ImGui.PopStyleColor()
+							
+							end
+							 nextObj(v,1,index)
+							 if(index == #questgraph.objectives ) then
+						
+						ImGui.PushStyleColor(ImGuiCol.Text,  1, 1, 1, 1)
+						ImGui.SameLine()
+						ImGui.Text("-")
+						ImGui.SameLine()
+						ImGui.Text("-")
+						ImGui.SameLine()
+						ImGui.Text(">")
+						ImGui.SameLine()
+						ImGui.PopStyleColor()
+						
+						ImGui.PushStyleColor(ImGuiCol.ChildBg,  0,	0,	0, 1)
+						if ImGui.BeginChild("graphquestEnd", 150, 30, true) then
+						
+						ImGui.PushStyleColor(ImGuiCol.Text, 0.71372549019608,0.0,0.0, 1)
+						ImGui.Text("END OF THE QUEST")
+						ImGui.PopStyleColor()
+						
+							
+						end	
+						
+						ImGui.EndChild()
+						ImGui.PopStyleColor()
+						
+						
+						end
+							
+						end
+						
+						
+						
+						
+					
+					end
+					ImGui.TableNextColumn()      
+				
+				end
+				
+				ImGui.TableNextRow()  
+			
+			end
+			
+			
+			end
+		ImGui.EndTable()
+		--nextObj(questgraph.objectives[1],1)
+		
+		
+		
+		
+		
+		
+		end
+	ImGui.EndChild()
+	ImGui.PopStyleColor()
+	ImGui.Separator()
+	
+			
+	end
+	
+	ImGui.End()
+	
+	end
+	
+end
+
+
+function nextObj(objective,layer,index)
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		if objective.isoptionnal == true then
+			ImGui.PushStyleColor(ImGuiCol.ChildBg,  0.1921568627451,0.77254901960784,0.31372549019608, 0.5)
+			else
+			ImGui.PushStyleColor(ImGuiCol.ChildBg, 0.1921568627451,0.65882352941176,0.77254901960784, 0.5)
+		end
+		
+		
+		if ImGui.BeginChild(objective.title, 190, 50, true) then
+			if ImGui.BeginChild(objective.title.."child", 190, 30, false) then
+				ImGui.Text(objective.title)
+				ImGui.SameLine()
+				
+				if ImGui.Button("+", 20, 0) then
+					currentSelectObjective = {}
+					currentSelectObjective = activeEditedQuest.objectives[index]
+					currentSelectObjective.index = index
+					currentSelectObjective.parent = "objectives"
+					currentSelectObjective.tagprefix = objective.tag.."_"
+					
+					
+					
+					
+					
+					openEditObjective = true
+				end
+				
+				
+				
+				
+				
+			end
+			ImGui.EndChild()
+			local tab1hov = ImGui.IsItemHovered()
+			if tab1hov then
+				
+				ImGui.BeginTooltip()
+			
+				ImGui.SameLine(20)
+				ImGui.BeginGroup()
+				ImGui.BeginChild("ToolTipMain", 400, 800, true,ImGuiWindowFlags.AlwaysAutoResize )
+				
+				ImGui.Text("Tag : "..objective.tag)
+				ImGui.Text("State : "..objective.statedisplay)
+				ImGui.Text("is Optionnal : "..tostring(objective.isoptionnal))
+				ImGui.Text("This objective is finished when : ")
+				ImGui.Text(splitByChunk(objective.requirementtext, 40))
+				ImGui.Spacing()
+				ImGui.Text("Actions : ")
+				ImGui.Text(objective.actionsdisplay)
+				
+				
+				ImGui.EndChild()
+				ImGui.EndGroup()
+				ImGui.EndTooltip()
+			end
+		end
+		ImGui.EndChild()
+		
+		ImGui.PopStyleColor()
+		
+		
+	
+end
+
 
 
 function DialogTabs()
@@ -871,7 +1613,7 @@ function DialogTabs()
 				
 				local arraydialogTemp = {}
 				table.insert(arraydialogTemp,activeEditedDialog)
-				local file = assert(io.open("json/report/"..activeEditedDialog.Tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedDialog.Tag..".json", "w"))
 				local stringg = JSON:encode_pretty(arraydialogTemp)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -1108,7 +1850,7 @@ function PhoneDialogTabs()
 					
 					local arraydialogTemp = {}
 					table.insert(arraydialogTemp,activeEditedPhoneDialog)
-					local file = assert(io.open("json/report/"..activeEditedPhoneDialog.tag..".json", "w"))
+					local file = assert(io.open("user/editor_output/"..activeEditedPhoneDialog.tag..".json", "w"))
 					local stringg = JSON:encode_pretty(arraydialogTemp)
 					--debug--debugPrint(2,stringg)
 					file:write(stringg)
@@ -1148,9 +1890,6 @@ function PhoneDialogTabs()
 	
 	
 end
-
-
-
 
 
 function InteractTabs()
@@ -1328,7 +2067,7 @@ function InteractTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedInteract.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedInteract.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedInteract.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedInteract)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -1508,7 +2247,7 @@ function EventTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedEvent.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedEvent.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedEvent.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedEvent)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -1808,7 +2547,7 @@ function FixerTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedFixer.Tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedFixer.Tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedFixer.Tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedFixer)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -2010,7 +2749,7 @@ function FactionTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedFaction.Tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedFaction.Tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedFaction.Tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedFaction)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -2174,7 +2913,7 @@ function RadioTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedRadio.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedRadio.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedRadio.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedRadio)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -2286,52 +3025,181 @@ end
 function ItemTabs()
 	if ImGui.BeginTabItem(getLang("editor_Housing")) then
 		
+		if ImGui.BeginTabBar("UITabsTabsBar", ImGuiTabBarFlags.NoTooltip) then
+		
 		if(currentHouse ~=nil) then
+			 Housing_CurrentTabs()
+		end
+		
+		HousingTabs()
+	
+		Housing_TemplateTabs()
 			
+		
+		
 			
+		end
+		ImGui.EndTabBar()
+		
+	end
+		
+		ImGui.EndTabItem()
+		
+		
+	
+end
+
+
+function Housing_CurrentTabs()
+	if ImGui.BeginTabItem(getLang("Current House : "..currentHouse.name)) then
 			
-			ItemNode()
-			
-			
-			
-			if ImGui.Button(getLang("editor_Housing_Export")) then 
+				ItemNode(currentItemSpawned)
 				
+				ImGui.Spacing()
 				
-				if(#currentItemSpawned > 0) then
-					local toexport = {}
+				if ImGui.Button(getLang("editor_Housing_Export_Current")) then 
 					
 					
-					
-					for i=1,#currentItemSpawned do
+					if(#currentItemSpawned > 0) then
+						local toexport = {}
 						
-						local obj = {}
-						obj.Id = currentItemSpawned[i].Id
-						obj.Tag = currentItemSpawned[i].Tag
-						obj.HouseTag = currentItemSpawned[i].HouseTag
-						obj.ItemPath = currentItemSpawned[i].ItemPath
-						obj.X = currentItemSpawned[i].X
-						obj.Y = currentItemSpawned[i].Y
-						obj.Z = currentItemSpawned[i].Z
-						obj.Yaw = currentItemSpawned[i].Yaw
-						obj.Pitch = currentItemSpawned[i].Pitch
-						obj.Roll = currentItemSpawned[i].Roll
-						obj.scale = currentItemSpawned[i].scale
-						obj.defaultScale = currentItemSpawned[i].defaultScale
-						table.insert(toexport,obj)
 						
+						
+						for i=1,#currentItemSpawned do
+							
+							
+							table.insert(toexport,currentItemSpawned)
+							
+						end
+						
+						
+						local file = assert(io.open("user/editor_output/"..activeEditedPlace.tag.."_housing.json", "w"))
+						local stringg = JSON:encode_pretty(toexport)
+						--debug--debugPrint(2,stringg)
+						file:write(stringg)
+						file:close()
 					end
 					
-					
-					local file = assert(io.open("json/report/"..activeEditedPlace.tag.."_housing.json", "w"))
-					local stringg = JSON:encode_pretty(toexport)
-					--debug--debugPrint(2,stringg)
-					file:write(stringg)
-					file:close()
 				end
 				
+				if ImGui.Button(getLang("Clear")) then 
+					
+					
+					despawnItemFromHouse()
+					
+				end
+				
+				
+				if ImGui.Button(getLang("Clear All From Housing")) then 
+					
+					
+					currentHouseClearAllHousing()
+					
+				end
+				
+				
+				if ImGui.Button(getLang("Clear All From Template")) then 
+					
+					
+					currentHouseClearAllTemplate()
+					
+				end
+				
+				
+					ImGui.EndTabItem()
 			end
+		
+	
+	
+end
+
+
+function HousingTabs()
+	
+	
+	
+	
+	if ImGui.BeginTabItem(getLang("Housing script")) then
+	
+	if(activeEditedHousing.tag == nil) then
+			activeEditedHousing.tag = ""
+			activeEditedHousing.target = ""
+			activeEditedHousing["trigger"] = {}
+			activeEditedHousing["requirement"] = {}
+			activeEditedHousing["items"] = {}
+			
+			
+		end
+		
+			if ImGui.BeginCombo(getLang("editor_load_script"), loadHousingtag) then -- Remove the ## if you'd like for the title to display above combo box
+			
+			
+			
+			for k,v in pairs(arrayHousing) do
+				
+				if ImGui.Selectable(k, false) then
+					
+					
+					loadHousing = v.housing
+					loadHousingtag = k
+					
+					ImGui.SetItemDefaultFocus()
+				end
+				
+				
+			end
+			ImGui.EndCombo()
+		end
+		
+		
+		
+		
+		if(ImGui.Button(getLang("editor_load"))) then
+			
+			activeEditedHousing =loadHousing
+			
+			if(activeEditedHousing == nil) then
+				activeEditedHousing.tag = ""
+				activeEditedHousing.target = ""
+				activeEditedHousing["trigger"] = {}
+				activeEditedHousing["requirement"] = {}
+				activeEditedHousing["items"] = {}
+				
+				
+			end
+			
+		end
+		if(loadHousing.tag ~= nil) then
 			ImGui.SameLine()
-			if ImGui.Button(getLang("editor_Housing_Save")) then 
+			if(ImGui.Button(getLang("editor_unload"))) then
+				loadHousing = {}
+				loadHousingtag = ""
+				activeEditedHousing = {}
+				if(activeEditedHousing == nil) then
+					activeEditedHousing.tag = ""
+					activeEditedHousing.target = ""
+					activeEditedHousing["trigger"] = {}
+					activeEditedHousing["requirement"] = {}
+					activeEditedHousing["items"] = {}
+					
+					
+				end
+			end
+			
+		end
+		
+		ImGui.Spacing()
+		ImGui.Spacing()
+		ImGui.Spacing()
+		
+		activeEditedHousing.tag = ImGui.InputText(getLang("editor_tag"), activeEditedHousing.tag, 100, ImGuiInputTextFlags.AutoSelectAll)
+		
+		
+		activeEditedHousing.target = ImGui.InputText(getLang("Targeted Place Tag :"), activeEditedHousing.target, 100, ImGuiInputTextFlags.AutoSelectAll)
+		
+		ItemNode(activeEditedHousing.items)
+			
+			if ImGui.Button(getLang("Save from current House spawned item")) then 
 				
 				
 				if(#currentItemSpawned > 0) then
@@ -2341,26 +3209,13 @@ function ItemTabs()
 					
 					for i=1,#currentItemSpawned do
 						
-						local obj = {}
-						obj.Id = currentItemSpawned[i].Id
-						obj.Tag = currentItemSpawned[i].Tag
-						obj.HouseTag = currentItemSpawned[i].HouseTag
-						obj.ItemPath = currentItemSpawned[i].ItemPath
-						obj.X = currentItemSpawned[i].X
-						obj.Y = currentItemSpawned[i].Y
-						obj.Z = currentItemSpawned[i].Z
-						obj.Yaw = currentItemSpawned[i].Yaw
-						obj.Pitch = currentItemSpawned[i].Pitch
-						obj.Roll = currentItemSpawned[i].Roll
-						obj.Title = currentItemSpawned[i].Title
-						obj.scale = currentItemSpawned[i].scale
-						obj.defaultScale = currentItemSpawned[i].defaultScale
+						local obj = deepcopy(currentItemSpawned[i],obj)
 						table.insert(toexport,obj)
 						
 					end
 					
-					housing.tag = activeEditedPlace.tag
-					housing.items = toexport
+					
+					activeEditedHousing["items"] = toexport
 					
 					
 					if(#myDatapackHousing > 0) then
@@ -2368,7 +3223,7 @@ function ItemTabs()
 						local exist = false
 						
 						for i=1,#myDatapackHousing do
-							if(myDatapackHousing[i].tag == activeEditedPlace.tag) then
+							if(myDatapackHousing[i].tag == activeEditedHousing.tag) then
 								
 								myDatapackHousing[i].items =toexport
 								exist = true
@@ -2378,40 +3233,95 @@ function ItemTabs()
 						
 						
 						if(exist == false)then
-							table.insert(myDatapackHousing, housing)
+							table.insert(myDatapackHousing, activeEditedHousing)
 							
 						end
 						
 						else
-						table.insert(myDatapackHousing, housing)
+						table.insert(myDatapackHousing, activeEditedHousing)
 					end
 				end
 				
 			end
-			ImGui.Spacing()
-			if ImGui.Button(getLang("editor_Housing_Buy"), 300, 0) then
+			
+			
+			if ImGui.Button(getLang("Show/hide "..activeEditedHousing.tag.." to place "..activeEditedHousing.target), 300, 0) then
+			
+				if(togglehousing == false) then
+				spawnItemFromHousingTag(activeEditedHousing.target, activeEditedHousing.tag)
+				togglehousing = true
 				
-				setScore(currentHouse.tag,"Statut",1)
+				else
+				
+				currentHouseClearHousing(activeEditedHousing.tag)
+				togglehousing = false
+				end
+			
 			end
-			ImGui.SameLine()
-			if ImGui.Button(getLang("editor_Housing_Sell"), 300, 0) then
+			
+			ImGui.Text("Show ? : "..tostring(togglehousing))
+			
+			
+			
+			
+			
+			if ImGui.Button(getLang("Export loaded housing"), 300, 0) then
 				
-				setScore(currentHouse.tag,"Statut",0)
+				local file = assert(io.open("user/editor_output/"..activeEditedHousing.tag..".json", "w"))
+					local stringg = dump(activeEditedHousing)
+					file:write(stringg)
+					file:close()
 			end	
 			
-			ImGui.SameLine()
-			if ImGui.Button(getLang("editor_Housing_OpenBusiness"), 300, 0) then
-				
-				setScore(currentHouse.tag,"Statut",2)
-			end	
-			
-			ImGui.Spacing()
 			
 			
-			ImGui.Separator()
 			
-			ImGui.Text("Template")
+		
 			
+		ImGui.EndTabItem()
+		end
+		
+	
+end
+
+
+function Housing_TemplateTabs()
+	
+	
+		if ImGui.BeginTabItem(getLang("Template")) then
+			
+			if ImGui.BeginCombo(getLang("editor_Housing_load_template"), currentHousingTemplatetag) then -- Remove the ## if you'd like for the title to display above combo box
+					
+					
+					
+					for k,v in pairs(arrayHousingTemplate) do
+						
+						if ImGui.Selectable(k, false) then
+							
+							
+							currentHousingTemplate = v.template
+							currentHousingTemplatetag=k
+							newHousingTemplateTag = k
+							if(v.template.name == nil) then v.template.name = "" end
+							newHousingTemplateName = tostring(v.template.name)
+							if(v.template.price == nil) then v.template.price = 0 end
+							newHousingTemplatePrice =  tonumber(v.template.price)
+							if(v.template.desc == nil) then v.template.desc = "" end
+							newHousingTemplateDescription =  tostring(v.template.desc)
+							if(v.template.target == nil) then v.template.target = "" end
+							newHousingTemplateTarget =  tostring(v.template.target)
+							ImGui.SetItemDefaultFocus()
+						end
+						
+						
+						
+						
+					end
+					
+					
+					ImGui.EndCombo()
+				end
+		
 			if ImGui.Button(getLang("editor_Housing_template_set_center_player_pos")) then 
 				
 				currentHouseCenter = {}
@@ -2433,101 +3343,7 @@ function ItemTabs()
 				if(newHousingTemplateTag ~= "") then
 					if ImGui.Button(getLang("editor_Housing_template_test")) then 
 						
-						if(#currentItemSpawned > 0) then
-							local toexport = {}
-							toexport.items = {}
-							
-							
-							for i=1,#currentItemSpawned do
-								
-								local obj = {}
-								obj.Id = currentItemSpawned[i].Id
-								obj.Tag = currentItemSpawned[i].Tag
-								obj.HouseTag = currentItemSpawned[i].HouseTag
-								obj.ItemPath = currentItemSpawned[i].ItemPath
-								obj.X = currentItemSpawned[i].X - currentHouseCenter.x
-								obj.Y = currentItemSpawned[i].Y - currentHouseCenter.y
-								obj.Z = currentItemSpawned[i].Z - currentHouseCenter.z
-								obj.Yaw = currentItemSpawned[i].Yaw
-								obj.Pitch = currentItemSpawned[i].Pitch
-								obj.Roll = currentItemSpawned[i].Roll
-								obj.Title = currentItemSpawned[i].Title
-								obj.scale = currentItemSpawned[i].scale
-								obj.defaultScale = currentItemSpawned[i].defaultScale
-								table.insert(toexport.items,obj)
-								deleteHousing(currentItemSpawned[i].Id)
-							end
-							
-							toexport.center = currentHouseCenter
-							toexport.tag = newHousingTemplateTag
-							toexport.name = newHousingTemplateName
-							toexport.price = newHousingTemplatePrice
-							toexport.desc = newHousingTemplateDescription
-							toexport.target = newHousingTemplateTarget
-							
-							despawnItemFromHouse()
-							
-							if(#toexport.items > 0) then
-								
-								
-								
-								
-								for i,v in ipairs(toexport.items) do
-									
-									local obj = {}
-									obj.Id = v.Id
-									obj.Tag = v.Tag
-									obj.HouseTag = currentHouse.tag
-									obj.ItemPath = v.ItemPath
-									obj.X = currentHouseCenter.x +v.X
-									obj.Y = currentHouseCenter.y + v.Y
-									obj.Z = currentHouseCenter.z + v.Z
-									obj.Yaw = v.Yaw
-									obj.Pitch = v.Pitch
-									obj.Roll = v.Roll
-									obj.Title = v.Title
-									obj.fromTemplate = true
-									obj.scale = v.scale
-									obj.defaultScale = v.defaultScale
-									
-									saveHousing(obj)
-									
-									local housing = getHousing(obj.Tag,obj.X,obj.Y,obj.Z)
-									obj.Id = housing.Id
-									
-									local poss = Vector4.new( obj.X, obj.Y,  obj.Z,1)
-									
-									
-									local angless = EulerAngles.new(obj.Roll, obj.Pitch,  obj.Yaw)
-									
-									
-									obj.entityId = spawnItem(obj, poss, angless)
-									local entity = Game.FindEntityByID(obj.entityId)
-									local components = checkForValidComponents(entity)
-									if components then
-										local visualScale = checkDefaultScale(components)
-										obj.defaultScale = {
-											x = visualScale.x * 100,
-											y = visualScale.x * 100,
-											z = visualScale.x * 100,
-										}
-										if obj.scale and obj.scale ~= "nil" then
-											setItemScale(entity,obj, obj.scale)
-											else
-											obj.scale = {
-												x = components[1].visualScale.x * 100,
-												y = components[1].visualScale.y * 100,
-												z = components[1].visualScale.z * 100,
-											}
-										end
-									end
-									
-									table.insert(currentItemSpawned,obj)
-									
-								end
-								
-								
-							end
+						
 							
 							
 							arrayHousingTemplate[newHousingTemplateTag] = {}
@@ -2537,7 +3353,7 @@ function ItemTabs()
 							
 						end
 						
-					end
+					ImGui.SameLine()
 					
 					
 					if ImGui.Button(getLang("editor_Housing_template_export")) then 
@@ -2550,20 +3366,8 @@ function ItemTabs()
 							
 							for i=1,#currentItemSpawned do
 								
-								local obj = {}
-								obj.Id = currentItemSpawned[i].Id
-								obj.Tag = currentItemSpawned[i].Tag
-								obj.HouseTag = currentItemSpawned[i].HouseTag
-								obj.ItemPath = currentItemSpawned[i].ItemPath
-								obj.X = currentItemSpawned[i].X - currentHouseCenter.x
-								obj.Y = currentItemSpawned[i].Y - currentHouseCenter.y
-								obj.Z = currentItemSpawned[i].Z - currentHouseCenter.z
-								obj.Yaw = currentItemSpawned[i].Yaw
-								obj.Pitch = currentItemSpawned[i].Pitch
-								obj.Roll = currentItemSpawned[i].Roll
-								obj.Title = currentItemSpawned[i].Title
-								obj.scale = currentItemSpawned[i].scale
-								obj.defaultScale = currentItemSpawned[i].defaultScale
+								local obj =  deepcopy(currentItemSpawned[i], obj)
+								obj.fromTemplate = true
 								table.insert(toexport.items,obj)
 								
 							end
@@ -2575,7 +3379,7 @@ function ItemTabs()
 							toexport.desc = newHousingTemplateDescription
 							toexport.target = newHousingTemplateTarget
 							
-							local file = assert(io.open("json/report/"..activeEditedPlace.tag.."_housing_template.json", "w"))
+							local file = assert(io.open("user/editor_output/"..activeEditedPlace.tag.."_housing_template.json", "w"))
 							local stringg = JSON:encode_pretty(toexport)
 							--debug--debugPrint(2,stringg)
 							file:write(stringg)
@@ -2584,7 +3388,7 @@ function ItemTabs()
 						
 					end
 					
-					
+					ImGui.SameLine()
 					if ImGui.Button(getLang("editor_Housing_template_save")) then 
 						
 						
@@ -2595,20 +3399,8 @@ function ItemTabs()
 							
 							for i=1,#currentItemSpawned do
 								
-								local obj = {}
-								obj.Id = currentItemSpawned[i].Id
-								obj.Tag = currentItemSpawned[i].Tag
-								obj.HouseTag = currentItemSpawned[i].HouseTag
-								obj.ItemPath = currentItemSpawned[i].ItemPath
-								obj.X = currentItemSpawned[i].X - currentHouseCenter.x
-								obj.Y = currentItemSpawned[i].Y - currentHouseCenter.y
-								obj.Z = currentItemSpawned[i].Z - currentHouseCenter.z
-								obj.Yaw = currentItemSpawned[i].Yaw
-								obj.Pitch = currentItemSpawned[i].Pitch
-								obj.Roll = currentItemSpawned[i].Roll
-								obj.Title = currentItemSpawned[i].Title
-								obj.scale = currentItemSpawned[i].scale
-								obj.defaultScale = currentItemSpawned[i].defaultScale
+								local obj =  deepcopy(currentItemSpawned[i], obj)
+								obj.fromTemplate = true
 								table.insert(toexport.items,obj)
 								
 							end
@@ -2649,39 +3441,13 @@ function ItemTabs()
 					
 				end
 				
-				if ImGui.BeginCombo(getLang("editor_Housing_load_template"), currentHousingTemplatetag) then -- Remove the ## if you'd like for the title to display above combo box
-					
-					
-					
-					for k,v in pairs(arrayHousingTemplate) do
-						
-						if ImGui.Selectable(k, false) then
-							
-							
-							currentHousingTemplate = v.template
-							currentHousingTemplatetag=k
-							newHousingTemplateTag = k
-							if(v.template.name == nil) then v.template.name = "" end
-							newHousingTemplateName = tostring(v.template.name)
-							if(v.template.price == nil) then v.template.price = 0 end
-							newHousingTemplatePrice =  tonumber(v.template.price)
-							if(v.template.desc == nil) then v.template.desc = "" end
-							newHousingTemplateDescription =  tostring(v.template.desc)
-							if(v.template.target == nil) then v.template.target = "" end
-							newHousingTemplateTarget =  tostring(v.template.target)
-							ImGui.SetItemDefaultFocus()
-						end
-						
-						
-						
-						
-					end
-					
-					
-					ImGui.EndCombo()
-				end
+				
 				
 				if(currentHousingTemplate ~= nil) then
+				
+				
+					ItemNode(currentHousingTemplate.items)
+					ImGui.Spacing()
 					if ImGui.Button(getLang("editor_Housing_apply_template")) then 
 						
 						
@@ -2692,19 +3458,12 @@ function ItemTabs()
 							
 							for i,v in ipairs(currentHousingTemplate.items) do
 								
-								local obj = {}
-								obj.Id = v.Id
-								obj.Tag = v.Tag
+								local obj =  deepcopy(v, obj)
+								obj.fromTemplate = true
 								obj.HouseTag = currentHouse.tag
-								obj.ItemPath = v.ItemPath
 								obj.X = currentHouseCenter.x +v.X
 								obj.Y = currentHouseCenter.y + v.Y
 								obj.Z = currentHouseCenter.z + v.Z
-								obj.Yaw = v.Yaw
-								obj.Pitch = v.Pitch
-								obj.Roll = v.Roll
-								obj.Title = v.Title
-								obj.fromTemplate = true
 								obj.template = currentHousingTemplate.tag
 								
 								saveHousing(obj)
@@ -2753,10 +3512,11 @@ function ItemTabs()
 						end
 						
 					end
-					
+					ImGui.SameLine()
 					if ImGui.Button(getLang("editor_Housing_edit_template")) then 
 						openEditHousingTemplate = true
 					end
+					ImGui.SameLine()
 					if ImGui.Button(getLang("editor_Housing_clear_template")) then 
 						
 						currentHousingTemplate = nil
@@ -2778,8 +3538,18 @@ function ItemTabs()
 						
 						
 					end
-					
-					
+					ImGui.SameLine()
+					if ImGui.Button(getLang("editor_open_json_editor")) and  currentHousingTemplate.tag ~= "" then
+			
+							editor_json_tag =  currentHousingTemplate.tag
+							editor_json = JSON:encode_pretty(currentHousingTemplate)
+							editor_json_obj = currentHousingTemplate
+							editor_json_obj_name = "currentHousingTemplate"
+							editor_json_view = true
+							
+							
+					end
+								
 				end
 				
 			end
@@ -2799,108 +3569,16 @@ function ItemTabs()
 				end
 			end	
 			
-			ImGui.Spacing()
-			ImGui.Separator()
-			
-			if(ActualPlayerMultiData ~= nil and #ActualPlayerMultiData.currentPlaces > 0 and ActualPlayerMultiData.instance.CanBuild == true) then
-				
-				ImGui.Text("Multiplayer Place : ".. ActualPlayerMultiData.currentPlaces[1].name)
-				
-				if(currentHouseCenter ~= nil) then
-					
-					
-					if(currentHousingTemplate ~= nil) then
-						if ImGui.Button(getLang("editor_Housing_apply_template_multi")) then 
-							
-							
-							if(#currentHousingTemplate.items > 0) then
-								
-								local itemlist = {}
-								
-								
-								for i,v in ipairs(currentHousingTemplate.items) do
-									
-									local obj = {}
-									obj.Id = 0
-									obj.HouseId = 0
-									obj.Tag = v.Tag
-									obj.HouseTag = ActualPlayerMultiData.currentPlaces[1].tag
-									obj.ItemPath = v.ItemPath
-									obj.X = currentHouseCenter.x +v.X
-									obj.Y = currentHouseCenter.y + v.Y
-									obj.Z = currentHouseCenter.z + v.Z
-									obj.Yaw = v.Yaw
-									obj.Pitch = v.Pitch
-									obj.Roll = v.Roll
-									obj.Title = v.Title
-									
-									table.insert(itemlist,obj)
-									
-									
-									
-								end
-								
-								
-								SetItemList(itemlist)
-								
-							end
-							
-						end
-						
-						if ImGui.Button(getLang("editor_Housing_clear_all_multi"), 300, 0) then
-							DeleteAllItem(ActualPlayerMultiData.currentPlaces[1].tag)
-						end	
-						
-						
-					end
-					
-				end
-				
-				
-				ImGui.Spacing()
-				ImGui.Separator()
-				
-				
-			end
-			if ImGui.Button(getLang("editor_open_json_editor")) and #currentItemSpawned > 0 then
-				local toexport = {}
-				
-				
-				
-				for i=1,#currentItemSpawned do
-					
-					local obj = {}
-					obj.Id = currentItemSpawned[i].Id
-					obj.Tag = currentItemSpawned[i].Tag
-					obj.HouseTag = currentItemSpawned[i].HouseTag
-					obj.ItemPath = currentItemSpawned[i].ItemPath
-					obj.X = currentItemSpawned[i].X
-					obj.Y = currentItemSpawned[i].Y
-					obj.Z = currentItemSpawned[i].Z
-					obj.Yaw = currentItemSpawned[i].Yaw
-					obj.Pitch = currentItemSpawned[i].Pitch
-					obj.Roll = currentItemSpawned[i].Roll
-					obj.Title = currentItemSpawned[i].Title
-					table.insert(toexport,obj)
-					
-				end
-				editor_json_tag = "housing_"..currentHouse.tag
-				editor_json = JSON:encode_pretty(toexport)
-				editor_json_obj = toexport
-				editor_json_obj_name = "toexport"
-				editor_json_view = true
-				
-				
-			end
-			
-		end	
-		
-		
 		ImGui.EndTabItem()
+		end
 		
 		
-	end
+		
+	
 end
+
+
+
 
 
 function InterfacesTabs()
@@ -3012,6 +3690,7 @@ function InterfacesTabs()
 		controlsNode(getLang("editor_Interfaces_Controls"),getLang("editor_Interfaces_Controls_msg"),activeEditedInterfaces,"controls")
 		
 		
+		
 		if(activeEditedInterfaces.tag ~= nil and activeEditedTheme.tag ~= "")then
 			
 			if ImGui.Button(getLang("editor_save_for_build")) then
@@ -3036,7 +3715,7 @@ function InterfacesTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedInterfaces.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedInterfaces.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedInterfaces.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedInterfaces)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -3165,7 +3844,7 @@ function HelpTabs()
 			if ImGui.Button(getLang("editor_export")) then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditHelp.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditHelp.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditHelp)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -3577,7 +4256,7 @@ function PlaceTabs()
 				if ImGui.Button(getLang("editor_export")) and activeEditedPlace.tag ~= "" then
 					
 					
-					local file = assert(io.open("json/report/"..activeEditedPlace.tag..".json", "w"))
+					local file = assert(io.open("user/editor_output/"..activeEditedPlace.tag..".json", "w"))
 					local stringg = JSON:encode_pretty(activeEditedPlace)
 					--debug--debugPrint(2,stringg)
 					file:write(stringg)
@@ -3735,7 +4414,7 @@ function FunctionTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedFunction.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedFunction.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedFunction.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedFunction)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -3961,7 +4640,7 @@ function NodeTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedNode.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedNode.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedNode.tag..".json", "w"))
 				local nodeTable = {}
 				
 				table.insert(nodeTable,activeEditedNode)
@@ -4116,7 +4795,7 @@ function CircuitTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedCircuit.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedCircuit.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedCircuit.tag..".json", "w"))
 				local nodeTable = {}
 				
 				table.insert(nodeTable,activeEditedCircuit)
@@ -4166,6 +4845,7 @@ function PathTabs()
 		activeEditedPath.isFor = 4
 		activeEditedPath.recordRotation = false
 		activeEditedPath.recordRelative = false
+		activeEditedPath.recordRotationOnly = false
 		activeEditedPath["locations"] = {}
 		
 		
@@ -4219,12 +4899,17 @@ function PathTabs()
 				activeEditedPath.isFor = 4
 				activeEditedPath.recordRotation = false
 				activeEditedPath.recordRelative = false
+				activeEditedPath.recordRotationOnly = false
 				activeEditedPath["locations"] = {}
 				
 				else
 				
 				if(activeEditedPath.recordRotation == nil) then
 					activeEditedPath.recordRotation = false
+					
+				end
+				if(activeEditedPath.recordRotationOnly == nil) then
+					activeEditedPath.recordRotationOnly = false
 					
 				end
 				if(activeEditedPath.recordRelative == nil) then
@@ -4250,6 +4935,7 @@ function PathTabs()
 					activeEditedPath.endNode = ""
 					activeEditedPath.isFor = 4
 					activeEditedPath.recordRotation = false
+					activeEditedPath.recordRotationOnly = false
 					activeEditedPath.recordRelative = false
 					
 					activeEditedPath["locations"] = {}
@@ -4258,6 +4944,9 @@ function PathTabs()
 					
 					if(activeEditedPath.recordRotation == nil) then
 						activeEditedPath.recordRotation = false
+					end
+					if(activeEditedPath.recordRotationOnly == nil) then
+						activeEditedPath.recordRotationOnly = false
 					end
 					
 				end
@@ -4277,6 +4966,7 @@ function PathTabs()
 		activeEditedPath.startNode = ImGui.InputText(getLang("editor_Path_StartNode"), activeEditedPath.startNode, 100, ImGuiInputTextFlags.AutoSelectAll)
 		activeEditedPath.endNode = ImGui.InputText(getLang("editor_Path_EndNode"), activeEditedPath.endNode, 100, ImGuiInputTextFlags.AutoSelectAll)
 		activeEditedPath.recordRotation = ImGui.Checkbox(getLang("editor_Path_recordRotation"), activeEditedPath.recordRotation)
+		activeEditedPath.recordRotationOnly = ImGui.Checkbox(getLang("editor_Path_recordRotation").." Only", activeEditedPath.recordRotationOnly)
 		activeEditedPath.recordRelative = ImGui.Checkbox(getLang("editor_Path_recordRelative"), activeEditedPath.recordRelative)
 		
 		if ImGui.BeginTabBar("EditorTabs", ImGuiTabBarFlags.NoTooltip) then
@@ -4312,8 +5002,13 @@ function PathTabs()
 						if ImGui.Button(getLang("editor_Path_RecordPath"))then
 							Game.t1()
 							recordRotation = activeEditedPath.recordRotation
+							recordRotationOnly = activeEditedPath.recordRotationOnly
 							recordRelative = activeEditedPath.recordRelative
+							if (recorderEntity == "player_camera")then
+							recordInitialPosition = Game.GetPlayer():GetFPPCameraComponent():GetLocalPosition() 
+							else
 							recordInitialPosition = Game.GetPlayer():GetWorldPosition()
+							end
 							tempLocation = {}
 							saveLocationEnabled = true
 							
@@ -4369,7 +5064,9 @@ function PathTabs()
 					if used then
 						local frame =activeEditedPath["locations"][sliderPathTarget]
 						
+						
 						local poss = Vector4.new( frame.x, frame.y,  frame.z,1)
+						
 						
 						local angless = EulerAngles.new(frame.roll, frame.pitch,  frame.yaw)
 						
@@ -4379,6 +5076,14 @@ function PathTabs()
 						end
 						local obj = getEntityFromManager(editorPathTarget)
 						local enti = Game.FindEntityByID(obj.id)
+						if(activeEditedPath.recordRelative == true) then
+						poss = enti:GetWorldPosition()
+						poss.x = poss.x + frame.x
+						poss.y = poss.y + frame.y
+						poss.z = poss.z + frame.z
+						
+						end
+						
 						if(enti ~= nil) then
 							teleportTo(enti, Vector4.new( poss.x, poss.y, poss.z,1), angless,isplayer)
 						end
@@ -4475,7 +5180,7 @@ function PathTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedPath.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedPath.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedPath.tag..".json", "w"))
 				local nodeTable = {}
 				
 				
@@ -4644,7 +5349,7 @@ function POITabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedPOI.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedPOI.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedPOI.tag..".json", "w"))
 				local nodeTable = {}
 				
 				
@@ -4939,7 +5644,7 @@ function CustomNPCTabs()
 			if ImGui.Button(getLang("editor_export")) and activeEditedCustomNPC.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedCustomNPC.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedCustomNPC.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedCustomNPC)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -5111,7 +5816,7 @@ function ShardTab()
 			if ImGui.Button(getLang("editor_export")) and activeEditedShard.tag ~= "" then
 				
 				
-				local file = assert(io.open("json/report/"..activeEditedShard.tag..".json", "w"))
+				local file = assert(io.open("user/editor_output/"..activeEditedShard.tag..".json", "w"))
 				local stringg = JSON:encode_pretty(activeEditedShard)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
@@ -5200,14 +5905,14 @@ function DatapackBuilder()
 				
 				
 				
-				local file = assert(io.open("json/mydatapack/desc.json", "w"))
+				local file = assert(io.open("user/mydatapack/desc.json", "w"))
 				local stringg = JSON:encode_pretty(myDatapack)
 				--debug--debugPrint(2,stringg)
 				file:write(stringg)
 				file:close()
 				
 				
-				local dirz = "json/mydatapack/circuit"
+				local dirz = "user/mydatapack/circuit"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5220,7 +5925,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/dialog"
+				dirz = "user/mydatapack/dialog"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5233,7 +5938,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/faction"
+				dirz = "user/mydatapack/faction"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5246,7 +5951,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/fixer"
+				dirz = "user/mydatapack/fixer"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5259,7 +5964,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/function"
+				dirz = "user/mydatapack/function"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5272,7 +5977,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/interact"
+				dirz = "user/mydatapack/interact"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5285,7 +5990,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/lang"
+				dirz = "user/mydatapack/lang"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5298,7 +6003,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/mission"
+				dirz = "user/mydatapack/mission"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5311,7 +6016,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/node"
+				dirz = "user/mydatapack/node"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5324,7 +6029,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/path"
+				dirz = "user/mydatapack/path"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5337,7 +6042,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/place"
+				dirz = "user/mydatapack/place"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5350,7 +6055,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/housing"
+				dirz = "user/mydatapack/housing"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5364,7 +6069,7 @@ function DatapackBuilder()
 				end
 				
 				
-				dirz = "json/mydatapack/poi"
+				dirz = "user/mydatapack/poi"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5377,7 +6082,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/radio"
+				dirz = "user/mydatapack/radio"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5390,7 +6095,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/help"
+				dirz = "user/mydatapack/help"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5403,7 +6108,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/interfaces"
+				dirz = "user/mydatapack/interfaces"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5416,7 +6121,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/npc"
+				dirz = "user/mydatapack/npc"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5429,7 +6134,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/shard"
+				dirz = "user/mydatapack/shard"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5442,7 +6147,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/phone_dialog"
+				dirz = "user/mydatapack/phone_dialog"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5455,7 +6160,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/poi"
+				dirz = "user/mydatapack/poi"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5468,7 +6173,7 @@ function DatapackBuilder()
 					end
 				end
 				
-				dirz = "json/mydatapack/scene"
+				dirz = "user/mydatapack/scene"
 				local reader = dir(dirz)
 				if(reader ~= nil) then
 					for i=1, #reader do 
@@ -5487,7 +6192,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackQuest do 
 						
-						local file = assert(io.open("json/mydatapack/mission/"..myDatapackQuest[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/mission/"..myDatapackQuest[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackQuest[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5501,7 +6206,7 @@ function DatapackBuilder()
 				if(#myDatapackDialog > 0)then
 					--	os.execute( "mkdir json\\report\\"..myDatapack.tag.."\\dialog" )
 					
-					local file = assert(io.open("json/mydatapack/dialog/"..myDatapack.tag..".json", "w"))
+					local file = assert(io.open("user/mydatapack/dialog/"..myDatapack.tag..".json", "w"))
 					local stringg = JSON:encode_pretty(myDatapackDialog)
 					--debug--debugPrint(2,stringg)
 					file:write(stringg)
@@ -5515,7 +6220,7 @@ function DatapackBuilder()
 				if(#myDatapackCircuit > 0)then
 					--	os.execute( "mkdir json\\report\\"..myDatapack.tag.."\\circuit" )
 					
-					local file = assert(io.open("json/mydatapack/circuit/"..myDatapack.tag..".json", "w"))
+					local file = assert(io.open("user/mydatapack/circuit/"..myDatapack.tag..".json", "w"))
 					local stringg = JSON:encode_pretty(myDatapackCircuit)
 					--debug--debugPrint(2,stringg)
 					file:write(stringg)
@@ -5531,7 +6236,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackEvent do 
 						
-						local file = assert(io.open("json/mydatapack/event/"..myDatapackEvent[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/event/"..myDatapackEvent[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackEvent[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5549,7 +6254,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackFaction do 
 						
-						local file = assert(io.open("json/mydatapack/faction/"..myDatapackFaction[i].Tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/faction/"..myDatapackFaction[i].Tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackFaction[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5566,7 +6271,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackLanguage do 
 						
-						local file = assert(io.open("json/mydatapack/lang/"..myDatapackLanguage[i].name..".json", "w"))
+						local file = assert(io.open("user/mydatapack/lang/"..myDatapackLanguage[i].name..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackLanguage[i]["data"])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5583,7 +6288,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackFaction do 
 						
-						local file = assert(io.open("json/mydatapack/fixer/"..myDatapackFixer[i].Tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/fixer/"..myDatapackFixer[i].Tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackFixer[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5601,7 +6306,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackFunction do 
 						
-						local file = io.open("json/mydatapack/function/"..myDatapackFunction[i].tag..".json", "w")
+						local file = io.open("user/mydatapack/function/"..myDatapackFunction[i].tag..".json", "w")
 						local stringg = JSON:encode_pretty(myDatapackFunction[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5619,7 +6324,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackInteract do 
 						
-						local file = assert(io.open("json/mydatapack/interact/"..myDatapackInteract[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/interact/"..myDatapackInteract[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackInteract[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5635,7 +6340,7 @@ function DatapackBuilder()
 					--os.execute( "mkdir json\\report\\"..myDatapack.tag.."\\node" )
 					
 					
-					local file = assert(io.open("json/mydatapack/node/"..myDatapack.tag..".json", "w"))
+					local file = assert(io.open("user/mydatapack/node/"..myDatapack.tag..".json", "w"))
 					local stringg = JSON:encode_pretty(myDatapackNode)
 					--debug--debugPrint(2,stringg)
 					file:write(stringg)
@@ -5656,7 +6361,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackPlace do 
 						
-						local file = assert(io.open("json/mydatapack/place/"..myDatapackPlace[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/place/"..myDatapackPlace[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackPlace[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5674,7 +6379,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackHousing do 
 						
-						local file = assert(io.open("json/mydatapack/housing/"..myDatapackHousing[i].name.."_housing.json", "w"))
+						local file = assert(io.open("user/mydatapack/housing/"..myDatapackHousing[i].name.."_housing.json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackHousing[i].items)
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5692,7 +6397,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackPath do 
 						
-						local file = assert(io.open("json/mydatapack/path/"..myDatapackPath[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/path/"..myDatapackPath[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackPath[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5710,7 +6415,7 @@ function DatapackBuilder()
 					--os.execute( "mkdir json\\report\\"..myDatapack.tag.."\\song" )
 					for i=1,#myDatapackRadio do 
 						
-						local file = assert(io.open("json/mydatapack/radio/"..myDatapackRadio[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/radio/"..myDatapackRadio[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackRadio[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5727,7 +6432,7 @@ function DatapackBuilder()
 					--os.execute( "mkdir json\\report\\"..myDatapack.tag.."\\song" )
 					for i=1,#myDatapackHelp do 
 						
-						local file = assert(io.open("json/mydatapack/help/"..myDatapackHelp[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/help/"..myDatapackHelp[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackHelp[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5745,7 +6450,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackInterfaces do 
 						
-						local file = assert(io.open("json/mydatapack/interfaces/"..myDatapackInterfaces[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/interfaces/"..myDatapackInterfaces[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackInterfaces[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5763,7 +6468,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackCustomNPC do 
 						
-						local file = assert(io.open("json/mydatapack/npc/"..myDatapackCustomNPC[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/npc/"..myDatapackCustomNPC[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackCustomNPC[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5780,7 +6485,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackShard do 
 						
-						local file = assert(io.open("json/mydatapack/shard/"..myDatapackShard[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/shard/"..myDatapackShard[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackShard[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5797,7 +6502,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackPhoneDialog do 
 						
-						local file = assert(io.open("json/mydatapack/phone_dialog/"..myDatapackPhoneDialog[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/phone_dialog/"..myDatapackPhoneDialog[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackPhoneDialog[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5814,7 +6519,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackPOI do 
 						
-						local file = assert(io.open("json/mydatapack/poi/"..myDatapackPOI[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/poi/"..myDatapackPOI[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackPOI[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -5831,7 +6536,7 @@ function DatapackBuilder()
 					
 					for i=1,#myDatapackScene do 
 						
-						local file = assert(io.open("json/mydatapack/scene/"..myDatapackScene[i].tag..".json", "w"))
+						local file = assert(io.open("user/mydatapack/scene/"..myDatapackScene[i].tag..".json", "w"))
 						local stringg = JSON:encode_pretty(myDatapackScene[i])
 						--debug--debugPrint(2,stringg)
 						file:write(stringg)
@@ -6168,67 +6873,25 @@ function SettingTab()
 		end
 		
 		
-		ImGui.Spacing()
-		ImGui.Spacing()
-		ImGui.Spacing()
-		ImGui.Text(getLang("editor_Setting_RunningScript"))
+	
 		
-		if ImGui.Button(getLang("editor_Setting_ScriptRunToggle")) then
-			autoScript = not autoScript
-		end
-		ImGui.Text(getLang("editor_Setting_ScriptAutoMode")..tostring(autoScript))
 		
-		if ImGui.Button(getLang("editor_Setting_ResetScript")) then
-			workerTable = {}
-			despawnAll()
-		end
-		ImGui.Spacing()
-		ImGui.Spacing()
 		
-		if ImGui.Button(getLang("editor_Setting_ScriptManualStep")) then
-			CompileCachedThread()
-			ScriptExecutionEngine()
-		end
-		pcall(function()
-			for k,v in pairs(workerTable) do 
+		if ImGui.Button("TP to Custom MapPin") then
+			
+			if(ActivecustomMappin ~= nil) then
 				
-				if ImGui.TreeNode(k) then
-					
-					local index = workerTable[k]["index"]
-					
-					local list = workerTable[k]["action"]
-					
-					local parent = workerTable[k]["parent"]
-					
-					local source = workerTable[k]["source"]
-					
-					local pending = workerTable[k]["pending"]
-					
-					local started = workerTable[k]["started"]
-					
-					local disabled = workerTable[k]["disabled"]
-					
-					local quest = workerTable[k]["quest"]
-					
-					local executortag = workerTable[k]["executortag"]
-					ImGui.Text("index : "..index)
-					ImGui.Text("list : "..#list)
-					ImGui.Text("parent : "..parent)
-					ImGui.Text("source : "..source)
-					ImGui.Text("pending : "..tostring(pending))
-					ImGui.Text("started : "..tostring(started))
-					ImGui.Text("disabled : "..tostring(disabled))
-					
-					if quest ~= nil then
-						ImGui.Text("quest : "..tostring(quest))
-					end
-					ImGui.Text("Executor Tag : "..executortag)
-					ImGui.Text("Current Action : "..list[index].name)
-					ImGui.TreePop()
-				end
+				local pos = ActivecustomMappin:GetWorldPosition()
+				Game.TeleportPlayerToPosition(pos.x,pos.y,pos.z)
 			end
-		end)
+		end
+		pox = ImGui.InputInt("X", pox)
+		poy = ImGui.InputInt("Y", poy)
+		poz = ImGui.InputInt("Z", poz)
 		
+		if ImGui.Button("TP to XYZ") then
+			Game.TeleportPlayerToPosition(pox,poy,poz)
+		end
 		
 		
 		
@@ -6471,7 +7134,7 @@ function SceneTabs()
 				if ImGui.Button(getLang("editor_export")) and activeEditedScene.tag ~= "" then
 					
 					
-					local file = assert(io.open("json/report/"..activeEditedScene.tag..".json", "w"))
+					local file = assert(io.open("user/editor_output/"..activeEditedScene.tag..".json", "w"))
 					local stringg = JSON:encode_pretty(activeEditedScene)
 					--debug--debugPrint(2,stringg)
 					file:write(stringg)
@@ -6513,8 +7176,6 @@ function SceneTabs()
 	
 	
 end
-
-
 
 
 
@@ -6562,60 +7223,60 @@ function VariableEditor()
 			if (editorCurrentVariableSearch == "" or (editorCurrentVariableSearch ~= "" and (string.match(variabletag,editorCurrentVariableSearch)))) then
 				if ImGui.TreeNode(variabletag)  then
 					for key,value in pairs (variable) do
-					
-						if (editorCurrentVariableKeySearch == "" or (editorCurrentVariableKeySearch ~= "" and (string.match(key,editorCurrentVariableKeySearch)))) then
-					
-							if ImGui.TreeNode(key)  then
 						
-						if(type(value) == "string") then
-						currentSave.Variable[variabletag][key] = ImGui.InputText("##("..type(value)..") "..variabletag..key,value, 100, ImGuiInputTextFlags.AutoSelectAll)
+						if (editorCurrentVariableKeySearch == "" or (editorCurrentVariableKeySearch ~= "" and (string.match(key,editorCurrentVariableKeySearch)))) then
+							
+							if ImGui.TreeNode(key)  then
+								
+								if(type(value) == "string") then
+									currentSave.Variable[variabletag][key] = ImGui.InputText("##("..type(value)..") "..variabletag..key,value, 100, ImGuiInputTextFlags.AutoSelectAll)
+								end
+								if(type(value) == "number") then
+									currentSave.Variable[variabletag][key] = ImGui.InputFloat("##("..type(value)..") "..variabletag..key,value, 1, 10,"%.2f", ImGuiInputTextFlags.None)
+								end
+								if(type(value) == "boolean") then
+									currentSave.Variable[variabletag][key] = ImGui.Checkbox("##("..type(value)..") "..variabletag..key, currentSave.Variable[variabletag][key])
+								end
+								if(type(value) == "table") then
+									currentSave.Variable[variabletag][key] = ImGui.Text("It's an object, can't be edit like this :( ")
+									ImGui.SameLine()
+									if ImGui.Button(getLang("Dump in log and console")) then
+										
+										
+										
+										print("Editor Variable Dump for "..variabletag.." "..key.." : "..dump(currentSave.Variable[variabletag][key]))
+										spdlog.error("Editor Variable Dump for "..variabletag.." "..key.." : "..dump(currentSave.Variable[variabletag][key]))
+										
+										
+									end
+								end
+								if(type(value) == "userdata") then
+									currentSave.Variable[variabletag][key] = ImGui.Text("It's an Game Object, can't be edit like this :( ")
+									ImGui.SameLine()
+									if ImGui.Button(getLang("Dump in log and console")) then
+										
+										
+										
+										print("Editor Variable Game Dump for "..variabletag.." "..key.." : "..GameDump(currentSave.Variable[variabletag][key]))
+										spdlog.error("Editor Variable Game Dump for "..variabletag.." "..key.." : "..GameDump(currentSave.Variable[variabletag][key]))
+										
+										
+									end
+								end
+								ImGui.Spacing()
+								if ImGui.Button(getLang("editor_reset")) then
+									
+									
+									
+									currentSave.Variable[variabletag][key] = nil
+									
+									
+								end
+								ImGui.TreePop()
+							end
 						end
-						if(type(value) == "number") then
-						currentSave.Variable[variabletag][key] = ImGui.InputFloat("##("..type(value)..") "..variabletag..key,value, 1, 10,"%.2f", ImGuiInputTextFlags.None)
-						end
-						if(type(value) == "boolean") then
-						currentSave.Variable[variabletag][key] = ImGui.Checkbox("##("..type(value)..") "..variabletag..key, currentSave.Variable[variabletag][key])
-						end
-						if(type(value) == "table") then
-						currentSave.Variable[variabletag][key] = ImGui.Text("It's an object, can't be edit like this :( ")
-						ImGui.SameLine()
-						if ImGui.Button(getLang("Dump in log and console")) then
-							
-							
-							
-							print("Editor Variable Dump for "..variabletag.." "..key.." : "..dump(currentSave.Variable[variabletag][key]))
-							spdlog.error("Editor Variable Dump for "..variabletag.." "..key.." : "..dump(currentSave.Variable[variabletag][key]))
-							
-							
-						end
-						end
-						if(type(value) == "userdata") then
-						currentSave.Variable[variabletag][key] = ImGui.Text("It's an Game Object, can't be edit like this :( ")
-						ImGui.SameLine()
-						if ImGui.Button(getLang("Dump in log and console")) then
-							
-							
-							
-							print("Editor Variable Game Dump for "..variabletag.." "..key.." : "..GameDump(currentSave.Variable[variabletag][key]))
-							spdlog.error("Editor Variable Game Dump for "..variabletag.." "..key.." : "..GameDump(currentSave.Variable[variabletag][key]))
-							
-							
-						end
-						end
-						ImGui.Spacing()
-						if ImGui.Button(getLang("editor_reset")) then
-							
-							
-							
-							currentSave.Variable[variabletag][key] = nil
-							
-							
-						end
-						ImGui.TreePop()
 					end
-						end
-					end
-				ImGui.TreePop()
+					ImGui.TreePop()
 				end
 			end
 		end
@@ -6632,14 +7293,563 @@ end
 
 
 
-
-
-
-
-
-
-
-
+function debugTab()
+	
+	if ImGui.BeginTabItem("Debug & Tools") then
+		
+				if ImGui.BeginTabBar("DebugTabsBar", ImGuiTabBarFlags.NoTooltip) then
+				
+					if ImGui.BeginTabItem("Current Looked Entity") then
+						local status, result =  pcall(function()
+							if objLook ~= nil then
+								ImGui.Indent()
+								
+								local entity = objLook
+								-- Functions
+								IGE.DrawNodeTree("GetEntityID", "entEntityID", entity:GetEntityID(), 
+								function(entEntityID) entEntityIDDraw(entEntityID) end)
+								
+								if ImGui.Button("Destroy") then
+									entity:Dispose()
+								end
+								
+								
+								if entity:IsPlayer() then
+									IGE.DisplayObjectArray("GetPlayerCurrentWorkspotTags", "CName", entity:GetPlayerCurrentWorkspotTags(),
+									function(key, value) CNameDraw("Tag", value) end)
+								end
+								
+								if entity:IsVehicle() then
+									ImGui.Text("Entity is an vehicle")
+									ImGui.Spacing()
+									ImGui.Text("Available Seats Slot: ")
+									
+									local seatstable = GetSeats(entity)
+									
+									if #seatstable > 0 then
+										for i=1, #seatstable do 
+											ImGui.Text(seatstable[i])
+											ImGui.Spacing()
+										end
+									end
+									else
+									ImGui.Text("Entity is not an vehicule")
+									ImGui.Spacing()
+								end
+								
+								local obj = getEntityFromManagerById(entity:GetEntityID())
+								
+								if obj.id ~= nil then
+									ImGui.Text("This entity has been registered as Entity in CyberScript with tag "..obj.tag)
+									ImGui.Spacing()
+									
+									ImGui.Text("This entity has been registered as AV ?"..tostring(obj.isAV))
+									ImGui.Spacing()
+									if ImGui.Button("dump") then
+										debugPrint(10,tostring(dump(obj)))
+									end
+									local group = getEntityGroupfromEntityTag(obj.tag)
+									
+									if group ~= nil then
+										ImGui.Text("This entity has been registered in the Group "..group.tag)
+									end
+								end
+								
+								CNameDraw("GetCurrentAppearanceName", entity:GetCurrentAppearanceName())
+								CNameDraw("GetCurrentContext", entity:GetCurrentContext())
+								CNameDraw("GetDisplayName", entity:GetDisplayName())
+								ImGui.Text("GetTweakDBDisplayName: "..entity:GetTweakDBDisplayName(true))
+								ImGui.Text("GetTweakDBFullDisplayName:"..entity:GetTweakDBFullDisplayName(true))
+								
+								
+								
+								IGE.DisplayVector4("GetWorldPosition", entity:GetWorldPosition())
+								IGE.ObjectToText("GetWorldOrientation", entity:GetWorldOrientation())
+								IGE.DisplayVector4("GetWorldForward", entity:GetWorldForward())
+								
+								IGE.DisplayVector4("GetWorldRight", entity:GetWorldRight())
+								IGE.DisplayVector4("GetWorldUp", entity:GetWorldUp())
+								IGE.ObjectToText("GetWorldYaw", entity:GetWorldYaw())
+								-- IGE.ObjectToText("IsAttached", entity:IsAttached()) -- Good way to tell if object has been deleted!
+								-- IGE.ObjectToText("IsControlledByAnotherClient", entity:IsControlledByAnotherClient())
+								-- IGE.ObjectToText("IsControlledByAnyPeer", entity:IsControlledByAnyPeer())
+								-- IGE.ObjectToText("IsControlledBylocalPeer", entity:IsControlledBylocalPeer())
+								-- IGE.ObjectToText("ShouldEnableRemoteLayer", entity:ShouldEnableRemoteLayer())
+								-- IGE.ObjectToText("HasDirectActionsActive", entity:HasDirectActionsActive())
+								-- IGE.ObjectToText("CanRevealRemoteActionsWheel", entity:CanRevealRemoteActionsWheel())
+								-- IGE.ObjectToText("ShouldRegisterToHUD", entity:ShouldRegisterToHUD())
+								-- IGE.ObjectToText("GetIsIconic", entity:GetIsIconic())
+								-- IGE.ObjectToText("GetContentScale", entity:GetContentScale())
+								-- IGE.ObjectToText("IsExplosive", entity:IsExplosive())
+								-- IGE.ObjectToText("IsFastTravelPoint", entity:IsFastTravelPoint())
+								-- IGE.ObjectToText("HasAnySlaveDevices", entity:HasAnySlaveDevices())
+								-- IGE.ObjectToText("IsBodyDisposalPossible", entity:IsBodyDisposalPossible())
+								-- IGE.ObjectToText("IsReplicated", entity:IsReplicated())
+								
+								
+								ImGui.Unindent()
+								
+								
+								posstep =  ImGui.DragFloat("##post", posstep, 0.1, 0.1, 10, "%.3f Position Step")
+								rotstep =  ImGui.DragFloat("##rost", rotstep, 0.1, 0.1, 10, "%.3f Rotation Step")
+								
+								
+								
+								moveX =  ImGui.DragFloat("##x", moveX, posstep, -9999, 9999, "%.3f X")
+								
+								
+								
+								moveY = ImGui.DragFloat("##y", moveY, posstep, -9999, 9999, "%.3f Y")
+								
+								
+								moveZ = ImGui.DragFloat("##z", moveZ, posstep, -9999, 9999, "%.3f Z")
+								
+								
+								moveYaw =  ImGui.DragFloat("##yaw", moveYaw, rotstep, -9999, 9999, "%.3f YAW")
+								
+								
+								movePitch = ImGui.DragFloat("##pitch", movePitch, rotstep, -9999, 9999, "%.3f PITCH")
+								
+								
+								moveRoll = ImGui.DragFloat("##roll", moveRoll, rotstep, -9999, 9999, "%.3f ROLL")
+								
+								
+								
+								
+								
+								
+								
+								if ImGui.Button("change position", 300, 0) then
+									local positu =  entity:GetWorldPosition()
+									local qat = entity:GetWorldOrientation()
+									local angless = GetSingleton('Quaternion'):ToEulerAngles(qat)
+									positu.x = positu.x + moveX
+									positu.y = positu.y + moveY
+									positu.z = positu.z + moveZ
+									
+									
+									local cmd = NewObject('handle:AITeleportCommand')
+									
+									cmd.doNavTest = false
+									cmd.rotation = angless
+									cmd.position = positu 
+									
+									
+									executeCmd(entity, cmd)
+									
+								end
+								
+								if ImGui.Button("change angle", 300, 0) then
+									local qat = entity:GetWorldOrientation()
+									local angless = GetSingleton('Quaternion'):ToEulerAngles(qat)
+									
+									angless.yaw = angless.yaw + moveYaw
+									angless.pitch = angless.pitch + movePitch
+									angless.roll = angless.roll + moveRoll
+									
+									local cmd = NewObject('handle:AITeleportCommand')
+									
+									cmd.doNavTest = false
+									cmd.rotation = angless
+									cmd.position = entity:GetWorldPosition() 
+									
+									
+									executeCmd(entity, cmd)
+									
+									
+								end
+								
+								
+								
+							end
+							
+						end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Current CS Quest") then
+						local status, result = pcall(function()
+							
+							if currentQuest ~= nil then
+								ImGui.Text("title : "..currentQuest.title)
+								ImGui.Text("content : "..currentQuest.content)
+								ImGui.Text("tag : "..currentQuest.tag)
+								ImGui.Text("recommandedlevel : "..currentQuest.recommandedlevel)
+								ImGui.Text("questtype : "..currentQuest.questtype)
+								ImGui.Text("district : "..currentQuest.district)
+								ImGui.Text("isNPCD : "..tostring(currentQuest.isNPCD))
+								ImGui.Text("recurrent : "..tostring(currentQuest.recurrent))
+								ImGui.Text("State : "..tostring(getScoreKey(currentQuest.tag,"Score")))
+								for k,v in pairs(currentQuest.trigger_condition) do
+									ImGui.Text(v.name)
+								end
+								
+								if ImGui.TreeNode("trigger_action") then
+									for i=1, #currentQuest.trigger_action do
+										ImGui.Text(currentQuest.trigger_action[i].name)
+									end
+									ImGui.TreePop()
+								end
+								
+								if ImGui.TreeNode("objectives") then
+									for i=1, #currentQuest.objectives do
+										
+										local objective = currentQuest.objectives[i]
+										
+										if ImGui.TreeNode(objective.title.." ( "..objective.tag.." )") then
+											ImGui.Text("state : "..tostring(QuestManager.GetObjectiveState(objective.tag).state))
+											ImGui.Text("isoptionnal : "..tostring(objective.isoptionnal))
+											ImGui.Text("isActive : "..tostring(QuestManager.GetObjectiveState(objective.tag).isActive))
+											ImGui.Text("isComplete : "..tostring(QuestManager.GetObjectiveState(objective.tag).isComplete))
+											ImGui.Text("isTracked : "..tostring(QuestManager.GetObjectiveState(objective.tag).isTracked))
+											ImGui.TreePop()
+										end
+									end
+									ImGui.TreePop()
+								end
+								else
+								ImGui.Text("No current Quest")
+							end
+						end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Current Bounty") then
+						local status, result = pcall(function()
+							
+							if currentScannerItem ~= nil then
+								ImGui.Text("primaryname : "..currentScannerItem.primaryname)
+								ImGui.Text("secondaryname : "..currentScannerItem.secondaryname)
+								ImGui.Text("entityname : "..currentScannerItem.entityname)
+								ImGui.Text("level : "..tostring(currentScannerItem.level))
+								ImGui.Text("rarity : "..tostring(currentScannerItem.rarity))
+								ImGui.Text("attitude : "..tostring(currentScannerItem.attitude))
+								ImGui.Text("Desc : "..currentScannerItem.text)
+								if currentScannerItem.bounty ~= nil then
+									
+									ImGui.Text("reward : "..tostring(currentScannerItem.bounty.reward))
+									ImGui.Text("streetreward : "..tostring(currentScannerItem.bounty.streetreward))
+									ImGui.Text("danger : "..tostring(currentScannerItem.bounty.danger))
+									ImGui.Text("issuedby : "..tostring(currentScannerItem.bounty.issuedby))
+									
+									
+									for i,v in ipairs(currentScannerItem.bounty.transgressions) do
+										ImGui.Text(v)
+										end
+									
+									for i,v in ipairs(currentScannerItem.bounty.customtransgressions) do
+										ImGui.Text(v)
+									end
+								end
+								
+								else
+								ImGui.Text("No current Bounty")
+							end
+						end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Script Execution Engine") then
+						ImGui.TextColored(0.79, 0.40, 0.29, 1, "tick is .."..tostring(tick))
+						ImGui.TextColored(0.79, 0.40, 0.29, 1, "Current Controller is .."..tostring(currentController))
+						if ImGui.Button("Toggle automatic thread running") then
+							autoScript = not autoScript
+						end
+						ImGui.Text("Automatic Mode : "..tostring(autoScript))
+						
+						if ImGui.Button("Reset pending actions (Script)") then
+							workerTable = {}
+							despawnAll()
+						end
+						ImGui.Spacing()
+						ImGui.Spacing()
+						
+						if ImGui.Button("Manual script Step") then
+							CompileCachedThread()
+							ScriptExecutionEngine()
+						end
+						
+						local status, result =  pcall(function()
+							for k,v in pairs(workerTable) do 
+								
+								if ImGui.TreeNode(k) then
+									
+									local index = workerTable[k]["index"]
+									
+									local list = workerTable[k]["action"]
+									
+									local parent = workerTable[k]["parent"]
+									
+									local source = workerTable[k]["source"]
+									
+									local pending = workerTable[k]["pending"]
+									
+									local started = workerTable[k]["started"]
+									
+									local disabled = workerTable[k]["disabled"]
+									
+									local quest = workerTable[k]["quest"]
+									
+									local executortag = workerTable[k]["executortag"]
+									ImGui.Text("index : "..index)
+									ImGui.Text("list : "..#list)
+									ImGui.Text("parent : "..parent)
+									ImGui.Text("source : "..source)
+									ImGui.Text("pending : "..tostring(pending))
+									ImGui.Text("started : "..tostring(started))
+									ImGui.Text("disabled : "..tostring(disabled))
+									
+									if quest ~= nil then
+										ImGui.Text("quest : "..tostring(quest))
+									end
+									ImGui.Text("Executor Tag : "..executortag)
+									if(list[index] ~= nil) then
+									ImGui.Text("Current Action : "..list[index].name)
+									end
+									ImGui.TreePop()
+								end
+							end
+						end)
+						
+						if status == false then
+						
+						
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Mod Data") then
+						local status, result =  pcall(function()
+							
+							if ImGui.TreeNode("Group") then
+								for k,v in pairs(cyberscript.GroupManager) do
+									
+									local group = v
+									if ImGui.TreeNode(group.tag) then
+									
+										ImGui.Text("Tag : "..group.tag)
+								
+										ImGui.Text("Entities : "..#group.entities)
+										
+									ImGui.TreePop()
+									end
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							
+							if ImGui.TreeNode("Entities") then
+								for k,v in pairs(cyberscript.EntityManager) do
+									
+									local enti = v
+									if ImGui.TreeNode(enti.tag) then
+										ImGui.Text("hash".." : "..tostring(enti.id.hash))
+										for key,prop in pairs(enti) do
+										
+											ImGui.Text(key.." : "..tostring(prop))
+											
+										end
+										
+										if ImGui.Button("Despawn") then
+										
+										despawnEntity(k)
+										
+										
+										end
+									ImGui.TreePop()
+									end
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.TreeNode("Items Spawned") then
+								for i,v in ipairs(currentItemSpawned) do
+									
+									local enti = v
+									if ImGui.TreeNode(enti.tag) then
+									
+										for key,prop in pairs(enti) do
+										
+											ImGui.Text(key.." : "..tostring(prop))
+										
+										end
+										
+									ImGui.TreePop()
+									end
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.TreeNode("Setting") then
+								for k,v in pairs(currentSave.arrayUserSetting) do
+									
+									
+									if ImGui.TreeNode(k) then
+									
+										ImGui.Text("Value : "..tostring(v))
+										
+									ImGui.TreePop()
+									end
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.TreeNode("Interact Group") then
+								for k,v in ipairs(currentInteractGroup) do
+									
+									local enti = v
+									ImGui.Text(v)
+								end
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.Button("Refresh Interact Group")  then
+								
+								getInteractGroup()
+							end
+							
+							ImGui.Separator()
+							ImGui.Text("Possible Interact : "..#possibleInteract)
+							ImGui.Text("Possible Interact Display : "..#possibleInteractDisplay)
+							ImGui.Separator()
+							
+							if ImGui.Button("Dump Currentsave data")  then
+								
+								local sessionFile = io.open('currentsave.txt', 'w')
+								sessionFile:write(dump(currentSave))
+								sessionFile:close()
+							end
+							
+							
+							if ImGui.Button("Dump arrayDatapack data")  then
+								
+								local sessionFile = io.open('arrayDatapack.lua', 'w')
+								sessionFile:write(JSON:encode_pretty(arrayDatapack))
+								sessionFile:close()
+							end
+							
+							if ImGui.Button("Dump HUD key")  then
+								
+								local sessionFile = io.open('displayHUD.txt', 'w')
+								for k,v in pairs(displayHUD) do
+									sessionFile:write(k, "\n")
+								end
+								sessionFile:close()
+							end
+							
+							
+							if ImGui.Button("Dump Variable table")  then
+							
+							local sessionFile = io.open('variableboard.txt', 'w')
+								sessionFile:write(dump(currentSave.Variable))
+								sessionFile:close()
+							
+							end
+						end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
+					if ImGui.BeginTabItem("Mod Log") then
+						
+						local status, result = pcall(function()
+							
+							
+							logrecordlevel = ImGui.InputInt(getLang("Record at Log Level"), logrecordlevel, 1,10, ImGuiInputTextFlags.None)
+							ImGui.Spacing()
+							
+							logLevel = ImGui.InputInt(getLang("Log Level"), logLevel, 1,10, ImGuiInputTextFlags.None)
+							ImGui.Spacing()
+							logFilter = ImGui.InputText(getLang("Log Filter"), logFilter, 100, ImGuiInputTextFlags.AutoSelectAll)
+							ImGui.Spacing()
+							if ImGui.Button("Clear log and log file") then
+								logTable = {}
+								logf:close()
+								io.open("cyberscript.log", "w"):close()
+								logf = io.open("cyberscript.log", "a")
+							end
+							ImGui.Spacing()
+							ImGui.Separator()
+							ImGui.Spacing()
+							
+							
+							ImGui.BeginChild("log", 1500, 600)
+							
+							for i,v in ipairs(logTable) do
+								if(v.level <= logLevel and (logFilter == nil or logFilter == "" or (logFilter ~= nil and logFilter ~= "" and string.match(v.msg, logFilter)))) then
+									ImGui.Text("[Level:"..v.level.."]"..v.datestring..":"..v.msg)
+								end
+							end
+							
+							ImGui.EndChild()
+							
+							
+						end)
+								
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						ImGui.EndTabItem()
+						
+					end
+				
+				ImGui.EndTabBar()
+				end
+					
+	ImGui.EndTabItem()
+	end
+		
+	
+	
+	
+end
 
 
 
@@ -6647,7 +7857,7 @@ end
 --Windows
 function TriggerEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(100, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(300, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -6701,14 +7911,14 @@ function TriggerEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
 
 function TriggerNewWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(100, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(300, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -6761,7 +7971,7 @@ function TriggerNewWindows()
 		
 		ImGui.PopStyleVar(2)
 		ImGui.End()
-		CPS:setThemeEnd()
+		
 		
 		
 	end
@@ -6769,7 +7979,7 @@ end
 
 function TriggerActionEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(100, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(300, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -6825,7 +8035,7 @@ function TriggerActionEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -6834,7 +8044,7 @@ end
 
 function SubTriggerEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(100, 200, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -6873,7 +8083,7 @@ function SubTriggerEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -6881,7 +8091,7 @@ end
 
 function ActionEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(0, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(700, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -6931,14 +8141,14 @@ function ActionEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
 
 function ActionNewWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(0, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(700, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -6992,7 +8202,7 @@ function ActionNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -7000,7 +8210,7 @@ end
 
 function ActionSubEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(0, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(700, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7062,7 +8272,7 @@ function ActionSubEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -7112,7 +8322,7 @@ function orderedPairs(t)
 end
 
 function RoomNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7225,12 +8435,12 @@ function RoomNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 function SceneStepNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7298,11 +8508,11 @@ function SceneStepNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function SceneStepEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7378,11 +8588,11 @@ function SceneStepEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function RoomEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7503,12 +8713,12 @@ function RoomEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 function OptionsNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7617,11 +8827,11 @@ function OptionsNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function NewItemsWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7741,29 +8951,29 @@ function NewItemsWindows()
 				currentEditorItems.entityId = spawnItem(currentEditorItems, poss, angless)
 				
 				Cron.After(0.7, function()
-				
-				local entity = Game.FindEntityByID(currentEditorItems.entityId)
-				local components = checkForValidComponents(entity)
-				if components then
-					local visualScale = checkDefaultScale(components)
-					currentEditorItems.defaultScale = {
-						x = visualScale.x * 100,
-						y = visualScale.x * 100,
-						z = visualScale.x * 100,
-					}
-					currentEditorItems.scale = {
-						x = visualScale.x * 100,
-						y = visualScale.y * 100,
-						z = visualScale.z * 100,
-					}
-				end
-				
-				table.insert(currentItemSpawned,currentEditorItems)
-				
-				
-				currentEditorItems = {}
-				
-				openNewItems = false
+					
+					local entity = Game.FindEntityByID(currentEditorItems.entityId)
+					local components = checkForValidComponents(entity)
+					if components then
+						local visualScale = checkDefaultScale(components)
+						currentEditorItems.defaultScale = {
+							x = visualScale.x * 100,
+							y = visualScale.x * 100,
+							z = visualScale.x * 100,
+						}
+						currentEditorItems.scale = {
+							x = visualScale.x * 100,
+							y = visualScale.y * 100,
+							z = visualScale.z * 100,
+						}
+					end
+					
+					table.insert(currentItemSpawned,currentEditorItems)
+					
+					
+					currentEditorItems = {}
+					
+					openNewItems = false
 				end)
 			end
 			
@@ -7783,12 +8993,12 @@ function NewItemsWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 function EditItemsWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -7797,18 +9007,18 @@ function EditItemsWindows()
 	ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, 8, 7)
 	
 	
-	if ImGui.Begin("Items") then
+	if ImGui.Begin("Edit Items") then
 		
 		
 		
 		
 		
 		
-		posstep =  ImGui.DragFloat("##post", posstep, 0.1, 0.1, 10, "%.3f Position Step")
+		posstep =  ImGui.DragFloat("##post", posstep, 0.001, 0.1, 10, "%.4f Position Step")
 		
 		
 		
-		rotstep =  ImGui.DragFloat("##rost", rotstep, 0.1, 0.1, 10, "%.3f Rotation Step")
+		rotstep =  ImGui.DragFloat("##rost", rotstep, 0.001, 0.1, 10, "%.4f Rotation Step")
 		
 		
 		currentEditorItems.X,change =  ImGui.DragFloat("##x", currentEditorItems.X, posstep, -9999, 9999, "%.3f X")
@@ -7926,7 +9136,7 @@ function EditItemsWindows()
 		
 		
 		
-	
+		
 		print(tostring(currentEditorItems.scale == nil ))
 		if(components) then
 			
@@ -7973,10 +9183,10 @@ function EditItemsWindows()
 			
 			if scaleChanged then
 				Cron.After(0.7, function()
-				local entityid = currentEditorItems.entityId
-				local entity = Game.FindEntityByID(entityid)
-				local components = checkForValidComponents(entity)
-				setItemScale(entity, currentEditorItems, currentEditorItems.scale,proportionalMode)
+					local entityid = currentEditorItems.entityId
+					local entity = Game.FindEntityByID(entityid)
+					local components = checkForValidComponents(entity)
+					setItemScale(entity, currentEditorItems, currentEditorItems.scale,proportionalMode)
 				end)
 			end
 			
@@ -8018,7 +9228,14 @@ function EditItemsWindows()
 			
 		end
 		
-		
+		if ImGui.Button("Close", 300, 0) then
+			
+			
+			currentEditorItems = {}
+			
+			openEditItems = false
+		end
+			
 		
 		
 	end
@@ -8028,13 +9245,13 @@ function EditItemsWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 function EditTemplatePositionWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8057,20 +9274,20 @@ function EditTemplatePositionWindows()
 		rotstep =  ImGui.DragFloat("##rost", rotstep, 0.1, 0.1, 10, "%.3f Rotation Step")
 		
 		
-		editHousingTemplateX =  ImGui.DragFloat("##x", editHousingTemplateX, posstep, -9999, 9999, "%.3f X")
+		currentHousingTemplate.x  =  ImGui.DragFloat("##x", currentHouseCenter.x, posstep, -9999, 9999, "%.3f X")
 		
-		editHousingTemplateY = ImGui.DragFloat("##y", editHousingTemplateY, posstep, -9999, 9999, "%.3f Y")
+		currentHousingTemplate.y  = ImGui.DragFloat("##y", currentHouseCenter.y, posstep, -9999, 9999, "%.3f Y")
 		
-		editHousingTemplateZ = ImGui.DragFloat("##z", editHousingTemplateZ, posstep, -9999, 9999, "%.3f Z")
-		
-		
+		currentHousingTemplate.x  = ImGui.DragFloat("##z", currentHouseCenter.z, posstep, -9999, 9999, "%.3f Z")
 		
 		
-		editHousingTemplateYaw =  ImGui.DragFloat("##yaw", editHousingTemplateYaw, rotstep, -9999, 9999, "%.3f YAW")
 		
-		editHousingTemplatePitch = ImGui.DragFloat("##pitch", editHousingTemplatePitch, rotstep, -9999, 9999, "%.3f PITCH")
 		
-		editHousingTemplateRoll = ImGui.DragFloat("##roll", editHousingTemplateRoll, rotstep, -9999, 9999, "%.3f ROLL")
+		-- currentHouseCenter.yaw =  ImGui.DragFloat("##yaw", currentHouseCenter.yaw, rotstep, -9999, 9999, "%.3f YAW")
+		
+		-- currentHouseCenter.pitch = ImGui.DragFloat("##pitch", currentHouseCenter.pitch, rotstep, -9999, 9999, "%.3f PITCH")
+		
+		-- currentHouseCenter.roll = ImGui.DragFloat("##roll", currentHouseCenter.roll, rotstep, -9999, 9999, "%.3f ROLL")
 		
 		
 		
@@ -8086,10 +9303,10 @@ function EditTemplatePositionWindows()
 					
 					if(v.fromTemplate ~= nil and v.fromTemplate == true) then
 						
-						local poss = Vector4.new( v.X + editHousingTemplateX, v.Y + editHousingTemplateY,  v.Z + editHousingTemplateZ,1)
+						local poss = Vector4.new( v.X + currentHouseCenter.x, v.Y + currentHouseCenter.y,  v.Z + currentHouseCenter.z,1)
 						
 						
-						local angless = EulerAngles.new(v.Roll + editHousingTemplateRoll, v.Pitch + editHousingTemplatePitch,  v.Yaw + editHousingTemplateYaw)
+						local angless = EulerAngles.new(v.Roll, v.Pitch,  v.Yaw)
 						
 						
 						
@@ -8105,15 +9322,7 @@ function EditTemplatePositionWindows()
 			end
 			
 			
-			editHousingTemplateX = 0
-			editHousingTemplateY = 0
-			editHousingTemplateZ = 0
-			
-			editHousingTemplateYaw = 0
-			editHousingTemplatePitch = 0
-			editHousingTemplateRoll = 0
-			
-			
+		
 			
 			
 			
@@ -8121,14 +9330,7 @@ function EditTemplatePositionWindows()
 		
 		
 		if ImGui.Button("Close", 300, 0) then
-			
-			editHousingTemplateY = 0
-			editHousingTemplateZ = 0
-			
-			editHousingTemplateYaw = 0
-			editHousingTemplatePitch = 0
-			editHousingTemplateRoll = 0
-			
+		
 			openEditHousingTemplate = false
 			
 			
@@ -8144,11 +9346,11 @@ function EditTemplatePositionWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function OptionsEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8257,12 +9459,12 @@ function OptionsEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function ControlsEditWindows()
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8659,7 +9861,7 @@ function ControlsEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
@@ -8667,7 +9869,7 @@ end
 
 
 function ObjectiveNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8685,6 +9887,7 @@ function ObjectiveNewWindows()
 		currentSelectObjective.title = ImGui.InputText("Title", currentSelectObjective.title, 100, ImGuiInputTextFlags.AutoSelectAll)
 		currentSelectObjective.tag = ImGui.InputText(getLang("editor_tag"), currentSelectObjective.tag, 100, ImGuiInputTextFlags.AutoSelectAll)
 		
+		listStringNode("Unlock Objectives","Unlock Objectives when completed",currentSelectObjective,"unlock",false)
 		
 		if ImGui.BeginCombo("State :", defaultJournalEntryState) then
 			
@@ -8741,17 +9944,12 @@ function ObjectiveNewWindows()
 					
 					
 					currentSelectObjective = {}
-					
+					makeGraphdata()
 					openNewObjective = false
 				end
 				
 				
-				if ImGui.Button("Close", 300, 0) then
-					
-					currentSelectObjective = {}
-					
-					openNewObjective = false
-				end
+			
 				
 				
 				end
@@ -8765,7 +9963,12 @@ function ObjectiveNewWindows()
 		end
 		
 		
-		
+			if ImGui.Button("Close", 300, 0) then
+					
+					currentSelectObjective = {}
+					makeGraphdata()
+					openNewObjective = false
+				end
 		
 		
 		
@@ -8776,11 +9979,11 @@ function ObjectiveNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function ObjectiveEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8798,7 +10001,8 @@ function ObjectiveEditWindows()
 		currentSelectObjective.title = ImGui.InputText("Title", currentSelectObjective.title, 100, ImGuiInputTextFlags.AutoSelectAll)
 		currentSelectObjective.tag = ImGui.InputText(getLang("editor_tag"), currentSelectObjective.tag, 100, ImGuiInputTextFlags.AutoSelectAll)
 		
-		
+		listStringNode("Unlock Objectives","Unlock Objectives when completed",currentSelectObjective,"unlock",false)
+				
 		if ImGui.BeginCombo("State :", defaultJournalEntryState) then
 			
 			
@@ -8861,12 +10065,7 @@ function ObjectiveEditWindows()
 				end
 				
 				
-				if ImGui.Button("Close", 300, 0) then
-					
-					currentSelectObjective = {}
-					
-					openEditObjective = false
-				end
+				
 				
 				
 				end
@@ -8879,7 +10078,12 @@ function ObjectiveEditWindows()
 			
 		end
 		
-		
+		if ImGui.Button("Close", 300, 0) then
+					
+					currentSelectObjective = {}
+					makeGraphdata()
+					openEditObjective = false
+			end
 		
 		
 		
@@ -8891,14 +10095,14 @@ function ObjectiveEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 
 function ConversationNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -8982,11 +10186,11 @@ function ConversationNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function ConversationEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9071,14 +10275,14 @@ function ConversationEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 
 function MessageNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9180,11 +10384,11 @@ function MessageNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 function MessageEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9284,13 +10488,13 @@ function MessageEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 function ChoiceNewWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9379,13 +10583,13 @@ function ChoiceNewWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
 
 function ChoiceEditWindows()
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(500, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -9474,7 +10678,7 @@ function ChoiceEditWindows()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 end
 
 
@@ -9595,6 +10799,7 @@ function ObjectiveNode(obj)
 			currentSelectObjective["action"] = {}
 			currentSelectObjective["failaction"] = {}
 			currentSelectObjective["resume_action"] = {}
+			currentSelectObjective["unlock"] = {}
 			
 			
 			
@@ -10051,6 +11256,7 @@ function actionNode(title,obj,key)
 	
 	if ImGui.TreeNode(title) then
 		
+		if( #obj[key] > 0) then
 		for i = 1, #obj[key] do 
 			
 			if ImGui.Button(obj[key][i].name.." ("..tostring(i)..")", 300, 0) then
@@ -10065,6 +11271,7 @@ function actionNode(title,obj,key)
 				
 			end
 			
+		end
 		end
 		
 		if ImGui.Button("(Add new)", 300, 0) then
@@ -10174,18 +11381,18 @@ function controlsNode(title,help,obj,parent)
 	end
 end
 
-function ItemNode()
+function ItemNode(list)
 	
 	if ImGui.TreeNode("Items") then
 		
 		
 		
 		
-		for i,value in ipairs(currentItemSpawned) do
+		for i,value in ipairs(list) do
 			
 			
-			if ImGui.Button(currentItemSpawned[i].Id, 600, 0) then
-				currentEditorItems = currentItemSpawned[i]
+			if ImGui.Button(list[i].Id, 600, 0) then
+				currentEditorItems = list[i]
 				currentEditorItems.index = i
 				openEditItems = true
 			end
@@ -12916,7 +14123,7 @@ end
 function openJson()
 	
 	
-	CPS:setThemeBegin()
+	
 	
 	ImGui.SetNextWindowPos(200, 150, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(1200, 500, ImGuiCond.Appearing) -- set window size w, h
@@ -12951,7 +14158,7 @@ function openJson()
 			try {
 				function()
 					json.decode(editor_json)
-					local file = assert(io.open("json/report/"..editor_json_tag..".json", "w"))
+					local file = assert(io.open("user/editor_output/"..editor_json_tag..".json", "w"))
 					local stringg = editor_json
 					
 					file:write(stringg)
@@ -13112,8 +14319,7 @@ function openJson()
 	
 	ImGui.PopStyleVar(2)
 	ImGui.End()
-	CPS:setThemeEnd()
+	
 	
 	
 end
-

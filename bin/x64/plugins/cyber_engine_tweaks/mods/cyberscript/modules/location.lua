@@ -18,11 +18,11 @@ end
 end
 
 
-function savePath(recordRotation,recordRelative)
+function savePath(recordRotation,recordRelative,recordRotationOnly)
 
 pathtick = tick
 
-saveLocation(recordRotation,recordRelative)
+saveLocation(recordRotation,recordRelative,recordRotationOnly)
 -- if (pathtick % 30 == 0) then
 
 -- saveLocation()
@@ -33,37 +33,58 @@ saveLocation(recordRotation,recordRelative)
 
 end
 
-function saveLocation(recordRotation,recordRelative)
+function saveLocation(recordRotation,recordRelative,recordRotationOnly)
 
 local location = {}
 local inVehicule = false
 
 inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
+local currentlocation = curPos
 
-
-if(recordRelative == true) then
 	
-location.x = curPos.x - recordInitialPosition.x
-location.y = curPos.y - recordInitialPosition.y 
-location.z = curPos.z - recordInitialPosition.z
-recordInitialPosition = curPos
+		
+	
+	
+if recorderEntity == "player_camera" then
+	local fppComp = Game.GetPlayer():GetFPPCameraComponent()
+	local cmapos = fppComp:GetLocalPosition() 
+	currentlocation.x = cmapos.x 
+	currentlocation.y = cmapos.y 
+	currentlocation.z = cmapos.z 
+	
+	
+end   
+
+
+if(recordRotationOnly == false) then
+if(recordRelative == true) then
+
+
+location.x = currentlocation.x - recordInitialPosition.x
+location.y = currentlocation.y - recordInitialPosition.y 
+location.z = currentlocation.z - recordInitialPosition.z
+recordInitialPosition = currentlocation
 
 else
-location.x = curPos.x
-location.y = curPos.y
-location.z = curPos.z  
+location.x = currentlocation.x
+location.y = currentlocation.y
+location.z = currentlocation.z  
 end
-
+else
+location.x = 0
+location.y = 0
+location.z = 0
+end
 
 
 local euler = {}
 
-if recorderEntity == "player" then
-        local v = Vector4.new(-Game.GetCameraSystem():GetActiveCameraForward().x, -Game.GetCameraSystem():GetActiveCameraForward().y, -Game.GetCameraSystem():GetActiveCameraForward().z, -Game.GetCameraSystem():GetActiveCameraForward().w)
-		euler = GetSingleton('Vector4'):ToRotation(v)
-		euler.yaw = euler.yaw + 180
-		debugPrint(10,recorderEntity)
-end
+	if recorderEntity == "player" then
+			local v = Vector4.new(-Game.GetCameraSystem():GetActiveCameraForward().x, -Game.GetCameraSystem():GetActiveCameraForward().y, -Game.GetCameraSystem():GetActiveCameraForward().z, -Game.GetCameraSystem():GetActiveCameraForward().w)
+			euler = GetSingleton('Vector4'):ToRotation(v)
+			euler.yaw = euler.yaw + 180
+			debugPrint(10,recorderEntity)
+	end
 	if recorderEntity == "mounted_vehicle" then
 		if Game['GetMountedVehicle;GameObject'](Game.GetPlayer()) ~= nil then
 			local qat = Game['GetMountedVehicle;GameObject'](Game.GetPlayer()):GetWorldOrientation()
@@ -88,9 +109,9 @@ end
 	if recorderEntity == "player_camera" then
 		local fppComp = Game.GetPlayer():GetFPPCameraComponent()
 		local cmapos = fppComp:GetLocalPosition() 
-		location.x = cmapos.x 
-		location.y = cmapos.y 
-		location.z = cmapos.z 
+		
+		euler = fppComp:GetLocalOrientation():ToEulerAngles()
+		
 	end   
 
 

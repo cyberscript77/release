@@ -66,7 +66,11 @@ function loadCustomPlace()
 		if(checkTriggerRequirement(currentHouse.requirement,currentHouse.trigger) and check3DPos(curPos,currentHouse.posX,currentHouse.posY, currentHouse.posZ,currentHouse.range, currentHouse.Zrange) ) then
 			
 			if ItemOfHouseSpawned == false  then
+			
+				
 				spawnItemFromHouseTag(currentHouse.tag)
+				
+				
 				ItemOfHouseSpawned = true
 			end
 			

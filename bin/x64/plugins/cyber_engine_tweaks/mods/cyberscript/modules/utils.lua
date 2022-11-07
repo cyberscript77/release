@@ -4,15 +4,15 @@ cyberscript.module = cyberscript.module +1
 --This file contains several functions that are used everywhere
 function isActiveRipperDoc(vendorRecord)
 	return vendorRecord:VendorType()
-		and vendorRecord:VendorType():Type() == Enum.new('gamedataVendorType', 'RipperDoc')
-		and vendorRecord:GetItemStockCount() > 0
-		and vendorRecord:LocalizedName() ~= ''
-		and Game.GetLocalizedText(vendorRecord:LocalizedName()) ~= 'DELETE'
+	and vendorRecord:VendorType():Type() == Enum.new('gamedataVendorType', 'RipperDoc')
+	and vendorRecord:GetItemStockCount() > 0
+	and vendorRecord:LocalizedName() ~= ''
+	and Game.GetLocalizedText(vendorRecord:LocalizedName()) ~= 'DELETE'
 end
 
 
 function getVendorId()
-local ripperDocList = {}
+	local ripperDocList = {}
 	for _, vendorRecord in ipairs(TweakDB:GetRecords('gamedataVendor_Record')) do
 		if isActiveRipperDoc(vendorRecord) then
 			local ripperDocItem = {
@@ -20,19 +20,29 @@ local ripperDocList = {}
 				desc = Game.GetLocalizedText(vendorRecord:LocalizedDescription()),
 				vendorId = vendorRecord:GetID()
 			}
-
+			
 			ripperDocItem.filter = ripperDocItem.name:upper()
-
+			
 			table.insert(ripperDocList, ripperDocItem)
 		end
 	end
-
+	
 	table.sort(ripperDocList, function(a, b)
 		return a.name < b.name
 	end)
 	
 	return ripperDocList[1].vendorId
 	
+end
+
+
+function hex2rgb(hex)
+    local hex = hex:gsub("#","")
+    if hex:len() == 3 then
+		return (tonumber("0x"..hex:sub(1,1))*17)/255, (tonumber("0x"..hex:sub(2,2))*17)/255, (tonumber("0x"..hex:sub(3,3))*17)/255
+		else
+		return tonumber("0x"..hex:sub(1,2))/255, tonumber("0x"..hex:sub(3,4))/255, tonumber("0x"..hex:sub(5,6))/255
+	end
 end
 
 
@@ -100,20 +110,20 @@ function locateValue( tab, value )
     local path = ''  --  placeholder
     
     for key, val in pairs( tab ) do
-      
+		
         if key == value then  --  found location
-           
+			
             return tab[key]  --  concatenate
-
-        elseif type( tab[key] ) == 'table' then  --  go further down the rabbit hole
+			
+			elseif type( tab[key] ) == 'table' then  --  go further down the rabbit hole
             local found = locatePath( tab[key], value )
             
             if found ~= '' then  --  found relevant path
                 return tab[key][found]  --  concatenate location
-
-            end  --  found
-        end  --  recursion
-    end  --  pairs
+				
+			end  --  found
+		end  --  recursion
+	end  --  pairs
     return path
 end  --  function
 
@@ -121,20 +131,20 @@ function locatePath( tab, value )
     local path = ''  --  placeholder
     
     for key, val in pairs( tab ) do
-      
+		
         if key == value then  --  found location
-           
+			
             return key --  concatenate
-
-        elseif type( tab[key] ) == 'table' then  --  go further down the rabbit hole
+			
+			elseif type( tab[key] ) == 'table' then  --  go further down the rabbit hole
             local found = locatePath( tab[key], value )
-           
+			
             if found ~= '' then  --  found relevant path
-               
-              return found
-            end  --  found
-        end  --  recursion
-    end  --  pairs
+				
+				return found
+			end  --  found
+		end  --  recursion
+	end  --  pairs
     return path
 end  --  function
 
@@ -142,21 +152,21 @@ function locatePathString( tab, value )
     local path = {}  --  placeholder
     
     for key, val in pairs( tab ) do
-      
+		
         if key == value then  --  found location
-           
+			
             table.insert(path,key) --  concatenate
-
-        elseif type( tab[key] ) == 'table' then  --  go further down the rabbit hole
+			
+			elseif type( tab[key] ) == 'table' then  --  go further down the rabbit hole
             local found = locatePath( tab[key], value )
-           
+			
             if found ~= '' then  --  found relevant path
-               
-                 table.insert(path,key) 
+				
+				table.insert(path,key) 
                 table.insert(path,found) 
-            end  --  found
-        end  --  recursion
-    end  --  pairs
+			end  --  found
+		end  --  recursion
+	end  --  pairs
     return path
 end  --  function
 
@@ -171,62 +181,62 @@ function splitDot(s, sep)
     return fields
 end
 function stringToPath(table, path)
-local split  = splitDot(path, '.')
-local result = {}
+	local split  = splitDot(path, '.')
+	local result = {}
     if(#split > 0) then
         
-    for i,v in ipairs(split) do
+		for i,v in ipairs(split) do
             if(i == 1) then
-               
+				
                 result = table[v]
                 
                 else
                 
                 result = result[v]
                 
-                end
-           
+			end
+			
             
             
-        
-    end
-    end
+			
+		end
+	end
     return result
     
     
 end
 
 function SetValuestringToPath(table, path,value)
-local split  = split(path, '.')
-local result = {}
+	local split  = split(path, '.')
+	local result = {}
     if(#split > 0) then
         
-    for i,v in ipairs(split) do
+		for i,v in ipairs(split) do
             if(i == 1) then
-               
+				
                 result = table[v]
                 
                 else
                 
                 result = result[v]
                 
-                end
+			end
             
-           
+			
             
             
-        
-    end
-    end
-   
+			
+		end
+	end
+	
     
     
 end
 function setValueToTablePath(obj, keys, value)
     for i = 1, #keys - 1 do
         obj = obj[keys[i]]
-    end
-
+	end
+	
     -- Merely "obj = value" would affect only this local variable
     -- (as above in the loop), rather than modify the table.
     -- So the last index has to be done separately from the loop:
@@ -481,7 +491,13 @@ function splitByChunk(text, chunkSize)
 		s[#s+1] = text:sub(i,i+chunkSize - 1)
 		
 	end
-	return s
+	local result = ""
+	for i,v in ipairs(s) do
+		
+		result = result .. "\n" .. v
+		
+	end
+	return result
 end
 
 function split(s, sep)
@@ -612,267 +628,260 @@ end
 function getGameTimeHHmm()
 	
 	-- local enginetime = Game.GetTimeSystem()
--- local times = enginetime:GetGameTimeStamp() 
--- local temp = os.date('!*t', times)
--- local t = os.time()
--- local ut = os.date('!*t',t)
--- local lt = os.date('*t',t)
-
-local gameTime = Game.GetTimeSystem():GetGameTime()
-
-
-local temp = {}
-temp.hour = GetSingleton('GameTime'):Hours(gameTime)
-temp.min = GetSingleton('GameTime'):Minutes(gameTime)
-temp.sec = GetSingleton('GameTime'):Seconds(gameTime)
-temp.day = GetSingleton('GameTime'):Days(gameTime)
-
-
--- local thour = lt.hour - ut.hour
--- -- tmin = lt.min - ut.min
--- --debugPrint(2,"timezone"..thour)
--- -- debugPrint(2,tmin)
--- --debugPrint(2,"first date "..temp.hour.." "..temp.min)
--- --temp.hour = temp.hour - thour
-
-
-local tempzero = ""
--- -- if(temp.hour == 1)then
--- -- temp.hour = 25
--- -- end
-
--- -- if(temp.hour == 2)then
--- -- temp.hour = 0
--- -- end
-
--- -- if(temp.hour == 0)then
--- -- temp.hour = 24
--- -- end
-
-if(temp.min < 10)then
-tempzero = "0"
-end
-
-
-return temp.hour..tempzero..temp.min
-
+	-- local times = enginetime:GetGameTimeStamp() 
+	-- local temp = os.date('!*t', times)
+	-- local t = os.time()
+	-- local ut = os.date('!*t',t)
+	-- local lt = os.date('*t',t)
+	
+	local gameTime = Game.GetTimeSystem():GetGameTime()
+	
+	
+	local temp = {}
+	temp.hour = GetSingleton('GameTime'):Hours(gameTime)
+	temp.min = GetSingleton('GameTime'):Minutes(gameTime)
+	temp.sec = GetSingleton('GameTime'):Seconds(gameTime)
+	temp.day = GetSingleton('GameTime'):Days(gameTime)
+	
+	
+	-- local thour = lt.hour - ut.hour
+	-- -- tmin = lt.min - ut.min
+	-- --debugPrint(2,"timezone"..thour)
+	-- -- debugPrint(2,tmin)
+	-- --debugPrint(2,"first date "..temp.hour.." "..temp.min)
+	-- --temp.hour = temp.hour - thour
+	
+	
+	local tempzero = ""
+	-- -- if(temp.hour == 1)then
+	-- -- temp.hour = 25
+	-- -- end
+	
+	-- -- if(temp.hour == 2)then
+	-- -- temp.hour = 0
+	-- -- end
+	
+	-- -- if(temp.hour == 0)then
+	-- -- temp.hour = 24
+	-- -- end
+	
+	if(temp.min < 10)then
+		tempzero = "0"
+	end
+	
+	
+	return temp.hour..tempzero..temp.min
+	
 end
 
 function get_timezone()
-local now = os.time()
-return os.difftime(now, os.time(os.date("!*t", now)))
+	local now = os.time()
+	return os.difftime(now, os.time(os.date("!*t", now)))
 end
 
 -- Return a timezone string in ISO 8601:2000 standard form (+hhmm or -hhmm)
 function get_tzoffset(timezone)
-local h, m = math.modf(timezone / 3600)
-return string.format("%+.4d", 100 * h + 60 * m)
+	local h, m = math.modf(timezone / 3600)
+	return string.format("%+.4d", 100 * h + 60 * m)
 end
 
 function addGameTime(temp, value)
-
-local nexttemp = temp.hour + value
-if(nexttemp > 24) then
-nexttemp = nexttemp -24
-end
-
-Game.GetTimeSystem():SetGameTimeByHMS(nexttemp, 00,00)
-debugPrint(2,nexttemp)
-return getGameTime()
-
+	
+	local nexttemp = temp.hour + value
+	if(nexttemp > 24) then
+		nexttemp = nexttemp -24
+	end
+	
+	Game.GetTimeSystem():SetGameTimeByHMS(nexttemp, 00,00)
+	debugPrint(2,nexttemp)
+	return getGameTime()
+	
 end
 
 function setGameTime(hour,minutes)
-
-local nexttemp = {}
-
-nexttemp.hour = hour
-nexttemp.min = minutes
-nexttemp.sec = 0
-
-if(nexttemp.hour == 1)then
-nexttemp.hour = 25
-end
-
-if(nexttemp.hour == 2)then
-nexttemp.hour = 0
-end
-
-if(nexttemp.hour == 0)then
-nexttemp.hour = 24
-end
-
-nexttemp.hour = nexttemp.hour-2
-
-Game.GetTimeSystem():SetGameTimeByHMS(nexttemp.hour, nexttemp.min,nexttemp.sec)
-
-return getGameTime()
-
+	
+	local nexttemp = {}
+	
+	nexttemp.hour = hour
+	nexttemp.min = minutes
+	nexttemp.sec = 0
+	
+	if(nexttemp.hour == 1)then
+		nexttemp.hour = 25
+	end
+	
+	if(nexttemp.hour == 2)then
+		nexttemp.hour = 0
+	end
+	
+	if(nexttemp.hour == 0)then
+		nexttemp.hour = 24
+	end
+	
+	nexttemp.hour = nexttemp.hour-2
+	
+	Game.GetTimeSystem():SetGameTimeByHMS(nexttemp.hour, nexttemp.min,nexttemp.sec)
+	
+	return getGameTime()
+	
 end
 
 function getTest()
 end
 
 function getCurrentDistrict(psi,arrayDistricts)
-
-
-local pti = {}
-
-
-
-pti.x = psi.x
-pti.y = psi.y
-
-
-local unknow = {}
-unknow.Name = "Unknown"
-unknow.Tag = "district_unknown"
-unknow.Polygon = {}
-unknow.POI = {}
-
-nameD=unknow
---debugPrint(2,arrayDistricts[1].Name)
-
-for i = 1, #arrayDistricts do
-
-if(insidePolygon(arrayDistricts[i].Polygon,pti))then
-
-nameD = arrayDistricts[i]
-
-
-
-end
-
-end
-return nameD
-
+	
+	
+	local pti = {}
+	
+	
+	
+	pti.x = psi.x
+	pti.y = psi.y
+	
+	
+	local unknow = {}
+	unknow.Name = "Unknown"
+	unknow.Tag = "district_unknown"
+	unknow.Polygon = {}
+	unknow.POI = {}
+	
+	nameD=unknow
+	--debugPrint(2,arrayDistricts[1].Name)
+	
+	for i = 1, #arrayDistricts do
+		
+		if(insidePolygon(arrayDistricts[i].Polygon,pti))then
+			
+			nameD = arrayDistricts[i]
+			
+			
+			
+		end
+		
+	end
+	return nameD
+	
 end
 
 function searchAround()
-
-local player = Game.GetPlayer()
-local targetingSystem = Game.GetTargetingSystem()
-local parts = {}
-
-local searchQuery = Game["TSQL_ALL;"]
-searchQuery.maxDistance = Game["SNameplateRangesData::GetDisplayRange;"]
-searchQuery.searchFilter = Game["TSF_Quickhackable;"]
-success, parts = targetingSystem:GetTargetParts(player, searchQuery, parts)
-
-for _,v in ipairs(parts) do
-local obj = v:GetComponent(v):GetEntity()
-local targetPS = obj:GetDevicePS()
-if targetPS ~= nil then
-
-if targetPS.currentTimeToDepart  ~= nil then
-
-debugPrint(2,targetPS.currentTimeToDepart)
-
-
-end
-
-
-end
-end
-
+	
+	local player = Game.GetPlayer()
+	local targetingSystem = Game.GetTargetingSystem()
+	local parts = {}
+	
+	local searchQuery = Game["TSQL_ALL;"]
+	searchQuery.maxDistance = Game["SNameplateRangesData::GetDisplayRange;"]
+	searchQuery.searchFilter = Game["TSF_Quickhackable;"]
+	success, parts = targetingSystem:GetTargetParts(player, searchQuery, parts)
+	
+	for _,v in ipairs(parts) do
+		local obj = v:GetComponent(v):GetEntity()
+		local targetPS = obj:GetDevicePS()
+		if targetPS ~= nil then
+			
+			if targetPS.currentTimeToDepart  ~= nil then
+				
+				debugPrint(2,targetPS.currentTimeToDepart)
+				
+				
+			end
+			
+			
+		end
+	end
+	
 end
 
 function insidePolygon(polygon, point)
-local tx = point.x
-local ty = point.y
-local pgon = polygon
-local i, yflag0, yflag1, inside_flag
-local vtx0, vtx1
-
-local numverts = #pgon
-vtx0 = pgon[numverts]
-vtx1 = pgon[1]
-
--- get test bit for above/below X axis
-yflag0 = ( vtx0.y >= ty )
-inside_flag = false
-
-for i=2,numverts+1 do
-yflag1 = ( vtx1.y >= ty )
-
-
-if ( yflag0 ~= yflag1 ) then
-
-if ( ((vtx1.y - ty) * (vtx0.x - vtx1.x) >= (vtx1.x - tx) * (vtx0.y - vtx1.y)) == yflag1 ) then
-inside_flag = not inside_flag
-
-end
-end
-
--- Move to the next pair of vertices, retaining info as possible.
-yflag0  = yflag1
-vtx0    = vtx1
-vtx1    = pgon[i]
-end
-
-return  inside_flag
+	local tx = point.x
+	local ty = point.y
+	local pgon = polygon
+	local i, yflag0, yflag1, inside_flag
+	local vtx0, vtx1
+	
+	local numverts = #pgon
+	vtx0 = pgon[numverts]
+	vtx1 = pgon[1]
+	
+	-- get test bit for above/below X axis
+	yflag0 = ( vtx0.y >= ty )
+	inside_flag = false
+	
+	for i=2,numverts+1 do
+		yflag1 = ( vtx1.y >= ty )
+		
+		
+		if ( yflag0 ~= yflag1 ) then
+			
+			if ( ((vtx1.y - ty) * (vtx0.x - vtx1.x) >= (vtx1.x - tx) * (vtx0.y - vtx1.y)) == yflag1 ) then
+				inside_flag = not inside_flag
+				
+			end
+		end
+		
+		-- Move to the next pair of vertices, retaining info as possible.
+		yflag0  = yflag1
+		vtx0    = vtx1
+		vtx1    = pgon[i]
+	end
+	
+	return  inside_flag
 end
 
 function checkWithFixer(curPos)
-
-for k,v in pairs(arrayFixer) do
---debugPrint(2,arrayFixer[i].Name)
-if(arrayFixer[k].fixer.Name ~= "Delamain")then
-if(checkPosFixer(curPos,arrayFixer[k].fixer.LOC_X,arrayFixer[k].fixer.LOC_Y,arrayFixer[k].fixer.range))then
-Game.ChangeZoneIndicatorSafe()
-return arrayFixer[k].fixer
-
-end
-
-else
-inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
-if (inVehicule) then
-vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
-
-if(vehicule ~=nil) then
-isDelamainDrived = (string.find(vehicule:GetDisplayName(), "Delamain") ~= nil)
-if isDelamainDrived then
-
-return arrayFixer[k].fixer
-
-end
-end
-end
-
-end
-end
-
-
-if(fixerCanSpawn == false)then
-Game.GetPreventionSpawnSystem():RequestDespawnPreventionLevel(-85)
-objLook = Game.GetTargetingSystem():GetLookAtObject(Game.GetPlayer(),false,false)
-if(objLook ~= nil) then
-Game.GetPreventionSpawnSystem():RequestDespawn(Game.GetTargetingSystem():GetLookAtObject(Game.GetPlayer(), false, false):GetEntityID())
-end
-fixerCanSpawn = true
-end
-
+	
+	for k,v in pairs(arrayFixer) do
+		--debugPrint(2,arrayFixer[i].Name)
+		if(arrayFixer[k].fixer.Name ~= "Delamain")then
+			if(checkPosFixer(curPos,arrayFixer[k].fixer.LOC_X,arrayFixer[k].fixer.LOC_Y,arrayFixer[k].fixer.range))then
+				Game.ChangeZoneIndicatorSafe()
+				return arrayFixer[k].fixer
+				
+			end
+			
+			else
+			inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
+			if (inVehicule) then
+				vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+				
+				if(vehicule ~=nil) then
+					isDelamainDrived = (string.find(vehicule:GetDisplayName(), "Delamain") ~= nil)
+					if isDelamainDrived then
+						
+						return arrayFixer[k].fixer
+						
+					end
+				end
+			end
+			
+		end
+	end
+	
+	
+	
+	
 end
 
 function checkNearFastTravel(curPos)
-
-for i=1, #arrayFastTravel do
-local FT = arrayFastTravel[i]
-debugPrint(2,curPos.x)
-debugPrint(2,curPos.y)
-if(checkPos(curPos, FT.X, FT.Y,10)) then 
-
-return true
-
-end
-
-
-end
-
-return false
-
-
-
+	
+	for i=1, #arrayFastTravel do
+		local FT = arrayFastTravel[i]
+		debugPrint(2,curPos.x)
+		debugPrint(2,curPos.y)
+		if(checkPos(curPos, FT.x, FT.y,10)) then 
+			
+			return true
+			
+		end
+		
+		
+	end
+	
+	return false
+	
+	
+	
 end
 
 function IsInDelamainCar()
@@ -1814,157 +1823,157 @@ end
 
 
 function TweakDbtoKey(data)
-	if type(data) == 'number' then
-		return data
-	end
+if type(data) == 'number' then
+return data
+end
 
-	if type(data) == 'string' then
-		data = TweakDbtoTweakId(data)
-	end
+if type(data) == 'string' then
+data = TweakDbtoTweakId(data)
+end
 
-	if type(data) == 'userdata' then
-		data = TweakDbextract(data)
-	end
+if type(data) == 'userdata' then
+data = TweakDbextract(data)
+end
 
-	if type(data) == 'table' then
-		return data.length * 0x100000000 + data.hash
-		--return (data.length << 32 | data.hash)
-	end
+if type(data) == 'table' then
+return data.length * 0x100000000 + data.hash
+--return (data.length << 32 | data.hash)
+end
 
-	return 0
+return 0
 end
 
 function TweakDbisRealKey(key)
-	return key <= 0xFFFFFFFFFF
+return key <= 0xFFFFFFFFFF
 end
 
 function TweakDbtoStruct(data)
-	if type(data) == 'table' then
-		return data
-	end
+if type(data) == 'table' then
+return data
+end
 
-	if type(data) == 'number' then
-		-- { hash = data & 0xFFFFFFFF, length = data >> 32 }
-		local length = math.floor(data / 0x100000000)
-		local hash = data - (length * 0x100000000)
-		return { hash = hash, length = length }
-	end
+if type(data) == 'number' then
+-- { hash = data & 0xFFFFFFFF, length = data >> 32 }
+local length = math.floor(data / 0x100000000)
+local hash = data - (length * 0x100000000)
+return { hash = hash, length = length }
+end
 
-	if type(data) == 'string' then
-		data = TweakDbtoTweakId(data)
-	end
+if type(data) == 'string' then
+data = TweakDbtoTweakId(data)
+end
 
-	if type(data) == 'userdata' then
-		return TweakDbextract(data)
-	end
+if type(data) == 'userdata' then
+return TweakDbextract(data)
+end
 
-	return nil
+return nil
 end
 
 function TweakDbtoType(tweakId, prefix)
-	if type(tweakId) == 'string' then
-		return str.with(tweakId, prefix)
-	end
+if type(tweakId) == 'string' then
+return str.with(tweakId, prefix)
+end
 
-	return ''
+return ''
 end
 
 function TweakDbtoAlias(tweakId--[[, prefix]])
-	return tweakId
+return tweakId
 
-	--if type(tweakId) == 'string' then
-	--	return str.without(tweakId, prefix)
-	--end
-	--
-	--return ''
+--if type(tweakId) == 'string' then
+--	return str.without(tweakId, prefix)
+--end
+--
+--return ''
 end
 
 function TweakDbtoTweakId(tweakId, prefix)
-	if type(tweakId) == 'number' then
-		tweakId = TweakDbtoStruct(tweakId)
-	end
+if type(tweakId) == 'number' then
+tweakId = TweakDbtoStruct(tweakId)
+end
 
-	if type(tweakId) == 'table' then
-		return TweakDBID.new(tweakId.hash, tweakId.length)
-	end
+if type(tweakId) == 'table' then
+return TweakDBID.new(tweakId.hash, tweakId.length)
+end
 
-	if type(tweakId) == 'string' then
-		local hashHex, lenHex = tweakId:match('^<TDBID:([0-9A-Z]+):([0-9A-Z]+)>$')
-		if hashHex and lenHex then
-			return TweakDBID.new(tonumber(hashHex, 16), tonumber(lenHex, 16))
-		elseif tweakId:find('%.') then
-			return TweakDBID.new(tweakId)
-		else
-			return TweakDBID.new(str.with(tweakId, prefix))
-		end
-	end
+if type(tweakId) == 'string' then
+local hashHex, lenHex = tweakId:match('^<TDBID:([0-9A-Z]+):([0-9A-Z]+)>$')
+if hashHex and lenHex then
+return TweakDBID.new(tonumber(hashHex, 16), tonumber(lenHex, 16))
+elseif tweakId:find('%.') then
+return TweakDBID.new(tweakId)
+else
+return TweakDBID.new(str.with(tweakId, prefix))
+end
+end
 
-	if type(tweakId) == 'userdata' then
-		return tweakId
-	end
+if type(tweakId) == 'userdata' then
+return tweakId
+end
 end
 
 function TweakDbtoItemId(tweakId, seed)
-	if type(tweakId) == 'string' then
-		tweakId = TweakDbtoItemTweakId(tweakId)
-	end
+if type(tweakId) == 'string' then
+tweakId = TweakDbtoItemTweakId(tweakId)
+end
 
-	if seed then
-		return ItemID.new(tweakId, seed)
-	elseif seed == false then
-		return ItemID.new(tweakId)
-	else
-		return GetSingleton('gameItemID'):FromTDBID(tweakId)
-	end
+if seed then
+return ItemID.new(tweakId, seed)
+elseif seed == false then
+return ItemID.new(tweakId)
+else
+return GetSingleton('gameItemID'):FromTDBID(tweakId)
+end
 end
 
 function TweakDbtoItemTweakId(tweakId)
-	return TweakDbtoTweakId(tweakId, 'Items.')
+return TweakDbtoTweakId(tweakId, 'Items.')
 end
 
 function TweakDbtoItemType(alias)
-	return TweakDbtoType(alias, 'Items.')
+return TweakDbtoType(alias, 'Items.')
 end
 
 function TweakDbtoItemAlias(type)
-	return TweakDbtoAlias(type, 'Items.')
+return TweakDbtoAlias(type, 'Items.')
 end
 
 function TweakDbtoVehicleTweakId(tweakId)
-	return TweakDbtoTweakId(tweakId, 'Vehicle.')
+return TweakDbtoTweakId(tweakId, 'Vehicle.')
 end
 
 function TweakDbtoVehicleType(alias)
-	return TweakDbtoType(alias, 'Vehicle.')
+return TweakDbtoType(alias, 'Vehicle.')
 end
 
 function TweakDbtoVehicleAlias(type)
-	return TweakDbtoAlias(type, 'Vehicle.')
+return TweakDbtoAlias(type, 'Vehicle.')
 end
 
 
 
 function TweakDbtoSlotType(alias)
-	return TweakDbtoType(alias, 'AttachmentSlots.')
+return TweakDbtoType(alias, 'AttachmentSlots.')
 end
 
 function TweakDblocalize(tweakId)
-	tweakId = TweakDbtoTweakId(tweakId)
+tweakId = TweakDbtoTweakId(tweakId)
 
-	return {
-		name = Game.GetLocalizedTextByKey(Game['TDB::GetLocKey;TweakDBID'](TweakDBID.new(tweakId, '.displayName'))),
-		comment = Game.GetLocalizedTextByKey(Game['TDB::GetLocKey;TweakDBID'](TweakDBID.new(tweakId, '.localizedDescription'))),
-	}
+return {
+name = Game.GetLocalizedTextByKey(Game['TDB::GetLocKey;TweakDBID'](TweakDBID.new(tweakId, '.displayName'))),
+comment = Game.GetLocalizedTextByKey(Game['TDB::GetLocKey;TweakDBID'](TweakDBID.new(tweakId, '.localizedDescription'))),
+}
 end
 
 function TweakDbextract(data)
-	if data.hash then
-		return { hash = data.hash, length = data.length }
-	end
+if data.hash then
+return { hash = data.hash, length = data.length }
+end
 
-	if data.id then
-		return { id = { data.id.hash, length = data.id.length }, rng_seed = data.rng_seed }
-	end
+if data.id then
+return { id = { data.id.hash, length = data.id.length }, rng_seed = data.rng_seed }
+end
 
-	return data
+return data
 end

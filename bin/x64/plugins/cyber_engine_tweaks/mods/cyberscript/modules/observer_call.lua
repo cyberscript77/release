@@ -11,6 +11,36 @@ function SetObserver()
 		 ComputerMainLayoutWidgetController_OnScreenSaverSpawned(this,widget,userData)
 
 	end)
+	ObserveAfter("ComputerMainLayoutWidgetController", "OnMailsMenuSpawned", function(this,widget,userData)
+		
+		 ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
+
+	end)
+	
+	
+	ObserveAfter("ComputerMainLayoutWidgetController", "ShowMails", function(this)
+		
+		 ComputerInkGameController_ShowMails(this)
+
+	end)
+	
+	ObserveAfter("ComputerMenuWidgetController", "InitializeFiles", function(this,gameController,widgetsData)
+		ComputerMenuWidgetController_InitializeFiles(this,gameController,widgetsData)
+		
+
+	end)
+	
+	ObserveAfter("ComputerMenuWidgetController", "InitializeFilesThumbnails", function(this,gameController,widgetsData)
+		ComputerMenuWidgetController_InitializeFilesThumbnails(this,gameController,widgetsData)
+		
+
+	end)
+	
+	ObserveAfter("ComputerDocumentWidgetController", "Initialize", function(this,gameController,widgetsData)
+		ComputerDocumentWidgetController_Initialize(this,gameController,widgetsData)
+		
+
+	end)
 	
 	ObserveAfter("FullscreenVendorGameController", "PopulateVendorInventory", function(this)
 	 FullscreenVendorGameController_PopulateVendorInventory(this)
@@ -264,8 +294,9 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 		
 	ObserveAfter("ShardsMenuGameController", "PopulateData", function(this)
-		
+		Cron.NextTick(function()
 		ShardsMenuGameController_PopulateData(this)
+		end)
 	end)
 	
 	ObserveAfter('WorldMapMenuGameController', 'OnSelectedDistrictChanged', function(this,oldDistrict,newDistrict)
@@ -676,7 +707,8 @@ function SetOverrider()
 	
 	Override('DoubleJumpDecisions','EnterCondition',function(this,stateContext,scriptInterface, wrappedMethod)
 		
-		DoubleJumpDecisions_EnterCondition(this,stateContext,scriptInterface, wrappedMethod)
+		local value = DoubleJumpDecisions_EnterCondition(this,stateContext,scriptInterface, wrappedMethod)
+		return value
 	end)
 	
 	Override('LocomotionAirEvents','OnUpdate',function(this,timeDelta, stateContext, scriptInterface, wrappedMethod)
@@ -753,55 +785,62 @@ function SetOverrider()
 	-- end)
 
 	
-	Override("RipperdocIdPanel", "SetName", function(this,vendorName,wrappedMethod)
-		RipperdocIdPanel_SetName(this,vendorName,wrappedMethod)
-	end)
+	-- Override("RipperdocIdPanel", "SetName", function(this,vendorName,wrappedMethod)
+		-- RipperdocIdPanel_SetName(this,vendorName,wrappedMethod)
+	-- end)
 	
-	Override("VendorHubMenuGameController", "SetupTopBar", function(this,wrappedMethod)
-		VendorHubMenuGameController_SetupTopBar(this,wrappedMethod)
-	end)
+	-- Override("VendorHubMenuGameController", "SetupTopBar", function(this,wrappedMethod)
+		-- VendorHubMenuGameController_SetupTopBar(this,wrappedMethod)
+	-- end)
 	
-	Override("FullscreenVendorGameController", "PopulateVendorInventory", function(this,wrappedMethod)
+	-- Override("FullscreenVendorGameController", "PopulateVendorInventory", function(this,wrappedMethod)
 		
-		FullscreenVendorGameController_PopulateVendorInventory(this,wrappedMethod)
-	end)
+		-- FullscreenVendorGameController_PopulateVendorInventory(this,wrappedMethod)
+	-- end)
 	
 	
 	---Scanner
 	Override('ScannervehicleGameController', 'OnVehicleInfoChanged', function(this, value,wrappedMethod)
 		ScannervehicleGameController_OnVehicleInfoChanged(this, value,wrappedMethod)
+		print("OnVehicleInfoChanged")
 	end)
 	
 	
 	Override('ScannerNPCHeaderGameController', 'OnNameChanged', function(this, value,wrappedMethod)
 		ScannerNPCHeaderGameController_OnNameChanged(this, value,wrappedMethod)
-		
+		print("OnNameChanged")
 	end)
 	
 	Override('ScannerNPCHeaderGameController', 'OnLevelChanged', function(this, value,wrappedMethod)
 		 ScannerNPCHeaderGameController_OnLevelChanged(this, value,wrappedMethod)
+		 print("OnLevelChanged")
 	end)
 	
 	Override('ScannerNPCHeaderGameController', 'OnAttitudeChange', function(this, value,wrappedMethod)
 		 ScannerNPCHeaderGameController_OnAttitudeChange(this, value,wrappedMethod)
+		 print("OnAttitudeChange")
 		
 	end)
 	
 	Override('ScannerNPCBodyGameController', 'OnFactionChanged', function(this, value,wrappedMethod)
 		ScannerNPCBodyGameController_OnFactionChanged(this, value,wrappedMethod)
+		print("OnFactionChanged")
 	end)
 	
 	
 	Override('ScannerNPCBodyGameController', 'OnRarityChanged', function(this, value,wrappedMethod)
 		 ScannerNPCBodyGameController_OnRarityChanged(this, value,wrappedMethod)
+		 print("OnRarityChanged")
 	end)
 	
 	Override('ScannerBountySystemGameController', 'OnBountySystemChanged', function(this, value,wrappedMethod)
 		ScannerBountySystemGameController_OnBountySystemChanged(this, value,wrappedMethod)
+		print("OnBountySystemChanged")
 	end)
 	
 	Override('scannerDetailsGameController', 'RefreshLayout', function(this,wrappedMethod)
-		cannerDetailsGameController_RefreshLayout(this,wrappedMethod)
+		scannerDetailsGameController_RefreshLayout(this,wrappedMethod)
+		print("RefreshLayout")
 	end)
 	
 	

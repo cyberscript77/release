@@ -474,8 +474,6 @@ function initCore() --Setup session, external observer and trigger mod core load
 	
 	
 	
-	if GetMod('ImmersiveFirstPerson') then GetMod('ImmersiveFirstPerson').api.Disable() debugPrint(1,getLang("immersivepersonenabled")) end
-	
 	
 	
 	
@@ -548,7 +546,10 @@ function initCore() --Setup session, external observer and trigger mod core load
 	CheckandUpdateDatapack()
 	LoadDataPackCache()
 	SaveLoading()
-	initEditor()
+	if file_exists("modules/editor.lua") then
+		initEditor()
+	end
+	
 	
 	debugPrint(1,getLang("CyberScriptinit"))
 	tick = 0
@@ -614,6 +615,10 @@ function inGameInit() -- init some function after save loaded
 	local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
 	blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
 	Game.SetTimeDilation(0)
+
+pcall(function()
+	Game.GetSettingsSystem():GetVar("/gameplay/performance", "CrowdDensity"):SetValue("High")
+end)
 	debugPrint(1,getLang("seestarted"))
 end
 function shutdownManager() -- setup some function at shutdown
@@ -655,7 +660,7 @@ function TweakManager() -- Load vehicles and change some TweakDB
 	local encdo = lines
 	local tableDis = {}
 	tableDis =json.decode(lines)
-	
+	vehiclelist = tableDis
 	f:close()
 	
 	local unlockableVehicles = TweakDB:GetFlat(TweakDBID.new('Vehicle.vehicle_list.list'))
@@ -700,6 +705,8 @@ end
 -- ------------------------------------------------------------------
 
 registerForEvent("onInit", function()
+	
+	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	JSON = dofile("external/json.lua")
 	
 	Observe('PlayerPuppet', 'OnAction',function(_,action)
@@ -711,9 +718,11 @@ registerForEvent("onInit", function()
 	loadExternal()
 	cyberscript.var = dofile('modules/var.lua')
 	cyberscript.observercontroller = dofile('modules/observer_call.lua')
+
 	resetVar()
 	ModInitialisation()
 	setupCore()
+	
 end)
 registerForEvent('onDraw', function()
 	
@@ -730,10 +739,11 @@ registerForEvent("onUpdate", function(delta)
 			Game.GetPlayer():SetWarningMessage(getLang("CyberScript : Hot Reload in progress..."))
 			loadModule()
 			Game.GetPlayer():SetWarningMessage(getLang("CyberScript : Hot Reload finished !"))
+			TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 		else
 	
 		if saveLocationEnabled then
-			savePath(recordRotation,recordRelative)
+			savePath(recordRotation,recordRelative,recordRotationOnly)
 		end
 		if playLocationEnabled then
 			playPath()
@@ -761,7 +771,7 @@ registerForEvent("onOverlayClose", function()
 	overlayOpen = false
 end)
 registerForEvent("onTweak", function()
-
+	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	TweakManager()
 	
 end)

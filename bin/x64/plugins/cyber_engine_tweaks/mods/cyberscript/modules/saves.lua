@@ -274,7 +274,7 @@ function updateHousing(item)
 	local res = false 
 	for i=1,#currentSave.arrayHousing do
 	
-		if(currentSave.arrayHousing[i].Id == item.Id) then
+		if(currentSave.arrayHousing[i].Tag == item.Tag) then
 			currentSave.arrayHousing[i].X = item.X
 			currentSave.arrayHousing[i].Y = item.Y
 			currentSave.arrayHousing[i].Z = item.Z
@@ -295,18 +295,8 @@ function getHousing(tag,x,y,z)
 	for i = 1, #currentSave.arrayHousing do
 	
 	local item = currentSave.arrayHousing[i]
-		debugPrint(4,item.Tag)
-		debugPrint(4,tag)
 		
-		debugPrint(4,item.X)
-		debugPrint(4,x)
-		
-		debugPrint(4,item.Y)
-		debugPrint(4,y)
-		
-		debugPrint(4,item.Z)
-		debugPrint(4,z)
-	if(tostring(item.X) == tostring(x) and tostring(item.Y) == tostring(y) and tostring(item.Z) == tostring(z) and tostring(item.Tag) == tostring(tag)) then
+	if(tostring(item.Tag) == tostring(tag)) then
 		debugPrint(4,item.Tag)
 		return item
 	
@@ -649,55 +639,29 @@ end
 	
 	
 	
-	
+--obsolete	
 function setScore(tag,key,score)
 	
 	
-	if(type(score) == "number") then
-	
-		if(currentSave.Variable[tag] == nil) then
-		
-		
-		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = 0
-		
-		end 
-		
-		currentSave.Variable[tag][key] = score
-
-	end
+	 setVariable(tag,key,score)
 end
-
+--obsolete
 function getScoreKey(tag,key)
-	local score = currentSave.Variable[tag]
 	
-	if(score ~= nil) then
-	
-		return currentSave.Variable[tag][key]
-	
-	end
+	return getVariableKey(tag,key)
 	
 	
 end
-
+--obsolete
 function getScoreKeyWithDefault(tag,key,default)
-	local score = currentSave.Variable[tag]
 	
-	if(score ~= nil) then
-	
-		return currentSave.Variable[tag][key]
-	else
-		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = default
-		return currentSave.Variable[tag][key]
-	end
-	
+	return getVariableKeyWithDefault(tag,key,default)
 	
 end
-
+--obsolete
 function getScore(tag)
 	
-	return currentSave.Variable[tag]
+	return getVariable(tag)
 		
 	
 end
@@ -758,8 +722,13 @@ function getVariableKeyWithDefault(tag,key,default)
 	local score = currentSave.Variable[tag]
 	
 	if(score ~= nil) then
-	
-		return currentSave.Variable[tag][key]
+		 score = currentSave.Variable[tag][key]
+		 if(score ~= nil) then
+			return currentSave.Variable[tag][key]
+		else
+			currentSave.Variable[tag][key] = default
+			return currentSave.Variable[tag][key]
+		 end
 	else
 		currentSave.Variable[tag] = {}
 		currentSave.Variable[tag][key] = default

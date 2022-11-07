@@ -26,13 +26,16 @@ function windowsManager() -- manage and toggle UI windows
 		
 		
 		if(overlayOpen ) then
-			if debugLog == true then
-				frameworklog()
-			end	
+			
 			if debugOptions == true then
 				debugWindows()
 			end	
-			newWindows()
+			
+			
+			if file_exists("modules/editor.lua") then
+				newWindows()
+			end
+			
 			
 			if(openEditor) then
 				editorWindows()
@@ -40,6 +43,11 @@ function windowsManager() -- manage and toggle UI windows
 				if(openEditTrigger) then
 					TriggerEditWindows()	
 				end
+				
+				if(openQuestGraph) then
+					QuestGraph()	
+				end
+				
 				if(openEditActionTrigger) then
 					TriggerActionEditWindows()	
 				end
@@ -459,7 +467,8 @@ function refreshUIWidget()
 					-- control.ink.root:SetOpacity(control.data.opacity)
 					-- control.ink.root:SetRotation(control.data.rotation)
 						if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"visible")) or (table.contains(control.data.dynamic,"default"))   then 
-						control.ink:GetRootWidget():SetVisible(control.data.visible)
+						print("test "..GameDump(control.ink:GetRootWidget()))
+						if control.ink:GetRootWidget().name ~=nil then control.ink:GetRootWidget():SetVisible(control.data.visible) end
 						end
 					-- control.ink.root:SetTranslation(Vector2.new({ X = translationwidth, Y = translationheight }))
 					-- control.ink.root:SetPadding(inkMargin.new(control.data.padding))
@@ -1042,7 +1051,7 @@ end
 
 if setting.type == "toggle" then
 nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
-	setVariable(setting.variable.tag,setting.variable.key,value)
+	setVariable(setting.target.tag,setting.target.key,value)
  	runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
  	
  end)
@@ -1051,7 +1060,7 @@ end
 if setting.type == "sliderInt" then
  nativeSettings.addRangeInt("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 
-	setScore(setting.variable.tag,setting.variable.key,value)
+	setScore(setting.target.tag,setting.target.key,value)
  	runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
  	
  end)
@@ -1061,7 +1070,7 @@ end
 if setting.type == "sliderFloat" then
  nativeSettings.addRangeFloat("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step,"%.2f", getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 
-	setScore(setting.variable.tag,setting.variable.key,value)
+	setScore(setting.target.tag,setting.target.key,value)
  	runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
  	
  end)
@@ -1158,12 +1167,12 @@ function makeNativeSettings()
 			end
 	end
 	
-	local reader = dir("data/cache")
+	local reader = dir("cache")
 	
 	for i=1, #reader do 
 		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 			
-				os.remove('data/cache/'..reader[i].name)
+				os.remove('cache/'..reader[i].name)
 	
 	
 			
@@ -1256,6 +1265,7 @@ function makeNativeSettings()
  	Game.untrack()
  	
  end)
+
 	nativeSettings.addSwitch("/CM/actions", getLang("Enable Custom Quest"), getLang("Enable Custom Quest"), enableCustomQuest, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
 		enableCustomQuest = state
 		updateUserSetting("enableCustomQuest", enableCustomQuest)
@@ -1263,7 +1273,7 @@ function makeNativeSettings()
 	
 	nativeSettings.addButton("/CM/actions",  getLang("ui_setting_actions_resetquest"),  getLang("ui_setting_actions_resetquest"), "Reset CS Quest", 45, function()
  		if currentQuest then
-			closeQuest(currentQuest)
+			resetQuest()
 		end
  	
  end)
@@ -1293,7 +1303,7 @@ function makeNativeSettings()
  
  end)
  
- nativeSettings.addButton("/CM/actions", getLang("ui_setting_actions_cleareaffinity"), getLang("ui_setting_actions_recalculateaffinity_msg"),"Clear", 45, function()
+	nativeSettings.addButton("/CM/actions", getLang("ui_setting_actions_cleareaffinity"), getLang("ui_setting_actions_recalculateaffinity_msg"),"Clear", 45, function()
 		for k,v in pairs(arrayFaction) do
 			setScore("Affinity",k, 0)
 		end
@@ -1303,10 +1313,13 @@ function makeNativeSettings()
 	
  	
  end)
-	nativeSettings.addSwitch("/CM/actions", getLang("ui_setting_actions_auto_refresh"), getLang("ui_setting_actions_auto_refresh"), AutoRefreshDatapack, AutoRefreshDatapack, function(state) -- path, label, desc, currentValue, defaultValue, callback
-		AutoRefreshDatapack = state
-		updateUserSetting("AutoRefreshDatapack", AutoRefreshDatapack)
-	end)
+	
+	nativeSettings.addButton("/CM/actions", getLang("Hot Reload the mod"), getLang("Hot Reload the mod. Without Reload CET"), "Hot Reload", 45, function()
+		hotreload = true
+	
+ 	
+ end)
+ 
 	
 	nativeSettings.addButton("/CM/actions", getLang("ui_setting_actions_refresh"), getLang("ui_setting_actions_refresh"), "Refresh", 45, function()
 	CheckandUpdateDatapack()
@@ -1317,12 +1330,12 @@ function makeNativeSettings()
  
 	nativeSettings.addButton("/CM/actions", getLang("ui_setting_actions_rebuild"), getLang("ui_setting_actions_rebuild"), "Rebuild", 45, function()
 	
-	local reader = dir("data/cache")
+	local reader = dir("cache")
 	
 	for i=1, #reader do 
 		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 			
-				os.remove('data/cache/'..reader[i].name)
+				os.remove('cache/'..reader[i].name)
 	
 	
 			
@@ -1332,18 +1345,14 @@ function makeNativeSettings()
 	
 	
  	ImportDataPack()
+	CheckandUpdateDatapack()
 	LoadDataPackCache()
 	debugPrint(2, getLang("ui_setting_actions_rebuild_done"))
  	
  end)
  
- nativeSettings.addButton("/CM/actions", getLang("Hot Reload"), getLang("Hot Reload the mod"), "Hot Reload", 45, function()
-	hotreload = true
 	
- 	
- end)
- 
- nativeSettings.addButton("/CM/actions", "Reset the mod", "Will totaly delete download datapack, cache and latest session", "Reset the mod", 45, function()
+	nativeSettings.addButton("/CM/actions", "Reset the mod", "Will totaly delete download datapack, cache and latest session", "Reset the mod", 45, function()
 	
 	if file_exists("sessions/latest.txt") then
 		os.remove("sessions/latest.txt")
@@ -1357,12 +1366,12 @@ function makeNativeSettings()
 			end
 	end
 	
-	local reader = dir("data/cache")
+	local reader = dir("cache")
 	
 	for i=1, #reader do 
 		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 			
-				os.remove('data/cache/'..reader[i].name)
+				os.remove('cache/'..reader[i].name)
 	
 	
 			
@@ -1372,6 +1381,7 @@ function makeNativeSettings()
 	
 	
  	ImportDataPack()
+	CheckandUpdateDatapack()
 	LoadDataPackCache()
 	debugPrint(2, getLang("ui_setting_actions_rebuild_done"))
  	
@@ -1461,29 +1471,6 @@ function makeNativeSettings()
 	end)
 
 	
-	nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_debug_options"),  getLang("ui_setting_cheat_debug_options"), debugOptions, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-		debugOptions = state
-		
-	end)
-	
-	nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_debug_log"),  getLang("ui_setting_cheat_debug_log"), debugLog, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-		debugLog = state
-		
-	end)
-	
-	nativeSettings.addRangeFloat("/CMCHEAT/player", getLang("logrecordlevel"),  getLang("logrecordlevel"), 1, 10, 1, "%.1f", logrecordlevel, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
-		pcall(function() 
-		logrecordlevel = tonumber(string.format("%.1f", value))
-		updateUserSetting("logrecordlevel", logrecordlevel)
-		
-		-- local newMod = gameConstantStatModifierData.new()
-		-- newMod.statType = 596
-		-- newMod.modifierType = 2
-		-- newMod.value = Jump_Height
-		
-		-- Game.GetStatsSystem():AddModifier(Game.GetPlayer():GetEntityID(),newmod)
-		end)
-	end)
 	
 	
 	end)
@@ -1514,12 +1501,12 @@ function makeNativeSettings()
 			end
 	end
 	
-	local reader = dir("data/cache")
+	local reader = dir("cache")
 	
 	for i=1, #reader do 
 		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 			
-				os.remove('data/cache/'..reader[i].name)
+				os.remove('cache/'..reader[i].name)
 	
 	
 			
@@ -1543,7 +1530,7 @@ function makeNativeSettings()
 ---IMGUI UI---
 function newWindows()
 	
-	if not ImGui.Begin(getLang("ui_menu")) then return end
+	if not ImGui.Begin(getLang("CyberScript")) then return end
 	ImGui.SetNextWindowPos(800, 800, ImGuiCond.Appearing) -- set window position x, y
 	ImGui.SetNextWindowSize(menuWindowsX, menuWindowsY, ImGuiCond.Appearing) -- set window size w, h
 	ImGui.SetWindowSize(menuWindowsX, menuWindowsY)
@@ -1573,19 +1560,19 @@ function newWindows()
 		
 		
 		
-		if ImGui.Button(getLang("ui_menu_online"), menuBTNX, menuBTNY) then
-			openanpage("multi")
-		end
-		ImGui.SameLine()
+		-- if ImGui.Button(getLang("ui_menu_online"), menuBTNX, menuBTNY) then
+			-- openanpage("multi")
+		-- end
+		-- ImGui.SameLine()
 		
-		if ImGui.Button(getLang("editor"), menuBTNX, menuBTNY) then
+		if ImGui.Button(getLang("editor"), menuBTNX*2, menuBTNY) then
 			openanpage("editor")
 		end
 		ImGui.EndChild()
 		elseif getcurrentpage() == "editor" then
 		openEditor = true
-		elseif getcurrentpage() == "multi" then
-		openNetContract = true
+		-- elseif getcurrentpage() == "multi" then
+		-- openNetContract = true
 	end
 	ImGui.EndChild()
 end
@@ -1731,29 +1718,6 @@ function debugWindows()
 	
 	if ImGui.BeginTabItem("Command") then
 		local status, result =  pcall(function()
-			ImGui.TextColored(0.79, 0.40, 0.29, 1, "Enable Console : "..tostring(showLog))
-			if CPS:CPButton("Toggle Console Log") then
-				showLog = not showLog
-			end
-			ImGui.TextColored(0.79, 0.40, 0.29, 1, "tick is .."..tostring(tick))
-			ImGui.TextColored(0.79, 0.40, 0.29, 1, "Current Controller is .."..tostring(currentController))
-			charatabledebug = {}
-			
-			if CPS:CPButton("TP to Custom MapPin") then
-				
-				if(ActivecustomMappin ~= nil) then
-					
-					local pos = ActivecustomMappin:GetWorldPosition()
-					Game.TeleportPlayerToPosition(pos.x,pos.y,pos.z)
-				end
-			end
-			pox = ImGui.InputInt("X", pox)
-			poy = ImGui.InputInt("Y", poy)
-			poz = ImGui.InputInt("Z", poz)
-			
-			if CPS:CPButton("TP to XYZ") then
-				Game.TeleportPlayerToPosition(pox,poy,poz)
-			end
 			
 			local chara = ImGui.InputText("chara", "", 100, ImGuiInputTextFlags.AutoSelectAll)
 			ImGui.Text("Selected Character :"..chara)
@@ -1953,248 +1917,8 @@ function debugWindows()
 		ImGui.EndTabItem()
 	end
 	
-	if ImGui.BeginTabItem("Entity Inspector") then
-		local status, result =  pcall(function()
-		if objLook ~= nil then
-			ImGui.Indent()
-			
-			local entity = objLook
-			-- Functions
-			IGE.DrawNodeTree("GetEntityID", "entEntityID", entity:GetEntityID(), 
-			function(entEntityID) entEntityIDDraw(entEntityID) end)
-			
-			if ImGui.Button("Destroy") then
-				entity:Dispose()
-			end
-			
-			
-			if entity:IsPlayer() then
-				IGE.DisplayObjectArray("GetPlayerCurrentWorkspotTags", "CName", entity:GetPlayerCurrentWorkspotTags(),
-				function(key, value) CNameDraw("Tag", value) end)
-			end
-			
-			if entity:IsVehicle() then
-				ImGui.Text("Entity is an vehicle")
-				ImGui.Spacing()
-				ImGui.Text("Available Seats Slot: ")
-				
-				local seatstable = GetSeats(entity)
-				
-				if #seatstable > 0 then
-					for i=1, #seatstable do 
-						ImGui.Text(seatstable[i])
-						ImGui.Spacing()
-					end
-				end
-				else
-				ImGui.Text("Entity is not an vehicule")
-				ImGui.Spacing()
-			end
-			
-			local obj = getEntityFromManagerById(entity:GetEntityID())
-			
-			if obj.id ~= nil then
-				ImGui.Text("This entity has been registered as Entity in CyberScript with tag "..obj.tag)
-				ImGui.Spacing()
-				
-				ImGui.Text("This entity has been registered as AV ?"..tostring(obj.isAV))
-				ImGui.Spacing()
-				if ImGui.Button("dump") then
-					debugPrint(10,tostring(dump(obj)))
-				end
-				local group = getEntityGroupfromEntityTag(obj.tag)
-				
-				if group ~= nil then
-					ImGui.Text("This entity has been registered in the Group "..group.tag)
-				end
-			end
-		
-			CNameDraw("GetCurrentAppearanceName", entity:GetCurrentAppearanceName())
-			CNameDraw("GetCurrentContext", entity:GetCurrentContext())
-			CNameDraw("GetDisplayName", entity:GetDisplayName())
-			
-			IGE.DisplayVector4("GetWorldPosition", entity:GetWorldPosition())
-			IGE.ObjectToText("GetWorldOrientation", entity:GetWorldOrientation())
-			IGE.DisplayVector4("GetWorldForward", entity:GetWorldForward())
-			
-			IGE.DisplayVector4("GetWorldRight", entity:GetWorldRight())
-			IGE.DisplayVector4("GetWorldUp", entity:GetWorldUp())
-			IGE.ObjectToText("GetWorldYaw", entity:GetWorldYaw())
-			-- IGE.ObjectToText("IsAttached", entity:IsAttached()) -- Good way to tell if object has been deleted!
-			-- IGE.ObjectToText("IsControlledByAnotherClient", entity:IsControlledByAnotherClient())
-			-- IGE.ObjectToText("IsControlledByAnyPeer", entity:IsControlledByAnyPeer())
-			-- IGE.ObjectToText("IsControlledBylocalPeer", entity:IsControlledBylocalPeer())
-			-- IGE.ObjectToText("ShouldEnableRemoteLayer", entity:ShouldEnableRemoteLayer())
-			-- IGE.ObjectToText("HasDirectActionsActive", entity:HasDirectActionsActive())
-			-- IGE.ObjectToText("CanRevealRemoteActionsWheel", entity:CanRevealRemoteActionsWheel())
-			-- IGE.ObjectToText("ShouldRegisterToHUD", entity:ShouldRegisterToHUD())
-			-- IGE.ObjectToText("GetIsIconic", entity:GetIsIconic())
-			-- IGE.ObjectToText("GetContentScale", entity:GetContentScale())
-			-- IGE.ObjectToText("IsExplosive", entity:IsExplosive())
-			-- IGE.ObjectToText("IsFastTravelPoint", entity:IsFastTravelPoint())
-			-- IGE.ObjectToText("HasAnySlaveDevices", entity:HasAnySlaveDevices())
-			-- IGE.ObjectToText("IsBodyDisposalPossible", entity:IsBodyDisposalPossible())
-			-- IGE.ObjectToText("IsReplicated", entity:IsReplicated())
-			
-			
-			ImGui.Unindent()
-			
-			
-			posstep =  ImGui.DragFloat("##post", posstep, 0.1, 0.1, 10, "%.3f Position Step")
-			rotstep =  ImGui.DragFloat("##rost", rotstep, 0.1, 0.1, 10, "%.3f Rotation Step")
-			
-			
-			
-			moveX =  ImGui.DragFloat("##x", moveX, posstep, -9999, 9999, "%.3f X")
-			
-			
-
-			moveY = ImGui.DragFloat("##y", moveY, posstep, -9999, 9999, "%.3f Y")
-			
-			
-			moveZ = ImGui.DragFloat("##z", moveZ, posstep, -9999, 9999, "%.3f Z")
-			
-			
-			moveYaw =  ImGui.DragFloat("##yaw", moveYaw, rotstep, -9999, 9999, "%.3f YAW")
-			
-			
-			movePitch = ImGui.DragFloat("##pitch", movePitch, rotstep, -9999, 9999, "%.3f PITCH")
-			
-			
-			moveRoll = ImGui.DragFloat("##roll", moveRoll, rotstep, -9999, 9999, "%.3f ROLL")
-			
-			
-			
-			
-			
-			
-				
-			if ImGui.Button("change position", 300, 0) then
-				local positu =  entity:GetWorldPosition()
-				local qat = entity:GetWorldOrientation()
-				local angless = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				positu.x = positu.x + moveX
-				positu.y = positu.y + moveY
-				positu.z = positu.z + moveZ
-				
-				
-				local cmd = NewObject('handle:AITeleportCommand')
-				
-				cmd.doNavTest = false
-				cmd.rotation = angless
-				cmd.position = positu 
-				
-				
-				executeCmd(entity, cmd)
-		
-			end
-			
-			if ImGui.Button("change angle", 300, 0) then
-				local qat = entity:GetWorldOrientation()
-				local angless = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				
-				angless.yaw = angless.yaw + moveYaw
-				angless.pitch = angless.pitch + movePitch
-				angless.roll = angless.roll + moveRoll
-				
-				local cmd = NewObject('handle:AITeleportCommand')
-				
-				cmd.doNavTest = false
-				cmd.rotation = angless
-				cmd.position = entity:GetWorldPosition() 
-				
-				
-				executeCmd(entity, cmd)
-			
-			
-			end
-				
-				
-			
-		end
-		
-		end)
-		
-		if status == false then
-		
-		
-			debugPrint(10,result)
-			spdlog.error(result)
-		end
-		
-		ImGui.EndTabItem()
-	end
 	
-	if ImGui.BeginTabItem("Current Threads") then
-		
-		if CPS:CPButton("Toggle automatic thread running") then
-			autoScript = not autoScript
-		end
-		ImGui.Text("Automatic Mode : "..tostring(autoScript))
-		
-		if CPS:CPButton("Reset pending actions (Script)") then
-			workerTable = {}
-			despawnAll()
-		end
-		ImGui.Spacing()
-		ImGui.Spacing()
-		
-		if CPS:CPButton("Manual script Step") then
-			CompileCachedThread()
-			ScriptExecutionEngine()
-		end
-		
-		local status, result =  pcall(function()
-			for k,v in pairs(workerTable) do 
-				
-				if ImGui.TreeNode(k) then
-					
-					local index = workerTable[k]["index"]
-					
-					local list = workerTable[k]["action"]
-					
-					local parent = workerTable[k]["parent"]
-					
-					local source = workerTable[k]["source"]
-					
-					local pending = workerTable[k]["pending"]
-					
-					local started = workerTable[k]["started"]
-					
-					local disabled = workerTable[k]["disabled"]
-					
-					local quest = workerTable[k]["quest"]
-					
-					local executortag = workerTable[k]["executortag"]
-					ImGui.Text("index : "..index)
-					ImGui.Text("list : "..#list)
-					ImGui.Text("parent : "..parent)
-					ImGui.Text("source : "..source)
-					ImGui.Text("pending : "..tostring(pending))
-					ImGui.Text("started : "..tostring(started))
-					ImGui.Text("disabled : "..tostring(disabled))
-					
-					if quest ~= nil then
-						ImGui.Text("quest : "..tostring(quest))
-					end
-					ImGui.Text("Executor Tag : "..executortag)
-					if(list[index] ~= nil) then
-					ImGui.Text("Current Action : "..list[index].name)
-					end
-					ImGui.TreePop()
-				end
-			end
-		end)
-		
-		if status == false then
-		
-		
-			debugPrint(10,result)
-			spdlog.error(result)
-		end
-		
-		ImGui.EndTabItem()
-	end
+	
 	
 	if ImGui.BeginTabItem("Dev Playground") then
 		
@@ -2235,214 +1959,6 @@ function debugWindows()
 		ImGui.EndTabItem()
 	end
 	
-	if ImGui.BeginTabItem("Mod Data") then
-		local status, result =  pcall(function()
-		ImGui.Text("Group : ")
-		for k,v in pairs(cyberscript.GroupManager) do
-			
-			local group = v
-			ImGui.Text("Tag : "..group.tag)
-
-			ImGui.Text("Entities : "..#group.entities)
-			ImGui.Separator()
-		end
-		ImGui.Separator()
-		ImGui.Text("Entities")
-		for k,v in pairs(cyberscript.EntityManager) do
-			
-			local enti = v
-			ImGui.Text("Tag : "..enti.tag)
-			
-			ImGui.Text("Tweak : "..tostring(enti.tweak))
-			ImGui.Text("NPC : "..tostring(enti.id))
-		end
-		ImGui.Text("Items Spawned")
-		for i=1, #currentItemSpawned do
-			
-			local enti = currentItemSpawned[i]
-			debugPrint(6,dump(enti))
-			ImGui.Text("Tag : "..enti.Tag)
-			ImGui.Text("Id : "..tostring(enti.entityId))
-		end
-		ImGui.Text("Setting")
-		for k,v in pairs(currentSave.arrayUserSetting) do
-			
-			local enti = v
-			ImGui.Text("Tag : "..k)
-			ImGui.Text("Value : "..tostring(v))
-		end
-		
-		if currentQuest ~= nil then
-			ImGui.Text("Current Quest")
-			ImGui.Text("title : "..currentQuest.title)
-			ImGui.Text("tag : "..currentQuest.tag)
-			ImGui.Text("recommandedlevel : "..tostring(currentQuest.recommandedlevel))
-			ImGui.Text("questtype : "..tostring(currentQuest.questtype))
-			ImGui.Text("statut : "..tostring(getScoreKey(currentQuest.tag,"Score")))
-			for i=1, #currentQuest.objectives do
-				
-				local objectif = currentQuest.objectives[i]
-				ImGui.Text("title : "..objectif.title)
-				ImGui.Text("tag : "..objectif.tag)
-				ImGui.Text("state : "..tostring(QuestManager.GetObjectiveState(objectif.tag).state))
-				ImGui.Text("isoptionnal : "..tostring(currentQuest.isoptionnal))
-			end
-		end
-		ImGui.Separator()
-		ImGui.Text("Interact Group : ")
-		if(currentInteractGroup ~= nil and #currentInteractGroup > 0) then
-			for i=1,#currentInteractGroup do
-				ImGui.Text(currentInteractGroup[i])
-			end
-		end
-		
-		if CPS:CPButton("Refresh Interact Group")  then
-			
-			getInteractGroup()
-		end
-		
-		ImGui.Separator()
-		ImGui.Text("possibleInteract : "..#possibleInteract)
-		ImGui.Text("possibleInteractDisplay : "..#possibleInteractDisplay)
-		ImGui.Separator()
-		
-		if CPS:CPButton("print currentsave data")  then
-			
-			local sessionFile = io.open('currentsave.txt', 'w')
-			sessionFile:write(dump(currentSave))
-			sessionFile:close()
-		end
-		
-		
-		if CPS:CPButton("print arrayDatapack data")  then
-			
-			local sessionFile = io.open('arrayDatapack.lua', 'w')
-			sessionFile:write(dump(arrayDatapack))
-			sessionFile:close()
-		end
-		
-		if CPS:CPButton("print HUD key")  then
-			
-			local sessionFile = io.open('displayHUD.txt', 'w')
-			for k,v in pairs(displayHUD) do
-				sessionFile:write(k, "\n")
-			end
-			sessionFile:close()
-		end
-		
-		
-	end)
-	
-		if status == false then
-		
-		
-			debugPrint(10,result)
-			spdlog.error(result)
-		end
-		
-		ImGui.EndTabItem()
-	end
-	
-	if ImGui.BeginTabItem("Current Quest") then
-		local status, result = pcall(function()
-			
-			if currentQuest ~= nil then
-				ImGui.Text("title : "..currentQuest.title)
-				ImGui.Text("content : "..currentQuest.content)
-				ImGui.Text("tag : "..currentQuest.tag)
-				ImGui.Text("recommandedlevel : "..currentQuest.recommandedlevel)
-				ImGui.Text("questtype : "..currentQuest.questtype)
-				ImGui.Text("district : "..currentQuest.district)
-				ImGui.Text("isNPCD : "..tostring(currentQuest.isNPCD))
-				ImGui.Text("recurrent : "..tostring(currentQuest.recurrent))
-				ImGui.Text("State : "..tostring(getScoreKey(currentQuest.tag,"Score")))
-				for k,v in pairs(currentQuest.trigger_condition) do
-					ImGui.Text(v.name)
-				end
-				
-				if ImGui.TreeNode("trigger_action") then
-					for i=1, #currentQuest.trigger_action do
-						ImGui.Text(currentQuest.trigger_action[i].name)
-					end
-					ImGui.TreePop()
-				end
-				
-				if ImGui.TreeNode("objectives") then
-					for i=1, #currentQuest.objectives do
-						
-						local objective = currentQuest.objectives[i]
-						
-						if ImGui.TreeNode(objective.title.." ( "..objective.tag.." )") then
-							ImGui.Text("state : "..tostring(QuestManager.GetObjectiveState(objective.tag).state))
-							ImGui.Text("isoptionnal : "..tostring(objective.isoptionnal))
-							ImGui.Text("isActive : "..tostring(QuestManager.GetObjectiveState(objective.tag).isActive))
-							ImGui.Text("isComplete : "..tostring(QuestManager.GetObjectiveState(objective.tag).isComplete))
-							ImGui.Text("isTracked : "..tostring(QuestManager.GetObjectiveState(objective.tag).isTracked))
-							ImGui.TreePop()
-						end
-					end
-					ImGui.TreePop()
-				end
-				else
-				ImGui.Text("No current Quest")
-			end
-		end)
-		
-		if status == false then
-		
-		
-			debugPrint(10,result)
-			spdlog.error(result)
-		end
-		
-		ImGui.EndTabItem()
-	end
-	
-	
-	if ImGui.BeginTabItem("Current Bounty") then
-		local status, result = pcall(function()
-			
-			if currentScannerItem ~= nil then
-				ImGui.Text("primaryname : "..currentScannerItem.primaryname)
-				ImGui.Text("secondaryname : "..currentScannerItem.secondaryname)
-				ImGui.Text("entityname : "..currentScannerItem.entityname)
-				ImGui.Text("level : "..tostring(currentScannerItem.level))
-				ImGui.Text("rarity : "..tostring(currentScannerItem.rarity))
-				ImGui.Text("attitude : "..tostring(currentScannerItem.attitude))
-				ImGui.Text("Desc : "..currentScannerItem.text)
-				if currentScannerItem.bounty ~= nil then
-				
-				ImGui.Text("reward : "..tostring(currentScannerItem.bounty.reward))
-				ImGui.Text("streetreward : "..tostring(currentScannerItem.bounty.streetreward))
-				ImGui.Text("danger : "..tostring(currentScannerItem.bounty.danger))
-				ImGui.Text("issuedby : "..tostring(currentScannerItem.bounty.issuedby))
-				
-				
-				for i,v in ipairs(currentScannerItem.bounty.transgressions) do
-					ImGui.Text(v)
-				end
-				
-				for i,v in ipairs(currentScannerItem.bounty.customtransgressions) do
-					ImGui.Text(v)
-				end
-			end
-				
-				else
-				ImGui.Text("No current Bounty")
-			end
-		end)
-		
-		if status == false then
-		
-		
-			debugPrint(10,result)
-			spdlog.error(result)
-		end
-		
-		ImGui.EndTabItem()
-	end
-	
-	
 	CPS.styleEnd(1)
 	ImGui.EndTabBar()
 	ImGui.End()
@@ -2450,57 +1966,6 @@ function debugWindows()
 end
 
 
-function frameworklog()
-	
-	if CPS == nil then return end
-	CPS:setThemeBegin()
-	ImGui.SetNextWindowPos(900, 500, ImGuiCond.Appearing) -- set window position x, y
-	ImGui.SetNextWindowSize(1600, 800, ImGuiCond.Appearing) -- set window size w, h
-	
-	if ImGui.Begin("CyberScript Log Windows") then
-		
-	
-	
-	
-	
-	
-	logLevel = ImGui.InputInt(getLang("Log Level"), logLevel, 1,10, ImGuiInputTextFlags.None)
-	ImGui.Spacing()
-	logFilter = ImGui.InputText(getLang("Log Filter"), logFilter, 100, ImGuiInputTextFlags.AutoSelectAll)
-	ImGui.Spacing()
-	if ImGui.Button("Clear log and log file") then
-		logTable = {}
-		logf:close()
-		io.open("cyberscript.log", "w"):close()
-		logf = io.open("cyberscript.log", "a")
-	end
-	ImGui.Spacing()
-	ImGui.Separator()
-	ImGui.Spacing()
-	
-	
-	ImGui.BeginChild("log", 1500, 600)
-	
-		for i,v in ipairs(logTable) do
-			if(v.level <= logLevel and (logFilter == nil or logFilter == "" or (logFilter ~= nil and logFilter ~= "" and string.match(v.msg, logFilter)))) then
-				ImGui.Text("[Level:"..v.level.."]"..v.datestring..":"..v.msg)
-			end
-		end
-		
-	ImGui.EndChild()
-		
-	
-	
-	
-	
-	
-	
-	end
-	
-	
-	ImGui.End()
-	CPS:setThemeEnd()
-end
 
 function fadeinwindows()
 	
@@ -3564,7 +3029,7 @@ function cycleInteract()
 	--inputcount = inputcount +1
 	
 	currentInteractGroupIndex = currentInteractGroupIndex or 1
-
+	inputInAction = false
 	logme(1,"possibleInteractDisplay"..#possibleInteractDisplay)
 	-- debugPrint(6,"currentInteractGroupIndex"..currentInteractGroupIndex)
 	logme(1,"currentInteractGroup"..currentInteractGroup[currentInteractGroupIndex])
@@ -3613,7 +3078,7 @@ function cycleInteract()
 		debugPrint(6,"tyuss")
 	end
 
-	inputInAction = false
+	
 end
 
 function cycleInteractgroup()

@@ -90,12 +90,14 @@ function exportCompiledDatapackFolder(directories,msg)
 		local k = directories
 		local file = io.open("cache/"..k..".lua", "w")	
 		--file:write('debugPrint(10,'..k..' Cache Loaded) return ')
+		if(file ~= nil) then
 		file:write('return ')
 		file:write(exportDatapackArray(arrayDatapack[k]))
 		file:close()
 		
 		logme(1,k)
 		logme(1,getLang("datapack_datapack_created")..msg)
+		end
 	
 end
 
@@ -166,7 +168,7 @@ function ImportDataPack()
 		
 	end
 	
-	arrayDatapack["default"].enabled =  true
+	
 	end
 
 
@@ -230,7 +232,7 @@ function CheckandUpdateDatapack()
 	local directories = {}
 	
 	if(arrayDatapack["default"] ~= nil) then 
-	arrayDatapack["default"].enabled = true
+	
 	end
 	
 	if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil  ) then
@@ -257,11 +259,7 @@ function CheckandUpdateDatapack()
 		
 		
 		
-		if(k == "default" and arrayDatapack[k] ~= nil ) then
-			
-			arrayDatapack[k].enabled = true
-			
-		end
+	
 		
 		local jsondesc = nil
 		
@@ -315,7 +313,7 @@ function CheckandUpdateDatapack()
 			local isenabled = false
 			haveupdate = true
 			
-			if(k == "default" or (arrayDatapack[k] ~= nil and arrayDatapack[k].enabled == true)) then
+			if((arrayDatapack[k] ~= nil and arrayDatapack[k].enabled == true)) then
 				
 				isenabled = true
 				
@@ -369,8 +367,11 @@ function CheckandUpdateDatapack()
 	
 	local i = 1
 	for k,v in pairs(arrayDatapack) do
-		if('table' == type(v) and k ~= "default") then
-			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil) then
+		
+		local status, retval = pcall(function()
+		if('table' == type(v)) then
+			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil and (table_contains(arrayDatapack[k].metadata.flags,"essential",false) == false)) then
+			
 				nativeSettings.addSwitch("/CMDT", k, "index :"..i, arrayDatapack[k].enabled, arrayDatapack[k].enabled, function(state)
 					if (state == false) then
 						
@@ -380,19 +381,31 @@ function CheckandUpdateDatapack()
 					end
 				end)
 			end
-			i = i +1
-			else
 			
-			if('table' == type(v) and k == "default") then
-			
-			EnableDatapack(k)
-			
+			if((table_contains(arrayDatapack[k].metadata.flags,"essential",false) == true)) then
+				EnableDatapack(k)
 			end
+			
+			i = i +1
+		end
+			
+		end)
+		
+		if status == false then
+											
+											
+								
+											--spdlog.error(getLang("Modpack Setting Error") .. retval.." Modpack : "..k.."value : "..tostring(arrayDatapack[k].enabled))
+											--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
+											
+										end
+										
+		
 		end
 	end
 	
 	buildnativesetting()
-	end
+	
 	
 	end
 end
@@ -762,6 +775,7 @@ end
 	arrayEvent = {}
 	arrayCodex = {}
 	arrayWebpage = {}
+	arrayEmail = {}
 	
 	arrayFunction = {}
 	arrayHousing = {}
@@ -782,6 +796,7 @@ end
 	arrayCharacterArchive = {}
 	
 	if(arrayDatapack ~= nil) then
+	
 	try {
 		function()
 			for k,v in pairs(arrayDatapack) do
@@ -817,24 +832,8 @@ end
 		}
 	}
 	
-	local desc = io.open("changelog.json")
-	lines = desc:read("*a")
-	if(lines ~= "") then
-		local update = trydecodeJSOn(lines,desc,"changelog.json")
-		table.insert(arrayHelp,update)
-	end
-	desc:close()
-	if(#currentSave.arrayHousing ==0) then
-		currentSave.arrayHousing = arrayHousing
-		else
-		for i=1,#arrayHousing do
-			local obj = getItemFromArrayHousing(arrayHousing[i].Tag,arrayHousing[i].X,arrayHousing[i].Y,arrayHousing[i].Z,arrayHousing[i].HouseTag,arrayHousing[i].ItemPath)
-			if(obj == nil) then
-				table.insert(currentSave.arrayHousing, arrayHousing[i])
-				--debugPrint(1,"Added item ino your housing")
-			end
-		end
-	end
+
+	
 	
 	initPath()
 	
@@ -929,16 +928,125 @@ end
 						end
 						elseif(objtype == "housing") then
 						for key, value in pairs(tabl) do 
+						
+							
+							
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							if(#value > 0) then
-								for i=1,#value do
-									local obj = value[i]
-									obj.datapack = datapackname
-									obj.file = path
-									table.insert(arrayHousing,obj)
+							
+							
+							
+							if(value.customIncluded ~= nil) then --amm template
+								print("Cyberscript : AMM housing founded : "..path..". Converting to CS Housing..")
+								local statutfile = true
+								
+								local newobj = {}
+								newobj.target = value.props[1].tag
+								newobj.trigger = {}
+								newobj.tag = value.props[1].tag
+								newobj.trigger.auto = {}
+								newobj.trigger.auto.name = "auto"
+								newobj.requirement = {}
+								local requirement = { "auto" }
+								
+								table.insert(newobj.requirement,requirement)
+								
+								newobj.items = {}
+								newobj.gameid = "fb721b23723385bfd5cb959ad14961d6"
+								
+								
+								for i,prop in ipairs(value.props) do
+									
+									
+									
+									local csprop = {}
+									csprop.HouseTag = prop.tag
+									
+									
+									local testtt = amm_entities[prop.entity_id]
+									if(testttt ~= nil) then
+									
+										csprop.Tag = amm_entities[prop.entity_id].entity_path
+										csprop.Id = prop.tag.."_"..amm_entities[prop.entity_id].entity_path.."_"..prop.uid
+									
+									else
+									
+										csprop.Tag = prop.tag
+										csprop.Id = prop.tag.."_".."unknown".."_"..prop.uid
+									
+									end
+									csprop.Title = prop.name
+									csprop.ItemPath = prop.template_path
+									csprop.appearance = prop.app
+									
+									local pos = loadstring("return "..prop.pos, '')()
+								
+									csprop.X = pos.x
+									csprop.Y = pos.y
+									csprop.Z = pos.z
+									
+									csprop.Yaw = pos.yaw
+									csprop.Pitch = pos.pitch
+									csprop.Roll = pos.roll
+									csprop.gameid = "fb721b23723385bfd5cb959ad14961d6"
+									csprop.scale =loadstring("return "..prop.scale, '')()
+								
+									
+									for y,light in ipairs(value.lights) do
+										
+										if(light.uid == prop.uid) then
+											
+											csprop.color = loadstring("return "..light.color, '')() 
+											csprop.angles = loadstring("return "..light.angles, '')() 
+											
+											
+											
+											csprop.radius = light.radius
+											csprop.intensity = light.intensity
+											
+										
+										end
+								
+									end
+									
+									
+									
+									table.insert(newobj.items,csprop)
+									
 								end
+								
+								
+								
+								arrayHousing[newobj.tag] = {}
+								arrayHousing[newobj.tag].housing = newobj
+								arrayHousing[newobj.tag].file = path
+								arrayHousing[newobj.tag].datapack = datapackname
+								
+								if(statutfile == true) then print("Cyberscript : AMM housing : "..path..". Convertion successfull !") else print("Cyberscript : AMM housing : "..path..". Convertion failed !") end
+								
+								else
+								
+								if(value.tag ~= nil) then
+								print(value.tag)
+								arrayHousing[value.tag] = {}
+								arrayHousing[value.tag].housing = value
+								arrayHousing[value.tag].file = path
+								arrayHousing[value.tag].datapack = datapackname
+								
+								else
+								
+								print("Cyberscript : old housing format founded : "..path..". Not Loaded, apply modification to allow the loading.")
+								
+								end
+							
+								
+							
 							end
+							
+							
+							
+							
+							
 						end
 						elseif(objtype == "interact") then
 						for key, value in pairs(tabl) do 
@@ -977,6 +1085,7 @@ end
 							arrayQuest2[value.tag].quest = value
 							arrayQuest2[value.tag].file = path
 							arrayQuest2[value.tag].datapack = datapackname
+							
 						end
 						elseif(objtype == "node") then
 						for key, value in pairs(tabl) do 
@@ -1176,6 +1285,16 @@ end
 							arrayWebpage[value.tag].file = path
 							arrayWebpage[value.tag].datapack = datapackname
 						end
+						elseif(objtype == "email") then
+						for key, value in pairs(tabl) do 
+							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							rootpath = path
+							
+							arrayEmail[value.tag] = {}
+							arrayEmail[value.tag].entry = value
+							arrayEmail[value.tag].file = path
+							arrayEmail[value.tag].datapack = datapackname
+						end
 						elseif(objtype == "character") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
@@ -1187,13 +1306,16 @@ end
 						end
 					end
 				end
+			
+			
 			end,
 			catch {
 				function(error)
-					debugPrint(1,'Error during creating cache for datatpack: '..error.." "..objtype.." "..datapackname.." path : "..rootpath)
+					logme(1,'Error during creating cache for datatpack: '..error.." "..objtype.." "..datapackname.." path : "..rootpath)
 					RecoverDatapack()
 				end
 			}
+			
 		}
 		
 	end
@@ -1357,7 +1479,7 @@ end
 		
 		--debugPrint("Importing District...")
 		
-		local f = assert(io.open("data/fasttravel.json"))
+		local f = assert(io.open("data/fasttravelmarkref.json"))
 		
 		lines = f:read("*a")
 		
@@ -1365,7 +1487,7 @@ end
 		
 		tableDis = {}
 		
-		tableDis = trydecodeJSOn(lines,f,"data/fasttravel.json")
+		tableDis = trydecodeJSOn(lines,f,"data/fasttravelmarkref.json")
 		
 		
 		

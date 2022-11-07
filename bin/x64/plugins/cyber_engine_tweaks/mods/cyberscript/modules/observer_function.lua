@@ -16,9 +16,83 @@ print("hot reload test")
 		end
 
 	end
+	 
+	function ComputerMenuWidgetController_InitializeFiles(this,gameController,widgetsData)
+	
+		-- for i,v in ipairs(widgetsData) do
+		
+		-- spdlog.error(GameDump(v))
+		
+		-- end
+	
+	end
+	function ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
+	
+	 -- spdlog.error(GameDump(this.mailsMenu))
+	 -- print("mark1")
+	 -- this.mailsMenu:SetVisible(false)
+	
+	end
+	function ComputerInkGameController_ShowMails(this)
+	
+	-- print("mark3")
+	end
+	
+	function ComputerDocumentWidgetController_Initialize(this,gameController,widgetsData)
+		
+		-- print("mark4")
+		
+		-- this.titleWidget:SetText("Donk is bonl")
+		
+	end
+	function ComputerMenuWidgetController_InitializeFilesThumbnails(this,gameController,widgetsData)
+		
+	-- this.thumbnailsListWidget:SetVisible(true)
+		-- local mymail = SDocumentThumbnailWidgetPackage.new()
+		-- mymail.displayName = "Donk no bonk"
+		-- mymail.libraryID="mailThumbnail"
+		
+		-- mymail.widgetName = "cyberscript_01"
+		-- mymail.placement = 0
+		-- mymail.orientation= 0
+		-- mymail.isWidgetInactive=false
+		-- mymail.widgetState = 0
+		-- mymail.iconID=nil
+		-- mymail.documentType = 1
+		-- mymail.wasRead = false
+		-- mymail.isOpened = false
+		-- mymail.folderName = "Q101 new email"
+		
+		-- local docaddress =  SDocumentAdress.new()
+		-- docaddress.folderID=7
+		-- docaddress.documentID=0 
+		-- mymail.documentAdress  = docaddress
+		
+		 
+		
+		-- local questinfo = gamedeviceQuestInfo.new()
+		-- questinfo.isHighlighted = true
+		-- questinfo.factName  = "donknobonk"
+		-- mymail.questInfo = questinfo
+		
+		
+		
+	
+		
+		
+   
+    -- local screenDef = gameController:GetScreenDefinition()
+    -- local spawnData = AsyncSpawnData.new()
+    -- spawnData:Initialize(this, "OnDocumentThumbnailWidgetSpawned", widgetData, gameController)
+    -- this:AddFileThumbnailWidgetData(widgetData, gameController)
+	
+		
+	
+	
+	end
 	
 	function FullscreenVendorGameController_PopulateVendorInventory(thos)
-	print("selll02")
+	-- print("selll02")
 	end
 	
 	
@@ -893,7 +967,7 @@ print("hot reload test")
 		
 		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
 			
-			debugPrint(10,"flib sort mod is enabled, custom shard is disabled")
+			logme(1,"flib sort mod is enabled, custom shard is disabled")
 			else
 			local counter = 0
 			local groupData
@@ -1209,18 +1283,37 @@ print("hot reload test")
 	GameController["BrowserController"]  = self
 	end
 	
+	
+	function printChild(widget)
+		
+		spdlog.error(GameDump(widget))
+		local result = pcall(function() widget:GetNumChildren() end)
+		
+		if(result) then
+			if(widget:GetNumChildren() > 0) then
+				for i=0,widget:GetNumChildren() do
+				
+					printChild(widget:GetWidgetByIndex(i))
+				
+				end
+			
+			end
+		end
+	
+	end
+	
 	function WebPage_OnInitialize(self)
 		
 		GameController["WebPage"]  = self
 	end
 	function WebPage_FillPageFromJournal(self,page)
-	
-		print(tostring(CurrentAddress))
-	
+		print("testlogic5")
+		print("ttot"..tostring(CurrentAddress))
+		print("ttot"..tostring(BrowserCustomPlace))
 		defaultPage = page
 	
 		
-		if(page.address == "NETdir://ncity.pub") then
+		if(page.address == "NETdir://ncity.pub") then -- custompage
 		
 		
 		
@@ -2653,8 +2746,9 @@ print("hot reload test")
 					
 			for k,wpage in pairs(arrayWebpage) do 
 				
+				if(checkTriggerRequirement(wpage.entry.requirement,wpage.entry.trigger))then
 					table.insert(templist,wpage)
-					
+				end
 			end
 			
 			
@@ -2788,7 +2882,17 @@ print("hot reload test")
 		
 	
 		end
-		if(CurrentAddress == "NETdir://ezestates.web/for_rent") then
+		if(CurrentAddress == "NETdir://ezestates.web/for_rent") then --place and housing
+	
+			
+			local root = self:GetRootWidget()
+			
+			pcall(function()
+			printChild(root)
+			end)
+			
+		
+		
 			LinkController = inkWidgetRef.GetController(self.textList[1])
 			local root = self.textList[1].widget.parentWidget.parentWidget
 			debugPrint(2,"obs6")
@@ -2811,10 +2915,10 @@ print("hot reload test")
 				if(self.textList ~= nil) then
 					local linkController = LinkController
 					if linkController ~= nil then
-						linkController:SetLinkAddress("NETdir://ezestates.web/renovations")
+						linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
 						self.lastClickedLinkAddress = linkController:GetLinkAddress()
 						self:CallCustomCallback("OnLinkPressed")
-						CurrentAddress = "NETdir://ezestates.web/renovations"
+						CurrentAddress = "NETdir://ezestates.web/makeovers"
 						BrowserCustomPlace = "main"
 						else 
 						debugPrint(2,"Missing LinkController for a widget [" + NameToString(inkWidgetRef.GetName(self.textList[1])) + "]")
@@ -2830,7 +2934,7 @@ print("hot reload test")
 			local nightcity02 = self.textList[11].widget.parentWidget
 			nightcity02:SetVisible(false)
 		end
-		if(CurrentAddress == "NETdir://ezestates.web/renovations" and BrowserCustomPlace ~= nil) then
+		if(CurrentAddress == "NETdir://ezestates.web/makeovers" and BrowserCustomPlace ~= nil) then
 			LinkController = inkWidgetRef.GetController(self.textList[1])
 			local root = self.textList[1].widget.parentWidget.parentWidget
 			debugPrint(2,tostring(GameDump(root)))
@@ -2850,10 +2954,10 @@ print("hot reload test")
 			buttonComponent:RegisterCallback('OnRelease', function(button, evt)
 				local linkController = LinkController
 				if linkController ~= nil then
-					linkController:SetLinkAddress("NETdir://ezestates.web/renovations")
+					linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
 					self.lastClickedLinkAddress = linkController:GetLinkAddress()
 					self:CallCustomCallback("OnLinkPressed")
-					CurrentAddress = "NETdir://ezestates.web/renovations"
+					CurrentAddress = "NETdir://ezestates.web/makeovers"
 					BrowserCustomPlace = "main"
 					else 
 					debugPrint(2,"Missing LinkController for a widget [" + NameToString(inkWidgetRef.GetName(self.textList[1])) + "]")
@@ -2892,7 +2996,8 @@ print("hot reload test")
 			contactUs:SetText("Go to CyberScript Discord for Help !")
 			contactUs:SetFontSize(35)
 		end
-		if(CurrentAddress == "NETdir://ezestates.web/renovations" and BrowserCustomPlace == "main") then
+		if(CurrentAddress == "NETdir://ezestates.web/makeovers" and BrowserCustomPlace == "main") then
+			 print("YOHOHOHO")
 			local texts = page:GetTexts()
 			debugPrint(2,"obs6")
 			local fontsize = uifont
@@ -2911,9 +3016,9 @@ print("hot reload test")
 			btn_house:RegisterCallback('OnRelease', function(button, evt)
 				local linkController = LinkController
 				if linkController ~= nil then
-					linkController:SetLinkAddress("NETdir://ezestates.web/renovations")
+					linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
 					self.lastClickedLinkAddress = linkController:GetLinkAddress()
-					CurrentAddress = "NETdir://ezestates.web/renovations"
+					CurrentAddress = "NETdir://ezestates.web/makeovers"
 					BrowserCustomPlace = "house"
 					self:CallCustomCallback("OnLinkPressed")
 					else 
@@ -2922,13 +3027,13 @@ print("hot reload test")
 				evt:Handle()
 			end)
 			local btn_bar = UIButton.Create("btn_bar", "Our bars",50, width, heigh ,{top=150,left=leftm},black,yellow)
-			btn_bar:Reparent(root2, 1)
+			btn_bar:Reparent(root2, 0)
 			btn_bar:RegisterCallback('OnRelease', function(button, evt)
 				local linkController = LinkController
 				if linkController ~= nil then
-					linkController:SetLinkAddress("NETdir://ezestates.web/renovations")
+					linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
 					self.lastClickedLinkAddress = linkController:GetLinkAddress()
-					CurrentAddress = "NETdir://ezestates.web/renovations"
+					CurrentAddress = "NETdir://ezestates.web/makeovers"
 					BrowserCustomPlace = "bar"
 					self:CallCustomCallback("OnLinkPressed")
 					else 
@@ -2937,13 +3042,13 @@ print("hot reload test")
 				evt:Handle()
 			end)
 			local btn_nightclub = UIButton.Create("btn_nightclub", "Our nightclubs",50, width, heigh ,{top=150,left=leftm},black,yellow)
-			btn_nightclub:Reparent(root2, 2)
+			btn_nightclub:Reparent(root2, 1)
 			btn_nightclub:RegisterCallback('OnRelease', function(button, evt)
 				local linkController = LinkController
 				if linkController ~= nil then
-					linkController:SetLinkAddress("NETdir://ezestates.web/renovations")
+					linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
 					self.lastClickedLinkAddress = linkController:GetLinkAddress()
-					CurrentAddress = "NETdir://ezestates.web/renovations"
+					CurrentAddress = "NETdir://ezestates.web/makeovers"
 					BrowserCustomPlace = "nightclub"
 					self:CallCustomCallback("OnLinkPressed")
 					else 
@@ -2952,13 +3057,13 @@ print("hot reload test")
 				evt:Handle()
 			end)
 			local btn_shops = UIButton.Create("btn_shops", "Our Shops",50, width, heigh ,{top=150,left=leftm},black,yellow)
-			btn_shops:Reparent(root2, 4)
+			btn_shops:Reparent(root2, 2)
 			btn_shops:RegisterCallback('OnRelease', function(button, evt)
 				local linkController = LinkController
 				if linkController ~= nil then
-					linkController:SetLinkAddress("NETdir://ezestates.web/renovations")
+					linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
 					self.lastClickedLinkAddress = linkController:GetLinkAddress()
-					CurrentAddress = "NETdir://ezestates.web/renovations"
+					CurrentAddress = "NETdir://ezestates.web/makeovers"
 					BrowserCustomPlace = "shopping"
 					self:CallCustomCallback("OnLinkPressed")
 					else 
@@ -2971,9 +3076,9 @@ print("hot reload test")
 			btn_restaurant:RegisterCallback('OnRelease', function(button, evt)
 				local linkController = LinkController
 				if linkController ~= nil then
-					linkController:SetLinkAddress("NETdir://ezestates.web/renovations")
+					linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
 					self.lastClickedLinkAddress = linkController:GetLinkAddress()
-					CurrentAddress = "NETdir://ezestates.web/renovations"
+					CurrentAddress = "NETdir://ezestates.web/makeovers"
 					BrowserCustomPlace = "restaurant"
 					self:CallCustomCallback("OnLinkPressed")
 					else 
@@ -2981,28 +3086,64 @@ print("hot reload test")
 				end
 				evt:Handle()
 			end)
-			local btn_template = UIButton.Create("btn_template", "Our Renovations",50, width, heigh ,{top=150,left=leftm},black,yellow)
-			btn_template:Reparent(root2, 3)
-			btn_template:RegisterCallback('OnRelease', function(button, evt)
-				local linkController = LinkController
-				if linkController ~= nil then
-					linkController:SetLinkAddress("NETdir://ezestates.web/renovations")
-					self.lastClickedLinkAddress = linkController:GetLinkAddress()
-					CurrentAddress = "NETdir://ezestates.web/renovations"
-					BrowserCustomPlace = "template"
-					self:CallCustomCallback("OnLinkPressed")
-					else 
-					debugPrint(2,"Missing LinkController for a widget [" + NameToString(inkWidgetRef.GetName(self.textList[1])) + "]")
+			
+			
+			
+			if(currentHouse ~= nil) then
+				local housestatut = getVariableKey(currentHouse.tag,"Statut")
+				if(housestatut ~= nil and housestatut > 0) then
+			
+					local btn_template = UIButton.Create("btn_template", "Our Renovations",50, width, heigh ,{top=150,left=leftm},black,yellow)
+					btn_template:Reparent(root2, 4)
+					btn_template:RegisterCallback('OnRelease', function(button, evt)
+						local linkController = LinkController
+						if linkController ~= nil then
+							linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
+							self.lastClickedLinkAddress = linkController:GetLinkAddress()
+							CurrentAddress = "NETdir://ezestates.web/makeovers"
+							BrowserCustomPlace = "template"
+							self:CallCustomCallback("OnLinkPressed")
+							else 
+							debugPrint(2,"Missing LinkController for a widget [" + NameToString(inkWidgetRef.GetName(self.textList[1])) + "]")
+						end
+						evt:Handle()
+					end)
+					
+					if(currentHouse.step ~= nil and #currentHouse.step > 0) then
+					local housesttep = getVariableKeyWithDefault(currentHouse.tag,"step",0)
+					
+					
+					
+					local btn_upgrade = UIButton.Create("btn_upgrade", "Upgrade your home !",50, width, heigh ,{top=150,left=leftm},black,yellow)
+					btn_upgrade:Reparent(root2, 5)
+					btn_upgrade:RegisterCallback('OnRelease', function(button, evt)
+						local linkController = LinkController
+						if linkController ~= nil then
+							linkController:SetLinkAddress("NETdir://ezestates.web/makeovers")
+							self.lastClickedLinkAddress = linkController:GetLinkAddress()
+							CurrentAddress = "NETdir://ezestates.web/makeovers"
+							BrowserCustomPlace = "upgrade"
+							self:CallCustomCallback("OnLinkPressed")
+							else 
+							debugPrint(2,"Missing LinkController for a widget [" + NameToString(inkWidgetRef.GetName(self.textList[1])) + "]")
+						end
+						evt:Handle()
+					end)
+					
+					end
+					
 				end
-				evt:Handle()
-			end)
-		end
-		if(CurrentAddress == "NETdir://ezestates.web/renovations" and BrowserCustomPlace ~= nil and BrowserCustomPlace ~= "main") then
+			end
+			
+			end
+			
+		
+		if(CurrentAddress == "NETdir://ezestates.web/makeovers" and BrowserCustomPlace ~= "main") then
 			-- local textList = #self.textList
 			-- debugPrint(2,"textList "..textList)
 			--Hide current Items
-			
-			if (BrowserCustomPlace ~= "template") then
+			print("YAHAHAHA")
+			if (BrowserCustomPlace == "house" or BrowserCustomPlace == "bar" or BrowserCustomPlace == "nightclub" or BrowserCustomPlace == "restaurant" or BrowserCustomPlace == "shopping") then
 				local textink = self.textList[4].widget
 				local textcontainer = self.textList[4].widget.parentWidget
 				local buttonink = self.textList[4].widget.parentWidget.parentWidget
@@ -3149,10 +3290,7 @@ print("hot reload test")
 								textinkhousedesc:SetText("No description about thos place. Come back later !")
 								else
 								local splitContentRequ = splitByChunk(house.desc,50)
-								local result = ""
-								for i,v in ipairs(splitContentRequ) do
-									result = result..v.."\n"
-								end
+								local result = splitContentRequ
 								textinkhousedesc:SetText(result)
 							end
 							textinkhousedesc:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
@@ -3254,8 +3392,8 @@ print("hot reload test")
 				end
 				
 				
-				else
-				
+			end
+			if(BrowserCustomPlace == "template") then
 				if(currentHouse ~= nil) then
 					
 					local textink = self.textList[4].widget
@@ -3390,10 +3528,8 @@ print("hot reload test")
 									textinkhousedesc:SetText("No description about thos place. Come back later !")
 									else
 									local splitContentRequ = splitByChunk(template.desc,50)
-									local result = ""
-									for i,v in ipairs(splitContentRequ) do
-										result = result..v.."\n"
-									end
+									local result = splitContentRequ
+								
 									textinkhousedesc:SetText(result)
 								end
 								textinkhousedesc:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
@@ -3586,18 +3722,279 @@ print("hot reload test")
 				
 				
 			end
+			
+			
+			if(BrowserCustomPlace == "upgrade") then
+				if(currentHouse ~= nil) then
+					
+					local textink = self.textList[4].widget
+					local textcontainer = self.textList[4].widget.parentWidget
+					local buttonink = self.textList[4].widget.parentWidget.parentWidget
+					local itemcontainer = self.textList[4].widget.parentWidget.parentWidget.parentWidget
+					local rowcontainer = self.textList[4].widget.parentWidget.parentWidget.parentWidget.parentWidget
+					local verticalarea = self.textList[4].widget.parentWidget.parentWidget.parentWidget.parentWidget.parentWidget
+					local scrollarea = self.textList[4].widget.parentWidget.parentWidget.parentWidget.parentWidget.parentWidget.parentWidget
+					local tempcount = 0
+					local temparrayHouse = {}
+					local obj = {}
+					local templist = {}
+					
+					local marginleft = 50
+					local topleft = 0
+					
+				
+					local housesttep = getVariableKeyWithDefault(currentHouse.tag,"step",0)
+					
+					if (housesttep > 0) then
+					
+					local currentstep = currentHouse.step[housesttep]
+					
+					local rowcontainerhouse = inkHorizontalPanelWidget.new()
+					rowcontainerhouse:SetName(CName.new("rowcontainer_house_clear"))
+					rowcontainerhouse:SetSize(Vector2.new({ X = 2120, Y = 500 }))
+					rowcontainerhouse:SetMargin(inkMargin.new({ top = 50, bottom = 50 }))
+					rowcontainerhouse:Reparent(verticalarea)
+					
+					local canvas = inkCanvasWidget.new()
+					canvas:SetName(CName.new("canvas_house_clear"))
+					canvas:SetSize(Vector2.new({ X = 874, Y = 491 }))
+					canvas:SetMargin(inkMargin.new({ bottom = 50 }))
+					canvas:Reparent(rowcontainerhouse)
+					local bg = inkImage.new()
+					bg:SetName(CName.new("bg_house_clear"))
+					bg:SetAtlasResource(ResRef.FromName('base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas'))
+					bg:SetTexturePart('cell_bg')
+					bg:SetTintColor(HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }))
+					bg:SetOpacity(0.8)
+					bg:SetAnchor(inkEAnchor.Fill)
+					bg.useNineSliceScale = true
+					bg.nineSliceScale = inkMargin.new({ left = 0.0, top = 0.0, right = 10.0, bottom = 0.0 })
+					bg:SetInteractive(false)
+					bg:Reparent(canvas, -1)
+					local fill = inkImage.new()
+					fill:SetName("fill_house_clear")
+					fill:SetAtlasResource(ResRef.FromName('base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas'))
+					fill:SetTexturePart('cell_bg')
+					fill:SetTintColor(HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+					fill:SetOpacity(0.0)
+					fill:SetAnchor(inkEAnchor.Fill)
+					fill.useNineSliceScale = true
+					fill.nineSliceScale = inkMargin.new({ left = 0.0, top = 0.0, right = 10.0, bottom = 0.0 })
+					fill:SetInteractive(false)
+					fill:Reparent(canvas, -1)
+					local frame = inkImage.new()
+					frame:SetName("frame_house_clear")
+					frame:SetAtlasResource(ResRef.FromName('base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas'))
+					frame:SetTexturePart('cell_fg')
+					frame:SetTintColor(HDRColor.new({ Red = 0.368627, Green = 0.964706, Blue = 1.0, Alpha = 1.0 }))
+					frame:SetOpacity(0.3)
+					frame:SetAnchor(inkEAnchor.Fill)
+					frame.useNineSliceScale = true
+					frame.nineSliceScale = inkMargin.new({ left = 0.0, top = 0.0, right = 10.0, bottom = 0.0 })
+					frame:SetInteractive(false)
+					frame:Reparent(canvas, -1)
+					
+					
+					
+					local textc01 = inkText.new()
+					textc01:SetName(CName.new("text_house_clear_title"))
+					textc01:SetText("Current Upgrade : "..currentstep.title)
+					textc01:SetTintColor(gamecolor(255,0,0,1))
+					textc01:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+					textc01:SetFontStyle('Medium')
+					textc01:SetFontSize(45)
+					
+					
+					
+				
+					textc01:SetHorizontalAlignment(textHorizontalAlignment.Center)
+					textc01:SetVerticalAlignment(textVerticalAlignment.Center)
+					textc01:SetMargin(inkMargin.new({ left = 50, top = 0 }))
+					textc01:Reparent(canvas,-1)
+					
+					local textc02 = inkText.new()
+					textc02:SetName(CName.new("text_house_clear_desc"))
+					textc02:SetText(splitByChunk(currentstep.desc,50))
+					
+					textc02:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+					textc02:SetFontStyle('Medium')
+					textc02:SetFontSize(35)
+					textc02:SetTintColor(HDRColor.new({ Red = 0.113725, Green = 0.929412, Blue = 0.513726, Alpha = 1.0 }))
+					textc02:SetHorizontalAlignment(textHorizontalAlignment.Center)
+					textc02:SetVerticalAlignment(textVerticalAlignment.Center)
+					textc02:SetMargin(inkMargin.new({ left = 50, top = 100 }))
+					textc02:Reparent(canvas,-1)
+			
+					local fontsize = uifont
+					local blackbgcolor = Color.ToHDRColorDirect(Color.new({ Red = 0, Green = 0, Blue = 0, Alpha = 1.0 }))
+					local goldtextcolor = Color.ToHDRColorDirect(Color.new({ Red = 255, Green = 220, Blue = 16, Alpha = 1.0 }))
+					
+					end
+							
+					local nextstep = currentHouse.step[housesttep+1]
+					if(nextstep ~= nil) then
+							
+					local rowcontainerhouse = inkHorizontalPanelWidget.new()
+					rowcontainerhouse:SetName(CName.new("rowcontainer_house_newstep"))
+					rowcontainerhouse:SetSize(Vector2.new({ X = 2120, Y = 500 }))
+					rowcontainerhouse:SetMargin(inkMargin.new({ top = 50, bottom = 50 }))
+					rowcontainerhouse:Reparent(verticalarea)
+					
+					local canvas = inkCanvasWidget.new()
+					canvas:SetName(CName.new("canvas_house_newstep"))
+					canvas:SetSize(Vector2.new({ X = 874, Y = 491 }))
+					canvas:SetMargin(inkMargin.new({ bottom = 50 }))
+					canvas:Reparent(rowcontainerhouse)
+					local bg = inkImage.new()
+					bg:SetName(CName.new("bg_house_new"))
+					bg:SetAtlasResource(ResRef.FromName('base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas'))
+					bg:SetTexturePart('cell_bg')
+					bg:SetTintColor(HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }))
+					bg:SetOpacity(0.8)
+					bg:SetAnchor(inkEAnchor.Fill)
+					bg.useNineSliceScale = true
+					bg.nineSliceScale = inkMargin.new({ left = 0.0, top = 0.0, right = 10.0, bottom = 0.0 })
+					bg:SetInteractive(false)
+					bg:Reparent(canvas, -1)
+					local fill = inkImage.new()
+					fill:SetName("fill_house_new")
+					fill:SetAtlasResource(ResRef.FromName('base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas'))
+					fill:SetTexturePart('cell_bg')
+					fill:SetTintColor(HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+					fill:SetOpacity(0.0)
+					fill:SetAnchor(inkEAnchor.Fill)
+					fill.useNineSliceScale = true
+					fill.nineSliceScale = inkMargin.new({ left = 0.0, top = 0.0, right = 10.0, bottom = 0.0 })
+					fill:SetInteractive(false)
+					fill:Reparent(canvas, -1)
+					local frame = inkImage.new()
+					frame:SetName("frame_house_new")
+					frame:SetAtlasResource(ResRef.FromName('base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas'))
+					frame:SetTexturePart('cell_fg')
+					frame:SetTintColor(HDRColor.new({ Red = 0.368627, Green = 0.964706, Blue = 1.0, Alpha = 1.0 }))
+					frame:SetOpacity(0.3)
+					frame:SetAnchor(inkEAnchor.Fill)
+					frame.useNineSliceScale = true
+					frame.nineSliceScale = inkMargin.new({ left = 0.0, top = 0.0, right = 10.0, bottom = 0.0 })
+					frame:SetInteractive(false)
+					frame:Reparent(canvas, -1)
+					
+					
+					local text01 = inkText.new()
+					text01:SetName(CName.new("text_house_new_Name"))
+					text01:SetText(nextstep.title)
+					
+					text01:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+					text01:SetFontStyle('Medium')
+					text01:SetFontSize(45)
+				
+					text01:SetHorizontalAlignment(textHorizontalAlignment.Center)
+					text01:SetVerticalAlignment(textVerticalAlignment.Center)
+					text01:SetMargin(inkMargin.new({ left = 50, top = 0 }))
+					text01:SetTintColor(gamecolor(255,169,0,1))
+					text01:Reparent(canvas,-1)
+					
+					
+					
+					local text02 = inkText.new()
+					text02:SetName(CName.new("text_house_new_price"))
+					text02:SetText("Price : "..nextstep.price.."€$")
+					text02:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+					text02:SetFontStyle('Medium')
+					text02:SetFontSize(35)
+					text02:SetTintColor(gamecolor(255,255,255,1))
+					text02:SetHorizontalAlignment(textHorizontalAlignment.Center)
+					text02:SetVerticalAlignment(textVerticalAlignment.Center)
+					text02:SetMargin(inkMargin.new({ left = 50, top = 100 }))
+					text02:Reparent(canvas,-1)
+					
+					
+					
+					local text03 = inkText.new()
+					text03:SetName(CName.new("text_house_new_desc"))
+					text03:SetText(splitByChunk(nextstep.desc,50))
+					
+					text03:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+					text03:SetFontStyle('Medium')
+					text03:SetFontSize(35)
+					text03:SetTintColor(gamecolor(255,255,255,1))
+					text03:SetHorizontalAlignment(textHorizontalAlignment.Center)
+					text03:SetVerticalAlignment(textVerticalAlignment.Center)
+					text03:SetMargin(inkMargin.new({ left = 50, top = 150 }))
+					text03:Reparent(canvas,-1)
+					
+					
+					
+					
+					local buttonData = {
+						name = "text_house_new_buy",
+						text = "Upgrade !",
+						value = 1,
+						tag =  "text_house_new_buy"
+					}
+					local fontsize = uifont
+					local blackbgcolor = Color.ToHDRColorDirect(Color.new({ Red = 0, Green = 0, Blue = 0, Alpha = 1.0 }))
+					local goldtextcolor = Color.ToHDRColorDirect(Color.new({ Red = 255, Green = 220, Blue = 16, Alpha = 1.0 }))
+					local buy_btn= UIButton.Create(buttonData.name, buttonData.text,50, 300, 100,{top=420,left=650},blackbgcolor,goldtextcolor)
+					buy_btn:Reparent(canvas, -1)
+					buy_btn:RegisterCallback('OnRelease', function(button, evt)
+						local onenter_action = {}
+						local action = {}
+						action.name = "remove_money"
+						action.value = nextstep.price
+						table.insert(onenter_action,action)
+						local action = {}
+						action.name = "notify"
+						action.value = "Upgrade installed !"
+						table.insert(onenter_action,action)
+						local action = {}
+						action.name = "current_place_clear_all_template"
+						table.insert(onenter_action,action)
+						local action = {}
+						action.name = "set_variable"
+						action.variable = currentHouse.tag
+						action.key = "step"
+						action.value = housesttep+1
+						table.insert(onenter_action,action)
+						local action = {}
+						action.name = "current_place_apply_template"
+						action.tag = nextstep.template
+						action.x = nextstep.anchor.x
+						action.y = nextstep.anchor.y
+						action.z = nextstep.anchor.z
+						table.insert(onenter_action,action)
+						
+						runActionList(onenter_action, "test_onenter", "interact",false,"nothing",false)
+						local linkController = LinkController
+						if linkController ~= nil then
+							linkController:SetLinkAddress("NETdir://ezestates.web/for_rent")
+							self.lastClickedLinkAddress = linkController:GetLinkAddress()
+							CurrentAddress = "NETdir://ezestates.web/for_rent"
+							BrowserCustomPlace = nil
+							self:CallCustomCallback("OnLinkPressed")
+							else 
+							debugPrint(2,"Missing LinkController for a widget [" + NameToString(inkWidgetRef.GetName(self.textList[1])) + "]")
+						end
+						evt:Handle()
+					end)
+					end
+				end
+				
+				
+			end
+			
 		end
-	end
+		end		
 	function BrowserController_OnPageSpawned(thos, widget, userData)
 		
 		GameController["BrowserController"]  = thos
-		if(CurrentAddress == "CyberScript") then
-			inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod");
-		end
+		-- if(CurrentAddress == "CyberScript") then
+			-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod");
+		-- end
 		
-		if(CurrentAddress == "CyberScript" and BrowserCybserscript ~= nil) then
-			inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/"..BrowserCybserscript);
-		end
+		-- if(CurrentAddress == "CyberScript" and BrowserCybserscript ~= nil) then
+			-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/"..BrowserCybserscript);
+		-- end
 		
 		if(CurrentAddress == "CyberScriptWeb") then
 			inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/search");
@@ -3606,13 +4003,14 @@ print("hot reload test")
 		if(CurrentAddress == "CyberScriptWeb" and BrowserCybserscript ~= nil) then
 			inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/search/site/"..BrowserCybserscript);
 		end
-		if(CurrentAddress == "NETdir://ezestates.web/renovations" and BrowserCustomPlace ~= nil) then
-			if(BrowserCustomPlace == "template") then
-			inkTextRef.SetText(thos.addressText, "NETdir://ezestates.web/CyberScript/renovations")
-			else
-			inkTextRef.SetText(thos.addressText, "NETdir://ezestates.web/CyberScript/estates")
-			end
+		if(CurrentAddress == "NETdir://ezestates.web/makeovers" and BrowserCustomPlace ~= nil) then
+		 if(BrowserCustomPlace == "template") then
+			 inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/makeovers")
+		else
+			 inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/estates")
 		end
+		
+	end
 	end
 	
 	
@@ -3811,13 +4209,39 @@ print("hot reload test")
 	
 	
 	function NPCPuppet_SendAfterDeathOrDefeatEvent(target)
-		if target ~= nil and target.shouldDie and ((target.myKiller ~= nil and target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash) or target.wasJustKilledOrDefeated) then
+		-- print("target.shouldDie".." "..tostring(target.shouldDie))
+		-- print("target.myKiller ~= nil".." "..tostring(target.myKiller ~= nil))
+		-- print("target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash".." "..tostring(target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash))
+		-- print("target.wasJustKilledOrDefeated".." "..tostring(target.wasJustKilledOrDefeated))
+		
+		local obj = getEntityFromManagerById(target:GetEntityID())
+			if(obj.id ~= nil) then
 			
-			lastTargetKilled = target
-			debugPrint(10,"last killed target")
+			-- print("mykill "..obj.tag)
 			
+			end
+			
+		
+		if target ~= nil and ((target.myKiller ~= nil and target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash) or target.wasJustKilledOrDefeated) then
+			
+			if(obj.id ~= nil) then
+			
+				cyberscript.EntityManager["last_killed"].tweak =  obj.tweak
 			else
-			lastTargetKilled = nil
+				cyberscript.EntityManager["last_killed"].tweak = "none"
+			end
+			
+			if cyberscript.EntityManager["last_killed"].isquest == nil then cyberscript.EntityManager["last_killed"].isquest = false end
+			
+			cyberscript.EntityManager["last_killed"].id = nil
+		
+			cyberscript.EntityManager["last_killed"].id = target:GetEntityID()
+			
+			target:MarkAsQuest(cyberscript.EntityManager["last_killed"].isquest)
+				
+			-- print("LAST KILLED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			lastTargetKilled = target
+			
 		end
 	end
 	
@@ -4785,9 +5209,57 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	-- end)
 	function PreventionSpawnSystem_SpawnCallback(thos,spawnedObject,wrappedMethod)
+		
+		
+		--print("spawned "..tostring(spawnedObject:GetEntityID().hash))
+	
+		
+		for k,v in pairs(cachedespawn) do
+			local tweak = TweakDBID.new(k)
+		
+			if(tweak == spawnedObject:GetRecordID()) then
+				
+				local obj = getEntityFromManagerById(spawnedObject:GetEntityID())
+			
+				if((v.id == nil or v.id.hash ~= spawnedObject:GetEntityID().hash) and getEntityFromManagerById(spawnedObject:GetEntityID())~= nil) then
+							
+							local entity = getEntityFromManagerById(spawnedObject:GetEntityID())
+							
+							if (v.count == nil) then
+								v.count = 0
+							end
+							--print("Kill the NPC "..tostring(spawnedObject:GetEntityID().hash))
+							--Game.GetPreventionSpawnSystem():RequestDespawn(spawnedObject:GetEntityID())
+							 
+							
+							spawnedObject:Dispose()
+							
+							--cachedespawn[i] = nil
+							if(entity.fromgarage ~= nil ) then
+							
+								if (v.count == 0) then
+									cachedespawn[k] = nil
+								end
+							
+							else
+								v.count = v.count +1
+								if (v.count == 2) then
+									cachedespawn[k] = nil
+								end
+							end
+				end
+			
+			
+			
+			end
+		
+		end
+	
 		local obj = getEntityFromManagerById(spawnedObject:GetEntityID())
 		if(obj.tag == nil ) then
 		
+		
+			
 			wrappedMethod(spawnedObject)
 		
 		
@@ -5143,29 +5615,29 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 			local gameCon = gameController
 			
 			
-			local widget = SComputerMenuButtonWidgetPackage.new()
-			widget.libraryID = widgetsData[2].libraryID 
-			widget.widgetTweakDBID = widgetsData[2].widgetTweakDBID 
-			widget.widget = widgetsData[2].widget 
-			widget.widgetName = widgetsData[2].widgetName 
-			widget.placement = widgetsData[2].placement 
-			widget.isValid = widgetsData[2].isValid 
-			widget.displayName = widgetsData[2].displayName 
-			widget.ownerID = widgetsData[2].ownerID 
-			widget.ownerIDClassName = widgetsData[2].ownerIDClassName 
-			widget.customData = widgetsData[2].customData 
-			widget.isWidgetInactive = widgetsData[2].isWidgetInactive 
-			widget.widgetState = widgetsData[2].widgetState 
-			widget.iconID = widgetsData[2].iconID 
-			widget.bckgroundTextureID = widgetsData[2].bckgroundTextureID 
-			widget.iconTextureID = widgetsData[2].iconTextureID 
-			widget.textData = widgetsData[2].textData 
-			widget.counter = widgetsData[2].counter 
-			widget.displayName = "CyberScript"
-			widget.widgetName = "CyberScript"
-			local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
-			thos:AddMenuButtonWidget(widgeto, widget, gameController)
-			thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
+			-- local widget = SComputerMenuButtonWidgetPackage.new()
+			-- widget.libraryID = widgetsData[2].libraryID 
+			-- widget.widgetTweakDBID = widgetsData[2].widgetTweakDBID 
+			-- widget.widget = widgetsData[2].widget 
+			-- widget.widgetName = widgetsData[2].widgetName 
+			-- widget.placement = widgetsData[2].placement 
+			-- widget.isValid = widgetsData[2].isValid 
+			-- widget.displayName = widgetsData[2].displayName 
+			-- widget.ownerID = widgetsData[2].ownerID 
+			-- widget.ownerIDClassName = widgetsData[2].ownerIDClassName 
+			-- widget.customData = widgetsData[2].customData 
+			-- widget.isWidgetInactive = widgetsData[2].isWidgetInactive 
+			-- widget.widgetState = widgetsData[2].widgetState 
+			-- widget.iconID = widgetsData[2].iconID 
+			-- widget.bckgroundTextureID = widgetsData[2].bckgroundTextureID 
+			-- widget.iconTextureID = widgetsData[2].iconTextureID 
+			-- widget.textData = widgetsData[2].textData 
+			-- widget.counter = widgetsData[2].counter 
+			-- widget.displayName = "CyberScript"
+			-- widget.widgetName = "CyberScript"
+			-- local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
+			-- thos:AddMenuButtonWidget(widgeto, widget, gameController)
+			-- thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
 		end
 		
 		
@@ -5359,28 +5831,36 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	---Scanner
 	function ScannervehicleGameController_OnVehicleInfoChanged(thos, value,wrappedMethod)
+	
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
 			if(entity.id ~= nil) and (getScannerdataFromEntityOrGroupOfEntity(entity) ~= nil) then
+			
 				if(ScannerInfoManager[entity.tag].primaryname ~= nil) then
 					local vehicleInfoData = ScannerVehicleInfo.new()
 					vehicleInfoData = FromVariant(value)
 					
-					
-					
 					if vehicleInfoData ~= nil then
+						local text = ""..ScannerInfoManager[entity.tag].text
+						
+						if string.match(text,"cyberscript_scanner_") then
+						text = text:gsub("cyberscript_scanner_", " ") 
+						inkTextRef.SetText(thos.vehicleInfoText, text)
+						
+						thos.isValidVehicleInfo = true
 						
 						
+						
+						else
 						if(Game.GetLocalizedText(vehicleInfoData:GetVehicleInfo()) ~= nil) then 
 							
 							inkTextRef:SetLocalizedTextScript(thos.vehicleInfoText, vehicleInfoData:GetVehicleInfo())
 							
 						end
 						thos.isValidVehicleInfo = true
-						else
-						inkTextRef.SetText(thos.vehicleInfoText, ScannerInfoManager[entity.tag].text)
-						thos.isValidVehicleInfo = true
+						
+						
 					end
 					thos:UpdateGlobalVisibility()
 					
@@ -5398,6 +5878,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 			wrappedMethod(value)
 			
 		end
+	end
 	end
 	
 	
@@ -5736,7 +6217,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 					thos:GetRootWidget():SetVisible(false)
 					table.insert(thos.asyncSpawnRequests,thos:AsyncSpawnFromLocal(inkWidgetRef.Get(thos.quickhackContainer), "QuickHackDescription"))
 					
-					
+					print(tostring(thos.scannedObjectType))
 					if(thos.scannedObjectType == ScannerObjectType.PUPPET) then
 						thos:GetRootWidget():SetVisible(true)
 						thos:AsyncSpawnScannerModule("ScannerNPCHeaderWidget")
@@ -5756,6 +6237,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 						thos:AsyncSpawnScannerModule("ScannerVulnerabilitiesWidget")
 						thos:AsyncSpawnScannerModule("ScannerRequirementsWidget")
 						thos:AsyncSpawnScannerModule("ScannerDeviceDescriptionWidget")
+								
 						
 						elseif(thos.scannedObjectType == ScannerObjectType.VEHICLE) then
 						
@@ -5767,6 +6249,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 						thos:GetRootWidget():SetVisible(true)
 						thos:AsyncSpawnScannerModule("ScannerDeviceHeaderWidget")
 						thos:AsyncSpawnScannerModule("ScannerDeviceDescriptionWidget")
+								
 						inkWidgetRef:SetVisible(thos.toggleDescirptionHackPart, false)
 						
 					end
@@ -5784,13 +6267,14 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 				else
 				
 				wrappedMethod()
+				print("tossss")
 				
 			end
 			
 			else
 			
 			wrappedMethod()
-			
+			print("tossss")
 		end
 		
 	end
@@ -5799,16 +6283,16 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	---Scanner
 	
 	function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
-		if(elementName == "CyberScript") then
-			local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
-			thos:GetMainLayoutController():ShowInternet("CyberScript")
+		-- if(elementName == "CyberScript") then
+			-- local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
+			-- thos:GetMainLayoutController():ShowInternet("CyberScript")
 			
-			thos:RequestMainMenuButtonWidgetsUpdate()
-			CurrentAddress = "CyberScript"
-			BrowserCybserscript = "loading"
-			else
-			wrappedMethod(elementName)
-		end
+			-- thos:RequestMainMenuButtonWidgetsUpdate()
+			-- CurrentAddress = "CyberScript"
+			-- BrowserCybserscript = "loading"
+			-- else
+			-- wrappedMethod(elementName)
+		-- end
 		
 		if(elementName == "CyberScriptWeb") then
 			local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
@@ -5842,11 +6326,11 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	--	CurrentAddress = address
 	
 	print("LoadWebPage : "..address)
-	if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/renovations") then
+	if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
 		if(BrowserController == nil) then BrowserController = self end
 		
 		
-		if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/renovations") then
+		if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
 			
 			CurrentAddress = address
 			
@@ -5860,30 +6344,41 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		
 			BrowserCybserscript = nil
 			BrowserCustomPlace = nil
+			
 		end
 		
 		if(CurrentAddress == "CyberScript" and BrowserCybserscript == nil) then
 			BrowserCybserscript = "loading"
+			BrowserCustomPlace = nil
 		end
 		
 		if(CurrentAddress == "CyberScriptWeb" and BrowserCybserscript == nil) then
 			BrowserCybserscript = "home"
-		end
-		
-		-- Cron.NextTick(function()
-		if(CurrentAddress ~= "NETdir://ezestates.web/renovations") then
 			BrowserCustomPlace = nil
 		end
 		
+		-- Cron.NextTick(function()
+		if(CurrentAddress ~= "NETdir://ezestates.web/makeovers") then
+			BrowserCustomPlace = nil
+			
+		end
 		
 		
+		if(address == "CyberScript" or address == "CyberScriptWeb" ) then
+		print("testlogic0")
 		return wrappedMethod("NETdir://ncity.pub")
+		
+		else
+		print("testlogic1")
+		return wrappedMethod(address)
+		
+		end
 	
 	else
 		CurrentAddress = nil
 		BrowserCybserscript = nil
 		BrowserCustomPlace = nil
-		print("here")
+		
 		return wrappedMethod(address)
 		
 	end
@@ -6010,14 +6505,22 @@ end
 
 
 function listenPlayerInput(action)
-
+	
 		actionName = Game.NameToString(action:GetName(action))
 		actionType = action:GetType(action).value
 		actionValue = action:GetValue(action)
+		-- if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
+			
+		-- logme(1,actionName)
+		-- logme(1,actionType)
+		-- end
+		-- logme(1,currentController)
+		
+		
 		
 		if actionName == "PhoneInteract" and actionType == "BUTTON_RELEASED" and currentPhoneCall ~= nil   then 
-local audioEvent = SoundStopEvent.new()
-audioEvent.soundName = "ui_phone_incoming_call"
+			local audioEvent = SoundStopEvent.new()
+			audioEvent.soundName = "ui_phone_incoming_call"
 			Game.GetPlayer():QueueEvent(audioEvent)
 			
 			runActionList(currentPhoneCall.answer_action,"phone_call","interact",false,"player")
@@ -6028,8 +6531,8 @@ audioEvent.soundName = "ui_phone_incoming_call"
 		
 		if actionName == "PhoneReject" and actionType == "BUTTON_HOLD_COMPLETE" and currentPhoneCall ~= nil   then 
 
-local audioEvent = SoundStopEvent.new()
-audioEvent.soundName = "ui_phone_incoming_call"
+			local audioEvent = SoundStopEvent.new()
+			audioEvent.soundName = "ui_phone_incoming_call"
 			Game.GetPlayer():QueueEvent(audioEvent)
 			
 			runActionList(currentPhoneCall.rejected_action,"phone_call","interact",false,"player")
@@ -6043,10 +6546,10 @@ audioEvent.soundName = "ui_phone_incoming_call"
 			hideInteract()
 			--debugPrint(2,"tosto")
 		end
-		if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and inputInAction == false and currentHelp == nil  then 
-			inputInAction = true
-			--debugPrint(2,"toto")
+		if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and currentHelp == nil  then 
+			
 			cycleInteract()
+			
 		end
 		
 		if currentHelp ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "activate_secondary" or actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
@@ -6096,16 +6599,18 @@ audioEvent.soundName = "ui_phone_incoming_call"
 		end
 		
 		
-		if(actionType == "BUTTON_RELEASED" and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
+		if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
 			----printactionName)+
 			-- --debugPrint(2,actionName)
 			-- --debugPrint(2,actionType)
+			 -- logme(1,actionName)
+			-- logme(1,actionType)
 			local inputHitted = false
 			if(isdialogactivehub == true ) then
 				
 				local inputIndex = 0
 				
-				if(string.find(tostring(actionName), "hoice1_Release")and actionType == "BUTTON_RELEASED" and (currentDialogHub.dial.options[currentDialogHub.index].locked == nil or currentDialogHub.dial.options[currentDialogHub.index].locked == false)) then
+				if(string.find(tostring(actionName), "hoice1_Release")and (actionType == "BUTTON_RELEASED") and (currentDialogHub.dial.options[currentDialogHub.index].locked == nil or currentDialogHub.dial.options[currentDialogHub.index].locked == false)) then
 					ClickOnDialog(currentDialogHub.dial.options[currentDialogHub.index],currentDialogHub.dial.speaker.value,currentDialogHub.dial.speaker.way)
 					
 					
@@ -6114,7 +6619,7 @@ audioEvent.soundName = "ui_phone_incoming_call"
 				
 				
 				
-				if((string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "up_button"))and actionType == "BUTTON_RELEASED") then
+				if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "up_button"))and (actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED")) then
 					
 					
 					if(currentDialogHub.index == nil) then
@@ -6132,7 +6637,7 @@ audioEvent.soundName = "ui_phone_incoming_call"
 				
 				
 				
-				if((string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "down_button"))and actionType == "BUTTON_RELEASED") then
+				if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "down_button"))and (actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED")) then
 					if(currentDialogHub.index == nil) then
 						currentDialogHub.index = 1
 					end

@@ -134,12 +134,15 @@ function loadModule()
 	cyberscript.housing = dofile('modules/housing.lua')
 	cyberscript.saves = dofile('modules/saves.lua')
 	cyberscript.AV = dofile('modules/av.lua')
-	cyberscript.editor = dofile('modules/editor.lua')
+	if file_exists("modules/editor.lua") then
+		cyberscript.editor = dofile('modules/editor.lua')
+		print("CyberScript : Editor Lua founded, loading editor")
+	end
 	cyberscript.see = dofile('modules/see.lua')
 	cyberscript.scripting = dofile('modules/scripting.lua')
 	cyberscript.observer = dofile('modules/observer_function.lua')
 	cyberscript.ui = dofile('modules/ui.lua')
-	
+	cyberscript.api = dofile('modules/api.lua')
 	
 	--external library
 
@@ -148,4 +151,4 @@ end
 
 
 
-return quest_mod
+return cyberscript
