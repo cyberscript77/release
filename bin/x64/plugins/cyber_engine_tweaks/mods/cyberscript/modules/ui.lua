@@ -1077,9 +1077,9 @@ if setting.type == "sliderFloat" then
 end
 
 if setting.type == "sliderText" then
- nativeSettings.addRangeFloat("/CMCUSTOM/"..setting.category, setting.label, setting.description, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue), setting.defaultvalue, function(value)
+ nativeSettings.addSelectorString("/CMCUSTOM/"..setting.category, setting.label, setting.description, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue), setting.defaultvalue, function(value)
 
-	setScore(setting.target.tag,setting.target.key,value)
+	setScore(setting.target.tag,setting.target.key,getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue)[value])
  	runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
  	
  end)
@@ -1223,7 +1223,7 @@ function makeNativeSettings()
 		updateUserSetting("ScriptedEntityAffinity", ScriptedEntityAffinity)
 	end)
 	
-	nativeSettings.addSwitch("/CM/script", getLang("AutoAmbushToggle"), getLang("AutoAmbushToggle"), AutoAmbush, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
+	nativeSettings.addSwitch("/CM/script", getLang("AutoAmbushToggle"), getLang("AutoAmbush"), AutoAmbush, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
 		AutoAmbush = state
 		updateUserSetting("AutoAmbush", AutoAmbush)
 	end)

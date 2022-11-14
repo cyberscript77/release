@@ -164,6 +164,7 @@ if spawnRegion then
 						entity.name = tag
 					end
 					cyberscript.EntityManager[tag]=entity
+					cyberscript.EntityManager["last_spawned"].tag=tag
 					
 					
 					-- Cron.After(0.5, function()
@@ -937,6 +938,13 @@ if spawnRegion then
 			local entity = {}
 			entity.id = nil
 			entity.tag = "last_killed"
+			entity.tweak = "None"
+			
+			cyberscript.EntityManager[entity.tag] = entity
+			
+			local entity = {}
+			entity.id = nil
+			entity.tag = "last_spawned"
 			entity.tweak = "None"
 			
 			cyberscript.EntityManager[entity.tag] = entity
@@ -2085,7 +2093,12 @@ if attitudeRegion then
 	
 	
 	
+	function setAttitudeAgainstAttitude(atttitude,targetattitude,relation)
 	
+	Game.GetAttitudeSystem():SetAttitudeRelation(Cname.new(atttitude), Cname.new(targetattitude), Enum.new("EAIAttitude", relation))
+		
+	
+	end
 	
 	
 	function setAggressiveKillMission()
@@ -2342,6 +2355,8 @@ if attitudeRegion then
 			end
 		end
 	end
+	
+	
 	
 	function setFollower(tag)
 		TweakDB:SetFlatNoUpdate(TweakDBID.new('FollowerActions.FollowCloseMovePolicy.distance'), 1)
@@ -3002,7 +3017,7 @@ if vehiculeRegion then
 			
 			
 			cyberscript.EntityManager[entity.tag] = entity
-			
+			cyberscript.EntityManager["last_spawned"].tag=tag
 			
 			
 			

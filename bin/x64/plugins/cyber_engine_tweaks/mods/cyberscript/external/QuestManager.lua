@@ -387,11 +387,11 @@ function QuestManager.resetQuestfromJson(questId)
 	local questos = arrayQuest2[questId].quest
 	
 	local data = {}
-					
-	data.id = questos.tag
-	data.title = questos.title
-	data.description = questos.content
+	checkContext(questos)		
 	
+	data.id = questos.tag
+	data.title = getLang(questos.title)
+	data.description = getLang(questos.content)
 	data.metadata = {}
 	data.metadata.level = questos.recommandedlevel
 	data.metadata.questType = questos.questtype
@@ -403,10 +403,11 @@ function QuestManager.resetQuestfromJson(questId)
 	for i=1,#questos.objectives do 
 	
 	local irpobj = questos.objectives[i]
+	checkContext(irpobj)
 	local obj = irpobj
 	
 	obj.id = irpobj.tag
-	
+	obj.title = getLang(irpobj.title)
 	obj.isOptional = irpobj.isoptionnal
 	obj.state = irpobj.state
 	

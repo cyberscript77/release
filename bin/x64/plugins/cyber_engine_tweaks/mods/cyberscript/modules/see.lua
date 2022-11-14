@@ -251,18 +251,18 @@ function scriptcheckTrigger(trigger)
 				
 				if(enti ~= nil) then
 					local entityposition = enti:GetWorldPosition()
-					if cyberscript.EntityManager[trigger.tag].targetedPostion == nil then
-						cyberscript.EntityManager[trigger.tag].targetedPostion = {}
-						cyberscript.EntityManager[trigger.tag].targetedPostion.x = entityposition.x + trigger.x
-						cyberscript.EntityManager[trigger.tag].targetedPostion.y = entityposition.y + trigger.y
-						cyberscript.EntityManager[trigger.tag].targetedPostion.z = entityposition.z + trigger.z
+					if getEntityFromManager(trigger.tag).targetedPostion == nil then
+						getEntityFromManager(trigger.tag).targetedPostion = {}
+						getEntityFromManager(trigger.tag).targetedPostion.x = entityposition.x + trigger.x
+						getEntityFromManager(trigger.tag).targetedPostion.y = entityposition.y + trigger.y
+						getEntityFromManager(trigger.tag).targetedPostion.z = entityposition.z + trigger.z
 					end
-					local targetedPostions = cyberscript.EntityManager[trigger.tag].targetedPostion
+					local targetedPostions = getEntityFromManager(trigger.tag).targetedPostion
 					--debugPrint(3,entityposition.y)
 					--debugPrint(3,targetedPostions.y)
 					if check3DPos(entityposition, targetedPostions.x, targetedPostions.y, targetedPostions.z,trigger.range) then
 						result = true
-						cyberscript.EntityManager[trigger.tag].targetedPostion = nil
+						getEntityFromManager(trigger.tag).targetedPostion = nil
 						else
 						result = false
 					end
@@ -317,16 +317,16 @@ function scriptcheckTrigger(trigger)
 					--debugPrint(3,"test")
 					local entityposition = enti:GetWorldPosition()
 					local playerpos = Game.GetPlayer():GetWorldPosition()
-					if cyberscript.EntityManager[trigger.tag].targetedPostion == nil then
-						cyberscript.EntityManager[trigger.tag].targetedPostion = {}
-						cyberscript.EntityManager[trigger.tag].targetedPostion.x = playerpos.x + trigger.x
-						cyberscript.EntityManager[trigger.tag].targetedPostion.y = playerpos.y + trigger.y
-						cyberscript.EntityManager[trigger.tag].targetedPostion.z = playerpos.z + trigger.z
+					if getEntityFromManager(trigger.tag).targetedPostion == nil then
+						getEntityFromManager(trigger.tag).targetedPostion = {}
+						getEntityFromManager(trigger.tag).targetedPostion.x = playerpos.x + trigger.x
+						getEntityFromManager(trigger.tag).targetedPostion.y = playerpos.y + trigger.y
+						getEntityFromManager(trigger.tag).targetedPostion.z = playerpos.z + trigger.z
 					end
-					local targetedPostions = cyberscript.EntityManager[trigger.tag].targetedPostion
+					local targetedPostions = getEntityFromManager(trigger.tag).targetedPostion
 					if check3DPos(entityposition, targetedPostions.x, targetedPostions.y, targetedPostions.z,trigger.range) then
 						result = true
-						cyberscript.EntityManager[trigger.tag].targetedPostion = nil
+						getEntityFromManager(trigger.tag).targetedPostion = nil
 						else
 						result = false
 					end
@@ -384,7 +384,7 @@ function scriptcheckTrigger(trigger)
 			end
 			
 			if(trigger.name == "last_killed_entity_is_registred") then
-				if cyberscript.EntityManager["last_killed"].id ~= nil then
+				if getEntityFromManager("last_killed").id ~= nil then
 				
 				
 						result = true
@@ -8636,6 +8636,174 @@ end
 				setPsycho(action.tag, action.entity)
 			end
 		end
+		
+		if(action.name == "attitude_entity_against_entity") then
+			if action.attitude == "hostile" then
+				setAggressiveAgainst(action.tag, action.entity)
+			end
+			if action.attitude == "passive"   then
+				setPassiveAgainst(action.tag, action.entity)
+			end
+			if action.attitude == "companion"   then
+				setFollower(action.tag)
+			end
+			if action.attitude == "friendly"   then
+				setFriendAgainst(action.tag, action.entity)
+			end
+			if action.attitude == "psycho" then
+				setPsycho(action.tag, action.entity)
+			end
+		end
+		
+		if(action.name == "set_relation_between_attitude") then
+		
+			
+			local EAIAttitude = Enum.new("EAIAttitude", "AIA_Hostile")
+			
+		
+			if action.relation == "passive"   then
+				EAIAttitude =Enum.new("EAIAttitude", "AIA_Neutral")
+			end
+			if action.relation == "friendly"   then
+				EAIAttitude =Enum.new("EAIAttitude", "AIA_Friendly")
+			end
+			
+			
+			setAttitudeAgainstAttitude(action.attitude,action.target, EAIAttitude)
+		end
+		
+		if(action.name == "set_relation_from_faction_to_attitude") then
+		
+			local faction = getFactionByTag(action.tag)
+			
+			
+			if(faction ~= nil and faction.AttitudeGroup ~= nil and #faction.AttitudeGroup > 0) then
+			
+			for i,attitude in ipairs(faction.AttitudeGroup) do
+			
+				local EAIAttitude = Enum.new("EAIAttitude", "AIA_Hostile")
+			
+		
+				if action.relation == "passive"   then
+					EAIAttitude =Enum.new("EAIAttitude", "AIA_Neutral")
+				end
+				if action.relation == "friendly"   then
+					EAIAttitude =Enum.new("EAIAttitude", "AIA_Friendly")
+				end
+				
+				setAttitudeAgainstAttitude(attitude,action.target, EAIAttitude)
+			end
+			end
+		
+		end
+		
+		if(action.name == "set_relation_from_faction_to_faction") then
+			
+			local faction = getFactionByTag(action.tag)
+			
+			local factiontarget = getFactionByTag(action.target)
+			
+			
+			if(faction ~= nil and faction.AttitudeGroup ~= nil and #faction.AttitudeGroup > 0) and (factiontarget ~= nil and factiontarget.AttitudeGroup ~= nil and #factiontarget.AttitudeGroup > 0) then
+			
+				for i,attitude01 in ipairs(faction.AttitudeGroup) do
+					
+					for i,attitude02 in ipairs(factiontarget.AttitudeGroup) do
+					
+					
+					
+						local EAIAttitude = Enum.new("EAIAttitude", "AIA_Hostile")
+					
+				
+						if action.relation == "passive"   then
+							EAIAttitude =Enum.new("EAIAttitude", "AIA_Neutral")
+						end
+						if action.relation == "friendly"   then
+							EAIAttitude =Enum.new("EAIAttitude", "AIA_Friendly")
+						end
+						
+						setAttitudeAgainstAttitude(attitude01,attitude02, EAIAttitude)
+					end
+				end
+			end
+		
+		end
+		
+		
+		if(action.name == "update_faction_relation_attitude") then
+			
+			for key01,gang01 in pairs(arrayFaction) do
+			
+					for key02,gang02 in pairs(arrayFaction) do
+			
+							local relation = getFactionRelation(gang01.faction.Tag,gang02.faction.Tag)
+							
+							if(relation == nil or relation == 0) then
+								
+								if(gang01.faction ~= nil and gang01.faction.AttitudeGroup ~= nil and #gang01.faction.AttitudeGroup > 0) and (gang02.faction ~= nil and gang02.faction.AttitudeGroup ~= nil and #gang02.faction.AttitudeGroup > 0) then
+			
+									for i,attitude01 in ipairs(gang01.faction.AttitudeGroup) do
+											
+											for i,attitude02 in ipairs(gang02.faction.AttitudeGroup) do
+											
+											
+											
+												local EAIAttitude = Enum.new("EAIAttitude", "AIA_Neutral")
+												setAttitudeAgainstAttitude(attitude01,attitude02, EAIAttitude)
+											end
+										end
+									end
+								
+								
+							end
+							
+							if(relation ~= nil and relation > 0) then
+								
+								if(gang01.faction ~= nil and gang01.faction.AttitudeGroup ~= nil and #gang01.faction.AttitudeGroup > 0) and (gang02.faction ~= nil and gang02.faction.AttitudeGroup ~= nil and #gang02.faction.AttitudeGroup > 0) then
+			
+									for i,attitude01 in ipairs(gang01.faction.AttitudeGroup) do
+											
+											for i,attitude02 in ipairs(gang02.faction.AttitudeGroup) do
+											
+											
+											
+												local EAIAttitude = Enum.new("EAIAttitude", "AIA_Friendly")
+												setAttitudeAgainstAttitude(attitude01,attitude02, EAIAttitude)
+											end
+										end
+									end
+								
+								
+							end
+							
+							if(relation ~= nil and relation < 0) then
+								
+								if(gang01.faction ~= nil and gang01.faction.AttitudeGroup ~= nil and #gang01.faction.AttitudeGroup > 0) and (gang02.faction ~= nil and gang02.faction.AttitudeGroup ~= nil and #gang02.faction.AttitudeGroup > 0) then
+			
+									for i,attitude01 in ipairs(gang01.faction.AttitudeGroup) do
+											
+											for i,attitude02 in ipairs(gang02.faction.AttitudeGroup) do
+											
+											
+											
+												local EAIAttitude = Enum.new("EAIAttitude", "AIA_Hostile")
+												setAttitudeAgainstAttitude(attitude01,attitude02, EAIAttitude)
+											end
+										end
+									end
+								
+								
+							end
+			
+					end
+			
+			end
+		
+		end
+		
+		
+		
+		
 		if(action.name == "play_entity_voice") then
 			local obj = getEntityFromManager(action.tag)
 			local enti = Game.FindEntityByID(obj.id)
@@ -9141,7 +9309,7 @@ end
 			ScannerInfoManager[action.tag].faction = action.faction
 			ScannerInfoManager[action.tag].networkstate = ""
 			ScannerInfoManager[action.tag].text = getLang("cyberscript_scanner_"..action.text)
-			print(action.text)
+		--	print(action.text)
 			ScannerInfoManager[action.tag].attitude = action.attitude
 			
 			if(action.bounty ~= nil) then
@@ -9681,8 +9849,8 @@ end
 				
 				else
 				print("no apply")
-				print(tostring(GameDump(displayHUD[action.parent])))
-				print(tostring(dump(arrayInterfaces[action.tag])))
+				-- print(tostring(GameDump(displayHUD[action.parent])))
+				-- print(tostring(dump(arrayInterfaces[action.tag])))
 				
 			end
 		end
@@ -12524,7 +12692,7 @@ function GenerateTextFromContextValues(context, v)
 				if(v.key == "group") then
 				local group = getEntityGroupfromEntityTag(obj.tag)
 				
-					value = tostring(group)
+					value = tostring(group.tag)
 				end
 				else
 				--spdlog.error("Context : No Entity Founded for "..v.tag)
