@@ -1040,9 +1040,9 @@ mappinData.variant = Enum.new('gamedataMappinVariant', typemap)
 mappinData.visibleThroughWalls = wall or true
 
 local posZ = posz or 200
-print(posx)
-print(posy)
-print(posZ)
+-- print(posx)
+-- print(posy)
+-- print(posZ)
 local position  = ToVector4{ x = posx, y = posy, z = posZ , w = 1}
 
 local mapId = Game.GetMappinSystem():RegisterMappin(mappinData, position)
@@ -1661,8 +1661,8 @@ end
 
 
 function diffVector(from, to)
-print(dump(from))
-print(dump(to))
+-- print(dump(from))
+-- print(dump(to))
 
 return Vector4.new(to.x - from.x, to.y- from.y, to.z - from.z, to.w - from.w)
 end

@@ -6217,7 +6217,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 					thos:GetRootWidget():SetVisible(false)
 					table.insert(thos.asyncSpawnRequests,thos:AsyncSpawnFromLocal(inkWidgetRef.Get(thos.quickhackContainer), "QuickHackDescription"))
 					
-					print(tostring(thos.scannedObjectType))
+				--	print(tostring(thos.scannedObjectType))
 					if(thos.scannedObjectType == ScannerObjectType.PUPPET) then
 						thos:GetRootWidget():SetVisible(true)
 						thos:AsyncSpawnScannerModule("ScannerNPCHeaderWidget")

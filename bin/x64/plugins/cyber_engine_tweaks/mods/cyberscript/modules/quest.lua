@@ -85,6 +85,9 @@ function QuestThreadManager()
 							action.name = "quest_notification"
 							action.title =  currentQuest.title
 							action.desc = objectif.title
+							if(objectif.extra ~= nil and objectif.extra.update ~= nil) then
+							action.desc = objectif.extra.update
+							end
 							action.duration = 4
 							action.type = "update"
 							executeAction(action,"update_mission","",0,"see","")
@@ -134,6 +137,9 @@ function QuestThreadManager()
 						action.name = "quest_notification"
 						action.title =  currentQuest.title
 						action.desc = currentQuest.content
+						if(currentQuest.extra ~= nil and currentQuest.extra.success ~= nil) then
+							action.desc = currentQuest.extra.success
+						end
 						action.duration = 4
 						action.type = "success"
 						executeAction(action,"success_mission","",0,"see","")
@@ -173,6 +179,9 @@ function QuestThreadManager()
 						action.name = "quest_notification"
 						action.title =  currentQuest.title
 						action.desc = currentQuest.content
+						if(currentQuest.extra ~= nil and currentQuest.extra.fail ~= nil) then
+							action.desc = currentQuest.extra.fail
+						end
 						action.duration = 4
 						action.type = "fail"
 						executeAction(action,"fail_mission","",0,"see","")
@@ -263,7 +272,11 @@ function startQuest(quest)
 			local action = {}
 			action.name = "quest_notification"
 			action.title =  currentQuest.title
+			
 			action.desc = currentQuest.content..getLang("mission_start_look_map")
+			if(currentQuest.extra ~= nil and currentQuest.extra.new ~= nil) then
+				action.desc = currentQuest.extra.new
+			end
 			action.duration = 4
 			action.type = "new"
 			executeAction(action,"start_mission","",0,"see","")
@@ -366,8 +379,8 @@ function resetQuest()
 	
 	end
 	
-	QuestManager.MarkQuestAsActive(currentQuest.tag)
-	QuestManager.MarkAllObjectiveOfQuestAs(currentQuest.tag,"Active")
+	QuestManager.MarkQuestAsInactive(currentQuest.tag)
+	QuestManager.MarkAllObjectiveOfQuestAs(currentQuest.tag,1)
 	QuestManager.MarkQuestAsUnVisited(entryId)
 	setScore(currentQuest.tag,"Score",0)
 	
@@ -398,7 +411,7 @@ function resetQuest()
 	DoedStartAction = false
 	DoedEndAction = false
 	DoedFailAction = false
-	
+	TrackObjective()
 	debugPrint(2,"Interrupt quest")
 	
 end
@@ -468,7 +481,7 @@ function HaveTriggerCondition(quest)
 	result = checkTriggerRequirement(quest.trigger_condition_requirement,quest.trigger_condition)
 	----debugPrint(2,askTriggerRequirement(quest.trigger_condition_requirement,quest.trigger_condition))
 	if(result)then
-		print(quest.title.." is okk")
+		--print(quest.title.." is okk")
 	end
 	return result
 end

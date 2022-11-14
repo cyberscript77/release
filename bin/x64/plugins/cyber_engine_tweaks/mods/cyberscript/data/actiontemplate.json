@@ -3106,4 +3106,38 @@
 		"helper": "This action will change time dilatation for NPC",
 		"helperTitle": "Entity : Set Time Dilatation"
 	},
+
+{
+	"name":"set_relation_between_attitude",
+	"attitude":"nid_04_maelstrom",
+	"target":"ina_11_scavs",
+	"relation":"hostile",
+	"helper": "This action will set relation between two AttitudeGroup",
+	"helperTitle": "Gameplay : Set Attitude Relation Between Attitude"
+
+},
+{
+	"name":"set_relation_from_faction_to_attitude",
+	"tag":"faction_maelstrom",
+	"target":"ina_11_scavs",
+	"relation":"hostile",
+	"helper": "This action will set relation between a faction and an AttitudeGroup",
+	"helperTitle": "Gameplay : Set Attitude Relation Between a Faction and an Attitude"
+
+},
+{
+	"name":"set_relation_from_faction_to_faction",
+	"tag":"faction_maelstrom",
+	"target":"faction_scavengers",
+	"relation":"hostile",
+	"helper": "This action will set relation between a faction and another faction",
+	"helperTitle": "Gameplay : Set Attitude Relation Between Faction"
+
+},
+{
+	"name":"update_faction_relation_attitude",
+	"helper": "This action will set relation between a faction and an AttitudeGroup",
+	"helperTitle": "Gameplay : Update Attitude Relation for every Factions from Affinity board"
+
+}
 ]

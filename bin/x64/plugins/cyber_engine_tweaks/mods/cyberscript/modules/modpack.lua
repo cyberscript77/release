@@ -1027,7 +1027,7 @@ end
 								else
 								
 								if(value.tag ~= nil) then
-								print(value.tag)
+							--	print(value.tag)
 								arrayHousing[value.tag] = {}
 								arrayHousing[value.tag].housing = value
 								arrayHousing[value.tag].file = path

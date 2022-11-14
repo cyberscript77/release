@@ -265,7 +265,7 @@ function QuestJournalUI.Initialize()
 						
 						
 						local obj = QuestManager.GetObjective(objectiveDef.id)
-						spdlog.error(dump(obj))
+						
 						if obj.extra ~= nil then
 							
 							

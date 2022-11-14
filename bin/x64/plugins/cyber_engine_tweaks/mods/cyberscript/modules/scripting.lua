@@ -450,18 +450,16 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				local obj = getEntityFromManagerById(objLook:GetEntityID())
 				
 				if(obj.id ~= nil) then
-					cyberscript.EntityManager["lookatentity"].id = nil
-					cyberscript.EntityManager["lookatentity"].tweak = "None"
-					cyberscript.EntityManager["lookatentity"].id = objLook:GetEntityID()
-					cyberscript.EntityManager["lookatentity"].tweak = obj.tweak
-					
+					cyberscript.EntityManager["lookatentity"].tag = obj.tag
 					
 					if obj.isquest == nil then obj.isquest = false end
 					
 					objLook:MarkAsQuest(obj.isquest)
 					
 					else
-					cyberscript.EntityManager["lookatentity"].id = nil
+					
+					
+					cyberscript.EntityManager["lookatentity"].tag = nil
 					
 					if cyberscript.EntityManager["lookatnpc"].isquest == nil then cyberscript.EntityManager["lookatnpc"].isquest = false end
 					
@@ -492,8 +490,8 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		cyberscript.EntityManager["lookatnpc"].id = nil
 		cyberscript.EntityManager["lookatnpc"].tweak = "None"
 		currentScannerItem = nil
-		cyberscript.EntityManager["lookatentity"].id = nil
-		cyberscript.EntityManager["lookatentity"].tweak = "None"
+		cyberscript.EntityManager["lookatentity"].tag = nil
+		
 		openCompanion = false
 		objLookIsVehicule = false
 	end
@@ -2086,7 +2084,7 @@ function checkFixer()
 		
 		if(checkTriggerRequirement(currentfixer.requirement,currentfixer.trigger)) then --check that fixer can be spawn
 			
-			print(currentfixer.Tag)
+			--print(currentfixer.Tag)
 			oldfixer = currentfixer
 		
 					
@@ -2096,7 +2094,7 @@ function checkFixer()
 					
 					
 					if(obj.id == nil) then -- if there is no entity
-							print("spawn")
+							--print("spawn")
 						
 						local twkVehi = TweakDBID.new(currentfixer.NPCId)
 						
@@ -3829,30 +3827,22 @@ function getEntityFromManager(tag)
 	
 	
 	
-	if(tag == "lookat" and objLook ~= nil) then
+	if(tag == "lookatentity" or tag == "last_spawned") then
 		
 		
 		
 		
 		
-		local enti = cyberscript.EntityManager["lookat"]
-		if(enti ~= nil) and type(enti.id) ~= "number" then
+		local enti = cyberscript.EntityManager[cyberscript.EntityManager[tag].tag]
+		
+		if(enti ~= nil) then
 			
-			if(enti.id ~= nil and enti.id.hash == objLook:GetEntityID().hash) then
-				obj = enti
-			end
+			obj = enti
 			
 		end	
 		
 		
-		if(obj.id == nil and lookatEntity == nil) then
-			obj.id = objLook:GetEntityID()
-			obj.tag = "lookat"
-			obj.tweak = nil
-			
-			else
-			--		obj.tag = "lookat"
-		end
+		
 		
 		
 	end
@@ -3895,6 +3885,26 @@ function getTrueEntityFromManager(tag)
 	
 	
 	local enti = cyberscript.EntityManager[tag]
+	if(tag == "lookatentity") then
+		
+	
+	
+	
+	
+		local enti = cyberscript.EntityManager[cyberscript.EntityManager["lookatEntity"].tag]
+		
+		if(enti ~= nil) then
+			
+				return enti
+			
+		end	
+		
+		
+		
+	
+	
+	end
+	
 	if((enti ~= nil) and enti.tag == tag) then
 		return enti
 	end
