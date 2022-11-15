@@ -910,7 +910,7 @@ function scriptcheckTrigger(trigger)
 					
 					if(trigger.prop == "customtransgressions" or trigger.prop == "transgressions"  ) then
 						
-						result = table.contains(ScannerInfoManager[trigger.tag]["bounty"][trigger.prop],trigger.value)
+						result = table_contains(ScannerInfoManager[trigger.tag]["bounty"][trigger.prop],trigger.value,false)
 						
 						
 						
