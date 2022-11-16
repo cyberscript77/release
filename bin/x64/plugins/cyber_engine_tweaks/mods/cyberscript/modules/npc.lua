@@ -2095,7 +2095,7 @@ if attitudeRegion then
 	
 	function setAttitudeAgainstAttitude(atttitude,targetattitude,relation)
 	
-	Game.GetAttitudeSystem():SetAttitudeRelation(CName.new(atttitude), CName.new(targetattitude), Enum.new("EAIAttitude", relation))
+	Game.GetAttitudeSystem():SetAttitudeRelation(CName.new(atttitude), CName.new(targetattitude), relation)
 		
 	
 	end

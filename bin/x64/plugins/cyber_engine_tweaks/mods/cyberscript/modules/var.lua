@@ -157,7 +157,8 @@ datapackObjectType = {
 	"sound",
 	"texture",
 	"webpage",
-	"email"
+	"email",
+	"quickhack"
 	
 	}
 cacheupdate = false

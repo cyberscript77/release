@@ -6048,6 +6048,15 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		end
 	end
 	
+	function QuickHackDescriptionGameController_OnQuickHackDataChanged(thos, value,wrappedMethod)
+		
+			local vehicleInfoData = QuickhackData.new()
+			vehicleInfoData = FromVariant(value)
+			spdlog.error(GameDump(vehicleInfoData))
+			wrappedMethod(value)
+	
+	end
+	
 	function ScannerBountySystemGameController_OnBountySystemChanged(thos, value,wrappedMethod)
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
@@ -6279,7 +6288,93 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		
 	end
 	
+	function QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
+		wrappedMethod(data)
+		
+		for k,v in pairs(arrayquickhack) do
+			print(k)
+			if(checkTriggerRequirement(v.entry.requirement,v.entry.trigger))then
+				
+				
+			CName.add("cyberscript_hack:"..v.entry.tag)
+			
+			CName.add("cyberscript_hack_category")
+			
+			local mydata = QuickhackData.new()
+			mydata.action = nil
+			mydata.actionOwner = Game.GetPlayer()
+			mydata.actionOwnerName = CName("cyberscript_hack:"..v.entry.tag)
+			mydata.icon = TweakDBID.new(v.entry.icon)
+			mydata.iconCategory = CName("cyberscript_hack_category")
+			mydata.title = v.entry.title
+			mydata.titleAlternative = v.entry.titlealternative
+			mydata.description = v.entry.description
+			mydata.inactiveReason = v.entry.inactivereason
+			mydata.isLocked = checkTriggerRequirement(v.entry.unlockrequirement,v.entry.unlocktrigger) == false
+			mydata.type = v.entry.actiontype
+			mydata.cost = v.entry.cost
+			mydata.costRaw = v.entry.cost
+			mydata.uploadTime = v.entry.uploadtime
+			mydata.duration =  v.entry.duration
+			mydata.ICELevelVisible = v.entry.icelevelvisible
+			mydata.ICELevel =  v.entry.iceLevel
+			mydata.vulnerabilities = nil
+			mydata.quality =  v.entry.quality
+			mydata.isInstant =  v.entry.isinstant
+			mydata.cooldown  = v.entry.cooldown
+			mydata.cooldownTweak  = nil
+			mydata.actionMatchesTarget  = false
+			mydata.maxListSize  =  13
+			mydata.category  =  nil
+			mydata.actionCompletionEffects  = nil
+			mydata.networkBreached  =  v.entry.networkbreached
+			
+			this.listController:PushData(mydata, false)
+			
+			end
+			
+			
+			
+			
+			end
+		
+		this.listController:Refresh()
 	
+	end
+	
+	function QuickhacksListItemController_UpdateState(this,wrappedMethod)
+		wrappedMethod()
+		
+	
+	end
+	
+	function QuickhacksListItemController_PlayChoiceAcceptedAnimation(this,wrappedMethod)
+		wrappedMethod()
+		if this.isSelected then
+			
+			if string.match(NameToString(this.data.actionOwnerName),"cyberscript_hack:") then
+			
+				local splittext = split(NameToString(this.data.actionOwnerName),':')
+				print("custom hack activated : "..splittext[2])
+				if(checkTriggerRequirement(arrayquickhack[splittext[2]].entry.requirement,arrayquickhack[splittext[2]].entry.trigger))then
+				
+					runActionList(arrayquickhack[splittext[2]].entry.action,arrayquickhack[splittext[2]].entry.tag,"interact",false,"player")
+				
+				end
+				
+			
+			
+			end
+				
+				
+			
+		
+		
+		end
+	
+		
+	
+	end
 	---Scanner
 	
 	function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
@@ -6598,13 +6693,13 @@ function listenPlayerInput(action)
 			end		
 		end
 		
-		
+
 		if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
 			----printactionName)+
 			-- --debugPrint(2,actionName)
 			-- --debugPrint(2,actionType)
-			 -- logme(1,actionName)
-			-- logme(1,actionType)
+			logme(1,actionName)
+			logme(1,actionType)
 			local inputHitted = false
 			if(isdialogactivehub == true ) then
 				
@@ -6619,7 +6714,7 @@ function listenPlayerInput(action)
 				
 				
 				
-				if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "up_button"))and (actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED")) then
+				if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp"))and (actionType == "BUTTON_PRESSED")) then
 					
 					
 					if(currentDialogHub.index == nil) then
@@ -6637,7 +6732,7 @@ function listenPlayerInput(action)
 				
 				
 				
-				if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "down_button"))and (actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED")) then
+				if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "hoiceScrollDown"))and (actionType == "BUTTON_PRESSED")) then
 					if(currentDialogHub.index == nil) then
 						currentDialogHub.index = 1
 					end

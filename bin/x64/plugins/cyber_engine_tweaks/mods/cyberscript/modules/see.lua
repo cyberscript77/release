@@ -12689,10 +12689,21 @@ function GenerateTextFromContextValues(context, v)
 				
 				end
 				
-				if(v.key == "group") then
-				local group = getEntityGroupfromEntityTag(obj.tag)
+				if(v.key == "gang") then
 				
-					value = tostring(group.tag)
+					value = getGangForEntity(enti)
+					
+				
+				end
+				
+				if(v.key == "group") then
+					local group = getEntityGroupfromEntityTag(obj.tag)
+					if(group ~= nil) then
+					
+						value = group.tag
+					
+					
+					end
 				end
 				else
 				--spdlog.error("Context : No Entity Founded for "..v.tag)

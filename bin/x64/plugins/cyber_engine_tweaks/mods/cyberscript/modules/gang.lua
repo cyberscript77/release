@@ -166,6 +166,56 @@ function checkAttitudeByGangScore(enti)
 	
 end
 
+function getGangForEntity(enti)
+	
+
+	local lookedgang = ""
+	
+	if(enti ~= nil) then
+		pcall(function() 
+		local targeName = enti:ToString()
+		if(string.match(targeName, "NPCPuppet"))then 
+			local targetAttAgent = enti:GetAttitudeAgent()
+			local group = Game.NameToString(targetAttAgent:GetAttitudeGroup())
+			local npcCurrentName = Game.NameToString(enti:GetCurrentAppearanceName())
+			
+			--debugPrint(10,tostring(group))
+			
+			for k,v in pairs(arrayFaction) do
+				
+				for y=1,#arrayFaction[k].faction.AttitudeGroup do
+					
+					if(string.find(group,arrayFaction[k].faction.AttitudeGroup[y]) ~= nil or string.find(npcCurrentName,arrayFaction[k].faction.AttitudeGroup[y]) ~= nil)then
+						if(string.find(npcCurrentName,"beyond_bouncer") == nil)then
+							
+						local score = getScorebyTag(arrayFaction[k].faction.Tag)
+							
+							
+							
+							lookedgang = arrayFaction[k].faction.Tag
+							
+							
+						end
+						
+						
+					end
+					
+				end
+				
+			end
+			
+			
+			
+		end 
+		
+		
+		
+		end)
+	end
+	return lookedgang
+	
+end
+
 function checkAlliesByScore(score)
 	
 	if(score >= 5) then

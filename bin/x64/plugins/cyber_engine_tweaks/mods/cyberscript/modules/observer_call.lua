@@ -844,11 +844,23 @@ function SetOverrider()
 	end)
 	
 	
+	
+	
+	Override('QuickhacksListGameController', 'PopulateData', function(this,data,wrappedMethod)
+		QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
+		print("PopulateData")
+	end)
+	
 	---Scanner
 	
-	Override('ComputerInkGameController', 'ShowMenuByName', function(this, elementName, wrappedMethod)
-		ComputerInkGameController_ShowMenuByName(this, elementName, wrappedMethod)
+	Override('QuickhacksListItemController', 'UpdateState', function(this, wrappedMethod)
+		QuickhacksListItemController_UpdateState(this, wrappedMethod)
 	end)
+	
+	Override('QuickhacksListItemController', 'PlayChoiceAcceptedAnimation', function(this, wrappedMethod)
+		QuickhacksListItemController_PlayChoiceAcceptedAnimation(this, wrappedMethod)
+	end)
+	
 	
 	-- Override('BrowserController', 'TryGetWebsiteData', function(this, address, wrappedMethod)
 	

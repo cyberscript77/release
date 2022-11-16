@@ -794,6 +794,7 @@ end
 	arraySetting = {}
 	arrayHousingTemplate = {}
 	arrayCharacterArchive = {}
+	arrayquickhack = {}
 	
 	if(arrayDatapack ~= nil) then
 	
@@ -1303,6 +1304,16 @@ end
 							arrayCharacterArchive[value.name].obj = value
 							arrayCharacterArchive[value.name].file = path
 							arrayCharacterArchive[value.name].datapack = datapackname
+						end
+						elseif(objtype == "quickhack") then
+						for key, value in pairs(tabl) do 
+							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							rootpath = path
+							
+							arrayquickhack[value.tag] = {}
+							arrayquickhack[value.tag].entry = value
+							arrayquickhack[value.tag].file = path
+							arrayquickhack[value.tag].datapack = datapackname
 						end
 					end
 				end

@@ -2441,7 +2441,7 @@ function checkNPC()
 		end
 		
 		else
-		print("error for npc working location. NPC : "..k)
+		--print("error for npc working location. NPC : "..k)
 		end
 		
 		
@@ -4013,7 +4013,7 @@ function getEntityGroupfromEntityTag(tag)
 				
 				local entity = group.entities[y]
 				
-				if(entity.tag == tag) then
+				if(entity == tag) then
 					goodgroup = group
 				end
 				

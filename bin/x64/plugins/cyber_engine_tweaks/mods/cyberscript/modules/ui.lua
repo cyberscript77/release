@@ -1300,6 +1300,8 @@ function makeNativeSettings()
 		
 		
 		GangAffinityCalculator()
+		initGangRelation()
+		initGangDistrictScore()
  
  end)
  
