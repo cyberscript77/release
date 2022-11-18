@@ -6289,10 +6289,12 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
+		
+		print("step 00")
 		wrappedMethod(data)
 		
 		for k,v in pairs(arrayquickhack) do
-			print(k)
+			
 			if(checkTriggerRequirement(v.entry.requirement,v.entry.trigger))then
 				
 				
@@ -6348,23 +6350,146 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	end
 	
-	function QuickhacksListItemController_PlayChoiceAcceptedAnimation(this,wrappedMethod)
-		wrappedMethod()
-		if this.isSelected then
+	function QuickhacksListGameController_OnAction(this,action,consumer,wrappedMethod)
+		--print("step 01")
+		wrappedMethod(action,consumer)
+		
+	
+	end
+	
+	function QuickhacksListGameController_ApplyQuickHack(this,wrappedMethod)
+		--print("step 02")
+		
+		
+		local value = wrappedMethod()
+		if string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
 			
-			if string.match(NameToString(this.data.actionOwnerName),"cyberscript_hack:") then
+				local splittext = split(NameToString(this.selectedData.actionOwnerName),':')
 			
-				local splittext = split(NameToString(this.data.actionOwnerName),':')
-				print("custom hack activated : "..splittext[2])
 				if(checkTriggerRequirement(arrayquickhack[splittext[2]].entry.requirement,arrayquickhack[splittext[2]].entry.trigger))then
 				
-					runActionList(arrayquickhack[splittext[2]].entry.action,arrayquickhack[splittext[2]].entry.tag,"interact",false,"player")
+					usedCells = this.selectedData.cost
+					maxCells =  this.lastMaxCells
+					-- print(usedCells)
+					-- print(maxCells)
+					-- print(this.lastFillCells)
+					
+					local availablecell = maxCells-usedCells
+					
+					local percent = math.floor((availablecell*100)/maxCells)
+					
+					local fillCells =  math.floor(maxCells * percent *0.01)
+					
+					if this:GetRootWidget():IsVisible() == false or (this.lastFillCells == fillCells and this.lastUsedCells == usedCells and this.lastMaxCells == maxCells) then
+					
+					else
+						this.lastUsedCells = usedCells
+						this.lastMaxCells = maxCells
+						this.lastFillCells = fillCells
+						this:UpdateMemoryBar()
+					end
+					
+					
+					
+					
+				end
+				
+			
+			
+			
+		end
+		
+	
+	end
+	
+	function QuickhacksListGameController_OnQuickhackStarted(this,value,wrappedMethod)
+		--print("step 03")
+		wrappedMethod(value)
+		if string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
+			
+				local splittext = split(NameToString(this.selectedData.actionOwnerName),':')
+			
+				if(checkTriggerRequirement(arrayquickhack[splittext[2]].entry.requirement,arrayquickhack[splittext[2]].entry.trigger))then
+					
+					local availablecell = maxCells-usedCells
+					
+					local percent = math.floor((availablecell*100)/maxCells)
+					
+					local fillCells =  math.floor(maxCells * percent *0.01)
+					
+					if(fillCells > -1) then
+						runActionList(arrayquickhack[splittext[2]].entry.action,arrayquickhack[splittext[2]].entry.tag,"interact",false,"player")
+					end
 				
 				end
 				
 			
 			
-			end
+		end
+	
+	end
+	
+	function QuickhacksListGameController_SetVisibility(this,value,wrappedMethod)
+		--print("step 04")
+		wrappedMethod(value)
+		
+		
+		
+		
+		
+		
+	
+	end
+	
+	function QuickhacksListItemController_OnMemoryPercentUpdate(this,value, wrappedMethod)
+	--	print("step 05")
+		wrappedMethod(value)
+		
+		
+		
+	
+	end
+	
+	function QuickhacksListItemController_UpdateQuickhacksMemoryBarSize(this,size, wrappedMethod)
+		print("step 06")
+		wrappedMethod(size)
+			
+		
+	
+	end
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	function QuickhacksListItemController_PlayChoiceAcceptedAnimation(this,wrappedMethod)
+	
+	
+	
+		wrappedMethod()
+		if this.isSelected then
+			
+			
 				
 				
 			
@@ -6698,8 +6823,8 @@ function listenPlayerInput(action)
 			----printactionName)+
 			-- --debugPrint(2,actionName)
 			-- --debugPrint(2,actionType)
-			logme(1,actionName)
-			logme(1,actionType)
+			-- logme(1,actionName)
+			-- logme(1,actionType)
 			local inputHitted = false
 			if(isdialogactivehub == true ) then
 				

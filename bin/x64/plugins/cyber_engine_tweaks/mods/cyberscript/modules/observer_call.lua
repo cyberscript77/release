@@ -843,12 +843,37 @@ function SetOverrider()
 		print("RefreshLayout")
 	end)
 	
-	
-	
-	
 	Override('QuickhacksListGameController', 'PopulateData', function(this,data,wrappedMethod)
 		QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
-		print("PopulateData")
+	end)
+	
+	
+	Override('QuickhacksListGameController', 'OnAction', function(this,action,consumer,wrappedMethod)
+		QuickhacksListGameController_OnAction(this,action,consumer,wrappedMethod)
+		
+	end)
+	
+	Override('QuickhacksListGameController', 'ApplyQuickHack', function(this,wrappedMethod)
+		QuickhacksListGameController_ApplyQuickHack(this,wrappedMethod)
+		
+	end)
+	
+	Override('QuickhacksListGameController', 'OnQuickhackStarted', function(this,value,wrappedMethod)
+		QuickhacksListGameController_OnQuickhackStarted(this,value,wrappedMethod)
+		
+	end)
+	
+	Override('QuickhacksListGameController', 'SetVisibility', function(this,value,wrappedMethod)
+		QuickhacksListGameController_SetVisibility(this,value,wrappedMethod)
+		
+	end)
+	
+	Override('QuickhacksListGameController', 'OnMemoryPercentUpdate', function(this,value, wrappedMethod)
+		QuickhacksListItemController_OnMemoryPercentUpdate(this,value, wrappedMethod)
+	end)
+	
+	Override('QuickhacksListGameController', 'UpdateQuickhacksMemoryBarSize', function(this,size, wrappedMethod)
+		QuickhacksListItemController_UpdateQuickhacksMemoryBarSize(this,size, wrappedMethod)
 	end)
 	
 	---Scanner
@@ -860,6 +885,8 @@ function SetOverrider()
 	Override('QuickhacksListItemController', 'PlayChoiceAcceptedAnimation', function(this, wrappedMethod)
 		QuickhacksListItemController_PlayChoiceAcceptedAnimation(this, wrappedMethod)
 	end)
+	
+	
 	
 	
 	-- Override('BrowserController', 'TryGetWebsiteData', function(this, address, wrappedMethod)

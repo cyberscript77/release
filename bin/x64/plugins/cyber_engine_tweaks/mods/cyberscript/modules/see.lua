@@ -606,7 +606,27 @@ function scriptcheckTrigger(trigger)
 				end
 			end
 			
+			if(trigger.name == "player_lifepath") then
 			
+				local player = Game.GetPlayer()
+				local scriptableSystemsContainer = Game.GetScriptableSystemsContainer()
+				local playerDevSystem = scriptableSystemsContainer:Get(CName.new('PlayerDevelopmentSystem'))
+				local path = playerDevSystem:GetLifePath(player)
+				if(trigger.output == true) then
+				print("player_lifepath result "..tostring((path)))
+				end
+				result = (trigger.value == EnumInt(path))
+			
+			end
+			
+			if(trigger.name == "player_have_combatstate") then
+				local player = Game.GetPlayer()
+				local state = player:GetCurrentCombatState()
+				result = (trigger.value == EnumInt(state))
+				if(trigger.output == true) then
+				print("player_have_combatstate result "..tostring((state)))
+				end
+			end
 			
 			
 			
@@ -1455,7 +1475,7 @@ function scriptcheckTrigger(trigger)
 			end
 			if(trigger.name== "check_mod") then
 				
-				result = (GetMod(action.value) ~= nil)
+				result = GetMod(trigger.value) ~= nil
 				
 			end
 		end
@@ -2240,9 +2260,7 @@ end
 				local entityTag = group.entities[i]
 				local obj = getEntityFromManager(entityTag)
 				local enti = Game.FindEntityByID(obj.id)
-				local reaction = {}
-				reaction.category = action.category
-				reaction.idle = action.idle
+				local reaction = getExpression(action.value)
 				if(enti ~= nil) then
 					makeFacial(enti,reaction)
 				end
@@ -5549,18 +5567,21 @@ end
 		
 		if(action.name == "wanted_level") then
 			local preventionSystem = Game.GetScriptableSystemsContainer():Get("PreventionSystem")
-			preventionSystem:AddGeneralPercent(action.value)
+			preventionSystem:SetHeatStage(action.value)
 			preventionSystem:HeatPipeline()
 		end
 		if(action.name == "change_zone") then
 			if(action.value == "safe") then
 				Game.ChangeZoneIndicatorSafe()
+				Game.ApplyEffectOnPlayer("GameplayRestriction.NoCombat")
 			end
 			if(action.value == "neutral") then
 				Game.ChangeZoneIndicatorPublic()
+				Game.RemoveEffectPlayer("GameplayRestriction.NoCombat")
 			end
 			if(action.value == "hostile") then
 				Game.ChangeZoneIndicatorDanger()
+				Game.RemoveEffectPlayer("GameplayRestriction.NoCombat")
 			end
 		end
 		if(action.name == "recording_mode") then
@@ -9009,8 +9030,24 @@ end
 			end
 		end
 		if(action.name == "set_timedilationforplayer") then
+			TimeDilationHelper.SetTimeDilationOnPlayer(Game.GetPlayer(), "see_engine", action.value, 99999, "", "");
+		end
+		
+		if(action.name == "ignore_timedilatationforplayer") then
 			Game.GetTimeSystem():SetIgnoreTimeDilationOnLocalPlayerZero(action.value)  
 		end
+		
+		if(action.name == "unset_timedilation_for_entity") then
+			local obj = getEntityFromManager(action.tag)
+			if(obj ~= nil ) then
+			local enti = Game.FindEntityByID(obj.id)
+			
+			if enti ~= nil then
+			TimeDilationHelper.UnsetIndividualTimeDilation(enti, "");
+			end
+			end
+		end
+		
 		if(action.name == "set_timedilation") then
 			Game.SetTimeDilation(action.value)
 		end
@@ -12460,7 +12497,22 @@ function GenerateTextFromContextValues(context, v)
 			value = getAtttribute(v.key, v.value)
 		end
 		
+		if(v.key == "combatstate") then
+			local player = Game.GetPlayer()
+			local state = player:GetCurrentCombatState()
+			
+			value = EnumInt(state)
+		end
 		
+		
+		if(v.key == "lifepath") then
+			local player = Game.GetPlayer()
+			local scriptableSystemsContainer = Game.GetScriptableSystemsContainer()
+			local playerDevSystem = scriptableSystemsContainer:Get(CName.new('PlayerDevelopmentSystem'))
+			local path = playerDevSystem:GetLifePath(player)
+			
+			value = EnumInt(path)
+		end
 	end
 		
 	if(v.type == "corpo") then
@@ -13157,6 +13209,12 @@ function GenerateTextFromContextValues(context, v)
 			value = checkTrigger(v.trigger)
 	end
 	
+	if(v.type == "action") then
+			local status, result = pcall(executeAction(v.action,"context_action_"..tostring(math.random(1,99999)),"",1,"interact","see"))
+			
+			value = status
+	end
+	
 	
 	if(v.type == "list") then
 		local list = {}
@@ -13179,7 +13237,7 @@ function GenerateTextFromContextValues(context, v)
 	if(value == nil) then value = "" end
 	
 	
-	
+	 
 	if(v.outputtype ~= nil and v.outputtype =="number") then
 		value = tonumber(value)
 	end
