@@ -372,7 +372,7 @@ function CheckandUpdateDatapack()
 		if('table' == type(v)) then
 			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil and (table_contains(arrayDatapack[k].metadata.flags,"essential",false) == false)) then
 			
-				nativeSettings.addSwitch("/CMDT", k, "index :"..i, arrayDatapack[k].enabled, arrayDatapack[k].enabled, function(state)
+				nativeSettings.addSwitch("/CMDT", k, arrayDatapack[k].metadata.version, arrayDatapack[k].enabled, arrayDatapack[k].enabled, function(state)
 					if (state == false) then
 						
 						DisableDatapack(k)

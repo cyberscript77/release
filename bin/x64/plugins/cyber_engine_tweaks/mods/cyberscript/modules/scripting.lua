@@ -2942,8 +2942,8 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 							
 							(
 								(isArray(poitype) == false and isArray(v.poi.isFor) == false and (poitype == 1 or (poitype == v.poi.isFor))) or
-								(isArray(poitype) == true and isArray(v.poi.isFor) == false and table.contains(poitype,v.poi.isFor)) or
-								(isArray(poitype) == false and isArray(v.poi.isFor) == true and table.contains(v.poi.isFor,poitype)) or
+								(isArray(poitype) == true and isArray(v.poi.isFor) == false and table_contains(poitype,v.poi.isFor)) or
+								(isArray(poitype) == false and isArray(v.poi.isFor) == true and table_contains(v.poi.isFor,poitype)) or
 								(isArray(poitype) == true and isArray(v.poi.isFor) == true and table.compare(poitype, v.poi.isFor))
 							)
 							

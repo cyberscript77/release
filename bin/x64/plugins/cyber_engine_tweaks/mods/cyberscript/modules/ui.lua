@@ -322,7 +322,7 @@ function refreshUIWidget()
 					
 					
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"text")) or (table.contains(control.data.dynamic,"default"))  then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"text")) or (table_contains(control.data.dynamic,"default"))  then 
 					
 					if(control.data.split) then
 
@@ -379,7 +379,7 @@ function refreshUIWidget()
 					
 					if(control.type == "shape") then
 					
-						if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"shape")) then 
+						if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"shape")) then 
 							control.ink.shapeVariant = Enum.new('inkEShapeVariant', control.data.shapevariant)
 							control.ink.lineThickness = control.data.linethickness
 							control.ink.endCapStyle = Enum.new('inkEEndCapStyle', control.data.endcapstyle)
@@ -412,44 +412,44 @@ function refreshUIWidget()
 					
 					
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"color")) or (table.contains(control.data.dynamic,"default") ) then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"color")) or (table_contains(control.data.dynamic,"default") ) then 
 					control.ink:SetTintColor(textcolor)
 					end
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"visible") )or (table.contains(control.data.dynamic,"default") )  then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"visible") )or (table_contains(control.data.dynamic,"default") )  then 
 					control.ink:SetVisible(control.data.visible)
 					end
 					
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"opacity")) or (table.contains(control.data.dynamic,"default") ) then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"opacity")) or (table_contains(control.data.dynamic,"default") ) then 
 					control.ink:SetOpacity(control.data.opacity)
 					end
 					
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"rotation")) or (table.contains(control.data.dynamic,"default")) then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"rotation")) or (table_contains(control.data.dynamic,"default")) then 
 					control.ink:SetRotation(control.data.rotation)
 					end
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"size")) or (table.contains(control.data.dynamic,"default")) then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"size")) or (table_contains(control.data.dynamic,"default")) then 
 					control.ink:SetSize(Vector2.new({ X = width, Y = height }))
 					end
 					
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"margin")) or (table.contains(control.data.dynamic,"default"))  then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"margin")) or (table_contains(control.data.dynamic,"default"))  then 
 					control.ink:SetMargin(inkMargin.new(control.data.margin))
 					end
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"translation")) or (table.contains(control.data.dynamic,"default")) then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"translation")) or (table_contains(control.data.dynamic,"default")) then 
 					control.ink:SetTranslation(Vector2.new({ X = translationwidth, Y = translationheight }))
 					end
 					
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"padding")) or (table.contains(control.data.dynamic,"default")) then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"padding")) or (table_contains(control.data.dynamic,"default")) then 
 					control.ink:SetPadding(inkMargin.new(control.data.padding))
 					end
 					
 					
-					if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"pivot")) or (table.contains(control.data.dynamic,"default")) then 
+					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"pivot")) or (table_contains(control.data.dynamic,"default")) then 
 					control.ink:SetRenderTransformPivot(Vector2.new({ X = transformwidth, Y = transformheight }))
 					end
 					
@@ -466,7 +466,7 @@ function refreshUIWidget()
 					-- control.ink.root:SetAnchorPoint(Vector2.new({ X = 0, Y = 0 }))
 					-- control.ink.root:SetOpacity(control.data.opacity)
 					-- control.ink.root:SetRotation(control.data.rotation)
-						if(control.data.dynamic == nil) or (table.contains(control.data.dynamic,"visible")) or (table.contains(control.data.dynamic,"default"))   then 
+						if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"visible")) or (table_contains(control.data.dynamic,"default"))   then 
 						print("test "..GameDump(control.ink:GetRootWidget()))
 						if control.ink:GetRootWidget().name ~=nil then control.ink:GetRootWidget():SetVisible(control.data.visible) end
 						end

@@ -1272,7 +1272,7 @@ print("hot reload test")
 		end
 	end
 	
-	--region CyberScript Estates
+	--region Browser
 	function PhotoModeGridButton_ButtonStateChanged(thos)
 		print(NameToString(thos.currentImagePart))
 	
@@ -1306,6 +1306,8 @@ print("hot reload test")
 		
 		GameController["WebPage"]  = self
 	end
+	
+	
 	function WebPage_FillPageFromJournal(self,page)
 		print("testlogic5")
 		print("ttot"..tostring(CurrentAddress))
@@ -3985,8 +3987,9 @@ print("hot reload test")
 			
 		end
 		end		
-	function BrowserController_OnPageSpawned(thos, widget, userData)
-		
+	
+function BrowserController_OnPageSpawned(thos, widget, userData)
+		print("OnPageSpawned "..tostring(CurrentAddress))
 		GameController["BrowserController"]  = thos
 		-- if(CurrentAddress == "CyberScript") then
 			-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod");
@@ -4013,8 +4016,209 @@ print("hot reload test")
 	end
 	end
 	
+	function ComputerMainLayoutWidgetController_InitializeMenuButtons(thos, gameController, widgetsData,wrappedMethod)
 	
-	--endregion CyberScript Estates
+		
+				wrappedMethod(gameController,widgetsData)
+		
+			local test = thos
+			local gameCon = gameController
+			print("inirt"..widgetsData[2].widgetName)
+			
+			
+			
+			local widget = SComputerMenuButtonWidgetPackage.new()
+			widget.libraryID = widgetsData[2].libraryID 
+			widget.widgetTweakDBID = widgetsData[2].widgetTweakDBID 
+			widget.widget = widgetsData[2].widget 
+			widget.widgetName = widgetsData[2].widgetName 
+			widget.placement = widgetsData[2].placement 
+			widget.isValid = widgetsData[2].isValid 
+			widget.displayName = widgetsData[2].displayName 
+			widget.ownerID = widgetsData[2].ownerID 
+			widget.ownerIDClassName = widgetsData[2].ownerIDClassName 
+			widget.customData = widgetsData[2].customData 
+			widget.isWidgetInactive = widgetsData[2].isWidgetInactive 
+			widget.widgetState = widgetsData[2].widgetState 
+			widget.iconID = widgetsData[2].iconID 
+			widget.bckgroundTextureID = widgetsData[2].bckgroundTextureID 
+			widget.iconTextureID = widgetsData[2].iconTextureID 
+			widget.textData = widgetsData[2].textData 
+			widget.counter = widgetsData[2].counter 
+			widget.displayName = "CyberScript Web"
+			widget.widgetName = "CyberScriptWeb"
+			local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
+			thos:AddMenuButtonWidget(widgeto, widget, gameController)
+			thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
+
+
+			
+			
+	end
+	
+	function ComputerMainLayoutWidgetController_ShowInternet(thos, startingPage,wrappedMethod)
+	print("startingPage "..tostring(startingPage))
+		-- if(startingPage == "CyberScript") then
+			-- -- thos:GetWindowContainer():SetVisible(false)
+			-- -- Keystone_Load()
+			-- -- if(currentInterface ~= nil and (currentInterface.type == "web")) then
+				
+				
+			
+				-- -- makeCustomInterface(thos:GetRootWidget())
+		
+			-- -- if(displayHUD["keystone_test"] == nil) then
+			
+			
+			-- -- -- displayHUD["keystone_container"] = inkCanvas.new()
+			-- -- -- displayHUD["keystone_container"]:SetName(CName.new("keystone_container"))
+			-- -- -- displayHUD["keystone_container"]:SetAnchor(inkEAnchor.Fill)
+			-- -- -- displayHUD["keystone_container"]:Reparent(thos:GetWindowContainer(), -1)
+		
+		
+			-- -- displayHUD["keystone_test"] = inkText.new()
+			-- -- displayHUD["keystone_test"]:SetName(CName.new("test"))
+			-- -- displayHUD["keystone_test"]:SetText("TEST")
+			-- -- displayHUD["keystone_test"]:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+			-- -- displayHUD["keystone_test"]:SetFontStyle('Medium')
+			-- -- displayHUD["keystone_test"]:SetFontSize(54)
+			-- -- displayHUD["keystone_test"]:SetHorizontalAlignment(textHorizontalAlignment.Center)
+			-- -- displayHUD["keystone_test"]:SetVerticalAlignment(textVerticalAlignment.Center)
+			-- -- displayHUD["keystone_test"]:Reparent(thos:GetRootWidget(), -1)
+			
+			
+			-- -- end
+		
+			-- -- displayHUD["keystone_test"]:SetVisible(true)
+			
+			-- -- end
+		
+			-- -- else
+			 -- -- if(displayHUD["keystone_test"] ~= nil) then
+				 -- -- displayHUD["keystone_test"]:SetVisible(false)
+			 -- -- end
+			-- wrappedMethod(startingPage)
+			
+		-- end
+		
+		wrappedMethod(startingPage)
+	end
+	
+	function ComputerInkGameController_ResolveBreadcrumbLevel(thos,  wrappedMethod) 
+	
+	print("test")
+	wrappedMethod()
+	end
+		
+	function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
+		-- if(elementName == "CyberScript") then
+			-- local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
+			-- thos:GetMainLayoutController():ShowInternet("CyberScript")
+			
+			-- thos:RequestMainMenuButtonWidgetsUpdate()
+			-- CurrentAddress = "CyberScript"
+			-- BrowserCybserscript = "loading"
+			-- else
+			-- wrappedMethod(elementName)
+		-- end
+		print("ShowMenuByName "..elementName)
+		if(elementName == "CyberScriptWeb") then
+			print("ShowMenuByName2 "..elementName)
+			local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
+			thos:GetMainLayoutController():ShowInternet("CyberScriptWeb")
+			thos:RequestMainMenuButtonWidgetsUpdate()
+			CurrentAddress = "CyberScriptWeb"
+			BrowserCybserscript = "home"
+			else
+			wrappedMethod(elementName)
+		end
+	end
+	
+-- function BrowserController_TryGetWebsiteData(thos, address, wrappedMethod)
+	
+		-- BrowserController = thos
+		
+		-- print("02 - TryGetWebsiteData "..address)
+		-- if(address == "CyberScript" or address == "CyberScriptWeb") then
+			
+			
+			-- return wrappedMethod("NETdir://ncity.pub")
+			
+			
+			
+			
+			-- else
+			-- return wrappedMethod(address)
+		-- end
+	-- end
+	
+	
+	function BrowserController_LoadWebPage(self,address,wrappedMethod)
+	--	CurrentAddress = address
+	
+	print("LoadWebPage : "..address)
+	if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
+		if(BrowserController == nil) then BrowserController = self end
+		
+		
+		if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
+			
+			CurrentAddress = address
+			
+		else
+			CurrentAddress = nil
+			
+		
+		end
+		
+		if(CurrentAddress == nil) then
+		
+			BrowserCybserscript = nil
+			BrowserCustomPlace = nil
+			
+		end
+		
+		if(CurrentAddress == "CyberScript" and BrowserCybserscript == nil) then
+			BrowserCybserscript = "loading"
+			BrowserCustomPlace = nil
+		end
+		
+		if(CurrentAddress == "CyberScriptWeb" and BrowserCybserscript == nil) then
+			BrowserCybserscript = "home"
+			BrowserCustomPlace = nil
+		end
+		
+		-- Cron.NextTick(function()
+		if(CurrentAddress ~= "NETdir://ezestates.web/makeovers") then
+			BrowserCustomPlace = nil
+			
+		end
+		
+		
+		if(address == "CyberScript" or address == "CyberScriptWeb" ) then
+		print("testlogic0")
+		return wrappedMethod("NETdir://ncity.pub")
+		
+		else
+		print("testlogic1")
+		return wrappedMethod(address)
+		
+		end
+	
+	else
+		CurrentAddress = nil
+		BrowserCybserscript = nil
+		BrowserCustomPlace = nil
+		
+		return wrappedMethod(address)
+		
+	end
+	
+	end
+
+	
+	
+	--endregion Browser
 	function WorldMapTooltipController_SetData(self,data,menu)
 		local mappinVariant = nil
 		
@@ -5608,118 +5812,6 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	
-	function ComputerMainLayoutWidgetController_InitializeMenuButtons(thos, gameController, widgetsData,wrappedMethod)
-		wrappedMethod(gameController,widgetsData)
-		if(currentHouse ~= nil) then
-			local test = thos
-			local gameCon = gameController
-			
-			
-			-- local widget = SComputerMenuButtonWidgetPackage.new()
-			-- widget.libraryID = widgetsData[2].libraryID 
-			-- widget.widgetTweakDBID = widgetsData[2].widgetTweakDBID 
-			-- widget.widget = widgetsData[2].widget 
-			-- widget.widgetName = widgetsData[2].widgetName 
-			-- widget.placement = widgetsData[2].placement 
-			-- widget.isValid = widgetsData[2].isValid 
-			-- widget.displayName = widgetsData[2].displayName 
-			-- widget.ownerID = widgetsData[2].ownerID 
-			-- widget.ownerIDClassName = widgetsData[2].ownerIDClassName 
-			-- widget.customData = widgetsData[2].customData 
-			-- widget.isWidgetInactive = widgetsData[2].isWidgetInactive 
-			-- widget.widgetState = widgetsData[2].widgetState 
-			-- widget.iconID = widgetsData[2].iconID 
-			-- widget.bckgroundTextureID = widgetsData[2].bckgroundTextureID 
-			-- widget.iconTextureID = widgetsData[2].iconTextureID 
-			-- widget.textData = widgetsData[2].textData 
-			-- widget.counter = widgetsData[2].counter 
-			-- widget.displayName = "CyberScript"
-			-- widget.widgetName = "CyberScript"
-			-- local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
-			-- thos:AddMenuButtonWidget(widgeto, widget, gameController)
-			-- thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
-		end
-		
-		
-			local test = thos
-			local gameCon = gameController
-			
-			
-			
-			local widget = SComputerMenuButtonWidgetPackage.new()
-			widget.libraryID = widgetsData[2].libraryID 
-			widget.widgetTweakDBID = widgetsData[2].widgetTweakDBID 
-			widget.widget = widgetsData[2].widget 
-			widget.widgetName = widgetsData[2].widgetName 
-			widget.placement = widgetsData[2].placement 
-			widget.isValid = widgetsData[2].isValid 
-			widget.displayName = widgetsData[2].displayName 
-			widget.ownerID = widgetsData[2].ownerID 
-			widget.ownerIDClassName = widgetsData[2].ownerIDClassName 
-			widget.customData = widgetsData[2].customData 
-			widget.isWidgetInactive = widgetsData[2].isWidgetInactive 
-			widget.widgetState = widgetsData[2].widgetState 
-			widget.iconID = widgetsData[2].iconID 
-			widget.bckgroundTextureID = widgetsData[2].bckgroundTextureID 
-			widget.iconTextureID = widgetsData[2].iconTextureID 
-			widget.textData = widgetsData[2].textData 
-			widget.counter = widgetsData[2].counter 
-			widget.displayName = "CyberScript Web"
-			widget.widgetName = "CyberScriptWeb"
-			local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
-			thos:AddMenuButtonWidget(widgeto, widget, gameController)
-			thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
-	end
-	
-	function ComputerMainLayoutWidgetController_ShowInternet(thos, startingPage,wrappedMethod)
-	
-		-- if(startingPage == "CyberScript") then
-			-- -- thos:GetWindowContainer():SetVisible(false)
-			-- -- Keystone_Load()
-			-- -- if(currentInterface ~= nil and (currentInterface.type == "web")) then
-				
-				
-			
-				-- -- makeCustomInterface(thos:GetRootWidget())
-		
-			-- -- if(displayHUD["keystone_test"] == nil) then
-			
-			
-			-- -- -- displayHUD["keystone_container"] = inkCanvas.new()
-			-- -- -- displayHUD["keystone_container"]:SetName(CName.new("keystone_container"))
-			-- -- -- displayHUD["keystone_container"]:SetAnchor(inkEAnchor.Fill)
-			-- -- -- displayHUD["keystone_container"]:Reparent(thos:GetWindowContainer(), -1)
-		
-		
-			-- -- displayHUD["keystone_test"] = inkText.new()
-			-- -- displayHUD["keystone_test"]:SetName(CName.new("test"))
-			-- -- displayHUD["keystone_test"]:SetText("TEST")
-			-- -- displayHUD["keystone_test"]:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
-			-- -- displayHUD["keystone_test"]:SetFontStyle('Medium')
-			-- -- displayHUD["keystone_test"]:SetFontSize(54)
-			-- -- displayHUD["keystone_test"]:SetHorizontalAlignment(textHorizontalAlignment.Center)
-			-- -- displayHUD["keystone_test"]:SetVerticalAlignment(textVerticalAlignment.Center)
-			-- -- displayHUD["keystone_test"]:Reparent(thos:GetRootWidget(), -1)
-			
-			
-			-- -- end
-		
-			-- -- displayHUD["keystone_test"]:SetVisible(true)
-			
-			-- -- end
-		
-			-- -- else
-			 -- -- if(displayHUD["keystone_test"] ~= nil) then
-				 -- -- displayHUD["keystone_test"]:SetVisible(false)
-			 -- -- end
-			-- wrappedMethod(startingPage)
-			
-		-- end
-		
-		wrappedMethod(startingPage)
-	end
-	
-	
 
 	
 	function RipperdocIdPanel_SetName(thos,vendorName,wrappedMethod)
@@ -6501,110 +6593,11 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	end
 	---Scanner
-	
-	function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
-		-- if(elementName == "CyberScript") then
-			-- local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
-			-- thos:GetMainLayoutController():ShowInternet("CyberScript")
-			
-			-- thos:RequestMainMenuButtonWidgetsUpdate()
-			-- CurrentAddress = "CyberScript"
-			-- BrowserCybserscript = "loading"
-			-- else
-			-- wrappedMethod(elementName)
-		-- end
-		
-		if(elementName == "CyberScriptWeb") then
-			local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
-			thos:GetMainLayoutController():ShowInternet("CyberScriptWeb")
-			thos:RequestMainMenuButtonWidgetsUpdate()
-			CurrentAddress = "CyberScriptWeb"
-			BrowserCybserscript = "home"
-			else
-			wrappedMethod(elementName)
-		end
-	end
-	
-	-- function BrowserController_TryGetWebsiteData(thos, address, wrappedMethod)
-	
-		-- BrowserController = thos
-		
-		-- spdlog.error("02 - TryGetWebsiteData "..address)
-		-- if(address == "CyberScript" or address == "CyberScriptWeb") then
-			
-			
-			-- return wrappedMethod("NETdir://ncity.pub")
-			
-			
-			
-			
-			-- else
-			-- return wrappedMethod(address)
-		-- end
-	-- end)
-	function BrowserController_LoadWebPage(self,address,wrappedMethod)
-	--	CurrentAddress = address
-	
-	print("LoadWebPage : "..address)
-	if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
-		if(BrowserController == nil) then BrowserController = self end
-		
-		
-		if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
-			
-			CurrentAddress = address
-			
-		else
-			CurrentAddress = nil
-			
-		
-		end
-		
-		if(CurrentAddress == nil) then
-		
-			BrowserCybserscript = nil
-			BrowserCustomPlace = nil
-			
-		end
-		
-		if(CurrentAddress == "CyberScript" and BrowserCybserscript == nil) then
-			BrowserCybserscript = "loading"
-			BrowserCustomPlace = nil
-		end
-		
-		if(CurrentAddress == "CyberScriptWeb" and BrowserCybserscript == nil) then
-			BrowserCybserscript = "home"
-			BrowserCustomPlace = nil
-		end
-		
-		-- Cron.NextTick(function()
-		if(CurrentAddress ~= "NETdir://ezestates.web/makeovers") then
-			BrowserCustomPlace = nil
-			
-		end
-		
-		
-		if(address == "CyberScript" or address == "CyberScriptWeb" ) then
-		print("testlogic0")
-		return wrappedMethod("NETdir://ncity.pub")
-		
-		else
-		print("testlogic1")
-		return wrappedMethod(address)
-		
-		end
-	
-	else
-		CurrentAddress = nil
-		BrowserCybserscript = nil
-		BrowserCustomPlace = nil
-		
-		return wrappedMethod(address)
-		
-	end
-	
-	end
-	function WorldMapMenuGameController_ShowGangsInfo(self,district)
+
+
+
+
+function WorldMapMenuGameController_ShowGangsInfo(self,district)
 		
 		local zoomlevel = self:GetCurrentZoom()
 		debugPrint(2,zoomlevel)

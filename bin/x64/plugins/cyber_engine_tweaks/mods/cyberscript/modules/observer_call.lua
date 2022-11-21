@@ -891,20 +891,8 @@ function SetOverrider()
 	
 	-- Override('BrowserController', 'TryGetWebsiteData', function(this, address, wrappedMethod)
 	
-		-- BrowserController = this
+		-- BrowserController_TryGetWebsiteData(thos, address, wrappedMethod)
 		
-		-- spdlog.error("02 - TryGetWebsiteData "..address)
-		-- if(address == "CyberScript" or address == "CyberScriptWeb") then
-			
-			
-			-- return wrappedMethod("NETdir://ncity.pub")
-			
-			
-			
-			
-			-- else
-			-- return wrappedMethod(address)
-		-- end
 	-- end)
 	Override('BrowserController', 'LoadWebPage', function(self,address,wrappedMethod)
 	 BrowserController_LoadWebPage(self,address,wrappedMethod)
@@ -913,6 +901,11 @@ function SetOverrider()
 	Override('WorldMapMenuGameController', 'ShowGangsInfo', function(self,district)
 		
 		WorldMapMenuGameController_ShowGangsInfo(self,district)
+	end)
+	
+	Override('ComputerInkGameController', 'ShowMenuByName', function(this, elementName,wrappedMethod)
+		ComputerInkGameController_ShowMenuByName(this, elementName, wrappedMethod)
+		
 	end)
 	
 end

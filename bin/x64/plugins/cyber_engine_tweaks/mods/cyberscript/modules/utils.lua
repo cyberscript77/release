@@ -246,7 +246,7 @@ end
 
 function table_contains(tables,value,checkkey)
 	local result = false
-	
+	if(checkkey == nil) then checkkey = false end
 	if(tables ~= nil) then
 		if(checkkey == false) then
 			if(tables[1] == nil) then
@@ -1750,21 +1750,13 @@ end
 
 
 
-function table.contains(table,value)
 
-for i, element in ipairs(table) do
-if(value == element) then
-return true
-end
-end
-return false
-end
 
 function table.compare(tablepoi, tablepoi2) 
 
 for i,v in ipairs(tablepoi) do
 
-if table.contains(tablepoi2,v) then
+if table_contains(tablepoi2,v) then
 
 return true
 
