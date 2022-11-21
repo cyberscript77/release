@@ -1052,6 +1052,7 @@ end
 if setting.type == "toggle" then
 nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 	setVariable(setting.target.tag,setting.target.key,value)
+	
  	runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
  	
  end)
@@ -1155,20 +1156,40 @@ function makeNativeSettings()
 		
 	
  
-	nativeSettings.addButton("/CM/gameplay02", "Reset the mod", "Will totaly delete downloaded datapack, cache and latest session", "Reset the mod", 45, function()
+	nativeSettings.addButton("/CM/gameplay02", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
 	
 	if file_exists("sessions/latest.txt") then
 		os.remove("sessions/latest.txt")
 	end
 	
-	for k,v in arrayDatapack do
-			if(k ~="default") then
-			DeleteModpack(k)
-			end
+	
+	local reader = dir("sessions")
+	
+	
+	for i=1, #reader do 
+		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
+			
+				os.remove('sessions/'..reader[i].name)
+	
+	
+			
+			
+		end
+	end
+	
+	local reader = dir("datapack")
+	for i=1, #reader do 
+		if(tostring(reader[i].type) == "directory") then
+			
+				os.remove('datapack/'..reader[i].name)
+	
+	
+			
+			
+		end
 	end
 	
 	local reader = dir("cache")
-	
 	for i=1, #reader do 
 		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 			
@@ -1354,22 +1375,40 @@ function makeNativeSettings()
  end)
  
 	
-	nativeSettings.addButton("/CM/actions", "Reset the mod", "Will totaly delete download datapack, cache and latest session", "Reset the mod", 45, function()
+	nativeSettings.addButton("/CM/gameplay02", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
 	
 	if file_exists("sessions/latest.txt") then
 		os.remove("sessions/latest.txt")
 	end
 	
-	for k,v in arrayDatapack do
 	
-			if(k ~="default") then
-			debugPrint(10,k)
-			DeleteModpack(k)
-			end
+	local reader = dir("sessions")
+	
+	
+	for i=1, #reader do 
+		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
+			
+				os.remove('sessions/'..reader[i].name)
+	
+	
+			
+			
+		end
+	end
+	
+	local reader = dir("datapack")
+	for i=1, #reader do 
+		if(tostring(reader[i].type) == "directory") then
+			
+				os.remove('datapack/'..reader[i].name)
+	
+	
+			
+			
+		end
 	end
 	
 	local reader = dir("cache")
-	
 	for i=1, #reader do 
 		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 			
@@ -1383,7 +1422,6 @@ function makeNativeSettings()
 	
 	
  	ImportDataPack()
-	CheckandUpdateDatapack()
 	LoadDataPackCache()
 	debugPrint(2, getLang("ui_setting_actions_rebuild_done"))
  	
@@ -1491,20 +1529,40 @@ function makeNativeSettings()
 		
 	
  
-	nativeSettings.addButton("/CM/gameplay02", "Reset the mod", "Will totaly delete download datapack, cache and latest session", "Reset the mod", 45, function()
+	nativeSettings.addButton("/CM/gameplay02", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
 	
 	if file_exists("sessions/latest.txt") then
 		os.remove("sessions/latest.txt")
 	end
 	
-	for k,v in arrayDatapack do
-			if(k ~="default") then
-			DeleteModpack(k)
-			end
+	
+	local reader = dir("sessions")
+	
+	
+	for i=1, #reader do 
+		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
+			
+				os.remove('sessions/'..reader[i].name)
+	
+	
+			
+			
+		end
+	end
+	
+	local reader = dir("datapack")
+	for i=1, #reader do 
+		if(tostring(reader[i].type) == "directory") then
+			
+				os.remove('datapack/'..reader[i].name)
+	
+	
+			
+			
+		end
 	end
 	
 	local reader = dir("cache")
-	
 	for i=1, #reader do 
 		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 			

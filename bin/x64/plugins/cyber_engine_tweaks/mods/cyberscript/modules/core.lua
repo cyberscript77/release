@@ -435,7 +435,7 @@ function DatapackLoading() --handle the loading and creation of cache for datapa
 		--if an error occur, we only load the default datapack
 		if(haveerror == true) then
 			
-			RecoverDatapack()
+			--RecoverDatapack()
 			
 		end
 		

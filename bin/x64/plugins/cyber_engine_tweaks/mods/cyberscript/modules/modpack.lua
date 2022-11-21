@@ -160,15 +160,15 @@ function ImportDataPack()
 	
 	
 	
+	if(#directories > 0) then
+		for i = 1, #directories do
+			
+			ImportDataPackFolder(directories[i])
+			exportCompiledDatapackFolder(directories[i],"From Create")
+			
+		end
 	
-	for i = 1, #directories do
-		
-		ImportDataPackFolder(directories[i])
-		exportCompiledDatapackFolder(directories[i],"From Create")
-		
 	end
-	
-	
 	end
 
 
@@ -798,8 +798,8 @@ end
 	
 	if(arrayDatapack ~= nil) then
 	
-	try {
-		function()
+	
+	
 			for k,v in pairs(arrayDatapack) do
 				if('table' == type(v) and v.enabled ~= nil and v.enabled == true) then
 					
@@ -809,8 +809,18 @@ end
 							local objtype = datapackObjectType[y]
 							if(arrayDatapack[k][objtype] ~= nil) then
 								
+								try {
+									function()
 								FillList(objtype,arrayDatapack[k][objtype],k)
+									end,
 								
+								catch {
+									function(error)
+										debugPrint(1,'Error during loading cache for datatpack: '..error)
+										
+									end
+								}
+								}
 								else
 							--	debugPrint(10,"can't find "..objtype.." for "..k)
 								
@@ -824,14 +834,9 @@ end
 					end
 				end
 			end
-		end,
-		catch {
-			function(error)
-				debugPrint(1,'Error during loading cache for datatpack: '..error)
-				RecoverDatapack()
-			end
-		}
-	}
+		end
+		
+	
 	
 
 	
@@ -845,7 +850,7 @@ end
 	
 	
 	end
-	end
+	
 	
 	function FillList(objtype,tabl, datapackname)
 		local rootpath = ""
@@ -1323,7 +1328,7 @@ end
 			catch {
 				function(error)
 					logme(1,'Error during creating cache for datatpack: '..error.." "..objtype.." "..datapackname.." path : "..rootpath)
-					RecoverDatapack()
+				
 				end
 			}
 			
