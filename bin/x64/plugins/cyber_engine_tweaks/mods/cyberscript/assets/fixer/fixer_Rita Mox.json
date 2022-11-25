@@ -1,0 +1,28 @@
+{
+
+	"Name":"Rita Wheeler",
+	"LOC_X":-1202,
+	"LOC_Y":1562,
+	"LOC_Z":20,
+	"range":8,
+	"Faction":"faction_mox",
+	"Tag": "fixer_rita",
+	"exist":false,
+	"npcexist":true,
+	"NPCId":"Character.q000_corpo_mox_bouncer",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+	"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"despawn_action":[]
+}

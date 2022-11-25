@@ -1,0 +1,66 @@
+{
+	"AttitudeGroup": [
+		"rogue"
+		
+	],
+	"DistrictTag": "district_watson",
+	"Name": "Afterlife Mercs",
+	"Logo": "logo_netwatch",
+	"Rivals": [
+		"faction_arasaka",
+		"faction_kangtao",
+		"faction_militech",
+		"faction_maelstrom",
+		"faction_scavengers"
+	],
+	"SpawnableNPC": [
+		"Character.afterlife_merc_fast_melee_m_hard",
+		"Character.afterlife_merc_fast_melee_w_hard",
+		"Character.afterlife_merc_generic_medium_range_m_hard",
+		"Character.afterlife_merc_generic_medium_range_w_hard",
+		"Character.afterlife_merc_netrunner_m_hard",
+		"Character.afterlife_merc_netrunner_w_hard",
+		"Character.afterlife_merc_strong_short_range_m_hard",
+		"Character.afterlife_merc_strong_short_range_w_hard",
+		"Character.afterlife_netrunner_netrunner2_yukimura_ma_rare",
+		"Character.afterlife_netrunner_netrunner2_yukimura_wa_rare",
+		"Character.afterlife_rare_fmelee3_katana_ma_elite",
+		"Character.afterlife_rare_fmelee3_katana_wa_elite",
+		"Character.afterlife_rare_fmelee3_mantis_ma_elite",
+		"Character.afterlife_rare_fmelee3_mantis_wa_elite",
+		"Character.afterlife_rare_franged2_ajax_ma_rare",
+		"Character.afterlife_rare_franged2_ajax_wa_rare",
+		"Character.afterlife_rare_franged2_overture_wa_rare",
+		"Character.afterlife_rare_franged2_saratoga_ma_rare",
+		"Character.afterlife_rare_franged2_saratoga_wa_rare",
+		"Character.afterlife_rare_gunner3_hmg_mb_elite",
+		"Character.afterlife_rare_sniper3_ashura_ma_elite"
+	],
+	"SpawnableVehicule": [	
+		"Vehicle.rogue_bike",		
+		"Vehicle.rogue_car",		
+		 "Vehicle.v_sport2_mizutani_shion",		 
+		 "Vehicle.v_sport2_quadra_type66",		 
+		 "Vehicle.v_sportbike2_arch",		 
+		 "Vehicle.v_sportbike1_yaiba_kusanagi"
+	],
+	"Tag": "faction_afterlife",
+	"VIP": [
+		{
+			"name": "Nix",
+			"score": 0
+		},
+		{
+			"name": "Nancy",
+			"score": 20
+		},
+		{
+			"name": "Henry",
+			"score": 10
+		},
+		{
+			"name": "Kerry",
+			"score": 30
+		}
+	]
+}

@@ -1,0 +1,25 @@
+{
+
+	"Name":"Regina Jones",
+
+	"LOC_X":-1143.104,
+	"LOC_Y":1568.628,
+	"LOC_Z": 71.707,
+	"range":8,
+	"Faction":"faction_ncpd",
+	"Tag": "fixer_regina",
+	"exist":true,
+	"npcexist":true,
+	"NPCId":"Character.Reginald",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+"spawn_action": [
+		{
+		}
+	],
+	"despawn_action":[]
+}

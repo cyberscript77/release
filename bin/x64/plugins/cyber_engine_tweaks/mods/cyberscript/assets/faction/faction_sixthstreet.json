@@ -1,0 +1,43 @@
+{
+    "Name": "6thStreet",
+    "Logo": "logo_6thstreet",
+    "Tag": "faction_sixthstreet",
+   "AttitudeGroup": [
+   "q103_6th_street", 
+   "de_wbr_hil_06_6th_street",
+   "de_std_rcr_06_6th_street",
+  "sq012_6th_street"
+   ],
+    "Rivals": [
+        "faction_valentinos"
+    ],
+    "SpawnableNPC": [
+        "Character.mq008_6th_street_civ_judge_ma",
+        "Character.mq008_6th_street_civ_judge_wa",
+        "Character.mq008_6th_street_representative",
+        "Character.sts_wbr_hil_06_6th_street_ganger",
+        "Character.sts_wbr_hil_06_6th_street_ganger_wa",
+        "Character.sts_wbr_hil_06_6th_street_marksman_ma",
+        "Character.sts_hey_gle_06_6th_street_officer",
+        "Character.sts_hey_gle_06_6th_street_smg_ma",
+        "Character.sts_hey_gle_06_6th_street_smg_wa"
+    ],
+    "SpawnableVehicule": [
+        "Vehicle.v_standard2_chevalier_thrax_sixth_street",
+        "Vehicle.v_standard2_archer_hella_sixth_street",
+        "Vehicle.v_standard25_villefort_columbus_sixth_street",
+        "Vehicle.cs_savable_archer_hella_sixth_street"
+    ],
+    "DistrictTag": "district_santodomingo",
+    "VIP": [{
+            "name": "Buck Arnold",
+            "score": 0
+        }, {
+			 "name": "Darius Miles",
+            "score": 20
+        }, {
+            "name": "Olga Elisabeth Longmead",
+            "score": 30
+        }
+    ]
+}

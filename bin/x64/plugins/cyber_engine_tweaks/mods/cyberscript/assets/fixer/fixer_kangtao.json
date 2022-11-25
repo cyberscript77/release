@@ -1,0 +1,30 @@
+{
+
+	"Name": "KangTao Agent",
+	"LOC_X": -1200.250,
+	"LOC_Y": -127.313,
+	"LOC_Z": 16.123,
+	"range": 15,
+	"Faction": "faction_kangtao",
+	"Tag": "fixer_kangtao",
+	"NPCId": "Character.kangtao_officer_grenadier3_mah_elite",
+	"exist": false,
+	"npcexist": false,
+	"trigger": {
+		"always_enable": {
+			"name": "auto"
+		}
+	},
+	"requirement": [
+		["always_enable"]
+	],
+	"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"despawn_action": []
+}

@@ -1,0 +1,50 @@
+{
+	"Name": "Animals",
+	"Logo": "logo_animals",
+	"Tag": "faction_animals",
+	"AttitudeGroup": [
+		"wwd_05_animals",
+		"q110_mall_animals",
+        "animals_ow"
+	],
+	"Rivals": ["faction_voodooboys", "faction_mox", "faction_wraiths", "faction_arasaka", "faction_valentinos"],
+	"SpawnableNPC": [
+		"Character.q110_mall_animals_bouncer3_hmelee3_fists_mba_elite",
+		"Character.q110_mall_animals_grunt1_ranged1_nova_mb",
+		"Character.animals_elite3_hmelee3_fists_mba_elite",
+		"Character.animals_bouncer2_melee2_fists_mb",
+		"Character.animals_elite3_hmelee3_fists_mba_elite",
+		"Character.animals_bouncer1_melee1_fists_mb",
+		"Character.animals_bouncer1_ranged1_kenshin_mb",
+		"Character.q110_animals_mall_entrance_zone_female",
+		"Character.q110_animals_mall_workout_zone_melee",
+		"Character.q110_animals_mall_entrance_zone_melee2h",
+		"Character.q110_mall_animals_grunt1_ranged1_pulsar_mb",
+		"Character.q110_animals_mall_west_wing_zone_fists",
+		"Character.q110_animals_mall_workout_zone"
+	],
+	"SpawnableVehicule": [
+		"Vehicle.v_standard2_chevalier_thrax_quest",
+		"Vehicle.v_sportbike1_yaiba_kusanagi_animal",
+		"Vehicle.v_standard25_villefort_columbus_quest"
+	],
+	"DistrictTag": "district_pacifica",
+	"VIP": [
+		{
+			"name": "Rhino",
+			"score": 0
+		}, {
+			"name": "Raptor",
+			"score": 5
+		}, {
+			"name": "Razor Hugh",
+			"score": 5
+		}, {
+			"name": "Mauler",
+			"score": 10
+		}, {
+			"name": "Denzel Cryer",
+			"score": 20
+		}
+	]
+}

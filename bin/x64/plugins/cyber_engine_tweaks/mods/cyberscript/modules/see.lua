@@ -4552,20 +4552,22 @@ end
 		
 		if(action.name == "load_interact") then
 			
-			if(#loadInteract < 4) then
+			if(#loadInteract < 4 and (table_contains(loadInteract,action.tag,false) == false))then
 				table.insert(loadInteract,action.tag)
 				
 				createInteraction(false)
 				candisplayInteract = true
 				createInteraction(true)
+				cycleInteract()
 				else
-				
+				if((table_contains(loadInteract,action.tag,false) == false)) then
 				error("There is already 4 force loaded interact. Limit is reached !")
+				end
 			end
 		end
 		
 		if(action.name == "unload_interact") then
-			if(#loadInteract > 0) then
+			if(#loadInteract > 0 and (table_contains(loadInteract,action.tag,false) == true)) then
 				local indextoremove  = nil
 				for i,v in ipairs(loadInteract) do
 					
@@ -4781,7 +4783,23 @@ end
 		if(action.name == "clean_activefasttravelpoint") then
 			if(ActiveFastTravelMappin ~= nil) then
 				
+				local newmappin = ActiveFastTravelMappin
+				local mappins = Game.GetMappinSystem():GetMappins(2)
+				
+				for i,v in ipairs(mappins) do
+				
+				if(v.worldPosition.x == ActiveFastTravelMappin.position.x and v.worldPosition.y == ActiveFastTravelMappin.position.y and v.worldPosition.z == ActiveFastTravelMappin.position.z)then
+					
+					lastId =v.id
+					Game.GetMappinSystem():SetMappinActive(v.id,false)
+				end
+				
+				
+				end
+				
+				
 				ActiveFastTravelMappin = nil
+				
 			end
 		end
 		
@@ -5882,7 +5900,29 @@ end
 			end
 		end
 		
-		
+		if(action.name == "safe_execution") then
+			local status, result = pcall(executeAction(action.action,tag,parent,index,source,executortag))
+	
+	
+	
+			if status == false then
+				
+				if(action.output == true) then 
+				
+					print(action.name)
+					print(dump(action))
+					print(tostring(result))
+					spdlog.error(dump(action))
+				end
+				
+				debugPrint(1,getLang("Action execution error") .. result.." Action : "..tostring(JSON:encode_pretty(action)))
+				
+				--Game.GetPlayer():SetWarningMessage("CyberScript Trigger error, check the log for more detail")
+				runActionList(action.failactions, tag, source,false,executortag)
+				
+			end
+	
+		end
 		
 		if(action.name == "set_map_point_position") then
 			setMappinPositionByTag(action.tag,action.x,action.y,action.z)
@@ -9710,8 +9750,8 @@ end
 			local event = boj.func
 			if( boj ~= nil) then
 				local exector = executortag
-				
-				
+				local bypassmenu = false
+				if action.bypassmenu ~= nil then bypassmenu = action.bypassmenu end
 				if(action.applyto ~= nil and action.applyto ~= "")then
 					exector = action.applyto
 				end
@@ -9720,10 +9760,11 @@ end
 				if(action.parallele == nil or action.parallele == false)then
 					
 					
-					runSubActionList(event.action, action.value, tag,source,false,exector)
+					runSubActionList(event.action, action.value, tag,source,false,exector,bypassmenu)
+					
 					result=false
 					else
-					runActionList(event.action,action.value,source,false,exector)
+					runActionList(event.action,action.value,source,false,exector,bypassmenu)
 					
 					
 				end

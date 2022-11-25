@@ -1,0 +1,29 @@
+{
+
+	"Name": "Muamar « El Captain » Reyes",
+	"LOC_X": 406,
+	"LOC_Y": -2361,
+	"LOC_Z": 0,
+	"range": 5,
+	"Faction": "faction_sixthstreet",
+	"Tag": "fixer_captain",
+	"NPCId": "Character.muamar_reyes",
+	"exist": true,
+	"npcexist": true,
+	"trigger": {
+		"always_enable": {
+			"name": "auto"
+		}
+	},
+	"requirement": [
+		["always_enable"]
+	],
+	"spawn_action": [
+
+		{
+
+		}
+
+	],
+	"despawn_action": []
+}

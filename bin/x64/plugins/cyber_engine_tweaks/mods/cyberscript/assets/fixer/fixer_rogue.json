@@ -1,0 +1,25 @@
+{
+	"Name": "Rogue Amendiares",
+	"LOC_X": -1421.547,
+	"LOC_Y": 1014.365,
+	"LOC_Z": 16.922,
+	"range": 3,
+	"Faction": "faction_afterlife",
+	"Tag": "fixer_rogue",
+	"NPCId": "Character.Rogue",
+	"exist": true,
+	"npcexist": true,
+	"trigger": {
+		"always_enable": {
+			"name": "auto"
+		}
+	},
+	"requirement": [
+		["always_enable"]
+	],
+	"spawn_action": [
+		{
+		}
+	],
+	"despawn_action": []
+}

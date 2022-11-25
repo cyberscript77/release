@@ -1,0 +1,26 @@
+{
+
+	"Name": "Coach Fred",
+	"LOC_X": -1430,
+	"LOC_Y": 1335,
+	"LOC_Z": 86,
+	"range": 8,
+	"Faction": "faction_animals",
+	"Tag": "fixer_fred",
+	"exist": false,
+	"npcexist": true,
+	"NPCId": "Character.q110_animals_boss",
+	"trigger": {
+		"always_enable": {
+			"name": "auto"
+		}
+	},
+	"requirement": [
+		["always_enable"]
+	],
+	"spawn_action": [{
+
+
+	}],
+	"despawn_action": []
+}

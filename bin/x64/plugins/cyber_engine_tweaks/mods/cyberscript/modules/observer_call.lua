@@ -288,16 +288,28 @@ PanzerHUDGameController_OnInitialize(this)
 		
 	end)
 	
+	ObserveBefore("ShardItemVirtualController", "OnToggledOn", function (this)
+		
+		
+	end)
+	
 	ObserveAfter("CodexGameController", "PopulateData", function(this)
 		CodexGameController_PopulateData(this)
 	
 	end)
-		
-	ObserveAfter("ShardsMenuGameController", "PopulateData", function(this)
-		Cron.NextTick(function()
-		ShardsMenuGameController_PopulateData(this)
-		end)
+	
+	ObserveBefore("ShardsMenuGameController", "PopulateData", function(this)
+			
+		shardpopulate = true
+			
 	end)
+		
+	ObserveAfter("ShardsVirtualNestedListController", "SetData", function(this,data, keepToggledLevels, sortOnce)
+			
+		ShardsMenuGameController_PopulateData(this,data, keepToggledLevels, sortOnce)
+	end)
+	
+
 	
 	ObserveAfter('WorldMapMenuGameController', 'OnSelectedDistrictChanged', function(this,oldDistrict,newDistrict)
 		
@@ -496,10 +508,6 @@ PanzerHUDGameController_OnInitialize(this)
 	Observe('MessangerReplyItemRenderer', 'OnJournalEntryUpdated', function(self,entry,extraData)
 		MessangerReplyItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
 	end)
-	
-	
-	
-	
 	
 	
 	

@@ -990,22 +990,27 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 							local gangslist = {}
 							if(#currentDistricts2.districtLabels > 1) then
 								local gangs = getGangfromDistrict(currentDistricts2.districtLabels[2],20)
+								if(#gangs > 0) then
 								for i=1,#gangs do
 									if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
 										table.insert(gangslist,gangs[i])
 									end
 								end
+								end
 								else
 								local gangs = getGangfromDistrict(currentDistricts2.districtLabels[1],20)
+								if(#gangs > 0) then
 								for i=1,#gangs do
 									if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
 										table.insert(gangslist,gangs[i])
 										
 									end
 								end
+								end
 								
 							end
 							
+							if(#gangslist > 0) then
 							for i,v in ipairs(gangslist) do
 								
 								
@@ -1020,7 +1025,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 								
 							end
 							
-							
+							end
 							
 							
 							
@@ -1640,11 +1645,11 @@ function checkTriggerRequirement(requirement,triggerlist)
 				
 				
 				if(result == false) then --si un requirement n'a pas été validé déja
-					
+					--print(requirementcondition[y])
 					local trigger = triggerlist[requirementcondition[y]]
 					
 					local triggerIsOk = checkTrigger(trigger) --on evalue le trigger
-					
+					--print(trigger.name.." "..dump(trigger).." "..tostring(triggerIsOk))
 					if(triggerIsOk) then --on incrémente le compteur si le trigger est ok
 						
 						
@@ -1860,10 +1865,12 @@ function doTriggeredEvent()
 		local event = arrayEvent[key].event
 		
 		if(event.way == "world") then
+		--print("test"..dump(event))
 			--debugPrint(4,"check for "..event.name)
 			--testTriggerRequirement(event.requirement,event.trigger)
+			--print(key)
 			if(checkTriggerRequirement(event.requirement,event.trigger))then
-				
+				--logme(1,"check for "..event.name)
 				runActionList(event.action,key,"interact",false,"nothing")
 				
 			end

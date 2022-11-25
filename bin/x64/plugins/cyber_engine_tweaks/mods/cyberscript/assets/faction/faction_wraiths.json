@@ -1,0 +1,44 @@
+{
+
+	"Name": "wraiths",
+	"Logo": "logo_wraiths",
+	"Tag": "faction_wraiths",
+	"AttitudeGroup": [
+		"wraiths",
+		"wraiths_ow"
+	],
+	"Rivals": [
+		"faction_aldecaldos"
+	],
+	"SpawnableNPC": [
+		"Character.wraiths_grunt2_ranged2_copperhead_wa",
+		"Character.wraiths_prisoner_fmelee3_fists_ma_elite",
+		"Character.wraiths_strongarms_hmelee3_fists_mb_elite",
+		"Character.wraiths_ghost2_sniper2_achilles_ma_rare",
+		"Character.wraiths_grunt1_melee1_ironpipe_ma",
+		"Character.wraiths_grunt2_ranged2_copperhead_ma",
+		"Character.wraiths_grunt2_melee2_crowbar_wa"
+	],
+	"SpawnableVehicule": [
+		"Vehicle.v_sport2_quadra_type66_nomad_wraiths",
+		"Vehicle.v_sport2_mizutani_shion_nomad_wraiths",
+		"Vehicle.v_standard2_thorton_galena_nomad_wraiths"
+	],
+	"DistrictTag": "district_badland",
+	"VIP": [
+		{
+			"name": "Santiago",
+			"score": 0
+		},
+		{
+			"name": "Rufus Mcbride",
+			"score": 10
+		}, {
+			"name": "wraiths Female",
+			"score": 15
+		}, {
+			"name": "Bruce Ward",
+			"score": 20
+		}
+	]
+}

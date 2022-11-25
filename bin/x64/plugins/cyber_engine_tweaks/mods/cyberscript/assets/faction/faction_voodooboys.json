@@ -1,0 +1,41 @@
+{
+	"Name": "VoodooBoys",
+	"Logo": "logo_voodooboys",
+	"Tag": "faction_voodooboys",
+	"AttitudeGroup": [
+	"voodooBoys_ow",
+	"voodooBoys"
+	],
+	"Rivals": [
+		"faction_animals",
+		"faction_kangtao",
+		"faction_arasaka",
+		"faction_militech",
+		"faction_ncpd",
+		"faction_scavengers"
+	],
+	"SpawnableNPC": [
+		"Character.cvi_voodooboys_grunt1_ranged2_saratoga_wa",
+		"Character.cvi_voodooboys_netrunner2_netrunner2_lexington_ma_rare",
+		"Character.q110_esc_voodooboys_grunt1_ranged2_saratoga_ma",
+		"Character.q110_esc_voodooboys_grunt1_ranged2_sidewinder_wa"
+	],
+	"SpawnableVehicule": [
+		"Vehicle.v_standard2_thorton_galena_voodoo_boys",
+		"Vehicle.cs_savable_mahir_voodoo_boys",
+		"Vehicle.v_sportbike2_arch_sport"
+	],
+	"DistrictTag": "district_pacifica",
+	"VIP": [
+		{
+			"name": "Ertha Ojasama",
+			"score": 0
+		}, {	
+			"name": "Noel Ducael",
+			"score": 5
+		}, {
+			"name": "Emilie Massenat",
+			"score": 20
+		}
+	]
+}

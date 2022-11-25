@@ -6,7 +6,7 @@ print("hot reload test")
 	
 	
 	function ComputerMainLayoutWidgetController_OnScreenSaverSpawned(thos,widget,userData)
-		
+		if(moddisabled == true) then return end
 		local obj = widget:GetWidgetByIndex(2):GetWidgetByIndex(3):GetWidgetByIndex(1)
 		if(NetServiceOn == true and currentHouse ~= nil) then
 		
@@ -18,7 +18,7 @@ print("hot reload test")
 	end
 	 
 	function ComputerMenuWidgetController_InitializeFiles(this,gameController,widgetsData)
-	
+	if(moddisabled == true) then return end
 		-- for i,v in ipairs(widgetsData) do
 		
 		-- spdlog.error(GameDump(v))
@@ -27,26 +27,26 @@ print("hot reload test")
 	
 	end
 	function ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
-	
+	if(moddisabled == true) then return end
 	 -- spdlog.error(GameDump(this.mailsMenu))
 	 -- print("mark1")
 	 -- this.mailsMenu:SetVisible(false)
 	
 	end
 	function ComputerInkGameController_ShowMails(this)
-	
+	if(moddisabled == true) then return end
 	-- print("mark3")
 	end
 	
 	function ComputerDocumentWidgetController_Initialize(this,gameController,widgetsData)
-		
+		if(moddisabled == true) then return end
 		-- print("mark4")
 		
 		-- this.titleWidget:SetText("Donk is bonl")
 		
 	end
 	function ComputerMenuWidgetController_InitializeFilesThumbnails(this,gameController,widgetsData)
-		
+		if(moddisabled == true) then return end
 	-- this.thumbnailsListWidget:SetVisible(true)
 		-- local mymail = SDocumentThumbnailWidgetPackage.new()
 		-- mymail.displayName = "Donk no bonk"
@@ -93,11 +93,13 @@ print("hot reload test")
 	
 	function FullscreenVendorGameController_PopulateVendorInventory(thos)
 	-- print("selll02")
+	if(moddisabled == true) then return end
 	end
 	
 	
 	function HUDProgressBarController_OnInitialize(thos)
 	GameController["HUDProgressBarController"] = thos
+	if(moddisabled == true) then return end
 	end
 	
 	
@@ -107,10 +109,12 @@ print("hot reload test")
 	function AnimationControllerComponent_ApplyFeature(thos,obj,inputName,value,delay)
 	print("ApplyFeature "..NameToString(inputName))
 	print("ApplyFeature "..GameDump(value))
+	if(moddisabled == true) then return end
 	end
 	
 	
 	function BackdoorInkGameController_OnInitialize(thos)
+	if(moddisabled == true) then return end
 	GameController["BackdoorInkGameController"] = thos
 	
 	thos:GetRootWidget():SetVisible(true)
@@ -118,6 +122,7 @@ print("hot reload test")
 	end
 	
 	function hudCorpoController_OnInitialize(thos)
+	if(moddisabled == true) then return end
 	
 	GameController["hudCorpoController"] = thos
 	hudCorpoControllerReady = true
@@ -132,7 +137,7 @@ print("hot reload test")
 	
 	
 	function PanzerHUDGameController_OnInitialize(thos)
-	
+	if(moddisabled == true) then return end
 	GameController["PanzerHUDGameController"] = thos
 	PanzerHUDGameControllerReady = true
 	spdlog.error("PanzerHUDGameController")
@@ -142,14 +147,14 @@ print("hot reload test")
 	
 	
 	function PanzerHUDGameController_OnUninitialize(thos)
-	
+	if(moddisabled == true) then return end
 	spdlog.error("PanzerHUDGameControllerOnUninitialize")
 	
 	
 	end
 	
 	function PanzerHUDGameController_OnVehicleStateChanged(thos)
-	
+	if(moddisabled == true) then return end
 	spdlog.error("PanzerHUDGameControllerOnVehicleStateChanged")
 	
 	
@@ -157,37 +162,37 @@ print("hot reload test")
 
 
 	function PanzerHUDGameController_OnPlayerVehicleStateChange(thos)
-	
+	if(moddisabled == true) then return end
 	spdlog.error("PanzerHUDGameControllerOnPlayerVehicleStateChange")
 	
 	end
 	
 	function PanzerHUDGameController_EvaluateUIState(thos)
-	
+	if(moddisabled == true) then return end
 	spdlog.error("PanzerHUDGameControllerEvaluateUIState")
 	
 	end
 	
 	function PanzerHUDGameController_OnForwardVehicleQuestEnableUIEvent(thos)
-	
+	if(moddisabled == true) then return end
 	spdlog.error("PanzerHUDGameControllerOnForwardVehicleQuestEnableUIEvent")
 	
 	end
 	
 	function PanzerHUDGameController_OnPlayerAttach(thos)
-	
+	if(moddisabled == true) then return end
 	spdlog.error("PanzerHUDGameControllerOnPlayerAttach")
 	
 	end
 	
 	function PanzerHUDGameController_OnPlayerDetach(thos)
-	
+	if(moddisabled == true) then return end
 	spdlog.error("PanzerHUDGameControllerOnPlayerDetach")
 	
 	end
 	
 	function vehicleUIGameController_OnVehiclePanzerBootupUIQuestEvent(thos)
-	
+	if(moddisabled == true) then return end
 	spdlog.error("vehicleUIGameControllerOnVehiclePanzerBootupUIQuestEvent")
 	
 	end
@@ -195,32 +200,34 @@ print("hot reload test")
 	
 	
 	function ChatBoxGameController_OnInitialize(thos)
-	
+	if(moddisabled == true) then return end
 	GameController["ChatBoxGameController"]  = thos
 	inkWidgetRef.SetVisible(thos.chatBox, true)
 	print("YYYYYYYYYYYYYYYESSS")
 	end
 	function HudPhoneAvatarController_OnInitialize(thos)
-	
+	if(moddisabled == true) then return end
 	GameController["HudPhoneAvatarController"]  = thos
 	end
 	function HudPhoneGameController_OnInitialize(thos)
-	
+	if(moddisabled == true) then return end
 	GameController["HudPhoneGameController"]  = thos
 	end
 	
 	function FlightController_Activate(thos)
+	if(moddisabled == true) then return end
 	JackFlight = true
 	
 	end
 	
 	function FlightController_Deactivate(thos)
+	if(moddisabled == true) then return end
 	JackFlight = false
 	
 	end
 	
 	function PlayerPuppet_ReactToHitProcess(thos,hitEvent)
-	
+	if(moddisabled == true) then return end
 	
 	 --targetGodMode = GetImmortality(hitEvent.target)
 	 if  hitEvent.target:IsPlayer() == true then
@@ -238,12 +245,13 @@ print("hot reload test")
 	
 	
 	function PlayerPuppet_SetEntityNoticedPlayerBBValue(thos,b)
+	if(moddisabled == true) then return end
 		playerNoticed = b
 		--debugPrint(10,"playerNoticed "..tostring(b))
 	end
 	
 	function PlayerPuppet_OnBeingTarget(thos,evt)
-		
+		if(moddisabled == true) then return end
 		
 		if(evt.noLongerTarget == true) then
 			
@@ -287,13 +295,14 @@ print("hot reload test")
 	
 	
 	function MinimapContainerController_OnInitialize(thos)
+	if(moddisabled == true) then return end
 		GameController["MinimapContainerController"]  = thos
 		
 		
 	end
 	
 	function healthbarWidgetGameController_OnInitialize(thos)
-		
+		if(moddisabled == true) then return end
 		GameController["healthbarWidgetGameController"]  = thos
 		
 		
@@ -302,21 +311,21 @@ print("hot reload test")
 	
 	
 	function StaminabarWidgetGameController_OnInitialize(thos)
-		
+		if(moddisabled == true) then return end
 		GameController["StaminabarWidgetGameController"]  = thos
 		
 		
 	end
 	
 	function HotkeysWidgetController_OnInitialize(thos)
-		
+		if(moddisabled == true) then return end
 		GameController["HotkeysWidgetController"]  = thos
 		
 		
 	end
 	
 	function NPCPuppet_CompileScannerChunks(thos)
-		
+		if(moddisabled == true) then return end
 		local vehicleSummonDef = Game.GetAllBlackboardDefs().UI_ScannerModules
 		local scannerBlackboard = Game.GetBlackboardSystem():Get(vehicleSummonDef)
 		
@@ -535,7 +544,7 @@ print("hot reload test")
 	end
 	
 	function PhoneDialerGameController_PopulateData(thos)
-		
+		if(moddisabled == true) then return end
 		local contactDataArray = thos.journalManager:GetContactDataArray(false)
 		------printdump(contactDataArray))
 		if(#contactList > 0) then
@@ -569,6 +578,7 @@ print("hot reload test")
 	end
 	
 	function MessengerGameController_PopulateData(thos) 
+	if(moddisabled == true) then return end
 		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
 			
 			debugPrint(10,"flib sort mod is enabled, custom message is disabled")
@@ -748,7 +758,7 @@ print("hot reload test")
 	end
 	
 	function VehiclesManagerListItemController_OnDataChanged(thos,value)
-		
+		if(moddisabled == true) then return end
 		
 		if(tostring(thos.vehicleData.displayName) == "None")then
 			inkTextRef.SetText(thos.label, tostring(NameToString(thos.vehicleData.data.name)));
@@ -757,7 +767,7 @@ print("hot reload test")
 	end
 	
 	function VehiclesManagerListItemController_OnSelected(thos,itemController,discreteNav)
-		
+		if(moddisabled == true) then return end
 		
 		if(tostring(thos.vehicleData.displayName) == "None")then
 			inkTextRef.SetText(thos.label, tostring(NameToString(thos.vehicleData.data.name)));
@@ -766,38 +776,39 @@ print("hot reload test")
 	end
 	
 	function IncomingCallGameController_OnInitialize(thos)
-		
+		if(moddisabled == true) then return end
 		
 		GameController["IncomingCallGameController"]  = thos
 	end
 	
 	function IncomingCallGameController_GetIncomingContact(thos)
-		
+		if(moddisabled == true) then return end
 		GameController["IncomingCallGameController"]  = thos
 	end
 	
 	function IncomingCallGameController_OnPhoneCall(thos)
-		
+		if(moddisabled == true) then return end
 		GameController["IncomingCallGameController"]  = thos
 	end
 	
 	function TutorialPopupGameController_OnInitialize(thos)
-		
+		if(moddisabled == true) then return end
 		GameController["TutorialPopupGameController"]  = thos
 	end
 	
 	function TutorialPopupGameController_OnPlayerAttach(thos,playerPuppet)
-		
+		if(moddisabled == true) then return end
 		GameController["TutorialPopupGameController"]  = thos
 	end
 	
 	function WorldMapMenuGameController_GetDistrictAnimation(thos,view ,show)
+		if(moddisabled == true) then return end
 		debugPrint(2,tostring(view))
 		
 	end
 	
 	function WorldMapMenuGameController_GetDistrictAnimation(thos,view ,show)
-		debugPrint(2,tostring(view))
+		if(moddisabled == true) then return end
 		if(show == true or view == gameuiEWorldMapDistrictView.None) then
 			
 			
@@ -816,7 +827,7 @@ print("hot reload test")
 	end
 	
 	function TrackQuestNotificationAction_TrackFirstObjective(thos,questEntry)
-		
+		if(moddisabled == true) then return end
 		
 		if(questEntry ~= nil and ( questEntry.id == nil or questEntry.id == ""))then
 			
@@ -854,7 +865,7 @@ print("hot reload test")
 	end
 	
 	function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdistrict)
-		
+		if(moddisabled == true) then return end
 		if(subdistrict ~= gamedataDistrict.Invalid) then
 			mapSubDistrict = subdistrict
 			else
@@ -878,10 +889,12 @@ print("hot reload test")
 	end
 	
 	function CodexGameController_PopulateData(thos)
+	if(moddisabled == true) then return end
 		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
 				
 			debugPrint(10,"flib sort mod is enabled, custom codex is disabled")
 		else
+		print("test")
 			local counter = 0
 			local groupData
 			local groupVirtualListData
@@ -963,35 +976,16 @@ print("hot reload test")
 	
 	end
 		
-	function ShardsMenuGameController_PopulateData(thos)
+	function ShardsMenuGameController_PopulateData(thos,data, keepToggledLevels, sortOnce)
+	
+		if(moddisabled == true) then return end
+	
+			
+			
 		
-		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
-			
-			logme(1,"flib sort mod is enabled, custom shard is disabled")
-			else
-			local counter = 0
-			local groupData
-			local groupVirtualListData
-			local i
-			local items
-			local level
-			local success = false
-			local newEntries
-			local tagsFilter = {}
-			local toti = {}
-			local data = CodexUtils.GetShardsDataArray(thos.journalManager,thos.activeData)
-			
-			
-			local totalcount = 0
-			
-			
-			local datatemp = CodexUtils.GetShardsDataArray(thos.journalManager,thos.activeData)
-			table.insert(tagsFilter, CName("HideInBackpackUI"))
-			items = thos.InventoryManager:GetPlayerItemsByType(gamedataItemType.Gen_Misc, tagsFilter)
-			counter = 0
-			level = #data+1
-			thos.hasNewCryptedEntries = false
-			i = 1
+			if(ActiveSubMenu == "Shards" and firstexecutionshard == nil ) then
+			firstexecutionshard = true
+			local count = 1
 			local textAffinity = "Affinity"
 			for i = 1,#arrayPnjDb  do
 				local score = getScoreKey("Affinity",arrayPnjDb[i].Names) 
@@ -1000,29 +994,38 @@ print("hot reload test")
 				end
 			end
 			
-			
+			local test = data
 			local shardData =  ShardEntryData.new()
 			shardData.title = "CyberScript : NPC Affinity"
 			shardData.description = textAffinity
-			shardData.activeDataSync = thos.activeData
-			shardData.counter = counter
-			shardData.isNew = true
-			shardData.imageId = datatemp[i].imageId
+			shardData.isNew = false
 			shardData.hash = -13082022
-			shardData.activeDataSync = thos.activeData
 			shardData.isCrypted = false
-			shardData.itemID = datatemp[i].itemID
+			
+			shardData.counter =  data[1].data.counter
+			shardData.timeStamp  =  data[1].data.timeStamp 
+			shardData.newEntries   = {}
+			shardData.imageId = data[1].data.imageId
+			shardData.activeDataSync = data[1].data.activeDataSync
+			shardData.itemID = data[1].data.itemID
+			
+			
+			
 			table.insert(shardData.newEntries, shardData.hash)
 			
 			local shardVirtualListData = VirutalNestedListData.new()
-			shardVirtualListData.level = -1
+			shardVirtualListData.level = 999999
+			shardVirtualListData.collapsable = false
+			shardVirtualListData.forceToTopWithinLevel = false
 			shardVirtualListData.widgetType = 0
 			shardVirtualListData.isHeader = false
 			shardVirtualListData.data = shardData
-			table.insert(data, shardVirtualListData)
-			totalcount = totalcount +1
+			table.insert(test, shardVirtualListData)
+
 			
-			textAffinity = "Gang Affinity"
+			 textAffinity = "Gang Affinity"
+			 
+			 
 			for k,v in pairs(arrayFaction) do
 				local score =getScoreKey("Affinity",k)
 				if score ~= nil then
@@ -1030,120 +1033,142 @@ print("hot reload test")
 				end
 			end
 			
-			
-			
 			local shardData =  ShardEntryData.new()
 			shardData.title = "CyberScript : Gang Affinity"
 			shardData.description = textAffinity
-			shardData.activeDataSync = thos.activeData
-			shardData.counter = counter
-			shardData.isNew = true
-			shardData.imageId = datatemp[i].imageId
+			shardData.isNew = false
 			shardData.hash = -13082021
-			shardData.activeDataSync = thos.activeData
 			shardData.isCrypted = false
-			shardData.itemID = datatemp[i].itemID
+			
+			shardData.counter =  data[1].data.counter
+			shardData.timeStamp  =  data[1].data.timeStamp 
+				shardData.newEntries   = {}
+			shardData.imageId = data[1].data.imageId
+			shardData.activeDataSync = data[1].data.activeDataSync
+			shardData.itemID = data[1].data.itemID
+			
+			
+			
 			table.insert(shardData.newEntries, shardData.hash)
 			
-			
-			
 			local shardVirtualListData = VirutalNestedListData.new()
-			shardVirtualListData.level = -1
+			shardVirtualListData.level = 999999
+			shardVirtualListData.collapsable = false
+			shardVirtualListData.forceToTopWithinLevel = false
 			shardVirtualListData.widgetType = 0
 			shardVirtualListData.isHeader = false
 			shardVirtualListData.data = shardData
-			table.insert(data, shardVirtualListData)
-			totalcount = totalcount +1
+			table.insert(test, shardVirtualListData)
+			count = count+1
 			
-			for i = 1,#arrayHelp do
-				local shard = arrayHelp[i]
+			
+			for k,v in pairs(arrayHelp) do
+				local shard = v.help
 				local description = ""
 				for y=1,#shard.section do
 					description = description..shard.section[y].."\n"
 				end
 				
-				local shardData =  ShardEntryData.new()
-				shardData.title = "CyberScript Wiki : "..getLang(shard.title)
-				shardData.description = description
-				shardData.activeDataSync = thos.activeData
-				shardData.counter = counter
-				shardData.isNew = false
-				shardData.imageId = datatemp[2].imageId
-				shardData.hash = -(i+130820221)
-				shardData.activeDataSync = thos.activeData
-				shardData.isCrypted = false
-				shardData.itemID = datatemp[1].imageId
-				table.insert(shardData.newEntries, shardData.hash)
+				local shardDatas =  ShardEntryData.new()
+				shardDatas.title = "CyberScript Wiki : "..getLang(shard.title)
+				shardDatas.description = description
+				shardDatas.isNew = true
+				shardDatas.hash = (math.random(1,99999)+1308202028)
+				shardDatas.isCrypted = false
 				
-				local shardVirtualListData = VirutalNestedListData.new()
-				shardVirtualListData.level =-1
-				shardVirtualListData.widgetType = 0
-				shardVirtualListData.isHeader = false
-				shardVirtualListData.data = shardData
-				table.insert(data, shardVirtualListData)
-				totalcount = totalcount +1
+				shardDatas.counter =  data[1].data.counter
+				shardDatas.timeStamp  =  data[1].data.timeStamp 
+				shardDatas.newEntries   = {}
+				shardDatas.imageId = data[1].data.imageId
+				shardDatas.activeDataSync = data[1].data.activeDataSync
+				shardDatas.itemID = data[1].data.itemID
+				table.insert(shardDatas.newEntries, shardDatas.hash)
+				
+				local shardVirtualListDatass = VirutalNestedListData.new()
+				shardVirtualListDatass.level = 999999
+				shardVirtualListDatass.collapsable = false
+				shardVirtualListDatass.forceToTopWithinLevel = false
+				shardVirtualListDatass.widgetType = 0
+				shardVirtualListDatass.isHeader = false
+				shardVirtualListDatass.data = shardDatas
+
+				table.insert(test, shardVirtualListDatass)
+				
 			end
 			
-			for i = 1,#arrayShard do
-				local shard = arrayShard[i]
+			for k,v in pairs(arrayShard) do
+				local shard = v.shard
 				checkContext(shard)
 			
 				
 				if((getScoreKey(shard.tag,"Score") == nil and shard.locked == false) or getScoreKey(shard.tag,"Score") == 0) then
 					
 					local shardData =  ShardEntryData.new()
-					shardData.title = "CS : "..shard.title
+					shardData.title = shard.title
 					shardData.description = shard.description
-					shardData.activeDataSync = thos.activeData
-					shardData.counter = counter
+					
+					
 					shardData.isNew = shard.new
-					shardData.imageId = datatemp[1].imageId
-					shardData.hash = -(i+130820202)
-					shardData.activeDataSync = thos.activeData
+					shardData.hash = (math.random(1,9999999)+1308202029)
 					shardData.isCrypted = shard.crypted
-					shardData.itemID = datatemp[1].itemID
+					
+					shardData.counter =  data[1].data.counter
+					shardData.timeStamp  =  data[1].data.timeStamp 
+					shardData.newEntries   = {}
+					shardData.imageId = data[1].data.imageId
+					shardData.activeDataSync = data[1].data.activeDataSync
+					shardData.itemID = data[1].data.itemID
 					table.insert(shardData.newEntries, shardData.hash)
 					
+				
+					
 					local shardVirtualListData = VirutalNestedListData.new()
-					shardVirtualListData.level = -1
+					shardVirtualListData.level = 999999
+					shardVirtualListData.collapsable = false
+					shardVirtualListData.forceToTopWithinLevel = false
 					shardVirtualListData.widgetType = 0
 					shardVirtualListData.isHeader = false
 					shardVirtualListData.data = shardData
-					table.insert(data, shardVirtualListData)
-					totalcount = totalcount +1
+					table.insert(test, shardVirtualListData)
+					
 				end
 			end
 			
-			groupData = ShardEntryData.new()
+			local groupData = ShardEntryData.new()
 			groupData.title = "CyberScript"
-			groupData.activeDataSync = thos.activeData
-			groupData.counter = totalcount
-			groupData.isNew = thos.hasNewCryptedEntries
-			groupData.newEntries = {}
+			groupData.isNew = false
+			groupData.hash = 1308202299
+			groupData.isCrypted = false
+			groupData.newEntries   = {}
+			groupData.counter =  1
 			
-			groupVirtualListData = VirutalNestedListData.new()
-			groupVirtualListData.level = -1
-			groupVirtualListData.widgetType = 1
+			
+			groupData.timeStamp  =  data[1].data.timeStamp 
+			
+			groupData.imageId = data[15].data.imageId
+			groupData.activeDataSync = data[15].data.activeDataSync
+			groupData.itemID = data[15].data.itemID
+			
+			local groupVirtualListData = VirutalNestedListData.new()		
+		
+			groupVirtualListData.collapsable = false
 			groupVirtualListData.isHeader = true
+			groupVirtualListData.level = 999999
+			groupVirtualListData.forceToTopWithinLevel = false
+			groupVirtualListData.widgetType = 1
 			groupVirtualListData.data = groupData
-			groupVirtualListData.forceToTopWithinLevel  = true
-			table.insert(data, groupVirtualListData)
+			table.insert(test, groupVirtualListData)
+			data = test
 			
 			
-			if #data <= 0 then
-				thos:ShowNodataWarning()
-				else 
-				thos:HideNodataWarning()
-				thos.listController:SetData(data, true, true)
-			end
-			
-			thos:RefreshButtonHints()
+			thos:SetData(data, keepToggledLevels, sortOnce)
+			shardpopulate = false
 		end
 	end
 	
 	function WorldMapMenuGameController_OnSelectedDistrictChanged(thos,oldDistrict,newDistrict)
 		
-		
+		if(moddisabled == true) then return end
 		
 		
 		if(currentMapDistrictView == gameuiEWorldMapDistrictView.Districts or currentMapDistrictView == nil or newDistrict == gamedataDistrict.Invalid) then
@@ -1173,7 +1198,7 @@ print("hot reload test")
 	end
 	
 	function WorldMapMenuGameController_OnZoomLevelChanged(thos,oldLevel,newLevel)
-		
+		if(moddisabled == true) then return end
 		
 		local zoomlevel = thos:GetCurrentZoom()
 		
@@ -1186,36 +1211,45 @@ print("hot reload test")
 	end
 	
 	function WorldMapMenuGameController_OnSetUserData(thos,userData)
+		if(moddisabled == true) then return end
 		setNewFixersPoint()
 		setCustomLocationPoint() 
 		
 	end
 	function SettingsMainGameController_RequestClose (_, _, target) -- Check if activated button is the custom mods button
-		
+		if(moddisabled == true) then return end
 		if(AutoRefreshDatapack == true) then
 			LoadDataPackCache()
 		end
 	end
 	
 	function PlayerPuppet_OnGameAttached(thos)
+		if(moddisabled == true) then return end
 		GameController["PlayerPuppet"]  = thos
 		startListeners(thos)
 	end
 	
 	function JournalNotificationQueue_OnMenuUpdate(self)
 		----debugPrint(2,"obs2")
-		
+		if(moddisabled == true) then return end
 			GameController["JournalNotificationQueue"]  = self
 	end
 	
 	function JournalNotificationQueue_OnInitialize(self)
 		----debugPrint(2,"obs2")
-		
+		if(moddisabled == true) then return end
 		GameController["JournalNotificationQueue"]  = self
 	end
 	
+
+	
 	function BaseWorldMapMappinController_SelectMappin(self)
-		if(self.mappin ~= nil) then
+		
+		if(moddisabled == true) then return end
+		
+		GameController["BaseWorldMapMappinController"]  = self
+		if(self.mappin ~= nil and self:IsTracked() and self.mappin:IsActive()) then
+			if lastId ~= nil then Game.GetMappinSystem():SetMappinActive(lastId,true) end
 			SelectedMappinMetro = nil
 			SelectedScriptMappin = nil
 			SelectedMappinHouse = nil
@@ -1225,6 +1259,7 @@ print("hot reload test")
 			ActivecustomMappin = self.mappin
 			if mappinType == gamedataMappinVariant.FastTravelVariant then
 				ActiveFastTravelMappin = {}
+				
 				ActiveFastTravelMappin.markerRef = self.mappin:GetPointData():GetMarkerRef()
 				ActiveFastTravelMappin.position = self.mappin:GetWorldPosition()
 			end
@@ -1274,18 +1309,19 @@ print("hot reload test")
 	
 	--region Browser
 	function PhotoModeGridButton_ButtonStateChanged(thos)
+	if(moddisabled == true) then return end
 		print(NameToString(thos.currentImagePart))
 	
 	end
 	function BrowserController_OnInitialize(self)
 	
-	
+	if(moddisabled == true) then return end
 	GameController["BrowserController"]  = self
 	end
 	
 	
 	function printChild(widget)
-		
+		if(moddisabled == true) then return end
 		spdlog.error(GameDump(widget))
 		local result = pcall(function() widget:GetNumChildren() end)
 		
@@ -1303,13 +1339,13 @@ print("hot reload test")
 	end
 	
 	function WebPage_OnInitialize(self)
-		
+		if(moddisabled == true) then return end
 		GameController["WebPage"]  = self
 	end
 	
 	
 	function WebPage_FillPageFromJournal(self,page)
-		print("testlogic5")
+		if(moddisabled == true) then return end
 		print("ttot"..tostring(CurrentAddress))
 		print("ttot"..tostring(BrowserCustomPlace))
 		defaultPage = page
@@ -3989,7 +4025,7 @@ print("hot reload test")
 		end		
 	
 function BrowserController_OnPageSpawned(thos, widget, userData)
-		print("OnPageSpawned "..tostring(CurrentAddress))
+		if(moddisabled == true) then return end
 		GameController["BrowserController"]  = thos
 		-- if(CurrentAddress == "CyberScript") then
 			-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod");
@@ -4017,7 +4053,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ComputerMainLayoutWidgetController_InitializeMenuButtons(thos, gameController, widgetsData,wrappedMethod)
-	
+	if(moddisabled == true) then return wrappedMethod(gameController,widgetsData)  end
 		
 				wrappedMethod(gameController,widgetsData)
 		
@@ -4057,7 +4093,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ComputerMainLayoutWidgetController_ShowInternet(thos, startingPage,wrappedMethod)
-	print("startingPage "..tostring(startingPage))
+	if(moddisabled == true) then return wrappedMethod(startingPage) end
 		-- if(startingPage == "CyberScript") then
 			-- -- thos:GetWindowContainer():SetVisible(false)
 			-- -- Keystone_Load()
@@ -4105,12 +4141,14 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ComputerInkGameController_ResolveBreadcrumbLevel(thos,  wrappedMethod) 
-	
+	if(moddisabled == true) then return wrappedMethod() end
 	print("test")
 	wrappedMethod()
 	end
 		
 	function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
+	
+	if(moddisabled == true) then return wrappedMethod(elementName) end
 		-- if(elementName == "CyberScript") then
 			-- local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
 			-- thos:GetMainLayoutController():ShowInternet("CyberScript")
@@ -4155,7 +4193,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function BrowserController_LoadWebPage(self,address,wrappedMethod)
 	--	CurrentAddress = address
-	
+	if(moddisabled == true) then return wrappedMethod(address) end
 	print("LoadWebPage : "..address)
 	if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
 		if(BrowserController == nil) then BrowserController = self end
@@ -4220,6 +4258,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	--endregion Browser
 	function WorldMapTooltipController_SetData(self,data,menu)
+	if(moddisabled == true) then return end
 		local mappinVariant = nil
 		
 		if( data.mappin ~= nil) then
@@ -4243,7 +4282,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function WorldMapTooltipContainer_SetData(self,target,data,menu)
-		
+		if(moddisabled == true) then return end
 		local displayXYZ = getUserSetting("displayXYZ")
 		local mappinVariant = nil
 		
@@ -4307,12 +4346,13 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function WorldMapMenuGameController_UntrackCustomPositionMappin(self)
+		if(moddisabled == true) then return end
 		ActivecustomMappin = nil
 		--debugPrint(2,"obs3")
 	end
 	
 	function BraindanceGameController_OnInitialize(self)
-		
+		if(moddisabled == true) then return end
 		GameController["BraindanceGameController"]  = self
 	
 		GameController["BraindanceGameControllerRoot"] = self:GetRootWidget().parentWidget
@@ -4323,7 +4363,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function QuestTrackerGameController_OnInitialize()
-		--debugPrint(2,"obs7")
+		if(moddisabled == true) then return end
 		if not isGameLoaded then
 			--debugPrint(2,'Game Session Started')
 			isGameLoaded = true
@@ -4332,7 +4372,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function QuestTrackerGameController_OnUninitialize()
-		--debugPrint(2,"obs8")
+		if(moddisabled == true) then return end
 		if Game.GetPlayer() == nil then
 			--debugPrint(2,'Game Session Ended')
 			workerTable = {}
@@ -4343,7 +4383,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function interactionWidgetGameController_OnInitialize(self)
-		--debugPrint(2,"obs8")
+		if(moddisabled == true) then return end
 		Cron.NextTick(function()
 			
 				GameController["interactionWidgetGameController"]  = self
@@ -4352,7 +4392,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ChattersGameController_OnInitialize(self) 
-		--debugPrint(2,"obs99")
+		if(moddisabled == true) then return end
 		GameController["ChattersGameController"]  = self
 		
 		--debugPrint(2,"Chat Sub Controller Init")
@@ -4360,20 +4400,20 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ChattersGameController_OnPlayerAttach(self,playerGameObject) 
-		--debugPrint(2,"obs99")
+		if(moddisabled == true) then return end
 		GameController["ChattersGameController"]  = self
 		
 		--debugPrint(2,"Chat Sub Controller Init")
 	end
 	
 	function SubtitlesGameController_OnInitialize(self) 
-		
+		if(moddisabled == true) then return end
 		GameController["SubtitlesGameController"]  = self
 	end
 	
 	
 	function interactionWidgetGameController_OnItemSpawned(self)
-		--debugPrint(2,"obs8")
+		if(moddisabled == true) then return end
 		if(GameController["interactionWidgetGameController"] == nil) then
 			Cron.NextTick(function()
 				
@@ -4384,6 +4424,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ChattersGameController_SetupLine(self) 
+	if(moddisabled == true) then return end
 		if(currentChattersGameController == nil) then
 			--debugPrint(2,"obs99")
 			Cron.NextTick(function()
@@ -4395,7 +4436,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function SubtitlesGameController_SetupLine(self) 
-		--debugPrint(2,"obs999")
+		if(moddisabled == true) then return end
 		if(currentSubtitlesGameController == nil) then
 			Cron.NextTick(function()
 				
@@ -4406,13 +4447,14 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function BaseSubtitlesGameController_OnUninitialize(self) 
-		--debugPrint(2,"obs988")
+		if(moddisabled == true) then return end
 		currentChattersGameController = nil
 		currentSubtitlesGameController = nil
 	end
 	
 	
 	function NPCPuppet_SendAfterDeathOrDefeatEvent(target)
+	if(moddisabled == true) then return end
 		-- print("target.shouldDie".." "..tostring(target.shouldDie))
 		-- print("target.myKiller ~= nil".." "..tostring(target.myKiller ~= nil))
 		-- print("target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash".." "..tostring(target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash))
@@ -4458,6 +4500,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	
 	function MessengerGameController_OnContactActivated(self,evt) 
+	if(moddisabled == true) then return end
 		debugPrint(2,"MessengerGameController.OnContactActivated")
 		debugPrint(2,GameDump(evt))
 		--if(currentSubtController == nil) then
@@ -4502,6 +4545,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_SetVisited(thos, records) 
+	if(moddisabled == true) then return end
 		debugPrint(2,"MessengerDialogViewController.SetVisited")
 		local messages = thos.messages
 		local choices = thos.replyOptions
@@ -4566,19 +4610,20 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function MessengerDialogViewController_AttachJournalManager(thos, journalManager) 
 		
-		
+		if(moddisabled == true) then return end
 		GameController["MessengerDialogViewController"]  = thos
 		
 	end
 	
 	function MessengerDialogViewController_OnInitialize(thos) 
-		
+		if(moddisabled == true) then return end
 
 		GameController["MessengerDialogViewController"]  = thos
 		
 	end
 	
 	function PhoneMessagePopupGameController_SetupData(thos)
+	if(moddisabled == true) then return end
 		debugPrint(2,"PhoneMessagePopupGameController.SetupData")
 		if (currentPhoneDialogPopup ~= nil and MessengerGameController ~= nil) then
 			
@@ -4592,7 +4637,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_ShowThread(self,thread)
-		debugPrint(2,"MessengerDialogViewController.ShowThread")
+		if(moddisabled == true) then return end
 		if(thread == nil) then
 			local message = {}
 			table.insert(message,currentPhoneDialogPopup)
@@ -4601,7 +4646,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_ShowDialog(self,contact)
-		debugPrint(2,"MessengerDialogViewController.ShowThread")
+		if(moddisabled == true) then return end
 		if(contact == nil) then
 			local message = {}
 			table.insert(message,currentPhoneDialogPopup)
@@ -4610,7 +4655,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_UpdateData(self,animateLastMessage)
-		debugPrint(2,"MessengerDialogViewController.UpdateData")
+		if(moddisabled == true) then return end
 		
 		if(contact == nil) then
 			local message = {}
@@ -4624,7 +4669,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessangerItemRenderer_GetData(self)
-		debugPrint(10,"MessangerItemRenderer.GetData")
+		if(moddisabled == true) then return end
 		local choicepress = false
 		if(currentPhoneConversation ~= nil) then
 			for i = 1, #currentPhoneConversation.currentchoices do
@@ -4657,11 +4702,11 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessangerReplyItemRenderer_OnDataChanged(self,value)
-		debugPrint(10,"MessangerReplyItemRenderer.OnDataChanged")
+		if(moddisabled == true) then return end
 	end
 	
 	function MessangerItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
-		debugPrint(2,"MessangerItemRenderer.OnJournalEntryUpdated")
+		if(moddisabled == true) then return end
 		--	----printmessage.id)
 		spdlog.error(GameDump(entry))
 		Cron.NextTick(function()
@@ -4723,7 +4768,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	
 	function MessangerReplyItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
-		debugPrint(10,"MessangerReplyItemRenderer.OnJournalEntryUpdated")
+		if(moddisabled == true) then return end
 		--	----printmessage.id)
 		spdlog.error(GameDump(entry))
 		Cron.NextTick(function()
@@ -4795,11 +4840,13 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	
 	function MenuScenario_HubMenu_OnSelectMenuItem(_, menuItemData)
+		if(moddisabled == true) then return end
 		------print"toto"..menuItemData.menuData.label)
 		--debugPrint(2,"obs17")
 	end
 	
 	function PhoneDialerGameController_CallSelectedContact_Observer(thos)
+		if(moddisabled == true) then return end
 		-- let item: ref<PhoneContactItemVirtualController> = thos.m_listController.GetSelectedItem() as PhoneContactItemVirtualController;
 		-- let contactData: ref<ContactData> = item.GetContactData();
 		-- if IsDefined(contactData) {
@@ -4936,6 +4983,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PhoneSystem_OnTriggerCall(thos, request)
+	if(moddisabled == true) then return end
 		debugPrint(2,"called")
 		debugPrint(2,GameDump(request))
 		
@@ -4950,6 +4998,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PhoneSystem_OnUsePhone(thos, request)
+	if(moddisabled == true) then return end
 		debugPrint(2,"usephone")
 		debugPrint(2,GameDump(request))
 		
@@ -4958,15 +5007,18 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PhoneDialerGameController_Show(_,contactsList)
+	if(moddisabled == true) then return end
 		refreshContact()
 		openPhone = true
 	end
 	
 	function PhoneDialerGameController_Hide()
+	if(moddisabled == true) then return end
 		openPhone = false
 	end
 	
 	function VehicleRadioPopupGameController_VirtualListReady(self)
+	if(moddisabled == true) then return end
 		----debugPrint(2,#self.dataSource:GetArray())
 		-- 1. Remove stations that are not supported by the radio device
 		-- 2. Select currently playing station
@@ -4992,7 +5044,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function VehicleSummonWidgetGameController_OnVehicleSummonStateChanged(state,value ) 
-		
+		if(moddisabled == true) then return end
 		local vehicleSummonDef = Game.GetAllBlackboardDefs().VehicleSummonData
 		local vehicleSummonBB = Game.GetBlackboardSystem():Get(vehicleSummonDef)
 		vehicleEntId = vehicleSummonBB:GetEntityID(vehicleSummonDef.SummonedVehicleEntityID)
@@ -5092,16 +5144,18 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PopupsManager_OnPlayerAttach(self)
-		
+		if(moddisabled == true) then return end
 		
 		GameController["PopupsManager"]  = self
 	end
 	
 	function PopupsManager_OnPlayerDetach()
+	if(moddisabled == true) then return end
 		radiopopup = nil
 	end
 	
 	function RadioStationListItemController_OnDataChanged(self,value)
+	if(moddisabled == true) then return end
 		-- --debugPrint(2,"thos is it 2")
 		-- -- --debugPrint(2,GameDump(self.label))
 		-- if(self.stationData.record == nil) then
@@ -5122,6 +5176,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function RadioStationListItemController_Activate(self)
+	if(moddisabled == true) then return end
 		if currentRadio ~= nil then
 			self.quickSlotsManager:SendRadioEvent(false, false, -1)
 		end
@@ -5145,6 +5200,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function VehicleRadioPopupGameController_OnScrollChanged(self)
+	if(moddisabled == true) then return end
 		for k,v in pairs(arrayRadio) do
 			arrayRadio[k].enabled = false
 		end
@@ -5152,7 +5208,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function RadioStationListItemController_OnSelected(self,itemController,discreteNav)
-		
+		if(moddisabled == true) then return end
 		if(self.stationData.record:DisplayName() == nil or self.stationData.record:DisplayName() == "") then
 			
 			local radioToPut = nil
@@ -5183,6 +5239,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function VehicleRadioPopupGameController_OnClose()
+	if(moddisabled == true) then return end
 		for k,v in pairs(arrayRadio) do
 			arrayRadio[k].enabled = false
 		end
@@ -5190,6 +5247,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PlayerPuppet_OnDeath()
+	if(moddisabled == true) then return end
 		isdead = true
 	end
 	
@@ -5197,7 +5255,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function DialogChoiceLogicController_UpdateView(self,wrappedMethod)
 		
-		
+		if(moddisabled == true) then return end
 		if(currentDialogHub ~= nil and self.ActiveTextRef ~= nil) then
 			
 			local isphoneDialog = currentDialogHub.dial.speaker.way == "phone"
@@ -5312,23 +5370,23 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	
 function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,iconColor)
-		
+		if(moddisabled == true) then return end
 		
 	end
 	
 	
 	function ShardNotificationController_OnInitialize(self)
-		
+		if(moddisabled == true) then return end
 		GameController["ShardNotificationController"]  = self
 	end
 	
 	function ShardNotificationController_OnPlayerAttach(self,playerPuppet)
-		
+		if(moddisabled == true) then return end
 		GameController["ShardNotificationController"]  = self
 	end
 	
 	function ShardNotificationController_SetButtonHints(self)
-		
+		if(moddisabled == true) then return end
 		if not UIPopupsManager.IsOwnPopup(self) then
 			return
 		end
@@ -5352,6 +5410,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		end
 	
 	function ShardNotificationController_Close(self)
+	if(moddisabled == true) then return end
 		buttonsData = {}
 		if UIPopupsManager.IsOwnPopup(self) then
 			UIPopupsManager.ClosePopup()
@@ -5359,17 +5418,17 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function gameuiInGameMenuGameController_OnHandleMenuInput(self)
-		
+		if(moddisabled == true) then return end
 		GameController["gameuiInGameMenuGameController"]  = self
 	end
 	
 	function gameuiInGameMenuGameController_SpawnMenuInstanceEvent(self) -- Get Controller to spawn popup
-		
+		if(moddisabled == true) then return end
 		GameController["gameuiInGameMenuGameController"]  = self
 	end
 	
 	function PopupsManager_ShowPhoneMessage(self)
-		
+		if(moddisabled == true) then return end
 		
 		if self.phoneMessageData ~= nil and self.phoneMessageData.journalEntry == nil then
 			
@@ -5383,7 +5442,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function PopupsManager_OnMessagePopupUseCloseRequest(self)
-		
+		if(moddisabled == true) then return end
 		if(currentPhoneConversation ~= nil) then
 			currentPhoneConversation = nil
 		end
@@ -5392,7 +5451,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuestCodexLinkController_Setup(self)
-		
+		if(moddisabled == true) then return end
 		print("test")
 		
 	end
@@ -5413,7 +5472,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	-- end)
 	function PreventionSpawnSystem_SpawnCallback(thos,spawnedObject,wrappedMethod)
-		
+		if(moddisabled == true) then return wrappedMethod(spawnedObject) end
 		
 		--print("spawned "..tostring(spawnedObject:GetEntityID().hash))
 	
@@ -5432,7 +5491,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 							if (v.count == nil) then
 								v.count = 0
 							end
-							--print("Kill the NPC "..tostring(spawnedObject:GetEntityID().hash))
+							print("Kill the NPC "..tostring(spawnedObject:GetEntityID().hash))
 							--Game.GetPreventionSpawnSystem():RequestDespawn(spawnedObject:GetEntityID())
 							 
 							
@@ -5474,7 +5533,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuestMappinLinkController_Setup(thos,mappinEntry,jumpTo,wrappedMethod)
-
+		if(moddisabled == true) then return wrappedMethod(mappinEntry,jumpTo) end
 		if mappinEntry == nil and journalQuestMapPinBase ~= nil then
 		
 			local mappin = getMappinByTag(journalQuestMapPinBase)
@@ -5496,7 +5555,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuestCodexLinkController_SetupCodexLink(thos,codexEntry,wrappedMethod)
-
+			if(moddisabled == true) then return wrappedMethod(codexEntry) end
 		if codexEntry == nil and codexEntryTag ~= nil then
 			
 		
@@ -5535,6 +5594,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function CodexPopupGameController_SetupData(thos,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod() end
 		  thos.data = thos:GetRootWidget():GetUserData("CodexPopupData")
 		  
 			if string.match(thos.data.entry.id,"CS_customcodex:") then
@@ -5572,7 +5632,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	function CodexEntryViewController_ShowEntry(thos,data,wrappedMethod)
 		
-		  
+		  if(moddisabled == true) then return wrappedMethod() end
 		if data.hash == 13081991 then
 			
 			local codex = arrayCodex[data.title].entry
@@ -5600,11 +5660,13 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function PlayerPuppet_OnLookAtObjectChangedEvent(thos)
+	if(moddisabled == true) then return end
 		thos.isAimingAtFriendly = false
 		thos.isAimingAtChild = false
 	end
 	
 	function NcartTimetableControllerPS_UpdateCurrentTimeToDepart(self,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod() end
 		if(activeMetroDisplay == true) then
 			self.currentTimeToDepart = MetroCurrentTime
 			--NewMetroTime = 0
@@ -5615,7 +5677,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function PhoneDialerGameController_CallSelectedContact(thos, wrappedMethod)
-		
+		if(moddisabled == true) then return wrappedMethod() end
 		local callRequest = nil
 		local item = thos.listController:GetSelectedItem()
 		local contactData = item:GetContactData()
@@ -5629,7 +5691,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function DoubleJumpDecisions_EnterCondition(thos,stateContext,scriptInterface, wrappedMethod)
-		
+		if(moddisabled == true) then return wrappedMethod(stateContext,scriptInterface) end
 		if(getUserSetting('InfiniteDoubleJump') == true) then
 			
 			
@@ -5701,7 +5763,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function LocomotionAirEvents_OnUpdate(thos,timeDelta, stateContext, scriptInterface, wrappedMethod)
-		
+		if(moddisabled == true) then return wrappedMethod(stateContext,scriptInterface) end
 		if(getUserSetting('DisableFallDamage') == true) then
 			
 			
@@ -5792,14 +5854,16 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function WorldMapMenuGameController_OnGangListItemSpawned(self,gangWidget,userData) 
-		
+		if(moddisabled == true) then return  end
 	end
 	
 	function WorldMapMenuGameController_OnSelectedDistrictChanged(self,oldDistrict,newDistrict) 
+	if(moddisabled == true) then return  end
 		self:ShowGangsInfo(newDistrict)
 	end
 	
 	function WorldMapGangItemController_SetData(self,affiliationRecord) 
+	if(moddisabled == true) then return  end
 		
 		if(CurrentGang ~= nil) then
 			
@@ -5815,6 +5879,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 
 	
 	function RipperdocIdPanel_SetName(thos,vendorName,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod(vendorName)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -5835,6 +5900,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function VendorHubMenuGameController_SetupTopBar(thos,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod()  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -5855,7 +5921,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function FullscreenVendorGameController_PopulateVendorInventory(thos,wrappedMethod)
-		
+		if(moddisabled == true) then return wrappedMethod() end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -5923,7 +5989,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	---Scanner
 	function ScannervehicleGameController_OnVehicleInfoChanged(thos, value,wrappedMethod)
-	
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -5975,6 +6041,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function ScannerNPCHeaderGameController_OnNameChanged(thos, value,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6012,6 +6079,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function ScannerNPCHeaderGameController_OnLevelChanged(thos, value,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6042,6 +6110,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function ScannerNPCHeaderGameController_OnAttitudeChange(thos, value,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6082,6 +6151,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function ScannerNPCBodyGameController_OnFactionChanged(thos, value,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6111,6 +6181,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function ScannerNPCBodyGameController_OnRarityChanged(thos, value,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6141,6 +6212,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickHackDescriptionGameController_OnQuickHackDataChanged(thos, value,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		
 			local vehicleInfoData = QuickhackData.new()
 			vehicleInfoData = FromVariant(value)
@@ -6150,6 +6222,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function ScannerBountySystemGameController_OnBountySystemChanged(thos, value,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6289,7 +6362,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function scannerDetailsGameController_RefreshLayout(thos,wrappedMethod)
-		
+		if(moddisabled == true) then return wrappedMethod()  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6381,7 +6454,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
-		
+		if(moddisabled == true) then return wrappedMethod(data)  end
 		print("step 00")
 		wrappedMethod(data)
 		
@@ -6437,13 +6510,14 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListItemController_UpdateState(this,wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod()  end
 		wrappedMethod()
 		
 	
 	end
 	
 	function QuickhacksListGameController_OnAction(this,action,consumer,wrappedMethod)
-		--print("step 01")
+		if(moddisabled == true) then return wrappedMethod(action,consumer)  end
 		wrappedMethod(action,consumer)
 		
 	
@@ -6451,7 +6525,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	function QuickhacksListGameController_ApplyQuickHack(this,wrappedMethod)
 		--print("step 02")
-		
+		if(moddisabled == true) then return wrappedMethod()  end
 		
 		local value = wrappedMethod()
 		if string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
@@ -6495,7 +6569,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListGameController_OnQuickhackStarted(this,value,wrappedMethod)
-		--print("step 03")
+		if(moddisabled == true) then return wrappedMethod(value)  end
 		wrappedMethod(value)
 		if string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
 			
@@ -6522,7 +6596,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListGameController_SetVisibility(this,value,wrappedMethod)
-		--print("step 04")
+		if(moddisabled == true) then return wrappedMethod(value)  end
 		wrappedMethod(value)
 		
 		
@@ -6534,7 +6608,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListItemController_OnMemoryPercentUpdate(this,value, wrappedMethod)
-	--	print("step 05")
+	if(moddisabled == true) then return wrappedMethod(value)  end
 		wrappedMethod(value)
 		
 		
@@ -6543,7 +6617,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListItemController_UpdateQuickhacksMemoryBarSize(this,size, wrappedMethod)
-		print("step 06")
+		if(moddisabled == true) then return wrappedMethod(size)  end
 		wrappedMethod(size)
 			
 		
@@ -6577,7 +6651,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	function QuickhacksListItemController_PlayChoiceAcceptedAnimation(this,wrappedMethod)
 	
 	
-	
+	if(moddisabled == true) then return wrappedMethod()  end
 		wrappedMethod()
 		if this.isSelected then
 			
@@ -6598,7 +6672,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 
 
 function WorldMapMenuGameController_ShowGangsInfo(self,district)
-		
+		if(moddisabled == true) then return  end
 		local zoomlevel = self:GetCurrentZoom()
 		debugPrint(2,zoomlevel)
 		
@@ -6718,7 +6792,7 @@ end
 
 
 function listenPlayerInput(action)
-	
+	if(moddisabled == true) then return  end
 		actionName = Game.NameToString(action:GetName(action))
 		actionType = action:GetType(action).value
 		actionValue = action:GetValue(action)

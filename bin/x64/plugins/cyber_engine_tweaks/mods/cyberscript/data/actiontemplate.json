@@ -3152,4 +3152,17 @@
 		"helper": "This action will unset time dilatation for NPC",
 		"helperTitle": "Entity : Unset Time Dilatation"
 	},
+	{
+		"name": "safe_execution",
+		"action": {
+			"name": "unset_timedilation_for_entity",
+			"tag": "judy01||player",
+			"helper": "This action will unset time dilatation for NPC",
+			"helperTitle": "Entity : Unset Time Dilatation"
+		},
+		"failactions":[],
+		"help": "will try to execute an action then play an actionlist if it fails",
+		"helper": "will try to execute an action then play an actionlist if it fails",
+		"helperTitle": "Script : Run action in Safe Execution"
+	},
 ]

@@ -1,0 +1,28 @@
+{
+
+	"Name":"Nash",
+	"LOC_X": 2577,
+	"LOC_Y": -5,
+	"LOC_Z": 85,
+	"range": 15,
+	"Faction":"faction_wraiths",
+	"Tag": "fixer_nash",
+	"exist":false,
+	"npcexist":false,
+	"NPCId":"Character.q103_raffen_nash",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"despawn_action":[]
+}

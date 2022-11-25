@@ -220,9 +220,7 @@ function SaveLoading()
 	Player_Run_Multiplier = getUserSettingWithDefault("Player_Run_Multiplier",Player_Run_Multiplier)
 	Jump_Height = getUserSettingWithDefault("Jump_Height",Jump_Height)
 	Double_Jump_Height = getUserSettingWithDefault("Double_Jump_Height",Double_Jump_Height)
-	
-	
-	
+	moddisabled = getUserSettingWithDefault("moddisabled",moddisabled)
 	
 	SetFlatFromSetting()
 	
@@ -282,8 +280,26 @@ end
 
 function setupCore() --Setup environnement (DatapackLoading, observer, overrider)
 	
-	DatapackLoading()
 	
+	GameUI.Listen(function(state)
+		
+		if(state.submenu == "Stats") then
+		end
+		if(state.isMenu) then
+			inMenu = true
+			ActiveMenu = state.menu
+			ActiveSubMenu = state.submenu 
+			if(ActiveSubMenu ~= "Shards") then
+			firstexecutionshard = nil
+			end
+			else
+			inMenu = false
+			ActiveMenu = nil
+			ActiveSubMenu = nil
+			firstexecutionshard = nil
+			AffinityPopupisShow = false
+		end
+	end)
 	MasterVolume = Game.GetSettingsSystem():GetVar("/audio/volume", "MasterVolume")
 	UIPopupsManager.Inititalize()
 	playerDeltaPos = Vector4.new(0, 0, 0, 1)
@@ -304,21 +320,18 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 	SetOverrider()
 	SetObserver()
 	eventCatcher = sampleStyleManagerGameController.new()
-	GameUI.Listen(function(state)
-		
-		if(state.submenu == "Stats") then
-		end
-		if(state.isMenu) then
-			inMenu = true
-			ActiveMenu = state.menu
-			ActiveSubMenu = state.submenu 
-			else
-			inMenu = false
-			ActiveMenu = nil
-			ActiveSubMenu = nil
-			AffinityPopupisShow = false
-		end
+	local datapackresult,datapackerror  = pcall(function()
+	DatapackLoading()
 	end)
+	
+	if datapackresult == false then
+		
+		
+	logme(1,"!!!!! CYBERSCRIPT : ERROR IN DATAPACK LOADING" .. datapackerror)
+		
+end
+		
+	
 	if(ModIsLoaded) then
 		reloadDB()
 		GameSession.StoreInDir('sessions')
@@ -355,7 +368,7 @@ function DatapackLoading() --handle the loading and creation of cache for datapa
 		local haveerror = false
 		
 		arrayDatapack = {}
-		
+		loadAssetsObject()
 		
 		local directories = {}
 		
@@ -464,6 +477,8 @@ function initCore() --Setup session, external observer and trigger mod core load
 		print(getLang("ammnotfound"))
 		
 	end
+	
+	
 	resetVar()
 	
 	
@@ -546,6 +561,32 @@ function initCore() --Setup session, external observer and trigger mod core load
 	CheckandUpdateDatapack()
 	LoadDataPackCache()
 	SaveLoading()
+	
+	if GetMod('MissingPersons') then 
+		MissingPersons =  GetMod("MissingPersons")
+		
+		if(MissingPersons.settings.DisableMod == true) then
+				updateUserSetting("moddisabled",true)
+				moddisabled = true
+				
+				print("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and  reload CET, then go in setting to enable Cyberscript")
+				spdlog.error("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and reload CET, then go in setting to enable Cyberscript")
+				Game.GetPlayer():SetWarningMessage(getLang("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and reload CET, then go in setting to enable Cyberscript"))
+				else
+				updateUserSetting("moddisabled",false)
+		end
+	end
+	
+	
+	if GetMod('corruptNCPD') then 
+		
+		
+		print("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript")
+		spdlog.error("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript")
+		Game.GetPlayer():SetWarningMessage(getLang("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript"))
+		
+	end
+	
 	if file_exists("modules/editor.lua") then
 		initEditor()
 	end
@@ -727,12 +768,15 @@ end)
 registerForEvent('onDraw', function()
 	
 	
-	
+	if(moddisabled == false) then
 	windowsManager()
-	
+	end
 	
 end)
 registerForEvent("onUpdate", function(delta)
+		
+		if(moddisabled == false) then
+		
 		
 		if(hotreload == true and inMenu == false) then
 			hotreload = false
@@ -752,6 +796,13 @@ registerForEvent("onUpdate", function(delta)
 		refresh(delta)
 			
 	
+		end
+		
+		
+		
+		
+		
+		
 		end
 	
 	

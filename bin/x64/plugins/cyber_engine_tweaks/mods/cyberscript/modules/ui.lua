@@ -467,7 +467,7 @@ function refreshUIWidget()
 					-- control.ink.root:SetOpacity(control.data.opacity)
 					-- control.ink.root:SetRotation(control.data.rotation)
 						if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"visible")) or (table_contains(control.data.dynamic,"default"))   then 
-						print("test "..GameDump(control.ink:GetRootWidget()))
+						
 						if control.ink:GetRootWidget().name ~=nil then control.ink:GetRootWidget():SetVisible(control.data.visible) end
 						end
 					-- control.ink.root:SetTranslation(Vector2.new({ X = translationwidth, Y = translationheight }))
@@ -1148,71 +1148,81 @@ function makeNativeSettings()
 
 	
 	
-	nativeSettings.addSubcategory("/CM/gameplay", "Ooops there is an mising setting in CyberScript Setting !")
-	nativeSettings.addSubcategory("/CM/gameplay01", "Try rebuild the cache and reload the mod/save/game !")
-	nativeSettings.addSubcategory("/CM/gameplay02", "Send quest_mod.log to discord Admin on Cyberscript Discord !")
+	-- nativeSettings.addSubcategory("/CM/gameplay", "Ooops there is an mising setting in CyberScript Setting !")
+	-- nativeSettings.addSubcategory("/CM/gameplay01", "Try rebuild the cache and reload the mod/save/game !")
+	-- nativeSettings.addSubcategory("/CM/gameplay02", "Send quest_mod.log to discord Admin on Cyberscript Discord !")
 	
 	
 		
 	
  
-	nativeSettings.addButton("/CM/gameplay02", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
+	-- nativeSettings.addButton("/CM/gameplay02", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
 	
-	if file_exists("sessions/latest.txt") then
-		os.remove("sessions/latest.txt")
-	end
-	
-	
-	local reader = dir("sessions")
+	-- if file_exists("sessions/latest.txt") then
+		-- os.remove("sessions/latest.txt")
+	-- end
 	
 	
-	for i=1, #reader do 
-		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
+	-- local reader = dir("sessions")
+	
+	
+	-- for i=1, #reader do 
+		-- if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 			
-				os.remove('sessions/'..reader[i].name)
-	
-	
-			
-			
-		end
-	end
-	
-	local reader = dir("datapack")
-	for i=1, #reader do 
-		if(tostring(reader[i].type) == "directory") then
-			
-				os.remove('datapack/'..reader[i].name)
+				-- os.remove('sessions/'..reader[i].name)
 	
 	
 			
 			
-		end
-	end
+		-- end
+	-- end
 	
-	local reader = dir("cache")
-	for i=1, #reader do 
-		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
+	-- local reader = dir("datapack")
+	-- for i=1, #reader do 
+		-- if(tostring(reader[i].type) == "directory") then
 			
-				os.remove('cache/'..reader[i].name)
+				-- os.remove('datapack/'..reader[i].name)
 	
 	
 			
 			
-		end
-	end
+		-- end
+	-- end
+	
+	-- local reader = dir("cache")
+	-- for i=1, #reader do 
+		-- if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
+			
+				-- os.remove('cache/'..reader[i].name)
 	
 	
- 	ImportDataPack()
-	LoadDataPackCache()
-	debugPrint(2, getLang("ui_setting_actions_rebuild_done"))
+			
+			
+		-- end
+	-- end
+	
+	
+ 	-- ImportDataPack()
+	-- LoadDataPackCache()
+	-- debugPrint(2, getLang("ui_setting_actions_rebuild_done"))
  	
- end)
+ -- end)
  
  
 	
 	
 	else
 	local status, result =  pcall(function()
+	
+	nativeSettings.addSubcategory("/CM/general", getLang("General")) -- Optional: Add a subcategory (path, label), you can add as many as you want
+	
+	settingsTables["disabled"] =  
+	nativeSettings.addSwitch("/CM/general",  getLang("Disable CyberScript"),  getLang("Disable CyberScript"), moddisabled, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+		moddisabled = state
+		updateUserSetting ("moddisabled", moddisabled)
+	end)
+	
+	
 	nativeSettings.addSubcategory("/CM/gameplay", getLang("ui_setting_gameplay")) -- Optional: Add a subcategory (path, label), you can add as many as you want
 	
 	settingsTables["gamepad"] =  
@@ -1375,7 +1385,7 @@ function makeNativeSettings()
  end)
  
 	
-	nativeSettings.addButton("/CM/gameplay02", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
+	nativeSettings.addButton("/CM/actions", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
 	
 	if file_exists("sessions/latest.txt") then
 		os.remove("sessions/latest.txt")
@@ -1521,7 +1531,7 @@ function makeNativeSettings()
 		
 			spdlog.error(result)
 			
-			nativeSettings.addSubcategory("/CM/gameplay", "Ooops there is an error in CyberScript Setting !")
+			nativeSettings.addSubcategory("/CM/gameplay00", "sssOoops there is an error in CyberScript Setting !")
 	nativeSettings.addSubcategory("/CM/gameplay01", "Try rebuild the cache and reload the mod/save/game !")
 	nativeSettings.addSubcategory("/CM/gameplay02", "Send quest_mod.log to discord Admin on Cyberscript Discord !")
 	

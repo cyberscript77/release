@@ -502,6 +502,107 @@ function loadDatapackObject(namespace)
 		end
 	end
 end
+
+function loadAssetsObject()
+	
+
+	local namespace = "assets"
+	arrayDatapack[namespace] = {}
+	arrayDatapack[namespace].enabled = true
+	arrayDatapack[namespace].metadata = {}
+	arrayDatapack[namespace].metadata.name = "Default Assets"
+	arrayDatapack[namespace].metadata.desc = "Default Assets"
+	arrayDatapack[namespace].metadata.author = "CyberScript"
+	arrayDatapack[namespace].metadata.file = "assets"
+	arrayDatapack[namespace].metadata.tag = "assets"
+	arrayDatapack[namespace].metadata.version = cyberscript.version
+	arrayDatapack[namespace].metadata.flags = {"compile","essential"}
+	
+	
+	for i=1,#datapackObjectType do
+		local objtype = datapackObjectType[i]
+		
+		local reader = dir("assets/"..objtype)
+		if(reader ~= nil) then
+			arrayDatapack[namespace][objtype] = {}
+			for i=1, #reader do 
+				if(objtype == "sound") then
+					
+					if(tostring(reader[i].type) == "file" and (string.match(tostring(reader[i].name), ".mp3") or string.match(tostring(reader[i].name), ".wav"))) then
+						
+						local soundobj = {}
+						soundobj.name = reader[i].name
+						soundobj.path=namespace.."\\sound\\"
+						soundobj.namespace = namespace
+						
+						arrayDatapack[namespace][objtype][tostring(reader[i].name)] = {}
+						arrayDatapack[namespace][objtype][tostring(reader[i].name)] = soundobj
+						
+						
+					end
+					
+					
+					
+					
+					
+					elseif(objtype == "texture") then
+					
+					if(tostring(reader[i].type) == "file" and 
+						(
+							string.match(tostring(reader[i].name), ".jpg") or 
+							string.match(tostring(reader[i].name), ".jpeg") or 
+							string.match(tostring(reader[i].name), ".png")or 
+							string.match(tostring(reader[i].name), ".bmp")
+						)
+					) then
+					
+					local imageobj = {}
+					
+					
+					imageobj.name = reader[i].name
+					imageobj.path="assets/"..objtype.."/"..reader[i].name
+					imageobj.namespace = namespace
+					
+					
+					
+					arrayDatapack[namespace][objtype][tostring(reader[i].name)] = {}
+					arrayDatapack[namespace][objtype][tostring(reader[i].name)] = imageobj
+					
+					end
+					
+					elseif(objtype == "path") then
+					
+					
+					
+					else
+					
+					if(tostring(reader[i].type) == "file" and string.match(tostring(reader[i].name), ".json")) then
+						
+						local foo = io.open("assets/"..objtype.."/"..reader[i].name)
+						local lines = foo:read("*a")
+						if(lines ~= "") then
+							local jsonf = trydecodeJSOn(lines,foo,"assets/"..objtype.."/"..reader[i].name)
+							arrayDatapack[namespace][objtype][tostring(reader[i].name)] = {}
+							arrayDatapack[namespace][objtype][tostring(reader[i].name)] = jsonf
+							
+							else
+							res = false
+							
+						end
+								foo:close()
+					end
+					
+					
+					
+				end
+			end
+		end
+	end
+
+	logme(1,"CyberScript Assets Loaded")
+
+end
+
 function DeleteDatapackFromCache(tag)
 	
 	if(arrayDatapack[tag]~= nil) then

@@ -127,6 +127,7 @@ editorCurrentVariableSearch = ""
 editorCurrentVariableKeySearch = ""
 PlayerisHitten = false
 spawntablecount = {}
+moddisabled = false
 cachedespawn = {}
 datapackObjectType = { 
 	"character",
@@ -2355,8 +2356,6 @@ for i,v in ipairs(test) do
 
 end
 
-spdlog.error("amm_entities : "..dump(amm_entities))
-
 
 
 
@@ -2377,7 +2376,6 @@ for i,v in ipairs(test) do
 end
 
 
-spdlog.error("amm_component : "..dump(amm_component))
 
 arraytriggertemplate = {}
 

@@ -1,0 +1,105 @@
+{
+	"Name": "Valentinos",
+	"Logo": "logo_valentinos",
+	"Tag": "faction_valentinos",
+	"AttitudeGroup": [
+		"valentinos_ow",
+		"valentinos"
+	],
+	"Rivals": [
+		"faction_sixthstreet", "faction_ncpd", "faction_militech", "faction_maelstrom", "faction_tygerclaws", "faction_scavengers"
+	],
+	"SpawnableNPC": [
+		"Character.gle_valentinos_grunt2_melee2_machete_wa",
+		"Character.gle_valentinos_grunt1_ranged1_nova_ma",
+		"Character.gle_valentinos_grunt1_ranged1_nova_wa",
+		"Character.gle_valentinos_grunt1_ranged1_nue_ma",
+		"Character.gle_valentinos_grunt1_ranged1_nue_wa",
+		"Character.gle_valentinos_grunt2_melee2_machete_wa",
+		"Character.gle_valentinos_grunt2_melee2_machete_ma",
+		"Character.gle_valentinos_grunt2_ranged2_ajax_ma",
+		"Character.gle_valentinos_grunt2_ranged2_ajax_wa",
+		"Character.gle_valentinos_grunt2_ranged2_nue_ma",
+		"Character.gle_valentinos_grunt2_ranged2_nue_wa",
+		"Character.gle_valentinos_grunt2_ranged2_overture_ma",
+		"Character.gle_valentinos_grunt2_ranged2_overture_wa",
+		"Character.gle_valentinos_grunt3_fmelee2_machete_ma_rare",
+		"Character.gle_valentinos_machete_hmelee3_machete_mb_elite",
+		"Character.gle_valentinos_sniper_sniper3_grad_wa_elite",
+		"Character.spr_03_valentinos_ranged2_ajax_ma",
+		"Character.rey_valentinos_grunt1_ranged1_nue_ma",
+		"Character.rey_valentinos_grunt2_ranged2_ajax_wa",
+		"Character.rey_valentinos_grunt2_ranged2_overture_wa",
+		"Character.ma_hey_gle_05_valentinos_grunt2_ranged2_overture_ma_Danilo_Ruiz",
+		"Character.dtn_valentinos_grunt1_ranged1_nova_ma",
+		"Character.dtn_valentinos_grunt1_ranged1_nue_ma",
+		"Character.dtn_valentinos_grunt1_ranged1_nue_wa",
+		"Character.dtn_valentinos_grunt2_ranged2_ajax_ma",
+		"Character.dtn_valentinos_grunt2_ranged2_ajax_wa",
+		"Character.dtn_valentinos_grunt2_ranged2_nue_ma",
+		"Character.dtn_valentinos_grunt2_ranged2_nue_wa",
+		"Character.dtn_valentinos_grunt2_ranged2_overture_wa",
+		"Character.valentinos_elite3_ranged3_dual_ma_elite",
+		"Character.valentinos_grunt1_ranged1_nova_ma",
+		"Character.valentinos_grunt2_melee2_machete_ma",
+		"Character.valentinos_sniper_sniper3_grad_wa_elite",
+		"Character.valentinos_grunt4_hmelee2_fists_mb_rare"
+	],
+	"SpawnableVehicule": [
+		"Vehicle.v_sport2_villefort_alvarado_cabrio",
+		"Vehicle.v_sport2_villefort_alvarado_valentinos",
+		"Vehicle.cs_savable_thorton_colby_valentinos",
+		"Vehicle.cs_savable_mizutani_shion",
+		"Vehicle.cs_savable_thorton_mackinaw_valentinos"
+	],
+	"DistrictTag": "district_heywood",
+	"VIP": [{
+			"name": "Mama_Welles",
+			"score": 0
+		},
+		{
+			"name": "Camilo Castilla",
+			"score": 5
+		},
+		{
+			"name": "Daniel Duarte",
+			"score": 5
+		},
+		{
+			"name": "Gustav",
+			"score": 10
+		},
+		{
+			"name": "Isabella Fuscino",
+			"score": 10
+		},
+		{
+			"name": "Micaela Ruiz",
+			"score": 15
+		},
+		{
+			"name": "Pepe Najarro",
+			"score": 15
+		},
+		{
+			"name": "Irene Hermoso",
+			"score": 15
+		},
+		{
+			"name": "Martha Young Funeral",
+			"score": 20
+		},
+		{
+			"name": "Sofia Rossil",
+			"score": 20
+		},
+		{
+			"name": "Zoe Alonzo",
+			"score": 30
+		},
+		{
+			"name": "Misty",
+			"score": 40
+		}
+	]
+}

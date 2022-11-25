@@ -1,0 +1,27 @@
+{
+
+	"Name":"Dakota",
+	"LOC_X":2420,
+	"LOC_Y":-795,
+	"LOC_Z":0,
+	"range":5,
+	"Faction":"faction_aldecaldos",
+	"Tag": "fixer_dakota",
+	"exist":true,
+	"npcexist":true,
+	"NPCId":"Character.dakota_smith",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+	"spawn_action":[
+		{
+			
+		
+		}
+		
+		],
+	"despawn_action":[]
+}
