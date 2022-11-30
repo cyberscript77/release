@@ -562,30 +562,7 @@ function initCore() --Setup session, external observer and trigger mod core load
 	LoadDataPackCache()
 	SaveLoading()
 	
-	if GetMod('MissingPersons') then 
-		MissingPersons =  GetMod("MissingPersons")
-		
-		if(MissingPersons.settings.DisableMod == true) then
-				updateUserSetting("moddisabled",true)
-				moddisabled = true
-				
-				print("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and  reload CET, then go in setting to enable Cyberscript")
-				spdlog.error("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and reload CET, then go in setting to enable Cyberscript")
-				Game.GetPlayer():SetWarningMessage(getLang("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and reload CET, then go in setting to enable Cyberscript"))
-				else
-				updateUserSetting("moddisabled",false)
-		end
-	end
 	
-	
-	if GetMod('corruptNCPD') then 
-		
-		
-		print("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript")
-		spdlog.error("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript")
-		Game.GetPlayer():SetWarningMessage(getLang("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript"))
-		
-	end
 	
 	if file_exists("modules/editor.lua") then
 		initEditor()
@@ -597,6 +574,7 @@ function initCore() --Setup session, external observer and trigger mod core load
 end
 function inGameInit() -- init some function after save loaded
 	--loadHUD()
+	LoadDataPackCache()
 	candrwMapPinFixer= false
 	cancheckmission = true
 	choiceHubData =  gameinteractionsvisInteractionChoiceHubData.new()

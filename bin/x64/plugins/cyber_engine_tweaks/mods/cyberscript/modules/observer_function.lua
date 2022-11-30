@@ -3,7 +3,123 @@ cyberscript.module = cyberscript.module +1
 print("hot reload test")
 ---Observer and Overrider---
 
+	function PerksMainGameController_SetupLayout(this,screenType)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(0):GetWidgetByIndex(0):SetVisible(false)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(0):GetWidgetByIndex(1):SetVisible(false)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(1):SetVisible(false)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(2):SetVisible(false)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(3):SetVisible(false)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(4):SetVisible(false)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(5):SetVisible(false)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(6):GetWidgetByIndex(2):SetVisible(false)
+		
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(7):SetVisible(false)
+
+		
+		
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(0):AddChild(this.attributeSelectorsContainer.widget:GetWidgetByIndex(0):GetWidgetByIndex(1).widget)
+		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(0):GetWidgetByIndex(1):SetRotation(90)
+		
+		
+	local currentperkscreen = this.perksScreen.widget
+		if(currentperkscreen.visible == true) then
+		
+		if NameToString(currentperkscreen.name) == "SkillPerksScreen8" then
+		--printChild(this.perksScreen.widget)
+		
+		print("yes")
+		
+		end
+		end
+		  -- inkWidgetRef.SetVisible(this.attributeSelectorsContainer, false)
+			-- inkWidgetRef.SetVisible(this.perksScreen, false)
+		-- inkWidgetRef.SetVisible(this.johnnyConnectorRef, true)
 	
+	end
+	function PerkDisplayController_Setup(this,displayData, dataManager , startingIndex)
+	
+	print(GameDump(displayData))
+	
+	end
+	
+	function PerkScreenController_Setup(this,displayData, dataManager , startingIndex,wrappedMethod)
+	
+	local proficiencies = displayData.proficiencies
+	
+	local myproficiency = ProficiencyDisplayData.new()
+	
+	
+	myproficiency.attributeId  = TweakDBID.new("Test")
+	myproficiency.proficiency  = 10
+	myproficiency.index   = #displayData.proficiencies+1
+	myproficiency.areas   = {}
+	
+	local myarea = AreaDisplayData.new()
+	myarea.attributeId  = TweakDBID.new("Test")
+	myarea.perks = {}
+	myarea.locked = false
+	myarea.proficency  = 102	
+	myarea.area   = 117
+	
+	local myperk = PerkDisplayData.new()
+	myperk.attributeId= TweakDBID.new("Test")
+	
+	
+	myperk.name =CName.new("myperk")
+	myperk.localizedName  = "donk special move"
+	myperk.localizedDescription   = "donk special move"
+	myperk.iconID   = TweakDBID.new("Test")
+	myperk.level   = 1
+	myperk.maxLevel   = 13
+	myperk.locked 	  = false
+	myperk.proficiency   = 0
+	
+	myperk.area   = 102
+	myperk.type =174
+	table.insert(myarea.perks,myperk)
+	table.insert(myproficiency.areas ,myarea)
+	
+	
+	myproficiency.passiveBonusesData   = displayData.proficiencies[1].passiveBonusesData 
+	myproficiency.traitData   = {}
+	myproficiency.localizedName   = "donk no bonk"
+	myproficiency.localizedDescription   = "See that comin ? ;)"
+	myproficiency.level   = 13
+	myproficiency.maxLevel    = 99
+	myproficiency.expPoints     = 13	
+	myproficiency.maxExpPoints      = 100	
+	myproficiency.unlockedLevel      = 50	
+	table.insert(proficiencies,myproficiency)
+	
+	displayData.proficiencies = proficiencies
+	wrappedMethod(displayData, dataManager , startingIndex)
+	for i,pro in ipairs(displayData.proficiencies) do
+		
+		print(GameDump(pro))
+	
+	end
+	-- local attributeData
+    -- this.dataManager = dataManager
+    -- this.displayData = displayData
+	
+	-- for i=0,#this.widgetMap do
+	
+		-- this.widgetMap[i]:SetData(nil,nil)
+	
+	-- end
+   
+    -- this:RegisterProficiencyButtons(displayData, startingIndex)
+    -- attributeData = dataManager:GetAttribute(displayData.m_attributeId)
+    -- inkTextRef.SetText(this.attributeNameText, attributeData.label)
+	
+	
+    -- inkTextRef.SetText(this.attributeLevelText, IntToString(attributeData.value))
+    
+	-- inkImageRef.SetTexturePart(this.attributeIcon, this:GetIconAtlasPart(attributeData.id))
+	
+    -- this:RebuildPerks(startingIndex)
+    -- this:PlayLibraryAnimation("start_perk_screen")
+	end
 	
 	function ComputerMainLayoutWidgetController_OnScreenSaverSpawned(thos,widget,userData)
 		if(moddisabled == true) then return end
@@ -542,221 +658,7 @@ print("hot reload test")
 		
 		
 	end
-	
-	function PhoneDialerGameController_PopulateData(thos)
-		if(moddisabled == true) then return end
-		local contactDataArray = thos.journalManager:GetContactDataArray(false)
-		------printdump(contactDataArray))
-		if(#contactList > 0) then
-			for i = 1, #contactList do
-				local itemData = ContactData.new()
-				itemData.id = contactList[i].id
-				itemData.localizedName  = contactList[i].name
-				itemData.avatarID = TweakDBID.new(contactList[i].avatarID)
-				itemData.questRelated  =  false
-				itemData.hasMessages   =  true
-				itemData.unreadMessegeCount  = 13
-				itemData.unreadMessages  = {}
-				itemData.playerCanReply   =  false
-				itemData.playerIsLastSender   =  false
-				itemData.lastMesssagePreview  =  "CyberScript"
-				itemData.threadsCount  = 0
-				itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
-				itemData.hash  = 0
-				table.insert(contactDataArray,itemData)
-			end
-		end
-		-- for i = 1,#contactDataArray do
-		------printGameDump(contactDataArray[i]))
-		-- end
-		--table.sort(contactDataArray)
-		thos.dataView:EnableSorting();
-		thos.dataSource:Reset(contactDataArray);
-		thos.dataView:DisableSorting();
-		thos.firstInit = true;
-		--	----printGameDump(_.dataView))
-	end
-	
-	function MessengerGameController_PopulateData(thos) 
-	if(moddisabled == true) then return end
-		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
-			
-			debugPrint(10,"flib sort mod is enabled, custom message is disabled")
-			else
-			local data = MessengerUtils.GetContactDataArray(thos.journalManager,true,true,thos.activeData)
-			-- for i=1,#data do
-			-- spdlog.info(GameDump(data[i].data))
-			-- end
-			if(MultiplayerOn and OnlineConversation ~= nil) then
-				onlineInstanceMessageProcessing()
-				local phoneConversation = OnlineConversation
-				spdlog.error(JSON:encode_pretty(phoneConversation))
-				if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
-					if phoneConversation.hash == nil then
-						OnlineConversation.hash = 0 - tonumber("1308"..math.random(1,999))
-						
-						phoneConversation.hash = OnlineConversation.hash
-					end
-					local itemData = ContactData.new()
-					itemData.id = phoneConversation.tag
-					itemData.localizedName  = phoneConversation.speaker
-					itemData.avatarID = TweakDBID.new("Character.Judy")
-					itemData.questRelated  =  false
-					local unreadcount = 0
-					itemData.unreadMessages  = {}
-					if(#phoneConversation.conversation > 0) then
-						for z=1,#phoneConversation.conversation do
-							if(phoneConversation.conversation[z].message ~= nil and #phoneConversation.conversation[z].message > 0) then
-								for y=1,#phoneConversation.conversation[z].message do
-									if(phoneConversation.conversation[z].message[y].readed == false and (getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == nil or getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == 1)) then
-										unreadcount = unreadcount + 1
-										table.insert(itemData.unreadMessages ,unreadcount)
-										itemData.playerCanReply   =  true
-									end
-								end
-							end
-						end
-					end
-					itemData.hasMessages   =  true
-					itemData.unreadMessegeCount  = unreadcount
-					itemData.playerIsLastSender   =  false
-					itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
-					itemData.threadsCount  = #phoneConversation.conversation
-					itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
-					itemData.hash = phoneConversation.hash
-					local contactVirtualListData =  VirutalNestedListData.new()
-					contactVirtualListData.level =  phoneConversation.hash
-					contactVirtualListData.widgetType = 0
-					contactVirtualListData.isHeader = true
-					contactVirtualListData.data = itemData
-					contactVirtualListData.collapsable = true
-					contactVirtualListData.forceToTopWithinLevel  = true
-					table.insert(data,contactVirtualListData)
-					for z=1,#phoneConversation.conversation do
-						unreadcount = 0
-						itemData.unreadMessages  = {}
-						local conversation = phoneConversation.conversation[z]
-						if(getScoreKey(conversation.tag,"unlocked") == nil or getScoreKey(conversation.tag,"unlocked") == 1) then
-							if(conversation.message ~= nil and #conversation.message > 0) then
-								for y=1,#conversation.message do
-									if(conversation.message[y].readed == false and (getScoreKey(conversation.message[y].tag,"unlocked") == nil or getScoreKey(conversation.message[y].tag,"unlocked") == 1)) then
-										unreadcount = unreadcount + 1
-										table.insert(itemData.unreadMessages ,unreadcount)
-										itemData.playerCanReply   =  true
-									end
-								end
-							end
-							local itemData = ContactData.new()
-							itemData.id = conversation.tag
-							itemData.localizedName  = conversation.name
-							itemData.avatarID = TweakDBID.new("Character.Judy")
-							itemData.questRelated  =  false
-							itemData.hasMessages   =  true
-							itemData.unreadMessegeCount  = unreadcount
-							itemData.playerIsLastSender   =  false
-							itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
-							OnlineConversation.conversation[z].hash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
-							conversation.hash = OnlineConversation.conversation[z].hash
-							
-							itemData.threadsCount  = 0
-							itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
-							itemData.hash = conversation.hash
-							local contactVirtualListData =  VirutalNestedListData.new()
-							contactVirtualListData.level = phoneConversation.hash
-							contactVirtualListData.widgetType = 1
-							contactVirtualListData.isHeader = false
-							contactVirtualListData.data = itemData
-							contactVirtualListData.collapsable = false
-							table.insert(data,contactVirtualListData)
-						end
-					end
-				end
-			end
-			for k,v in pairs(arrayPhoneConversation) do
-				local phoneConversation = v.conv
-				debugPrint(2,phoneConversation.tag)
-				if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
-					if phoneConversation.hash == nil then
-						arrayPhoneConversation[k].conv.hash = 0 - tonumber("1308"..math.random(1,999))
-						
-						phoneConversation.hash = arrayPhoneConversation[k].conv.hash
-					end
-					local itemData = ContactData.new()
-					itemData.id = phoneConversation.tag
-					itemData.localizedName  = phoneConversation.speaker
-					itemData.avatarID = TweakDBID.new("Character.Judy")
-					itemData.questRelated  =  false
-					local unreadcount = 0
-					itemData.unreadMessages  = {}
-					for z=1,#phoneConversation.conversation do
-						if(phoneConversation.conversation[z].message ~= nil and #phoneConversation.conversation[z].message >0) then
-							for y=1,#phoneConversation.conversation[z].message do
-								if(phoneConversation.conversation[z].message[y].readed == false and (getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == nil or getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == 1)) then
-									unreadcount = unreadcount + 1
-									table.insert(itemData.unreadMessages ,unreadcount)
-									itemData.playerCanReply   =  true
-								end
-							end
-						end
-					end
-					itemData.hasMessages   =  true
-					itemData.unreadMessegeCount  = unreadcount
-					itemData.playerIsLastSender   =  false
-					itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
-					itemData.threadsCount  = #phoneConversation.conversation
-					itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
-					itemData.hash = phoneConversation.hash
-					local contactVirtualListData =  VirutalNestedListData.new()
-					contactVirtualListData.level =  phoneConversation.hash
-					contactVirtualListData.widgetType = 0
-					contactVirtualListData.isHeader = true
-					contactVirtualListData.data = itemData
-					contactVirtualListData.collapsable = true
-					table.insert(data,contactVirtualListData)
-					for z=1,#phoneConversation.conversation do
-						unreadcount = 0
-						itemData.unreadMessages  = {}
-						local conversation = phoneConversation.conversation[z]
-						if(getScoreKey(conversation.tag,"unlocked") == nil or getScoreKey(conversation.tag,"unlocked") == 1) then
-							if(conversation.message ~= nil and #conversation.message>0) then
-								for y=1,#conversation.message do
-									if(conversation.message[y].readed == false and (getScoreKey(conversation.message[y].tag,"unlocked") == nil or getScoreKey(conversation.message[y].tag,"unlocked") == 1)) then
-										unreadcount = unreadcount + 1
-										table.insert(itemData.unreadMessages ,unreadcount)
-										itemData.playerCanReply   =  true
-									end
-								end
-							end
-							local itemData = ContactData.new()
-							itemData.id = conversation.tag
-							itemData.localizedName  = conversation.name
-							itemData.avatarID = TweakDBID.new("Character.Judy")
-							itemData.questRelated  =  false
-							itemData.hasMessages   =  true
-							itemData.unreadMessegeCount  = unreadcount
-							itemData.playerIsLastSender   =  false
-							itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
-							arrayPhoneConversation[k].conv.conversation[z].hash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
-							conversation.hash = arrayPhoneConversation[k].conv.conversation[z].hash
-							
-							itemData.threadsCount  = 0
-							itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
-							itemData.hash = conversation.hash
-							local contactVirtualListData =  VirutalNestedListData.new()
-							contactVirtualListData.level = phoneConversation.hash
-							contactVirtualListData.widgetType = 1
-							contactVirtualListData.isHeader = false
-							contactVirtualListData.data = itemData
-							contactVirtualListData.collapsable = false
-							table.insert(data,contactVirtualListData)
-						end
-					end
-				end
-			end
-			thos.listController:SetData(data, true)
-		end
-	end
-	
+
 	function VehiclesManagerListItemController_OnDataChanged(thos,value)
 		if(moddisabled == true) then return end
 		
@@ -894,7 +796,8 @@ print("hot reload test")
 				
 			debugPrint(10,"flib sort mod is enabled, custom codex is disabled")
 		else
-		print("test")
+				
+				
 			local counter = 0
 			local groupData
 			local groupVirtualListData
@@ -919,6 +822,105 @@ print("hot reload test")
 		
 			i = 1
 			
+			
+			local textAffinity = "Affinity"
+			for i = 1,#arrayPnjDb  do
+				local score = getScoreKey("Affinity",arrayPnjDb[i].Names) 
+				if score ~= nil and score > 1 then
+					textAffinity = textAffinity.."\n "..arrayPnjDb[i].Names.." : "..score
+				end
+			end
+			
+			local test = data
+			local shardData =  CodexEntryData.new()
+		
+			shardData.description = textAffinity
+			shardData.title = "CS Affinity : NPC"
+			shardData.activeDataSync = thos.activeData
+			shardData.counter = counter
+			shardData.category =4
+			shardData.imageType = 0
+			shardData.isNew = true
+			shardData.hash = 8888888+math.random(1,9999999)
+			shardData.activeDataSync = thos.activeData
+			table.insert(shardData.newEntries, shardData.hash)
+			
+			local shardVirtualListData = VirutalNestedListData.new()
+			shardVirtualListData.level = -1
+			shardVirtualListData.widgetType = 0
+			shardVirtualListData.isHeader = false
+			shardVirtualListData.data = shardData
+			table.insert(data, shardVirtualListData)
+			totalcount = totalcount +1
+
+			
+			 textAffinity = "Gang Affinity"
+			for k,v in pairs(arrayFaction) do
+				local score =getScoreKey("Affinity",k)
+				if score ~= nil then
+					textAffinity = textAffinity.."\n "..arrayFaction[k].faction.Name.." : "..score
+				end
+			end
+			
+			test = data
+			shardData =  CodexEntryData.new()
+		
+			shardData.description = textAffinity
+			shardData.title = "CS Affinity : Gang"
+			shardData.activeDataSync = thos.activeData
+			shardData.counter = counter
+			shardData.category =4
+			shardData.imageType = 0
+			shardData.isNew = true
+			shardData.hash = 8888888+math.random(1,9999999)
+			shardData.activeDataSync = thos.activeData
+			table.insert(shardData.newEntries, shardData.hash)
+			
+			local shardVirtualListData = VirutalNestedListData.new()
+			shardVirtualListData.level = -1
+			shardVirtualListData.widgetType = 0
+			shardVirtualListData.isHeader = false
+			shardVirtualListData.data = shardData
+			table.insert(data, shardVirtualListData)
+			totalcount = totalcount +1
+			
+			
+			for k,v in pairs(arrayHelp) do
+				local codex = v.help
+				local description = ""
+				for i,section in ipairs(codex.section) do
+					if(section.message ~= nil) then
+						description = description..section.message.."\n\n\n"
+					else
+						description = description..section.."\n\n\n"
+					end
+				end
+				
+				local shardData =  CodexEntryData.new()
+				shardData.title = "CS Wiki : "..codex.title
+				shardData.description = description
+				shardData.activeDataSync = thos.activeData
+				shardData.counter = counter
+				shardData.category =4
+				shardData.imageType = 0
+				shardData.isNew = true
+		
+				shardData.hash = 13081991+math.random(1,9999999)
+				shardData.activeDataSync = thos.activeData
+				
+				table.insert(shardData.newEntries, shardData.hash)
+				
+				local shardVirtualListData = VirutalNestedListData.new()
+				shardVirtualListData.level = -1
+				shardVirtualListData.widgetType = 0
+				shardVirtualListData.isHeader = false
+				shardVirtualListData.data = shardData
+				table.insert(data, shardVirtualListData)
+				totalcount = totalcount +1
+				
+			end
+			
+			
 			for k,v in pairs(arrayCodex) do
 				local codex = v.entry
 				if((getScoreKey(codex.tag,"Score") == nil and codex.locked == false) or getScoreKey(codex.tag,"Score") == 0) then
@@ -932,7 +934,7 @@ print("hot reload test")
 					shardData.imageType = 0
 					shardData.isNew = codex.new
 			
-					shardData.hash = 13081991
+					shardData.hash = 13081992+math.random(1,9999999)
 					shardData.activeDataSync = thos.activeData
 					
 					table.insert(shardData.newEntries, shardData.hash)
@@ -986,115 +988,9 @@ print("hot reload test")
 			if(ActiveSubMenu == "Shards" and firstexecutionshard == nil ) then
 			firstexecutionshard = true
 			local count = 1
-			local textAffinity = "Affinity"
-			for i = 1,#arrayPnjDb  do
-				local score = getScoreKey("Affinity",arrayPnjDb[i].Names) 
-				if score ~= nil and score > 1 then
-					textAffinity = textAffinity.."\n "..arrayPnjDb[i].Names.." : "..score
-				end
-			end
 			
 			local test = data
-			local shardData =  ShardEntryData.new()
-			shardData.title = "CyberScript : NPC Affinity"
-			shardData.description = textAffinity
-			shardData.isNew = false
-			shardData.hash = -13082022
-			shardData.isCrypted = false
 			
-			shardData.counter =  data[1].data.counter
-			shardData.timeStamp  =  data[1].data.timeStamp 
-			shardData.newEntries   = {}
-			shardData.imageId = data[1].data.imageId
-			shardData.activeDataSync = data[1].data.activeDataSync
-			shardData.itemID = data[1].data.itemID
-			
-			
-			
-			table.insert(shardData.newEntries, shardData.hash)
-			
-			local shardVirtualListData = VirutalNestedListData.new()
-			shardVirtualListData.level = 999999
-			shardVirtualListData.collapsable = false
-			shardVirtualListData.forceToTopWithinLevel = false
-			shardVirtualListData.widgetType = 0
-			shardVirtualListData.isHeader = false
-			shardVirtualListData.data = shardData
-			table.insert(test, shardVirtualListData)
-
-			
-			 textAffinity = "Gang Affinity"
-			 
-			 
-			for k,v in pairs(arrayFaction) do
-				local score =getScoreKey("Affinity",k)
-				if score ~= nil then
-					textAffinity = textAffinity.."\n "..arrayFaction[k].faction.Name.." : "..score
-				end
-			end
-			
-			local shardData =  ShardEntryData.new()
-			shardData.title = "CyberScript : Gang Affinity"
-			shardData.description = textAffinity
-			shardData.isNew = false
-			shardData.hash = -13082021
-			shardData.isCrypted = false
-			
-			shardData.counter =  data[1].data.counter
-			shardData.timeStamp  =  data[1].data.timeStamp 
-				shardData.newEntries   = {}
-			shardData.imageId = data[1].data.imageId
-			shardData.activeDataSync = data[1].data.activeDataSync
-			shardData.itemID = data[1].data.itemID
-			
-			
-			
-			table.insert(shardData.newEntries, shardData.hash)
-			
-			local shardVirtualListData = VirutalNestedListData.new()
-			shardVirtualListData.level = 999999
-			shardVirtualListData.collapsable = false
-			shardVirtualListData.forceToTopWithinLevel = false
-			shardVirtualListData.widgetType = 0
-			shardVirtualListData.isHeader = false
-			shardVirtualListData.data = shardData
-			table.insert(test, shardVirtualListData)
-			count = count+1
-			
-			
-			for k,v in pairs(arrayHelp) do
-				local shard = v.help
-				local description = ""
-				for y=1,#shard.section do
-					description = description..shard.section[y].."\n"
-				end
-				
-				local shardDatas =  ShardEntryData.new()
-				shardDatas.title = "CyberScript Wiki : "..getLang(shard.title)
-				shardDatas.description = description
-				shardDatas.isNew = true
-				shardDatas.hash = (math.random(1,99999)+1308202028)
-				shardDatas.isCrypted = false
-				
-				shardDatas.counter =  data[1].data.counter
-				shardDatas.timeStamp  =  data[1].data.timeStamp 
-				shardDatas.newEntries   = {}
-				shardDatas.imageId = data[1].data.imageId
-				shardDatas.activeDataSync = data[1].data.activeDataSync
-				shardDatas.itemID = data[1].data.itemID
-				table.insert(shardDatas.newEntries, shardDatas.hash)
-				
-				local shardVirtualListDatass = VirutalNestedListData.new()
-				shardVirtualListDatass.level = 999999
-				shardVirtualListDatass.collapsable = false
-				shardVirtualListDatass.forceToTopWithinLevel = false
-				shardVirtualListDatass.widgetType = 0
-				shardVirtualListDatass.isHeader = false
-				shardVirtualListDatass.data = shardDatas
-
-				table.insert(test, shardVirtualListDatass)
-				
-			end
 			
 			for k,v in pairs(arrayShard) do
 				local shard = v.shard
@@ -1322,20 +1218,21 @@ print("hot reload test")
 	
 	function printChild(widget)
 		if(moddisabled == true) then return end
-		spdlog.error(GameDump(widget))
+		if(widget ~= nil) then
+		spdlog.error(tostring(NameToString(widget.name)).." "..GameDump(widget))
 		local result = pcall(function() widget:GetNumChildren() end)
 		
 		if(result) then
 			if(widget:GetNumChildren() > 0) then
 				for i=0,widget:GetNumChildren() do
-				
+					spdlog.error(tostring(NameToString(widget.name)).." ["..tostring(i).."]")
 					printChild(widget:GetWidgetByIndex(i))
 				
 				end
 			
 			end
 		end
-	
+		end
 	end
 	
 	function WebPage_OnInitialize(self)
@@ -4494,15 +4391,235 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	
 	
+	function MessengerGameController_OnInitialize(this) 
+	
+		GameController["MessengerGameController"] = this
+	end
 	
 	
+		
+	function PhoneDialerGameController_PopulateData(thos)
+		if(moddisabled == true) then return end
+		local contactDataArray = thos.journalManager:GetContactDataArray(false)
+		------printdump(contactDataArray))
+		if(#contactList > 0) then
+			for i = 1, #contactList do
+				local itemData = ContactData.new()
+				itemData.id = contactList[i].id
+				itemData.localizedName  = contactList[i].name
+				itemData.avatarID = TweakDBID.new(contactList[i].avatarID)
+				itemData.questRelated  =  false
+				itemData.hasMessages   =  true
+				itemData.unreadMessegeCount  = 13
+				itemData.unreadMessages  = {}
+				itemData.playerCanReply   =  false
+				itemData.playerIsLastSender   =  false
+				itemData.lastMesssagePreview  =  "CyberScript"
+				itemData.threadsCount  = 0
+				itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
+				itemData.hash  = 0
+				table.insert(contactDataArray,itemData)
+			end
+		end
+		-- for i = 1,#contactDataArray do
+		------printGameDump(contactDataArray[i]))
+		-- end
+		--table.sort(contactDataArray)
+		thos.dataView:EnableSorting();
+		thos.dataSource:Reset(contactDataArray);
+		thos.dataView:DisableSorting();
+		thos.firstInit = true;
+		--	----printGameDump(_.dataView))
+	end
 	
+	function MessengerGameController_PopulateData(thos) 
+	if(moddisabled == true) then return end
+	GameController["MessengerGameController"] = thos
+		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
+			
+			debugPrint(4,"flib sort mod is enabled, custom message is disabled")
+			else
+			
+			local data = MessengerUtils.GetContactDataArray(thos.journalManager,true,true,thos.activeData)
+			-- for i=1,#data do
+			-- spdlog.info(GameDump(data[i].data))
+			-- end
+			-- if(MultiplayerOn and OnlineConversation ~= nil) then
+				-- onlineInstanceMessageProcessing()
+				-- local phoneConversation = OnlineConversation
+				-- spdlog.error(JSON:encode_pretty(phoneConversation))
+				-- if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
+					-- if phoneConversation.hash == nil then
+						-- OnlineConversation.hash = 0 - tonumber("1308"..math.random(1,999))
+						
+						-- phoneConversation.hash = OnlineConversation.hash
+					-- end
+					-- local itemData = ContactData.new()
+					-- itemData.id = phoneConversation.tag
+					-- itemData.localizedName  = phoneConversation.speaker
+					-- itemData.avatarID = TweakDBID.new("Character.Judy")
+					-- itemData.questRelated  =  false
+					-- local unreadcount = 0
+					-- itemData.unreadMessages  = {}
+					-- if(#phoneConversation.conversation > 0) then
+						-- for z=1,#phoneConversation.conversation do
+							-- if(phoneConversation.conversation[z].message ~= nil and #phoneConversation.conversation[z].message > 0) then
+								-- for y=1,#phoneConversation.conversation[z].message do
+									-- if(phoneConversation.conversation[z].message[y].readed == false and (getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == nil or getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == 1)) then
+										-- unreadcount = unreadcount + 1
+										-- table.insert(itemData.unreadMessages ,unreadcount)
+										-- itemData.playerCanReply   =  true
+									-- end
+								-- end
+							-- end
+						-- end
+					-- end
+					-- itemData.hasMessages   =  true
+					-- itemData.unreadMessegeCount  = unreadcount
+					-- itemData.playerIsLastSender   =  false
+					-- itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
+					-- itemData.threadsCount  = #phoneConversation.conversation
+					-- itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
+					-- itemData.hash = phoneConversation.hash
+					-- local contactVirtualListData =  VirutalNestedListData.new()
+					-- contactVirtualListData.level =  phoneConversation.hash
+					-- contactVirtualListData.widgetType = 0
+					-- contactVirtualListData.isHeader = true
+					-- contactVirtualListData.data = itemData
+					-- contactVirtualListData.collapsable = true
+					-- contactVirtualListData.forceToTopWithinLevel  = true
+					-- table.insert(data,contactVirtualListData)
+					-- for z=1,#phoneConversation.conversation do
+						-- unreadcount = 0
+						-- itemData.unreadMessages  = {}
+						-- local conversation = phoneConversation.conversation[z]
+						-- if(getScoreKey(conversation.tag,"unlocked") == nil or getScoreKey(conversation.tag,"unlocked") == 1) then
+							-- if(conversation.message ~= nil and #conversation.message > 0) then
+								-- for y=1,#conversation.message do
+									-- if(conversation.message[y].readed == false and (getScoreKey(conversation.message[y].tag,"unlocked") == nil or getScoreKey(conversation.message[y].tag,"unlocked") == 1)) then
+										-- unreadcount = unreadcount + 1
+										-- table.insert(itemData.unreadMessages ,unreadcount)
+										-- itemData.playerCanReply   =  true
+									-- end
+								-- end
+							-- end
+							-- local itemData = ContactData.new()
+							-- itemData.id = conversation.tag
+							-- itemData.localizedName  = conversation.name
+							-- itemData.avatarID = TweakDBID.new("Character.Judy")
+							-- itemData.questRelated  =  false
+							-- itemData.hasMessages   =  true
+							-- itemData.unreadMessegeCount  = unreadcount
+							-- itemData.playerIsLastSender   =  false
+							-- itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
+							-- OnlineConversation.conversation[z].hash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
+							-- conversation.hash = OnlineConversation.conversation[z].hash
+							
+							-- itemData.threadsCount  = 0
+							-- itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
+							-- itemData.hash = conversation.hash
+							-- local contactVirtualListData =  VirutalNestedListData.new()
+							-- contactVirtualListData.level = phoneConversation.hash
+							-- contactVirtualListData.widgetType = 1
+							-- contactVirtualListData.isHeader = false
+							-- contactVirtualListData.data = itemData
+							-- contactVirtualListData.collapsable = false
+							-- table.insert(data,contactVirtualListData)
+						-- end
+					-- end
+				-- end
+			-- end
+			for k,v in pairs(arrayPhoneConversation) do
+				local phoneConversation = v.conv
+				debugPrint(1,phoneConversation.tag)
+				if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
+					if phoneConversation.hash == nil then
+						arrayPhoneConversation[k].conv.hash = 0 - tonumber("1308"..math.random(1,999))
+						
+						phoneConversation.hash = arrayPhoneConversation[k].conv.hash
+					end
+					local itemData = ContactData.new()
+					itemData.id = phoneConversation.tag
+					itemData.localizedName  = phoneConversation.speaker
+					itemData.avatarID = TweakDBID.new("Character.Judy")
+					itemData.questRelated  =  false
+					local unreadcount = 0
+					itemData.unreadMessages  = {}
+					for z=1,#phoneConversation.conversation do
+						if(phoneConversation.conversation[z].message ~= nil and #phoneConversation.conversation[z].message >0) then
+							for y=1,#phoneConversation.conversation[z].message do
+								if(phoneConversation.conversation[z].message[y].readed == false and (getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == nil or getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == 1)) then
+									unreadcount = unreadcount + 1
+									table.insert(itemData.unreadMessages ,unreadcount)
+									itemData.playerCanReply   =  true
+								end
+							end
+						end
+					end
+					itemData.hasMessages   =  true
+					itemData.unreadMessegeCount  = unreadcount
+					itemData.playerIsLastSender   =  false
+					itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
+					itemData.threadsCount  = #phoneConversation.conversation
+					itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
+					itemData.hash = phoneConversation.hash
+					local contactVirtualListData =  VirutalNestedListData.new()
+					contactVirtualListData.level =  phoneConversation.hash
+					contactVirtualListData.widgetType = 0
+					contactVirtualListData.isHeader = true
+					contactVirtualListData.data = itemData
+					contactVirtualListData.collapsable = true
+					table.insert(data,contactVirtualListData)
+					for z=1,#phoneConversation.conversation do
+						unreadcount = 0
+						itemData.unreadMessages  = {}
+						local conversation = phoneConversation.conversation[z]
+						if(getScoreKey(conversation.tag,"unlocked") == nil or getScoreKey(conversation.tag,"unlocked") == 1) then
+							if(conversation.message ~= nil and #conversation.message>0) then
+								for y=1,#conversation.message do
+									if(conversation.message[y].readed == false and (getScoreKey(conversation.message[y].tag,"unlocked") == nil or getScoreKey(conversation.message[y].tag,"unlocked") == 1)) then
+										unreadcount = unreadcount + 1
+										table.insert(itemData.unreadMessages ,unreadcount)
+										itemData.playerCanReply   =  true
+									end
+								end
+							end
+							local itemData = ContactData.new()
+							itemData.id = conversation.tag
+							itemData.localizedName  = conversation.name
+							itemData.avatarID = TweakDBID.new("Character.Judy")
+							itemData.questRelated  =  false
+							itemData.hasMessages   =  true
+							itemData.unreadMessegeCount  = unreadcount
+							itemData.playerIsLastSender   =  false
+							itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
+							arrayPhoneConversation[k].conv.conversation[z].hash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
+							conversation.hash = arrayPhoneConversation[k].conv.conversation[z].hash
+							
+							itemData.threadsCount  = 0
+							itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
+							itemData.hash = conversation.hash
+							local contactVirtualListData =  VirutalNestedListData.new()
+							contactVirtualListData.level = phoneConversation.hash
+							contactVirtualListData.widgetType = 1
+							contactVirtualListData.isHeader = false
+							contactVirtualListData.data = itemData
+							contactVirtualListData.collapsable = false
+							table.insert(data,contactVirtualListData)
+						end
+					end
+				end
+			end
+			thos.listController:SetData(data, true)
+		end
+	end
 	
 	
 	function MessengerGameController_OnContactActivated(self,evt) 
 	if(moddisabled == true) then return end
-		debugPrint(2,"MessengerGameController.OnContactActivated")
-		debugPrint(2,GameDump(evt))
+		GameController["MessengerGameController"] = self
+		debugPrint(1,"MessengerGameController.OnContactActivated")
+		
 		--if(currentSubtController == nil) then
 		currentPhoneConversation = nil
 		if (messageprocessing == false) then
@@ -4516,6 +4633,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 						if(conversation.hash == evt.entryHash)then
 							currentPhoneConversation = phoneConversation.conversation[z]
 							currentPhoneConversation.currentchoices = {}
+							debugPrint(1,GameDump(evt))
 							currentPhoneConversation.loaded = 0
 							onlineReceiver = nil
 							local test = gameJournalPhoneMessage.new()
@@ -4523,19 +4641,19 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 						end
 					end
 				end
-				if(MultiplayerOn and OnlineConversation ~= nil) then
-					for z=1,#OnlineConversation.conversation do
-						local conversation = OnlineConversation.conversation[z]
-						if(conversation.hash == evt.entryHash)then
-							currentPhoneConversation = OnlineConversation.conversation[z]
-							currentPhoneConversation.currentchoices = {}
-							currentPhoneConversation.loaded = 0
-							onlineReceiver = OnlineConversation.conversation[z].name
-							local test = gameJournalPhoneMessage.new()
-							self.dialogController:ShowThread(test)
-						end
-					end
-				end
+				-- if(MultiplayerOn and OnlineConversation ~= nil) then
+					-- for z=1,#OnlineConversation.conversation do
+						-- local conversation = OnlineConversation.conversation[z]
+						-- if(conversation.hash == evt.entryHash)then
+							-- currentPhoneConversation = OnlineConversation.conversation[z]
+							-- currentPhoneConversation.currentchoices = {}
+							-- currentPhoneConversation.loaded = 0
+							-- onlineReceiver = OnlineConversation.conversation[z].name
+							-- local test = gameJournalPhoneMessage.new()
+							-- self.dialogController:ShowThread(test)
+						-- end
+					-- end
+				-- end
 				else
 				currentPhoneConversation = nil
 				onlineReceiver = nil
@@ -4546,7 +4664,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function MessengerDialogViewController_SetVisited(thos, records) 
 	if(moddisabled == true) then return end
-		debugPrint(2,"MessengerDialogViewController.SetVisited")
+		debugPrint(1,"MessengerDialogViewController.SetVisited")
 		local messages = thos.messages
 		local choices = thos.replyOptions
 	
@@ -4638,8 +4756,10 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function MessengerDialogViewController_ShowThread(self,thread)
 		if(moddisabled == true) then return end
+	
 		if(thread == nil) then
 			local message = {}
+				logme(1,"test")
 			table.insert(message,currentPhoneDialogPopup)
 			self.messages = message
 		end
@@ -4649,6 +4769,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		if(moddisabled == true) then return end
 		if(contact == nil) then
 			local message = {}
+			logme(1,"test2")
 			table.insert(message,currentPhoneDialogPopup)
 			self.messages = message
 		end
@@ -4656,15 +4777,14 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function MessengerDialogViewController_UpdateData(self,animateLastMessage)
 		if(moddisabled == true) then return end
-		
+		logme(1,GameDump(self))
 		if(contact == nil) then
 			local message = {}
+			logme(1,"test3")
 			table.insert(message,currentPhoneDialogPopup)
 			self.messages = message
 			
-			local message = {}
-			table.insert(message,currentPhoneDialogPopup)
-			self.messages = message
+			
 		end
 	end
 	
@@ -4691,7 +4811,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 						for i = 1, #currentPhoneConversation.currentchoices do
 							setScore(currentPhoneConversation.currentchoices[i].tag,"unlocked",2)
 						end
-						MessengerGameController:UpdateData()
+						GameController["MessengerDialogViewController"]:UpdateData()
 						
 						break
 					end
@@ -4708,7 +4828,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	function MessangerItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
 		if(moddisabled == true) then return end
 		--	----printmessage.id)
-		spdlog.error(GameDump(entry))
+		logme(1,"MessangerItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
 		Cron.NextTick(function()
 			local message = entry
 			local txt = ""
@@ -4770,7 +4890,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	function MessangerReplyItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
 		if(moddisabled == true) then return end
 		--	----printmessage.id)
-		spdlog.error(GameDump(entry))
+		logme(1,"MessangerReplyItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
 		Cron.NextTick(function()
 			local message = entry
 			local txt = ""
@@ -4827,8 +4947,50 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	
 	
+	function MessengerDialogViewController_ActivateSelectedReplyOption(self)
+	print("MessengerDialogViewController_ActivateSelectedReplyOption")
+	end
 	
+	function MessengerDialogViewController_ActivateReply(self,target)
+	logme(1,GameDump(target))
+	logme(1,target.labelPathRef:GetText())
+	if(moddisabled == true) then return end
+		local choicepress = false
+		if(currentPhoneConversation ~= nil) then
+			for i = 1, #currentPhoneConversation.currentchoices do
+				debugPrint(10,currentPhoneConversation.currentchoices[i].text)
+				debugPrint(10,target.labelPathRef:GetText())
+				
+				
+				if(tostring(getLang(currentPhoneConversation.currentchoices[i].text)) == tostring(target.labelPathRef:GetText())) then
+					setScore(currentPhoneConversation.currentchoices[i].tag,"unlocked",2)
+					if(currentPhoneConversation.currentchoices[i].unlocknext ~= nil and currentPhoneConversation.currentchoices[i].unlocknext ~= "") then
+						setScore(currentPhoneConversation.currentchoices[i].unlocknext,"unlocked",1)
+					end
+					if(#currentPhoneConversation.currentchoices[i].action > 0) then
+						runActionList(currentPhoneConversation.currentchoices[i].action, currentPhoneConversation.currentchoices[i].tag, "interact",false,"nothing",currentPhoneConversation.currentchoices[i].action_bypassmenu_execution)
+					end
+					choicepress = true
+					
+					if choicepress == true then
+						for i = 1, #currentPhoneConversation.currentchoices do
+							setScore(currentPhoneConversation.currentchoices[i].tag,"unlocked",2)
+						end
+						
+						
+					GameController["MessengerDialogViewController"]:UpdateData()
+						
+						break
+					end
+				end
+			end
+			
+		end
+	end
 	
+	function MessengerDialogViewController_OnPlayerReplyActivated(self,index,target)
+	print("MessengerDialogViewController_OnPlayerReplyActivated")
+	end
 	
 	
 	
@@ -5251,7 +5413,41 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		isdead = true
 	end
 	
+	function interactionItemLogicController_SetData(self,data,skillcheck)
 	
+		local interact = arrayInteract[data.localizedName].interact
+		
+		
+		self.label:SetText(interact.name)
+		
+	
+		if(interact.style ~= nil) then
+						
+						
+						
+				local fontcolor = interact.style.textcolor
+				
+				if(fontcolor ~= nil) then
+					self.label.widget:SetTintColor(gamecolorStyle(fontcolor))
+				end
+				
+				local bgcolor = interact.style.bgcolor
+				
+				if(bgcolor ~= nil) then
+				
+					self.QuickHackHolder.widget:GetWidgetByIndex(0):GetWidgetByIndex(1):SetTintColor(gamecolorStyle(bgcolor))
+					
+				end
+				
+				local iconcolor = interact.style.iconcolor
+				if(iconcolor ~= nil) then
+					self.QuickHackIcon:SetTintColor(gamecolorStyle(iconcolor))
+				end
+						
+		end
+	
+	
+	end
 	
 	function DialogChoiceLogicController_UpdateView(self,wrappedMethod)
 		
@@ -5287,12 +5483,12 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 					
 					else
 					
-					local fontcolor = dialogoption.style.textcolor
+					local fontcolor = dialogoption.style.color
+	
+					self.ActiveTextRef.widget:SetTintColor(gamecolor(0,0,0,1))
+					self.InActiveTextRef.widget:SetTintColor(gamecolor(0,0,0,1))
 					
-					self.ActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
-					self.InActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
-					
-					self.SelectedBg:SetTintColor(gamecolorStyle(dialogoption.style.bgcolor))
+					self.SelectedBg:SetTintColor(gamecolorStyle(fontcolor))
 					
 					
 				end
@@ -5317,42 +5513,48 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				
 				else
 				
+				local dialogoption_unselect = nil
+				
+				
+				for i,v in ipairs(currentDialogHub.dial.options) do
+					
+					if(v.Description == self.ActiveTextRef:GetText()) then
+					
+					dialogoption_unselect = v
+					
+					end
+				
+				
+				end
 				
 				inkWidgetRef.SetVisible(self.VerticalLineWidget, true)
 				self.InputView:SetVisible(false)
 				
-				
-				
-				self.isSelected = true
-				
-				
-				if(dialogoption.style == nil) then
+				if(dialogoption_unselect ~= nil and dialogoption_unselect.style ~= nil) then
 					
-					self.ActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
-					self.InActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
-					self.VerticalLineWidget.widget:SetTintColor(gamecolor(0,255,255,1))
-					
-					
-					
-					else
-					
-					local fontcolor = dialogoption.style.font
-					
+					local fontcolor = dialogoption_unselect.style.color
 					self.ActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
 					self.InActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
-					self.VerticalLineWidget.widget:SetTintColor(gamecolorStyle(fontcolor))
 					
-					
-					
+					else
+						self.ActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
+						self.InActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
+						
 					
 				end
 				
+				self.isSelected = true
+					self.SelectedBg:SetTintColor(gamecolor(0,0,0,0))
+						inkWidgetRef.SetOpacity(self.ActiveTextRef, 1)
+					inkWidgetRef.SetOpacity(self.InActiveTextRef,0)
+			
+				self.VerticalLineWidget.widget:SetTintColor(gamecolor(0,255,255,1))
 				
 				
-				self.SelectedBg:SetTintColor(gamecolor(0,0,0,0))
 				
-				inkWidgetRef.SetOpacity(self.ActiveTextRef, 1)
-				inkWidgetRef.SetOpacity(self.InActiveTextRef,0)
+			
+				
+				
 				self.SelectedBg:SetOpacity(0.0)
 				
 				
@@ -5390,10 +5592,10 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		if not UIPopupsManager.IsOwnPopup(self) then
 			return
 		end
-		currentShardNotificationController = self
 		
+		GameController["ShardNotificationController"]  = self
 		if(currentInterface ~= nil and (currentInterface.type == nil or currentInterface.type == "popup")) then
-		
+		print("yahoo")
 			
 			
 			local titleIcon = self:GetRootWidget():GetWidgetByPathName(StringToName('container/Panel/vertical_organizer/topBar/icon'))
@@ -5403,6 +5605,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 			inkTextRef.SetText(self.titleRef, getLang(currentInterface.title))
 			titleIcon:SetTintColor(inkWidgetRef.GetTintColor(self.titleRef))
 			local contentArea = self:GetRootWidget():GetWidgetByPathName(StringToName('container/Panel/vertical_organizer/contentArea'))
+			print(GameDump(contentArea))
 			makeCustomInterface(contentArea,currentInterface)
 		end
 	

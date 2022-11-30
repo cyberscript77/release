@@ -1,0 +1,173 @@
+{
+	"tag":"roomwidget",
+	"type":"widget",
+	"container":"",
+	"fontfamily":"base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily",
+	"fontstyle":"Medium",
+	"fontsize":25,
+	"color":{
+		"red":255,
+		"green":255,
+		"blue":255
+		
+	},
+	"visible":true,
+	"margin":{
+	"top":675,
+	"left":3250
+	},
+	"text":"Here I am",
+	"context": [
+	{
+
+			"trigger": {
+				"auto": {
+					"name": "check_variable",
+					"variable": "current_place",
+					"key": "tag",
+					"value": "",
+					"operator": "empty"
+
+				}
+			},
+			"requirement": [
+				["auto"]
+			],
+			"prop": {
+
+				"visible": {
+					"text": "",
+					"values": {
+						"visible": {
+							"type": "object",
+							"value": false
+						}
+
+					}
+
+				}
+			}
+	},
+		{
+
+			"trigger": {
+				"room": {
+					"name": "check_variable",
+					"variable": "current_place",
+					"key": "room_tag",
+					"value": "",
+					"operator": "notempty"
+
+				}
+				
+			},
+			"requirement": [
+				["room"]
+			],
+			"prop": {
+				"visible": {
+					"text": "",
+					"values": {
+						"visible": {
+							"type": "object",
+							"value": true
+						}
+
+					}
+
+				},
+				"text": {
+					"text": "##languageplace ##currentplace ##languageroom ##currentroom",
+					"values": {
+						"languageplace": {
+							"type": "lang",
+							"tag": "ui_hud_place"
+						},
+						"currentplace": {
+							"type": "variable",
+							"variable": "current_place",
+							"key": "name"
+						},
+						"languageroom": {
+							"type": "lang",
+							"tag": "ui_hud_room"
+						},
+						"currentroom": {
+							"type": "variable",
+							"variable": "current_place",
+							"key": "room_name"
+						}
+
+					}
+
+				}
+			}
+		},
+		{
+
+			"trigger": {
+				"place": {
+					"name": "check_variable",
+					"variable": "current_place",
+					"key": "tag",
+					"value": "",
+					"operator": "notempty"
+
+				},
+				"noroom": {
+					"name": "check_variable",
+					"variable": "current_place",
+					"key": "room_tag",
+					"value": "",
+					"operator": "empty"
+
+				}
+				
+			},
+			"requirement": [
+				["place","noroom"]
+			],
+			"prop": {
+				"visible": {
+					"text": "",
+					"values": {
+						"visible": {
+							"type": "object",
+							"value": true
+						}
+
+					}
+
+				},
+				"text": {
+					"text": "##languageplace ##currentplace",
+					"values": {
+						"languageplace": {
+							"type": "lang",
+							"tag": "ui_hud_place"
+						},
+						"currentplace": {
+							"type": "variable",
+							"variable": "current_place",
+							"key": "name"
+						},
+						"languageroom": {
+							"type": "lang",
+							"tag": "ui_hud_room"
+						},
+						"currentroom": {
+							"type": "variable",
+							"variable": "current_place",
+							"key": "room_name"
+						}
+
+					}
+
+				}
+			}
+		}
+
+	]
+
+
+}

@@ -18,6 +18,26 @@ function SetObserver()
 	end)
 	
 	
+	
+	--perk
+	-- ObserveAfter("PerksMainGameController", "SetActiveScreen", function(this,screenType)
+	
+		-- PerksMainGameController_SetupLayout(this,screenType)
+	-- end)
+	
+	-- Override("PerkScreenController", "Setup", function(this,displayData, dataManager , startingIndex,wrappedMethod)
+	
+		-- PerkScreenController_Setup(this,displayData, dataManager , startingIndex,wrappedMethod)
+	-- end)
+	
+	-- ObserveAfter("PerkDisplayController", "Setup", function(this,displayData, dataManager, index)
+	
+		-- PerkDisplayController_Setup(this,displayData, dataManager , startingIndex)
+	-- end)
+		--perk
+	
+	
+	
 	ObserveAfter("ComputerMainLayoutWidgetController", "ShowMails", function(this)
 		
 		 ComputerInkGameController_ShowMails(this)
@@ -447,10 +467,14 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	
+	ObserveAfter('MessengerGameController','OnInitialize', function(this) 
+		MessengerGameController_PopulateData(this) 
+	end)
 	
 	
-	
-	
+	ObserveAfter('MessengerGameController','PopulateData', function(this) 
+		MessengerGameController_PopulateData(this) 
+	end)
 	
 	
 	
@@ -510,6 +534,17 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	
+	
+	
+	Observe('MessengerDialogViewController', 'ActivateSelectedReplyOption', function(self)
+		MessengerDialogViewController_ActivateSelectedReplyOption(self)
+	end)
+	Observe('MessengerDialogViewController', 'ActivateReply', function(self,target)
+		MessengerDialogViewController_ActivateReply(self,target)
+	end)
+	Observe('MessengerDialogViewController', 'OnPlayerReplyActivated', function(self,index,target)
+		MessengerDialogViewController_OnPlayerReplyActivated(self,index,target)
+	end)
 	
 	
 	
@@ -595,6 +630,13 @@ PanzerHUDGameController_OnInitialize(this)
 	Override('DialogChoiceLogicController', 'UpdateView', function(self,wrappedMethod)
 		
 		DialogChoiceLogicController_UpdateView(self,wrappedMethod)
+		
+	end)
+	
+	
+	ObserveAfter('interactionItemLogicController', 'SetData', function(self,data,skillcheck)
+		
+		interactionItemLogicController_SetData(self,data,skillcheck)
 		
 	end)
 	

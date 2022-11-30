@@ -230,7 +230,7 @@ function CheckandUpdateDatapack()
 	
 	if(arrayDatapack ~= nil) then 
 	local directories = {}
-	
+	loadAssetsObject()
 	if(arrayDatapack["default"] ~= nil) then 
 	
 	end
@@ -506,15 +506,15 @@ end
 function loadAssetsObject()
 	
 
-	local namespace = "assets"
+	local namespace = "cyberscript"
 	arrayDatapack[namespace] = {}
 	arrayDatapack[namespace].enabled = true
 	arrayDatapack[namespace].metadata = {}
 	arrayDatapack[namespace].metadata.name = "Default Assets"
 	arrayDatapack[namespace].metadata.desc = "Default Assets"
 	arrayDatapack[namespace].metadata.author = "CyberScript"
-	arrayDatapack[namespace].metadata.file = "assets"
-	arrayDatapack[namespace].metadata.tag = "assets"
+	arrayDatapack[namespace].metadata.file = "cyberscript"
+	arrayDatapack[namespace].metadata.tag = "cyberscript"
 	arrayDatapack[namespace].metadata.version = cyberscript.version
 	arrayDatapack[namespace].metadata.flags = {"compile","essential"}
 	

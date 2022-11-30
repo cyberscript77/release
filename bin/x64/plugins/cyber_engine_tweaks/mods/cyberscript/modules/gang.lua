@@ -572,7 +572,7 @@ function displayGangScoreWidget(score, libelle,parent,top,isleader)
 	descText:SetText(test)
 	descText:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
 	descText:SetFontStyle('Medium')
-	descText:SetFontSize(30)
+	descText:SetFontSize(35)
 
 	descText:SetVerticalAlignment(textVerticalAlignment.Center)
 	descText:SetHorizontalAlignment(textHorizontalAlignment.Right)

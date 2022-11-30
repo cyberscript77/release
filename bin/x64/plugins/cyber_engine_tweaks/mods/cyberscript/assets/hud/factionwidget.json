@@ -1,0 +1,64 @@
+{
+	"tag":"factionwidget",
+	"type":"container",
+	"visible":true,
+	"margin":{
+		"top":120,
+		"left":2800
+	},
+	"context": [
+        {
+			
+            "trigger": {
+                "auto": {
+                    "name": "check_setting",
+					"value":"showFactionAffinityHud",
+					"score":false
+                }
+            },
+            "requirement": [["auto"]],
+            "prop": 
+			{
+			
+				"visible": {
+					"text": "",
+					"values":{
+						"visible": {
+							"type": "object",
+							"value":false
+						}
+
+					}
+				
+				}
+			}
+		},
+		{
+			
+            "trigger": {
+                "auto": {
+                   "name": "check_setting",
+					"value":"showFactionAffinityHud",
+					"score":true
+                }
+            },
+            "requirement": [["auto"]],
+            "prop": 
+			{
+			
+				
+				"visible": {
+					"text": "",
+					"values":{
+						"visible": {
+							"type": "object",
+							"value":true
+						}
+
+					}
+				
+				}
+			}
+		}
+	]
+}

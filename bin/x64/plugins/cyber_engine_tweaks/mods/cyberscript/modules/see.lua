@@ -661,6 +661,19 @@ function scriptcheckTrigger(trigger)
 				local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 				result = inVehicule
 			end
+			if(trigger.name == "entity_in_car") then
+				local obj = getEntityFromManager(trigger.tag)
+				local enti = Game.FindEntityByID(obj.id)	
+				
+				if(enti ~= nil) then
+					local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(enti)
+					result = inVehicule
+				else
+					result = false
+				end
+			end
+			
+			
 			if(trigger.name == "in_car_specific") then
 				local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 				if (inVehicule) then
@@ -670,6 +683,22 @@ function scriptcheckTrigger(trigger)
 					if isThiscar then
 						result = true
 					end
+				end
+			end
+			if(trigger.name == "entity_in_car_specific") then
+				local obj = getEntityFromManager(trigger.tag)
+				local enti = Game.FindEntityByID(obj.id)	
+				
+				if(enti ~= nil) then
+				local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(enti)
+				if (inVehicule) then
+					local vehicule = Game['GetMountedVehicle;GameObject'](enti)
+					--debugPrint(3,vehicule:GetDisplayName())
+					local isThiscar = (string.find(string.lower(vehicule:GetDisplayName()), trigger.value) ~= nil)
+					if isThiscar then
+						result = true
+					end
+				end
 				end
 			end
 			if(trigger.name == "vehicule_is_in_custom_garage") then
@@ -4982,23 +5011,7 @@ end
 		end
 		if(action.name == "shard_notification") then
 			local test = getLang(action.title)
-			local obj = getEntityFromManager(action.title)
-			local enti = Game.FindEntityByID(obj.id)
-			if(action.title == "lookat")then
-				enti = objLook
-			end
-			if(enti ~= nil) then
-				if(action.title == "current_phone_npc") then
-					if(currentNPC ~= nil) then
-						test  = currentNPC.Names
-					end
-				end
-				if(action.title == "current_star") then
-					if(currentStar ~= nil) then
-						test  = currentStar.Names
-					end
-				end
-			end
+			
 			
 			local notificationData =  gameuiGenericNotificationData.new()
 			
@@ -9919,6 +9932,19 @@ end
 		end
 		
 		
+		if(action.name == "open_shard") then
+			
+			local shard = arrayShard[action.tag]
+			
+			if(shard ~= nil) then shard = arrayShard[action.tag].shard end
+			
+			if(shard ~= nil) then
+				Activatedshard(shard)
+				
+			end
+		end
+		
+		
 		if(action.name == "apply_interface_to_hud") then
 			
 			if(displayHUD[action.parent] ~= nil and arrayInterfaces[action.tag] ~= nil) then
@@ -10342,8 +10368,6 @@ end
 			Game.GetUISystem():QueueEvent(startHub)
 			
 			
-			
-			Game.GetUISystem():QueueEvent(startHub)
 		end
 		
 		if(action.name == "show_hack_animation") then

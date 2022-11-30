@@ -2407,9 +2407,31 @@ if attitudeRegion then
 			entity.isPlayerCompanionCached = true
 			entity.isPlayerCompanionCachedTimeStamp = currTime
 			local targName = tostring(entity:GetTweakDBFullDisplayName(true))
+			local npcType = entity:IsCrowd()
+			if npcType == false then
 			if not string.match(targName, "Johnny") and not string.match(targName, "Nibbles") then
 				AIC:SetAIRole(roleComp)
 				entity.movePolicies:Toggle(true)
+			end
+			else
+			local AIC = entity:GetAIControllerComponent()
+			local targetAttAgent = entity:GetAttitudeAgent()
+			local reactionComp = entity.reactionComponent
+			
+			local aiRole = NewObject('handle:AIRole')
+			aiRole:OnRoleSet(entity)
+			
+			entity:GetAIControllerComponent():OnAttach()	
+			Game['NPCPuppet::ChangeStanceState;GameObjectgamedataNPCStanceState'](entity, "Relaxed")
+			AIC:SetAIRole(aiRole)
+			entity.movePolicies:Toggle(true)
+			
+			targetAttAgent:SetAttitudeTowards(targets:GetAttitudeAgent(), Enum.new("EAIAttitude", "AIA_Friendly"))
+			
+			
+			
+			
+			ToggleImmortal(enti, false)
 			end
 			-- if objLook.isPlayerCompanionCached == false then
 			

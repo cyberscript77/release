@@ -1,0 +1,94 @@
+{
+	"tag": "districtWidget",
+	"type": "widget",
+	"container": "",
+	"fontfamily": "base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily",
+	"fontstyle": "Medium",
+	"fontsize": 25,
+	"color": {
+		"red": 183,
+		"green": 255,
+		"blue": 255
+
+	},
+	"visible": true,
+	"margin": {
+		"top": 625,
+		"left": 3250
+	},
+	"text": "Unknown District",
+	"context": [{
+
+			"trigger": {
+				"auto": {
+					"name": "check_variable",
+					"variable": "current_district",
+					"key": "districttext",
+					"value": "",
+					"operator": "empty"
+
+				}
+			},
+			"requirement": [
+				["auto"]
+			],
+			"prop": {
+
+				"visible": {
+					"text": "",
+					"values": {
+						"visible": {
+							"type": "object",
+							"value": false
+						}
+
+					}
+
+				}
+			}
+		},
+		{
+
+			"trigger": {
+				"auto": {
+					"name": "check_variable",
+					"variable": "current_district",
+					"key": "districttext",
+					"value": "",
+					"operator": "notempty"
+
+				}
+			},
+			"requirement": [
+				["auto"]
+			],
+			"prop": {
+				"visible": {
+					"text": "",
+					"values": {
+						"visible": {
+							"type": "object",
+							"value": true
+						}
+
+					}
+
+				},
+				"text": {
+					"text": "##currentdistrict",
+					"values": {
+						"currentdistrict": {
+							"type": "variable",
+							"variable": "current_district",
+							"key": "districttext"
+						}
+
+					}
+
+				}
+			}
+		}
+
+	]
+
+}

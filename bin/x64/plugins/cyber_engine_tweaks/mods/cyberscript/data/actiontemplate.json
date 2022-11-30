@@ -3165,4 +3165,10 @@
 		"helper": "will try to execute an action then play an actionlist if it fails",
 		"helperTitle": "Script : Run action in Safe Execution"
 	},
+	{
+		"name": "open_shard",
+		"tag": "myshardtag",
+		"helper": "This action will open an shard popup with custom shard content",
+		"helperTitle": "UI : Open Shard Popup"
+	},
 ]

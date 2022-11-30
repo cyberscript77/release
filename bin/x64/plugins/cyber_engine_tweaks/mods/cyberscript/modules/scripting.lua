@@ -42,7 +42,6 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	
 	
 	
-	
 	if(currentDistricts2 ~= nil)then
 		
 		setVariable("current_district","tag", currentDistricts2.Tag)
@@ -137,153 +136,101 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	setVariable("player_rotation","pitch",ftos(curRot.pitch))
 	setVariable("player_rotation","roll",ftos(curRot.roll))
 	
+
+	setVariable("game_time","day",GetSingleton('GameTime'):Days(gameTime))
+	setVariable("game_time","hour",GetSingleton('GameTime'):Hours(gameTime))
+	setVariable("game_time","min",GetSingleton('GameTime'):Minutes(gameTime))
+	setVariable("game_time","sec",GetSingleton('GameTime'):Seconds(gameTime))
+	
+	
+	
 	setScore("player","money",getStackableItemAmount("Items.money"))
 	
 	
 	pcall(function()
-	if(GameController["MinimapContainerController"] ~= nil and displayHUD["default_minimap_root"] == nil ) then
-		
-		
-		displayHUD["default_minimap_root"] = GameController["MinimapContainerController"]:GetRootWidget()
-		
-		displayHUD["default_minimap_container"] = GameController["MinimapContainerController"]:GetRootWidget():GetWidgetByIndex(4)
-		
-	end
-	end)
-	pcall(function()
-	if(GameController["healthbarWidgetGameController"] ~= nil and displayHUD["default_healthbar"] == nil ) then
-		
-		displayHUD["default_healthbar"] = GameController["healthbarWidgetGameController"]:GetRootWidget()
-		
-	end
-	end)
-	pcall(function()
-	if(GameController["StaminabarWidgetGameController"] ~= nil and displayHUD["default_staminabar"] == nil ) then
-		
-		displayHUD["default_staminabar"] = GameController["StaminabarWidgetGameController"]:GetRootWidget()
-		
-	end
-	end)
-	pcall(function()
-	if(GameController["HotkeysWidgetController"] ~= nil and displayHUD["default_hotkey"] == nil ) then
-		
-		
-		displayHUD["default_hotkey"] = GameController["HotkeysWidgetController"].root
-		displayHUD["default_hotkey_phone"] = GameController["HotkeysWidgetController"].phone
-		displayHUD["default_hotkey_car"] = GameController["HotkeysWidgetController"].car
-		displayHUD["default_hotkey_consumables"] = GameController["HotkeysWidgetController"].consumables
-		displayHUD["default_hotkey_gadgets"] = GameController["HotkeysWidgetController"].gadgets
-	end
-	end)
-	pcall(function()
-	if(GameController["BraindanceGameControllerRoot"] ~= nil and displayHUD["main_root_default"] == nil ) then
-		
-		print("setting HUD")
-		spdlog.error(GameDump(GameController["BraindanceGameControllerRoot"]))
-		
-		local rootContainerHUD = GameController["BraindanceGameControllerRoot"]
-		rootContainerHUD:SetVisible(true)
-		
-		
-		local cscontainer = rootContainerHUD:GetWidget(CName("default_cs")) 
-		local makenew = false
-		local hudprocessing = false
-		spdlog.error(GameDump(cscontainer))
-		
-		
-		if(cscontainer == nil) or (cscontainer:GetName() ~= CName("default_cs")) then
-			print("No container")
-			CName.add("default_cs")
-			local cscontainer = nil
-			cscontainer = inkCanvas.new()
-			cscontainer:SetName(CName("default_cs"))
-			cscontainer:SetAnchor(0)
-			cscontainer:SetFitToContent(false)
-			cscontainer:SetSize(rootContainerHUD:GetWidth(),rootContainerHUD:GetHeight() )
-			cscontainer:Reparent(rootContainerHUD, -1)
-			makenew = true
-			spdlog.error(GameDump(cscontainer))
-			spdlog.error(NameToString(cscontainer:GetName()))
+		if(GameController["MinimapContainerController"] ~= nil and displayHUD["default_minimap_root"] == nil ) then
+			
+			
+			displayHUD["default_minimap_root"] = GameController["MinimapContainerController"]:GetRootWidget()
+			
+			displayHUD["default_minimap_container"] = GameController["MinimapContainerController"]:GetRootWidget():GetWidgetByIndex(4)
 			
 		end
-		
-		
-		
-		displayHUD["main_root_default"] = cscontainer
-		
-		
-		
-		if(makenew == true) then
-			print("redo HUD")
-			hudprocessing = true
-			for k,v in pairs(arrayHUD) do
-				local hud = v.hud
-				if(hud.type == "container") then
-					displayHUD[k] = inkCanvas.new()
-					displayHUD[k]:SetName(CName.new(hud.tag))
-					displayHUD[k]:SetAnchor(inkEAnchor.Fill)
-					displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
-					debugPrint(10,"create "..hud.tag)
-					
-				end
-			end
+	end)
+	pcall(function()
+		if(GameController["healthbarWidgetGameController"] ~= nil and displayHUD["default_healthbar"] == nil ) then
+			
+			displayHUD["default_healthbar"] = GameController["healthbarWidgetGameController"]:GetRootWidget()
+			
+		end
+	end)
+	pcall(function()
+		if(GameController["StaminabarWidgetGameController"] ~= nil and displayHUD["default_staminabar"] == nil ) then
+			
+			displayHUD["default_staminabar"] = GameController["StaminabarWidgetGameController"]:GetRootWidget()
+			
+		end
+	end)
+	pcall(function()
+		if(GameController["HotkeysWidgetController"] ~= nil and displayHUD["default_hotkey"] == nil ) then
 			
 			
-			for k,v in pairs(arrayHUD) do
-				local hud = v.hud
-				if(hud.type == "container") then
-					if(hud.container == nil or hud.container == "default" or  hud.container == "") then
-						displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
-						else
-						displayHUD[k]:Reparent(displayHUD[hud.container], -1)
-					end
-					
-					
-				end
-			end
+			displayHUD["default_hotkey"] = GameController["HotkeysWidgetController"].root
+			displayHUD["default_hotkey_phone"] = GameController["HotkeysWidgetController"].phone
+			displayHUD["default_hotkey_car"] = GameController["HotkeysWidgetController"].car
+			displayHUD["default_hotkey_consumables"] = GameController["HotkeysWidgetController"].consumables
+			displayHUD["default_hotkey_gadgets"] = GameController["HotkeysWidgetController"].gadgets
+		end
+	end)
+	local result,err = pcall(function()
+		if(GameController["BraindanceGameControllerRoot"] ~= nil and displayHUD["main_root_default"] == nil ) then
 			
-			for k,v in pairs(arrayHUD) do
-				local hud = v.hud
-				if(hud.type == "widget") then
-					displayHUD[k] = inkText.new()
-					displayHUD[k]:SetName(CName.new(hud.tag))
-					displayHUD[k]:SetMargin(inkMargin.new({ top = hud.margin.top, left = hud.margin.left}))
-					displayHUD[k]:SetFontFamily(hud.fontfamily)
-					displayHUD[k]:SetFontStyle(hud.fontstyle)
-					displayHUD[k]:SetFontSize(hud.fontsize)
-					displayHUD[k]:SetTintColor(gamecolor(hud.color.red,hud.color.green,hud.color.blue,1))
-					displayHUD[k]:SetVisible(hud.visible)
-					displayHUD[k]:SetHorizontalAlignment(textHorizontalAlignment.Center)
-					displayHUD[k]:SetVerticalAlignment(textVerticalAlignment.Center)
-					
-					if(hud.container == nil or hud.container == "default" or hud.container == "") then
-						displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
-						else
-						displayHUD[k]:Reparent(displayHUD[hud.container], -1)
-					end
-					debugPrint(10,"create "..hud.tag)
-				end
+			print("setting HUD")
+			spdlog.error(GameDump(GameController["BraindanceGameControllerRoot"]))
+			
+			local rootContainerHUD = GameController["BraindanceGameControllerRoot"]
+			rootContainerHUD:SetVisible(true)
+			
+			
+			local cscontainer = rootContainerHUD:GetWidget(CName("default_cs")) 
+			local makenew = false
+			local hudprocessing = false
+			spdlog.error(GameDump(cscontainer))
+			
+			
+			if(cscontainer == nil) or (cscontainer:GetName() ~= CName("default_cs")) then
+				print("No container")
+				CName.add("default_cs")
+				local cscontainer = nil
+				cscontainer = inkCanvas.new()
+				cscontainer:SetName(CName("default_cs"))
+				cscontainer:SetAnchor(0)
+				cscontainer:SetFitToContent(false)
+				cscontainer:SetSize(rootContainerHUD:GetWidth(),rootContainerHUD:GetHeight() )
+				cscontainer:Reparent(rootContainerHUD, -1)
+				makenew = true
+				spdlog.error(GameDump(cscontainer))
+				spdlog.error(NameToString(cscontainer:GetName()))
 				
 			end
 			
-			print("HUD created")
-			else
-			if hudprocessing == false then
-				print("recreate HUD")
-				displayHUD["main_root_default"]:RemoveAllChildren()
-				
-				
+			
+			
+			displayHUD["main_root_default"] = cscontainer
+			
+			
+			
+			if(makenew == true) then
+				print("redo HUD")
+				hudprocessing = true
 				for k,v in pairs(arrayHUD) do
 					local hud = v.hud
 					if(hud.type == "container") then
-						
-						
 						displayHUD[k] = inkCanvas.new()
 						displayHUD[k]:SetName(CName.new(hud.tag))
 						displayHUD[k]:SetAnchor(inkEAnchor.Fill)
 						displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
 						debugPrint(10,"create "..hud.tag)
-						
 						
 					end
 				end
@@ -305,8 +252,6 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				for k,v in pairs(arrayHUD) do
 					local hud = v.hud
 					if(hud.type == "widget") then
-						
-						
 						displayHUD[k] = inkText.new()
 						displayHUD[k]:SetName(CName.new(hud.tag))
 						displayHUD[k]:SetMargin(inkMargin.new({ top = hud.margin.top, left = hud.margin.left}))
@@ -323,94 +268,162 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 							else
 							displayHUD[k]:Reparent(displayHUD[hud.container], -1)
 						end
-						debugPrint(10,"create "..hud.tag)
+						debugPrint(1,"create "..hud.tag)
 					end
-					
-					
-					
 					
 				end
 				
-				print("HUD initialised")
+				print("HUD created")
+				else
+				if hudprocessing == false then
+					print("recreate HUD")
+					displayHUD["main_root_default"]:RemoveAllChildren()
+					
+					
+					for k,v in pairs(arrayHUD) do
+						local hud = v.hud
+						if(hud.type == "container") then
+							
+							
+							displayHUD[k] = inkCanvas.new()
+							displayHUD[k]:SetName(CName.new(hud.tag))
+							displayHUD[k]:SetAnchor(inkEAnchor.Fill)
+							displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
+							debugPrint(10,"create "..hud.tag)
+							
+							
+						end
+					end
+					
+					
+					for k,v in pairs(arrayHUD) do
+						local hud = v.hud
+						if(hud.type == "container") then
+							if(hud.container == nil or hud.container == "default" or  hud.container == "") then
+								displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
+								else
+								displayHUD[k]:Reparent(displayHUD[hud.container], -1)
+							end
+							
+							
+						end
+					end
+					
+					for k,v in pairs(arrayHUD) do
+						local hud = v.hud
+						if(hud.type == "widget") then
+							
+							
+							displayHUD[k] = inkText.new()
+							displayHUD[k]:SetName(CName.new(hud.tag))
+							displayHUD[k]:SetMargin(inkMargin.new({ top = hud.margin.top, left = hud.margin.left}))
+							displayHUD[k]:SetFontFamily(hud.fontfamily)
+							displayHUD[k]:SetFontStyle(hud.fontstyle)
+							displayHUD[k]:SetFontSize(hud.fontsize)
+							displayHUD[k]:SetTintColor(gamecolor(hud.color.red,hud.color.green,hud.color.blue,1))
+							displayHUD[k]:SetVisible(hud.visible)
+							displayHUD[k]:SetHorizontalAlignment(textHorizontalAlignment.Center)
+							displayHUD[k]:SetVerticalAlignment(textVerticalAlignment.Center)
+							
+							if(hud.container == nil or hud.container == "default" or hud.container == "") then
+								displayHUD[k]:Reparent(displayHUD["main_root_default"], -1)
+								else
+								displayHUD[k]:Reparent(displayHUD[hud.container], -1)
+							end
+							debugPrint(10,"create "..hud.tag)
+						end
+						
+						
+						
+						
+					end
+					
+					print("HUD initialised")
+				end
 			end
 		end
-	end
 	end)
-	pcall(function()
-	if(GameController["hudCorpoController"] ~= nil and displayHUD["hud_corpo"] == nil ) then
-		
-		displayHUD["hud_corpo"] = GameController["hudCorpoController"].root
-		
-		
-		
-		displayHUD["hud_corpo_market"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0)
-		displayHUD["hud_corpo_market_marketFluffIcon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_market_marketFluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(1)
-		displayHUD["hud_corpo_market_marketConnection"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(2)
-		displayHUD["hud_corpo_market_marketHolderIcon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(3)
-		displayHUD["hud_corpo_market_marketHolderFluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(4)
-		
-		displayHUD["hud_corpo_market_marketWindowWrapperA"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_container"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_marketText"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_marketWindow"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(1)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_marketMask"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(2)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_FluffTxt_bottom2"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(3)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_Flufftxt_Bottom"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(4)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_logoArasaka"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(5)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_FluffTxt_bottom3"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(6)
-		displayHUD["hud_corpo_market_marketWindowWrapperA_03_mt_bottfluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(7)
-		
-		displayHUD["hud_corpo_market_marketWindowWrapperB"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(6)
-		displayHUD["hud_corpo_market_marketWindowWrapperB_markerGraph"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_market_marketWindowWrapperB_marketWindow"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(1)
-		displayHUD["hud_corpo_market_marketWindowWrapperB_marketMask"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(2)
-		
-		displayHUD["hud_corpo_assistant"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1)
-		displayHUD["hud_corpo_assistant_header"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_assistant_text"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(1)
-		displayHUD["hud_corpo_assistant_connection"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(2)
-		displayHUD["hud_corpo_assistant_holderfluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(3)
-		displayHUD["hud_corpo_assistant_holdericon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(4)
-		displayHUD["hud_corpo_assistant_holderplate"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(5)
-		
-		
-		
-		displayHUD["hud_corpo_stock"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2)
-		displayHUD["hud_corpo_stock_stockConnection"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_stock_stockFluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(1)
-		displayHUD["hud_corpo_stock_stockLogo"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(2)
-		displayHUD["hud_corpo_stock_stockHolderIcon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(3)
-		displayHUD["hud_corpo_stock_stockHolderFluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(4)
-		displayHUD["hud_corpo_stock_stockBorder"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(5)
-		displayHUD["hud_corpo_stock_marqueeUnit"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6)
-		
-		displayHUD["hud_corpo_stock_marqueeUnit_name_pet"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(2)
-		displayHUD["hud_corpo_stock_marqueeUnit_name_orb"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(5)
-		displayHUD["hud_corpo_stock_marqueeUnit_name_mil"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(8)
-		displayHUD["hud_corpo_stock_marqueeUnit_name_ara"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(11)
-		
-		displayHUD["hud_corpo_stock_marqueeUnit_value_pet"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_stock_marqueeUnit_value_orb"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(3)
-		displayHUD["hud_corpo_stock_marqueeUnit_value_mil"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(6)
-		displayHUD["hud_corpo_stock_marqueeUnit_value_ara"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(9)
-		
-		displayHUD["hud_corpo_stock_marqueeUnit_arrow_pet"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(1)
-		displayHUD["hud_corpo_stock_marqueeUnit_arrow_orb"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(4)
-		displayHUD["hud_corpo_stock_marqueeUnit_arrow_mil"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(7)
-		displayHUD["hud_corpo_stock_marqueeUnit_arrow_ara"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(10)
-		
-		displayHUD["hud_corpo_logo"] = GameController["hudCorpoController"].root:GetWidgetByIndex(3)
-		
-		displayHUD["hud_corpo_news"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5)
-		displayHUD["hud_corpo_news_stockHolderIcon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_news_hudFluffRight"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(1)
-		displayHUD["hud_corpo_news_title"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(2)
-		displayHUD["hud_corpo_news_inkFlexWidget9"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(3)
-		displayHUD["hud_corpo_news_content"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(3):GetWidgetByIndex(0)
-		displayHUD["hud_corpo_news_inkBorderWidget14"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(4)
-		
+	
+	if(result == false) then 
+		logme(1,err)
 	end
+
+	
+	pcall(function()
+		if(GameController["hudCorpoController"] ~= nil and displayHUD["hud_corpo"] == nil ) then
+			
+			displayHUD["hud_corpo"] = GameController["hudCorpoController"].root
+			
+			
+			
+			displayHUD["hud_corpo_market"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0)
+			displayHUD["hud_corpo_market_marketFluffIcon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_market_marketFluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(1)
+			displayHUD["hud_corpo_market_marketConnection"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(2)
+			displayHUD["hud_corpo_market_marketHolderIcon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(3)
+			displayHUD["hud_corpo_market_marketHolderFluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(4)
+			
+			displayHUD["hud_corpo_market_marketWindowWrapperA"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_container"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_marketText"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_marketWindow"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(1)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_marketMask"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(2)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_FluffTxt_bottom2"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(3)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_Flufftxt_Bottom"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(4)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_logoArasaka"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(5)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_FluffTxt_bottom3"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(6)
+			displayHUD["hud_corpo_market_marketWindowWrapperA_03_mt_bottfluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(5):GetWidgetByIndex(0):GetWidgetByIndex(7)
+			
+			displayHUD["hud_corpo_market_marketWindowWrapperB"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(6)
+			displayHUD["hud_corpo_market_marketWindowWrapperB_markerGraph"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_market_marketWindowWrapperB_marketWindow"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(1)
+			displayHUD["hud_corpo_market_marketWindowWrapperB_marketMask"] = GameController["hudCorpoController"].root:GetWidgetByIndex(0):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(2)
+			
+			displayHUD["hud_corpo_assistant"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1)
+			displayHUD["hud_corpo_assistant_header"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_assistant_text"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(1)
+			displayHUD["hud_corpo_assistant_connection"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(2)
+			displayHUD["hud_corpo_assistant_holderfluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(3)
+			displayHUD["hud_corpo_assistant_holdericon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(4)
+			displayHUD["hud_corpo_assistant_holderplate"] = GameController["hudCorpoController"].root:GetWidgetByIndex(1):GetWidgetByIndex(5)
+			
+			
+			
+			displayHUD["hud_corpo_stock"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2)
+			displayHUD["hud_corpo_stock_stockConnection"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_stock_stockFluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(1)
+			displayHUD["hud_corpo_stock_stockLogo"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(2)
+			displayHUD["hud_corpo_stock_stockHolderIcon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(3)
+			displayHUD["hud_corpo_stock_stockHolderFluff"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(4)
+			displayHUD["hud_corpo_stock_stockBorder"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(5)
+			displayHUD["hud_corpo_stock_marqueeUnit"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6)
+			
+			displayHUD["hud_corpo_stock_marqueeUnit_name_pet"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(2)
+			displayHUD["hud_corpo_stock_marqueeUnit_name_orb"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(5)
+			displayHUD["hud_corpo_stock_marqueeUnit_name_mil"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(8)
+			displayHUD["hud_corpo_stock_marqueeUnit_name_ara"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(11)
+			
+			displayHUD["hud_corpo_stock_marqueeUnit_value_pet"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_stock_marqueeUnit_value_orb"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(3)
+			displayHUD["hud_corpo_stock_marqueeUnit_value_mil"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(6)
+			displayHUD["hud_corpo_stock_marqueeUnit_value_ara"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(9)
+			
+			displayHUD["hud_corpo_stock_marqueeUnit_arrow_pet"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(1)
+			displayHUD["hud_corpo_stock_marqueeUnit_arrow_orb"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(4)
+			displayHUD["hud_corpo_stock_marqueeUnit_arrow_mil"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(7)
+			displayHUD["hud_corpo_stock_marqueeUnit_arrow_ara"] = GameController["hudCorpoController"].root:GetWidgetByIndex(2):GetWidgetByIndex(6):GetWidgetByIndex(0):GetWidgetByIndex(10)
+			
+			displayHUD["hud_corpo_logo"] = GameController["hudCorpoController"].root:GetWidgetByIndex(3)
+			
+			displayHUD["hud_corpo_news"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5)
+			displayHUD["hud_corpo_news_stockHolderIcon"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_news_hudFluffRight"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(1)
+			displayHUD["hud_corpo_news_title"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(2)
+			displayHUD["hud_corpo_news_inkFlexWidget9"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(3)
+			displayHUD["hud_corpo_news_content"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(3):GetWidgetByIndex(0)
+			displayHUD["hud_corpo_news_inkBorderWidget14"] = GameController["hudCorpoController"].root:GetWidgetByIndex(5):GetWidgetByIndex(4)
+			
+		end
 	end)
 	
 	-- local panzer = VehiclePanzerBootupUIQuestEvent.new()
@@ -418,22 +431,22 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	
 	-- Game.GetUISystem():QueueEvent(panzer)
 	pcall(function()
-	if(GameController["PanzerHUDGameController"] ~= nil) then
-		
-		
-		
-		
-	end
+		if(GameController["PanzerHUDGameController"] ~= nil) then
+			
+			
+			
+			
+		end
 	end)
 	
 	--Targeted entity
 	objLook = Game.GetTargetingSystem():GetLookAtObject(Game.GetPlayer(),false,false)
 	
 	if(objLook ~= nil) then
-	
-
-	
-	
+		
+		
+		
+		
 		if(objLook ~= nil) then
 			tarName = objLook:ToString()
 			--	debugPrint(10,tostring(objLook:GetHighLevelStateFromBlackboard()))
@@ -881,8 +894,8 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		
 		
 		refreshUIWidget()
-		
-		if curPos ~= nil and displayHUD["main_root_default"] ~= nil and displayHUD["posWidget"] ~= nil then
+	
+		if curPos ~= nil and displayHUD["main_root_default"] ~= nil then
 			if(enableLocation == true) then
 				
 				
@@ -990,41 +1003,45 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 							local gangslist = {}
 							if(#currentDistricts2.districtLabels > 1) then
 								local gangs = getGangfromDistrict(currentDistricts2.districtLabels[2],20)
+								
 								if(#gangs > 0) then
-								for i=1,#gangs do
-									if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
-										table.insert(gangslist,gangs[i])
+									for i=1,#gangs do
+										if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
+											table.insert(gangslist,gangs[i])
+											
+										end
 									end
-								end
 								end
 								else
 								local gangs = getGangfromDistrict(currentDistricts2.districtLabels[1],20)
+								
 								if(#gangs > 0) then
-								for i=1,#gangs do
-									if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
-										table.insert(gangslist,gangs[i])
-										
+									for i=1,#gangs do
+										if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
+											table.insert(gangslist,gangs[i])
+											
+										end
 									end
-								end
 								end
 								
 							end
 							
 							if(#gangslist > 0) then
-							for i,v in ipairs(gangslist) do
+								for i,v in ipairs(gangslist) do
+									
+									
+									local gang = getFactionByTag(v.tag)
+									
+									local top = (i*50)
+									locationWidgetPlace_top = locationWidgetFactionDisctrict_top + (i*50) + 50
+									
+									local isleader = (i==1)
+									
+									displayGangScoreWidget(getScoreKey("Affinity",v.tag),gang.Name,displayHUD["factionwidget"],top,isleader)
+									
+									
+								end
 								
-								
-								local gang = getFactionByTag(v.tag)
-								local top = (i*50)
-								locationWidgetPlace_top = locationWidgetFactionDisctrict_top + (i*50) + 50
-								
-								local isleader = (i==1)
-								
-								displayGangScoreWidget(getScoreKey("Affinity",v.tag),gang.Name,displayHUD["factionwidget"],top,isleader)
-								
-								
-							end
-							
 							end
 							
 							
@@ -1064,9 +1081,9 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	end
 	if (tick % 100 == 0) then --every 1 second
 		-- if(lastTargetKilled ~= nil)then
-			-- cyberscript.EntityManager["last_killed"].id = nil
-			-- cyberscript.EntityManager["last_killed"].tweak = "none"
-			-- lastTargetKilled = nil
+		-- cyberscript.EntityManager["last_killed"].id = nil
+		-- cyberscript.EntityManager["last_killed"].tweak = "none"
+		-- lastTargetKilled = nil
 		-- end
 	end
 	
@@ -1079,14 +1096,14 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 			if v.lock == false then	
 				enti = Game.FindEntityByID(v.id)
 				if(enti ~= nil and enti:isAttached() == false) then
-				
+					
 					despawnEntity(v.tag)
 				end
-			
-			
+				
+				
 			end
-		
-		
+			
+			
 		end
 		
 		if activeMetroDisplay == true then
@@ -1166,7 +1183,33 @@ function refresh(delta) -- update event (include thread refresh action and Quest
 					if(tick >= 61 and tick <= 62 and draw == false)then
 						
 						inGameInit()
+						if GetMod('MissingPersons') then 
+							MissingPersons =  GetMod("MissingPersons")
+							
+							if(MissingPersons.settings.DisableMod == true) then
+								updateUserSetting("moddisabled",true)
+								moddisabled = true
+								
+								print("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and  reload CET, then go in setting to enable Cyberscript")
+								spdlog.error("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and reload CET, then go in setting to enable Cyberscript")
+								if Game.GetPlayer() then
+									Game.GetPlayer():SetWarningMessage(getLang("CyberScript : MissingPersons Mod detected ! CyberScript will be disabled. For re-enable it, disable Missing Person and reload CET, then go in setting to enable Cyberscript"))
+								end
+								else
+								updateUserSetting("moddisabled",false)
+							end
+						end
 						
+						
+						if GetMod('corruptNCPD') then 
+							
+							
+							print("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript")
+							spdlog.error("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript")
+							if Game.GetPlayer() then
+								Game.GetPlayer():SetWarningMessage(getLang("CyberScript : corruptNCPD Mod detected ! CyberScript can override it and make it unstable. For use corruptNCPD, disable in setting Cyberscript"))
+							end
+						end
 					end
 					
 					if(file_exists("success.txt"))then
@@ -1865,7 +1908,7 @@ function doTriggeredEvent()
 		local event = arrayEvent[key].event
 		
 		if(event.way == "world") then
-		--print("test"..dump(event))
+			--print("test"..dump(event))
 			--debugPrint(4,"check for "..event.name)
 			--testTriggerRequirement(event.requirement,event.trigger)
 			--print(key)
@@ -2093,39 +2136,38 @@ function checkFixer()
 			
 			--print(currentfixer.Tag)
 			oldfixer = currentfixer
-		
-					
-					local obj = getEntityFromManager(currentfixer.Tag)
-					
-					
-					
-					
-					if(obj.id == nil) then -- if there is no entity
-							--print("spawn")
-						
-						local twkVehi = TweakDBID.new(currentfixer.NPCId)
-						
-						
-						spawnNPC(currentfixer.NPCId,"", currentfixer.Tag, currentfixer.LOC_X, currentfixer.LOC_Y, currentfixer.LOC_Z, 42, true, false, nil, false, nil)
-						
-						-- local obj = getEntityFromManager(currentfixer.Tag)
-						-- local enti = Game.FindEntityByID(obj.id)
-						-- lookAtPlayer(enti, 999999999)
-						
-						-- setFriendAgainst(currentfixer.Tag, "player")
-						
-					
-						if(currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 and fixerIsSpawn == false) then
-							
-							
-							runActionList(currentfixer.spawn_action, currentfixer.Tag.."_Spawn",nil,nil,currentfixer.Tag)
-							
-						end
-						
-						
-						
-					end	
+			
+			
+			local obj = getEntityFromManager(currentfixer.Tag)
+			
+			
+			
+			
+			if(obj.id == nil) then -- if there is no entity
+				--print("spawn")
 				
+				local twkVehi = TweakDBID.new(currentfixer.NPCId)
+				
+				
+				spawnNPC(currentfixer.NPCId,"", currentfixer.Tag, currentfixer.LOC_X, currentfixer.LOC_Y, currentfixer.LOC_Z, 42, true, false, nil, false, nil)
+				
+				-- local obj = getEntityFromManager(currentfixer.Tag)
+				-- local enti = Game.FindEntityByID(obj.id)
+				-- lookAtPlayer(enti, 999999999)
+				
+				-- setFriendAgainst(currentfixer.Tag, "player")
+				
+				
+				if(currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 and fixerIsSpawn == false) then
+					
+					
+					runActionList(currentfixer.spawn_action, currentfixer.Tag.."_Spawn",nil,nil,currentfixer.Tag)
+					
+				end
+				
+				
+				
+			end	
 			
 			
 			
@@ -2133,43 +2175,44 @@ function checkFixer()
 			
 			
 			
-		
+			
+			
 			
 		end
 		
-	else -- if we move away from fixer so currentfixer is nil
-	
-
-			Game.ChangeZoneIndicatorPublic()
+		else -- if we move away from fixer so currentfixer is nil
+		
+		
+		Game.ChangeZoneIndicatorPublic()
+		
+		if(oldfixer ~= nil) then
 			
-			if(oldfixer ~= nil) then
-				
-	
+			
 			local obj = getEntityFromManager(oldfixer.Tag)
-					
-					
-					
-					
+			
+			
+			
+			
 			if(obj.id ~= nil) then
-			despawnEntity(oldfixer.Tag)
-			
-			
-			
-			if(oldfixer ~= nil and oldfixer.despawn_action ~= nil and #oldfixer.despawn_action >0) then
+				despawnEntity(oldfixer.Tag)
 				
-				--doActionof(currentfixer.action,"interact")
-				runActionList(oldFixer.despawn_action, oldFixer.Tag.."_Despawn",nil, nil,currentfixer.Tag)
 				
+				
+				if(oldfixer ~= nil and oldfixer.despawn_action ~= nil and #oldfixer.despawn_action >0) then
+					
+					--doActionof(currentfixer.action,"interact")
+					runActionList(oldFixer.despawn_action, oldFixer.Tag.."_Despawn",nil, nil,currentfixer.Tag)
+					
+					
+					
+				end
+				
+				oldfixer = nil
 				
 				
 			end
-			
-		oldfixer = nil
-			
 			
 		end
-		
-			end
 		
 	end
 	
@@ -2234,62 +2277,14 @@ function checkNPC()
 		local npcpostion = getPositionFromParameter(npc.location)
 		
 		if(npcpostion.x ~= nil and npcpostion.y ~= nil and npcpostion.z~= nil)then
-		if( check3DPos(playerpos, npcpostion.x,  npcpostion.y,  npcpostion.z, npc.location.player_range) and getEntityFromManager(k).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
-			--if the npc is not spawned
-		
-			local tweakDBnpc =  npc.tweakDB
-			
-			if(tweakDBnpc== "district") then
+			if( check3DPos(playerpos, npcpostion.x,  npcpostion.y,  npcpostion.z, npc.location.player_range) and getEntityFromManager(k).id == nil and checkTriggerRequirement(npc.requirement,npc.triggers) ) then
+				--if the npc is not spawned
 				
-				local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
+				local tweakDBnpc =  npc.tweakDB
 				
-				if(#gangs == 0) then
+				if(tweakDBnpc== "district") then
 					
-					break
-					
-				end
-				
-				local gang = getFactionByTag(gangs[1].tag)
-				
-				if(#gang.SpawnableNPC > 0) then
-					local index = math.random(1,#gang.SpawnableNPC)
-					
-					tweakDBnpc = gang.SpawnableNPC[index]
-					else
-					break
-				end
-				
-				elseif (tweakDBnpc== "subdistrict") then
-				
-				local gangs = {}
-				
-				for i, test in ipairs(currentDistricts2.districtLabels) do
-					if i > 1 then
-						
-						
-						gangs = getGangfromDistrict(test,20)
-						
-						if(#gangs == 0) then
-							
-							break
-							
-						end
-					end
-				end
-				
-				local gang = getFactionByTag(gangs[1].tag)
-				
-				if(#gang.SpawnableNPC > 0) then
-					local index = math.random(1,#gang.SpawnableNPC)
-					
-					tweakDBnpc = gang.SpawnableNPC[index]
-					else
-					break
-				end
-				
-				if(tweakDBnpc== "districttag") then
-					
-					gangs = getGangfromDistrict(npc.locationtag,20)
+					local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
 					
 					if(#gangs == 0) then
 						
@@ -2307,11 +2302,23 @@ function checkNPC()
 						break
 					end
 					
-					elseif (tweakDBnpc== "subdistricttag") then
+					elseif (tweakDBnpc== "subdistrict") then
 					
 					local gangs = {}
 					
-					gangs = getGangfromDistrict(npc.locationtag,20)
+					for i, test in ipairs(currentDistricts2.districtLabels) do
+						if i > 1 then
+							
+							
+							gangs = getGangfromDistrict(test,20)
+							
+							if(#gangs == 0) then
+								
+								break
+								
+							end
+						end
+					end
 					
 					local gang = getFactionByTag(gangs[1].tag)
 					
@@ -2323,132 +2330,168 @@ function checkNPC()
 						break
 					end
 					
-					
-					
-					
-				end
-			end
-			
-			
-			spawnNPC(tweakDBnpc,"", npc.tag, npcpostion.x, npcpostion.y, npcpostion.z, 42, true, false, nil, false, npc.rotation)
-			
-			npc.isspawn=true
-			npc.init=false
-			
-			
-			else
-		
-			
-			
-			if(obj ~= nil and obj.id ~= nil) then 
-				local enti = Game.FindEntityByID(obj.id)	
-				
-				
-				if(enti ~= nil) then--entity exist 
-					
-					if((check3DPos(Game.GetPlayer():GetWorldPosition(), npcpostion.x,  npcpostion.y,  npcpostion.z, npc.location.player_range) and npc.spawnforced == false) or npc.spawnforced == true) then --ifplayer is in the location
+					if(tweakDBnpc== "districttag") then
 						
-						if(arrayCustomNPC[k].npc.init==false) then --if not initiaded
+						gangs = getGangfromDistrict(npc.locationtag,20)
+						
+						if(#gangs == 0) then
 							
-							local npc = arrayCustomNPC[k].npc
+							break
 							
-							if(npc.appeareance ~= nil or npc.appeareance ~= "" and arrayCustomNPC[k].npc.appearancesetted == false) then
+						end
+						
+						local gang = getFactionByTag(gangs[1].tag)
+						
+						if(#gang.SpawnableNPC > 0) then
+							local index = math.random(1,#gang.SpawnableNPC)
+							
+							tweakDBnpc = gang.SpawnableNPC[index]
+							else
+							break
+						end
+						
+						elseif (tweakDBnpc== "subdistricttag") then
+						
+						local gangs = {}
+						
+						gangs = getGangfromDistrict(npc.locationtag,20)
+						
+						local gang = getFactionByTag(gangs[1].tag)
+						
+						if(#gang.SpawnableNPC > 0) then
+							local index = math.random(1,#gang.SpawnableNPC)
+							
+							tweakDBnpc = gang.SpawnableNPC[index]
+							else
+							break
+						end
+						
+						
+						
+						
+					end
+				end
+				
+				
+				spawnNPC(tweakDBnpc,"", npc.tag, npcpostion.x, npcpostion.y, npcpostion.z, 42, true, false, nil, false, npc.rotation)
+				
+				npc.isspawn=true
+				npc.init=false
+				
+				
+				else
+				
+				
+				
+				if(obj ~= nil and obj.id ~= nil) then 
+					local enti = Game.FindEntityByID(obj.id)	
+					
+					
+					if(enti ~= nil) then--entity exist 
+						
+						if((check3DPos(Game.GetPlayer():GetWorldPosition(), npcpostion.x,  npcpostion.y,  npcpostion.z, npc.location.player_range) and npc.spawnforced == false) or npc.spawnforced == true) then --ifplayer is in the location
+							
+							if(arrayCustomNPC[k].npc.init==false) then --if not initiaded
 								
-								local obj = getEntityFromManager(npc.tag)
-								local enti = Game.FindEntityByID(obj.id)
-								if(enti ~= nil) then
+								local npc = arrayCustomNPC[k].npc
+								
+								if(npc.appeareance ~= nil or npc.appeareance ~= "" and arrayCustomNPC[k].npc.appearancesetted == false) then
 									
-									--getAppearance(enti)
-									setAppearance(enti,npc.appeareance)
-									arrayCustomNPC[k].npc.appearancesetted = true
+									local obj = getEntityFromManager(npc.tag)
+									local enti = Game.FindEntityByID(obj.id)
+									if(enti ~= nil) then
+										
+										--getAppearance(enti)
+										setAppearance(enti,npc.appeareance)
+										arrayCustomNPC[k].npc.appearancesetted = true
+									end
+									
+									
+								end
+								
+								if(workerTable[npc.tag.."_spawn"] == nil and #npc.spawnaction > 0 and npc.dospawnaction == true) then
+									
+									
+									
+									runActionList(npc.spawnaction, npc.tag.."_spawn", "interact",false,npc.tag)
+									
+								end
+								
+								if(workerTable[npc.tag.."_routine"] == nil and #npc.routineaction > 0 and npc.doroutineaction == true) then
+									runActionList(npc.routineaction, npc.tag.."_routine", "interact",false,npc.tag)
+									
 								end
 								
 								
+								arrayCustomNPC[k].npc.init = true
+								
+								else
+								
+								
+								
+								if(workerTable[npc.tag.."_routine"] == nil and npc.repeat_routine == true and #npc.routineaction > 0 and npc.doroutineaction == true) then
+									runActionList(npc.routineaction, npc.tag.."_routine", "interact",false,npc.tag)
+									--	debugPrint(4,"doing routine of "..npc.name)
+									
+								end
+								
+								
+								if (workerTable[npc.tag.."_death"] == nil and npc.deathaction ~= nil and #npc.deathaction > 0 and (enti:IsDead() == true or enti:IsActive() == false) and npc.dodeathaction == true)then
+									runActionList(npc.deathaction, npc.tag.."_death", "interact",false,npc.tag)
+									
+									npc.dodeathaction= false
+								end
 							end
 							
-							if(workerTable[npc.tag.."_spawn"] == nil and #npc.spawnaction > 0 and npc.dospawnaction == true) then
-								
-								
-								
-								runActionList(npc.spawnaction, npc.tag.."_spawn", "interact",false,npc.tag)
-								
-							end
-							
-							if(workerTable[npc.tag.."_routine"] == nil and #npc.routineaction > 0 and npc.doroutineaction == true) then
-								runActionList(npc.routineaction, npc.tag.."_routine", "interact",false,npc.tag)
-								
-							end
-							
-							
-							arrayCustomNPC[k].npc.init = true
 							
 							else
 							
 							
-							
-							if(workerTable[npc.tag.."_routine"] == nil and npc.repeat_routine == true and #npc.routineaction > 0 and npc.doroutineaction == true) then
-								runActionList(npc.routineaction, npc.tag.."_routine", "interact",false,npc.tag)
-								--	debugPrint(4,"doing routine of "..npc.name)
+							if(npc.auto_despawn == true) then
 								
-							end
-							
-							
-							if (workerTable[npc.tag.."_death"] == nil and npc.deathaction ~= nil and #npc.deathaction > 0 and (enti:IsDead() == true or enti:IsActive() == false) and npc.dodeathaction == true)then
-								runActionList(npc.deathaction, npc.tag.."_death", "interact",false,npc.tag)
+								arrayCustomNPC[k].npc.isspawn=false
+								arrayCustomNPC[k].npc.init=false
+								arrayCustomNPC[k].npc.appearancesetted = nil
 								
-								npc.dodeathaction= false
-							end
-						end
-						
-						
-						else
-						
-						
-						if(npc.auto_despawn == true) then
-							
-							arrayCustomNPC[k].npc.isspawn=false
-							arrayCustomNPC[k].npc.init=false
-							arrayCustomNPC[k].npc.appearancesetted = nil
-							
-							if(workerTable[npc.tag.."_spawn"] ~= nil) then
+								if(workerTable[npc.tag.."_spawn"] ~= nil) then
+									
+									workerTable[npc.tag.."_spawn"] = nil
+									
+								end
 								
-								workerTable[npc.tag.."_spawn"] = nil
+								if(workerTable[npc.tag.."_routine"] ~= nil) then
+									
+									workerTable[npc.tag.."_routine"] = nil
+									
+								end
 								
-							end
-							
-							if(workerTable[npc.tag.."_routine"] ~= nil) then
+								if(workerTable[npc.tag.."_death"] ~= nil) then
+									
+									workerTable[npc.tag.."_death"] = nil
+									
+								end
 								
-								workerTable[npc.tag.."_routine"] = nil
+								despawnEntity(npc.tag)
 								
-							end
-							
-							if(workerTable[npc.tag.."_death"] ~= nil) then
-								
-								workerTable[npc.tag.."_death"] = nil
-								
-							end
-							
-							despawnEntity(npc.tag)
-								
-							if(workerTable[npc.tag.."_despawn"] == nil and #npc.despawnaction > 0 and npc.dospawnaction == true) then
-								runActionList(npc.despawnaction, npc.tag.."_despawn", "interact",false,npc.tag)
+								if(workerTable[npc.tag.."_despawn"] == nil and #npc.despawnaction > 0 and npc.dospawnaction == true) then
+									runActionList(npc.despawnaction, npc.tag.."_despawn", "interact",false,npc.tag)
+									
+								end
 								
 							end
 							
 						end
 						
 					end
-					
 				end
+				
+				
+				
+				
 			end
 			
-			
-			
-		
-		end
-		
-		else
-		--print("error for npc working location. NPC : "..k)
+			else
+			--print("error for npc working location. NPC : "..k)
 		end
 		
 		
@@ -2532,7 +2575,7 @@ function getTriggeredActions()
 		local interact2 = arrayInteract[key].interact
 		
 		--testTriggerRequirement(interact2.requirement,interact2.trigger)
-		if(checkTriggerRequirement(interact2.requirement,interact2.trigger)) and (interact2.group == currentInteractGroup[currentInteractGroupIndex] or key == "open_datapack_group_ui") then
+		if(checkTriggerRequirement(interact2.requirement,interact2.trigger)) and (interact2.group == currentInteractGroup[currentInteractGroupIndex] or key == "default_open_datapack_group_ui") then
 			
 			--debugPrint(4,"check for "..interact2.name.." "..tostring(checkTriggerRequirement(interact2.requirement,interact2.trigger)))
 			table.insert(possibleinteractchunk, interact2)
@@ -3791,13 +3834,13 @@ end
 
 function getItemFromUserHousing(tag,X,Y,Z,HouseTag,ItemPath)
 	
-		for i=1,#currentSave.arrayHousing do
-			
-			if(currentSave.arrayHousing[i].Tag == tag and currentSave.arrayHousing[i].HouseTag == HouseTag and currentSave.arrayHousing[i].ItemPath == ItemPath) then
-				return currentSave.arrayHousing[i]
-			end
-			
+	for i=1,#currentSave.arrayHousing do
+		
+		if(currentSave.arrayHousing[i].Tag == tag and currentSave.arrayHousing[i].HouseTag == HouseTag and currentSave.arrayHousing[i].ItemPath == ItemPath) then
+			return currentSave.arrayHousing[i]
 		end
+		
+	end
 	
 	return nil
 end
@@ -3894,22 +3937,22 @@ function getTrueEntityFromManager(tag)
 	local enti = cyberscript.EntityManager[tag]
 	if(tag == "lookatentity") then
 		
-	
-	
-	
-	
+		
+		
+		
+		
 		local enti = cyberscript.EntityManager[cyberscript.EntityManager["lookatEntity"].tag]
 		
 		if(enti ~= nil) then
 			
-				return enti
+			return enti
 			
 		end	
 		
 		
 		
-	
-	
+		
+		
 	end
 	
 	if((enti ~= nil) and enti.tag == tag) then

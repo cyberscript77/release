@@ -783,5 +783,18 @@
 		"operator": ">=",
 		"helper": "This action will check the targeted data. Can be number, boolean or text \n Available Operator : < || <= || > || >= || != || = || contains || empty || notempty",
 		"helperTitle": "Score : Check Score"
-	}
+	},
+	{
+		"name": "entity_in_car",
+		"tag": "judy01",
+		"helper": "This trigger will be triggered when the targeted entity is in car",
+		"helperTitle": "Entity : In car"
+	},
+	{
+		"name": "entity_in_car_specific",
+		"tag": "judy01",
+		"value": "delamain",
+		"helper": "This trigger will be triggered when the targeted entity is in a specific car that name contains the name in it's ID",
+		"helperTitle": "Entity : In a specific car"
+	},
 ]
