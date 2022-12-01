@@ -221,6 +221,8 @@ function SaveLoading()
 	Jump_Height = getUserSettingWithDefault("Jump_Height",Jump_Height)
 	Double_Jump_Height = getUserSettingWithDefault("Double_Jump_Height",Double_Jump_Height)
 	moddisabled = getUserSettingWithDefault("moddisabled",moddisabled)
+	CurrentPOIDetectionRange = getUserSettingWithDefault("CurrentPOIDetectionRange",CurrentPOIDetectionRange)
+	AutoCheckPOI = getUserSettingWithDefault("AutoCheckPOI",AutoCheckPOI)
 	
 	SetFlatFromSetting()
 	

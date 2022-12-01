@@ -1271,6 +1271,16 @@ function makeNativeSettings()
 			updateUserSetting("AmbushMin", value)
 		end)
 		
+		nativeSettings.addSwitch("/CM/script", getLang("Experimental : Check Automatically the current Player's Point of Interest (Current POI)"), "Experimental : Check Automatically the current Player's Point of Interest (Current POI)", AutoCheckPOI, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			AutoCheckPOI = state
+			updateUserSetting("AutoCheckPOI", AutoCheckPOI)
+		end)
+		
+		nativeSettings.addRangeInt("/CM/script", getLang("Experimental : Automatic Point of Interest Detection Range"), getLang("Experimental : Automatic Point of Interest Detection Range"), 1, 100, 1, CurrentPOIDetectionRange, 10, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
+			CurrentPOIDetectionRange = value
+			updateUserSetting("CurrentPOIDetectionRange", value)
+		end)
+		
 		
 		nativeSettings.addSubcategory("/CM/hud",getLang("ui_setting_display"))
 		

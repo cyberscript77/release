@@ -2272,7 +2272,7 @@
 		"source_gang": "faction_mox",
 		"source_list": ["Vehicle.cs_savable_archer_hella_police_siren"],
 		"source_tag_helper": "Vehicle.cs_savable_archer_hella_police_siren||faction_mox||district_westbrook||NorthOaks",
-
+		
 		"source_use_rival": false,
 
 		"position": "at",
@@ -2304,6 +2304,7 @@
 
 		"amount": 1,
 		"isAV": false,
+		"fakeav":false,
 		"appears_from_behind": false,
 		"wait_for_vehicle": false,
 		"wait_for_vehicle_second": 7,

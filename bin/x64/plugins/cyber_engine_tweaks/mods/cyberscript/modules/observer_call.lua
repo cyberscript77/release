@@ -792,6 +792,27 @@ function SetOverrider()
 	end)
 	
 	
+	Override('VehiclesManagerDataHelper', 'GetVehicles', function(this,player, wrappedMethod)
+		print("test helper")
+		VehiclesManagerDataHelper_GetVehicles(this,player, wrappedMethod)
+	end)
+	
+	Override('VehiclesManagerPopupGameController', 'Activate', function(this, wrappedMethod)
+	
+		VehiclesManagerPopupGameController_Activate(this, wrappedMethod)
+	end)
+	
+	Override('VehiclesManagerPopupGameController', 'SetupData', function(this, wrappedMethod)
+	
+		VehiclesManagerPopupGameController_SetupData(this, wrappedMethod)
+	end)
+	
+	
+	Override('VehiclesManagerListItemController', 'OnDataChanged', function(this,value, wrappedMethod)
+	
+		VehiclesManagerListItemController_OnDataChanged(this,value, wrappedMethod)
+	end)
+	
 	--Vendors
 	
 	-- Override("VendorHubMenuGameController", "OnSetUserData", function(this,userData,wrappedMethod)

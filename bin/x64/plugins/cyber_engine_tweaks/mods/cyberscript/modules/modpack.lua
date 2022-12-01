@@ -896,6 +896,7 @@ end
 	arrayHousingTemplate = {}
 	arrayCharacterArchive = {}
 	arrayquickhack = {}
+	arrayGarage = {}
 	
 	if(arrayDatapack ~= nil) then
 	
@@ -1421,6 +1422,17 @@ end
 							arrayquickhack[value.tag].file = path
 							arrayquickhack[value.tag].datapack = datapackname
 						end
+						elseif(objtype == "garage") then
+						for key, value in pairs(tabl) do 
+							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							rootpath = path
+							
+							arrayGarage[value.tag] = {}
+							arrayGarage[value.tag].entry = value
+							arrayGarage[value.tag].file = path
+							arrayGarage[value.tag].datapack = datapackname
+						end
+					
 					end
 				end
 			

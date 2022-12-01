@@ -6870,9 +6870,130 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	end
 	---Scanner
+	function VehiclesManagerPopupGameController_SetupData(this, wrappedMethod)
+	if(moddisabled == true) then return wrappedMethod()  end
+	
+		local currnetData 
+		
+		local result = {}
+		
+		local vehicleRecord
+		local vehiclesList
+		vehiclesList = Game.GetVehicleSystem():GetPlayerUnlockedVehicles()
+		
+		
+		for i,vehicle in ipairs(vehiclesList) do
+		
+		  if TDBID.IsValid(vehicle.recordID) then
+			vehicleRecord = TweakDBInterface.GetVehicleRecord(vehicle.recordID)
+			currnetData =  VehicleListItemData.new()
+			currnetData.displayName = vehicleRecord:DisplayName()
+			currnetData.icon = vehicleRecord:Icon()
+			currnetData.data = vehicle
+			table.insert(result, currnetData)
+		  end
+		
+		end
+		
+		
+		for k,data in pairs(arrayGarage) do
+		
+			local vehicle = data.entry
+			
+			currnetData =  VehicleListItemData.new()
+			currnetData.displayName = vehicle.name
+			if(vehicle.icon ~= nil) then
+				currnetData.icon = TweakDBInterface.GetUIIconRecord("UIIcon."..vehicle.icon)
+			else
+				currnetData.icon = TweakDBInterface.GetUIIconRecord("UIIcon.".."ItemIcon")
+			end
+			local vehiclePlayerVehicle = vehiclePlayerVehicle.new()
+			CName.add(vehicle.tag)
+			
+			
+			vehiclePlayerVehicle.name = CName.new(vehicle.tag)
+			vehiclePlayerVehicle.recordID = TweakDBID.new(vehicle.tweak)
+			vehiclePlayerVehicle.vehicleType = vehicle.type
+			vehiclePlayerVehicle.isUnlocked  = checkTriggerRequirement(vehicle.requirement,vehicle.trigger)
+
+			currnetData.data = vehiclePlayerVehicle
+			print(dump(vehicle))
+			print(dump(vehiclePlayerVehicle))
+			if(vehiclePlayerVehicle.isUnlocked) then
+			
+				table.insert(result, currnetData)
+			end
+		  end
+		
+		
+		print(dump(result))
+		for i,v in ipairs(result) do
+		
+			print(GameDump(v))
+		
+		end
+		
+		
+		this.dataView:EnableSorting()
+		this.dataSource:Reset(result)
+	
+	
+	
+	
+	
+	
+	end
 
 
+	function VehiclesManagerListItemController_OnDataChanged(this,value, wrappedMethod)
+		 this.vehicleData = FromVariant(value)
+		 if(arrayGarage[NameToString(this.vehicleData.data.name)] ~= nil) then
+				
+				local myvehicle = arrayGarage[NameToString(this.vehicleData.data.name)].entry
+				print(dump(myvehicle))
+					
+				inkTextRef.SetText(this.label, myvehicle.name)
+					
+		else
+		 
+		 
+			inkTextRef.SetLocalizedTextScript(this.label, this.vehicleData.displayName)
+			
 
+		end
+		
+		
+		if this.vehicleData.data.vehicleType == gamedataVehicleType.Bike then
+		  inkImageRef.SetTexturePart(this.typeIcon, "motorcycle")
+		else 
+		  inkImageRef.SetTexturePart(this.typeIcon, "car")
+		end
+	end
+	
+	function VehiclesManagerPopupGameController_Activate(this, wrappedMethod)
+		if(moddisabled == true) then return wrappedMethod()  end
+			
+			
+		   local selectedItem = this.listController:GetSelectedItem()
+		   
+			local vehicleData = selectedItem:GetVehicleData()
+			print(GameDump(vehicleData))
+			print(GameDump(vehicleData.data))
+			if(arrayGarage[NameToString(vehicleData.data.name)] ~= nil) then
+			
+				local myvehicle = arrayGarage[NameToString(vehicleData.data.name)].entry
+				print(dump(myvehicle))
+				runActionList(myvehicle.action,myvehicle.tag,"interact",false,"player")
+				this:Close()
+			else
+			
+				wrappedMethod()
+			
+			end
+			
+		
+		
+	end
 
 function WorldMapMenuGameController_ShowGangsInfo(self,district)
 		if(moddisabled == true) then return  end
@@ -7235,7 +7356,7 @@ function listenPlayerInput(action)
 		if (AVisIn == true) then
 			AVinput.keyPressed = false
 			--back/forward
-			
+		
 			if  actionName == 'world_map_menu_move_vertical' or actionName == 'left_stick_y'then
 				if actionType == 'BUTTON_HOLD_PROGRESS' or (actionType == 'AXIS_CHANGE' and actionValue > 0) then
 					AVinput.currentDirections.forward = true
@@ -7250,50 +7371,82 @@ function listenPlayerInput(action)
 					AVinput.currentDirections.backwards = false
 					AVinput.currentDirections.forward = false
 				end
+			end
+			
 				--left/right - rollleft/rollright	
-				elseif actionName == 'world_map_menu_move_horizontal' or actionName == 'left_stick_x'  then
+			if actionName == 'world_map_menu_move_horizontal' or actionName == 'left_stick_x'  then
 				if (actionType == 'AXIS_CHANGE' and actionValue == -1) or (actionType == 'BUTTON_HOLD_PROGRESS' or actionValue < -0.6)then
 					AVinput.currentDirections.right = true
-					AVinput.currentDirections.rollleft = true
+					
 					AVinput.currentDirections.left = false
-					AVinput.currentDirections.rollleft = false
+					
 					elseif (actionType == 'AXIS_CHANGE' and actionValue == 1) or (actionType == 'BUTTON_HOLD_PROGRESS' or actionValue > 0.6) then
 					AVinput.currentDirections.left = true
-					AVinput.currentDirections.rollright = true
+					
 					AVinput.currentDirections.right = false
-					AVinput.currentDirections.rollright = false
+					
 					------print"Working mate right")
 					elseif (actionType == 'AXIS_CHANGE' and actionValue == 0) or (actionType == 'BUTTON_RELEASED' and (actionValue < 0.6 and actionValue > -0.6)) then
 					AVinput.currentDirections.right = false
 					AVinput.currentDirections.left = false
-					AVinput.currentDirections.rollleft = false
-					AVinput.currentDirections.rollright = false
-					------print"Stop Working mate")
+					
 				end
+			end
 				--up down
-				elseif actionName == 'ToggleSprint' or actionName == 'ToggleVehCamera' or actionName == 'left_trigger'then
+			if actionName == 'ToggleSprint' or actionName == 'ToggleVehCamera' or actionName == 'left_trigger'then
 				if actionType == 'BUTTON_PRESSED' or (actionType == 'AXIS_CHANGE' and actionValue > 0) then
 					AVinput.currentDirections.down = true
 					AVinput.currentDirections.up = false
 					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue == 0) then
 					AVinput.currentDirections.down = false
 				end
-				elseif actionName == 'UI_Skip' or actionName == 'right_trigger'then
+			end
+			
+			if actionName == "VisionHold" then
+				
+				print(actionName)
+				print(actionType)
+					
+				if actionType == 'BUTTON_PRESSED' or (actionType == 'AXIS_CHANGE' and actionValue > 0) then
+					AVinput.currentDirections.rollright = true
+					AVinput.currentDirections.rollleft = false
+					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue == 0) then
+					AVinput.currentDirections.rollright = false
+					
+				end
+			end
+			
+			
+			if actionName == "DescriptionChange" then
+				
+				if actionType == 'BUTTON_PRESSED' or (actionType == 'AXIS_CHANGE' and actionValue > 0) then
+					AVinput.currentDirections.rollleft = true
+					AVinput.currentDirections.rollright = false
+					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue == 0) then
+					AVinput.currentDirections.rollleft = false
+					
+				end
+			end
+				
+				
+			if actionName == 'UI_Skip' or actionName == 'right_trigger'then
 				if actionType == 'BUTTON_PRESSED' or (actionType == 'AXIS_CHANGE' and actionValue ==1) then
 					AVinput.currentDirections.up = true
 					AVinput.currentDirections.down = false
 					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue < 1) then
 					AVinput.currentDirections.up = false
 				end
-				elseif actionName == 'Exit' then
+			end
+			if actionName == 'Exit' then
 				if actionType == 'BUTTON_PRESSED'then
 					AVinput.exit = true
 				end
 			end
 			AVinput.keyPressed = false
+			AVinput.isMoving = false
 			for key, v in pairs(AVinput.currentDirections) do
 				if v == true then
-					------printkey)
+					print("toto"..key)
 					AVinput.isMoving = true
 					AVinput.keyPressed = true
 					if(key == "forward" or key == "backwards") then

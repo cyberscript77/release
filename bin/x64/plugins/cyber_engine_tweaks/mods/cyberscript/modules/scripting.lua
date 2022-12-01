@@ -32,6 +32,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	player = Game.GetPlayer()
 	currentTime = getGameTime()
 	curPos = player:GetWorldPosition()
+	
 	next_ambush = next_ambush + 1	
 	loadCustomPlace()
 	itemMover()
@@ -458,7 +459,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				openCompanion, gangscore, lookatgang = checkAttitudeByGangScore(objLook)
 				
 				
-				
+			end
 				
 				local obj = getEntityFromManagerById(objLook:GetEntityID())
 				
@@ -469,26 +470,26 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 					
 					objLook:MarkAsQuest(obj.isquest)
 					
-					else
+				else
 					
 					
-					cyberscript.EntityManager["lookatentity"].tag = nil
+					cyberscript.EntityManager["lookatentity"].tag = ""
 					
 					if cyberscript.EntityManager["lookatnpc"].isquest == nil then cyberscript.EntityManager["lookatnpc"].isquest = false end
 					
 					objLook:MarkAsQuest(cyberscript.EntityManager["lookatnpc"].isquest)
 					cyberscript.EntityManager["lookatnpc"].tweak = obj.tweak
+					cyberscript.EntityManager["lookatnpc"].id = nil
+					cyberscript.EntityManager["lookatnpc"].id = objLook:GetEntityID()
 					
 				end
 				
-				cyberscript.EntityManager["lookatnpc"].id = nil
 				
-				cyberscript.EntityManager["lookatnpc"].id = objLook:GetEntityID()
 				
 				
 				
 				-- end
-			end
+			
 			objLookIsVehicule = objLook:IsVehicle()
 			local obj = getEntityFromManagerById(objLook:GetEntityID())
 			
@@ -497,13 +498,13 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 			openCompanion = false
 			objLookIsVehicule = false
 		end
-		else
+	else
 		
 		
 		cyberscript.EntityManager["lookatnpc"].id = nil
 		cyberscript.EntityManager["lookatnpc"].tweak = "None"
 		currentScannerItem = nil
-		cyberscript.EntityManager["lookatentity"].tag = nil
+		cyberscript.EntityManager["lookatentity"].tag = ""
 		
 		openCompanion = false
 		objLookIsVehicule = false
@@ -565,14 +566,14 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				local fppComp = Game.GetPlayer():GetFPPCameraComponent()
 				
 				local bool = false
-				bool = IsPlaying("env")
-				if(bool == false) then
-					local sound = getSoundByNameNamespace("av_engine.mp3","av")
-					if(sound ~= nil) then
-						local path = cyberscript.soundpath..sound.path
-						PlaySound(sound.name,path,"env",100)
-					end
-				end
+				-- bool = IsPlaying("env")
+				-- if(bool == false) then
+					-- local sound = getSoundByNameNamespace("av_engine.mp3","av")
+					-- if(sound ~= nil) then
+						-- local path = cyberscript.soundpath..sound.path
+						-- PlaySound(sound.name,path,"env",100)
+					-- end
+				-- end
 				
 				else
 				if(obj.id == nil) then
@@ -595,9 +596,10 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		if AVisIn == true and inVehicule == true then
 			local fppComp = Game.GetPlayer():GetFPPCameraComponent()
 			fppComp:SetLocalPosition(Vector4:new(0.0, 0.0, 0.0, 1.0))
-			Stop("env")
+			-- Stop("env")
 			if(AVseat ~= nil) then
 				UnsetSeat("player",false, AVseat)
+				Game.RemoveEffectPlayer("GameplayRestriction.NoScanning")
 				AVseat = nil
 				Cron.After(1, function()
 					
@@ -623,31 +625,36 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 			end
 		end
 	end
+	
 	if (AVinput.isMoving == true and AVisIn and AVinput.keyPressed == true ) then
 		
 		fly(AVinput.currentDirections, 0)
-		elseif (AVinput.isMoving == true and AVinput.keyPressed == false and AVisIn) then
+	
+	end
+	
+	if (AVinput.isMoving == true and AVisIn and AVinput.keyPressed == false ) then
 		if AVspeed > 0.3 then
-			AVspeed = AVspeed - 0.05
-			if AVinput.lastInput ~= "" then
-				debugPrint(1,AVinput.lastInput)
-				if AVinput.lastInput == "forward" then
-					AVinput.currentDirections.forward = true
-					fly(AVinput.currentDirections, 0)
-				end
-				if AVinput.lastInput == "backwards" then
-					AVinput.currentDirections.backwards = true
-					fly(AVinput.currentDirections, 0)
-				end
-				else
-				AVinput.isMoving = false
-				AVinput.keyPressed = false
-				AVinput.currentDirections.backwards = false
-				AVinput.currentDirections.forward = false
-				AVinput.lastInput = ""
-			end
-			else
-			AVinput.isMoving = false
+			--AVspeed = AVspeed - 0.05
+			print("here")
+			-- if AVinput.lastInput ~= "" then
+				-- debugPrint(1,AVinput.lastInput)
+				-- if AVinput.lastInput == "forward" then
+					-- AVinput.currentDirections.forward = true
+					-- fly(AVinput.currentDirections, 0)
+				-- end
+				-- if AVinput.lastInput == "backwards" then
+					-- AVinput.currentDirections.backwards = true
+					-- fly(AVinput.currentDirections, 0)
+				-- end
+				-- else
+				-- AVinput.isMoving = false
+				-- AVinput.keyPressed = false
+				-- AVinput.currentDirections.backwards = false
+				-- AVinput.currentDirections.forward = false
+				-- AVinput.lastInput = ""
+			-- end
+		end
+			
 			AVinput.keyPressed = false
 			AVinput.currentDirections.backwards = false
 			AVinput.currentDirections.forward = false
@@ -671,7 +678,10 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				end
 			end
 		end
-		elseif(AVisIn) then
+	
+	if(AVinput.isMoving == false and AVisIn) then
+	
+		
 		AVinput.isMoving = false
 		AVinput.currentDirections.backwards = false
 		AVinput.currentDirections.forward = false
@@ -691,12 +701,13 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				newAngle.yaw = AVyaw
 				newAngle.roll = AVroll
 				newAngle.pitch = AVPitch
-				teleportTo(enti, enti:GetWorldPosition(), newAngle, false)
+				teleportTo(enti, enti:GetWorldPosition(), newAngle, false,obj)
 			end
 		end
 		
-		local speede = math.floor(AVspeed*10)
-		setScore("av","speed",speede)
+		-- local speede = math.floor(AVspeed*10)
+		-- setScore("av","speed",speede)
+		
 	end
 	
 	--Pause Menu and Ambush timer
@@ -841,8 +852,10 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		end
 	end
 	
-	--Record Location
-	
+	--POI Location
+	if(getUserSetting("AutoCheckPOI") == true) then
+		currentPOI = FindPOI(nil,nil,nil,inVehicule,nil,nil,true,getUserSetting("CurrentPOIDetectionRange"),nil,nil,nil)
+	end
 	
 	--Dialog check
 	if(currentDialogHub ~= nil) then
@@ -1079,13 +1092,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		
 		
 	end
-	if (tick % 100 == 0) then --every 1 second
-		-- if(lastTargetKilled ~= nil)then
-		-- cyberscript.EntityManager["last_killed"].id = nil
-		-- cyberscript.EntityManager["last_killed"].tweak = "none"
-		-- lastTargetKilled = nil
-		-- end
-	end
+	
 	
 	if (tick % 60 == 0) then --every 1 second
 		getTriggeredActions()
@@ -1117,9 +1124,11 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		checkFixer()
 		
 	end
+	
 	if (tick % 120 == 0) then --every 2 second
 		playRadio()
 	end
+	
 	if (tick % 180 == 0) then --every 3 second
 		TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 		getOsTimeHHmm()
@@ -1137,37 +1146,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 			end
 		end
 	end
-	if (tick % 3600 == 0) then --every 3 second
-		-- if(GameController["BraindanceGameController"] == nil or GameController["TutorialPopupGameController"]== nil or GameController["IncomingCallGameController"]==nil or GameController["ChattersGameController"]==nil or GameController["SubtitlesGameController"] == nil or GameController["MessengerDialogViewController"]==nil or LinkController==nil) then
-		-- Game.GetPlayer():SetWarningMessage(getLang("missingcontroller"))
-		-- if(GameController["BraindanceGameController"] == nil)then
-		-- debugPrint(1,"CyberScript : BraindanceGameController is missing !")
-		-- end
-		-- if(GameController["TutorialPopupGameController"] == nil)then
-		-- debugPrint(1,"CyberScript : TutorialPopupGameController is missing !")
-		-- end
-		-- if(GameController["IncomingCallGameController"] == nil)then
-		-- debugPrint(1,"CyberScript : IncomingCallGameController is missing !")
-		-- end
-		-- if(GameController["ShardNotificationController"] == nil)then
-		-- debugPrint(1,"CyberScript : ShardNotificationController is missing !")
-		-- end
-		-- if(GameController["ChattersGameController"] == nil)then
-		-- debugPrint(1,"CyberScript : ChattersGameController is missing !")
-		-- end
-		
-		-- if(GameController["MessengerDialogViewController"] == nil)then
-		-- debugPrint(1,"CyberScript : MessengerDialogViewController is missing !")
-		-- end
-		-- if(LinkController == nil)then
-		-- debugPrint(1,"CyberScript : LinkController is missing !")
-		-- end
-		
-		-- end
-	end
-	if(tick % 18000 == 0) then
-		SalaryIsPossible = true
-	end
+	
 	
 	
 end
@@ -2500,7 +2479,7 @@ function checkNPC()
 	
 end
 
-function checkValue(operator,value1,value2)
+function checkValue(operator,value1,value2, min, max)
 	return (
 		(value1 ~= nil and value2 ~= nil and 
 			(
@@ -2509,7 +2488,17 @@ function checkValue(operator,value1,value2)
 				(operator == ">" and value1 > value2) or
 				(operator == ">=" and value1 >= value2) or
 				(operator == "!=" and value1 ~= value2) or 
-				(operator == "=" and value1 == value2)
+				(operator == "=" and value1 == value2) or
+				
+				(operator == "><" and min ~= nil and max ~= nil and value1 > min and value1 < max ) or
+				(operator == ">=<" and min ~= nil and max ~= nil and value1 >= min and value1 < max ) or
+				(operator == "><=" and min ~= nil and max ~= nil and value1 > min and value1 <= max ) or
+				(operator == ">=<=" and min ~= nil and max ~= nil and value1 >= min and value1 <= max ) or
+				
+				(operator == "<>" and min ~= nil and max ~= nil and (value1 < min or value1 > max )) or
+				(operator == "<=>" and min ~= nil and max ~= nil and (value1 <= min or value1 > max )) or
+				(operator == "<>=" and min ~= nil and max ~= nil and (value1 < min or value1 >= max )) or
+				(operator == "<=>=" and min ~= nil and max ~= nil and (value1 <= min or value1 >= max )) 
 			)
 		) or
 		(operator == "empty" and value1 == nil) or
@@ -3007,9 +2996,10 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 					then
 					
 					
-					
-					
-					table.insert(currentpoilist,v.poi.locations[y])
+					local location =  deepcopy(v.poi.locations[y],nil)
+					location.parent = deepcopy(v.poi,nil)
+					location.parent.locations = nil
+					table.insert(currentpoilist,location)
 					
 					
 					
@@ -3036,7 +3026,7 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 		currentpoi = currentpoilist[math.random(#currentpoilist)]
 		
 		return currentpoi
-		else
+	else
 		return nil
 	end
 	

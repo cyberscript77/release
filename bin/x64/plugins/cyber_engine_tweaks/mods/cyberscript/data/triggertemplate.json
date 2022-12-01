@@ -482,28 +482,7 @@
 		"helper": "This trigger will be triggered when you has complete a quest of the game (by the fact)",
 		"helperTitle": "Quest : Game Quest is completed"
 	},
-	{
-		"name": "custom_condition",
-		"value": "mycustomScore",
-		"score": 50,
-		"helper": "This trigger will be triggered when the custom score (value) has reach the score",
-		"helperTitle": "Score : Custom Score"
-	},
-	{
-		"name": "custom_condition_higher_or_equals",
-		"value": "mycustomScore",
-		"score": 50,
-		"helper": "This trigger will be triggered when the custom score (value) is higher or equals to the score",
-		"helperTitle": "Score : Custom Score higher or equals"
-	},
-	{
-		"name": "custom_variable",
-		"variable": "mycustomVariable",
-		"key": "mycustomVariable",
-		"value": "myvarvalue",
-		"helper": "This trigger will be triggered when the value of the key of custom variable is the same that trigger value",
-		"helperTitle": "Score : Custom Variable"
-	},
+
 	{
 		"name": "gameVolume",
 		"value": "SfxVolume",
@@ -670,15 +649,7 @@
 		"helperTitle": "Entity : Last Killed Entity have Gang score"
 	},
 
-	{
-		"name": "check_score",
-		"value": "myScore",
-		"key": "myScoreKey",
-		"score": 50,
-		"operator": "=",
-		"helper": "This action will check the targeted score key value \n Available Operator : < || <= || > || >= || != || = ",
-		"helperTitle": "Score : Check Score"
-	},
+
 
 	{
 		"name": "last_killed_entity_is_in_specific_gang",

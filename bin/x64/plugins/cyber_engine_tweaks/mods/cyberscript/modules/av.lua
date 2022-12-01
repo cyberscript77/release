@@ -1,6 +1,12 @@
 debugPrint(3,"CyberScript: AV module loaded")
 cyberscript.module = cyberscript.module +1
 
+AVspeed = 0.5
+maxcollisionattemp = 5
+attempt = 0
+yawvelocity =  2
+rollvelocity = 0.70
+returnrollvelocity = 0.50
 --TAKEN AND ADAPTED FROM FREEFLY, This mod was created by keanuWheeze from CP2077 Modding Tools Discord. Check his page : https://www.nexusmods.com/cyberpunk2077/mods/780?tab=files
 
 
@@ -14,7 +20,7 @@ function fly(directions, angle)
 	local newPos = vehicules:GetWorldPosition()
 	
 	local record = vehicules:GetRecord()
-	
+	Game.ApplyEffectOnPlayer("GameplayRestriction.NoScanning")
 	
 	
 	local uiData = record:VehicleUIData()
@@ -61,7 +67,7 @@ function fly(directions, angle)
 			
 			
 			for directionKey, state in pairs(directions) do
-				if state == true and (directionKey ~= "left" or directionKey ~= "right") then
+				if state == true and (directionKey ~= "left" or directionKey ~= "right") and (directionKey ~= "rollleft" or directionKey ~= "rolllright") then
 				
 					if((directionKey=="forward" or directionKey=="backwards") or entityTag == "fake_av") then
 						
@@ -108,7 +114,7 @@ function fly(directions, angle)
 			newAngle.roll = AVroll
 			newAngle.pitch = AVPitch
 			
-			teleportTo(enti, newPos, newAngle, false)
+			teleportTo(enti, newPos, newAngle, false,obj)
 			
 			end
 			
@@ -146,13 +152,25 @@ function calculateNewPos(direction, newPos, vehicule,mass)
 		from.w
 	)
 	
+	-- local filters = {
+		
+		-- 'Static', -- Buildings, Concrete Roads, Crates, etc.
+		
+		-- 'Terrain'
+		
+	-- }
 	local filters = {
-		
+		-- 'Dynamic', -- Movable Objects
+		-- 'Vehicle',
 		'Static', -- Buildings, Concrete Roads, Crates, etc.
-		
-		'Terrain'
-		
+		'Water',
+		'Terrain',
+		-- 'PlayerBlocker', -- Trees, Billboards, Barriers
 	}
+
+	local results = {}
+
+	
 	
 	
 	
@@ -193,24 +211,43 @@ function calculateNewPos(direction, newPos, vehicule,mass)
 			from.w
 		)
 		
-		filters = {'Terrain'}
+	--	filters = {'Terrain'}
 		
 	end
-	
-	
-	
-	
 	
 	for _, filter in ipairs(filters) do
 		local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
 		
 		if success then
 			collision = true
-			--debugPrint(2,"collision"..filter)
+			
+			if(filter == "Static") then
+				collision = false
+				attempt = attempt+1
+			
+			else
+			
+				attempt = 0
+			
+			end
+			
+			if(attempt > maxcollisionattemp) then
+			
+				collision = true
+				
+				print("direction "..direction.."normal"..tostring(result.normal))
+				print("direction "..direction.."material"..tostring(result.material))
+				print("direction "..direction.."filter"..tostring(filter))
+				
+			end
+			
 		end
 	end
 	
-	if direction == "forward" and (collision == false or collision == true)  then
+	
+	
+	
+	if direction == "forward" and (collision == false)  then
 		direc = getForwardPosition(vehicule, AVspeed)
 		
 		
@@ -274,9 +311,13 @@ function calculateNewPos(direction, newPos, vehicule,mass)
 	
 	if collision == true then
 		AVspeed = 0.3
+		
 		else
 		AVspeed =  getvelocity(AVspeed,AVVelocity,mass)
+		
 	end
+	
+	
 	
 	return newPos
 end
@@ -285,10 +326,11 @@ function getvelocity(speed,velocity,mass)
 
 local minmass = mass/1000
 
-local massveloce = minmass * 0.001
+local massveloce = minmass * 0.01
 
 local result = speed + (velocity-massveloce)
-
+if(result < 0) then result = 0 - result end
+print(result)
 return result
 
 end
@@ -297,36 +339,58 @@ function calculateNewAngle(direction)
 	
 	
 	--debugPrint(2,direction)
+	if direction == "right" or direction == "rolllright" or direction == "left" or direction == "rollleft" then
+		
+		
+		
+		
+	if direction == "left" then
+		
+		AVyaw = AVyaw - yawvelocity
+		AVroll = AVroll+rollvelocity
+		AVrollCam = -1
+	end
+	
+	if direction == "rollleft"  then
+		
+		
+		AVroll = AVroll+rollvelocity
+		AVrollCam = -1
+	end
+	
 	if direction == "right"  then
 		
-		AVyaw = AVyaw + 0.7
-		AVroll = AVroll-0.15
-		AVrollCam = 1
-		
-		
-        elseif direction == "left"  then
-		
-		AVyaw = AVyaw - 0.7
-		AVroll = AVroll+0.15
+		AVyaw = AVyaw + yawvelocity
+		AVroll = AVroll-rollvelocity
 		AVrollCam = -1
+	end
+	
+	if direction == "rolllright" then
 		
+		
+		AVroll = AVroll-rollvelocity
+		AVrollCam = -1
+	end
 		
 	   
 		
-		else
-
 		
-	if(AVroll ~= 0) then
-			
-			if(AVroll > 0) then
-				AVroll=AVroll  -  0.05
-				else
+else
+		
+	-- if(AVroll > 1 or AVroll <-1 ) then
+			-- print("returning")
+			-- if(AVroll > 0) then
+				-- AVroll=AVroll  -  returnrollvelocity
+				-- else
 				
-				AVroll= AVroll +  0.05
-			end
-		end
+				-- AVroll= AVroll +  returnrollvelocity
+			-- end
+		-- else
 		
-		end
+		-- AVroll = 0
+		
+		-- end
+	 end
 		
 	
 	

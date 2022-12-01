@@ -1870,7 +1870,7 @@ if actionRegion then
 	
 	
 	
-	function teleportTo(objlook, position, rotation, isplayer)
+	function teleportTo(objlook, position, rotation, isplayer,obj)
 		--debugPrint(2,rotation)
 		if rotation == nil then
 			
@@ -1904,8 +1904,11 @@ if actionRegion then
 					-- debugPrint(2,position.y)
 					-- debugPrint(2,position.z)
 					-- debugPrint(2,rot)
-					rot.roll = 0
-					rot.pitch = 0
+					
+					if(obj.isAV == false) then
+						rot.roll = 0
+						rot.pitch = 0
+					end
 					Game.GetTeleportationFacility():Teleport(objlook, Vector4.new(position.x, position.y, position.z,1), rot)
 					-- debugPrint(2,"ok")
 					else
@@ -1920,7 +1923,7 @@ if actionRegion then
 						if(isplayer) then
 							debugPrint(10,tostring(rot.pitch))
 							
-							
+								print("TP Player")
 							Game.GetTeleportationFacility():Teleport(Game.GetPlayer(), Vector4.new(position.x, position.y, position.z,1) , rot)
 							Game.GetPlayer():GetFPPCameraComponent().pitchMin = rot.pitch - 0.01
 							Game.GetPlayer():GetFPPCameraComponent().pitchMax = rot.pitch
@@ -1958,6 +1961,7 @@ if actionRegion then
 			if(item == nil) then
 				rot.roll = 0
 				rot.pitch = 0
+				print("TP Other")
 				Game.GetTeleportationFacility():Teleport(objlook, Vector4.new(position.x, position.y, position.z,1) , rot)
 			end
 			
@@ -2812,7 +2816,7 @@ if vehiculeRegion then
 	--2 beta
 	--3 prevention
 	
-	function spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second)
+	function spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second,fakeav)
 		
 		if (('string' == type(chara)) and (string.match(tostring(chara), "AMM_Vehicle.") == nil or (string.match(tostring(chara), "AMM_Vehicle.") ~= nil and AMM ~= nil)  )  )then
 			
@@ -3024,6 +3028,7 @@ if vehiculeRegion then
 			entity.tweak = chara
 			entity.takenSeat = {}
 			entity.isAV = isAV
+			entity.fakeAV = fakeav
 			entity.name = chara
 			entity.isprevention = spawn_system == 3
 			entity.fromgarage = spawn_system == 1
@@ -3041,7 +3046,66 @@ if vehiculeRegion then
 			cyberscript.EntityManager[entity.tag] = entity
 			cyberscript.EntityManager["last_spawned"].tag=tag
 			
-			
+			if(entity.isAV == true) then
+				local group =getGroupfromManager("AV")
+				if(group.entities == nil) then
+					group.entities = {}
+				end
+				debugPrint(2,"addedAV"..entity.tag)
+				table.insert(group.entities,entity.tag)
+				local script = {}
+				local action = {}
+				if(entity.fakeAV ~= nil and entity.fakeAV == true) then
+					
+					local parentpos = vehi:GetWorldPosition()
+					spawnVehicleV2("Vehicle.v_sportbike1_yaiba_kusanagi","","fake_av", parentpos.x, parentpos.y ,parentpos.z,99,3,true,false,false,false, 0)
+					table.insert(group.entities,"fake_av")
+				
+				
+					
+					
+					
+					action = {}
+					action.name = "wait_second"
+					action.value = 3
+					table.insert(script,action)
+					
+					action = {}
+					action.name = "entity_set_seat"
+					action.tag = "player"
+					action.vehicle = "fake_av"
+					action.seat = "seat_front_left"
+					table.insert(script,action)
+					
+					action = {}
+					action.name = "change_custom_condition"
+					action.value = "av_cockpit"
+					action.score = 0
+					
+					action = {}
+					action.name = "change_camera_position"
+					action.x = 0
+					action.y = -15
+					action.z = 2
+					
+					
+					table.insert(script,action)
+					
+					else
+					action = {}
+					action.name = "vehicle_change_doors"
+					action.value = "open"
+					action.tag = entity.tag
+					table.insert(script,action)
+					
+					
+					runActionList(script, entity.tag, "interact",false,"engine",false)
+					
+				end
+				
+				
+				
+			end
 			
 			
 			end

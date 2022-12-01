@@ -123,6 +123,8 @@ playerNoticed = false
 playerTargeted = false
 entityTargetPlayer = {}
 displayHUD = {}
+CurrentPOIDetectionRange = 10
+AutoCheckPOI = true
 editorCurrentVariableSearch = ""
 editorCurrentVariableKeySearch = ""
 PlayerisHitten = false
@@ -159,7 +161,8 @@ datapackObjectType = {
 	"texture",
 	"webpage",
 	"email",
-	"quickhack"
+	"quickhack",
+	"garage"
 	
 	}
 cacheupdate = false

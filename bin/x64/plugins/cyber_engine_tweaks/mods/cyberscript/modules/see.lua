@@ -374,7 +374,7 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name == "entity_script_level") then
 				local obj = getEntityFromManager(trigger.tag)
 				if(obj.id ~= nil) then
-					if(checkValue(trigger.operator,obj.scriptlevel,trigger.scriptlevel)) then
+					if(checkValue(trigger.operator,obj.scriptlevel,trigger.scriptlevel,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -503,7 +503,7 @@ function scriptcheckTrigger(trigger)
 						local entityTag = group.entities[i]
 						local obj = getEntityFromManager(entityTag)
 						if(obj.id ~= nil) then
-							if(checkValue(trigger.operator,obj.scriptlevel,trigger.scriptlevel)) then
+							if(checkValue(trigger.operator,obj.scriptlevel,trigger.scriptlevel,trigger.min,trigger.max)) then
 								
 								count = count +1
 								
@@ -749,16 +749,6 @@ function scriptcheckTrigger(trigger)
 			end
 			
 			
-			if(trigger.name == "check_score") then
-				local score = getScoreKey(trigger.value,trigger.key)
-				if(checkValue(trigger.operator,score,trigger.score)) then
-					
-					result = true
-					
-				end
-				
-			end
-			
 			
 			
 			
@@ -780,7 +770,7 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
-			if(trigger.name == "custom_variable" or trigger.name == "check_variable") then
+			if(trigger.name == "custom_variable" or trigger.name == "check_variable" or  trigger.name == "check_score") then
 				local score = getVariableKey(trigger.variable,trigger.key)
 				
 				if(trigger.operator== nil) then
@@ -789,48 +779,57 @@ function scriptcheckTrigger(trigger)
 						result = true
 					end
 					
+				else
+					
+					if(type(score) == "number") then
+						
+						
+						if(checkValue(trigger.operator,score,trigger.target, trigger.min, trigger.max)) then
+							
+							result = true
+							
+						end
 					else
-					if(trigger.operator == "=") then
-						
-						if(score ~= nil and score == trigger.value) then
-							result = true
+						if(trigger.operator == "=") then
+							
+							if(score ~= nil and score == trigger.value) then
+								result = true
+							end
+							
 						end
 						
-					end
-					
-					if(trigger.operator == "!=") then
-						
-						if(score ~= nil and score ~= trigger.value) then
-							result = true
+						if(trigger.operator == "!=") then
+							
+							if(score ~= nil and score ~= trigger.value) then
+								result = true
+							end
+							
 						end
 						
-					end
-					
-					if(trigger.operator == "contains") then
-						
-						if(score ~= nil and string.match(score, trigger.value)) then
-							result = true
+						if(trigger.operator == "contains") then
+							
+							if(score ~= nil and string.match(score, trigger.value)) then
+								result = true
+							end
+							
 						end
 						
-					end
-					
-					if(trigger.operator == "empty" or trigger.operator == "nothing") then
+						if(trigger.operator == "empty" or trigger.operator == "nothing") then
+							
+							
+							result = score == nil or score == ""
+							
+							
+						end				
 						
-						
-						result = score == nil or score == ""
-						
-						
-					end
-					
-					
-					if(trigger.operator == "notempty" or trigger.operator == "notnothing") then
-						
-						
-						result = score ~= nil and score ~= ""
-						
-						
-					end
-					
+						if(trigger.operator == "notempty" or trigger.operator == "notnothing") then
+							
+							
+							result = score ~= nil and score ~= ""
+							
+							
+						end
+					end 
 				end
 			end
 			
@@ -846,7 +845,8 @@ function scriptcheckTrigger(trigger)
 				else
 					if(type(trigger.value) == "number") then
 						
-						if(checkValue(trigger.operator,trigger.value,trigger.target)) then
+						
+						if(checkValue(trigger.operator,trigger.value,trigger.target, trigger.min, trigger.max)) then
 							
 							result = true
 							
@@ -925,7 +925,7 @@ function scriptcheckTrigger(trigger)
 						
 						
 						
-						result = checkValue(trigger.operator,ScannerInfoManager[trigger.tag][trigger.prop],trigger.value)
+						result = checkValue(trigger.operator,ScannerInfoManager[trigger.tag][trigger.prop],trigger.value,trigger.min,trigger.max)
 						
 						
 						
@@ -936,7 +936,7 @@ function scriptcheckTrigger(trigger)
 						
 						
 						
-						result = checkValue(trigger.operator,ScannerInfoManager[trigger.tag]["bounty"][trigger.prop],trigger.value)
+						result = checkValue(trigger.operator,ScannerInfoManager[trigger.tag]["bounty"][trigger.prop],trigger.value,trigger.min,trigger.max)
 						
 						
 						
@@ -992,7 +992,7 @@ function scriptcheckTrigger(trigger)
 						
 						
 						
-						result = checkValue(trigger.operator,currentScannerItem[trigger.prop],trigger.value)
+						result = checkValue(trigger.operator,currentScannerItem[trigger.prop],trigger.value,trigger.min,trigger.max)
 						
 						
 						
@@ -1003,7 +1003,7 @@ function scriptcheckTrigger(trigger)
 						
 						
 						
-						result = checkValue(trigger.operator,currentScannerItem["bounty"][trigger.prop],trigger.value)
+						result = checkValue(trigger.operator,currentScannerItem["bounty"][trigger.prop],trigger.value,trigger.min,trigger.max)
 						
 						
 						
@@ -1261,7 +1261,7 @@ function scriptcheckTrigger(trigger)
 						if(trigger.target ~= trigger.tag ) then
 							
 							local score = getFactionRelation(trigger.tag,trigger.target)
-							if(checkValue(trigger.operator,score,trigger.score)) then
+							if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
 								
 								result = true
 								
@@ -1283,7 +1283,7 @@ function scriptcheckTrigger(trigger)
 							if(gangs[1].tag ~= trigger.tag) then
 								
 								local score = getFactionRelation(trigger.tag,gangs[1].tag)
-								if(checkValue(trigger.operator,score,trigger.score)) then
+								if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
 									result = true
 								end
 								
@@ -1302,7 +1302,7 @@ function scriptcheckTrigger(trigger)
 								if(gangs[1].tag ~= trigger.tag) then
 									
 									local score = getFactionRelation(trigger.tag,gangs[1].tag)
-									if(checkValue(trigger.operator,score,trigger.score)) then
+									if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
 										
 										result = true
 									end
@@ -1321,7 +1321,7 @@ function scriptcheckTrigger(trigger)
 									if(gangs[1].tag ~= trigger.tag) then
 										
 										local score = getFactionRelation(trigger.tag,gangs[1].tag)
-										if(checkValue(trigger.operator,score,trigger.score)) then
+										if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
 											result = true
 										end
 									end
@@ -1371,7 +1371,7 @@ function scriptcheckTrigger(trigger)
 				if lastTargetKilled ~= nil then
 					local killComp, killGangScore, killGang = checkAttitudeByGangScore(lastTargetKilled)
 					
-					if(checkValue(trigger.operator,killGangScore,trigger.score)) then
+					if(checkValue(trigger.operator,killGangScore,trigger.score,trigger.min,trigger.max)) then
 						result = true
 					end
 					
@@ -1765,9 +1765,8 @@ function scriptcheckTrigger(trigger)
 					local entid = objLook:GetEntityID()
 					local entity = getEntityFromManagerById(entid)
 					if(entity ~= nil) then
-						--debugPrint(3,"lloo")
-						local garagVeh = getVehiclefromCustomGarageTag(entity.tag)
-						if(garagVeh ~= nil and garagVeh.asAV == true or entity.tag == "fake_av") then
+						
+						if(entity.isAV == true or entity.tag == "fake_av") then
 							result = true
 						end
 					end
@@ -1855,7 +1854,7 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name =="player_server_score")then
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
 					local score = ActualPlayerMultiData.scores[trigger.value]
-					if(checkValue(trigger.operator,score,trigger.score)) then
+					if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1865,7 +1864,7 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name =="looked_player_score")then
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
 					local score = ActualPlayerMultiData.instance_players[multiName].score[trigger.value]
-					if(checkValue(trigger.operator,score,trigger.score)) then
+					if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1875,7 +1874,7 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name =="server_score")then
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
 					local score = ActualPlayerMultiData.instance.scores[trigger.value]
-					if(checkValue(trigger.operator,score,trigger.score)) then
+					if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1886,7 +1885,7 @@ function scriptcheckTrigger(trigger)
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
 					local score = ActualPlayerMultiData.instance.scores[trigger.server]
 					local playerscore = ActualPlayerMultiData.scores[trigger.player]
-					if(checkValue(trigger.operator,score,playerscore)) then
+					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1897,7 +1896,7 @@ function scriptcheckTrigger(trigger)
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
 					local score = ActualPlayerMultiData.instance.scores[trigger.server]
 					local playerscore = ActualPlayerMultiData.instance_players[multiName].score[trigger.value]
-					if(checkValue(trigger.operator,score,playerscore)) then
+					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1908,7 +1907,7 @@ function scriptcheckTrigger(trigger)
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
 					local score = ActualPlayerMultiData.instance.scores[trigger.server]
 					local playerscore = ActualPlayerMultiData.instance.scores[trigger.score]
-					if(checkValue(trigger.operator,score,playerscore)) then
+					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1919,7 +1918,7 @@ function scriptcheckTrigger(trigger)
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
 					local score = ActualPlayerMultiData.instance.scores[trigger.server]
 					local playerscore = getScoreKey(trigger.score,"Score")
-					if(checkValue(trigger.operator,score,playerscore)) then
+					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1929,7 +1928,7 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name =="guild_score")then
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
 					local score = ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
-					if(checkValue(trigger.operator,score,trigger.score)) then
+					if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1940,7 +1939,7 @@ function scriptcheckTrigger(trigger)
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
 					local playerscore = ActualPlayerMultiData.instance.Scores[trigger.server]
 					local score = ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
-					if(checkValue(trigger.operator,score,playerscore)) then
+					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1951,7 +1950,7 @@ function scriptcheckTrigger(trigger)
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
 					local score =  ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
 					local playerscore = ActualPlayerMultiData.scores[trigger.player]
-					if(checkValue(trigger.operator,score,playerscore)) then
+					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1962,7 +1961,7 @@ function scriptcheckTrigger(trigger)
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
 					local score =  ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
 					local playerscore = ActualPlayerMultiData.instance_players[multiName].score[trigger.value]
-					if(checkValue(trigger.operator,score,playerscore)) then
+					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -1973,7 +1972,7 @@ function scriptcheckTrigger(trigger)
 				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
 					local score =  ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
 					local playerscore = getScoreKey(trigger.score,"Score")
-					if(checkValue(trigger.operator,score,playerscore)) then
+					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
 						
 						result = true
 						
@@ -2383,7 +2382,7 @@ end
 	end
 	
 	if vehiculeregion then
-		if(action.name == "spawn_vehicule") then
+		if(action.name == "old_spawn_vehicule") then
 			spawnVehicle(action.value,action.from_behind,action.as_garage,action.as_av)
 		end
 		if(action.name == "spawn_vehicule_v2") then
@@ -2550,7 +2549,7 @@ end
 						position.x = position.x + (i*0.5)
 						
 					end
-					spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second)
+					spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav)
 					if(action.group ~= nil and action.group ~= "") then
 						
 						if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
@@ -5480,7 +5479,9 @@ end
 							notificationData.message = currentHelp.section[currentHelpIndex]
 							else
 							notificationData.message = currentHelp.section[currentHelpIndex].message
-							runActionList(currentHelp.section[currentHelpIndex].action, currentHelp.tag.."_"..currentHelpIndex, tag,source,false,executortag)
+							if(#currentHelp.section[currentHelpIndex].action > 0) then
+								runActionList(currentHelp.section[currentHelpIndex].action, currentHelp.tag.."_"..currentHelpIndex, tag,source,false,executortag)
+							end
 						end
 						notificationData.imageId = nil
 						notificationData.videoType = gameVideoType.Unknown 
@@ -12505,6 +12506,22 @@ function GenerateTextFromContextValues(context, v)
 		
 	end
 	
+	if(v.type == "current_district") then
+		
+		if(v.prop == "tag") then
+		value = getVariable("current_district","tag")
+		end
+		
+		if(v.prop == "state") then
+		value = getVariable("current_district","state")
+		end
+		
+		if(v.prop == "subdistrict") then
+		value = getVariable("current_district","subdistrict_enum")
+		end
+	
+	end
+	
 	
 	
 	if(v.type == "faction") then
@@ -12568,7 +12585,12 @@ function GenerateTextFromContextValues(context, v)
 			
 			value = EnumInt(state)
 		end
+			
+		if(v.key == "current_gang") then
 		
+			value = getVariableKey("player","current_gang")
+		
+		end
 		
 		if(v.key == "lifepath") then
 			local player = Game.GetPlayer()
@@ -12882,6 +12904,15 @@ function GenerateTextFromContextValues(context, v)
 		end
 	end
 	
+	if(v.type == "current_fixer" and  currentfixer ~= nil) then
+	
+		
+			value = currentfixer[v.prop]
+		
+	
+	end 
+	
+	
 	if(v.type == "place") then
 		if(v.searchprops ~= nil) then
 			
@@ -12896,6 +12927,25 @@ function GenerateTextFromContextValues(context, v)
 				
 			end
 		end
+	end
+	
+	
+	if(v.type == "current_place" and  currentHouse ~= nil) then
+	
+		value = currentHouse[v.prop]
+	
+	end
+	
+	if(v.type == "current_room" and currentRoom ~= nil) then
+	
+		value = currentRoom[v.prop]
+	
+	end
+	
+	if(v.type == "current_poi" and currentPOI ~= nil) then
+	
+		value = currentPOI[v.prop]
+	
 	end
 	
 	if(v.type == "poi") then

@@ -408,7 +408,7 @@ function getNPCCallableByAffinity()
 			if(v.interact.display == "phone_service")then
 			
 				local contactdata = {}
-				contactdata.name =  getLang("save_phone_cmservice")..v.interact.name
+				contactdata.name =  v.interact.name
 				contactdata.id =  v.interact.tag
 				contactdata.avatarID = "Character.Delamain"
 				contactdata.phonetype = "Service"
