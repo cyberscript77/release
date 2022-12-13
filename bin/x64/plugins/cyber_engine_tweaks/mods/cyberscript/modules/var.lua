@@ -109,6 +109,17 @@ end
 
 
 function resetVar()
+	
+editorAnimName = "q108_17_riots_guitar_anim_sn259"
+editorAnimRepo = "woman_base"
+editorAnimTag = "lookatnpc"
+editorEntName = "base\\cyberscript\\entity\\workspot_anim.ent"
+editorWKName = "cyberscript_workspot_custom_base"
+editorAnimx = 0
+editorAnimy = 0
+editorAnimz = 0
+
+
 hotreload = false
 ScrollSpeed = 0.020
 ScriptedEntityAffinity = false
@@ -131,6 +142,9 @@ PlayerisHitten = false
 spawntablecount = {}
 moddisabled = false
 cachedespawn = {}
+
+
+
 datapackObjectType = { 
 	"character",
 	"circuit",
@@ -2337,7 +2351,15 @@ controltypelist = {"button","label","area","scrollarea","vertical_area","image"}
 controltypevaluelist = {"text","number","score","variable"}
 
 
+-- animslibrary = {}
 
+-- local reader = dir("data/anims")
+-- if(reader ~= nil) then
+	-- for i,v in ipairs(reader) do 
+		-- animslibrary[reader[i].name] = dofile(v)
+	-- end
+
+-- end
 
 
 

@@ -272,6 +272,7 @@ function scriptcheckTrigger(trigger)
 				local obj = getEntityFromManager(trigger.tag)
 				local enti = Game.FindEntityByID(obj.id)	
 				if(enti ~= nil) then
+					local testres, err = pcall(function()
 					local levelstate = enti:GetHighLevelStateFromBlackboard()
 					local triggerlevelstate  = gamedataNPCHighLevelState.Any
 					if(trigger.value == 0) then
@@ -304,6 +305,13 @@ function scriptcheckTrigger(trigger)
 					if(trigger.value == 10) then
 						triggerlevelstate  = gamedataNPCHighLevelState.Invalid
 					end
+					
+					end)
+					if testres == false then
+					triggerlevelstate= gamedataNPCHighLevelState.Invalid
+					--print(triggerlevelstate)
+					end
+					
 					if(levelstate == triggerlevelstate) then
 						result = true
 					end
@@ -9574,6 +9582,49 @@ end
 		
 	end
 	
+	if action.name == "play_anim_entity" then
+	
+	
+	 
+			spawnAnimationWorkspot(action.tag,action.anim,"cyberscript_workspot_base",action.isinstant,action.unlockcamera)
+	end
+	
+	if action.name == "play_custom_anim_entity" then
+	
+	
+	 
+		spawnCustomAnimationWorkspot(action.tag,action.ent,action.anim,action.workspot,action.isinstant,action.unlockcamera)
+	end
+	
+	if action.name == "play_special_anim_entity" then
+	
+	
+	 
+			spawnAnimationWorkspot(action.tag,action.anim,action.workspot,action.isinstant)
+	end
+	
+	if action.name == "change_anim_entity" then
+	
+	
+	 
+			changeWorkSpotAnims(action.tag,action.anim,action.isinstant)
+	end
+	
+	if action.name == "change_anim_entity_workspot" then
+	
+	
+	 changeWorkSpot(action.tag,action.workspottag,action.workspot,action.unlockcamera)
+			
+			
+	end
+	
+	if action.name == "stop_anim_entity" then
+	
+	
+	 
+			stopWorkSpotAnims(action.tag)
+	end
+	
 	
 	if logicregion then
 		if(action.name == "if") then
@@ -12943,9 +12994,9 @@ function GenerateTextFromContextValues(context, v)
 	end
 	
 	if(v.type == "current_poi" and currentPOI ~= nil) then
-	
-		value = currentPOI[v.prop]
-	
+		
+		local path =  splitDot(v.prop, ".")
+		value = getValueToTablePath(currentPOI, path) 
 	end
 	
 	if(v.type == "poi") then

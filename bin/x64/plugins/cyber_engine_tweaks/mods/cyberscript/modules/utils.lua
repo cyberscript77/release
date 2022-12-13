@@ -244,6 +244,18 @@ function setValueToTablePath(obj, keys, value)
 	
 end
 
+function getValueToTablePath(obj, keys)
+    for i = 1, #keys - 1 do
+        obj = obj[keys[i]]
+	end
+	
+    -- Merely "obj = value" would affect only this local variable
+    -- (as above in the loop), rather than modify the table.
+    -- So the last index has to be done separately from the loop:
+	return obj[keys[#keys]] 
+	
+end
+
 function table_contains(tables,value,checkkey)
 	local result = false
 	if(checkkey == nil) then checkkey = false end
@@ -459,25 +471,27 @@ function check3DPos(vec4, x, y, z,radius, zradius)
 	boole = false
 	
 	
-	if(vec4.x >= x-radius and vec4.x <= x+radius) then
-		
-		if (vec4.y >= y-radius and vec4.y <= y+radius) then
-			
-			if zradius ~= nil then 
-				
-				
-				
-				if (vec4.z >= z-zradius and vec4.z <= z+zradius) then
-					
-					boole = true
-					
-				end
-				else
-				
-				if (vec4.z >= z-radius and vec4.z <= z+radius) then
-					
-					boole = true
-					
+	if(vec4.x >= x-radius) then
+		if(vec4.x <= x+radius) then
+			if (vec4.y >= y-radius ) then
+				if (vec4.y <= y+radius) then
+					if zradius ~= nil then 
+						
+						
+						
+						if (vec4.z >= z-zradius and vec4.z <= z+zradius) then
+							
+							boole = true
+							
+						end
+						else
+						
+						if (vec4.z >= z-radius and vec4.z <= z+radius) then
+							
+							boole = true
+							
+						end
+					end
 				end
 			end
 		end
@@ -486,18 +500,18 @@ function check3DPos(vec4, x, y, z,radius, zradius)
 end
 
 function splitByChunk(text, chunkSize)
-	local s = {}
-	for i=1, #text, chunkSize do
-		s[#s+1] = text:sub(i,i+chunkSize - 1)
-		
-	end
-	local result = ""
-	for i,v in ipairs(s) do
-		
-		result = result .. "\n" .. v
-		
-	end
-	return result
+local s = {}
+for i=1, #text, chunkSize do
+	s[#s+1] = text:sub(i,i+chunkSize - 1)
+	
+end
+local result = ""
+for i,v in ipairs(s) do
+	
+	result = result .. "\n" .. v
+	
+end
+return result
 end
 
 function split(s, sep)
@@ -885,750 +899,750 @@ function checkNearFastTravel(curPos)
 end
 
 function IsInDelamainCar()
-
-inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
-if (inVehicule) then
-vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
-
-isDelamainDrived = (string.find(vehicule:GetDisplayName(), "Delamain") ~= nil)
-
-if isDelamainDrived then
-
-return true
-
-end
-end
-return false
+	
+	inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
+	if (inVehicule) then
+		vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+		
+		isDelamainDrived = (string.find(vehicule:GetDisplayName(), "Delamain") ~= nil)
+		
+		if isDelamainDrived then
+			
+			return true
+			
+		end
+	end
+	return false
 end
 
 function GetVehicleName(t)
-return tostring(t:GetDisplayName())
+	return tostring(t:GetDisplayName())
 end
 
 function drawMappin(posx,posy)
-debugPrint(2,posx)
-debugPrint(2,posy)
-local posX = posx
-local posY = posy
-
-if(mappinPoint ~= nil) then
-debugPrint(2,"Unregister mappinPoint")
-Game.GetMappinSystem():UnregisterMappin(mappinPoint)
-
-end
-
-
-mappinData = NewObject('gamemappinsMappinData')
-mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
-mappinData.variant = Enum.new('gamedataMappinVariant', 'ExclamationMarkVariant')
-mappinData.visibleThroughWalls = true
-debugPrint(2,"Point draw at x:"..tostring(posX).." y:"..tostring(posY))
-
-offset = ToVector4{ x = posX, y = posY, z = 200 , w = 1} -- Move the pin a bit up relative to the target
-
-
-mappinPoint = Game.GetMappinSystem():RegisterMappin(mappinData, offset)
-
-Game.GetMappinSystem():SetMappinActive(mappinPoint,true)
-
-updatePlayerData(currentSave.arrayPlayerData)
-
+	debugPrint(2,posx)
+	debugPrint(2,posy)
+	local posX = posx
+	local posY = posy
+	
+	if(mappinPoint ~= nil) then
+		debugPrint(2,"Unregister mappinPoint")
+		Game.GetMappinSystem():UnregisterMappin(mappinPoint)
+		
+	end
+	
+	
+	mappinData = NewObject('gamemappinsMappinData')
+	mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
+	mappinData.variant = Enum.new('gamedataMappinVariant', 'ExclamationMarkVariant')
+	mappinData.visibleThroughWalls = true
+	debugPrint(2,"Point draw at x:"..tostring(posX).." y:"..tostring(posY))
+	
+	offset = ToVector4{ x = posX, y = posY, z = 200 , w = 1} -- Move the pin a bit up relative to the target
+	
+	
+	mappinPoint = Game.GetMappinSystem():RegisterMappin(mappinData, offset)
+	
+	Game.GetMappinSystem():SetMappinActive(mappinPoint,true)
+	
+	updatePlayerData(currentSave.arrayPlayerData)
+	
 end
 
 function draw3DMappin(posx,posy,posz)
-debugPrint(2,posx)
-debugPrint(2,posy)
-local posX = posx
-local posY = posy
-local posZ = posz
-
-if(mappinPoint ~= nil) then
-debugPrint(2,"Unregister mappinPoint")
-Game.GetMappinSystem():UnregisterMappin(mappinPoint)
-
-end
-
-
-mappinData = NewObject('gamemappinsMappinData')
-mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
-mappinData.variant = Enum.new('gamedataMappinVariant', 'ExclamationMarkVariant')
-mappinData.visibleThroughWalls = true
-debugPrint(2,"Point draw at x:"..tostring(posX).." y:"..tostring(posY).." Z:"..tostring(posZ))
-
-offset = ToVector4{ x = posX, y = posY, z = posZ , w = 1} -- Move the pin a bit up relative to the target
-
-
-mappinPoint = Game.GetMappinSystem():RegisterMappin(mappinData, offset)
-
-Game.GetMappinSystem():SetMappinActive(mappinPoint,true)
-
-updatePlayerData(currentSave.arrayPlayerData)
-
+	debugPrint(2,posx)
+	debugPrint(2,posy)
+	local posX = posx
+	local posY = posy
+	local posZ = posz
+	
+	if(mappinPoint ~= nil) then
+		debugPrint(2,"Unregister mappinPoint")
+		Game.GetMappinSystem():UnregisterMappin(mappinPoint)
+		
+	end
+	
+	
+	mappinData = NewObject('gamemappinsMappinData')
+	mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
+	mappinData.variant = Enum.new('gamedataMappinVariant', 'ExclamationMarkVariant')
+	mappinData.visibleThroughWalls = true
+	debugPrint(2,"Point draw at x:"..tostring(posX).." y:"..tostring(posY).." Z:"..tostring(posZ))
+	
+	offset = ToVector4{ x = posX, y = posY, z = posZ , w = 1} -- Move the pin a bit up relative to the target
+	
+	
+	mappinPoint = Game.GetMappinSystem():RegisterMappin(mappinData, offset)
+	
+	Game.GetMappinSystem():SetMappinActive(mappinPoint,true)
+	
+	updatePlayerData(currentSave.arrayPlayerData)
+	
 end
 
 function drawCustomMappin(posx,posy)
-debugPrint(2,posx)
-debugPrint(2,posy)
-local posX = posx
-local posY = posy
-
-if(customMappinPoint ~= nil) then
-debugPrint(2,"Unregister customMappinPoint")
-Game.GetMappinSystem():UnregisterMappin(customMappinPoint)
-
-updatePlayerData(currentSave.arrayPlayerData)
-
-end
-
-
-mappinCustomData = NewObject('gamemappinsMappinData')
-mappinCustomData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
-mappinCustomData.variant = Enum.new('gamedataMappinVariant', 'CustomPositionVariant')
-mappinCustomData.visibleThroughWalls = true
-debugPrint(2,"Point draw at x:"..tostring(posX).." y:"..tostring(posY))
-
-offset = ToVector4{ x = posX, y = posY, z = 35 , w = 1} -- Move the pin a bit up relative to the target
-
-
-customMappinPoint = Game.GetMappinSystem():RegisterMappin(mappinCustomData, offset)
-
-Game.GetMappinSystem():SetMappinActive(customMappinPoint,true)
-
-updatePlayerData(currentSave.arrayPlayerData)
-
+	debugPrint(2,posx)
+	debugPrint(2,posy)
+	local posX = posx
+	local posY = posy
+	
+	if(customMappinPoint ~= nil) then
+		debugPrint(2,"Unregister customMappinPoint")
+		Game.GetMappinSystem():UnregisterMappin(customMappinPoint)
+		
+		updatePlayerData(currentSave.arrayPlayerData)
+		
+	end
+	
+	
+	mappinCustomData = NewObject('gamemappinsMappinData')
+	mappinCustomData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
+	mappinCustomData.variant = Enum.new('gamedataMappinVariant', 'CustomPositionVariant')
+	mappinCustomData.visibleThroughWalls = true
+	debugPrint(2,"Point draw at x:"..tostring(posX).." y:"..tostring(posY))
+	
+	offset = ToVector4{ x = posX, y = posY, z = 35 , w = 1} -- Move the pin a bit up relative to the target
+	
+	
+	customMappinPoint = Game.GetMappinSystem():RegisterMappin(mappinCustomData, offset)
+	
+	Game.GetMappinSystem():SetMappinActive(customMappinPoint,true)
+	
+	updatePlayerData(currentSave.arrayPlayerData)
+	
 end
 
 function draw3DCustomMappin(posx,posy,posz)
-debugPrint(2,posx)
-debugPrint(2,posy)
-local posX = posx
-local posY = posy
-local posZ = posz
-
-if(customMappinPoint ~= nil) then
-debugPrint(2,"Unregister customMappinPoint")
-Game.GetMappinSystem():UnregisterMappin(customMappinPoint)
-
-updatePlayerData(currentSave.arrayPlayerData)
-
-end
-
-
-mappinCustomData = NewObject('gamemappinsMappinData')
-mappinCustomData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
-mappinCustomData.variant = Enum.new('gamedataMappinVariant', 'CustomPositionVariant')
-mappinCustomData.visibleThroughWalls = true
-debugPrint(2,"Point draw at x:"..tostring(posX).." Y:"..tostring(posY).." Z:"..tostring(posZ))
-
-offset = ToVector4{ x = posX, y = posY, z = posZ , w = 1} -- Move the pin a bit up relative to the target
-
-
-customMappinPoint = Game.GetMappinSystem():RegisterMappin(mappinCustomData, offset)
-
-Game.GetMappinSystem():SetMappinActive(customMappinPoint,true)
-
-updatePlayerData(currentSave.arrayPlayerData)
-
+	debugPrint(2,posx)
+	debugPrint(2,posy)
+	local posX = posx
+	local posY = posy
+	local posZ = posz
+	
+	if(customMappinPoint ~= nil) then
+		debugPrint(2,"Unregister customMappinPoint")
+		Game.GetMappinSystem():UnregisterMappin(customMappinPoint)
+		
+		updatePlayerData(currentSave.arrayPlayerData)
+		
+	end
+	
+	
+	mappinCustomData = NewObject('gamemappinsMappinData')
+	mappinCustomData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
+	mappinCustomData.variant = Enum.new('gamedataMappinVariant', 'CustomPositionVariant')
+	mappinCustomData.visibleThroughWalls = true
+	debugPrint(2,"Point draw at x:"..tostring(posX).." Y:"..tostring(posY).." Z:"..tostring(posZ))
+	
+	offset = ToVector4{ x = posX, y = posY, z = posZ , w = 1} -- Move the pin a bit up relative to the target
+	
+	
+	customMappinPoint = Game.GetMappinSystem():RegisterMappin(mappinCustomData, offset)
+	
+	Game.GetMappinSystem():SetMappinActive(customMappinPoint,true)
+	
+	updatePlayerData(currentSave.arrayPlayerData)
+	
 end
 
 function registerMappin(posx,posy,posz,tag,typemap,wall,active,mapgroup,extra,title,desc)
-
-local mappinData = NewObject('gamemappinsMappinData')
-mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
-mappinData.variant = Enum.new('gamedataMappinVariant', typemap)
-
-mappinData.visibleThroughWalls = wall or true
-
-local posZ = posz or 200
--- print(posx)
--- print(posy)
--- print(posZ)
-local position  = ToVector4{ x = posx, y = posy, z = posZ , w = 1}
-
-local mapId = Game.GetMappinSystem():RegisterMappin(mappinData, position)
-
-
-local activeMap = active or true
-
-if title == nil then title = "Something happens here" end
-if desc == nil then desc = "Something happens here" end 
-
-
-Game.GetMappinSystem():SetMappinActive(mapId,activeMap)
-
-local obj = {}
-obj.id = mapId
-obj.tag = tag
-obj.position = position
-obj.variant =  Enum.new('gamedataMappinVariant', typemap)
-obj.title = getLang(title)
-obj.desc = getLang(desc)
-
-if(mapgroup) then
-obj.group = mapgroup
-end
-if(extra) then
-obj.extra = extra
-end
-
-mappinManager[tag] = obj
-
-
-
-print("set mappin"..tag)
-
+	if mappinManager[tag] == nil then
+		local mappinData = NewObject('gamemappinsMappinData')
+		mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
+		mappinData.variant = Enum.new('gamedataMappinVariant', typemap)
+		
+		mappinData.visibleThroughWalls = wall or true
+		
+		local posZ = posz or 200
+		-- print(posx)
+		-- print(posy)
+		-- print(posZ)
+		local position  = ToVector4{ x = posx, y = posy, z = posZ , w = 1}
+		
+		local mapId = Game.GetMappinSystem():RegisterMappin(mappinData, position)
+		
+		
+		local activeMap = active or true
+		
+		if title == nil then title = "Something happens here" end
+		if desc == nil then desc = "Something happens here" end 
+		
+		
+		Game.GetMappinSystem():SetMappinActive(mapId,activeMap)
+		
+		local obj = {}
+		obj.id = mapId
+		obj.tag = tag
+		obj.position = position
+		obj.variant =  Enum.new('gamedataMappinVariant', typemap)
+		obj.title = getLang(title)
+		obj.desc = getLang(desc)
+		
+		if(mapgroup) then
+			obj.group = mapgroup
+		end
+		if(extra) then
+			obj.extra = extra
+		end
+		
+		mappinManager[tag] = obj
+		
+		
+		
+		
+	end
 end
 
 function registerMappintoEntity(target,tag,typemap,wall,active,mapgroup, title, desc)
-
-
-
-
-
-
-
-
-
-if target then
-local mappinData = NewObject('gamemappinsMappinData')
-mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
-mappinData.variant = typemap
-mappinData.visibleThroughWalls = wall or true
-
-local slot = 'poi_mappin'
-local offset = ToVector3{ x = 0, y = 0, z = 2 } -- Move the pin a bit up relative to the target
-if title == nil then title = "Something happens here" end
-if desc == nil then desc = "Something happens here" end
-local mapId =Game.GetMappinSystem():RegisterMappinWithObject(mappinData, target, slot, offset)
-local activeMap = active or true
-
-Game.GetMappinSystem():SetMappinActive(mapId,activeMap)
-local obj = {}
-obj.id = mapId
-obj.tag = tag
-obj.position = target:GetWorldPosition()
-obj.title = title
-obj.desc = desc
-
-if(mapgroup) then
-obj.group = mapgroup
-end
-
-mappinManager[tag] = obj
-
-end
-
-
-
+	if mappinManager[tag] == nil then
+		
+		
+		
+		
+		
+		
+		
+		
+		if target then
+			local mappinData = NewObject('gamemappinsMappinData')
+			mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
+			mappinData.variant = typemap
+			mappinData.visibleThroughWalls = wall or true
+			
+			local slot = 'poi_mappin'
+			local offset = ToVector3{ x = 0, y = 0, z = 2 } -- Move the pin a bit up relative to the target
+			if title == nil then title = "Something happens here" end
+			if desc == nil then desc = "Something happens here" end
+			local mapId =Game.GetMappinSystem():RegisterMappinWithObject(mappinData, target, slot, offset)
+			local activeMap = active or true
+			
+			Game.GetMappinSystem():SetMappinActive(mapId,activeMap)
+			local obj = {}
+			obj.id = mapId
+			obj.tag = tag
+			obj.position = target:GetWorldPosition()
+			obj.title = title
+			obj.desc = desc
+			
+			if(mapgroup) then
+				obj.group = mapgroup
+			end
+			
+			mappinManager[tag] = obj
+			
+		end
+		
+	end
+	
 end
 
 function deleteMappinByTag(tag)
-local mappin = getMappinByTag(tag)
-
-if(mappin ~= nil and mappin.id ~= nil)then
-Game.GetMappinSystem():UnregisterMappin(mappin.id)
-mappinManager[tag] = nil
-end
+	local mappin = getMappinByTag(tag)
+	
+	if(mappin ~= nil and mappin.id ~= nil)then
+		Game.GetMappinSystem():UnregisterMappin(mappin.id)
+		mappinManager[tag] = nil
+	end
 end	
 
 function activeMappinByTag(tag,active)
-local mappin = getMappinByTag(tag)
-if(mappin)then
-Game.GetMappinSystem():UnregisterMappin(mappin.id)
-end
+	local mappin = getMappinByTag(tag)
+	if(mappin)then
+		Game.GetMappinSystem():UnregisterMappin(mappin.id)
+	end
 end	
 
 function printGameDump(value)
-debugPrint(2,GameDump(value))
+	debugPrint(2,GameDump(value))
 end
 
 function setMappinPositionByTag(tag,posx,posy,posZ)
-local mappin = getMappinByTag(tag)
-if(mappin)then
-local position  = ToVector4{ x = posx, y = posy, z = posZ , w = 1}
-Game.GetMappinSystem():SetMappinPosition(mappin.id,position)
-mappin.position = position
-end
+	local mappin = getMappinByTag(tag)
+	if(mappin)then
+		local position  = ToVector4{ x = posx, y = posy, z = posZ , w = 1}
+		Game.GetMappinSystem():SetMappinPosition(mappin.id,position)
+		mappin.position = position
+	end
 end	
 
 function setMappinTypeByTag(tag,typeMap)
-local mappin = getMappinByTag(tag)
-if(mappin)then
-
-Game.GetMappinSystem():ChangeMappinVariant(mappin.id,typeMap)
-end
+	local mappin = getMappinByTag(tag)
+	if(mappin)then
+		
+		Game.GetMappinSystem():ChangeMappinVariant(mappin.id,typeMap)
+	end
 end	
 
 function setMappinTrackingByTag(tag,target)
-local mappin = getMappinByTag(tag)
-
-local target = getMappinByTag(target)
-if(mappin and target)then
-
-Game.GetMappinSystem():SetMappinTrackingAlternative(mappin.id,target.id)
-end
+	local mappin = getMappinByTag(tag)
+	
+	local target = getMappinByTag(target)
+	if(mappin and target)then
+		
+		Game.GetMappinSystem():SetMappinTrackingAlternative(mappin.id,target.id)
+	end
 end	
 
 function testCollision(pos,destination)
-
-local filters = {
-
-'Static', -- Buildings, Concrete Roads, Crates, etc.
-
-'Terrain'
-
-}
-
-local from = pos
-local to = destination
-
-local collision = false
-
-
-for _, filter in ipairs(filters) do
-local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
-
-if success then
-collision = true
---debugPrint(2,"collision"..filter)
-end
-end
-
-
-return collision
-
+	
+	local filters = {
+		
+		'Static', -- Buildings, Concrete Roads, Crates, etc.
+		
+		'Terrain'
+		
+	}
+	
+	local from = pos
+	local to = destination
+	
+	local collision = false
+	
+	
+	for _, filter in ipairs(filters) do
+		local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
+		
+		if success then
+			collision = true
+			--debugPrint(2,"collision"..filter)
+		end
+	end
+	
+	
+	return collision
+	
 end
 
 function giveGoodPath(pos,destination,axis)
-
-local filters = {
-
-'Static', -- Buildings, Concrete Roads, Crates, etc.
-
-'Terrain'
-
-}
-
-local from = pos
-local to = destination
-
-local collision = false
-
-
-for _, filter in ipairs(filters) do
-local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
-
-if success then
-collision = true
---debugPrint(2,"collision"..filter)
-end
-end
-
-if(collision == false) then
-
-
-return to
-
-else	
-
-local haveangood = false
-
-local positive = false
-local negative = false
-
-local testpos = destination
-
---test positive
-for i=1,500 do
-
-if haveangood == false then
-
-local testpos = destination
-
-if(axis == "x") then
-testpos.y = testpos.y+0.5
-local result = testCollision(from,testpos)
-if result == false then
-
-haveangood = true
-return testpos
-end
-
-end
-
-if(axis == "y") then
-testpos.x = testpos.x+0.5
-local result = testCollision(from,testpos)
-if result == false then
-haveangood = true
-return testpos
-end
-end
-
-if(axis == "z") then
-testpos.z = testpos.z+0.5
-
-testpos.x = testpos.x+0.5
-local result = testCollision(from,testpos)
-if result == false then
-haveangood = true
-return testpos
-else
-testpos.x = testpos.x-0.5
-testpos.y = testpos.y+0.5
-local result = testCollision(from,testpos)
-if result == false then
-haveangood = true
-return testpos
-else
-testpos.y = testpos.y-0.5
-end
-end
-
-end
-
-end
-
-end
-
-testpos = destination
-
---test negative
-for i=1,500 do
-
-if haveangood == false then
-
-
-
-if(axis == "x") then
-
-testpos.y = testpos.y-0.5
-local result = testCollision(from,testpos)
-if result == false then
-return testpos
-end
-
-
-
-end
-
-if(axis == "y") then
-testpos.x = testpos.x-0.5
-local result = testCollision(from,testpos)
-if result == false then
-return testpos
-end
-
-
-end
-
-if(axis == "z") then
-testpos.z = testpos.z-0.5
-
-testpos.x = testpos.x-0.5
-local result = testCollision(from,testpos)
-if result == false then
-haveangood = true
-return testpos
-else
-testpos.x = testpos.x+0.5
-testpos.y = testpos.y-0.5
-local result = testCollision(from,testpos)
-if result == false then
-haveangood = true
-return testpos
-else
-testpos.y = testpos.y+0.5
-end
-end
-
-end
-
-
-
-end
-end
-
-
-return from
-
-end
-
+	
+	local filters = {
+		
+		'Static', -- Buildings, Concrete Roads, Crates, etc.
+		
+		'Terrain'
+		
+	}
+	
+	local from = pos
+	local to = destination
+	
+	local collision = false
+	
+	
+	for _, filter in ipairs(filters) do
+		local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
+		
+		if success then
+			collision = true
+			--debugPrint(2,"collision"..filter)
+		end
+	end
+	
+	if(collision == false) then
+		
+		
+		return to
+		
+		else	
+		
+		local haveangood = false
+		
+		local positive = false
+		local negative = false
+		
+		local testpos = destination
+		
+		--test positive
+		for i=1,500 do
+			
+			if haveangood == false then
+				
+				local testpos = destination
+				
+				if(axis == "x") then
+					testpos.y = testpos.y+0.5
+					local result = testCollision(from,testpos)
+					if result == false then
+						
+						haveangood = true
+						return testpos
+					end
+					
+				end
+				
+				if(axis == "y") then
+					testpos.x = testpos.x+0.5
+					local result = testCollision(from,testpos)
+					if result == false then
+						haveangood = true
+						return testpos
+					end
+				end
+				
+				if(axis == "z") then
+					testpos.z = testpos.z+0.5
+					
+					testpos.x = testpos.x+0.5
+					local result = testCollision(from,testpos)
+					if result == false then
+						haveangood = true
+						return testpos
+						else
+						testpos.x = testpos.x-0.5
+						testpos.y = testpos.y+0.5
+						local result = testCollision(from,testpos)
+						if result == false then
+							haveangood = true
+							return testpos
+							else
+							testpos.y = testpos.y-0.5
+						end
+					end
+					
+				end
+				
+			end
+			
+		end
+		
+		testpos = destination
+		
+		--test negative
+		for i=1,500 do
+			
+			if haveangood == false then
+				
+				
+				
+				if(axis == "x") then
+					
+					testpos.y = testpos.y-0.5
+					local result = testCollision(from,testpos)
+					if result == false then
+						return testpos
+					end
+					
+					
+					
+				end
+				
+				if(axis == "y") then
+					testpos.x = testpos.x-0.5
+					local result = testCollision(from,testpos)
+					if result == false then
+						return testpos
+					end
+					
+					
+				end
+				
+				if(axis == "z") then
+					testpos.z = testpos.z-0.5
+					
+					testpos.x = testpos.x-0.5
+					local result = testCollision(from,testpos)
+					if result == false then
+						haveangood = true
+						return testpos
+						else
+						testpos.x = testpos.x+0.5
+						testpos.y = testpos.y-0.5
+						local result = testCollision(from,testpos)
+						if result == false then
+							haveangood = true
+							return testpos
+							else
+							testpos.y = testpos.y+0.5
+						end
+					end
+					
+				end
+				
+				
+				
+			end
+		end
+		
+		
+		return from
+		
+	end
+	
 end
 
 function getValue(object,value,parameter,index)
-
-local result = nil
-
-if(object == "fixer") then
-
-if(index == nil or index == 0 or index == "") then
-
-result = getFixerByTag(value)[parameter]
-
-else
-
-result = getFixerByTag(value)[parameter][index]
-
-end
-
-
-end
-
-if(object == "faction") then
-
-if(index == nil or index == 0 or index == "") then
-
-result = getFactionByTag(value)[parameter]
-
-else
-
-result = getFactionByTag(value)[parameter][index]
-
-end
-
-
-end
-
-
-if(object == "variable") then
-
-
-
-result = getVariableKey(value,parameter)
-
-
-
-end
-
-
-if(object == "score") then
-
-
-
-result = getScoreKey(value,"Score")
-
-
-
-end
-
-
-return result
-
+	
+	local result = nil
+	
+	if(object == "fixer") then
+		
+		if(index == nil or index == 0 or index == "") then
+			
+			result = getFixerByTag(value)[parameter]
+			
+			else
+			
+			result = getFixerByTag(value)[parameter][index]
+			
+		end
+		
+		
+	end
+	
+	if(object == "faction") then
+		
+		if(index == nil or index == 0 or index == "") then
+			
+			result = getFactionByTag(value)[parameter]
+			
+			else
+			
+			result = getFactionByTag(value)[parameter][index]
+			
+		end
+		
+		
+	end
+	
+	
+	if(object == "variable") then
+		
+		
+		
+		result = getVariableKey(value,parameter)
+		
+		
+		
+	end
+	
+	
+	if(object == "score") then
+		
+		
+		
+		result = getScoreKey(value,"Score")
+		
+		
+		
+	end
+	
+	
+	return result
+	
 end
 
 
 
 function checkItem(item)
-
-local itemTDBID = TweakDBID(item)
-local itemFound = false
-
-local success, items = Game.GetTransactionSystem():GetItemList(Game.GetPlayer())
-
-for _, itemData in ipairs(items) do
---------debugPrint(2,tostring(itemData:GetID().id))
-if tostring(itemData:GetID().id) == tostring(itemTDBID) then
-itemFound = true
-break
-end
-end
-
-
-return itemFound
-
-
-
+	
+	local itemTDBID = TweakDBID(item)
+	local itemFound = false
+	
+	local success, items = Game.GetTransactionSystem():GetItemList(Game.GetPlayer())
+	
+	for _, itemData in ipairs(items) do
+		--------debugPrint(2,tostring(itemData:GetID().id))
+		if tostring(itemData:GetID().id) == tostring(itemTDBID) then
+			itemFound = true
+			break
+		end
+	end
+	
+	
+	return itemFound
+	
+	
+	
 end
 
 function checkItemAmount(item,amount)
-local count = 0
-local itemTDBID = TweakDBID.new(item)
-local itemFound = false
-
-local success, items = Game.GetTransactionSystem():GetItemList(Game.GetPlayer())
-
-for _, itemData in ipairs(items) do
---------debugPrint(2,tostring(itemData:GetID().id))
-if tostring(itemData:GetID().id) == tostring(itemTDBID) then
-count = count +1
-end
-end
-
-if(count >= amount)then
-itemFound = true
-
-else
-
-itemFound = checkStackableItemAmount(item,amount)
-
-end
-
-
-
-return itemFound
-
-
-
+	local count = 0
+	local itemTDBID = TweakDBID.new(item)
+	local itemFound = false
+	
+	local success, items = Game.GetTransactionSystem():GetItemList(Game.GetPlayer())
+	
+	for _, itemData in ipairs(items) do
+		--------debugPrint(2,tostring(itemData:GetID().id))
+		if tostring(itemData:GetID().id) == tostring(itemTDBID) then
+			count = count +1
+		end
+	end
+	
+	if(count >= amount)then
+		itemFound = true
+		
+		else
+		
+		itemFound = checkStackableItemAmount(item,amount)
+		
+	end
+	
+	
+	
+	return itemFound
+	
+	
+	
 end
 
 function checkStackableItemAmount(item,amount)
-
-
-local itemFound = false
-
-local count = 0
-count = getStackableItemAmount(item)
-
-
-if(count >= amount)then
-itemFound = true
-
-else
-
-itemFound = false
-
-end
-
-return itemFound
-
-
+	
+	
+	local itemFound = false
+	
+	local count = 0
+	count = getStackableItemAmount(item)
+	
+	
+	if(count >= amount)then
+		itemFound = true
+		
+		else
+		
+		itemFound = false
+		
+	end
+	
+	return itemFound
+	
+	
 end
 
 function getItemAmount(item)
-local count = 0
-
-local itemTDBID = TweakDBID(item)
-
-local success, items = Game.GetTransactionSystem():GetItemList(Game.GetPlayer())
-
-for _, itemData in ipairs(items) do
---------debugPrint(2,tostring(itemData:GetID().id))
-if tostring(itemData:GetID().id) == tostring(itemTDBID) then
-count = count +1
-
-end
-end
-
-if(count > 0)then
-
-
-count = getStackableItemAmount(item)
-
-end
-
-if(count == nil) then 
-count = 0
-end
-
-
-return count
-
-
-
+	local count = 0
+	
+	local itemTDBID = TweakDBID(item)
+	
+	local success, items = Game.GetTransactionSystem():GetItemList(Game.GetPlayer())
+	
+	for _, itemData in ipairs(items) do
+		--------debugPrint(2,tostring(itemData:GetID().id))
+		if tostring(itemData:GetID().id) == tostring(itemTDBID) then
+			count = count +1
+			
+		end
+	end
+	
+	if(count > 0)then
+		
+		
+		count = getStackableItemAmount(item)
+		
+	end
+	
+	if(count == nil) then 
+		count = 0
+	end
+	
+	
+	return count
+	
+	
+	
 end
 
 function getStackableItemAmount(item)
-
-local itemTDBID = TweakDBID(item)
-
-
-local amount = Game.GetTransactionSystem():GetItemQuantity(Game.GetPlayer(), ItemID.new(itemTDBID))
-
-if(amount == nil) then 
-amount = 0
-end
-
-return amount
-
-
-
+	
+	local itemTDBID = TweakDBID(item)
+	
+	
+	local amount = Game.GetTransactionSystem():GetItemQuantity(Game.GetPlayer(), ItemID.new(itemTDBID))
+	
+	if(amount == nil) then 
+		amount = 0
+	end
+	
+	return amount
+	
+	
+	
 end
 
 function table.empty (self)
-for _, _ in pairs(self) do
-return false
-end
-return true
+	for _, _ in pairs(self) do
+		return false
+	end
+	return true
 end
 
 function sleep (a) 
-local sec = tonumber(os.clock() + a); 
-while (os.clock() < sec) do 
-end 
+	local sec = tonumber(os.clock() + a); 
+	while (os.clock() < sec) do 
+	end 
 end
 
 function setNewFixersPoint() 
-
-
-
-for k,v in pairs(arrayFixer) do
-
-if(mappinManager[arrayFixer[k].fixer.Tag] == nil) then
-
-registerMappin(arrayFixer[k].fixer.LOC_X,arrayFixer[k].fixer.LOC_Y,arrayFixer[k].fixer.LOC_Z,arrayFixer[k].fixer.Tag,'FixerVariant',true,false,"Fixer",nil,arrayFixer[k].fixer.Name,arrayFixer[k].fixer.Name)
-
-end
-
-
-end
-
+	
+	
+	
+	for k,v in pairs(arrayFixer) do
+		
+		if(mappinManager[arrayFixer[k].fixer.Tag] == nil) then
+			
+			registerMappin(arrayFixer[k].fixer.LOC_X,arrayFixer[k].fixer.LOC_Y,arrayFixer[k].fixer.LOC_Z,arrayFixer[k].fixer.Tag,'FixerVariant',true,false,"Fixer",nil,arrayFixer[k].fixer.Name,arrayFixer[k].fixer.Name)
+			
+		end
+		
+		
+	end
+	
 end
 
 function ShowMessage(text)
-if messageController and not isVehicle() then
-local message = NewObject('gameSimpleScreenMessage')
-message.isShown = true
-message.duration = 5.0
-message.message = text
-
-messageController.screenMessage = message
-messageController:UpdateWidgets()
-end
+	if messageController and not isVehicle() then
+		local message = NewObject('gameSimpleScreenMessage')
+		message.isShown = true
+		message.duration = 5.0
+		message.message = text
+		
+		messageController.screenMessage = message
+		messageController:UpdateWidgets()
+	end
 end
 
 function ShowWarning(text, duration)
-Game['PreventionSystem::ShowMessage;GameInstanceStringFloat'](text, duration or 5.0)
+	Game['PreventionSystem::ShowMessage;GameInstanceStringFloat'](text, duration or 5.0)
 end
 
 function has_value (tab, val)
-for index, value in ipairs(tab) do
-if value == val then
-return true
-end
-end
-
-return false
+	for index, value in ipairs(tab) do
+		if value == val then
+			return true
+		end
+	end
+	
+	return false
 end
 
 function entEntityIDDraw(entEntityID)
-ImGui.Indent()
-
--- Properties
-ImGui.Text("hash: " .. tostring(entEntityID.hash))
-
-ImGui.Unindent()
+	ImGui.Indent()
+	
+	-- Properties
+	ImGui.Text("hash: " .. tostring(entEntityID.hash))
+	
+	ImGui.Unindent()
 end
 
 function deepcopy(orig, copies)
-copies = copies or {}
-local orig_type = type(orig)
-local copy
-if orig_type == 'table' then
-if copies[orig] then
-copy = copies[orig]
-else
-copy = {}
-copies[orig] = copy
-for orig_key, orig_value in next, orig, nil do
-copy[deepcopy(orig_key, copies)] = deepcopy(orig_value, copies)
-end
-setmetatable(copy, deepcopy(getmetatable(orig), copies))
-end
-else -- number, string, boolean, etc
-copy = orig
-end
-return copy
+	copies = copies or {}
+	local orig_type = type(orig)
+	local copy
+	if orig_type == 'table' then
+		if copies[orig] then
+			copy = copies[orig]
+			else
+			copy = {}
+			copies[orig] = copy
+			for orig_key, orig_value in next, orig, nil do
+				copy[deepcopy(orig_key, copies)] = deepcopy(orig_value, copies)
+			end
+			setmetatable(copy, deepcopy(getmetatable(orig), copies))
+		end
+		else -- number, string, boolean, etc
+		copy = orig
+	end
+	return copy
 end	
 
 
@@ -1636,116 +1650,116 @@ end
 
 
 function tableHasKey(table)
-
-for key,value in pairs(table) do
-if(value ~= nil)then
-return true   
-end
-end
-
-return false
-
+	
+	for key,value in pairs(table) do
+		if(value ~= nil)then
+			return true   
+		end
+	end
+	
+	return false
+	
 end
 
 function round(x)
-return x>=0 and math.floor(x+0.5) or math.ceil(x-0.5)
+	return x>=0 and math.floor(x+0.5) or math.ceil(x-0.5)
 end
 
 function table.print(table)
-for key, value in pairs(table) do
-printf('(%s)=(%s)\n', tostring(key), tostring(value))
-end
+	for key, value in pairs(table) do
+		printf('(%s)=(%s)\n', tostring(key), tostring(value))
+	end
 end
 
 
 
 
 function diffVector(from, to)
--- print(dump(from))
--- print(dump(to))
-
-return Vector4.new(to.x - from.x, to.y- from.y, to.z - from.z, to.w - from.w)
+	-- print(dump(from))
+	-- print(dump(to))
+	
+	return Vector4.new(to.x - from.x, to.y- from.y, to.z - from.z, to.w - from.w)
 end
 
 function reverseTable(mytable)
-newtable = {}
-
-for i=1, #mytable do
-
-table.insert(newtable,mytable[#mytable + 1 - i])
-
-
-end
-
-return newtable
+	newtable = {}
+	
+	for i=1, #mytable do
+		
+		table.insert(newtable,mytable[#mytable + 1 - i])
+		
+		
+	end
+	
+	return newtable
 end
 
 function getMainStash()
-
-
-local stashId = NewObject('entEntityID')
-stashId.hash = 16570246047455160070ULL
-
-return Game.FindEntityByID(stashId)
-
+	
+	
+	local stashId = NewObject('entEntityID')
+	stashId.hash = 16570246047455160070ULL
+	
+	return Game.FindEntityByID(stashId)
+	
 end
 
 function tostringorempty(value)
-if value == nil then value = "" end
-
-return tostring(value)
+	if value == nil then value = "" end
+	
+	return tostring(value)
 end
 
 
 function getTransgressionFromTweakId(trans)
-
-for i,value in ipairs(transgressionsTweakList) do
-
-if(trans == TweakDBID.new("Transgression."..value)) then
-
-return value
-
-end
-
-
-end
-
-return nil
-
+	
+	for i,value in ipairs(transgressionsTweakList) do
+		
+		if(trans == TweakDBID.new("Transgression."..value)) then
+			
+			return value
+			
+		end
+		
+		
+	end
+	
+	return nil
+	
 end
 
 function getAffiliationsFromTweakId(aff)
-
-for i,value in ipairs(affiliationTweakList ) do
-
-if(aff == TweakDBID.new("Factions."..value)) then
-
-return value
-
-end
-
-
-end
-
-return nil
-
+	
+	for i,value in ipairs(affiliationTweakList ) do
+		
+		if(aff == TweakDBID.new("Factions."..value)) then
+			
+			return value
+			
+		end
+		
+		
+	end
+	
+	return nil
+	
 end
 
 
 
 
 function getRandomPairfromTable(myTable)
-
-
-local keyset = {}
-for k in pairs(myTable) do
-table.insert(keyset, k)
-end
--- now you can reliably return a random key
-random_elem = {}
-random_elem.key = keyset[math.random(#keyset)]
-random_elem.value = myTable[random_elem.key]
-return random_elem
+	
+	
+	local keyset = {}
+	for k in pairs(myTable) do
+		table.insert(keyset, k)
+	end
+	-- now you can reliably return a random key
+	random_elem = {}
+	random_elem.key = keyset[math.random(#keyset)]
+	random_elem.value = myTable[random_elem.key]
+	return random_elem
 end
 
 
@@ -1753,219 +1767,219 @@ end
 
 
 function table.compare(tablepoi, tablepoi2) 
-
-for i,v in ipairs(tablepoi) do
-
-if table_contains(tablepoi2,v) then
-
-return true
-
-end
-
-end
-return false
+	
+	for i,v in ipairs(tablepoi) do
+		
+		if table_contains(tablepoi2,v) then
+			
+			return true
+			
+		end
+		
+	end
+	return false
 end
 
 function SearchinTable(tables, prop, value,subitem) 
-
-local obj = nil 
-
-if(subitem == nil) then
-
-for k,v in pairs(tables) do
-
-if(v[prop] == value) then
-
-obj = v
-break
-
-end
-
-end
-
-else
-
-
-for k,v in pairs(tables) do
-
-if(v[subitem][prop] == value) then
-
-obj = v[subitem]
-break
-
-end
-
-end
-
-
-end
-
-
-
-return obj
+	
+	local obj = nil 
+	
+	if(subitem == nil) then
+		
+		for k,v in pairs(tables) do
+			
+			if(v[prop] == value) then
+				
+				obj = v
+				break
+				
+			end
+			
+		end
+		
+		else
+		
+		
+		for k,v in pairs(tables) do
+			
+			if(v[subitem][prop] == value) then
+				
+				obj = v[subitem]
+				break
+				
+			end
+			
+		end
+		
+		
+	end
+	
+	
+	
+	return obj
 end
 
 function isArray(t)
-if('table' == type(t) and t[1] ~= nil) then
-return true
-else
-return false
-end
+	if('table' == type(t) and t[1] ~= nil) then
+		return true
+		else
+		return false
+	end
 end
 
 
 function TweakDbtoKey(data)
-if type(data) == 'number' then
-return data
-end
-
-if type(data) == 'string' then
-data = TweakDbtoTweakId(data)
-end
-
-if type(data) == 'userdata' then
-data = TweakDbextract(data)
-end
-
-if type(data) == 'table' then
-return data.length * 0x100000000 + data.hash
---return (data.length << 32 | data.hash)
-end
-
-return 0
+	if type(data) == 'number' then
+		return data
+	end
+	
+	if type(data) == 'string' then
+		data = TweakDbtoTweakId(data)
+	end
+	
+	if type(data) == 'userdata' then
+		data = TweakDbextract(data)
+	end
+	
+	if type(data) == 'table' then
+		return data.length * 0x100000000 + data.hash
+		--return (data.length << 32 | data.hash)
+	end
+	
+	return 0
 end
 
 function TweakDbisRealKey(key)
-return key <= 0xFFFFFFFFFF
+	return key <= 0xFFFFFFFFFF
 end
 
 function TweakDbtoStruct(data)
-if type(data) == 'table' then
-return data
-end
-
-if type(data) == 'number' then
--- { hash = data & 0xFFFFFFFF, length = data >> 32 }
-local length = math.floor(data / 0x100000000)
-local hash = data - (length * 0x100000000)
-return { hash = hash, length = length }
-end
-
-if type(data) == 'string' then
-data = TweakDbtoTweakId(data)
-end
-
-if type(data) == 'userdata' then
-return TweakDbextract(data)
-end
-
-return nil
+	if type(data) == 'table' then
+		return data
+	end
+	
+	if type(data) == 'number' then
+		-- { hash = data & 0xFFFFFFFF, length = data >> 32 }
+		local length = math.floor(data / 0x100000000)
+		local hash = data - (length * 0x100000000)
+		return { hash = hash, length = length }
+	end
+	
+	if type(data) == 'string' then
+		data = TweakDbtoTweakId(data)
+	end
+	
+	if type(data) == 'userdata' then
+		return TweakDbextract(data)
+	end
+	
+	return nil
 end
 
 function TweakDbtoType(tweakId, prefix)
-if type(tweakId) == 'string' then
-return str.with(tweakId, prefix)
-end
-
-return ''
+	if type(tweakId) == 'string' then
+		return str.with(tweakId, prefix)
+	end
+	
+	return ''
 end
 
 function TweakDbtoAlias(tweakId--[[, prefix]])
-return tweakId
-
---if type(tweakId) == 'string' then
---	return str.without(tweakId, prefix)
---end
---
---return ''
+	return tweakId
+	
+	--if type(tweakId) == 'string' then
+	--	return str.without(tweakId, prefix)
+	--end
+	--
+	--return ''
 end
 
 function TweakDbtoTweakId(tweakId, prefix)
-if type(tweakId) == 'number' then
-tweakId = TweakDbtoStruct(tweakId)
-end
-
-if type(tweakId) == 'table' then
-return TweakDBID.new(tweakId.hash, tweakId.length)
-end
-
-if type(tweakId) == 'string' then
-local hashHex, lenHex = tweakId:match('^<TDBID:([0-9A-Z]+):([0-9A-Z]+)>$')
-if hashHex and lenHex then
-return TweakDBID.new(tonumber(hashHex, 16), tonumber(lenHex, 16))
-elseif tweakId:find('%.') then
-return TweakDBID.new(tweakId)
-else
-return TweakDBID.new(str.with(tweakId, prefix))
-end
-end
-
-if type(tweakId) == 'userdata' then
-return tweakId
-end
+	if type(tweakId) == 'number' then
+		tweakId = TweakDbtoStruct(tweakId)
+	end
+	
+	if type(tweakId) == 'table' then
+		return TweakDBID.new(tweakId.hash, tweakId.length)
+	end
+	
+	if type(tweakId) == 'string' then
+		local hashHex, lenHex = tweakId:match('^<TDBID:([0-9A-Z]+):([0-9A-Z]+)>$')
+		if hashHex and lenHex then
+			return TweakDBID.new(tonumber(hashHex, 16), tonumber(lenHex, 16))
+			elseif tweakId:find('%.') then
+			return TweakDBID.new(tweakId)
+			else
+			return TweakDBID.new(str.with(tweakId, prefix))
+		end
+	end
+	
+	if type(tweakId) == 'userdata' then
+		return tweakId
+	end
 end
 
 function TweakDbtoItemId(tweakId, seed)
-if type(tweakId) == 'string' then
-tweakId = TweakDbtoItemTweakId(tweakId)
-end
-
-if seed then
-return ItemID.new(tweakId, seed)
-elseif seed == false then
-return ItemID.new(tweakId)
-else
-return GetSingleton('gameItemID'):FromTDBID(tweakId)
-end
+	if type(tweakId) == 'string' then
+		tweakId = TweakDbtoItemTweakId(tweakId)
+	end
+	
+	if seed then
+		return ItemID.new(tweakId, seed)
+		elseif seed == false then
+		return ItemID.new(tweakId)
+		else
+		return GetSingleton('gameItemID'):FromTDBID(tweakId)
+	end
 end
 
 function TweakDbtoItemTweakId(tweakId)
-return TweakDbtoTweakId(tweakId, 'Items.')
+	return TweakDbtoTweakId(tweakId, 'Items.')
 end
 
 function TweakDbtoItemType(alias)
-return TweakDbtoType(alias, 'Items.')
+	return TweakDbtoType(alias, 'Items.')
 end
 
 function TweakDbtoItemAlias(type)
-return TweakDbtoAlias(type, 'Items.')
+	return TweakDbtoAlias(type, 'Items.')
 end
 
 function TweakDbtoVehicleTweakId(tweakId)
-return TweakDbtoTweakId(tweakId, 'Vehicle.')
+	return TweakDbtoTweakId(tweakId, 'Vehicle.')
 end
 
 function TweakDbtoVehicleType(alias)
-return TweakDbtoType(alias, 'Vehicle.')
+	return TweakDbtoType(alias, 'Vehicle.')
 end
 
 function TweakDbtoVehicleAlias(type)
-return TweakDbtoAlias(type, 'Vehicle.')
+	return TweakDbtoAlias(type, 'Vehicle.')
 end
 
 
 
 function TweakDbtoSlotType(alias)
-return TweakDbtoType(alias, 'AttachmentSlots.')
+	return TweakDbtoType(alias, 'AttachmentSlots.')
 end
 
 function TweakDblocalize(tweakId)
-tweakId = TweakDbtoTweakId(tweakId)
-
-return {
-name = Game.GetLocalizedTextByKey(Game['TDB::GetLocKey;TweakDBID'](TweakDBID.new(tweakId, '.displayName'))),
-comment = Game.GetLocalizedTextByKey(Game['TDB::GetLocKey;TweakDBID'](TweakDBID.new(tweakId, '.localizedDescription'))),
-}
+	tweakId = TweakDbtoTweakId(tweakId)
+	
+	return {
+		name = Game.GetLocalizedTextByKey(Game['TDB::GetLocKey;TweakDBID'](TweakDBID.new(tweakId, '.displayName'))),
+		comment = Game.GetLocalizedTextByKey(Game['TDB::GetLocKey;TweakDBID'](TweakDBID.new(tweakId, '.localizedDescription'))),
+	}
 end
 
 function TweakDbextract(data)
-if data.hash then
-return { hash = data.hash, length = data.length }
-end
-
-if data.id then
-return { id = { data.id.hash, length = data.id.length }, rng_seed = data.rng_seed }
-end
-
-return data
+	if data.hash then
+		return { hash = data.hash, length = data.length }
+	end
+	
+	if data.id then
+		return { id = { data.id.hash, length = data.id.length }, rng_seed = data.rng_seed }
+	end
+	
+	return data
 end

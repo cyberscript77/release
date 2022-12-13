@@ -1,5 +1,12 @@
 debugPrint(3,"CyberScript: Editor module loaded")
 
+testanims = {
+	"cyberscript_workspot_base",
+  "cyberscript_workspot_custom_base",
+  "cyberscript_workspot_head",
+  "cyberscript_workspot_items",
+  "cyberscript_workspot_specialnpc"
+}
 
 function resetEditorObject()
 	
@@ -7671,7 +7678,7 @@ function debugTab()
 								for k,v in pairs(cyberscript.EntityManager) do
 									
 									local enti = v
-									if ImGui.TreeNode(enti.tag) then
+									if ImGui.TreeNode(k) then
 									
 										for key,prop in pairs(enti) do
 										
@@ -7689,6 +7696,47 @@ function debugTab()
 									ImGui.TreePop()
 									end
 								end
+								
+								if ImGui.Button("Despawn ALL")  then
+								
+								despawnAll()
+								end
+								
+								
+								ImGui.TreePop()
+							end
+							
+							ImGui.Separator()
+							
+							if ImGui.TreeNode("Mappin") then
+								for k,v in pairs(mappinManager) do
+									
+									local enti = v
+									if ImGui.TreeNode(k) then
+									
+										for key,prop in pairs(enti) do
+										
+											ImGui.Text(key.." : "..tostring(prop))
+											
+										end
+											if ImGui.Button("Despawn") then
+											
+											deleteMappinByTag(k)
+											
+											
+											end
+										
+									ImGui.TreePop()
+									end
+								end
+								
+								if ImGui.Button("Despawn ALL")  then
+								for k,v in pairs(mappinManager) do
+									deleteMappinByTag(k)
+								end
+								end
+								
+								
 								ImGui.TreePop()
 							end
 							
@@ -7746,6 +7794,43 @@ function debugTab()
 								getInteractGroup()
 							end
 							
+							showArray(arrayQuest2, "mission")
+							showArray(arrayInteract, "interact")
+							showArray(arrayDialog, "choice")
+							showArray(arrayHouse, "place")
+							showArray(arrayFixer, "fixer")
+							showArray(arrayScene, "scene")
+							showArray(arrayHUD, "hud")
+							showArray(arrayFaction, "faction")
+							showArray(arrayPOI, "poi")
+							showArray(arrayEvent, "event")
+							showArray(arrayCodex, "codex")
+							showArray(arrayWebpage, "webpage")
+							showArray(arrayEmail, "email")
+							showArray(arrayFunction, "function")
+							showArray(arrayHousing, "housing")
+							showArray(arrayHelp, "help")
+							showArray(arrayInterfaces, "interface")
+							showArray(arrayCustomNPC, "npc")
+							showArray(arrayPhoneConversation, "phone conversation")
+							showArray(arrayShard, "shard")
+							showArray(arrayNode, "node")
+							showArray(arrayPath, "path")
+							showArray(arrayCircuit, "circuit")
+							showArray(arrayRadio, "radio")
+							showArray(arraySound, "sound")
+							showArray(arrayTexture, "texture")
+							showArray(arrayCorpo, "corpo")
+							showArray(arraySetting, "setting")
+							showArray(arrayHousingTemplate, "housingtemplate")
+							showArray(arrayCharacterArchive, "characterarchive")
+							showArray(arrayquickhack, "quickhack")
+							showArray(arrayGarage, "garage")
+							showArray(displayHUD, "display hud")
+							if ImGui.Button("Refresh Displayed HUD")  then
+								
+								loadHUD()
+							end
 							ImGui.Separator()
 							ImGui.Text("Possible Interact : "..#possibleInteract)
 							ImGui.Text("Possible Interact Display : "..#possibleInteractDisplay)
@@ -7783,6 +7868,23 @@ function debugTab()
 								sessionFile:close()
 							
 							end
+						
+							if ImGui.Button("clear spawntablecount")  then
+								
+								spawntablecount {}
+							end
+							
+							if ImGui.Button("Hot Reload")  then
+								
+							loadModule()
+							end
+							
+							if ImGui.Button("Close Popup")  then
+							UIPopupsManager.ClosePopup()
+							
+							end
+							
+						
 						end)
 						
 						if status == false then
@@ -7794,6 +7896,82 @@ function debugTab()
 						
 						ImGui.EndTabItem()
 					end
+					
+						if ImGui.BeginTabItem("Anim tester") then
+							local status, result =  pcall(function()
+							
+							
+							if ImGui.BeginCombo(getLang("workspot"), editorWKName) then -- Remove the ## if you'd like for the title to display above combo box
+			
+			
+			
+									for i,v in ipairs(testanims) do
+										
+										if ImGui.Selectable(v, false) then
+											
+											
+											editorWKName = v
+											
+											ImGui.SetItemDefaultFocus()
+										end
+										
+										
+										
+										
+									end
+									
+									
+									ImGui.EndCombo()
+								end
+							editorAnimName = ImGui.InputText("Anims Name", editorAnimName, 100, ImGuiInputTextFlags.AutoSelectAll)
+							
+							editorAnimTag  = ImGui.InputText("Tag of Entity", editorAnimTag, 100, ImGuiInputTextFlags.AutoSelectAll)
+							
+							editorEntName = ImGui.InputText("Ent Name", editorEntName, 100, ImGuiInputTextFlags.AutoSelectAll)
+							
+							editorWKName = ImGui.InputText("Wk Name", editorWKName, 100, ImGuiInputTextFlags.AutoSelectAll)
+							-- editorAnimx = ImGui.InputFloat(getLang("editor_x"), editorAnimx, 1, 10, "%.1f", ImGuiInputTextFlags.None)
+							-- editorAnimy = ImGui.InputFloat(getLang("editor_y"), editorAnimy, 1, 10, "%.1f", ImGuiInputTextFlags.None)
+							-- editorAnimz = ImGui.InputFloat(getLang("editor_z"), editorAnimz, 1, 10, "%.1f", ImGuiInputTextFlags.None)
+							
+							
+							
+							
+							
+							
+							if ImGui.Button("Test")  then
+							
+							
+								spawnCustomAnimationWorkspot(editorAnimTag,editorEntName,editorAnimName,editorWKName,false,true)
+						
+							end
+							
+							if ImGui.Button("change_anim_entity")  then
+							
+							
+								changeWorkSpotAnims(editorAnimTag,editorAnimName,true)
+						
+							end
+							
+							if ImGui.Button("stop_anim_entity")  then
+							
+							
+								stopWorkSpotAnims(editorAnimTag)
+						
+							end
+							
+							end)
+						
+						if status == false then
+							
+							
+							debugPrint(10,result)
+							spdlog.error(result)
+						end
+						
+						ImGui.EndTabItem()
+					end
+					
 					
 					if ImGui.BeginTabItem("Mod Log") then
 						
@@ -7853,7 +8031,33 @@ function debugTab()
 end
 
 
-
+function showArray(array, title)
+	
+	ImGui.Separator()
+							
+							
+		if ImGui.TreeNode(title) then
+		
+		
+		
+			for k,v in pairs(array) do
+				
+				local enti = v
+				if ImGui.TreeNode(k) then
+				
+					ImGui.Text("File : "..tostring(v.file))
+					ImGui.Text("Datapack : "..tostring(v.datapack))
+				
+				ImGui.TreePop()
+				end
+			end
+			
+			
+		
+			ImGui.TreePop()
+		end
+	
+end
 
 --Windows
 function TriggerEditWindows()

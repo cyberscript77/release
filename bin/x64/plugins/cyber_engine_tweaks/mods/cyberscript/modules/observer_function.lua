@@ -5680,46 +5680,46 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		--print("spawned "..tostring(spawnedObject:GetEntityID().hash))
 	
 		
-		for k,v in pairs(cachedespawn) do
-			local tweak = TweakDBID.new(k)
+		-- for k,v in pairs(cachedespawn) do
+			-- local tweak = TweakDBID.new(k)
 		
-			if(tweak == spawnedObject:GetRecordID()) then
+			-- if(tweak == spawnedObject:GetRecordID()) then
 				
-				local obj = getEntityFromManagerById(spawnedObject:GetEntityID())
+				-- local obj = getEntityFromManagerById(spawnedObject:GetEntityID())
 			
-				if((v.id == nil or v.id.hash ~= spawnedObject:GetEntityID().hash) and getEntityFromManagerById(spawnedObject:GetEntityID())~= nil) then
+				-- if((v.id == nil or v.id.hash ~= spawnedObject:GetEntityID().hash) and getEntityFromManagerById(spawnedObject:GetEntityID())~= nil) then
 							
-							local entity = getEntityFromManagerById(spawnedObject:GetEntityID())
+							-- local entity = getEntityFromManagerById(spawnedObject:GetEntityID())
 							
-							if (v.count == nil) then
-								v.count = 0
-							end
-							print("Kill the NPC "..tostring(spawnedObject:GetEntityID().hash))
-							--Game.GetPreventionSpawnSystem():RequestDespawn(spawnedObject:GetEntityID())
+							-- if (v.count == nil) then
+								-- v.count = 0
+							-- end
+							-- print("Kill the NPC "..tostring(spawnedObject:GetEntityID().hash))
+							-- --Game.GetPreventionSpawnSystem():RequestDespawn(spawnedObject:GetEntityID())
 							 
 							
-							spawnedObject:Dispose()
+							-- spawnedObject:Dispose()
 							
-							--cachedespawn[i] = nil
-							if(entity.fromgarage ~= nil ) then
+							-- --cachedespawn[i] = nil
+							-- if(entity.fromgarage ~= nil ) then
 							
-								if (v.count == 0) then
-									cachedespawn[k] = nil
-								end
+								-- if (v.count == 0) then
+									-- cachedespawn[k] = nil
+								-- end
 							
-							else
-								v.count = v.count +1
-								if (v.count == 2) then
-									cachedespawn[k] = nil
-								end
-							end
-				end
+							-- else
+								-- v.count = v.count +1
+								-- if (v.count == 2) then
+									-- cachedespawn[k] = nil
+								-- end
+							-- end
+				-- end
 			
 			
 			
-			end
+			-- end
 		
-		end
+		-- end
 	
 		local obj = getEntityFromManagerById(spawnedObject:GetEntityID())
 		if(obj.tag == nil ) then
@@ -7353,110 +7353,8 @@ function listenPlayerInput(action)
 				end
 			end
 		end
-		if (AVisIn == true) then
-			AVinput.keyPressed = false
-			--back/forward
 		
-			if  actionName == 'world_map_menu_move_vertical' or actionName == 'left_stick_y'then
-				if actionType == 'BUTTON_HOLD_PROGRESS' or (actionType == 'AXIS_CHANGE' and actionValue > 0) then
-					AVinput.currentDirections.forward = true
-					AVinput.currentDirections.backwards = false
-					elseif actionType == 'BUTTON_HOLD_PROGRESS' or (actionType == 'AXIS_CHANGE' and actionValue < 0) then
-					AVinput.currentDirections.backwards = true
-					AVinput.currentDirections.forward = false
-					if(AVspeed > 1 and AVinput.lastInput == "forward") then
-						AVspeed = 0.3
-					end
-					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue == 0) then
-					AVinput.currentDirections.backwards = false
-					AVinput.currentDirections.forward = false
-				end
-			end
-			
-				--left/right - rollleft/rollright	
-			if actionName == 'world_map_menu_move_horizontal' or actionName == 'left_stick_x'  then
-				if (actionType == 'AXIS_CHANGE' and actionValue == -1) or (actionType == 'BUTTON_HOLD_PROGRESS' or actionValue < -0.6)then
-					AVinput.currentDirections.right = true
-					
-					AVinput.currentDirections.left = false
-					
-					elseif (actionType == 'AXIS_CHANGE' and actionValue == 1) or (actionType == 'BUTTON_HOLD_PROGRESS' or actionValue > 0.6) then
-					AVinput.currentDirections.left = true
-					
-					AVinput.currentDirections.right = false
-					
-					------print"Working mate right")
-					elseif (actionType == 'AXIS_CHANGE' and actionValue == 0) or (actionType == 'BUTTON_RELEASED' and (actionValue < 0.6 and actionValue > -0.6)) then
-					AVinput.currentDirections.right = false
-					AVinput.currentDirections.left = false
-					
-				end
-			end
-				--up down
-			if actionName == 'ToggleSprint' or actionName == 'ToggleVehCamera' or actionName == 'left_trigger'then
-				if actionType == 'BUTTON_PRESSED' or (actionType == 'AXIS_CHANGE' and actionValue > 0) then
-					AVinput.currentDirections.down = true
-					AVinput.currentDirections.up = false
-					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue == 0) then
-					AVinput.currentDirections.down = false
-				end
-			end
-			
-			if actionName == "VisionHold" then
-				
-				print(actionName)
-				print(actionType)
-					
-				if actionType == 'BUTTON_PRESSED' or (actionType == 'AXIS_CHANGE' and actionValue > 0) then
-					AVinput.currentDirections.rollright = true
-					AVinput.currentDirections.rollleft = false
-					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue == 0) then
-					AVinput.currentDirections.rollright = false
-					
-				end
-			end
-			
-			
-			if actionName == "DescriptionChange" then
-				
-				if actionType == 'BUTTON_PRESSED' or (actionType == 'AXIS_CHANGE' and actionValue > 0) then
-					AVinput.currentDirections.rollleft = true
-					AVinput.currentDirections.rollright = false
-					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue == 0) then
-					AVinput.currentDirections.rollleft = false
-					
-				end
-			end
-				
-				
-			if actionName == 'UI_Skip' or actionName == 'right_trigger'then
-				if actionType == 'BUTTON_PRESSED' or (actionType == 'AXIS_CHANGE' and actionValue ==1) then
-					AVinput.currentDirections.up = true
-					AVinput.currentDirections.down = false
-					elseif actionType == 'BUTTON_RELEASED' or (actionType == 'AXIS_CHANGE' and actionValue < 1) then
-					AVinput.currentDirections.up = false
-				end
-			end
-			if actionName == 'Exit' then
-				if actionType == 'BUTTON_PRESSED'then
-					AVinput.exit = true
-				end
-			end
-			AVinput.keyPressed = false
-			AVinput.isMoving = false
-			for key, v in pairs(AVinput.currentDirections) do
-				if v == true then
-					print("toto"..key)
-					AVinput.isMoving = true
-					AVinput.keyPressed = true
-					if(key == "forward" or key == "backwards") then
-						AVinput.lastInput = key
-					end
-					--------printkey)
-				end
-			end
-		end
-	
+		inputAV(action)
 end
 	
 

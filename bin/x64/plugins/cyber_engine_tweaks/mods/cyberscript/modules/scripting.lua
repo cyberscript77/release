@@ -592,124 +592,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	end
 	
 	--AV
-	if(AVinput.exit ~= nil and AVinput.exit == true) then
-		if AVisIn == true and inVehicule == true then
-			local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-			fppComp:SetLocalPosition(Vector4:new(0.0, 0.0, 0.0, 1.0))
-			-- Stop("env")
-			if(AVseat ~= nil) then
-				UnsetSeat("player",false, AVseat)
-				Game.RemoveEffectPlayer("GameplayRestriction.NoScanning")
-				AVseat = nil
-				Cron.After(1, function()
-					
-					debugPrint(10,#cyberscript.GroupManager["AV"].entities)
-					for i=1, #cyberscript.GroupManager["AV"].entities do 
-						local entityTag = cyberscript.GroupManager["AV"].entities[i]
-						debugPrint(10,entityTag)
-						local obj = getEntityFromManager(entityTag)
-						local enti = Game.FindEntityByID(obj.id)
-						if(enti ~= nil) then
-							despawnEntity(entityTag)
-						end
-					end
-					cyberscript.GroupManager["AV"].entities = {}	
-					CurrentAVEntity = nil
-					AVisIn = false
-					AVinput.exit = false							
-				end)
-				else
-				CurrentAVEntity = nil
-				AVisIn = false
-				AVinput.exit = false		
-			end
-		end
-	end
-	
-	if (AVinput.isMoving == true and AVisIn and AVinput.keyPressed == true ) then
-		
-		fly(AVinput.currentDirections, 0)
-	
-	end
-	
-	if (AVinput.isMoving == true and AVisIn and AVinput.keyPressed == false ) then
-		if AVspeed > 0.3 then
-			--AVspeed = AVspeed - 0.05
-			print("here")
-			-- if AVinput.lastInput ~= "" then
-				-- debugPrint(1,AVinput.lastInput)
-				-- if AVinput.lastInput == "forward" then
-					-- AVinput.currentDirections.forward = true
-					-- fly(AVinput.currentDirections, 0)
-				-- end
-				-- if AVinput.lastInput == "backwards" then
-					-- AVinput.currentDirections.backwards = true
-					-- fly(AVinput.currentDirections, 0)
-				-- end
-				-- else
-				-- AVinput.isMoving = false
-				-- AVinput.keyPressed = false
-				-- AVinput.currentDirections.backwards = false
-				-- AVinput.currentDirections.forward = false
-				-- AVinput.lastInput = ""
-			-- end
-		end
-			
-			AVinput.keyPressed = false
-			AVinput.currentDirections.backwards = false
-			AVinput.currentDirections.forward = false
-			AVinput.lastInput = ""
-			local group =getGroupfromManager("AV")
-			for i=1, #group.entities do 
-				local entityTag = group.entities[i]
-				local isplayer = false
-				if entityTag == "player" then
-					isplayer = true
-				end
-				local obj = getEntityFromManager(entityTag)
-				local enti = Game.FindEntityByID(obj.id)
-				if(enti ~= nil) then
-					
-					local newAngle = {}
-					newAngle.yaw = AVyaw
-					newAngle.roll = AVroll
-					newAngle.pitch = AVPitch
-					teleportTo(enti, enti:GetWorldPosition(), newAngle, false)
-				end
-			end
-		end
-	
-	if(AVinput.isMoving == false and AVisIn) then
-	
-		
-		AVinput.isMoving = false
-		AVinput.currentDirections.backwards = false
-		AVinput.currentDirections.forward = false
-		AVinput.lastInput = ""
-		local group =getGroupfromManager("AV")
-		for i=1, #group.entities do 
-			local entityTag = group.entities[i]
-			local isplayer = false
-			if entityTag == "player" then
-				isplayer = true
-			end
-			local obj = getEntityFromManager(entityTag)
-			local enti = Game.FindEntityByID(obj.id)
-			if(enti ~= nil) then
-				
-				local newAngle = {}
-				newAngle.yaw = AVyaw
-				newAngle.roll = AVroll
-				newAngle.pitch = AVPitch
-				teleportTo(enti, enti:GetWorldPosition(), newAngle, false,obj)
-			end
-		end
-		
-		-- local speede = math.floor(AVspeed*10)
-		-- setScore("av","speed",speede)
-		
-	end
-	
+	refreshAV()
 	--Pause Menu and Ambush timer
 	if(inMenu) then
 		if(GameController["SubtitlesGameController"] ~= nil) then
@@ -854,7 +737,9 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	
 	--POI Location
 	if(getUserSetting("AutoCheckPOI") == true) then
-		currentPOI = FindPOI(nil,nil,nil,inVehicule,nil,nil,true,getUserSetting("CurrentPOIDetectionRange"),nil,nil,nil)
+	--print(getUserSetting("CurrentPOIDetectionRange"))
+		currentPOI = FindPOI("","","",inVehicule,nil,false,true,getUserSetting("CurrentPOIDetectionRange"),nil,nil,nil)
+		--print(dump(currentPOI))
 	end
 	
 	--Dialog check
@@ -1892,9 +1777,9 @@ function doTriggeredEvent()
 			--testTriggerRequirement(event.requirement,event.trigger)
 			--print(key)
 			if(checkTriggerRequirement(event.requirement,event.trigger))then
-				--logme(1,"check for "..event.name)
-				runActionList(event.action,key,"interact",false,"nothing")
-				
+				if workerTable[key] == nil then
+					runActionList(event.action,key,"interact",false,"nothing")
+				end
 			end
 		end 
 	end
@@ -2127,9 +2012,11 @@ function checkFixer()
 				
 				local twkVehi = TweakDBID.new(currentfixer.NPCId)
 				
+				if(cyberscript.EntityManager[currentfixer.Tag] == nil and exist ==  false) then
 				
+				cyberscript.EntityManager[currentfixer.Tag] = {}
 				spawnNPC(currentfixer.NPCId,"", currentfixer.Tag, currentfixer.LOC_X, currentfixer.LOC_Y, currentfixer.LOC_Z, 42, true, false, nil, false, nil)
-				
+				end
 				-- local obj = getEntityFromManager(currentfixer.Tag)
 				-- local enti = Game.FindEntityByID(obj.id)
 				-- lookAtPlayer(enti, 999999999)
@@ -2352,11 +2239,15 @@ function checkNPC()
 				end
 				
 				
+				if(cyberscript.EntityManager[npc.tag] == nil) then
+				print("Spawn NPC")
+				cyberscript.EntityManager[npc.tag] = {}
 				spawnNPC(tweakDBnpc,"", npc.tag, npcpostion.x, npcpostion.y, npcpostion.z, 42, true, false, nil, false, npc.rotation)
 				
 				npc.isspawn=true
 				npc.init=false
 				
+				end
 				
 				else
 				
@@ -2451,7 +2342,7 @@ function checkNPC()
 								end
 								
 								despawnEntity(npc.tag)
-								
+								print("despawn "..npc.tag)
 								if(workerTable[npc.tag.."_despawn"] == nil and #npc.despawnaction > 0 and npc.dospawnaction == true) then
 									runActionList(npc.despawnaction, npc.tag.."_despawn", "interact",false,npc.tag)
 									
@@ -3024,7 +2915,7 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 		
 		local currentpoi = nil
 		currentpoi = currentpoilist[math.random(#currentpoilist)]
-		
+		--print(dump(currentpoilist))
 		return currentpoi
 	else
 		return nil
