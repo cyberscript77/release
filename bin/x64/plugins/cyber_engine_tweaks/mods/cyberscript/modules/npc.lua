@@ -195,7 +195,7 @@ if spawnRegion then
 								
 								local entity = {}
 								entity.id = NPC
-								--cachedespawn[tag] = nil
+								cachedespawn[tag] = nil
 								entity.tag = tag
 								entity.tweak = chara
 								entity.isprevention = isprevention
@@ -3149,7 +3149,7 @@ if vehiculeRegion then
 							
 							
 							NPC = Game.GetPreventionSpawnSystem():RequestSpawn(twk, spawnlevel * -1, spawnTransform)
-							
+							cachedespawn[tag] = NPC
 							
 							
 							Cron.Every(0.1, {tick = 1}, function(timer)
@@ -3165,6 +3165,7 @@ if vehiculeRegion then
 								if ent then
 									print("Ok")
 										Cron.Halt(timer)
+										cachedespawn[tag] = nil
 									local entity = {}
 									entity.id = NPC
 									
