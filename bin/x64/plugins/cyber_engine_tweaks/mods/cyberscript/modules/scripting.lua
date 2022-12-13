@@ -442,7 +442,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	
 	--Targeted entity
 	objLook = Game.GetTargetingSystem():GetLookAtObject(Game.GetPlayer(),false,false)
-	
+	pcall(function()
 	if(objLook ~= nil) then
 		
 		
@@ -509,7 +509,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		openCompanion = false
 		objLookIsVehicule = false
 	end
-	
+	end)
 	
 	--house
 	if(currentHouse ~= nil) then
@@ -789,7 +789,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	--Timers 
 	if (tick % 5 == 0) then --every 0.5 second
 		
-		
+		--TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 		
 		refreshUIWidget()
 	

@@ -1,0 +1,142 @@
+{
+	"desc": "CAR_PATROLLINGNS_2",
+	"locations": [
+		{
+			"x": -1036.3518066406,
+			"subdistrict": "Northside",
+			"inVehicule": true,
+			"y": 2315.2746582031,
+			"district": "Watson",
+			"z": 16.125289916992,
+			"Tag": "CAR_PATROLLINGNS_2"
+		},
+		{
+			"x": -1065.9306640625,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2176.1936035156,
+			"subdistrict": "Northside",
+			"z": 13.007461547852,
+			"district": "Watson"
+		},
+		{
+			"x": -854.01702880859,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2340.4311523438,
+			"subdistrict": "Northside",
+			"z": 52.833305358887,
+			"district": "Watson"
+		},
+		{
+			"x": -789.38745117188,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2270.4624023438,
+			"subdistrict": "Northside",
+			"z": 52.833320617676,
+			"district": "Watson"
+		},
+		{
+			"x": -705.44903564453,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2203.4709472656,
+			"subdistrict": "Northside",
+			"z": 52.904281616211,
+			"district": "Watson"
+		},
+		{
+			"x": -816.39691162109,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2080.4982910156,
+			"subdistrict": "Northside",
+			"z": 53.061904907227,
+			"district": "Watson"
+		},
+		{
+			"x": -406.88238525391,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2012.25,
+			"subdistrict": "Northside",
+			"z": 36.108322143555,
+			"district": "Watson"
+		},
+		{
+			"x": -445.34268188477,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 1906.8940429688,
+			"subdistrict": "Northside",
+			"z": 36.180763244629,
+			"district": "Watson"
+		},
+		{
+			"x": -533.80084228516,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 1837.7377929688,
+			"subdistrict": "Northside",
+			"z": 36.108406066895,
+			"district": "Watson"
+		},
+		{
+			"x": -543.49725341797,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 1951.0126953125,
+			"subdistrict": "Northside",
+			"z": 36.108352661133,
+			"district": "Watson"
+		},
+		{
+			"x": -863.83795166016,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2623.3813476563,
+			"subdistrict": "Northside",
+			"z": 38.421859741211,
+			"district": "Watson"
+		},
+		{
+			"x": -909.2998046875,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2736.744140625,
+			"subdistrict": "Northside",
+			"z": 38.40828704834,
+			"district": "Watson"
+		},
+		{
+			"x": -938.1181640625,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2852.908203125,
+			"subdistrict": "Northside",
+			"z": 30.059043884277,
+			"district": "Watson"
+		},
+		{
+			"x": -1019.3898925781,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 3072.8198242188,
+			"subdistrict": "Northside",
+			"z": 7.0634613037109,
+			"district": "Watson"
+		},
+		{
+			"x": -1181.1613769531,
+			"Tag": "",
+			"inVehicule": true,
+			"y": 2938.2944335938,
+			"subdistrict": "Northside",
+			"z": 6.9874572753906,
+			"district": "Watson"
+		}
+	],
+	"isFor": 30,
+	"tag": "CAR_PATROLLINGNS_2"
+}

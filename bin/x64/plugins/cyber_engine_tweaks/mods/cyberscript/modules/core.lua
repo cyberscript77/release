@@ -664,8 +664,6 @@ function shutdownManager() -- setup some function at shutdown
 end
 function TweakManager() -- Load vehicles and change some TweakDB
 	
-	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
-	
 		TweakDB:CloneRecord("Cyberscript.Player_Male", "Character.TPP_Player_Cutscene_Male")
 		TweakDB:CloneRecord("Cyberscript.Player_Female", "Character.TPP_Player_Cutscene_Female")
 		
@@ -720,6 +718,10 @@ function SetFlatFromSetting()
 	TweakDB:SetFlat("PlayerLocomotion.JumpJumpHeightModifier.value", 1 * Jump_Height)
 	TweakDB:SetFlat("PlayerLocomotion.DoubleJumpJumpHeightModifier.value", 2.6 * Double_Jump_Height)
 	end
+	
+	
+		TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
+	
 end
 -- ------------------------------------------------------------------
 -- -------------------------------Event-------------------------------
@@ -727,7 +729,7 @@ end
 
 registerForEvent("onInit", function()
 	
-	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
+	--TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	JSON = dofile("external/json.lua")
 	
 	Observe('PlayerPuppet', 'OnAction',function(_,action)
@@ -802,8 +804,15 @@ registerForEvent("onOverlayClose", function()
 	overlayOpen = false
 end)
 registerForEvent("onTweak", function()
-	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
+	
+	
+	
+	
 	TweakManager()
+	
+	
+	
+	
 	
 end)
 

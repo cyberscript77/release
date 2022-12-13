@@ -1,0 +1,106 @@
+{
+	"desc": "CAR_PATROLLINGLCH_15",
+	"locations": [{
+			"x": -1388.8209228516,
+			"subdistrict": "LittleChina",
+			"inVehicule": true,
+			"y": 1448.9613037109,
+			"district": "Watson",
+			"z": 17.98999786377,
+			"Tag": "CAR_PATROLLINGLCH_15"
+		},
+		{
+			"x": -1420.8958740234,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 1192.6225585938,
+			"subdistrict": "LittleChina",
+			"z": 14.5,
+			"district": "Watson"
+		},
+		{
+			"x": -1532.3591308594,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 1146.0357666016,
+			"subdistrict": "LittleChina",
+			"z": 9.0972213745117,
+			"district": "Watson"
+		},
+		{
+			"x": -1672.4974365234,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 1141.8951416016,
+			"subdistrict": "LittleChina",
+			"z": 18,
+			"district": "Watson"
+		},
+		{
+			"x": -1687.6945800781,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 997.15930175781,
+			"subdistrict": "LittleChina",
+			"z": 23.400001525879,
+			"district": "Watson"
+		},
+		{
+			"x": -1598.3718261719,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 960.50250244141,
+			"subdistrict": "LittleChina",
+			"z": 23.390251159668,
+			"district": "Watson"
+		},
+		{
+			"x": -1274.728515625,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 998.56072998047,
+			"subdistrict": "LittleChina",
+			"z": 23.423194885254,
+			"district": "Watson"
+		},
+		{
+			"x": -1281.1701660156,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 1046.3347167969,
+			"subdistrict": "LittleChina",
+			"z": 23.426078796387,
+			"district": "Watson"
+		},
+		{
+			"x": -1267.3522949219,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 1155.9339599609,
+			"subdistrict": "LittleChina",
+			"z": 16.660018920898,
+			"district": "Watson"
+		},
+		{
+			"x": -1401.5001220703,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 1207.6424560547,
+			"subdistrict": "LittleChina",
+			"z": 22.887016296387,
+			"district": "Watson"
+		},
+		{
+			"x": -1431.3006591797,
+			"Tag": "CAR_PATROLLINGLCH_15",
+			"inVehicule": true,
+			"y": 1241.6450195313,
+			"subdistrict": "LittleChina",
+			"z": 22.867622375488,
+			"district": "Watson"
+		}
+	],
+	"isFor": 30,
+	"tag": "CAR_PATROLLINGLCH_15"
+
+}

@@ -1,0 +1,259 @@
+{
+	"desc": "CAR_PATROLLINGCC_1",
+	"locations": [
+		{
+			"x": -1281.5992431641,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": -168.27842712402,
+			"z": 7.9004821777344,
+			"subdistrict": "CorpoPlaza",
+			"district": "CityCenter"
+		},
+		{
+			"x": -1256.4599609375,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": -45.120323181152,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.9027404785156,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1318.8334960938,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 63.912971496582,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.9032821655273,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1749.0721435547,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": -113.15631103516,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.3434677124023,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1709.8186035156,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 92.887786865234,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.2537384033203,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1808.7626953125,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 197.54309082031,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.0786895751953,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1837.2872314453,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 150.36386108398,
+			"subdistrict": "CorpoPlaza",
+			"z": 6.6936111450195,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1832.1512451172,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 316.19464111328,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.4533996582031,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1829.7012939453,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 363.11819458008,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.491813659668,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1819.6309814453,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 442.25250244141,
+			"subdistrict": "CorpoPlaza",
+			"z": 12.243965148926,
+			"district": "CityCenter"
+		},
+		{
+			"x": -2092.8754882813,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 420.75845336914,
+			"subdistrict": "CorpoPlaza",
+			"z": 9.5622024536133,
+			"district": "CityCenter"
+		},
+		{
+			"x": -2189.4619140625,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 418.99703979492,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.2661590576172,
+			"district": "CityCenter"
+		},
+		{
+			"x": -2188.6127929688,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 546.53820800781,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.14013671875,
+			"district": "CityCenter"
+		},
+		{
+			"x": -2089.2087402344,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 544.28466796875,
+			"subdistrict": "CorpoPlaza",
+			"z": 10.02352142334,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1912.8719482422,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 542.48895263672,
+			"subdistrict": "CorpoPlaza",
+			"z": 10.128463745117,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1838.1896972656,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 587.10009765625,
+			"subdistrict": "CorpoPlaza",
+			"z": 10.236465454102,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1834.6672363281,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 668.87182617188,
+			"subdistrict": "CorpoPlaza",
+			"z": 10.52074432373,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1516.2542724609,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 647.32360839844,
+			"subdistrict": "CorpoPlaza",
+			"z": 8.7098083496094,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1285.2169189453,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 662.5966796875,
+			"subdistrict": "CorpoPlaza",
+			"z": 4.2962341308594,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1314.1437988281,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 372.66177368164,
+			"subdistrict": "CorpoPlaza",
+			"z": 4.5442657470703,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1261.2135009766,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 365.46725463867,
+			"subdistrict": "CorpoPlaza",
+			"z": 4.1511459350586,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1283.7746582031,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 480.01571655273,
+			"subdistrict": "CorpoPlaza",
+			"z": 3.949348449707,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1518.4001464844,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 419.91952514648,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.5401077270508,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1548.3343505859,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 313.57580566406,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.9899978637695,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1578.0817871094,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 274.05590820313,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.8489761352539,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1575.2249755859,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 223.0866394043,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.730110168457,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1329.2093505859,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 234.52995300293,
+			"subdistrict": "CorpoPlaza",
+			"z": 6.6722183227539,
+			"district": "CityCenter"
+		},
+		{
+			"x": -1221.5343017578,
+			"Tag": "CAR_PATROLLINGCC_1",
+			"inVehicule": true,
+			"y": 197.67950439453,
+			"subdistrict": "CorpoPlaza",
+			"z": 7.5,
+			"district": "CityCenter"
+		}
+	],
+	"tag": "CAR_PATROLLINGCC_1",
+	 "isFor": 30
+}

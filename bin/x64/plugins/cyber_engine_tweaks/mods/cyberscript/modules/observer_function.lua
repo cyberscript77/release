@@ -5676,11 +5676,18 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	-- end)
 	function PreventionSpawnSystem_SpawnCallback(thos,spawnedObject,wrappedMethod)
 		if(moddisabled == true) then return wrappedMethod(spawnedObject) end
-		
+	
 		--print("spawned "..tostring(spawnedObject:GetEntityID().hash))
 	
+		local contain = false
+		for k,v in pairs(cachedespawn) do
 		
-		-- for k,v in pairs(cachedespawn) do
+			if(spawnedObject:GetEntityID().hash == v.hash) then
+			
+			contain = true
+			
+			end
+		end
 			-- local tweak = TweakDBID.new(k)
 		
 			-- if(tweak == spawnedObject:GetRecordID()) then
@@ -5721,11 +5728,12 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		
 		-- end
 	
-		local obj = getEntityFromManagerById(spawnedObject:GetEntityID())
-		if(obj.tag == nil ) then
 		
 		
-			
+		if(contain == false) then
+		
+		
+				print("test")
 			wrappedMethod(spawnedObject)
 		
 		

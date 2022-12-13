@@ -1,0 +1,14 @@
+{
+  "desc": "CAR_PATROLLINGLCH_8",
+  "locations": [ {
+    "x": -1836.5441894531,
+    "Tag": "CAR_PATROLLINGLCH_8",
+    "inVehicule": true,
+    "y": 1473.8662109375,
+    "z": 10,
+    "district": "Watson",
+    "subdistrict": "LittleChina"
+  } ],
+  "tag": "CAR_PATROLLINGLCH_8",
+  "isFor": 30
+}
