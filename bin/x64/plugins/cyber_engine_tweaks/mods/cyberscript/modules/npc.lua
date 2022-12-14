@@ -3171,7 +3171,23 @@ if vehiculeRegion then
 									
 									entity.tag = tag
 									entity.tweak = chara
-									entity.isprevention = isprevention
+									entity.takenSeat = {}
+									entity.isAV = isAV
+									entity.fakeAV = fakeav
+									entity.name = chara
+									entity.isprevention = spawn_system == 3
+									entity.fromgarage = spawn_system == 1
+									entity.isMP = isMP
+									if(isMP ~= nil and isMP == true)then
+										entity.name = tag
+									end
+									
+									-- local veh = Game.FindEntityByID(NPC)
+									-- entity.availableSeat = GetSeats(veh)
+									--entity.availableSeat = {}
+									entity.driver = {}
+				
+									
 									if(scriptlevel == nil) then
 										entity.scriptlevel = 0
 										else

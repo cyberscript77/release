@@ -5473,7 +5473,25 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				self.InputView:SetVisible(true)
 				self.isSelected = true
 				
-				if(dialogoption.style == nil) then
+				
+				if(dialogoption.requirement ~= nil and checkTriggerRequirement(dialogoption.requirement,dialogoption.trigger) == false)then
+				--print(dialogoption.Description)
+					self.ActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
+					self.InActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
+					self.SelectedBg:SetTintColor(gamecolor(255, 86, 64,0))
+						inkWidgetRef.SetOpacity(self.ActiveTextRef, 1)
+					inkWidgetRef.SetOpacity(self.InActiveTextRef,0)
+			
+				self.VerticalLineWidget.widget:SetTintColor(gamecolor(237, 124, 109,1))
+				
+					self.InputView:SetVisible(true)
+				
+					self.isSelected = true
+				
+				
+				self.SelectedBg:SetOpacity(0.0)
+				else
+					if(dialogoption.style == nil) then
 					
 					self.ActiveTextRef.widget:SetTintColor(gamecolor(0,0,0,1))
 					self.InActiveTextRef.widget:SetTintColor(gamecolor(0,0,0,1))
@@ -5492,11 +5510,10 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 					
 					
 				end
+				end
 				
 				
-				
-				
-				local captionParts = {}
+					local captionParts = {}
 				
 				
 				
@@ -5508,6 +5525,11 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				self.SelectedBg:SetOpacity(0.6)
 				
 				
+				
+				
+				
+				
+			
 				
 				
 				
@@ -5530,7 +5552,13 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				inkWidgetRef.SetVisible(self.VerticalLineWidget, true)
 				self.InputView:SetVisible(false)
 				
-				if(dialogoption_unselect ~= nil and dialogoption_unselect.style ~= nil) then
+				
+				if(dialogoption_unselect.requirement ~= nil and checkTriggerRequirement(dialogoption_unselect.requirement,dialogoption_unselect.trigger) == false)then
+					self.ActiveTextRef.widget:SetTintColor(gamecolor(255, 86, 64,0))
+					self.InActiveTextRef.widget:SetTintColor(gamecolor(255, 86, 64,0))
+					
+				else
+					if(dialogoption_unselect ~= nil and dialogoption_unselect.style ~= nil) then
 					
 					local fontcolor = dialogoption_unselect.style.color
 					self.ActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
@@ -5541,7 +5569,12 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 						self.InActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
 						
 					
+					end
+					
+					
 				end
+				
+				
 				
 				self.isSelected = true
 					self.SelectedBg:SetTintColor(gamecolor(0,0,0,0))
@@ -5683,7 +5716,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		for k,v in pairs(cachedespawn) do
 		
 			if(spawnedObject:GetEntityID().hash == v.hash) then
-			
+			print("fgounded")
 			contain = true
 			
 			end
@@ -7230,8 +7263,11 @@ function listenPlayerInput(action)
 				local inputIndex = 0
 				
 				if(string.find(tostring(actionName), "hoice1_Release")and (actionType == "BUTTON_RELEASED") and (currentDialogHub.dial.options[currentDialogHub.index].locked == nil or currentDialogHub.dial.options[currentDialogHub.index].locked == false)) then
-					ClickOnDialog(currentDialogHub.dial.options[currentDialogHub.index],currentDialogHub.dial.speaker.value,currentDialogHub.dial.speaker.way)
 					
+					
+					if(currentDialogHub.dial.options[currentDialogHub.index].requirement == nil or checkTriggerRequirement(currentDialogHub.dial.options[currentDialogHub.index].requirement,currentDialogHub.dial.options[currentDialogHub.index].trigger))then
+						ClickOnDialog(currentDialogHub.dial.options[currentDialogHub.index],currentDialogHub.dial.speaker.value,currentDialogHub.dial.speaker.way)
+					end
 					
 				end
 				
@@ -7338,7 +7374,7 @@ function listenPlayerInput(action)
 								runActionList(possibleInteractDisplay[currentPossibleInteractChunkIndex][i].action,possibleInteractDisplay[currentPossibleInteractChunkIndex][i].tag,"interact",false,"player")
 								if(currentHouse == nil or (currentHouse ~= nil and interactautohide == true)) then
 									currentPossibleInteractChunkIndex = 0
-									debugPrint(2,"lol")
+									logme(1,"lol")
 									createInteraction(false)
 									candisplayInteract = false
 								end

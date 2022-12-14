@@ -3344,11 +3344,17 @@ function cycleInteract()
 	
 	currentInteractGroupIndex = currentInteractGroupIndex or 1
 	inputInAction = false
-	logme(1,"possibleInteractDisplay"..#possibleInteractDisplay)
-	-- debugPrint(6,"currentInteractGroupIndex"..currentInteractGroupIndex)
-	logme(1,"currentInteractGroup"..currentInteractGroup[currentInteractGroupIndex])
-	-- debugPrint(6,actionValue)
+	-- logme(1,"possibleInteractDisplay"..#possibleInteractDisplay)
+	-- logme(1,"currentInteractGroupIndex"..currentInteractGroupIndex)
+	-- logme(1,"currentPossibleInteractChunkIndex"..currentPossibleInteractChunkIndex)
+	-- logme(1,"candisplayInteract"..tostring(candisplayInteract))
+	-- logme(1,"currentInteractGroup"..currentInteractGroup[currentInteractGroupIndex])
+	-- -- debugPrint(6,actionValue)
 	
+	-- print(dump(possibleInteractDisplay))
+	
+	-- print(dump(currentInteractGroup[currentInteractGroupIndex]))
+	--scandisplayInteract = true
 	if currentPossibleInteractChunkIndex == 0 then
 		-- currentPossibleInteractChunkIndex = 1
 		candisplayInteract = true
@@ -3359,7 +3365,7 @@ function cycleInteract()
 		
 		getTriggeredActionsDisplay()
 		
-		debugPrint(6,"tyau")
+		logme(1,"000")
 		createInteraction(true)
 	end
 	
@@ -3371,7 +3377,7 @@ function cycleInteract()
 		-- currentInteractGroupIndex = 1
 		-- end
 		
-		-- Game.GetPlayer():SetWarningMessage(getLang("current_interact_group")..currentInteractGroup[currentInteractGroupIndex])
+		--Game.GetPlayer():SetWarningMessage(getLang("current_interact_group")..currentInteractGroup[currentInteractGroupIndex])
 	end
 	
 	if GameController["interactionWidgetGameController"].currentOptions then
