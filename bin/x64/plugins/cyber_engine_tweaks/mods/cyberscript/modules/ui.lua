@@ -3341,20 +3341,21 @@ end
 --interact--
 function cycleInteract()
 	--inputcount = inputcount +1
-	
+	getTriggeredActions()
 	currentInteractGroupIndex = currentInteractGroupIndex or 1
 	inputInAction = false
-	-- logme(1,"possibleInteractDisplay"..#possibleInteractDisplay)
-	-- logme(1,"currentInteractGroupIndex"..currentInteractGroupIndex)
-	-- logme(1,"currentPossibleInteractChunkIndex"..currentPossibleInteractChunkIndex)
-	-- logme(1,"candisplayInteract"..tostring(candisplayInteract))
-	-- logme(1,"currentInteractGroup"..currentInteractGroup[currentInteractGroupIndex])
+	logme(1,"possibleInteractDisplay"..#possibleInteractDisplay)
+	logme(1,"currentInteractGroupIndex"..currentInteractGroupIndex)
+	logme(1,"currentPossibleInteractChunkIndex"..currentPossibleInteractChunkIndex)
+	logme(1,"candisplayInteract"..tostring(candisplayInteract))
+	logme(1,"currentInteractGroup"..currentInteractGroup[currentInteractGroupIndex])
 	-- -- debugPrint(6,actionValue)
 	
 	-- print(dump(possibleInteractDisplay))
 	
 	-- print(dump(currentInteractGroup[currentInteractGroupIndex]))
 	--scandisplayInteract = true
+	candisplayInteract = true
 	if currentPossibleInteractChunkIndex == 0 then
 		-- currentPossibleInteractChunkIndex = 1
 		candisplayInteract = true
@@ -3365,7 +3366,7 @@ function cycleInteract()
 		
 		getTriggeredActionsDisplay()
 		
-		logme(1,"000")
+		--logme(1,"000")
 		createInteraction(true)
 	end
 	
@@ -3390,12 +3391,12 @@ function cycleInteract()
 			else
 			--createInteraction(true)
 			isdialogactivehub = false
-			debugPrint(6,"tyu")
+			--debugPrint(6,"tyu")
 		end
 		else
 		createInteraction(true)
 		isdialogactivehub = false
-		debugPrint(6,"tyuss")
+		--debugPrint(6,"tyuss")
 	end
 	
 	

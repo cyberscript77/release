@@ -12,32 +12,153 @@ if spawnRegion then
 	
 	function spawnAnimationWorkspot(entitytag,anim_cname,workspot,isinstant,unlockcamera)
 		
-		return nil
+		local obj = getEntityFromManager(entitytag)
+		local enti = Game.FindEntityByID(obj.id)
+		
+		
+		if(enti ~= nil) then
+			
+			
+			local spawnTransform = enti:GetWorldTransform()
+			spawnTransform:SetPosition(enti:GetWorldPosition())
+			if(entitytag == "player")then
+			spawnTransform:SetOrientationEuler(EulerAngles.new(0, 0, angles.yaw-180))
+			else
+			spawnTransform:SetOrientationEuler(EulerAngles.new(0, 0, angles.yaw))
+			
+			end
+			local NPC = exEntitySpawner.Spawn([[base\cyberscript\entity\workspot_anim.ent]], spawnTransform, '')
+			
+			Cron.Every(0.1, {tick = 1}, function(timer)
+				local ent = Game.FindEntityByID(NPC)
+				if ent then
+					-- stand_wall_lean180__rh_phone__ow__01
+					
+					Game.GetWorkspotSystem():PlayInDeviceSimple(ent, enti, unlockcamera, workspot)
+					Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, anim_cname, isinstant)
+					
+					if(NPC ~= nil) then
+						local entity = {}
+						entity.id = NPC
+						local tag = entitytag.."_workspot_"..tostring(math.random(1,99999))
+						entity.tag =tag
+						entity.tweak = anim_cname
+						entity.isprevention = false
+						entity.scriptlevel = 0
+						entity.name = tag
+						entity.isMP = false
+						entity.isWorkspot = true
+						
+						cyberscript.EntityManager[tag]=entity
+						
+					end
+					
+					
+					
+					Cron.Halt(timer)
+				end
+			end)
+		end
 		
 	end
 	
 	function spawnCustomAnimationWorkspot(entitytag,entname,anim_cname,workspot,isinstant,unlockcamera)
 		
-		return nil
+		local obj = getEntityFromManager(entitytag)
+		local enti = Game.FindEntityByID(obj.id)
+		
+		
+		if(enti ~= nil) then
+			
+			
+			local spawnTransform = enti:GetWorldTransform()
+			spawnTransform:SetPosition(enti:GetWorldPosition())
+			local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
+			if(entitytag == "player")then
+			spawnTransform:SetOrientationEuler(EulerAngles.new(0, 0, angles.yaw-180))
+			else
+			spawnTransform:SetOrientationEuler(EulerAngles.new(0, 0, angles.yaw))
+			
+			end
+			
+			
+			local NPC = exEntitySpawner.Spawn(entname, spawnTransform, '')
+			--print("Spawned "..entname)
+			Cron.Every(0.1, {tick = 1}, function(timer)
+				local ent = Game.FindEntityByID(NPC)
+				if ent then
+					-- stand_wall_lean180__rh_phone__ow__01
+						print("test")
+					Game.GetWorkspotSystem():PlayInDeviceSimple(ent, enti, unlockcamera, workspot)
+					Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, anim_cname, isinstant)
+					
+					if(NPC ~= nil) then
+						local entity = {}
+						entity.id = NPC
+						local tag = entitytag.."_workspot_"..tostring(math.random(1,99999))
+						entity.tag =tag
+						entity.tweak = anim_cname
+						entity.isprevention = false
+						entity.scriptlevel = 0
+						entity.name = tag
+						entity.isMP = false
+						entity.isWorkspot = true
+						
+						cyberscript.EntityManager[tag]=entity
+						
+					end
+					
+					
+					
+					Cron.Halt(timer)
+				end
+			end)
+		end
 		
 	end
 	
 	function changeWorkSpotAnims(entitytag,anim_cname,isinstant)
 		
-		return nil
+		local obj = getEntityFromManager(entitytag)
+		local enti = Game.FindEntityByID(obj.id)
+		
+		
+		
+		if(enti ~= nil ) then
+			
+			
+			Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, anim_cname, isinstant)
+		end
 		
 	end
 	
 	function changeWorkSpot(entitytag,workspotEnttag,workspot,unlockcamera)
 		
-		return nil
+		local obj = getEntityFromManager(entitytag)
+		local enti = Game.FindEntityByID(obj.id)
+		
+		local objwk = getEntityFromManager(workspotEnttag)
+		local entiwk = Game.FindEntityByID(objwk.id)
+		
+		if(enti ~= nil and entiwk ~= nil ) then
+			
+			Game.GetWorkspotSystem():PlayInDeviceSimple(entiwk, enti, unlockcamera, workspot)
+		end
 		
 	end
 	
 	
 	function stopWorkSpotAnims(entitytag)
 		
-		return nil
+		local obj = getEntityFromManager(entitytag)
+		local enti = Game.FindEntityByID(obj.id)
+		
+		
+		if(enti ~= nil) then
+			
+			
+			Game.GetWorkspotSystem():StopInDevice(enti)
+		end
 		
 	end
 	
@@ -77,13 +198,21 @@ if spawnRegion then
 					
 					worldpos:SetPosition(worldpos, postp)	
 					
+					if(rotation ~= nil) then
+						
+						local rostp =  EulerAngles.new(rotation.roll,rotation.pitch,rotation.yaw)
+						
+						worldpos:SetOrientationEuler(worldpos, rostp)	
+						
+					end
+					
 					if(isitem == nil or isitem == false)then
 						if(appearance ~= "" and appearance ~= "none") then
 							NPC = exEntitySpawner.SpawnRecord(chara, worldpos,appearance)
 							else
 							NPC = exEntitySpawner.SpawnRecord(chara, worldpos)
 						end
-						else
+					else
 						
 						
 						if(appearance ~= "" and appearance ~= "none") then
@@ -289,65 +418,11 @@ if spawnRegion then
 	
 	
 	
-	function spawnCamera(tag,types,entity,pos,angle,surveillance)
+	function spawnCamera(tag,pos,surveillance,angle)
 		
-		if(type == "entity") then
-			local objent = getEntityFromManager(entity)
-			local entient = Game.FindEntityByID(objent.id)
-			if(entient ~= nil) then
-				
-				local position = {}
-				position.x = 0
-				position.y = 0
-				position.z = 0
-				
-				
-				local vec4 = entient:GetWorldPosition()
-				
-				
-				
-				position.x = vec4.x + pos.x
-				position.y = vec4.y + pos.y
-				position.z = vec4.z + pos.z
-				
-				local angless = {}
-				angless.roll = 0
-				angless.pitch = 0
-				angless.yaw = 0
-				
-				local qat = entient:GetWorldOrientation()
-				local euler = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				
-				
-				angless = euler.pitch+ angle.pitch
-				angless = euler.roll+ angle.roll
-				angless = euler.yaw + angle.yaw
-				
-				if(surveillance == true)then
-					spawnNPC("base\\gameplay\\devices\\security_systems\\surveillance_cameras\\appearances\\ceiling_camera_1_militech.ent","", tag, position.x, position.y ,position.z, -90, false, false, 0,true)
-					else
-					spawnNPC("base\\entities\\cameras\\simple_free_camera.ent","", tag, position.x, position.y ,position.z, -90, false, false, 0,true)
-					
-				end
-				Cron.After(1, function()
-					local obj = getEntityFromManager(tag)
-					obj.surveillance = surveillance
-					local enti = Game.FindEntityByID(obj.id)
-					
-					if(enti ~= nil) then
-						RotateEntityTo(enti, angle.pitch, angle.yaw, angle.roll)
-						else
-						error(getLang("npc_error_nocamera"))
-					end
-				end)
-				
-				
-			end
+		
 			
-			
-			else
-			
-			
+			spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, angle)
 			
 			if(surveillance == true)then
 				spawnNPC("base\\gameplay\\devices\\security_systems\\surveillance_cameras\\appearances\\ceiling_camera_1_militech.ent","", tag, pos.x, pos.y ,pos.z, -90, false, false, 0,true)
@@ -355,6 +430,8 @@ if spawnRegion then
 				spawnNPC("base\\entities\\cameras\\simple_free_camera.ent","", tag, pos.x, pos.y ,pos.z, -90, false, false, 0,true)
 				
 			end
+			
+			
 			Cron.After(0.3, function()
 				local obj = getEntityFromManager(tag)
 				obj.surveillance = surveillance
@@ -363,12 +440,12 @@ if spawnRegion then
 				if(enti ~= nil) then
 					RotateEntityTo(enti, angle.pitch, angle.yaw, angle.roll)
 					else
-					error(getLang("npc_error_nocamera"))
+					--error(getLang("npc_error_nocamera"))
 				end
 			end)
 			
 			
-		end
+		
 		
 		
 		
@@ -378,70 +455,11 @@ if spawnRegion then
 	end
 	
 	
-	function moveCamera(tag, types ,entity,pos,angle)
+	function moveCamera(tag, pos,angle)
 		
 		
 		
-		if(type == "entity") then
-			local objent = getEntityFromManager(entity)
-			local entient = Game.FindEntityByID(objent.id)
-			if(entient ~= nil) then
-				
-				local position = {}
-				position.x = 0
-				position.y = 0
-				position.z = 0
-				
-				
-				local vec4 = entient:GetWorldPosition()
-				
-				
-				
-				position.x = vec4.x + pos.x
-				position.y = vec4.y + pos.y
-				position.z = vec4.z + pos.z
-				
-				local angless = {}
-				angless.roll = 0
-				angless.pitch = 0
-				angless.yaw = 0
-				
-				local qat = entient:GetWorldOrientation()
-				local euler = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				
-				
-				angless = euler.pitch+ angle.pitch
-				angless = euler.roll+ angle.roll
-				angless = euler.yaw + angle.yaw
-				
-				
-				
-				local obj = getEntityFromManager(tag)
-				local enti = Game.FindEntityByID(obj.id)
-				
-				if(enti ~= nil) then
-					teleportTo(enti, position, angless, false)
-					
-					-- Cron.After(0.3, function()
-					-- local obj = getEntityFromManager(tag)
-					-- local enti = Game.FindEntityByID(obj.id)
-					
-					-- if(enti ~= nil) then
-					-- RotateEntityTo(enti, angless.pitch, angless.yaw, angless.roll)
-					-- else
-					-- error("CyberScript : moveCamera : No camera founded")
-					-- end
-					-- end)
-					else
-					error(getLang("npc_error_nocamera"))
-				end
-				
-				
-			end
-			
-			
-			else
-			
+	
 			
 			
 			
@@ -449,22 +467,30 @@ if spawnRegion then
 			local enti = Game.FindEntityByID(obj.id)
 			
 			if(enti ~= nil) then
-				teleportTo(enti, pos,angle, false)
-				-- Cron.After(1, function()
-				-- local obj = getEntityFromManager(tag)
-				-- local enti = Game.FindEntityByID(obj.id)
-				
-				-- if(enti ~= nil) then
-				-- RotateEntityTo(enti, angle.pitch, angle.yaw, angle.roll)
-				-- else
-				-- error("CyberScript : moveCamera : No camera founded")
-				-- end
-				-- end)
+			--	teleportTo(enti, pos,angle, false)
+			
+				local rot = {}
+		
+				if(angle ~= 1) then
+					
+					rot = EulerAngles.new(0,0,0)
+					
+					rot.roll = angle.roll
+					rot.pitch = angle.pitch
+					rot.yaw = angle.yaw
+					
+					else
+					
+					rot = EulerAngles.new(0,0,0)
+					
+				end
+		
+					Game.GetTeleportationFacility():Teleport(enti, Vector4.new(pos.x, pos.y, pos.z,1) , rot)
 				else
-				error(getLang("npc_error_nocamera"))
+				--error(getLang("npc_error_nocamera"))
 			end
 			
-		end
+		
 		
 		
 	end
@@ -1987,8 +2013,7 @@ if actionRegion then
 					inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(objlook)
 					if (inVehicule) then
 						vehicule = Game['GetMountedVehicle;GameObject'](objlook)
-						rot.roll = 0
-						rot.pitch = 0
+					
 						GetSingleton('gameTeleportationFacility'):Teleport(vehicule, Vector4.new(position.x, position.y, position.z,1), rot)
 						else
 						
@@ -2000,7 +2025,7 @@ if actionRegion then
 							Game.GetPlayer():GetFPPCameraComponent().pitchMin = rot.pitch - 0.01
 							Game.GetPlayer():GetFPPCameraComponent().pitchMax = rot.pitch
 							Game.GetPlayer():GetFPPCameraComponent():SetLocalOrientation(GetSingleton('EulerAngles'):ToQuat(EulerAngles.new(rot.roll, 0, 0)))
-							else
+						else
 							local test = nil
 							pcall(function()
 								local cmd = NewObject('handle:AITeleportCommand')
@@ -2014,8 +2039,7 @@ if actionRegion then
 							end)
 							
 							if(test == nil) then
-								rot.roll = 0
-								rot.pitch = 0
+								
 								Game.GetTeleportationFacility():Teleport(objlook, Vector4.new(position.x, position.y, position.z,1) , rot)
 							end
 							

@@ -2649,9 +2649,30 @@
 	{
 		"name": "spawn_camera",
 		"tag": "mycamera",
-		"type": "free",
-		"entity": "judy",
 		"surveillance": false,
+		"position": "at",
+		"position_helper": "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		"position_change_helper": "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \n For poi if you write 'current' in position_poi_district you will get the current district, \n if you write 'current in position_poi_subdistrict you will get the current subdistrict. \n also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+		"position_range": 50,
+		"position_lookatdistance": 0,
+		"position_tag": "judy01",
+		"position_tag_helper": "judy01||playerhouse01||playerhouse_bed||",
+		"position_way": "normal",
+		"position_way_helper": "normal||behind||forward",
+		"position_poi_district": "",
+		"position_poi_subdistrict": "",
+		"position_poi_is_for_car": false,
+		"position_poi_from_position": false,
+		"position_poi_from_position_x":0,
+		"position_poi_from_position_y":0,
+		"position_poi_from_position_z":0,
+		"position_poi_use_location_tag": false,
+		"position_poi_type": 1,
+		"position_distance": 5,
+		"position_house_way": "default",
+		"position_house_way_helper": "default||enter||exit",
+		"position_house_tag": "playerhouse01",
+		"position_node_usegameplay": false,
 		"x": 0,
 		"y": 0,
 		"z": 0,
@@ -2667,12 +2688,33 @@
 	{
 		"name": "move_camera",
 		"tag": "mycamera",
-		"type": "free",
-		"entity": "judy",
-
+		"position": "at",
+		"position_helper": "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		"position_change_helper": "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \n For poi if you write 'current' in position_poi_district you will get the current district, \n if you write 'current in position_poi_subdistrict you will get the current subdistrict. \n also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+		"position_range": 50,
+		"position_lookatdistance": 0,
+		"position_tag": "judy01",
+		"position_tag_helper": "judy01||playerhouse01||playerhouse_bed||",
+		"position_way": "normal",
+		"position_way_helper": "normal||behind||forward",
+		"position_poi_district": "",
+		"position_poi_subdistrict": "",
+		"position_poi_is_for_car": false,
+		"position_poi_from_position": false,
+		"position_poi_from_position_x":0,
+		"position_poi_from_position_y":0,
+		"position_poi_from_position_z":0,
+		"position_poi_use_location_tag": false,
+		"position_poi_type": 1,
+		"position_distance": 5,
+		"position_house_way": "default",
+		"position_house_way_helper": "default||enter||exit",
+		"position_house_tag": "playerhouse01",
+		"position_node_usegameplay": false,
 		"x": 0,
 		"y": 0,
 		"z": 0,
+
 
 		"yaw": 0,
 		"pitch": 0,
@@ -2692,7 +2734,7 @@
 
 
 	{
-		"name": "delete_camera",
+		"name": "stop_camera",
 		"tag": "mycamera",
 
 		"helper": "This action will delete an camera object ",
@@ -3171,5 +3213,44 @@
 		"tag": "myshardtag",
 		"helper": "This action will open an shard popup with custom shard content",
 		"helperTitle": "UI : Open Shard Popup"
+	},
+	
+	{
+		"name": "subscribe_actionlist_to_direct_execution",
+		"tag": "myshardtag",
+		"action":[
+			
+			{
+					"name":"notify",
+					"value":"hello"
+			}
+			
+		],
+		"helper": "This action will subscribe a list of action to direct execution engine",
+		"helperTitle": "Script : Register Action List to Direct Execution"
+	},
+	
+	{
+		"name": "subscribe_event_to_direct_execution",
+		"tag": "myeventtag",
+		
+		"helper": "This action will subscribe a Event to direct execution engine. !!! The triggers are checked once before register !!!",
+		"helperTitle": "Script : Register Event to Direct Execution"
+	},
+	
+	{
+		"name": "subscribe_function_to_direct_execution",
+		"tag": "myshardtag",
+		
+		"helper": "This action will subscribe function to direct execution engine",
+		"helperTitle": "Script : Register Function to Direct Execution"
+	},
+	
+	{
+		"name": "unsubscribe_from_direct_execution",
+		"tag": "myshardtag",
+		
+		"helper": "This action will unsubscribe registred item from direct execution engine",
+		"helperTitle": "Script : Unregister from Direct Execution"
 	},
 ]

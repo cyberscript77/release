@@ -5553,17 +5553,17 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				self.InputView:SetVisible(false)
 				
 				
-				if(dialogoption_unselect.requirement ~= nil and checkTriggerRequirement(dialogoption_unselect.requirement,dialogoption_unselect.trigger) == false)then
+				if(dialogoption_unselect ~= nil and dialogoption_unselect.requirement ~= nil and checkTriggerRequirement(dialogoption_unselect.requirement,dialogoption_unselect.trigger) == false)then
 					self.ActiveTextRef.widget:SetTintColor(gamecolor(255, 86, 64,0))
 					self.InActiveTextRef.widget:SetTintColor(gamecolor(255, 86, 64,0))
 					
 				else
 					if(dialogoption_unselect ~= nil and dialogoption_unselect.style ~= nil) then
 					
-					local fontcolor = dialogoption_unselect.style.color
-					self.ActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
-					self.InActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
-					
+						local fontcolor = dialogoption_unselect.style.color
+						self.ActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
+						self.InActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
+						
 					else
 						self.ActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
 						self.InActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
@@ -5577,9 +5577,9 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				
 				
 				self.isSelected = true
-					self.SelectedBg:SetTintColor(gamecolor(0,0,0,0))
-						inkWidgetRef.SetOpacity(self.ActiveTextRef, 1)
-					inkWidgetRef.SetOpacity(self.InActiveTextRef,0)
+				self.SelectedBg:SetTintColor(gamecolor(0,0,0,0))
+				inkWidgetRef.SetOpacity(self.ActiveTextRef, 1)
+				inkWidgetRef.SetOpacity(self.InActiveTextRef,0)
 			
 				self.VerticalLineWidget.widget:SetTintColor(gamecolor(0,255,255,1))
 				

@@ -2037,6 +2037,7 @@ currentInteractGroup = {}
 
 workerTable={}
 workerTableKey={}
+directWorkerTable = {}
 toremove = {}
 selectTarget = nil
 autoScript = true

@@ -4,6 +4,11 @@ cyberscript.module = cyberscript.module +1
 ---Main Function---
 
 function mainThread()-- update event when mod is ready and in game (main thread for execution)
+	
+	
+	
+	
+	
 	local objective = Game.GetJournalManager():GetTrackedEntry()
 	if (AutoAmbush == 1 and objective ~= nil) then --AutoAmbush (disable ambush event when MainQuest or SideQuest is active)
 		-- MainQuest = 0,
@@ -146,7 +151,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	
 	
 	setScore("player","money",getStackableItemAmount("Items.money"))
-	
+--	doTriggeredEvent()	
 	
 	pcall(function()
 		if(GameController["MinimapContainerController"] ~= nil and displayHUD["default_minimap_root"] == nil ) then
@@ -184,7 +189,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		end
 	end)
 	local result,err = pcall(function()
-		if(GameController["BraindanceGameControllerRoot"] ~= nil and displayHUD["main_root_default"] == nil ) then
+		if(GameController["BraindanceGameControllerRoot"] ~= nil and displayHUD["main_root_default"] == nil and GameController["BraindanceGameControllerRoot"]:IsA('BraindanceGameController') ) then
 			
 			print("setting HUD")
 			spdlog.error(GameDump(GameController["BraindanceGameControllerRoot"]))
@@ -790,7 +795,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	if (tick % 5 == 0) then --every 0.5 second
 		
 		--TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
-		
+		doTriggeredEvent()	
 		refreshUIWidget()
 	
 		if curPos ~= nil and displayHUD["main_root_default"] ~= nil then
@@ -977,11 +982,11 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		
 		
 	end
-	
+	--getTriggeredActions()
+
 	
 	if (tick % 60 == 0) then --every 1 second
-		getTriggeredActions()
-		doTriggeredEvent()	
+		
 		
 		
 		for k,v in pairs(cyberscript.EntityManager) do
@@ -1085,6 +1090,7 @@ function refresh(delta) -- update event (include thread refresh action and Quest
 					
 					
 					if(autoScript == true) then
+						executeRealTimeScript()
 						CompileCachedThread()
 						ScriptExecutionEngine()
 						QuestThreadManager()
@@ -1113,7 +1119,17 @@ function refresh(delta) -- update event (include thread refresh action and Quest
 end
 
 
+function executeRealTimeScript()
 
+	for key,value in pairs(directWorkerTable) do --actualcode
+		
+		if workerTable[key] == nil then
+			runActionList(value.actionlist,value.tag,"interact",false,"nothing")
+		end
+	end
+	
+	
+end
 
 --Script Execution Engine
 function CompileCachedThread()
@@ -1806,7 +1822,7 @@ function doInitEvent()
 		if(event.way == "init") then
 			
 			if(checkTriggerRequirement(event.requirement,event.trigger))then
-				
+				print(k)
 				
 				
 				runActionList(event.action,key,"interact",false,"nothing")
@@ -1815,7 +1831,7 @@ function doInitEvent()
 	end
 	
 	worldprocessing = false
-	debugPrint(10,"CyberScript : doing init event...")
+	debugPrint(1,"CyberScript : doing init event...")
 	
 end
 
@@ -2103,6 +2119,8 @@ function checkContext(item)
 					
 					
 					for k,u in pairs(v.prop) do
+					
+					
 						local path =  splitDot(k, ".")
 						setValueToTablePath(item, path, GeneratefromContext(u))
 						
@@ -2116,7 +2134,7 @@ function checkContext(item)
 					
 					local path =  splitDot(k, ".")
 					
-					
+				
 					setValueToTablePath(item, path, GeneratefromContext(u))
 				end
 			end

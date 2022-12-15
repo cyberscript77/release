@@ -97,6 +97,9 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
+			if(trigger.name == "entity_tag_exist") then
+				result = cyberscript.EntityManager[trigger.tag] ~= nil
+			end
 			if(trigger.name == "entity_is_scanned") then
 				local obj = getEntityFromManager(trigger.tag)
 				if(obj.id ~= nil) then
@@ -2077,6 +2080,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 	local scene = true
 	local scannerregion = true
 	local hudregion = true
+	local animationregion = true
 	
 	if groupregion then
 		if(action.name == "create_group") then
@@ -4247,7 +4251,6 @@ end
 		end
 		
 	end
-	
 	
 	if gangregion then
 		if(action.name == "gang_affinity") then
@@ -9582,49 +9585,50 @@ end
 		
 	end
 	
-	if action.name == "play_anim_entity" then
-	
-	
-	 
-			spawnAnimationWorkspot(action.tag,action.anim,"cyberscript_workspot_base",action.isinstant,action.unlockcamera)
+	if animationregion then
+		if action.name == "play_anim_entity" then
+		
+		
+		 
+				spawnAnimationWorkspot(action.tag,action.anim,"cyberscript_workspot_base",action.isinstant,action.unlockcamera)
+		end
+		
+		if action.name == "play_custom_anim_entity" then
+		
+		
+		 
+			spawnCustomAnimationWorkspot(action.tag,action.ent,action.anim,action.workspot,action.isinstant,action.unlockcamera)
+		end
+		
+		if action.name == "play_special_anim_entity" then
+		
+		
+		 
+				spawnAnimationWorkspot(action.tag,action.anim,action.workspot,action.isinstant)
+		end
+		
+		if action.name == "change_anim_entity" then
+		
+		
+		 
+				changeWorkSpotAnims(action.tag,action.anim,action.isinstant)
+		end
+		
+		if action.name == "change_anim_entity_workspot" then
+		
+		
+		 changeWorkSpot(action.tag,action.workspottag,action.workspot,action.unlockcamera)
+				
+				
+		end
+		
+		if action.name == "stop_anim_entity" then
+		
+		
+		 
+				stopWorkSpotAnims(action.tag)
+		end
 	end
-	
-	if action.name == "play_custom_anim_entity" then
-	
-	
-	 
-		spawnCustomAnimationWorkspot(action.tag,action.ent,action.anim,action.workspot,action.isinstant,action.unlockcamera)
-	end
-	
-	if action.name == "play_special_anim_entity" then
-	
-	
-	 
-			spawnAnimationWorkspot(action.tag,action.anim,action.workspot,action.isinstant)
-	end
-	
-	if action.name == "change_anim_entity" then
-	
-	
-	 
-			changeWorkSpotAnims(action.tag,action.anim,action.isinstant)
-	end
-	
-	if action.name == "change_anim_entity_workspot" then
-	
-	
-	 changeWorkSpot(action.tag,action.workspottag,action.workspot,action.unlockcamera)
-			
-			
-	end
-	
-	if action.name == "stop_anim_entity" then
-	
-	
-	 
-			stopWorkSpotAnims(action.tag)
-	end
-	
 	
 	if logicregion then
 		if(action.name == "if") then
@@ -9913,6 +9917,68 @@ end
 			
 		end
 		
+		if(action.name == "subscribe_actionlist_to_direct_execution") then
+			local obj = {}
+			obj.actionlist = action.action
+			obj.tag = action.tag
+			directWorkerTable[action.tag] = obj
+		
+		end
+		
+		
+	
+		if(action.name == "subscribe_event_to_direct_execution") then
+			local boj = arrayEvent[action.tag]
+		
+			if( boj ~= nil) then
+				local event = boj.event
+				local trigger = event.trigger
+					if(checkTriggerRequirement(event.requirement,trigger))then
+						local obj = {}
+						obj.actionlist = event.action
+						obj.tag = event.tag
+						
+						
+						
+						directWorkerTable[action.tag] = obj
+					end
+				
+			end
+			
+			
+			
+			
+		
+		end
+		
+		if(action.name == "subscribe_function_to_direct_execution") then
+			local boj = arrayFunction[action.tag]
+		
+			if( boj ~= nil) then
+				local functio = boj.func
+				
+				local obj = {}
+				obj.actionlist = functio.action
+				obj.tag = event.tag
+				
+				
+				
+				directWorkerTable[action.tag] = obj
+					
+				
+			end
+			
+			
+			
+			
+		
+		end
+		
+		if(action.name == "unsubscribe_from_direct_execution") then
+			
+			directWorkerTable[action.tag] = nil
+		
+		end
 		
 	end
 	
@@ -12098,38 +12164,35 @@ end
 		
 		if(action.name == "spawn_camera") then
 			local position = {}
-			position.x = action.x
-			position.y = action.y
-			position.z = action.z
+			local position = getPositionFromParameter(action)
+				
 			
 			local angle = {}
 			angle.roll = action.roll
 			angle.pitch = action.pitch
 			angle.yaw = action.yaw
 			
-			spawnCamera(action.tag,action.type,action.entity,position,angle,action.surveillance)
+			spawnCamera(action.tag,position,action.surveillance,angle)
 			
 		end
 		
 		if(action.name == "move_camera") then
 			local position = {}
-			position.x = action.x
-			position.y = action.y
-			position.z = action.z
+			local position = getPositionFromParameter(action)
 			
 			local angle = {}
 			angle.roll = action.roll
 			angle.pitch = action.pitch
 			angle.yaw = action.yaw
 			
-			moveCamera(action.tag,action.type,action.entity,position,angle)
+			moveCamera(action.tag,position,angle)
 		end
 		
 		if(action.name == "activate_camera") then
 			enableCamera(action.tag)
 		end
 		
-		if(action.name == "delete_camera") then
+		if(action.name == "stop_camera") then
 			stopCamera(action.tag)
 		end
 		
@@ -12244,7 +12307,7 @@ function getPositionFromParameter(action)
 		position.z = action.z
 	end
 	if(action.position == "relative_to_entity") then
-		local positionVec4 = Game.GetPlayer():GetWorldPosition()
+		local positionVec4 = curPos
 		local entity = nil
 		if(action.position_tag ~= "player") then
 			local obj = getEntityFromManager(action.position_tag)
@@ -12533,7 +12596,25 @@ function GeneratefromContext(context)
 	
 	
 	if(context.type ~= nil and context.type =="number") then
-		text = tonumber(text)
+		if (text ~= "") then
+			
+			local funcs = loadstring("return " .. tostring(text),"")
+			
+			local res,msg = pcall(function() 
+			
+			text = tonumber(funcs())
+			end)
+			
+			if res == false then
+			
+				text = tonumber("")
+			
+			end
+			
+			else
+			
+			text = tonumber(text)
+		end
 	end
 	
 	if(context.type ~= nil and context.type =="text") then
@@ -12790,11 +12871,12 @@ function GenerateTextFromContextValues(context, v)
 	end
 	
 	if(v.type == "entity") then
-		
+		--	print(v.tag)
 		local obj = getEntityFromManager(v.tag)
 		if(obj.id ~= nil) then
 			local enti = Game.FindEntityByID(obj.id)	
 			if(enti ~= nil) then
+		--	print("ok")
 				if(v.key == "position") then
 					
 					local pos = enti:GetWorldPosition()
@@ -12804,9 +12886,61 @@ function GenerateTextFromContextValues(context, v)
 					obj.y = pos.y
 					obj.z = pos.z
 					
-					print(dump(obj))
+				--	print(dump(obj))
 					
 					value = obj[v.prop]
+				
+				end
+				
+				if(v.key == "head_position") then
+					
+					
+					local components =  enti:FindComponentByName("Item_Attachment_Slot")
+					--print("compo"..GameDump(components))
+					if(components~= nil) then
+						local _,head =  components:GetSlotTransform("Head")
+					--	print("head"..GameDump(head))
+						if(head ~= nil) then
+						--	print("yyyy")
+							local pos =  head:GetWorldPosition():ToVector4()
+							local pos2 = head:GetForward()
+							local pos3 =  head:GetInverse():GetWorldPosition():ToVector4()
+							local obj = {}
+					
+								obj.x = pos.x-(pos2.x*0.17)
+								obj.y = pos.y-(pos2.y*0.17)
+								obj.z = pos.z
+						
+							--	print(dump(obj))
+								value = obj[v.prop]
+						end
+					
+					end
+					
+					
+				
+				end
+				
+				if(v.key == "head_orientation") then
+					
+					local components =  enti:FindComponentByName("Item_Attachment_Slot")
+					
+					if(components~= nil) then
+						local _,head =  components:GetSlotTransform("Head")
+						
+						if(head ~= nil) then
+							
+							local angle = head:GetOrientation():ToEulerAngles()
+							local obj = {}
+					
+								obj.yaw = angle.yaw
+								obj.pitch = angle.pitch
+								obj.roll = angle.roll
+								--print(dump(obj))
+								value = obj[v.prop]
+						end
+					
+					end
 				
 				end
 				
