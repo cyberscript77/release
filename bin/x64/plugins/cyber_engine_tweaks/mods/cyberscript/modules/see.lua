@@ -611,7 +611,7 @@ function scriptcheckTrigger(trigger)
 				end
 				
 				
-				resultpos = FindPOI(trigger.tag,trigger.district,trigger.subdistrict,trigger.iscar,trigger.type,trigger.uselocationtag,true,trigger.range,nil,nil,nil)
+				resultpos = FindPOI(trigger.tag,trigger.district,trigger.subdistrict,trigger.iscar,trigger.type,trigger.uselocationtag,true,trigger.range,nil,nil,nil,trigger.search)
 				if(resultpos ~= nil)then
 					result = true
 				end
@@ -9587,17 +9587,38 @@ end
 	
 	if animationregion then
 		if action.name == "play_anim_entity" then
-		
+				
+				local angle = nil
+			
+			if(action.yaw ~= nil and action.roll ~= nil and action.pitch ~= nil ) then
+				
+				angle = {}
+				angle.yaw = action.yaw
+				angle.roll = action.pitch
+				angle.roll = action.pitch
+				
+			
+			end
 		
 		 
-				spawnAnimationWorkspot(action.tag,action.anim,"cyberscript_workspot_base",action.isinstant,action.unlockcamera)
+				spawnAnimationWorkspot(action.tag,action.anim,"cyberscript_workspot_base",action.isinstant,action.unlockcamera,angle)
 		end
 		
 		if action.name == "play_custom_anim_entity" then
 		
-		
+			local angle = nil
+			
+			if(action.yaw ~= nil and action.roll ~= nil and action.pitch ~= nil ) then
+				
+				angle = {}
+				angle.yaw = action.yaw
+				angle.roll = action.pitch
+				angle.roll = action.pitch
+				
+			
+			end
 		 
-			spawnCustomAnimationWorkspot(action.tag,action.ent,action.anim,action.workspot,action.isinstant,action.unlockcamera)
+			spawnCustomAnimationWorkspot(action.tag,action.ent,action.anim,action.workspot,action.isinstant,action.unlockcamera,angle)
 		end
 		
 		if action.name == "play_special_anim_entity" then
@@ -9917,16 +9938,7 @@ end
 			
 		end
 		
-		if(action.name == "subscribe_actionlist_to_direct_execution") then
-			local obj = {}
-			obj.actionlist = action.action
-			obj.tag = action.tag
-			directWorkerTable[action.tag] = obj
 		
-		end
-		
-		
-	
 		if(action.name == "subscribe_event_to_direct_execution") then
 			local boj = arrayEvent[action.tag]
 		
@@ -9977,6 +9989,70 @@ end
 		if(action.name == "unsubscribe_from_direct_execution") then
 			
 			directWorkerTable[action.tag] = nil
+		
+		end
+		
+		if(action.name == "subscribe_actionlist_to_direct_action") then
+			local obj = {}
+			obj.actionlist = action.action
+			obj.tag = action.tag
+			directActionsWorkerTable[action.tag] = obj
+		
+		end
+		
+		
+	
+		
+		if(action.name == "subscribe_event_to_direct_action") then
+			local boj = arrayEvent[action.tag]
+		
+			if( boj ~= nil) then
+				local event = boj.event
+				local trigger = event.trigger
+					if(checkTriggerRequirement(event.requirement,trigger))then
+						local obj = {}
+						obj.actionlist = event.action
+						obj.tag = event.tag
+						
+						
+						
+						directActionsWorkerTable[action.tag] = obj
+					end
+				
+			end
+			
+			
+			
+			
+		
+		end
+		
+		if(action.name == "subscribe_function_to_direct_action") then
+			local boj = arrayFunction[action.tag]
+		
+			if( boj ~= nil) then
+				local functio = boj.func
+				
+				local obj = {}
+				obj.actionlist = functio.action
+				obj.tag = event.tag
+				
+				
+				
+				directActionsWorkerTable[action.tag] = obj
+					
+				
+			end
+			
+			
+			
+			
+		
+		end
+		
+		if(action.name == "unsubscribe_from_direct_action") then
+			
+			directActionsWorkerTable[action.tag] = nil
 		
 		end
 		
@@ -12411,15 +12487,40 @@ function getPositionFromParameter(action)
 		end
 		
 		local currentpoi = nil
-		currentpoi = FindPOI(action.position_tag,action.position_poi_district,action.position_poi_subdistrict,action.position_poi_is_for_car,action.position_poi_type,action.position_poi_use_location_tag,action.position_poi_from_position,range,action.position_poi_from_position_x,action.position_poi_from_position_y,action.position_poi_from_position_z)
+		currentpoi = FindPOI(action.position_tag,action.position_poi_district,action.position_poi_subdistrict,action.position_poi_is_for_car,action.position_poi_type,action.position_poi_use_location_tag,action.position_poi_from_position,range,action.position_poi_from_position_x,action.position_poi_from_position_y,action.position_poi_from_position_z,"district")
 		if(currentpoi ~= nil) then
 			position.x = currentpoi.x
 			position.y = currentpoi.y
 			position.z = currentpoi.z
 			else
-			error("can't find an current poi")
+			error("can't find an poi")
 		end
 	end
+	
+	if(action.position == "current_poi") then
+		
+		
+		
+		if(currentPOI ~= nil) then
+		
+			if(
+				
+				(action.position_poi_is_for_car == nil or action.position_poi_is_for_car == "" or (action.position_poi_is_for_car ~= nil and action.position_poi_is_for_car == currentPOI.inVehicule)) and
+				(action.type == nil or action.type == "" or (action.type ~= nil and action.type == currentPOI.type)) and
+				(action.district == nil or action.district == "" or (action.district ~= nil and action.district == currentPOI.district)) and
+				(action.subdistrict == nil or action.subdistrict == "" or (action.subdistrict ~= nil and action.subdistrict == currentPOI.subdistrict))
+			
+			) then
+		
+			position.x = currentpoi.x
+			position.y = currentpoi.y
+			position.z = currentpoi.z
+			
+			else
+			error("can't find current poi")
+		end
+	end
+		end
 	if(action.position == "mappin") then
 		
 		
@@ -12581,7 +12682,7 @@ function GeneratefromContext(context)
 		
 			if(v.type ~= "object" and v.type ~= "list") then
 				local value = GenerateTextFromContextValues(context, v)
-				text = text:gsub("##"..k, value) 
+				text = text:gsub("##"..k, tostring(value)) 
 				
 				else
 				local value = GenerateTextFromContextValues(context, v)
@@ -12907,8 +13008,8 @@ function GenerateTextFromContextValues(context, v)
 							local pos3 =  head:GetInverse():GetWorldPosition():ToVector4()
 							local obj = {}
 					
-								obj.x = pos.x-(pos2.x*0.17)
-								obj.y = pos.y-(pos2.y*0.17)
+								obj.x = pos.x-(pos2.x*0.25)
+								obj.y = pos.y-(pos2.y*0.25)
 								obj.z = pos.z
 						
 							--	print(dump(obj))
@@ -13128,44 +13229,29 @@ function GenerateTextFromContextValues(context, v)
 	end
 	
 	if(v.type == "current_poi" and currentPOI ~= nil) then
+		--print(dump(currentPOI))
 		
-		local path =  splitDot(v.prop, ".")
-		value = getValueToTablePath(currentPOI, path) 
+		value = currentPOI[v.prop]
 	end
 	
 	if(v.type == "poi") then
 		
 		if(v.tag ~= "random") then
-			for o,b in pairs(arrayPOI) do
-				if(#b.poi.locations > 0) then	
-					for y=1,#b.poi.locations do
-						
-						local location = b.poi.locations[y]
-						if(location.Tag == v.tag) then
-							
-							value = location[v.prop]
-							
-							
-						end
-					end
-				end
+		
+		
+			local currentpoi = nil
+			currentpoi = FindPOI(v.argument.position_tag,v.argument.position_poi_district,v.argument.position_poi_subdistrict,v.argument.position_poi_is_for_car,v.argument.position_poi_type,v.argument.position_poi_use_location_tag,v.argument.position_poi_from_position,range,v.argument.position_poi_from_position_x,v.argument.position_poi_from_position_y,v.argument.position_poi_from_position_z,v.argument.search)
+			if(currentpoi ~= nil) then
+			
+				value = currentpoi[v.prop]
+			
 			end
+			
 			else
-			for o,b in pairs(arrayPOI) do
-				if(#b.poi.locations > 0) then	
-					for y=1,#b.poi.locations do
-						local prob = math.random(0,5)/5
-						
-						local location = b.poi.locations[math.random(#b.poi.locations)]
-						if(prob == 1) then
-							
-							value = location[v.prop]
-							
-							
-						end
-					end
-				end
-			end
+			--TODO
+		
+		
+		
 		end
 	end
 	

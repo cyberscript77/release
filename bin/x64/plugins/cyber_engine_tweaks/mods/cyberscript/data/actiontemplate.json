@@ -3253,4 +3253,60 @@
 		"helper": "This action will unsubscribe registred item from direct execution engine",
 		"helperTitle": "Script : Unregister from Direct Execution"
 	},
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+		"name": "subscribe_actionlist_to_direct_action",
+		"tag": "myshardtag",
+		"action":[
+			
+			{
+					"name":"notify",
+					"value":"hello"
+			}
+			
+		],
+		"helper": "This action will subscribe a list of action to direct Action Engine",
+		"helperTitle": "Script : Register Action List to Direct Action Engine"
+	},
+	
+	{
+		"name": "subscribe_event_to_direct_action",
+		"tag": "myeventtag",
+		
+		"helper": "This action will subscribe a Event to direct execution Action Engine. !!! The triggers are checked once before register !!!",
+		"helperTitle": "Script : Register Event to Direct Action Engine"
+	},
+	
+	{
+		"name": "subscribe_function_to_direct_action",
+		"tag": "myshardtag",
+		
+		"helper": "This action will subscribe function to direct execution Action Engine",
+		"helperTitle": "Script : Register Function to Direct Action Engine"
+	},
+	
+	{
+		"name": "unsubscribe_from_direct_action",
+		"tag": "myshardtag",
+		
+		"helper": "This action will unsubscribe registred item from direct Action Engine",
+		"helperTitle": "Script : Unregister from Direct Action Engine"
+	},
 ]

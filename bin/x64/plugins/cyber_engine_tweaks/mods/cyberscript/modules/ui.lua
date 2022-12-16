@@ -125,7 +125,11 @@ function windowsManager() -- manage and toggle UI windows
 					EditTemplatePositionWindows()
 				end
 				
+				if editLocation then
 				
+					editLocationWindows()
+				
+				end
 			end
 			
 			if openNetContract then
@@ -1053,7 +1057,7 @@ function buildnativesetting()
 			
 			if setting.type == "toggle" then
 				nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
-					setVariable(setting.target.tag,setting.target.key,value)
+					setVariable(setting.variable.tag,setting.variable.key,value)
 					
 					runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
 					
@@ -1281,7 +1285,10 @@ function makeNativeSettings()
 			updateUserSetting("CurrentPOIDetectionRange", value)
 		end)
 		
-		
+		nativeSettings.addSwitch("/CM/script", getLang("Auto Refresh Datapack When Pause Menu"), getLang("Auto Refresh Datapack When Pause Menu"), AutoRefreshDatapack, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			AutoRefreshDatapack = state
+			updateUserSetting("AutoRefreshDatapack", AutoRefreshDatapack)
+		end)
 		nativeSettings.addSubcategory("/CM/hud",getLang("ui_setting_display"))
 		
 		nativeSettings.addSwitch("/CM/hud", getLang("ui_setting_display_hud"), getLang("ui_setting_display_hud"), enableLocation, true, function(state) -- path, label, desc, currentValue, defaultValue, callback

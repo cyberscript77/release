@@ -951,6 +951,90 @@ end
 	FillCharacterArchive()
 	
 	
+	calculatePOIList()
+	
+	end
+	
+	function calculatePOIList()
+	
+	poi_district = {}
+	poi_subdistrict = {}
+	poi_type = {}
+	poi_tag = {}
+	
+	for k,v in pairs(arrayPOI) do
+		
+		
+		for i,location in ipairs(v.poi.locations) do
+			
+			
+			local obj = {}
+			obj.tag = location.Tag.."_"..i
+			obj.type = v.poi.isFor
+			obj.district =location.district
+			obj.subdistrict = location.subdistrict
+			obj.inVehicule = location.inVehicule
+			obj.x = location.x
+			obj.y = location.y
+			obj.z = location.z
+			
+			
+			if(poi_district[obj.district] == nil) then poi_district[obj.district] = {} end
+			if(poi_district[obj.district]["inVehicule"] == nil) then poi_district[obj.district]["inVehicule"] = {} end
+			if(poi_district[obj.district]["outVehicule"] == nil) then poi_district[obj.district]["outVehicule"] = {} end
+			
+			if(obj.inVehicule) then
+			
+				poi_district[obj.district]["inVehicule"][obj.tag] = obj
+			
+			else
+				
+				poi_district[obj.district]["outVehicule"][obj.tag] = obj
+			
+			end
+			
+			
+			
+			if(poi_subdistrict[obj.subdistrict] == nil) then poi_subdistrict[obj.subdistrict] = {} end
+			if(poi_subdistrict[obj.subdistrict]["inVehicule"] == nil) then poi_subdistrict[obj.subdistrict]["inVehicule"] = {} end
+			if(poi_subdistrict[obj.subdistrict]["outVehicule"] == nil) then poi_subdistrict[obj.subdistrict]["outVehicule"] = {} end
+			
+			if(obj.inVehicule) then
+			
+				poi_subdistrict[obj.subdistrict]["inVehicule"][obj.tag] = obj
+			
+			else
+				
+				poi_subdistrict[obj.subdistrict]["outVehicule"][obj.tag] = obj
+			
+			end
+			
+			
+			if(poi_type[tostring(obj.type)] == nil) then poi_type[tostring(obj.type)] = {} end
+			if(poi_type[tostring(obj.type)]["inVehicule"] == nil) then poi_type[tostring(obj.type)]["inVehicule"] = {} end
+			if(poi_type[tostring(obj.type)]["outVehicule"] == nil) then poi_type[tostring(obj.type)]["outVehicule"] = {} end
+			
+			if(obj.inVehicule) then
+			
+				poi_type[tostring(obj.type)]["inVehicule"][obj.tag] = obj
+			
+			else
+				
+				poi_type[tostring(obj.type)]["outVehicule"][obj.tag] = obj
+			
+			end
+			
+		
+			poi_tag[obj.tag] = obj
+	
+	
+		end
+	
+	
+	end
+	
+	
+	
 	end
 	
 	

@@ -143,6 +143,11 @@ spawntablecount = {}
 moddisabled = false
 cachedespawn = {}
 
+poi_district = {}
+poi_subdistrict = {}
+poi_type = {}
+poi_tag = {}
+
 
 
 datapackObjectType = { 
@@ -291,7 +296,7 @@ interactautohide = true
 reloadCET = false
 ambush_limit_min = 15000 -- 5min15
 ambush_limit_max = 30000 -- 10min30
-AutoRefreshDatapack = true
+AutoRefreshDatapack = false
 updateinprogress = false
 updatefinished = false
 currentInputHintList = {}
@@ -2038,6 +2043,7 @@ currentInteractGroup = {}
 workerTable={}
 workerTableKey={}
 directWorkerTable = {}
+directActionsWorkerTable = {}
 toremove = {}
 selectTarget = nil
 autoScript = true
@@ -2230,7 +2236,9 @@ loadShardtag = ""
 loadPhoneDialogtag = ""
 loadScenetag = ""
 loadHousingtag = ""
-
+currentSelectLocation = {}
+						
+editLocation = false
 placetype = "House"
 newRequirementItem = ""
 selectedTrigger2 = ""
@@ -2362,7 +2370,9 @@ controltypevaluelist = {"text","number","score","variable"}
 
 -- end
 
-
+wantcorrectpoi = false
+poicorrectready = false
+currentpoicorrectindex = 1
 
 
 local f = assert(io.open("external/amm_entities.json"))

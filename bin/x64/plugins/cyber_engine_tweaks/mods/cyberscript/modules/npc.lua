@@ -10,7 +10,7 @@ local vehiculeRegion = true
 
 if spawnRegion then 
 	
-	function spawnAnimationWorkspot(entitytag,anim_cname,workspot,isinstant,unlockcamera)
+	function spawnAnimationWorkspot(entitytag,anim_cname,workspot,isinstant,unlockcamera,angle)
 		
 		local obj = getEntityFromManager(entitytag)
 		local enti = Game.FindEntityByID(obj.id)
@@ -27,6 +27,12 @@ if spawnRegion then
 			spawnTransform:SetOrientationEuler(EulerAngles.new(0, 0, angles.yaw))
 			
 			end
+			
+			if(angle ~= nil) then
+				spawnTransform:SetOrientationEuler(EulerAngles.new(angle.roll, angle.pitch, angle.yaw))
+			end
+			
+			
 			local NPC = exEntitySpawner.Spawn([[base\cyberscript\entity\workspot_anim.ent]], spawnTransform, '')
 			
 			Cron.Every(0.1, {tick = 1}, function(timer)
@@ -62,11 +68,14 @@ if spawnRegion then
 		
 	end
 	
-	function spawnCustomAnimationWorkspot(entitytag,entname,anim_cname,workspot,isinstant,unlockcamera)
+	function spawnCustomAnimationWorkspot(entitytag,entname,anim_cname,workspot,isinstant,unlockcamera,angle)
 		
 		local obj = getEntityFromManager(entitytag)
 		local enti = Game.FindEntityByID(obj.id)
-		
+		print(entitytag)
+		print(entname)
+		print(anim_cname)
+		print(workspot)
 		
 		if(enti ~= nil) then
 			
@@ -79,6 +88,10 @@ if spawnRegion then
 			else
 			spawnTransform:SetOrientationEuler(EulerAngles.new(0, 0, angles.yaw))
 			
+			end
+			
+			if(angle ~= nil) then
+			spawnTransform:SetOrientationEuler(EulerAngles.new(angle.roll, angle.pitch, angle.yaw))
 			end
 			
 			

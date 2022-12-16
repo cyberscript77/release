@@ -51,8 +51,8 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	if(currentDistricts2 ~= nil)then
 		
 		setVariable("current_district","tag", currentDistricts2.Tag)
-		
-		
+		local district =  getDistrictByTag(currentDistricts2.Tag)
+		setVariable("current_district","enum", district.EnumName)
 		if(districtState == nil) then
 			districtState = "loading"
 			
@@ -113,8 +113,9 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 			
 			setVariable("current_district","districttext",districttext)
 			
-			else
+		else
 			setVariable("current_district","tag", "")
+			setVariable("current_district","enum", "")
 			setVariable("current_district","districttext","")
 			setVariable("current_district","subdistrict_enum", "")
 			setVariable("current_district","state","")
@@ -123,8 +124,9 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		end
 		
 		
-		else
+	else
 		setVariable("current_district","tag", "")
+		setVariable("current_district","enum", "")
 		setVariable("current_district","districttext","")
 		setVariable("current_district","subdistrict_enum", "")
 		setVariable("current_district","state","")
@@ -189,7 +191,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		end
 	end)
 	local result,err = pcall(function()
-		if(GameController["BraindanceGameControllerRoot"] ~= nil and displayHUD["main_root_default"] == nil and GameController["BraindanceGameControllerRoot"]:IsA('BraindanceGameController') ) then
+		if(GameController["BraindanceGameControllerRoot"] ~= nil and displayHUD["main_root_default"] == nil) then
 			
 			print("setting HUD")
 			spdlog.error(GameDump(GameController["BraindanceGameControllerRoot"]))
@@ -731,7 +733,11 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		end
 		
 		
+		if wantcorrectpoi == true then
 		
+		CorrectAllPOI()
+	
+	end
 		local ambusec = AmbushMin*60*60
 		
 		if (tick % ambusec == 0) then --every X second
@@ -743,7 +749,13 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	--POI Location
 	if(getUserSetting("AutoCheckPOI") == true) then
 	--print(getUserSetting("CurrentPOIDetectionRange"))
-		currentPOI = FindPOI("","","",inVehicule,nil,false,true,getUserSetting("CurrentPOIDetectionRange"),nil,nil,nil)
+		
+		
+		
+		--print(getUserSetting("CurrentPOIDetectionRange"))
+		-- print(getVariableKey("current_district","subdistrict_enum"))
+		
+		currentPOI = FindPOI("",getVariableKey("current_district","enum"),getVariableKey("current_district","subdistrict_enum"),inVehicule,nil,false,true,getUserSetting("CurrentPOIDetectionRange"),nil,nil,nil,"district")
 		--print(dump(currentPOI))
 	end
 	
@@ -1090,6 +1102,7 @@ function refresh(delta) -- update event (include thread refresh action and Quest
 					
 					
 					if(autoScript == true) then
+						executeRealTimeActions()
 						executeRealTimeScript()
 						CompileCachedThread()
 						ScriptExecutionEngine()
@@ -1130,6 +1143,36 @@ function executeRealTimeScript()
 	
 	
 end
+
+
+function executeRealTimeActions()
+
+	for key,value in pairs(directActionsWorkerTable) do --actualcode
+		
+		for i,v in ipairs(value.actionlist) do
+			
+			
+			local status, retval = pcall(executeAction,v,key,"",i,"interact","see_engine")
+										
+										
+										
+			if status == false then
+				
+				
+				debugPrint(1,getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((value.actionlist[i]))).." tag "..key.." parent ".."".." index "..i)
+				spdlog.error(getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((value.actionlist[i]))).." tag "..key.." parent ".."".." index "..i)
+				--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
+				
+			end
+			
+			
+		
+		end
+	end
+	
+	
+end
+
 
 --Script Execution Engine
 function CompileCachedThread()
@@ -2835,9 +2878,13 @@ function getPOI(tag)
 	
 end
 
-function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition,range,frompositionx,frompositiony,frompositionz)
+function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition,range,frompositionx,frompositiony,frompositionz,listargument)
+	
+	
+	
 	local currentpoilist = {}
 	local frompos = curPos
+	
 	if(frompositionx ~= nil and frompositiony ~= nil and frompositionz ~= nil) then
 		
 		frompos.x = frompositionx
@@ -2846,68 +2893,45 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 		
 	end
 	
-	for k,v in pairs(arrayPOI) do
+	if(listargument == "type" and poi_type[tostring(poitype)] ~= nil) then
+	
+		local list = poi_type[tostring(poitype)]["outVehicule"]
+	
+		if(iscar) then
 		
+		list = poi_type[tostring(poitype)]["inVehicule"]
 		
+		end
 		
+	
 		
-		if
-			(#v.poi.locations > 0) then	
-			
-			for y=1,#v.poi.locations do
-				
-				local location = v.poi.locations[y]
-				
-				-- debugPrint(4,"TEST POI ---")
-				-- debugPrint(4,"tag : "..tostring((
-				-- ((tag == nil or tag == "" or (v.poi.tag ~= nil and v.poi.tag == tag)) and locationtag == false) or
-				-- ((tag == nil or tag == "" or (location.Tag ~= nil and location.Tag == tag)) and locationtag == true)
-				-- )))
-				
-				-- debugPrint(4,"district : "..tostring((district == nil or district == "" or (district ~= nil and location.district == district))))
-				-- debugPrint(4,"subdistrict : "..tostring((subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict))))
-				
-				-- debugPrint(4,"iscar : "..tostring((iscar == nil or (iscar ~= nil and location.inVehicule == iscar))))
-				-- debugPrint(4,"poitype : "..tostring((poitype == nil or poitype == 1 or (poitype == v.poi.isFor))))
-				-- debugPrint(4,"fromposition : "..tostring((fromposition == false or	(fromposition == true and check3DPos(curPos, location.x, location.y, location.z, range)))))
-				-- debugPrint(4,"TEST POI ---")
-				
-				if
+		for k,location in pairs(list) do
+		-- print(k)
+		-- print(tostring((tag == nil or tag == "" or k == tag)))
+		-- print(tostring((district == nil or district == "" or (district ~= nil and location.district == district))))
+		-- print(tostring(subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict)))
+		--print(tostring((fromposition == false or (fromposition == true and check3DPos(frompos, location.x, location.y, location.z, range)))))
+		--print(tostring(check3DPos(frompos, location.x, location.y, location.z, range)))
+		
+					if
 					(
-						(
-							((tag == nil or tag == "" or (v.poi.tag ~= nil and v.poi.tag == tag)) and locationtag == false) or
-							((tag == nil or tag == "" or (location.Tag ~= nil and location.Tag == tag)) and locationtag == true)
-						)
 						
-						and
+						(tag == nil or tag == "" or k == tag) and
 						
 						(district == nil or district == "" or (district ~= nil and location.district == district)) and
+						
 						(subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict)) and
-						(iscar == nil or (iscar ~= nil and location.inVehicule == iscar)) and
 						
-						
-						(poitype == nil or 
-							
-							(
-								(isArray(poitype) == false and isArray(v.poi.isFor) == false and (poitype == 1 or (poitype == v.poi.isFor))) or
-								(isArray(poitype) == true and isArray(v.poi.isFor) == false and table_contains(poitype,v.poi.isFor)) or
-								(isArray(poitype) == false and isArray(v.poi.isFor) == true and table_contains(v.poi.isFor,poitype)) or
-								(isArray(poitype) == true and isArray(v.poi.isFor) == true and table.compare(poitype, v.poi.isFor))
-							)
-							
-						) and
-						
-						
-						(fromposition == false or	(fromposition == true and check3DPos(frompos, location.x, location.y, location.z, range)))
+					--	(poitype == nil or poitype == 1 or (poitype == location.type) and
+												
+						(fromposition == false or (fromposition == true and check3DPos(frompos, location.x, location.y, location.z, range)))
 						
 						
 					)
 					then
 					
 					
-					local location =  deepcopy(v.poi.locations[y],nil)
-					location.parent = deepcopy(v.poi,nil)
-					location.parent.locations = nil
+				
 					table.insert(currentpoilist,location)
 					
 					
@@ -2917,24 +2941,231 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 					
 					
 				end
-				
-				
-				
-				
-				
-			end
-			
-			
-		end
 		
+		end
+	
+	
+			
 	end
 	
+	if(listargument == "subdistrict" and poi_subdistrict[subdistrict] ~= nil) then
+		
+		local list = poi_subdistrict[subdistrict]["outVehicule"]
+		
+		if(iscar) then
+		
+			list = poi_subdistrict[subdistrict]["inVehicule"]
+		
+		end
+		
+		for k,location in pairs(list) do
+		
+					if
+					(
+						
+					
+						
+						(district == nil or district == "" or (district ~= nil and location.district == district)) and
+						
+						(tag == nil or tag == "" or k == tag) and
+						
+						(district == nil or district == "" or (district ~= nil and location.district == district)) and
+						
+					--	(subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict)) and
+						
+						(poitype == nil or poitype == 1 or (poitype == location.type)) and
+												
+						(fromposition == false or (fromposition == true and check3DPos(frompos, location.x, location.y, location.z, range)))
+						
+						
+					)
+					then
+					
+					
+			
+					table.insert(currentpoilist,location)
+					
+					
+					
+					
+					
+					
+					
+				end
+		
+		end
+	
+		end
+		
+	if(listargument == "district" and poi_district[district] ~= nil) then
+	
+		local list = poi_district[district]["outVehicule"]
+		
+		if(iscar) then
+		
+			list = poi_district[district]["inVehicule"]
+		
+		end
+		
+		for k,location in pairs(list) do
+		
+					if
+					(
+										
+						(tag == nil or tag == "" or k == tag) and
+						
+					--	(district == nil or district == "" or (district ~= nil and location.district == district)) and
+						
+						(subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict)) and
+						
+						(poitype == nil or poitype == 1 or (poitype == location.type)) and
+												
+						(fromposition == false or (fromposition == true and check3DPos(frompos, location.x, location.y, location.z, range)))
+						
+						
+					)
+					then
+					
+					
+			
+					table.insert(currentpoilist,location)
+					
+					
+					
+					
+					
+					
+					
+				end
+		
+		end
+	
+	end
+	
+	if(listargument == "tag") then
+	
+			local location = poi_tag[tag]
+			if(location ~= nil) then
+			
+				table.insert(currentpoilist,location)
+			end	
+	
+	end
+		
+		
+	if true then
+	-- for k,v in pairs(arrayPOI) do
+		
+		
+		
+		
+		-- if
+			-- (#v.poi.locations > 0) then	
+			
+			-- for y=1,#v.poi.locations do
+				
+				-- local location = v.poi.locations[y]
+				
+				-- -- debugPrint(4,"TEST POI ---")
+				-- -- debugPrint(4,"tag : "..tostring((
+				-- -- ((tag == nil or tag == "" or (v.poi.tag ~= nil and v.poi.tag == tag)) and locationtag == false) or
+				-- -- ((tag == nil or tag == "" or (location.Tag ~= nil and location.Tag == tag)) and locationtag == true)
+				-- -- )))
+				
+				-- -- debugPrint(4,"district : "..tostring((district == nil or district == "" or (district ~= nil and location.district == district))))
+				-- -- debugPrint(4,"subdistrict : "..tostring((subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict))))
+				
+				-- -- debugPrint(4,"iscar : "..tostring((iscar == nil or (iscar ~= nil and location.inVehicule == iscar))))
+				-- -- debugPrint(4,"poitype : "..tostring((poitype == nil or poitype == 1 or (poitype == v.poi.isFor))))
+				-- -- debugPrint(4,"fromposition : "..tostring((fromposition == false or	(fromposition == true and check3DPos(curPos, location.x, location.y, location.z, range)))))
+				-- -- debugPrint(4,"TEST POI ---")
+				
+				-- if
+					-- (
+						-- (
+							-- ((tag == nil or tag == "" or (v.poi.tag ~= nil and v.poi.tag == tag)) and locationtag == false) or
+							-- ((tag == nil or tag == "" or (location.Tag ~= nil and location.Tag == tag)) and locationtag == true)
+						-- )
+						
+						-- and
+						
+						-- (district == nil or district == "" or (district ~= nil and location.district == district)) and
+						-- (subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict)) and
+						-- (iscar == nil or (iscar ~= nil and location.inVehicule == iscar)) and
+						
+						
+						-- (poitype == nil or 
+							
+							-- (
+								-- (isArray(poitype) == false and isArray(v.poi.isFor) == false and (poitype == 1 or (poitype == v.poi.isFor))) or
+								-- (isArray(poitype) == true and isArray(v.poi.isFor) == false and table_contains(poitype,v.poi.isFor)) or
+								-- (isArray(poitype) == false and isArray(v.poi.isFor) == true and table_contains(v.poi.isFor,poitype)) or
+								-- (isArray(poitype) == true and isArray(v.poi.isFor) == true and table.compare(poitype, v.poi.isFor))
+							-- )
+							
+						-- ) and
+						
+						
+						-- (fromposition == false or	(fromposition == true and check3DPos(frompos, location.x, location.y, location.z, range)))
+						
+						
+					-- )
+					-- then
+					
+					
+					-- local location =  deepcopy(v.poi.locations[y],nil)
+					-- location.parent = deepcopy(v.poi,nil)
+					-- location.parent.locations = nil
+					-- table.insert(currentpoilist,location)
+					
+					
+					
+					
+					
+					
+					
+				-- end
+				
+				
+				
+				
+				
+			-- end
+			
+			
+		-- end
+		
+	-- end
+	end
 	if(#currentpoilist > 0) then
 		
+		
+		
+		
 		local currentpoi = nil
-		currentpoi = currentpoilist[math.random(#currentpoilist)]
+		--currentpoi = currentpoilist[math.random(#currentpoilist)]
+		
+		
+		local distance = function(start)
+				return math.abs(start.x - frompos.x) + math.abs(start.y - frompos.y)
+			end
+
+-- Define a comparator that compares locations based on
+-- distance to final position
+			local comparator = function(a, b)
+				return distance(a) < distance(b)
+			end
+
+local adj_tiles
+-- Set adj_tiles to an array of grid positions
+
+table.sort(currentpoilist, comparator) -- Sort adjacent tiles based on distance
+
+		
+		
+		
 		--print(dump(currentpoilist))
-		return currentpoi
+		return currentpoilist[1]
 	else
 		return nil
 	end
