@@ -12485,9 +12485,9 @@ function getPositionFromParameter(action)
 		if(action.position_range ~= nil) then
 			range = action.position_range
 		end
-		
+		if action.search == nil then action.search = "district" end
 		local currentpoi = nil
-		currentpoi = FindPOI(action.position_tag,action.position_poi_district,action.position_poi_subdistrict,action.position_poi_is_for_car,action.position_poi_type,action.position_poi_use_location_tag,action.position_poi_from_position,range,action.position_poi_from_position_x,action.position_poi_from_position_y,action.position_poi_from_position_z,"district")
+		currentpoi = FindPOI(action.position_tag,action.position_poi_district,action.position_poi_subdistrict,action.position_poi_is_for_car,action.position_poi_type,action.position_poi_use_location_tag,action.position_poi_from_position,range,action.position_poi_from_position_x,action.position_poi_from_position_y,action.position_poi_from_position_z,action.search)
 		if(currentpoi ~= nil) then
 			position.x = currentpoi.x
 			position.y = currentpoi.y
