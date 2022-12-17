@@ -609,7 +609,8 @@ function scriptcheckTrigger(trigger)
 						
 					end
 				end
-				
+				if trigger.search == nil then trigger.search = "district" end
+
 				
 				resultpos = FindPOI(trigger.tag,trigger.district,trigger.subdistrict,trigger.iscar,trigger.type,trigger.uselocationtag,true,trigger.range,nil,nil,nil,trigger.search)
 				if(resultpos ~= nil)then
