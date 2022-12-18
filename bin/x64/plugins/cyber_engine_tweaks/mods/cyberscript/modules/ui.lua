@@ -2841,7 +2841,7 @@ function ActivatedGroup()
 		area.anchor = 0
 		
 		area.size.width = 1500
-		area.size.height = 200
+		area.size.height = 600
 		area.scale = {}
 		area.scale.width = 1
 		area.scale.height = 1
@@ -2867,7 +2867,7 @@ function ActivatedGroup()
 		area.parent = "datapack_current_scroll"
 		area.style.fontsize = 30
 		area.size.width = 1500
-		area.size.height = 200
+		area.size.height = 600
 		area.scale = {}
 		area.scale.width = 1
 		area.scale.height = 1

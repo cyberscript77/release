@@ -755,7 +755,7 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 		--print(getUserSetting("CurrentPOIDetectionRange"))
 		-- print(getVariableKey("current_district","subdistrict_enum"))
 		
-		currentPOI = FindPOI("",getVariableKey("current_district","enum"),getVariableKey("current_district","subdistrict_enum"),inVehicule,nil,false,true,getUserSetting("CurrentPOIDetectionRange"),nil,nil,nil,"district")
+		currentPOI = FindPOI("",getVariableKey("current_district","enum"),getVariableKey("current_district","subdistrict_enum"),inVehicule,nil,false,true,getUserSetting("CurrentPOIDetectionRange"),nil,nil,nil,"district","near")
 		--print(dump(currentPOI))
 	end
 	
@@ -2878,7 +2878,7 @@ function getPOI(tag)
 	
 end
 
-function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition,range,frompositionx,frompositiony,frompositionz,listargument)
+function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition,range,frompositionx,frompositiony,frompositionz,listargument,distancename)
 	
 	
 	
@@ -3141,31 +3141,77 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 		
 		
 		
-		
-		local currentpoi = nil
-		--currentpoi = currentpoilist[math.random(#currentpoilist)]
-		
-		
-		local distance = function(start)
-				return math.abs(start.x - frompos.x) + math.abs(start.y - frompos.y)
-			end
+		if(distancename == "near") then
+				local currentpoi = nil
+				--currentpoi = currentpoilist[math.random(#currentpoilist)]
+				
+						
+				local distance = function(start)
+								return math.abs(start.x - frompos.x) + math.abs(start.y - frompos.y)
+							end
 
--- Define a comparator that compares locations based on
--- distance to final position
-			local comparator = function(a, b)
-				return distance(a) < distance(b)
-			end
+				-- Define a comparator that compares locations based on
+				-- distance to final position
+							local comparator = function(a, b)
+								return distance(a) < distance(b)
+							end
 
-local adj_tiles
--- Set adj_tiles to an array of grid positions
+				local adj_tiles
+				-- Set adj_tiles to an array of grid positions
 
-table.sort(currentpoilist, comparator) -- Sort adjacent tiles based on distance
+				table.sort(currentpoilist, comparator) -- Sort adjacent tiles based on distance
 
+						
+						
+			--	print(dump(currentpoilist[1]))
+				--print(dump(currentpoilist))
+				return currentpoilist[1]
+		
+		end
+		
+		if(distancename == "far") then
+				local currentpoi = nil
+				--currentpoi = currentpoilist[math.random(#currentpoilist)]
+				
+						
+				local distance = function(start)
+								return math.abs(start.x - frompos.x) + math.abs(start.y - frompos.y)
+							end
+
+				-- Define a comparator that compares locations based on
+				-- distance to final position
+							local comparator = function(a, b)
+								return distance(a) < distance(b)
+							end
+
+				local adj_tiles
+				-- Set adj_tiles to an array of grid positions
+
+				table.sort(currentpoilist, comparator) -- Sort adjacent tiles based on distance
+
+						
+						
+				--print(dump(currentpoilist[#currentpoilist]))
+				--print(dump(currentpoilist))
+				return currentpoilist[#currentpoilist]
+		
+		end
+		
+		if(distancename == "random") then
+				local currentpoi = nil
+				--currentpoi = currentpoilist[math.random(#currentpoilist)]
+				
+						
+				
+						
+				
+				print(dump(currentpoilist[math.random(1,#currentpoilist)]))
+				return currentpoilist[math.random(1,#currentpoilist)]
+		
+		end
 		
 		
 		
-		--print(dump(currentpoilist))
-		return currentpoilist[1]
 	else
 		return nil
 	end

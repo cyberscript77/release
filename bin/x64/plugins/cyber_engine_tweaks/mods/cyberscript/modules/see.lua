@@ -609,10 +609,11 @@ function scriptcheckTrigger(trigger)
 						
 					end
 				end
-				if trigger.search == nil then trigger.search = "district" end
-
+			
+				if trigger.position_poi_search == nil then trigger.position_poi_search = "type" end
+				if trigger.position_poi_searchdistance == nil then trigger.position_poi_searchdistance = "random" end
 				
-				resultpos = FindPOI(trigger.tag,trigger.district,trigger.subdistrict,trigger.iscar,trigger.type,trigger.uselocationtag,true,trigger.range,nil,nil,nil,trigger.search)
+				resultpos = FindPOI(trigger.tag,trigger.district,trigger.subdistrict,trigger.iscar,trigger.type,trigger.uselocationtag,true,trigger.range,nil,nil,nil,trigger.position_poi_search,trigger.position_poi_searchdistance)
 				if(resultpos ~= nil)then
 					result = true
 				end
@@ -12486,9 +12487,10 @@ function getPositionFromParameter(action)
 		if(action.position_range ~= nil) then
 			range = action.position_range
 		end
-		if action.search == nil then action.search = "district" end
+		if action.position_poi_search == nil then action.position_poi_search = "type" end
+		if action.position_poi_searchdistance == nil then action.position_poi_searchdistance = "random" end
 		local currentpoi = nil
-		currentpoi = FindPOI(action.position_tag,action.position_poi_district,action.position_poi_subdistrict,action.position_poi_is_for_car,action.position_poi_type,action.position_poi_use_location_tag,action.position_poi_from_position,range,action.position_poi_from_position_x,action.position_poi_from_position_y,action.position_poi_from_position_z,action.search)
+		currentpoi = FindPOI(action.position_tag,action.position_poi_district,action.position_poi_subdistrict,action.position_poi_is_for_car,action.position_poi_type,action.position_poi_use_location_tag,action.position_poi_from_position,range,action.position_poi_from_position_x,action.position_poi_from_position_y,action.position_poi_from_position_z,action.position_poi_search,action.position_poi_searchdistance)
 		if(currentpoi ~= nil) then
 			position.x = currentpoi.x
 			position.y = currentpoi.y
@@ -13237,23 +13239,19 @@ function GenerateTextFromContextValues(context, v)
 	
 	if(v.type == "poi") then
 		
-		if(v.tag ~= "random") then
 		
 		
 			local currentpoi = nil
-			currentpoi = FindPOI(v.argument.position_tag,v.argument.position_poi_district,v.argument.position_poi_subdistrict,v.argument.position_poi_is_for_car,v.argument.position_poi_type,v.argument.position_poi_use_location_tag,v.argument.position_poi_from_position,range,v.argument.position_poi_from_position_x,v.argument.position_poi_from_position_y,v.argument.position_poi_from_position_z,v.argument.search)
+			currentpoi = FindPOI(v.argument.position_tag,v.argument.position_poi_district,v.argument.position_poi_subdistrict,v.argument.position_poi_is_for_car,v.argument.position_poi_type,v.argument.position_poi_use_location_tag,v.argument.position_poi_from_position,range,v.argument.position_poi_from_position_x,v.argument.position_poi_from_position_y,v.argument.position_poi_from_position_z,v.argument.position_poi_search,v.argument.position_poi_searchdistance)
 			if(currentpoi ~= nil) then
 			
 				value = currentpoi[v.prop]
 			
 			end
 			
-			else
-			--TODO
+			
 		
 		
-		
-		end
 	end
 	
 	if(v.type == "node") then

@@ -72,10 +72,7 @@ if spawnRegion then
 		
 		local obj = getEntityFromManager(entitytag)
 		local enti = Game.FindEntityByID(obj.id)
-		print(entitytag)
-		print(entname)
-		print(anim_cname)
-		print(workspot)
+	
 		
 		if(enti ~= nil) then
 			
