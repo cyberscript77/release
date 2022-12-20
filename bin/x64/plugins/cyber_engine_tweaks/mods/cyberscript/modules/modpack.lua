@@ -2,7 +2,7 @@ debugPrint(3,"CyberScript: modpack module loaded")
 cyberscript.module = cyberscript.module +1
 
 
-local function exportDatapackArray(t, max, depth, result)
+ function exportDatapackArray(t, max, depth, result)
 	if type(t) ~= 'table' then
 		return '{}'
 	end

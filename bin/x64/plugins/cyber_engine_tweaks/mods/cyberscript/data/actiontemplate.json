@@ -435,9 +435,9 @@
 		"position_poi_subdistrict": "",
 		"position_poi_is_for_car": false,
 		"position_poi_from_position": false,
-		"position_poi_from_position_x":0,
-		"position_poi_from_position_y":0,
-		"position_poi_from_position_z":0,
+		"position_poi_from_position_x": 0,
+		"position_poi_from_position_y": 0,
+		"position_poi_from_position_z": 0,
 		"position_poi_use_location_tag": false,
 		"position_poi_type": 1,
 		"position_distance": 5,
@@ -525,9 +525,9 @@
 		"position_poi_subdistrict": "",
 		"position_poi_is_for_car": false,
 		"position_poi_from_position": false,
-		"position_poi_from_position_x":0,
-		"position_poi_from_position_y":0,
-		"position_poi_from_position_z":0,
+		"position_poi_from_position_x": 0,
+		"position_poi_from_position_y": 0,
+		"position_poi_from_position_z": 0,
 		"position_poi_use_location_tag": false,
 		"position_poi_type": 1,
 		"position_distance": 5,
@@ -566,9 +566,9 @@
 		"position_poi_subdistrict": "",
 		"position_poi_is_for_car": false,
 		"position_poi_from_position": false,
-		"position_poi_from_position_x":0,
-		"position_poi_from_position_y":0,
-		"position_poi_from_position_z":0,
+		"position_poi_from_position_x": 0,
+		"position_poi_from_position_y": 0,
+		"position_poi_from_position_z": 0,
 		"position_poi_use_location_tag": false,
 		"position_poi_type": 1,
 		"position_distance": 5,
@@ -1463,9 +1463,9 @@
 		"position_poi_subdistrict": "",
 		"position_poi_is_for_car": false,
 		"position_poi_from_position": false,
-		"position_poi_from_position_x":0,
-		"position_poi_from_position_y":0,
-		"position_poi_from_position_z":0,
+		"position_poi_from_position_x": 0,
+		"position_poi_from_position_y": 0,
+		"position_poi_from_position_z": 0,
 		"position_poi_use_location_tag": false,
 		"position_poi_type": 1,
 		"position_distance": 5,
@@ -2198,9 +2198,9 @@
 		"name": "vehicle_chase_entity",
 		"tag": "judy01||player",
 		"vehicle": "myvehiculetag",
-		"min":5,
-		"max":10,
-		"startspeed":50,
+		"min": 5,
+		"max": 10,
+		"startspeed": 50,
 		"helper": "This action will make the vehicule chase an entity. Min equal minimum distance, max equal maximum distance",
 		"helperTitle": "Vehicule : Chase a entity"
 	},
@@ -2272,7 +2272,7 @@
 		"source_gang": "faction_mox",
 		"source_list": ["Vehicle.cs_savable_archer_hella_police_siren"],
 		"source_tag_helper": "Vehicle.cs_savable_archer_hella_police_siren||faction_mox||district_westbrook||NorthOaks",
-		
+
 		"source_use_rival": false,
 
 		"position": "at",
@@ -2288,9 +2288,9 @@
 		"position_poi_subdistrict": "",
 		"position_poi_is_for_car": false,
 		"position_poi_from_position": false,
-		"position_poi_from_position_x":0,
-		"position_poi_from_position_y":0,
-		"position_poi_from_position_z":0,
+		"position_poi_from_position_x": 0,
+		"position_poi_from_position_y": 0,
+		"position_poi_from_position_z": 0,
 		"position_poi_use_location_tag": false,
 		"position_poi_type": 1,
 		"position_distance": 5,
@@ -2304,7 +2304,7 @@
 
 		"amount": 1,
 		"isAV": false,
-		"fakeav":false,
+		"fakeav": false,
 		"appears_from_behind": false,
 		"wait_for_vehicle": false,
 		"wait_for_vehicle_second": 7,
@@ -2663,9 +2663,9 @@
 		"position_poi_subdistrict": "",
 		"position_poi_is_for_car": false,
 		"position_poi_from_position": false,
-		"position_poi_from_position_x":0,
-		"position_poi_from_position_y":0,
-		"position_poi_from_position_z":0,
+		"position_poi_from_position_x": 0,
+		"position_poi_from_position_y": 0,
+		"position_poi_from_position_z": 0,
 		"position_poi_use_location_tag": false,
 		"position_poi_type": 1,
 		"position_distance": 5,
@@ -2701,9 +2701,9 @@
 		"position_poi_subdistrict": "",
 		"position_poi_is_for_car": false,
 		"position_poi_from_position": false,
-		"position_poi_from_position_x":0,
-		"position_poi_from_position_y":0,
-		"position_poi_from_position_z":0,
+		"position_poi_from_position_x": 0,
+		"position_poi_from_position_y": 0,
+		"position_poi_from_position_z": 0,
 		"position_poi_use_location_tag": false,
 		"position_poi_type": 1,
 		"position_distance": 5,
@@ -3151,45 +3151,45 @@
 	{
 		"name": "set_timedilation_for_entity",
 		"tag": "judy01||player",
-		"value":5,
+		"value": 5,
 		"helper": "This action will change time dilatation for NPC",
 		"helperTitle": "Entity : Set Time Dilatation"
 	},
 
-{
-	"name":"set_relation_between_attitude",
-	"attitude":"nid_04_maelstrom",
-	"target":"ina_11_scavs",
-	"relation":"hostile",
-	"helper": "This action will set relation between two AttitudeGroup",
-	"helperTitle": "Gameplay : Set Attitude Relation Between Attitude"
+	{
+		"name": "set_relation_between_attitude",
+		"attitude": "nid_04_maelstrom",
+		"target": "ina_11_scavs",
+		"relation": "hostile",
+		"helper": "This action will set relation between two AttitudeGroup",
+		"helperTitle": "Gameplay : Set Attitude Relation Between Attitude"
 
-},
-{
-	"name":"set_relation_from_faction_to_attitude",
-	"tag":"faction_maelstrom",
-	"target":"ina_11_scavs",
-	"relation":"hostile",
-	"helper": "This action will set relation between a faction and an AttitudeGroup",
-	"helperTitle": "Gameplay : Set Attitude Relation Between a Faction and an Attitude"
+	},
+	{
+		"name": "set_relation_from_faction_to_attitude",
+		"tag": "faction_maelstrom",
+		"target": "ina_11_scavs",
+		"relation": "hostile",
+		"helper": "This action will set relation between a faction and an AttitudeGroup",
+		"helperTitle": "Gameplay : Set Attitude Relation Between a Faction and an Attitude"
 
-},
-{
-	"name":"set_relation_from_faction_to_faction",
-	"tag":"faction_maelstrom",
-	"target":"faction_scavengers",
-	"relation":"hostile",
-	"helper": "This action will set relation between a faction and another faction",
-	"helperTitle": "Gameplay : Set Attitude Relation Between Faction"
+	},
+	{
+		"name": "set_relation_from_faction_to_faction",
+		"tag": "faction_maelstrom",
+		"target": "faction_scavengers",
+		"relation": "hostile",
+		"helper": "This action will set relation between a faction and another faction",
+		"helperTitle": "Gameplay : Set Attitude Relation Between Faction"
 
-},
-{
-	"name":"update_faction_relation_attitude",
-	"helper": "This action will set relation between a faction and an AttitudeGroup",
-	"helperTitle": "Gameplay : Update Attitude Relation for every Factions from Affinity board"
+	},
+	{
+		"name": "update_faction_relation_attitude",
+		"helper": "This action will set relation between a faction and an AttitudeGroup",
+		"helperTitle": "Gameplay : Update Attitude Relation for every Factions from Affinity board"
 
-},
-{
+	},
+	{
 		"name": "unset_timedilation_for_entity",
 		"tag": "judy01||player",
 		"helper": "This action will unset time dilatation for NPC",
@@ -3203,7 +3203,7 @@
 			"helper": "This action will unset time dilatation for NPC",
 			"helperTitle": "Entity : Unset Time Dilatation"
 		},
-		"failactions":[],
+		"failactions": [],
 		"help": "will try to execute an action then play an actionlist if it fails",
 		"helper": "will try to execute an action then play an actionlist if it fails",
 		"helperTitle": "Script : Run action in Safe Execution"
@@ -3214,46 +3214,45 @@
 		"helper": "This action will open an shard popup with custom shard content",
 		"helperTitle": "UI : Open Shard Popup"
 	},
-	
+
 	{
 		"name": "subscribe_actionlist_to_direct_execution",
 		"tag": "myshardtag",
-		"action":[
-			
+		"action": [
+
 			{
-					"name":"notify",
-					"value":"hello"
+				"name": "notify",
+				"value": "hello"
 			}
-			
+
 		],
 		"helper": "This action will subscribe a list of action to direct execution engine",
 		"helperTitle": "Script : Register Action List to Direct Execution"
 	},
-	
+
 	{
 		"name": "subscribe_event_to_direct_execution",
 		"tag": "myeventtag",
-		
+
 		"helper": "This action will subscribe a Event to direct execution engine. !!! The triggers are checked once before register !!!",
 		"helperTitle": "Script : Register Event to Direct Execution"
 	},
-	
+
 	{
 		"name": "subscribe_function_to_direct_execution",
 		"tag": "myshardtag",
-		
+
 		"helper": "This action will subscribe function to direct execution engine",
 		"helperTitle": "Script : Register Function to Direct Execution"
 	},
-	
+
 	{
 		"name": "unsubscribe_from_direct_execution",
 		"tag": "myshardtag",
-		
+
 		"helper": "This action will unsubscribe registred item from direct execution engine",
 		"helperTitle": "Script : Unregister from Direct Execution"
 	},
-	
 
 
 
@@ -3271,42 +3270,91 @@
 
 
 
-{
+
+	{
 		"name": "subscribe_actionlist_to_direct_action",
 		"tag": "myshardtag",
-		"action":[
-			
+		"action": [
+
 			{
-					"name":"notify",
-					"value":"hello"
+				"name": "notify",
+				"value": "hello"
 			}
-			
+
 		],
 		"helper": "This action will subscribe a list of action to direct Action Engine",
 		"helperTitle": "Script : Register Action List to Direct Action Engine"
 	},
-	
+
 	{
 		"name": "subscribe_event_to_direct_action",
 		"tag": "myeventtag",
-		
+
 		"helper": "This action will subscribe a Event to direct execution Action Engine. !!! The triggers are checked once before register !!!",
 		"helperTitle": "Script : Register Event to Direct Action Engine"
 	},
-	
+
 	{
 		"name": "subscribe_function_to_direct_action",
 		"tag": "myshardtag",
-		
+
 		"helper": "This action will subscribe function to direct execution Action Engine",
 		"helperTitle": "Script : Register Function to Direct Action Engine"
 	},
-	
+
 	{
 		"name": "unsubscribe_from_direct_action",
 		"tag": "myshardtag",
-		
+
 		"helper": "This action will unsubscribe registred item from direct Action Engine",
 		"helperTitle": "Script : Unregister from Direct Action Engine"
 	},
+
+	{
+		"name": "play_anim_entity",
+		"tag": "myshardtag",
+
+		"helper": "This action will unsubscribe registred item from direct Action Engine",
+		"helperTitle": "Script : Unregister from Direct Action Engine"
+	},
+
+	{
+		"name": "play_custom_anim_entity",
+		"tag": "lookatnpc",
+		"ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+		"anim": "add__stand__2h_front__01__dynamic",
+		"workspot": "cyberscript_workspot_custom_base",
+		"isinstant": false,
+		"unlockcamera": true,
+		"helper": "This action will apply animation to entity",
+		"helperTitle": "Anim : Play Anim to Entity"
+	},
+
+	{
+		"name": "change_anim_entity",
+		"tag": "myshardtag",
+		"anim": "add__stand__2h_front__01__dynamic",
+
+		"isinstant": false,
+		"helper": "This action will change animation to entity",
+		"helperTitle": "Anim : Change Anim to Entity (if in same workspot)"
+	},
+
+	{
+		"name": "change_anim_entity_workspot",
+		"tag": "myshardtag",
+		"workspottag": "myworkspot",
+		"workspot": "cyberscript_workspot_custom_base",
+		"unlockcamera": true,
+		"helper": "This action will change workspot to entity",
+		"helperTitle": "Anim : Change Workspot to Entity"
+	},
+
+	{
+		"name": "stop_anim_entity",
+		"tag": "myshardtag",
+
+		"helper": "This action will stop animation to entity",
+		"helperTitle": "Anim : Stop Anim for Entity"
+	}
 ]

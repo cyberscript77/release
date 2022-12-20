@@ -847,10 +847,13 @@ function checkWithFixer(curPos)
 	
 	for k,v in pairs(arrayFixer) do
 		--debugPrint(2,arrayFixer[i].Name)
-		if(arrayFixer[k].fixer.Name ~= "Delamain")then
-			if(checkPosFixer(curPos,arrayFixer[k].fixer.LOC_X,arrayFixer[k].fixer.LOC_Y,arrayFixer[k].fixer.range))then
+		
+		checkContext(v.fixer)
+		
+		if(v.fixer.Name ~= "Delamain")then
+			if(checkPosFixer(curPos,v.fixer.LOC_X,v.fixer.LOC_Y,v.fixer.range))then
 				Game.ChangeZoneIndicatorSafe()
-				return arrayFixer[k].fixer
+				return deepcopy(v.fixer,nil)
 				
 			end
 			
@@ -863,7 +866,7 @@ function checkWithFixer(curPos)
 					isDelamainDrived = (string.find(vehicule:GetDisplayName(), "Delamain") ~= nil)
 					if isDelamainDrived then
 						
-						return arrayFixer[k].fixer
+						return deepcopy(v.fixer,nil)
 						
 					end
 				end
@@ -1619,8 +1622,8 @@ function entEntityIDDraw(entEntityID)
 	ImGui.Indent()
 	
 	-- Properties
-	ImGui.Text("hash: " .. tostring(entEntityID.hash))
-	
+	ImGui.Text("hash: " .. tostring(entEntityID:GetEntityID().hash))
+	ImGui.Text("record hash: " .. tostring(entEntityID:GetRecordID().hash))
 	ImGui.Unindent()
 end
 

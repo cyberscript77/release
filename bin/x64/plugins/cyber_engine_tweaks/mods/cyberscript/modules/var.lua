@@ -110,14 +110,16 @@ end
 
 function resetVar()
 	
-editorAnimName = "q108_17_riots_guitar_anim_sn259"
-editorAnimRepo = "woman_base"
+editorAnimName = "add__stand__2h_front__01__dynamic"
+editorAnimRepo = "man_base"
 editorAnimTag = "lookatnpc"
-editorEntName = "base\\cyberscript\\entity\\workspot_anim.ent"
-editorWKName = "cyberscript_workspot_custom_base"
+editorEntName = "base\\amm_workspots\\entity\\workspot_anim.ent"
+editorWKName = "amm_workspot_custom_base"
 editorAnimx = 0
 editorAnimy = 0
 editorAnimz = 0
+
+animsearch = ""
 
 
 hotreload = false
@@ -147,6 +149,34 @@ poi_district = {}
 poi_subdistrict = {}
 poi_type = {}
 poi_tag = {}
+
+
+anim_rigs_list = {}
+
+
+	
+	
+	
+	local reader = dir("data/anims/workspot")
+	if(reader ~= nil) then
+	for i=1, #reader do 
+		if(tostring(reader[i].type) == "file" and string.match(tostring(reader[i].name), ".json")) then
+			local f = assert(io.open("data/anims/workspot/"..reader[i].name))
+
+			lines = f:read("*a")
+
+			encdo = lines
+			f:close()
+			
+
+			local mytable = trydecodeJSOn(encdo, f ,"data/anims/workspot/"..reader[i].name)
+			anim_rigs_list[reader[i].name:gsub(".json", "")] = mytable
+			
+			
+		end
+	end
+	end
+
 
 
 
@@ -2356,6 +2386,16 @@ triggertemplate = {}
 triggertemplate = trydecodeJSOn(encdo, f ,"data/triggertemplate.json")
 
 
+local f = assert(io.open("data/anims/CharacterEntryLibrary.json"))
+
+lines = f:read("*a")
+
+encdo = lines
+f:close()
+entityListJson = trydecodeJSOn(encdo, f ,"data/anims/CharacterEntryLibrary.json")
+
+
+entityListJsonfinal = {}
 controltypelist = {"button","label","area","scrollarea","vertical_area","image"}
 controltypevaluelist = {"text","number","score","variable"}
 

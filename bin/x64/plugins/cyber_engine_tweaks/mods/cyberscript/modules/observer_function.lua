@@ -4165,13 +4165,21 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		end
 		if(SelectedScriptMappin ~= nil) then
 			if(mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant) then
-				inkTextRef.SetText(self.gigBarCompletedText, "")
-				inkTextRef.SetText(self.gigBarTotalText, "")
+			
+				local fixer = getFixerByTag(SelectedScriptMappin.tag)
 				
-				inkImageRef.SetVisible(self.icon, false)
+				inkTextRef.SetText(self.gigBarCompletedText, "100")
+				inkTextRef.SetText(self.gigBarTotalText, "100")
+				self.gigProgress = 1
 				
 				inkWidgetRef.SetVisible(self.descText, true)
 				inkWidgetRef.SetVisible(self.fixerPanel, true)
+				inkImageRef.SetVisible(self.icon, false)
+				
+                self:GetRootWidget():SetState("Fixer");
+                self:PlayAnim("OnTooltipIntro", "OnFixerProgressBarAnim");
+				
+				
 			end
 			else
 			inkWidgetRef.SetVisible(self.icon, true)

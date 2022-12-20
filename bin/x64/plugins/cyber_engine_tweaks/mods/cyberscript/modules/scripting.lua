@@ -2054,6 +2054,8 @@ function checkFixer()
 	-- pcall(function() 
 	if(currentfixer ~= nil) then --if fixer si founded
 		
+	
+	
 		
 		if(checkTriggerRequirement(currentfixer.requirement,currentfixer.trigger)) then --check that fixer can be spawn
 			
@@ -2061,21 +2063,18 @@ function checkFixer()
 			oldfixer = currentfixer
 			
 			
-			local obj = getEntityFromManager(currentfixer.Tag)
-			
-			
-			
-			
-			if(obj.id == nil) then -- if there is no entity
+			if(cyberscript.EntityManager[currentfixer.Tag] == nil and currentfixer.exist == false and currentfixer.npcexist == false and fixerIsSpawn == false) then
 				--print("spawn")
 				
 				local twkVehi = TweakDBID.new(currentfixer.NPCId)
 				
-				if(cyberscript.EntityManager[currentfixer.Tag] == nil and exist ==  false) then
 				
-				cyberscript.EntityManager[currentfixer.Tag] = {}
-				spawnNPC(currentfixer.NPCId,"", currentfixer.Tag, currentfixer.LOC_X, currentfixer.LOC_Y, currentfixer.LOC_Z, 42, true, false, nil, false, nil)
-				end
+				
+					cyberscript.EntityManager[currentfixer.Tag] = {}
+					spawnNPC(currentfixer.NPCId,"", currentfixer.Tag, currentfixer.LOC_X, currentfixer.LOC_Y, currentfixer.LOC_Z, 42, true, false, nil, false, nil)
+					
+					
+				
 				-- local obj = getEntityFromManager(currentfixer.Tag)
 				-- local enti = Game.FindEntityByID(obj.id)
 				-- lookAtPlayer(enti, 999999999)
@@ -2083,19 +2082,20 @@ function checkFixer()
 				-- setFriendAgainst(currentfixer.Tag, "player")
 				
 				
-				if(currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 and fixerIsSpawn == false) then
-					
-					
-					runActionList(currentfixer.spawn_action, currentfixer.Tag.."_Spawn",nil,nil,currentfixer.Tag)
-					
-				end
 				
 				
 				
 			end	
 			
 			
-			
+			if(fixerIsSpawn == false and currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 ) then
+						
+				
+						
+				runActionList(currentfixer.spawn_action, currentfixer.Tag.."_Spawn",nil,nil,currentfixer.Tag)
+				fixerIsSpawn = true
+					
+			end
 			
 			
 			
@@ -2105,7 +2105,7 @@ function checkFixer()
 			
 		end
 		
-		else -- if we move away from fixer so currentfixer is nil
+	else -- if we move away from fixer so currentfixer is nil
 		
 		
 		Game.ChangeZoneIndicatorPublic()
@@ -2139,6 +2139,7 @@ function checkFixer()
 			
 		end
 		
+		fixerIsSpawn = false
 	end
 	
 	

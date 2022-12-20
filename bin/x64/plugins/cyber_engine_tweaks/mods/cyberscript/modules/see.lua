@@ -84,6 +84,7 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
+			
 			if(trigger.name == "entity_is_spawn") then
 				local obj = getEntityFromManager(trigger.tag)
 				if(obj.id ~= nil) then
@@ -9623,12 +9624,7 @@ end
 			spawnCustomAnimationWorkspot(action.tag,action.ent,action.anim,action.workspot,action.isinstant,action.unlockcamera,angle)
 		end
 		
-		if action.name == "play_special_anim_entity" then
 		
-		
-		 
-				spawnAnimationWorkspot(action.tag,action.anim,action.workspot,action.isinstant)
-		end
 		
 		if action.name == "change_anim_entity" then
 		
@@ -13242,7 +13238,7 @@ function GenerateTextFromContextValues(context, v)
 		
 		
 			local currentpoi = nil
-			currentpoi = FindPOI(v.argument.position_tag,v.argument.position_poi_district,v.argument.position_poi_subdistrict,v.argument.position_poi_is_for_car,v.argument.position_poi_type,v.argument.position_poi_use_location_tag,v.argument.position_poi_from_position,range,v.argument.position_poi_from_position_x,v.argument.position_poi_from_position_y,v.argument.position_poi_from_position_z,v.argument.position_poi_search,v.argument.position_poi_searchdistance)
+			currentpoi = FindPOI(v.argument.position_tag,v.argument.position_poi_district,v.argument.position_poi_subdistrict,v.argument.position_poi_is_for_car,v.argument.position_poi_type,v.argument.position_poi_use_location_tag,v.argument.position_poi_from_position,v.argument.position_range,v.argument.position_poi_from_position_x,v.argument.position_poi_from_position_y,v.argument.position_poi_from_position_z,v.argument.position_poi_search,v.argument.position_poi_searchdistance)
 			if(currentpoi ~= nil) then
 			
 				value = currentpoi[v.prop]

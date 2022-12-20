@@ -119,9 +119,10 @@ function loadModule()
 
 	
 	
+	cyberscript.entitieshash       = dofile("data/entitieshash.lua")
+	cyberscript.entities       = dofile("data/entities.lua")
+	cyberscript.workspot       = dofile("data/workspot.lua")
 	
-	
-
 	cyberscript.db       = dofile("modules/db.lua")
 	cyberscript.modpack   = dofile("modules/modpack.lua")
 	cyberscript.npc      = dofile("modules/npc.lua")
