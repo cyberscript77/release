@@ -1114,9 +1114,9 @@ print("hot reload test")
 	end
 	function SettingsMainGameController_RequestClose (_, _, target) -- Check if activated button is the custom mods button
 		if(moddisabled == true) then return end
-		-- if(AutoRefreshDatapack == true) then
-			-- LoadDataPackCache()
-		-- end
+		 if(AutoRefreshDatapack == true) then
+			 LoadDataPackCache()
+		 end
 	end
 	
 	function PlayerPuppet_OnGameAttached(thos)
