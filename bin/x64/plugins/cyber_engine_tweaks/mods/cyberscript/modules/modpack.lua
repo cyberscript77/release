@@ -429,26 +429,7 @@ function loadDatapackObject(namespace)
 		if(reader ~= nil) then
 			arrayDatapack[namespace][objtype] = {}
 			for i=1, #reader do 
-				if(objtype == "sound") then
-					
-					if(tostring(reader[i].type) == "file" and (string.match(tostring(reader[i].name), ".mp3") or string.match(tostring(reader[i].name), ".wav"))) then
-						
-						local soundobj = {}
-						soundobj.name = reader[i].name
-						soundobj.path=namespace.."\\sound\\"
-						soundobj.namespace = namespace
-						
-						arrayDatapack[namespace][objtype][tostring(reader[i].name)] = {}
-						arrayDatapack[namespace][objtype][tostring(reader[i].name)] = soundobj
-						
-						
-					end
-					
-					
-					
-					
-					
-					elseif(objtype == "texture") then
+				if(objtype == "texture") then
 					
 					if(tostring(reader[i].type) == "file" and 
 						(
@@ -599,9 +580,16 @@ function loadAssetsObject()
 		end
 	end
 
+
+	
+
+
 	logme(1,"CyberScript Assets Loaded")
 
 end
+
+
+
 
 function DeleteDatapackFromCache(tag)
 	
@@ -1054,6 +1042,7 @@ end
 									arrayCircuit[value[i].tag].circuit = value[i]
 									arrayCircuit[value[i].tag].file = path
 									arrayCircuit[value[i].tag].datapack = datapackname
+									arrayCircuit[value[i].tag].scripttype = objtype
 								end
 							end
 						end
@@ -1067,6 +1056,7 @@ end
 									arrayDialog[tostring(value[i].Tag)].dialog = value[i]
 									arrayDialog[tostring(value[i].Tag)].path = path
 									arrayDialog[tostring(value[i].Tag)].datapack = datapackname
+									arrayDialog[tostring(value[i].Tag)].scripttype = objtype
 									if(arrayDialog[tostring(value[i].Tag)]["dialog"] == nil) then
 										arrayDialog[tostring(value[i].Tag)]["dialog"]["havequitoption"] = true
 									end
@@ -1081,6 +1071,7 @@ end
 							arrayEvent[value.tag].event = value
 							arrayEvent[value.tag].file = path
 							arrayEvent[value.tag].datapack = datapackname
+							arrayEvent[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "faction") then
 						for key, value in pairs(tabl) do 
@@ -1090,6 +1081,7 @@ end
 							arrayFaction[value.Tag].faction = value
 							arrayFaction[value.Tag].file = path
 							arrayFaction[value.Tag].datapack = datapackname
+							arrayFaction[value.Tag].scripttype = objtype
 						end
 						elseif(objtype == "fixer") then
 						for key, value in pairs(tabl) do 
@@ -1099,15 +1091,17 @@ end
 							arrayFixer[value.Tag].fixer = value
 							arrayFixer[value.Tag].file = path
 							arrayFixer[value.Tag].datapack = datapackname
+							arrayFixer[value.Tag].scripttype = objtype
 						end
-						elseif(objtype == "function") then
+						elseif(objtype == "functions") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..datapackname.."/".."function".."/"..key
 							rootpath = path
 							arrayFunction[value.tag] = {}
 							arrayFunction[value.tag].func = value
 							arrayFunction[value.tag].file = path
 							arrayFunction[value.tag].datapack = datapackname
+							arrayFunction[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "help") then
 						for key, value in pairs(tabl) do 
@@ -1117,6 +1111,7 @@ end
 							arrayHelp[value.tag].help = value
 							arrayHelp[value.tag].file = path
 							arrayHelp[value.tag].datapack = datapackname
+							arrayHelp[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "housing") then
 						for key, value in pairs(tabl) do 
@@ -1213,6 +1208,7 @@ end
 								arrayHousing[newobj.tag].housing = newobj
 								arrayHousing[newobj.tag].file = path
 								arrayHousing[newobj.tag].datapack = datapackname
+								arrayHousing[newobj.tag].scripttype = objtype
 								
 								if(statutfile == true) then print("Cyberscript : AMM housing : "..path..". Convertion successfull !") else print("Cyberscript : AMM housing : "..path..". Convertion failed !") end
 								
@@ -1224,6 +1220,7 @@ end
 								arrayHousing[value.tag].housing = value
 								arrayHousing[value.tag].file = path
 								arrayHousing[value.tag].datapack = datapackname
+								arrayHousing[value.tag].scripttype = objtype
 								
 								else
 								
@@ -1250,6 +1247,7 @@ end
 							arrayInteract[value.tag].interact.group = datapackname
 							arrayInteract[value.tag].file = path
 							arrayInteract[value.tag].datapack = datapackname
+							arrayInteract[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "interfaces") then
 						for key, value in pairs(tabl) do 
@@ -1259,6 +1257,7 @@ end
 							arrayInterfaces[value.tag].ui = value
 							arrayInterfaces[value.tag].file = path
 							arrayInterfaces[value.tag].datapack = datapackname
+							arrayInterfaces[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "lang") then
 						local path = "datapack/"..datapackname.."/"..objtype.."/"
@@ -1277,6 +1276,7 @@ end
 							arrayQuest2[value.tag].quest = value
 							arrayQuest2[value.tag].file = path
 							arrayQuest2[value.tag].datapack = datapackname
+							arrayQuest2[value.tag].scripttype = objtype
 							
 						end
 						elseif(objtype == "node") then
@@ -1289,6 +1289,7 @@ end
 									arrayNode[tostring(value[i].tag)].node = value[i]
 									arrayNode[tostring(value[i].tag)].file = path
 									arrayNode[tostring(value[i].tag)].datapack = datapackname
+									arrayNode[tostring(value[i].tag)].scripttype = objtype
 								end
 							end
 						end
@@ -1308,6 +1309,7 @@ end
 							arrayCustomNPC[value.tag].npc.workinglocation=value.location
 							arrayCustomNPC[value.tag].datapack = datapackname
 							arrayCustomNPC[value.tag].file = path
+							arrayCustomNPC[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "path") then
 						for key, value in pairs(tabl) do 
@@ -1317,6 +1319,7 @@ end
 							arrayPath[value.tag].gamepath = value
 							arrayPath[value.tag].file = path
 							arrayPath[value.tag].datapack = datapackname
+							arrayPath[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "phone_dialog") then
 						for key, value in pairs(tabl) do 
@@ -1326,6 +1329,7 @@ end
 							arrayPhoneConversation[value.tag].conv = value
 							arrayPhoneConversation[value.tag].file = path
 							arrayPhoneConversation[value.tag].datapack = datapackname
+							arrayPhoneConversation[value.tag].scripttype = objtype
 							if(arrayPhoneConversation[tostring(value.tag)].conv.unlock == false ) then
 								if(getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked") == 0 or getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked") == nil ) then
 									setScore(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked",0)
@@ -1366,6 +1370,7 @@ end
 							arrayHouse[value.tag].house = value
 							arrayHouse[value.tag].file = path
 							arrayHouse[value.tag].datapack = datapackname
+							arrayHouse[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "poi") then
 						for key, value in pairs(tabl) do 
@@ -1378,6 +1383,7 @@ end
 							arrayPOI[value.tag].poi = value
 							arrayPOI[value.tag].file = path
 							arrayPOI[value.tag].datapack = datapackname
+							arrayPOI[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "radio") then
 						for key, value in pairs(tabl) do 
@@ -1389,6 +1395,7 @@ end
 							arrayRadio[value.tag].datapack = datapackname
 							arrayRadio[value.tag].namespace = datapackname
 							arrayRadio[value.tag].enabled = false
+							arrayRadio[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "shard") then
 						for key, value in pairs(tabl) do 
@@ -1398,14 +1405,22 @@ end
 							arrayShard[value.tag].shard = value
 							arrayShard[value.tag].file = path
 							arrayShard[value.tag].datapack = datapackname
+							arrayShard[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "sound") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arraySound[key] = {}
-							arraySound[key].sound = value
-							arraySound[key].file = path
+							
+							if(#value > 0) then
+								for i=1,#value do
+									arraySound[value[i].tag] = {}
+									arraySound[value[i].tag].sound = value[i]
+									arraySound[value[i].tag].file = path
+									arraySound[value[i].tag].scripttype = objtype
+									
+								end
+							end
 						end
 						elseif(objtype == "texture") then
 						for key, value in pairs(tabl) do 
@@ -1415,6 +1430,7 @@ end
 							arrayTexture[key] = {}
 							arrayTexture[key].texture = path
 							arrayTexture[key].file = path
+							arrayTexture[key].scripttype = objtype
 						end
 						elseif(objtype == "scene") then
 						for key, value in pairs(tabl) do 
@@ -1425,6 +1441,7 @@ end
 							arrayScene[value.tag].scene = value
 							arrayScene[value.tag].file = path
 							arrayScene[value.tag].datapack = datapackname
+							arrayScene[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "housing_template") then
 						for key, value in pairs(tabl) do 
@@ -1435,6 +1452,7 @@ end
 							arrayHousingTemplate[value.tag].template = value
 							arrayHousingTemplate[value.tag].file = path
 							arrayHousingTemplate[value.tag].datapack = datapackname
+							arrayHousingTemplate[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "hud") then
 						for key, value in pairs(tabl) do 
@@ -1445,6 +1463,7 @@ end
 							arrayHUD[value.tag].hud = value
 							arrayHUD[value.tag].file = path
 							arrayHUD[value.tag].datapack = datapackname
+							arrayHUD[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "setting") then
 						for key, value in pairs(tabl) do 
@@ -1455,6 +1474,7 @@ end
 							arraySetting[value.tag].setting = value
 							arraySetting[value.tag].file = path
 							arraySetting[value.tag].datapack = datapackname
+							arraySetting[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "codex") then
 						for key, value in pairs(tabl) do 
@@ -1465,6 +1485,7 @@ end
 							arrayCodex[value.tag].entry = value
 							arrayCodex[value.tag].file = path
 							arrayCodex[value.tag].datapack = datapackname
+							arrayCodex[value.tag].scripttype = objtype
 						end
 						
 						elseif(objtype == "webpage") then
@@ -1476,6 +1497,7 @@ end
 							arrayWebpage[value.tag].entry = value
 							arrayWebpage[value.tag].file = path
 							arrayWebpage[value.tag].datapack = datapackname
+							arrayWebpage[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "email") then
 						for key, value in pairs(tabl) do 
@@ -1486,6 +1508,7 @@ end
 							arrayEmail[value.tag].entry = value
 							arrayEmail[value.tag].file = path
 							arrayEmail[value.tag].datapack = datapackname
+							arrayEmail[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "character") then
 						for key, value in pairs(tabl) do 
@@ -1495,6 +1518,7 @@ end
 							arrayCharacterArchive[value.name].obj = value
 							arrayCharacterArchive[value.name].file = path
 							arrayCharacterArchive[value.name].datapack = datapackname
+							arrayCharacterArchive[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "quickhack") then
 						for key, value in pairs(tabl) do 
@@ -1505,6 +1529,7 @@ end
 							arrayquickhack[value.tag].entry = value
 							arrayquickhack[value.tag].file = path
 							arrayquickhack[value.tag].datapack = datapackname
+							arrayquickhack[value.tag].scripttype = objtype
 						end
 						elseif(objtype == "garage") then
 						for key, value in pairs(tabl) do 
@@ -1515,6 +1540,7 @@ end
 							arrayGarage[value.tag].entry = value
 							arrayGarage[value.tag].file = path
 							arrayGarage[value.tag].datapack = datapackname
+							arrayGarage[value.tag].scripttype = objtype
 						end
 					
 					end

@@ -829,7 +829,7 @@ print("hot reload test")
 				if score ~= nil and score > 1 then
 					textAffinity = textAffinity.."\n "..arrayPnjDb[i].Names.." : "..score
 				end
-			end
+				end
 			
 			local test = data
 			local shardData =  CodexEntryData.new()
@@ -1114,9 +1114,9 @@ print("hot reload test")
 	end
 	function SettingsMainGameController_RequestClose (_, _, target) -- Check if activated button is the custom mods button
 		if(moddisabled == true) then return end
-		 if(AutoRefreshDatapack == true) then
-			 LoadDataPackCache()
-		 end
+		if(AutoRefreshDatapack == true) then
+			LoadDataPackCache()
+		end
 	end
 	
 	function PlayerPuppet_OnGameAttached(thos)
@@ -5194,6 +5194,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		-- 2. Select currently playing station
 		local radio = RadioListItemData.new()
 		radio.record = gamedataRadioStation_Record.new()
+		print(radio.record:Index())
 		for k,v in pairs(arrayRadio) do
 			self.dataSource:AppendItem(radio)
 		end
@@ -5203,6 +5204,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 			---@type RadioStation_Record
 			local stationRecord = stationItem.record
 			local stationIndex = stationRecord:Index()
+		
 			if(stationRecord:DisplayName() == "") then
 			end
 			-- if(stationRecord.tag ~= nil) then
@@ -5345,10 +5347,53 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		----debugPrint(2,Dump(value))
 	end
 	
-	function RadioStationListItemController_Activate(self)
+	function VehicleRadioPopupGameController_Activate(self)
 	if(moddisabled == true) then return end
-		if currentRadio ~= nil then
-			self.quickSlotsManager:SendRadioEvent(false, false, -1)
+	--print("test")
+		
+		
+		if(self.selectedItem.stationData.record == nil or self.selectedItem.stationData.record:DisplayName() == nil or self.selectedItem.stationData.record:DisplayName() == "") then
+		
+			local radioToPut = nil
+			for k,v in pairs(arrayRadio) do
+				
+				if(self.selectedItem.label:GetText() == nil or self.selectedItem.label:GetText() == "") then
+					if(arrayRadio[k].enabled == false ) then
+						currentRadio = arrayRadio[k]
+				--		print(k)
+						if(selectedradioIndex ~= nil) then
+						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, selectedradioIndex)
+						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, 0)
+						else
+						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, -1)
+						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, 0)
+						end
+						
+						break
+					end
+					else
+					if(arrayRadio[k].radio.name == self.selectedItem.label:GetText() ) then
+						currentRadio = arrayRadio[k]
+					--	print(k)
+						if(selectedradioIndex ~= nil) then
+						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, selectedradioIndex)
+						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, 0)
+						else
+						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, -1)
+						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, 0)
+						end
+						break
+					end
+				end
+			end
+			
+			else
+			selectedradioIndex = self.selectedItem.stationData.record:Index()
+		--print("selectedradioIndex"..selectedradioIndex)
+			if(currentRadio ~= nil and currentRadio.playedmusic ~= nil) then Stop(currentRadio.playedmusic) end
+			currentRadio = nil
+			
+			
 		end
 		-- --debugPrint(2,"thos is it 2")
 		-- -- --debugPrint(2,GameDump(self.label))
@@ -5371,6 +5416,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function VehicleRadioPopupGameController_OnScrollChanged(self)
 	if(moddisabled == true) then return end
+	
 		for k,v in pairs(arrayRadio) do
 			arrayRadio[k].enabled = false
 		end
@@ -5379,31 +5425,34 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function RadioStationListItemController_OnSelected(self,itemController,discreteNav)
 		if(moddisabled == true) then return end
-		if(self.stationData.record:DisplayName() == nil or self.stationData.record:DisplayName() == "") then
+			if(self.stationData.record == nil or self.stationData.record:DisplayName() == nil or self.stationData.record:DisplayName() == "") then
 			
 			local radioToPut = nil
 			for k,v in pairs(arrayRadio) do
 				
 				if(self.label:GetText() == nil or self.label:GetText() == "") then
 					if(arrayRadio[k].enabled == false ) then
-						currentRadio = arrayRadio[k]
-						
+					--	currentRadio = arrayRadio[k]
+					--	print(k)
+					--	self.quickSlotsManager:SendRadioEvent(false, false, -1)
 						inkTextRef.SetText(self.label, arrayRadio[k].radio.name)
 						arrayRadio[k].enabled = true
 						break
 					end
 					else
 					if(arrayRadio[k].radio.name == self.label:GetText() ) then
-						currentRadio = arrayRadio[k]
+--currentRadio = arrayRadio[k]
 						
+					--	self.quickSlotsManager:SendRadioEvent(false, false, -1)
 						break
 					end
 				end
 			end
 			
 			else
+			if(currentRadio ~= nil and currentRadio.playedmusic ~= nil) then Stop(currentRadio.playedmusic) end
 			currentRadio = nil
-			Stop("music")
+			
 			
 		end
 	end

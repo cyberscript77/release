@@ -470,9 +470,10 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 				
 				local obj = getEntityFromManagerById(objLook:GetEntityID())
 				
-				if(obj.id ~= nil) then
+				if(obj.id ~= nil and obj.tag ~= "lookatnpc") then
 					cyberscript.EntityManager["lookatentity"].tag = obj.tag
-					
+					cyberscript.EntityManager["lookatnpc"].id = nil
+					cyberscript.EntityManager["lookatnpc"].tweak = "None"
 					if obj.isquest == nil then obj.isquest = false end
 					
 					objLook:MarkAsQuest(obj.isquest)
@@ -483,10 +484,19 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 					cyberscript.EntityManager["lookatentity"].tag = ""
 					
 					if cyberscript.EntityManager["lookatnpc"].isquest == nil then cyberscript.EntityManager["lookatnpc"].isquest = false end
+						
+						objLook:MarkAsQuest(cyberscript.EntityManager["lookatnpc"].isquest)
+						
+						pcall(function ()
+						if(objLook:GetRecordID() ~= nil and objLook:GetRecordID().hash ~= nil and cyberscript.entitieshash[tostring(objLook:GetRecordID().hash)] ~= nil) then
+						
+						
+							cyberscript.EntityManager["lookatnpc"].tweak =  cyberscript.entitieshash[tostring(objLook:GetRecordID().hash)].entity_tweak
+						
+						end
+						end)
 					
-					objLook:MarkAsQuest(cyberscript.EntityManager["lookatnpc"].isquest)
-					cyberscript.EntityManager["lookatnpc"].tweak = obj.tweak
-					cyberscript.EntityManager["lookatnpc"].id = nil
+				--	cyberscript.EntityManager["lookatnpc"].id = nil
 					cyberscript.EntityManager["lookatnpc"].id = objLook:GetEntityID()
 					
 				end
@@ -802,6 +812,35 @@ function mainThread()-- update event when mod is ready and in game (main thread 
 	-- Game.GetPlayer():GetFPPCameraComponent().pitchMax = pitch
 	-- Game.GetTeleportationFacility():Teleport(Game.GetPlayer(), Game.GetPlayer():GetWorldPosition() , EulerAngles.new(0,0,yaw)) -- Set yaw when teleporting
 	-- end
+	for k,v in pairs(cyberscript.soundmanager) do
+		
+		if(v.isplaying == true and v.endplaying ~=nil) then
+			
+			if( os.time(os.date("!*t"))+1 >=v.endplaying) then
+				
+				if(v.needrepeat == false) then
+				
+					Stop(v.tag)
+				
+				else
+				
+					local obj = deepcopy(v,nil)
+					Stop(v.tag)
+					PlaySound(obj.tag,obj.isradio,obj.needrepeat)
+				
+				
+				end
+			end
+			
+		
+		end
+	
+	
+	
+	end
+	
+	
+	
 	
 	--Timers 
 	if (tick % 5 == 0) then --every 0.5 second
@@ -1711,7 +1750,7 @@ end
 --run action Thread
 function runActionList(actionlist, tag, source,isquest,executortag,bypassMenu)
 	
-	
+	if(tag ~= nil) then
 	local copy = deepcopy(actionlist, copies)
 	
 	-- for k,v in pairs(copy) then
@@ -1724,7 +1763,7 @@ function runActionList(actionlist, tag, source,isquest,executortag,bypassMenu)
 	
 	
 	
-	
+	print(tag)
 	if(workerTable[tag] == nil) then
 		workerTable[tag] = {}
 	end
@@ -1742,12 +1781,12 @@ function runActionList(actionlist, tag, source,isquest,executortag,bypassMenu)
 	if(isquest ~= nil) then
 		workerTable[tag]["quest"] = isquest
 	end
-	
+	end
 end
 
 function runSubActionList(actionlist, tag, parent, source, isquest,executortag,bypassMenu)
 	
-	
+		if(tag ~= nil) then
 	
 	local copy = deepcopy(actionlist, copies)
 	
@@ -1779,7 +1818,7 @@ function runSubActionList(actionlist, tag, parent, source, isquest,executortag,b
 	if(isquest ~= nil and isquest == true) then
 		workerTable[tag]["quest"] = true
 	end
-	
+		end
 end
 
 

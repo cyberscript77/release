@@ -857,7 +857,10 @@ registerHotkey("selectcurrentInteractGroup5", "Select 5 Interact Group", functio
 	cycleInteractgroup()
 end
 )
-
+registerHotkey("openRadioPopup", "Open radio popup", function()
+	openRadio()
+end
+)
 registerHotkey("housingXp", "Housing : X+", function()
 	if(cetkeyused == false)then
 		if(selectedItem ~= nil) then

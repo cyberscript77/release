@@ -7621,26 +7621,28 @@ end
 			audioEvent.soundName = action.value
 			Game.GetPlayer():QueueEvent(audioEvent)
 		end
-		if(action.name == "play_sound_file") then 
-			local sound = getSoundByNameNamespace(action.value,action.datapack)
-			if(sound ~= nil) then
-				local path = cyberscript.soundpath..sound.path
-				--PlaySound(action.value,path,action.channel,action.volume)
+		if(action.name == "play_custom_sound") then 
+			
+			if(arraySound[action.value] ~= nil) then
+				local path = arraySound[action.value].sound
+				
+				local isradio = false
+				local needrepeat = false
+				
+				if action.isradio ~= nil then isradio = action.isradio end
+				if action.needrepeat ~= nil then needrepeat = action.needrepeat end
+				
+				PlaySound(path,isradio,needrepeat)
 				else
 				error("No sound founded")
 			end
 		end
-		if(action.name == "pause_sound_channel") then 
-			--Pause(action.channel)
-		end
-		if(action.name == "resume_sound_channel") then 
-			--Resume(action.channel)
-		end
-		if(action.name == "stop_sound_channel") then 
-			--Stop(action.channel)
+	
+		if(action.name == "stop_custom_sound") then 
+			Stop(action.value)
 		end
 		if(action.name == "setGameVolume") then 
-			--SetSoundSettingValue(action.value, action.score)
+			SetSoundSettingValue(action.value, action.score)
 		end
 	end
 	
@@ -13214,6 +13216,37 @@ function GenerateTextFromContextValues(context, v)
 		end
 	end
 	
+	if(v.type == "current_sound" and cyberscript.soundmanager[v.tag] ~= nil) then
+	
+		value = cyberscript.soundmanager[v.tag][v.prop]
+	
+	end
+	
+	if(v.type == "current_radio" and currentRadio ~= nil) then
+		
+		value = currentRadio[v.prop]
+	
+	end
+	
+	
+	if(v.type == "sound" and arraySound[v.tag] ~=nil) then
+	
+		value = arraySound[v.tag].sound[v.prop]
+	
+	end
+	
+	
+	if(v.type == "radio" and arrayRadio[v.tag] ~=nil) then
+	
+		value = arrayRadio[v.tag].radio[v.prop]
+	
+	end
+	
+	if(v.type == "current_radio" and currentRadio ~= nil) then
+		
+		value = currentRadio[v.prop]
+	
+	end
 	
 	if(v.type == "current_place" and  currentHouse ~= nil) then
 	
@@ -13471,11 +13504,14 @@ function GenerateTextFromContextValues(context, v)
 		
 		if(v.prop == "customtransgressions" or v.prop == "transgressions" and ScannerInfoManager[v.tag]["bounty"] ~= nil and #ScannerInfoManager[v.tag]["bounty"][v.prop] > 0) then
 			
+			if(v.index == nil) then
+				local index = math.random(1,#ScannerInfoManager[v.tag]["bounty"][v.prop])
+				
+				value = ScannerInfoManager[v.tag]["bounty"][v.prop][index]
+			else
 			
-			local index = math.random(1,#ScannerInfoManager[v.tag]["bounty"][v.prop])
-			
-			value = ScannerInfoManager[v.tag]["bounty"][v.prop][index]
-			
+				value = ScannerInfoManager[v.tag]["bounty"][v.prop][v.index]
+			end
 		end
 		
 		
@@ -13537,10 +13573,15 @@ function GenerateTextFromContextValues(context, v)
 		if(v.prop == "customtransgressions" or v.prop == "transgressions" and currentScannerItem["bounty"] ~= nil and #currentScannerItem["bounty"][v.prop] > 0) then
 			
 			
-			local index = math.random(1,#currentScannerItem["bounty"][v.prop])
+			if(v.index == nil) then
+				local index = math.random(1,#ScannerInfoManager[v.tag]["bounty"][v.prop])
+				
+				value = currentScannerItem[v.prop][index]
+			else
 			
-			value = currentScannerItem["bounty"][v.prop][index]
-			
+				value = currentScannerItem[v.prop][v.index]
+			end
+		
 		end
 		
 		

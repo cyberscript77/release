@@ -136,6 +136,12 @@ function windowsManager() -- manage and toggle UI windows
 				ContractWindows()
 			end
 			
+			
+			
+			if file_exists("editor/editor.lua") then
+				cyberscript.editor2.editorWindowsManager()
+			end
+			
 		end
 		if(openColorPicker) then
 			colorPicker() 
@@ -1654,8 +1660,11 @@ function newWindows()
 		-- end
 		-- ImGui.SameLine()
 		
-		if ImGui.Button(getLang("editor"), menuBTNX*2, menuBTNY) then
+		if ImGui.Button(getLang("editor"), menuBTNX, menuBTNY) then
 			openanpage("editor")
+		end
+		if ImGui.Button(getLang("editorv2"), menuBTNX, menuBTNY) then
+			toggleEditorUI("editorWindows")
 		end
 		ImGui.EndChild()
 		elseif getcurrentpage() == "editor" then
@@ -3479,42 +3488,71 @@ function playRadio()
 				canplay = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 				else
 				canplay = true
+				
 			end
 			
-			if(currentRadio.isplaying == nil and IsPlaying("music") == true) then
-				Stop("music")
+			if(currentRadio.playedmusic == nil or (currentRadio.playedmusic ~= nil and (cyberscript.soundmanager[currentRadio.playedmusic] == nil or cyberscript.soundmanager[currentRadio.playedmusic].isplaying == false))) then
+				
+				if(currentRadio.playedmusic ~= nil) then
+					currentRadio.lastplayedmusic = currentRadio.playedmusic
+				
+				end
+				
+				currentRadio.isplaying = false
+				currentRadio.playedmusic = nil
+				
+				
 			end
 			
 			
-			if(canplay and (IsPlaying("music") == false))then
+			if(canplay and (currentRadio.isplaying == false))then
 				
 				local index = math.random(1,#currentRadio.radio.tracks)
 				
 				local song = currentRadio.radio.tracks[index]
+				
+				if(currentRadio.lastplayedmusic ~= nil) then
+					while(song.name == currentRadio.lastplayedmusic) do
+					
+						index = math.random(1,#currentRadio.radio.tracks)
+				
+						song = currentRadio.radio.tracks[index]
+					end
+					
+				
+				end
+				
 				currentRadio.isplaying = true
+				currentRadio.playedmusic = song.name
+				
 				
 				local actionlist = {}
 				
 				local action = {}
 				action = {}
-				action.name = "play_sound_file"
-				action.value = song.file
-				action.datapack = currentRadio.namespace
-				action.volume = currentRadioVolume
-				action.channel = "music"
+				action.name = "play_custom_sound"
+				action.value = song.name
+				action.isradio = true
+				
 				table.insert(actionlist,action)
 				runActionList(actionlist, "play_radio_radio_"..currentRadio.radio.tag, "interact",false,"nothing",true)
-				else
-				
+			else
+		
 				if(currentRadio.radio.only_in_car == true) then
 					
 					local iscar = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 					
-					if(iscar == false) then
+					if(iscar == false and (currentRadio.playedmusic ~= "" and currentRadio.playedmusic ~= nil)) then
 						
-						Stop("music")
+						Stop(currentRadio.playedmusic)
+						currentRadio.isplaying = false
+						currentRadio.playedmusic = nil
 					end
+
 				end
+				
+				
+				
 			end
 		end
 	end

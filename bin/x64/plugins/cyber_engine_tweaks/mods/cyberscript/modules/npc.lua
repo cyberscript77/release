@@ -76,6 +76,14 @@ if spawnRegion then
 		
 		if(enti ~= nil) then
 			
+			if obj.workspot ~= nil and cyberscript.EntityManager[obj.workspot] ~= nil then
+			
+				if(cyberscript.EntityManager[obj.workspot].workspottag ~= workspot) then
+					changeWorkSpot(entitytag,obj.workspot,workspot,unlockcamera)
+				end
+				
+				changeWorkSpotAnims(entitytag,anim_cname,isinstant)
+			else
 			
 			local spawnTransform = enti:GetWorldTransform()
 			spawnTransform:SetPosition(enti:GetWorldPosition())
@@ -98,21 +106,22 @@ if spawnRegion then
 				local ent = Game.FindEntityByID(NPC)
 				if ent then
 					-- stand_wall_lean180__rh_phone__ow__01
-						print("test")
+					
 					Game.GetWorkspotSystem():PlayInDeviceSimple(ent, enti, unlockcamera, workspot)
 					Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, anim_cname, isinstant)
 					
 					if(NPC ~= nil) then
 						local entity = {}
 						entity.id = NPC
-						local tag = entitytag.."_workspot_"..tostring(math.random(1,99999))
+						local tag = entitytag.."_workspot"
+						cyberscript.EntityManager[entitytag].workspot = tag
 						entity.tag =tag
 						entity.tweak = anim_cname
 						entity.isprevention = false
 						entity.scriptlevel = 0
 						entity.name = tag
 						entity.isMP = false
-						entity.isWorkspot = true
+						entity.workspottag = workspot
 						
 						cyberscript.EntityManager[tag]=entity
 						
@@ -123,6 +132,9 @@ if spawnRegion then
 					Cron.Halt(timer)
 				end
 			end)
+		
+			end
+		
 		end
 		
 	end
@@ -151,7 +163,7 @@ if spawnRegion then
 		local entiwk = Game.FindEntityByID(objwk.id)
 		
 		if(enti ~= nil and entiwk ~= nil ) then
-			
+			cyberscript.EntityManager[workspotEnttag].workspottag = workspot
 			Game.GetWorkspotSystem():PlayInDeviceSimple(entiwk, enti, unlockcamera, workspot)
 		end
 		
@@ -166,7 +178,7 @@ if spawnRegion then
 		
 		if(enti ~= nil) then
 			
-			
+			cyberscript.EntityManager[entitytag].workspot = nil
 			Game.GetWorkspotSystem():StopInDevice(enti)
 		end
 		
@@ -174,6 +186,11 @@ if spawnRegion then
 	
 	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation)
 		
+		print(chara)
+		print(x)
+		print(y)
+		print(z)
+		print(tostring(isprevention))
 		
 		
 		if (('string' == type(chara)) and (string.match(tostring(chara), "AMM_Character.") == nil or (string.match(tostring(chara), "AMM_Character.") ~= nil and AMM ~= nil)  )  )then
@@ -201,7 +218,7 @@ if spawnRegion then
 				
 				local NPC = nil 
 				
-				
+				--ExEntity
 				if isprevention == false then
 					
 					local postp = Vector4.new( x, y, z,1)
@@ -216,24 +233,8 @@ if spawnRegion then
 						
 					end
 					
-					if(isitem == nil or isitem == false)then
-						if(appearance ~= "" and appearance ~= "none") then
-							NPC = exEntitySpawner.SpawnRecord(chara, worldpos,appearance)
-							else
-							NPC = exEntitySpawner.SpawnRecord(chara, worldpos)
-						end
-					else
-						
-						
-						if(appearance ~= "" and appearance ~= "none") then
-							NPC = exEntitySpawner.Spawn(chara, worldpos,appearance)
-							else
-							NPC = exEntitySpawner.Spawn(chara, worldpos)
-							--print("ent :"..chara)
-						end
-						--print("ent :"..chara)
-					end
-					
+					NPC = WorldFunctionalTests.SpawnEntity(chara, worldpos, '')
+							
 					
 					if(NPC ~= nil and isprevention == false ) then
 					local entity = {}
@@ -286,7 +287,7 @@ if spawnRegion then
 					
 				end
 				
-				
+				--Prevention
 				if isprevention == true then
 					range = 10
 					local spawnlvl = spawnlevel * -1

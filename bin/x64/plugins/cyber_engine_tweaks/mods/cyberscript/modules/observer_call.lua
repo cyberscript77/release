@@ -603,8 +603,8 @@ PanzerHUDGameController_OnInitialize(this)
 		RadioStationListItemController_OnDataChanged(self,value)
 	end)
 	
-	Observe('RadioStationListItemController', 'Activate', function(self)
-		RadioStationListItemController_Activate(self)
+	ObserveAfter('VehicleRadioPopupGameController', 'Activate', function(self)
+		VehicleRadioPopupGameController_Activate(self)
 	end)
 	
 	Observe('VehicleRadioPopupGameController', 'OnScrollChanged', function(self)
