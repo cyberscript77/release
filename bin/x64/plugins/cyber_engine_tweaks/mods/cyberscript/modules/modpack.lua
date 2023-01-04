@@ -424,7 +424,7 @@ function loadDatapackObject(namespace)
 	
 	for i=1,#datapackObjectType do
 		local objtype = datapackObjectType[i]
-		
+		if(objtype == "functions") then objtype = "function" end
 		local reader = dir("datapack/"..namespace.."/"..objtype)
 		if(reader ~= nil) then
 			arrayDatapack[namespace][objtype] = {}
@@ -502,7 +502,7 @@ function loadAssetsObject()
 	
 	for i=1,#datapackObjectType do
 		local objtype = datapackObjectType[i]
-		
+		if(objtype == "functions") then objtype = "function" end
 		local reader = dir("assets/"..objtype)
 		if(reader ~= nil) then
 			arrayDatapack[namespace][objtype] = {}
@@ -896,7 +896,11 @@ end
 					if(DatapackChecker(v.metadata)) then
 					
 						for y=1,#datapackObjectType do
+						
 							local objtype = datapackObjectType[y]
+							
+							if objtype == "functions" then objtype = "function" end
+						
 							if(arrayDatapack[k][objtype] ~= nil) then
 								
 								try {
@@ -1031,6 +1035,7 @@ end
 		try {
 			function()
 				if(tabl ~= nil ) then
+				
 					if(objtype == "circuit") then
 						for key, value in pairs(tabl) do 
 							
@@ -1093,15 +1098,16 @@ end
 							arrayFixer[value.Tag].datapack = datapackname
 							arrayFixer[value.Tag].scripttype = objtype
 						end
-						elseif(objtype == "functions") then
+						elseif(objtype == "function") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/".."function".."/"..key
+							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+						
 							arrayFunction[value.tag] = {}
 							arrayFunction[value.tag].func = value
 							arrayFunction[value.tag].file = path
 							arrayFunction[value.tag].datapack = datapackname
-							arrayFunction[value.tag].scripttype = objtype
+							arrayFunction[value.tag].scripttype = "functions"
 						end
 						elseif(objtype == "help") then
 						for key, value in pairs(tabl) do 
@@ -1215,7 +1221,7 @@ end
 								else
 								
 								if(value.tag ~= nil) then
-							--	print(value.tag)
+							
 								arrayHousing[value.tag] = {}
 								arrayHousing[value.tag].housing = value
 								arrayHousing[value.tag].file = path
