@@ -52,7 +52,8 @@ cyberscript = {
 	description = "CyberScript",
 		version = "0.16000069",
 		channel = "stable",
-		changelog =""
+		changelog ="",
+		editorDatapackInit = false
 		
 	}
 
@@ -116,7 +117,20 @@ function loadModule()
 	
 	
 	
+	cyberscript.triggertemplate       = dofile("data/triggertemplate.lua")
+	cyberscript.actiontemplate       = dofile("data/actiontemplate.lua")
+	
+	
+	local sessionFile = io.open('data/actiontemplate.json', 'w')
 
+	sessionFile:write(JSON:encode_pretty(cyberscript.actiontemplate))
+	sessionFile:close()
+
+
+	local sessionFile = io.open('data/triggertemplate.json', 'w')
+
+	sessionFile:write(JSON:encode_pretty(cyberscript.triggertemplate))
+	sessionFile:close()
 	
 	
 	cyberscript.entitieshash       = dofile("data/entitieshash.lua")
@@ -131,6 +145,7 @@ function loadModule()
 	cyberscript.relation = dofile("modules/relation.lua")
 	cyberscript.gang     = dofile("modules/gang.lua")
 	cyberscript.quest   = dofile("modules/quest.lua")
+		cyberscript.sound = dofile('modules/sound.lua')
 	cyberscript.location   = dofile("modules/location.lua")
 	cyberscript.housing = dofile('modules/housing.lua')
 	cyberscript.saves = dofile('modules/saves.lua')
@@ -139,12 +154,17 @@ function loadModule()
 		cyberscript.editor = dofile('modules/editor.lua')
 		print("CyberScript : Editor Lua founded, loading editor")
 	end
+	
+	if file_exists("editor/editor.lua") then
+		cyberscript.editor2 = dofile('editor/editor.lua')
+		print("CyberScript : Editor 2.0 Lua founded, loading editor")
+	end
 	cyberscript.see = dofile('modules/see.lua')
 	cyberscript.scripting = dofile('modules/scripting.lua')
 	cyberscript.observer = dofile('modules/observer_function.lua')
 	cyberscript.ui = dofile('modules/ui.lua')
 	cyberscript.api = dofile('modules/api.lua')
-	
+
 	--external library
 
 	modLoaded = true
