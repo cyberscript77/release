@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_mq026_smuggler",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Hostile",
+    ".name": "mq026_smuggler",
+    ".isState": false
+  }
+}

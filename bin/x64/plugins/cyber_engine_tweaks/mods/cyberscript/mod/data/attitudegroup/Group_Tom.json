@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Tom",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Friendly",
+    ".name": "tom",
+    ".isState": false
+  }
+}

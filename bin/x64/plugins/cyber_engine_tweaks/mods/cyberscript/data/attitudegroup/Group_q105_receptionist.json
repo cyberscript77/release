@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_q105_receptionist",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "q105_receptionist",
-    ".isState": false
-  }
-}

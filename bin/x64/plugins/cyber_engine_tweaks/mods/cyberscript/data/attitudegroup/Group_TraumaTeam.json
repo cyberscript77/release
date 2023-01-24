@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_TraumaTeam",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "traumateam",
-    ".isState": false
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_nid_04_Maelstrom",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Maelstrom_OW",
-    ".name": "nid_04_maelstrom",
-    ".isState": false
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Cyberninja_Oda",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "cyberninja_oda",
-    ".isState": true
-  }
-}

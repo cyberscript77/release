@@ -1,0 +1,971 @@
+[
+  {
+    "markerref": "#hey_gle_dataterm_04",
+    "name": "El Coyote Cojo",
+    "x": -1327.7883300781,
+    "y": -1003.4202270508,
+    "z": 12.349515914917
+  },
+  {
+    "markerref": "#wat_lch_metro_ftp_08",
+    "name": "Metro: Zocalo",
+    "x": -1456.6254882813,
+    "y": 1181.3449707031,
+    "z": 45.969848632813
+  },
+  {
+    "markerref": "#wat_lch_dataterm_05",
+    "name": "Bradbury \u0026 Buran",
+    "x": -1556.0311279297,
+    "y": 1246.0213623047,
+    "z": 19.075365066528
+  },
+  {
+    "markerref": "#wat_lch_dataterm_04",
+    "name": "Afterlife",
+    "x": -1470.3101806641,
+    "y": 1062.6676025391,
+    "z": 22.687755584717
+  },
+  {
+    "markerref": "#wat_lch_metro_ftp_09",
+    "name": "Metro: Ellison St",
+    "x": -1388.4503173828,
+    "y": 1031.4814453125,
+    "z": 27.139623641968
+  },
+  {
+    "markerref": "#wat_lch_dataterm_01",
+    "name": "Goldsmith St",
+    "x": -1520.2315673828,
+    "y": 1551.8796386719,
+    "z": 18.199981689453
+  },
+  {
+    "markerref": "#wat_lch_metro_ftp_02",
+    "name": "Metro: Med Center",
+    "x": -1416.7523193359,
+    "y": 1757.6116943359,
+    "z": 16.270000457764
+  },
+  {
+    "markerref": "#wat_kab_dataterm_01",
+    "name": "Kabuki Market",
+    "x": -1158.7810058594,
+    "y": 2014.2175292969,
+    "z": 12.064865112305
+  },
+  {
+    "markerref": "#wat_kab_dataterm_02",
+    "name": "Kennedy North",
+    "x": -1213.8695068359,
+    "y": 1880.7591552734,
+    "z": 22.5
+  },
+  {
+    "markerref": "#wat_kab_dataterm_06",
+    "name": "Charter St",
+    "x": -845.90405273438,
+    "y": 1835.4284667969,
+    "z": 36.189323425293
+  },
+  {
+    "markerref": "#wat_nid_dataterm_03",
+    "name": "NID: East",
+    "x": -541.7021484375,
+    "y": 1855.4565429688,
+    "z": 36.304096221924
+  },
+  {
+    "markerref": "#wat_nid_dataterm_07",
+    "name": "All Foods Plant",
+    "x": -715.86737060547,
+    "y": 2181.9016113281,
+    "z": 53.089996337891
+  },
+  {
+    "markerref": "#wat_lch_dataterm_10",
+    "name": "Megabuilding H10: Atrium",
+    "x": -1397.3062744141,
+    "y": 1278.0677490234,
+    "z": 123.07693481445
+  },
+  {
+    "markerref": "#wat_lch_dataterm_09",
+    "name": "Megabuilding H11",
+    "x": -1381.7875976563,
+    "y": 1970.7313232422,
+    "z": 23.309999465942
+  },
+  {
+    "markerref": "#wat_kab_dataterm_07",
+    "name": "Sutter St",
+    "x": -1202.8096923828,
+    "y": 1616.3762207031,
+    "z": 22.918962478638
+  },
+  {
+    "markerref": "#wat_kab_dataterm_04",
+    "name": "Kabuki: Central",
+    "x": -1183.1750488281,
+    "y": 1364.92578125,
+    "z": 20.306875228882
+  },
+  {
+    "markerref": "#wat_lch_dataterm_11",
+    "name": "Riot",
+    "x": -1658.8746337891,
+    "y": 997.36566162109,
+    "z": 23.699998855591
+  },
+  {
+    "markerref": "#wat_lch_dataterm_07",
+    "name": "Clarendon St",
+    "x": -1974.5493164063,
+    "y": 1180.2984619141,
+    "z": 12.140000343323
+  },
+  {
+    "markerref": "#wat_lch_dataterm_03",
+    "name": "California \u0026 Cartwright",
+    "x": -2022.4318847656,
+    "y": 1641.8247070313,
+    "z": 9.1076440811157
+  },
+  {
+    "markerref": "#wat_nid_dataterm_02",
+    "name": "NID: Docks",
+    "x": -1869.2717285156,
+    "y": 2701.6203613281,
+    "z": 7.1965379714966
+  },
+  {
+    "markerref": "#wat_nid_dataterm_01",
+    "name": "Martin St",
+    "x": -1419.1872558594,
+    "y": 2225.5856933594,
+    "z": 18.197374343872
+  },
+  {
+    "markerref": "#wat_kab_dataterm_10",
+    "name": "Allen St South",
+    "x": -1087.1630859375,
+    "y": 1312.5062255859,
+    "z": 5.3599996566772
+  },
+  {
+    "markerref": "#cct_cpz_dataterm_02",
+    "name": "Arasaka Tower",
+    "x": -1447.8912353516,
+    "y": 43.989212036133,
+    "z": 16.20072555542
+  },
+  {
+    "markerref": "#std_rcr_dataterm_08",
+    "name": "Dam Viewpoint",
+    "x": 772.51849365234,
+    "y": -2112.2268066406,
+    "z": 172.69633483887
+  },
+  {
+    "markerref": "#std_arr_dataterm_08",
+    "name": "MLK \u0026 Brandon",
+    "x": -506.40014648438,
+    "y": -760.18804931641,
+    "z": 7.4300003051758
+  },
+  {
+    "markerref": "#hey_gle_dataterm_01",
+    "name": "Senate \u0026 Market",
+    "x": -1888.3681640625,
+    "y": -574.49163818359,
+    "z": 7.8750996589661
+  },
+  {
+    "markerref": "#hey_gle_dataterm_03",
+    "name": "Palms View Way",
+    "x": -1719.9020996094,
+    "y": -886.14208984375,
+    "z": 8.5902557373047
+  },
+  {
+    "markerref": "#hey_gle_dataterm_05",
+    "name": "Megabuilding H3",
+    "x": -1177.8872070313,
+    "y": -916.87554931641,
+    "z": 12.872587203979
+  },
+  {
+    "markerref": "#hey_rey_dataterm_06",
+    "name": "Shooting Range",
+    "x": -1048.2706298828,
+    "y": -914.84979248047,
+    "z": 8.1876001358032
+  },
+  {
+    "markerref": "#hey_gle_metro_ftp_08",
+    "name": "Metro: Ebunike",
+    "x": -1363.3956298828,
+    "y": -657.78131103516,
+    "z": 5.8433389663696
+  },
+  {
+    "markerref": "#hey_rey_dataterm_05",
+    "name": "Congress \u0026 Madison",
+    "x": -1222.0938720703,
+    "y": -448.06579589844,
+    "z": 8.1482515335083
+  },
+  {
+    "markerref": "#cct_cpz_metro_ftp_15",
+    "name": "Metro: Memorial Park",
+    "x": -1333.2921142578,
+    "y": -86.132751464844,
+    "z": -3.8499999046326
+  },
+  {
+    "markerref": "#cct_dtn_dataterm_01",
+    "name": "Halsey \u0026 MLK",
+    "x": -1755.3469238281,
+    "y": 185.96363830566,
+    "z": 16.6809425354
+  },
+  {
+    "markerref": "#hey_gle_metro_ftp_01",
+    "name": "Metro: Glen North",
+    "x": -1553.94921875,
+    "y": -643.95599365234,
+    "z": 5.6399998664856
+  },
+  {
+    "markerref": "#cct_cpz_metro_ftp_01",
+    "name": "Metro: Republic Way",
+    "x": -1473.4285888672,
+    "y": 460.06097412109,
+    "z": 5.8199996948242
+  },
+  {
+    "markerref": "#cct_dtn_dataterm_05",
+    "name": "Downtown North",
+    "x": -1520.6838378906,
+    "y": 692.78698730469,
+    "z": 8.9742774963379
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_05",
+    "name": "Megabuilding H8",
+    "x": -704.24060058594,
+    "y": 762.15747070313,
+    "z": 32.713565826416
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_03",
+    "name": "Silk Road West",
+    "x": -695.70837402344,
+    "y": 403.71127319336,
+    "z": 19.43327331543
+  },
+  {
+    "markerref": "#hey_rey_dataterm_07",
+    "name": "Delamain HQ",
+    "x": -889.90026855469,
+    "y": -83.498260498047,
+    "z": 7.2400002479553
+  },
+  {
+    "markerref": "#hey_rey_metro_ftp_01",
+    "name": "Metro: Congress \u0026 MLK",
+    "x": -1026.5601806641,
+    "y": -348.45263671875,
+    "z": 5.7300000190735
+  },
+  {
+    "markerref": "#hey_gle_dataterm_08",
+    "name": "Embers",
+    "x": -1773.8709716797,
+    "y": -510.84536743164,
+    "z": 10.139998435974
+  },
+  {
+    "markerref": "#cct_cpz_dataterm_01",
+    "name": "Ring Road",
+    "x": -1148.6505126953,
+    "y": 135.85823059082,
+    "z": 7.3489050865173
+  },
+  {
+    "markerref": "#wbr_jpn_metro_ftp_02",
+    "name": "Metro: Japantown South",
+    "x": -568.45306396484,
+    "y": 206.49264526367,
+    "z": 22.269998550415
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_11",
+    "name": "Dark Matter",
+    "x": -304.84826660156,
+    "y": 221.92749023438,
+    "z": 28.829998016357
+  },
+  {
+    "markerref": "#wbr_hil_dataterm_01",
+    "name": "Gold Niwaki Plaza",
+    "x": -230.48515319824,
+    "y": 306.00756835938,
+    "z": 29.548595428467
+  },
+  {
+    "markerref": "#hey_rey_dataterm_01",
+    "name": "Republic \u0026 Vine",
+    "x": -596.91516113281,
+    "y": -121.97525024414,
+    "z": 7.6928367614746
+  },
+  {
+    "markerref": "#bls_bls_dataterm_01",
+    "name": "Sunset Motel",
+    "x": 1634.1553955078,
+    "y": -738.68566894531,
+    "z": 49.829444885254
+  },
+  {
+    "markerref": "#bls_bls_dataterm_27",
+    "name": "Edgewood Farm",
+    "x": 2458.2404785156,
+    "y": -1281.0017089844,
+    "z": 63.630516052246
+  },
+  {
+    "markerref": "#std_rcr_dataterm_02",
+    "name": "Rancho Coronado North",
+    "x": 703.34606933594,
+    "y": -980.73895263672,
+    "z": 28.837257385254
+  },
+  {
+    "markerref": "#std_rcr_dataterm_09",
+    "name": "Mallagra \u0026 Manzanita",
+    "x": 312.57836914063,
+    "y": -1420.8397216797,
+    "z": 15.109999656677
+  },
+  {
+    "markerref": "#std_rcr_dataterm_06",
+    "name": "Kendal Park",
+    "x": 365.21487426758,
+    "y": -1689.0950927734,
+    "z": 9.4394254684448
+  },
+  {
+    "markerref": "#std_rcr_dataterm_01",
+    "name": "Almunecar \u0026 Jerez",
+    "x": 60.155742645264,
+    "y": -1927.0841064453,
+    "z": 2.5169467926025
+  },
+  {
+    "markerref": "#std_rcr_dataterm_03",
+    "name": "Rancho Coronado South",
+    "x": -498.17776489258,
+    "y": -1850.8028564453,
+    "z": 7.4423203468323
+  },
+  {
+    "markerref": "#hey_gle_metro_ftp_02",
+    "name": "Metro: Glen South",
+    "x": -1590.0546875,
+    "y": -1302.6666259766,
+    "z": 47.979999542236
+  },
+  {
+    "markerref": "#hey_gle_dataterm_07",
+    "name": "Valentino Alley",
+    "x": -1610.9034423828,
+    "y": -1180.6201171875,
+    "z": 24.891031265259
+  },
+  {
+    "markerref": "#hey_gle_dataterm_02",
+    "name": "Ventura \u0026 Skyline",
+    "x": -1860.2552490234,
+    "y": -1206.4010009766,
+    "z": 20.234703063965
+  },
+  {
+    "markerref": "#wat_lch_metro_ftp_01",
+    "name": "Metro: Farrier St",
+    "x": -1608.4401855469,
+    "y": 1474.6574707031,
+    "z": 18.209999084473
+  },
+  {
+    "markerref": "#wat_nid_dataterm_04",
+    "name": "Longshore North",
+    "x": -600.88342285156,
+    "y": 2582.9584960938,
+    "z": 53.799999237061
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_07",
+    "name": "Fourth Wall Studios",
+    "x": -301.36535644531,
+    "y": 1089.1141357422,
+    "z": 65.654815673828
+  },
+  {
+    "markerref": "#pac_cvi_dataterm_03",
+    "name": "Chapel",
+    "x": -1770.8709716797,
+    "y": -1947.1254882813,
+    "z": 57.199996948242
+  },
+  {
+    "markerref": "#pac_cvi_dataterm_05",
+    "name": "Batty\u0027s Hotel",
+    "x": -1861.6560058594,
+    "y": -1936.7219238281,
+    "z": 48.51443862915
+  },
+  {
+    "markerref": "#wbr_hil_dataterm_02",
+    "name": "Lele Park",
+    "x": -176.44549560547,
+    "y": -82.809371948242,
+    "z": 7.2006525993347
+  },
+  {
+    "markerref": "#wbr_hil_dataterm_03",
+    "name": "Luxury Apartments",
+    "x": -57.226593017578,
+    "y": -49.423446655273,
+    "z": 7.1778745651245
+  },
+  {
+    "markerref": "#wbr_hil_dataterm_04",
+    "name": "Longshore South",
+    "x": 3.2243356704712,
+    "y": -343.18157958984,
+    "z": 8.2442293167114
+  },
+  {
+    "markerref": "#wbr_hil_metro_ftp_01",
+    "name": "Metro: Charter Hill",
+    "x": -113.25392150879,
+    "y": 119.11143493652,
+    "z": 12.39538860321
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_08",
+    "name": "Skyline \u0026 Salinas",
+    "x": -457.24099731445,
+    "y": 1402.6040039063,
+    "z": 37.284057617188
+  },
+  {
+    "markerref": "#std_rcr_dataterm_10",
+    "name": "PieZ",
+    "x": -152.41093444824,
+    "y": -2017.0325927734,
+    "z": 6.1800003051758
+  },
+  {
+    "markerref": "#std_arr_metro_ftp_01",
+    "name": "Metro: Wollesen St",
+    "x": -1069.1175537109,
+    "y": -1427.7143554688,
+    "z": 30.852592468262
+  },
+  {
+    "markerref": "#hey_spr_dataterm_05",
+    "name": "Parque del Mar",
+    "x": -2302.2758789063,
+    "y": -1107.943359375,
+    "z": 13.998116493225
+  },
+  {
+    "markerref": "#hey_spr_dataterm_07",
+    "name": "Pumping Station",
+    "x": -2410.0598144531,
+    "y": -960.99987792969,
+    "z": 8.1399974822998
+  },
+  {
+    "markerref": "#hey_spr_dataterm_06",
+    "name": "Palms View Plaza",
+    "x": -2357.734375,
+    "y": -810.30963134766,
+    "z": 12.92000579834
+  },
+  {
+    "markerref": "#hey_spr_dataterm_02",
+    "name": "Cannery Plaza",
+    "x": -2439.822265625,
+    "y": -537.75891113281,
+    "z": 6.9022932052612
+  },
+  {
+    "markerref": "#hey_spr_dataterm_03",
+    "name": "Berkeley \u0026 Bay",
+    "x": -2232.6730957031,
+    "y": -364.54565429688,
+    "z": 17.330913543701
+  },
+  {
+    "markerref": "#hey_rey_dataterm_03",
+    "name": "College St",
+    "x": -982.02886962891,
+    "y": -597.89617919922,
+    "z": 8.2038269042969
+  },
+  {
+    "markerref": "#bls_bls_dataterm_16",
+    "name": "Sunshine Motel",
+    "x": 3583.7414550781,
+    "y": -895.67852783203,
+    "z": 119.4747543335
+  },
+  {
+    "markerref": "#wbr_hil_dataterm_05",
+    "name": "Dynalar",
+    "x": 192.31532287598,
+    "y": -280.53540039063,
+    "z": 6.8688445091248
+  },
+  {
+    "markerref": "#wat_kab_dataterm_05",
+    "name": "Pinewood St South",
+    "x": -1154.4166259766,
+    "y": 1160.8092041016,
+    "z": 17.333700180054
+  },
+  {
+    "markerref": "#wbr_nok_dataterm_03",
+    "name": "Columbarium",
+    "x": 153.15863037109,
+    "y": 576.59600830078,
+    "z": 117.24936676025
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_02",
+    "name": "Cherry Blossom Market",
+    "x": -701.15844726563,
+    "y": 952.26879882813,
+    "z": 12.014831542969
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_10",
+    "name": "Japantown West",
+    "x": -836.02874755859,
+    "y": 1334.494140625,
+    "z": 22.440000534058
+  },
+  {
+    "markerref": "#wat_nid_dataterm_06",
+    "name": "Pershing St",
+    "x": -1731.353515625,
+    "y": 2308.1936035156,
+    "z": 18.158525466919
+  },
+  {
+    "markerref": "#std_arr_dataterm_03",
+    "name": "Red Dirt Bar",
+    "x": -735.42669677734,
+    "y": -978.51849365234,
+    "z": 7.8992004394531
+  },
+  {
+    "markerref": "#cct_cpz_dataterm_03",
+    "name": "Reconciliation Park",
+    "x": -1624.4720458984,
+    "y": -333.64358520508,
+    "z": -13.772867202759
+  },
+  {
+    "markerref": "#cct_dtn_dataterm_07",
+    "name": "Downtown Central",
+    "x": -2115.1342773438,
+    "y": 260.09552001953,
+    "z": 7.9015612602234
+  },
+  {
+    "markerref": "#hey_spr_dataterm_01",
+    "name": "Corporation St",
+    "x": -2402.8884277344,
+    "y": -72.031311035156,
+    "z": 8.1129293441772
+  },
+  {
+    "markerref": "#wat_kab_dataterm_08",
+    "name": "Bellevue Overwalk",
+    "x": -1129.6437988281,
+    "y": 1486.7232666016,
+    "z": 30.29711151123
+  },
+  {
+    "markerref": "#wat_kab_dataterm_03",
+    "name": "Creek Loop",
+    "x": -1054.5708007813,
+    "y": 1573.0587158203,
+    "z": 2.539999961853
+  },
+  {
+    "markerref": "#std_arr_dataterm_07",
+    "name": "San Amaro St",
+    "x": 683.63000488281,
+    "y": -593.33538818359,
+    "z": 9.960000038147
+  },
+  {
+    "markerref": "#bls_bls_dataterm_12",
+    "name": "Protein Farm",
+    "x": -3478.9094238281,
+    "y": -4183.6635742188,
+    "z": 68.05672454834
+  },
+  {
+    "markerref": "#pac_cvi_dataterm_01",
+    "name": "Grand Imperial Mall",
+    "x": -2187.5061035156,
+    "y": -2205.9919433594,
+    "z": 11.873382568359
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_01",
+    "name": "Capitola St",
+    "x": -519.16632080078,
+    "y": 1608.5042724609,
+    "z": 32.851528167725
+  },
+  {
+    "markerref": "#bls_bls_dataterm_04",
+    "name": "Rocky Ridge",
+    "x": 2534.7202148438,
+    "y": -95.229057312012,
+    "z": 81.400566101074
+  },
+  {
+    "markerref": "#bls_bls_dataterm_11",
+    "name": "Solar Power Station",
+    "x": -176.84484863281,
+    "y": -2613.2277832031,
+    "z": 28.603609085083
+  },
+  {
+    "markerref": "#bls_bls_dataterm_22",
+    "name": "Autowerks",
+    "x": -86.015083312988,
+    "y": -4357.5131835938,
+    "z": 58.925632476807
+  },
+  {
+    "markerref": "#bls_bls_dataterm_25",
+    "name": "Abandoned Parking Lot",
+    "x": -765.47454833984,
+    "y": -2437.0595703125,
+    "z": 14.153740882874
+  },
+  {
+    "markerref": "#bls_bls_dataterm_13",
+    "name": "Regional Airport",
+    "x": -1513.8560791016,
+    "y": -5080.9052734375,
+    "z": 83.008766174316
+  },
+  {
+    "markerref": "#bls_bls_dataterm_10",
+    "name": "Fuel Station",
+    "x": -1795.6608886719,
+    "y": -4323.810546875,
+    "z": 74.413078308105
+  },
+  {
+    "markerref": "#wat_lch_dataterm_02",
+    "name": "Drake Ave",
+    "x": -1608.1141357422,
+    "y": 1772.7012939453,
+    "z": 18.380001068115
+  },
+  {
+    "markerref": "#std_rcr_dataterm_07",
+    "name": "Trailer Park",
+    "x": 1194.1749267578,
+    "y": -592.33526611328,
+    "z": 32.617656707764
+  },
+  {
+    "markerref": "#bls_bls_dataterm_15",
+    "name": "Wraith Camp",
+    "x": 3079.3159179688,
+    "y": -2223.8640136719,
+    "z": 131.49398803711
+  },
+  {
+    "markerref": "#std_arr_dataterm_01",
+    "name": "Republic East",
+    "x": 121.32205200195,
+    "y": -631.64215087891,
+    "z": 7.5819206237793
+  },
+  {
+    "markerref": "#hey_rey_dataterm_02",
+    "name": "Petrel St",
+    "x": -923.71759033203,
+    "y": 105.70306396484,
+    "z": 7.3232703208923
+  },
+  {
+    "markerref": "#bls_bls_dataterm_new_06",
+    "name": "Nomad Camp",
+    "x": 1802.3071289063,
+    "y": 2248.6079101563,
+    "z": 180.13612365723
+  },
+  {
+    "markerref": "#hey_gle_dataterm_06",
+    "name": "Hanford Overpass",
+    "x": -1219.7209472656,
+    "y": -1208.2227783203,
+    "z": 32.811534881592
+  },
+  {
+    "markerref": "#bls_bls_dataterm_21",
+    "name": "Lake Farm",
+    "x": 911.50164794922,
+    "y": -3498.1032714844,
+    "z": 184.08485412598
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_04",
+    "name": "Sagan \u0026 Diamond",
+    "x": -715.03344726563,
+    "y": 1278.1424560547,
+    "z": 29.569910049438
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_06",
+    "name": "Crescent \u0026 Broad",
+    "x": -418.697265625,
+    "y": 484.74188232422,
+    "z": 30.247430801392
+  },
+  {
+    "markerref": "#wbr_nok_dataterm_02",
+    "name": "Kerry Eurodyne\u0027s Residence",
+    "x": 222.2552947998,
+    "y": 1076.9923095703,
+    "z": 200.58879089355
+  },
+  {
+    "markerref": "#wbr_nok_dataterm_05",
+    "name": "North Oak Sign",
+    "x": 282.83874511719,
+    "y": 801.34088134766,
+    "z": 146.41999816895
+  },
+  {
+    "markerref": "#cct_dtn_metro_ftp_02",
+    "name": "Metro: Downtown - Alexander St",
+    "x": -2068.25,
+    "y": 481.64953613281,
+    "z": 8.0500001907349
+  },
+  {
+    "markerref": "#cct_dtn_dataterm_04",
+    "name": "Gold Beach Marina",
+    "x": -2392.8049316406,
+    "y": 88.863052368164,
+    "z": 12.246580123901
+  },
+  {
+    "markerref": "#wat_nid_metro_ftp_01",
+    "name": "Metro: Eisenhower St",
+    "x": -1770.5189208984,
+    "y": 1868.5670166016,
+    "z": 18.260000228882
+  },
+  {
+    "markerref": "#hey_rey_dataterm_04",
+    "name": "Skyline East",
+    "x": -657.99243164063,
+    "y": -434.29837036133,
+    "z": 8.2060375213623
+  },
+  {
+    "markerref": "#std_arr_dataterm_04",
+    "name": "Hargreaves St",
+    "x": -681.62524414063,
+    "y": -1253.2204589844,
+    "z": 8.9721670150757
+  },
+  {
+    "markerref": "#pac_cvi_metro_ftp_01",
+    "name": "Metro: Stadium",
+    "x": -1542.1234130859,
+    "y": -1939.2069091797,
+    "z": 62.850002288818
+  },
+  {
+    "markerref": "#std_arr_dataterm_05",
+    "name": "Megabuilding H4",
+    "x": -966.77319335938,
+    "y": -1772.5238037109,
+    "z": 11.150108337402
+  },
+  {
+    "markerref": "#std_arr_dataterm_02",
+    "name": "Megabuilding H6",
+    "x": -210.26748657227,
+    "y": -851.60089111328,
+    "z": 7.6401991844177
+  },
+  {
+    "markerref": "#wbr_jpn_metro_ftp_01",
+    "name": "Metro: Monroe St",
+    "x": -528.15057373047,
+    "y": 1131.6843261719,
+    "z": 34.689998626709
+  },
+  {
+    "markerref": "#wat_nid_dataterm_08",
+    "name": "Ebunike Docks",
+    "x": -1481.1020507813,
+    "y": 2956.6457519531,
+    "z": 7.1899995803833
+  },
+  {
+    "markerref": "#wat_nid_dataterm_05",
+    "name": "Offshore St",
+    "x": -1256.3790283203,
+    "y": 2913.9089355469,
+    "z": 7.193489074707
+  },
+  {
+    "markerref": "#wbr_jpn_dataterm_09",
+    "name": "Redwood Market",
+    "x": -388.39788818359,
+    "y": 702.51605224609,
+    "z": 114.98999023438
+  },
+  {
+    "markerref": "#wbr_nok_dataterm_04",
+    "name": "Drive-In Theater",
+    "x": -72.285934448242,
+    "y": 1988.2366943359,
+    "z": 100.89966583252
+  },
+  {
+    "markerref": "#wat_awf_dataterm_03",
+    "name": "California \u0026 Pershing",
+    "x": -2158.6853027344,
+    "y": 1993.1072998047,
+    "z": 18.188344955444
+  },
+  {
+    "markerref": "#wbr_nok_dataterm_01",
+    "name": "Arasaka Estate",
+    "x": 485.98422241211,
+    "y": 1224.2333984375,
+    "z": 229.2541809082
+  },
+  {
+    "markerref": "#pac_cvi_dataterm_04",
+    "name": "Stadium Parking",
+    "x": -1306.2548828125,
+    "y": -1670.8786621094,
+    "z": 44.046737670898
+  },
+  {
+    "markerref": "#pac_cvi_dataterm_02",
+    "name": "Pacifica Pier",
+    "x": -1879.2314453125,
+    "y": -1626.7962646484,
+    "z": 18.033037185669
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7",
+    "x": 156.44590759277,
+    "y": -1181.2375488281,
+    "z": 31.640001296997
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#std_rcr_metro_ftp_05",
+    "name": "Metro: Megabuilding H7"
+  },
+  {
+    "markerref": "#wat_lch_metro_ftp_08",
+    "name": "Metro: Zocalo"
+  },
+  {
+    "markerref": "#wat_lch_metro_ftp_08",
+    "name": "Metro: Zocalo"
+  },
+  {
+    "markerref": "#std_arr_metro_ftp_01",
+    "name": "Metro: Wollesen St"
+  },
+  {
+    "markerref": "#std_arr_metro_ftp_01",
+    "name": "Metro: Wollesen St"
+  },
+  {
+    "markerref": "#wbr_jpn_metro_ftp_02",
+    "name": "Metro: Japantown South"
+  }
+]

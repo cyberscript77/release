@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_ina_11_scavs",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "ina_11_scavs",
-    ".isState": false
-  }
-}

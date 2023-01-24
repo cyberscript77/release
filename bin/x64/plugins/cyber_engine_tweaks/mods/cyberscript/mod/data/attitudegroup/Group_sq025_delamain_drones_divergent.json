@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_sq025_delamain_drones_divergent",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Neutral",
+    ".name": "sq025_delamain_drones_divergent",
+    ".isState": false
+  }
+}

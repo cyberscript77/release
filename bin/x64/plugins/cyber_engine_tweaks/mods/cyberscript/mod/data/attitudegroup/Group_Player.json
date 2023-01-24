@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Player",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "player",
+    ".isState": false
+  }
+}

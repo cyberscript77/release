@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_spr_08_NonCombat",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "spr_08_NonCombat",
-    ".isState": false
-  }
-}

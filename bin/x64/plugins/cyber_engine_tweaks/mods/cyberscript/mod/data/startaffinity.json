@@ -1,0 +1,128 @@
+[
+	{
+        "fact": "q001_tt_put_girl_stretchers",
+        "factionscore":
+        [
+			{
+                "faction": "faction_scavenger",
+                "value": -10
+            }
+        ],
+		"npcscore":[]
+     
+    }, 
+	
+	{
+        "fact": "q003_militech_betrayed",
+        "factionscore":
+        [
+			{
+                "faction": "faction_maelstrom",
+                "value": 20
+            }
+        ],
+		"npcscore":[]
+    }, 
+	
+	
+	
+	{
+        "fact": "q003_deal_peaceful",
+        "factionscore":
+        [
+			{
+                "faction": "faction_maelstrom",
+                "value": 10
+            }
+        ],
+		"npcscore":[]
+    }, 
+	
+	{
+        "fact": "q003_royce_dead",
+        "factionscore":
+        [
+			{
+                "faction": "faction_maelstrom",
+                "value": -30
+            }
+        ],
+		"npcscore":[]
+    }, 
+	
+	{
+        "fact": "q103_done",
+        "factionscore":
+        [
+			{
+                "faction": "faction_wraith",
+                "value": -10
+            },
+			{
+                "faction": "faction_aldecaldos",
+                "value": 10
+            }
+        ],
+		"npcscore":[]
+    }, 
+	
+	{
+        "fact": "q103_helped_panam",
+        "factionscore":
+        [
+			{
+                "faction": "faction_wraith",
+                "value": -20
+            },
+			{
+                "faction": "faction_aldecaldos",
+                "value": 20
+            }
+        ],
+		"npcscore":[]
+    }, 
+	
+	{
+        "fact": "q105_done",
+        "factionscore":
+        [
+			{
+                "faction": "faction_scavenger",
+                "value": -10
+            },
+			{
+                "faction": "faction_mox",
+                "value": 10
+            }
+        ],
+		"npcscore":[]
+    }, 
+	
+	{
+        "fact": "q110_var_animals_boss_dead",
+        "factionscore":
+        [
+			{
+                "faction": "faction_animals",
+                "value": -30
+            },
+			{
+                "faction": "faction_voodooboys",
+                "value": 10
+            }
+        ],
+		"npcscore":[]
+    }, 
+	{
+        "fact": "q110_voodoo_queen_dead",
+        "factionscore":
+        [
+			{
+                "faction": "faction_voodooboys",
+                "value": -40
+            }
+        ],
+		"npcscore":[]
+    }
+
+]

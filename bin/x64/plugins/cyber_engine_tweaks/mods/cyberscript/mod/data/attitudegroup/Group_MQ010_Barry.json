@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_MQ010_Barry",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Friendly",
+    ".name": "mq010_barry",
+    ".isState": false
+  }
+}

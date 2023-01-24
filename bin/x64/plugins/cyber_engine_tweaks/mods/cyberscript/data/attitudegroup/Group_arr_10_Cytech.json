@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_arr_10_Cytech",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "arr_10_Cytech",
-    ".isState": false
-  }
-}

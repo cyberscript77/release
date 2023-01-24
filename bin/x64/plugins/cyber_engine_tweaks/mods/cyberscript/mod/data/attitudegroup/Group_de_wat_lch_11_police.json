@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_de_wat_lch_11_police",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Guard",
+    ".name": "de_wat_lch_11_police",
+    ".isState": false
+  }
+}

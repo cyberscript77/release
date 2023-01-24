@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_nid_03_Turrets",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "nid_03_tyger_claws",
-    ".isState": false
-  }
-}

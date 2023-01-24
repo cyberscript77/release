@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_SQ018_Melissa",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "sq018_melissa",
+    ".isState": false
+  }
+}

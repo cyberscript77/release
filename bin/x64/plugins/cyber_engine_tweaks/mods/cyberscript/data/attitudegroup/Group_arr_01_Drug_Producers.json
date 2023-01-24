@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_arr_01_Drug_Producers",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "arr_01_Drug_Producers",
-    ".isState": false
-  }
-}

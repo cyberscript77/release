@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Guard",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "guard",
+    ".isState": false
+  }
+}

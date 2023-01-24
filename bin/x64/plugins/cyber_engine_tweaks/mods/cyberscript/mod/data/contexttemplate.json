@@ -1,0 +1,199 @@
+{
+	"current_district": {
+		"prop": "tag"
+	},
+	"faction": {
+
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"player": {
+		"key": "tag",
+		"value": "tag"
+	},
+	"corpo": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"lang": {
+		"tag": "tag"
+	},
+	"random_lang": {
+		"list": ["aa", "bb", "cc"]
+	},
+	"district_leader": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"subdistrict_leader": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"current_district_leader": {
+		"prop": "tag"
+	},
+	"current_subdistrict_leader": {
+		"prop": "tag"
+	},
+	"district_rival": {
+		"tag": "tag",
+		"district": "districttagEnum",
+		"prop": "tag"
+	},
+	"subdistrict_rival": {
+		"tag": "tag",
+		"district": "districttagEnum",
+		"prop": "tag"
+	},
+	"current_district_rival": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"current_subdistrict_rival": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"entity": {
+		"key": "tag",
+		"prop": "tag"
+	},
+	"mappin": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"fixer": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"current_fixer": {
+		"prop": "tag"
+	},
+	"place": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"current_sound": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"sound": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"radio": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"current_radio": {
+
+		"prop": "tag"
+	},
+	"current_place": {
+		"prop": "tag"
+	},
+	"current_room": {
+		"prop": "tag"
+	},
+	"current_poi": {
+		"prop": "tag"
+	},
+	"poi": {
+		"prop": "tag",
+		"argument": {
+			"position_tag": "dummy",
+			"position_poi_district": "dummy",
+			"position_poi_subdistrict": "dummy",
+			"position_poi_is_for_car": false,
+			"position_poi_type": 0,
+			"position_poi_use_location_tag": false,
+			"position_poi_from_position": true,
+			"position_range": 10,
+			"position_poi_from_position_x": 0,
+			"position_poi_from_position_y": 0,
+			"position_poi_from_position_z": 0,
+			"position_poi_search": "type",
+			"position_poi_searchdistance": "near"
+		}
+	},
+	"node": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"custom_npc": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"npc": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"score": {
+		"variable": "tag",
+		"key": "tag"
+	},
+	"variable": {
+		"variable": "tag",
+		"key": "tag",
+		"index": 0
+	},
+	"random_variable_key": {
+		"variable": "tag"
+	},
+	"random_score_key": {
+		"variable": "tag"
+	},
+	"text": {
+		"value": "tag"
+	},
+	"random_text": {
+		"list": ["aa", "bb", "cc"]
+	},
+	"number": {
+		"value": 1
+	},
+	"random_number": {
+		"list": [1, 2, 5, 9]
+	},
+	"random_math": {
+		"min": 1,
+		"max": 5
+	},
+	"random_range": {
+		"min": 1,
+		"max": 5
+	},
+	"scannerdata": {
+		"tag": "tag",
+		"prop": "tag",
+		"index": 0
+	},
+	"current_scannerdata": {
+		"tag": "tag",
+		"prop": "tag",
+		"index": 0
+	},
+	"corpo_news": {
+
+	},
+	"stock": {
+		"tag": "tag",
+		"prop": "tag"
+	},
+	"object": {
+		"value": "use json to replace me"
+	},
+	"trigger": {
+		"name": "auto"
+	},
+	"action": {
+		"name": "notify",
+		"value": "Hello There!"
+	},
+	"list": {
+		"items": []
+
+	}
+
+
+
+}

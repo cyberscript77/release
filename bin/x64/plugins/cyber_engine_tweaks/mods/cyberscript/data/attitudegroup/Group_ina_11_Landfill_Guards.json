@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_ina_11_Landfill_Guards",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "ina_11_Landfill_Guards",
-    ".isState": false
-  }
-}

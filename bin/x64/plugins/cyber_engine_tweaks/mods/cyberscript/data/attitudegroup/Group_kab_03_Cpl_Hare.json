@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_kab_03_Cpl_Hare",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "kab_03_cpl_hare",
-    ".isState": false
-  }
-}

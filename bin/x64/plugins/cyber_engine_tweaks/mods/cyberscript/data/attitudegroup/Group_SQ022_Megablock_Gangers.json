@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_SQ022_Megablock_Gangers",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Hostile",
-    ".name": "sq022_megablock_gangers",
-    ".isState": false
-  }
-}

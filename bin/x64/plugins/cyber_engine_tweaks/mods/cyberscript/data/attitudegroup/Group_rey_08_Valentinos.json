@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_rey_08_Valentinos",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Valentinos_OW",
-    ".name": "rey_08_Valentinos",
-    ".isState": false
-  }
-}

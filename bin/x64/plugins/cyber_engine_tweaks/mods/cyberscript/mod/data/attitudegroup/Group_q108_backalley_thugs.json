@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_q108_backalley_thugs",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Neutral",
+    ".name": "q108_backalley_thugs",
+    ".isState": false
+  }
+}

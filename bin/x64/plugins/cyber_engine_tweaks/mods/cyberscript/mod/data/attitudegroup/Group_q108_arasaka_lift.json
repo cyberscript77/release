@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_q108_arasaka_lift",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Hostile",
+    ".name": "q108_arasaka_lift",
+    ".isState": false
+  }
+}

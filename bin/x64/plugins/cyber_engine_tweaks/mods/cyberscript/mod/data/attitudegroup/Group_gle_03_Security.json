@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_gle_03_Security",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "gle_03_security",
+    ".isState": false
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Emmerick",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "emmerick",
-    ".isState": false
-  }
-}

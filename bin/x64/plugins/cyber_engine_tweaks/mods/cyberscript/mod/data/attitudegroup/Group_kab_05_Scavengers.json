@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_kab_05_Scavengers",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Scavenger_OW",
+    ".name": "kab_05_scavengers",
+    ".isState": false
+  }
+}

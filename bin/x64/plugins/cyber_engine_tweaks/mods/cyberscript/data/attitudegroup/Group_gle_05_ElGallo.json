@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_gle_05_ElGallo",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "gle_05_ElGallo",
-    ".isState": false
-  }
-}

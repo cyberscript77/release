@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Max_Border_guards",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_border_guards",
-    ".name": "max_border_guards",
-    ".isState": false
-  }
-}

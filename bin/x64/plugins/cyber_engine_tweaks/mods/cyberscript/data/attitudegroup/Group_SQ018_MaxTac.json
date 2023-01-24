@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_SQ018_MaxTac",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "sq018_maxtac",
-    ".isState": false
-  }
-}

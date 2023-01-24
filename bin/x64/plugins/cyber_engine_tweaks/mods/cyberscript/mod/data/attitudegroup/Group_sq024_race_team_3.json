@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_sq024_race_team_3",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "sq024_race_team_3",
+    ".isState": false
+  }
+}

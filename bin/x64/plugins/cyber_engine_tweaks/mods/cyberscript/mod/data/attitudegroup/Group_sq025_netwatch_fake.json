@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_sq025_netwatch_fake",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "sq025_netwatch_fake",
+    ".isState": false
+  }
+}

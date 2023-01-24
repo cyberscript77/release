@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_nid_102_Tyger_Claws",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_TygerClaws_OW",
+    ".name": "nid_102_Tyger_Claws",
+    ".isState": false
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Animals",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Neutral",
+    ".name": "animals",
+    ".isState": false
+  }
+}

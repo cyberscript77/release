@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_q000_roadhouse_town_defenders",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Neutral",
+    ".name": "q000_roadhouse_town_defenders",
+    ".isState": false
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Arasaka",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "arasaka",
-    ".isState": false
-  }
-}

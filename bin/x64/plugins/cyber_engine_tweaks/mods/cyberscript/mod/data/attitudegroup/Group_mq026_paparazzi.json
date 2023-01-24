@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_mq026_paparazzi",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Neutral",
+    ".name": "mq026_paparazzi",
+    ".isState": false
+  }
+}

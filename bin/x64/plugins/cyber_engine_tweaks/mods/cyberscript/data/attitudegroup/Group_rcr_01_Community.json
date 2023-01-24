@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_rcr_01_Community",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "rcr_01_community",
-    ".isState": false
-  }
-}

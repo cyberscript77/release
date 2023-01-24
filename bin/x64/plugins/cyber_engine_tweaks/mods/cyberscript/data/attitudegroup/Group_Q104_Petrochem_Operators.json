@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Q104_Petrochem_Operators",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "q104_petrochem_operators",
-    ".isState": false
-  }
-}

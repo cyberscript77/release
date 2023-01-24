@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_DeadMaelstrom",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "deadMaelstrom",
-    ".isState": false
-  }
-}

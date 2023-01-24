@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Police",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "police",
-    ".isState": false
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_gle_01_Tucker",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Militech_OW",
-    ".name": "gle_01_tucker",
-    ".isState": false
-  }
-}

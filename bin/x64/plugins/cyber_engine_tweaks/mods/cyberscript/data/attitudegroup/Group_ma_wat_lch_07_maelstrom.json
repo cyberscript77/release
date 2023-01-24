@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_ma_wat_lch_07_maelstrom",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "ma_wat_lch_07_maelstrom",
-    ".isState": false
-  }
-}

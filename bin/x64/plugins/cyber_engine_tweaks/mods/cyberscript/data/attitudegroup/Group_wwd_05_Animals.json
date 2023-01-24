@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_wwd_05_Animals",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Animals_OW",
-    ".name": "wwd_05_animals",
-    ".isState": false
-  }
-}

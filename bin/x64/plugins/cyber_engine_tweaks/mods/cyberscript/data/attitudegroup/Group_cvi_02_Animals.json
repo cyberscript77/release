@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_cvi_02_Animals",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Animals_OW",
-    ".name": "cvi_02_Animals",
-    ".isState": false
-  }
-}

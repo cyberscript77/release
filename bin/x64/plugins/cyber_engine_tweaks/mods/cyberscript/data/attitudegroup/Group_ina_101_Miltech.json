@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_ina_101_Miltech",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Militech_OW",
-    ".name": "ina_101_Miltech",
-    ".isState": false
-  }
-}

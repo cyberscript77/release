@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_nid_12_Mercenaries",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "nid_12_Mercenaries",
-    ".isState": false
-  }
-}

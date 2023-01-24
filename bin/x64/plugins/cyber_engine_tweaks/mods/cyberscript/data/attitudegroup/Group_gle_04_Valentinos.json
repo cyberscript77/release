@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_gle_04_Valentinos",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Valentinos_OW",
-    ".name": "gle_04_valentinos",
-    ".isState": false
-  }
-}

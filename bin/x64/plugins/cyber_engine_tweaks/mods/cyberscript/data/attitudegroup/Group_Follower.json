@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Follower",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Player",
-    ".name": "follower",
-    ".isState": false
-  }
-}

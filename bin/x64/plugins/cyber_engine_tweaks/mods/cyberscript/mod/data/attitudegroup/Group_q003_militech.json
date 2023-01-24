@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_q003_militech",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "q003_militech",
+    ".isState": false
+  }
+}

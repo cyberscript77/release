@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_mq026_animals",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "mq026_animals",
-    ".isState": false
-  }
-}

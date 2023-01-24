@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_SQ018_Bernie",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "sq018_bernie",
-    ".isState": false
-  }
-}

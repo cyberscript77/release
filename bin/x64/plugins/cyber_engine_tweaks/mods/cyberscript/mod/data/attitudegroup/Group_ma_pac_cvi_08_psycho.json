@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_ma_pac_cvi_08_psycho",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Hostile",
+    ".name": "ma_pac_cvi_08_psycho",
+    ".isState": false
+  }
+}

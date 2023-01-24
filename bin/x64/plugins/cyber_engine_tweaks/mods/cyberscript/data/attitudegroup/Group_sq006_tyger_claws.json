@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_sq006_tyger_claws",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "sq006_tyger_claws",
-    ".isState": false
-  }
-}

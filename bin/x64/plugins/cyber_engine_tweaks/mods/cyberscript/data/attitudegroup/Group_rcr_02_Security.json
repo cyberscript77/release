@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_rcr_02_Security",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "rcr_02_security",
-    ".isState": false
-  }
-}

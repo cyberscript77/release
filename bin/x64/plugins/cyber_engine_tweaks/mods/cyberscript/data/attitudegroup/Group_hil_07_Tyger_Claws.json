@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_hil_07_Tyger_Claws",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_TygerClaws_OW",
-    ".name": "hil_07_tyger_claws",
-    ".isState": false
-  }
-}

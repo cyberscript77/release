@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_nid_01_Lizzies",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "nid_01_Lizzies",
-    ".isState": false
-  }
-}

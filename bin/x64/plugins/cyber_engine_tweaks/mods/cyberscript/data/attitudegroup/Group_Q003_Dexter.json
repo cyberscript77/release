@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Q003_Dexter",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Civilian",
-    ".name": "q003_dexter",
-    ".isState": false
-  }
-}

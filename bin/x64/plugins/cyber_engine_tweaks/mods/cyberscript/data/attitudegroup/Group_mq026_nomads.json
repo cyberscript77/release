@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_mq026_nomads",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "mq026_nomads",
-    ".isState": false
-  }
-}

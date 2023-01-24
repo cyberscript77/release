@@ -1,0 +1,119 @@
+[
+
+	{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Element_R"
+	
+	
+	},
+	{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Trauma_Text"
+	
+	
+	},
+	{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+			"texture": "Trauma_R_Logo"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+			"texture": "Platinum_Logo"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+			"texture": "Platinum_Text"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Medtech_Logo"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Red_Mask"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Card_Number_Text"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Circle_Logo"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Central_Element_Border"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Element_R_Border"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Panel"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Attention_Logo"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "CC_Logo"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Protocol_Logo"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Booting_Text"
+	
+	
+	},
+	{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Element_L_Border"
+	
+	
+	},
+	{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Element_L"
+	
+	
+	},
+	{
+		"tweak": "base\\gameplay\\gui\\quests\\assets\\q001_sandra.inkatlas",
+		"texture": "Sandra_Icon"
+	
+	
+	},
+	{
+		"tweak": "base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas",
+		"texture": "item_fg"
+	
+	
+	},{
+		"tweak": "base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas",
+		"texture": "item_bg"
+	
+	
+	},
+
+
+
+
+}

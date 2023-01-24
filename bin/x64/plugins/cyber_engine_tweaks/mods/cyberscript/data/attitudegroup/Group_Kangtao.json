@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Kangtao",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "kangtao",
-    ".isState": false
-  }
-}

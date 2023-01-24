@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_mq005_police",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Neutral",
+    ".name": "mq005_police",
+    ".isState": false
+  }
+}

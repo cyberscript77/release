@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Rogue",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "rogue",
-    ".isState": false
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_rcr_04_Gangers",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "Group_rcr_04_Gangers",
-    ".isState": false
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Q104_Neutral_Petrochem",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "q104_neutral_petrochems",
-    ".isState": false
-  }
-}

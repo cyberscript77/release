@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_dtn_05_Militech",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Militech_OW",
+    ".name": "dtn_05_Militech",
+    ".isState": false
+  }
+}

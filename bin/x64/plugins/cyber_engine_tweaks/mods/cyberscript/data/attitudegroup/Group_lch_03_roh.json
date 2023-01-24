@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_lch_03_roh",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "lch_03_roh",
-    ".isState": false
-  }
-}

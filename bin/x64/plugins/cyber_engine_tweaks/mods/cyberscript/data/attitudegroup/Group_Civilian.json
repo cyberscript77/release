@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Civilian",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "civilian",
-    ".isState": false
-  }
-}
