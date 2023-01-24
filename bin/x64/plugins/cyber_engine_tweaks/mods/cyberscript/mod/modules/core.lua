@@ -723,13 +723,13 @@ registerForEvent("onInit", function()
 		AMM =  GetMod("AppearanceMenuMod")
 		if(AMM.API ~= nil) then
 			AMMversion = AMM.API.version
-			logme(1,"Cyberscript : AMM Version founded : "..AMMversion)
+			print("Cyberscript : AMM Version founded : "..AMMversion)
 			else
 			AMM = nil
-			logme(1,getLang("ammoutdated"))
+			print("Cyberscript : AMM outdated !")
 		end
 		else 
-		logme(1,getLang("ammnotfound"))
+		print("Cyberscript : AMM Not found !")
 		
 	end
 	resetVar()
