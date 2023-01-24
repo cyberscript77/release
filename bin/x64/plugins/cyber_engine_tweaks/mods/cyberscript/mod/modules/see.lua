@@ -688,7 +688,15 @@ function scriptcheckTrigger(trigger)
 					result = false
 				end
 			end
-			
+			if(trigger.name == "vehicle_entity_is_moving") then
+				local obj = getEntityFromManager(trigger.tag)
+				local enti = Game.FindEntityByID(obj.id)	
+				
+				if(enti ~= nil and enti:IsVehicle()) then
+					result = not (enti:GetCurrentSpeed() == 0 or enti:GetCurrentSpeed() == -0 )
+				
+				end
+			end
 			
 			if(trigger.name == "in_car_specific") then
 				local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
@@ -1464,7 +1472,7 @@ function scriptcheckTrigger(trigger)
 				end
 			end
 			if(trigger.name == "have_fasttravel_mappin_placed") then
-				logme(3,"test")
+				
 				if(ActiveFastTravelMappin ~= nil) then
 					result =  true
 					logme(3,"toto"..dump(ActiveFastTravelMappin))
@@ -1522,6 +1530,66 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name== "check_mod") then
 				
 				result = GetMod(trigger.value) ~= nil
+				
+			end
+			
+			if(trigger.name== "have_collision") then
+				
+					local collision = false
+					trigger.output = true
+					local from = Vector4.new(
+						trigger.from_x,
+						trigger.from_y,
+						trigger.from_z,
+						1
+					)
+					
+					
+					local to = Vector4.new(
+						trigger.to_x,
+						trigger.to_y,
+						trigger.to_z,
+						1
+					)
+					
+					-- local filters = {
+					
+					-- 'Static', -- Buildings, Concrete Roads, Crates, etc.
+					
+					-- 'Terrain'
+					
+					-- }
+					-- local filters = {
+						-- -- 'Dynamic', -- Movable Objects
+						-- -- 'Vehicle',
+						-- 'Static', -- Buildings, Concrete Roads, Crates, etc.
+						-- 'Water',
+						-- 'Terrain',
+						-- -- 'PlayerBlocker', -- Trees, Billboards, Barriers
+					-- }
+					local filters = trigger.filters
+					local results = {}
+					
+					
+					
+					
+					
+					
+					
+					for _, filter in ipairs(filters) do
+						local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
+						
+						if success then
+							collision = true
+							
+							
+							
+						end
+					end
+					
+					result = collision
+					
+					
 				
 			end
 		end
@@ -1681,18 +1749,40 @@ function scriptcheckTrigger(trigger)
 			end
 			if(trigger.name == "testFor") then
 				local count = 0
-				for i=1, #trigger.triggers do 
-					local trig = trigger.triggers[i]
-					local rs = checkTrigger(trig)
-					if(rs == true ) then
-						count = count +1
+				local counttrigger = 0
+				if(isArray(trigger.triggers))then
+					for i=1, #trigger.triggers do 
+						counttrigger = #trigger.triggers
+						
+						
+						local trig = trigger.triggers[i]
+						
+						local rs = checkTrigger(trig)
+						if(rs == true ) then
+							count = count +1
+						end
 					end
+					else
+					print("notarray")
+					for k,v in pairs(trigger.triggers) do 
+						counttrigger = counttrigger+1
+						
+						
+						local trig = v
+						
+						local rs = checkTrigger(trig)
+						if(rs == true ) then
+							count = count +1
+						end
+					end
+					
 				end
+				
 				if(trigger.logic == "or") then
 					--logme(3,tostring(count >=1))
 					result = (count >=1 )
 					else
-					result = (count == #trigger.triggers)
+					result = (count == counttrigger)
 				end
 			end
 		end
@@ -2668,7 +2758,7 @@ end
 			local vehicule = Game.FindEntityByID(vehiculeobj.id)
 			if(vehicule ~= nil and ActiveFastTravelMappin ~= nil) then
 				vehiculeobj.destination = ActiveFastTravelMappin.position
-				VehicleGoToGameNode(action.tag, ActiveFastTravelMappin.markerRef, action.speed, action.forcegreenlight, action.needdriver, action.usetraffic)
+				VehicleGoToGameNode(action.tag, ActiveFastTravelMappin.markerRef, action.speed, action.forcegreenlight, action.needdriver, action.usetraffic, action.useKinematic)
 			end
 		end
 		if(action.name == "vehicle_go_to_fasttravel_point") then
@@ -4828,33 +4918,10 @@ end
 			end
 		end
 		if(action.name == "clean_custommappin") then
-			if(ActivecustomMappin ~= nil) then
-				------logme(3,"Unregister mappinPoint")
-				
-				ActivecustomMappin = nil
-			end
+			ActivecustomMappin = nil
 		end
 		if(action.name == "clean_activefasttravelpoint") then
-			if(ActiveFastTravelMappin ~= nil) then
-				
-				local newmappin = ActiveFastTravelMappin
-				local mappins = Game.GetMappinSystem():GetMappins(2)
-				
-				for i,v in ipairs(mappins) do
-				
-				if(v.worldPosition.x == ActiveFastTravelMappin.position.x and v.worldPosition.y == ActiveFastTravelMappin.position.y and v.worldPosition.z == ActiveFastTravelMappin.position.z)then
-					
-					lastId =v.id
-					Game.GetMappinSystem():SetMappinActive(v.id,false)
-				end
-				
-				
-				end
-				
-				
 				ActiveFastTravelMappin = nil
-				
-			end
 		end
 		
 		if(action.name == "notify") then

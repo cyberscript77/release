@@ -796,6 +796,7 @@ return {
 		["helper"] = "This action will launch the vehicle to the current selected fast travel point",
 		["greenlight"] = true,
 		["needdriver"] = true,
+		["useKinematic"] = true,
 		["usetraffic"] = true,
 		["speed"] = 50,
 		["name"] = "vehicle_go_to_current_fasttravel_point",
@@ -3265,5 +3266,5 @@ return {
 		["tag"] = "myentitytag",
 		["name"] = "clear_interface_to_inkwidget_entity",
 		["helperTitle"] = "UI : Clear Interface to InkWidget Entity",
-	},
+	}
 }

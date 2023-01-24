@@ -400,6 +400,13 @@ return {
 		["helperTitle"] = "Entity : Path is Finish",
 		["name"] = "entity_path_is_finish",
 	},
+	
+	["vehicle_entity_is_moving"] = {
+		["helper"] = "This trigger will be triggered when vehicle entity path is moving",
+		["tag"] = "Judy",
+		["helperTitle"] = "Entity : Vehicle is Moving",
+		["name"] = "vehicle_entity_is_moving",
+	},
 	["current_district"] = {
 		["helper"] = "This trigger will be triggered when you are in a specific district",
 		["helperTitle"] = "Map : Current District",
@@ -722,5 +729,27 @@ return {
 		["helper"] = "This trigger will be triggered when you are in buyed custom place",
 		["helperTitle"] = "Player : In buyed custom place",
 		["name"] = "is_in_buyed_place",
+	},
+	
+	
+	["have_collision"] = {
+		["helper"] = "This trigger will check if there is collision betwwen 2 points. Filter can be Dynamic,Vehicle,Static,Water,Terrain,PlayerBlocker",
+		["helperTitle"] = "Game : Have collision",
+		["name"] = "have_collision",
+		["from_x"] = 0,
+		["from_y"] = 0,
+		["from_z"] = 0,
+		["to_x"] = 0,
+		["to_y"] = 0,
+		["to_z"] = 0,
+		["filters"] = {
+			"Dynamic",
+			"Vehicle",
+			"Static",
+			"Water",
+			"Terrain",
+			"PlayerBlocker"
+		
+		}
 	},
 }

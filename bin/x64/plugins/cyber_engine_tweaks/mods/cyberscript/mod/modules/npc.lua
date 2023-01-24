@@ -3940,7 +3940,7 @@ if vehiculeRegion then
 	end
 	
 	
-	function VehicleGoToGameNode(vehiculetag, noderef, speed, greenlight, needdriver, usetraffic)
+	function VehicleGoToGameNode(vehiculetag, noderef, speed, greenlight, needdriver, usetraffic,useKinematic)
 		
 		
 		
@@ -3965,6 +3965,7 @@ if vehiculeRegion then
 		cmd.useTraffic = usetraffic or false
 		cmd.speedInTraffic = speed
 		cmd.forceGreenLights = greenlight
+		cmd.useKinematic   =useKinematic or true
 		cmd = cmd:Copy()
 		
 		

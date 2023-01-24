@@ -2998,7 +2998,7 @@ function getPath(tag)
 	
 	
 	if(arrayPath[tag] ~= nil) then
-		return arrayPath[tag].gamepath
+		return arrayPath[tag].path
 	end
 	return nil
 	
@@ -3379,7 +3379,7 @@ function getPathBetweenTwoNode(CurrentNode, NextNode)
 	for k,v in pairs(arrayPath)do
 		
 		
-		local path = v.gamepath
+		local path = v.path
 		logme(4,"startNode"..path.startNode)
 		logme(4,"endNode"..path.endNode)
 		

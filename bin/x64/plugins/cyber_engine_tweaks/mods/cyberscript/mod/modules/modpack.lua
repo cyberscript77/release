@@ -452,8 +452,6 @@ function loadDatapackObject(namespace)
 					
 					end
 					
-					elseif(objtype == "path") then
-					
 					
 					
 					else
@@ -548,9 +546,6 @@ function loadAssetsObject()
 					arrayDatapack[namespace][objtype][tostring(reader[i].name)] = imageobj
 					
 					end
-					
-					elseif(objtype == "path") then
-					
 					
 					
 					else
@@ -931,11 +926,6 @@ end
 	
 	
 
-	
-	
-	initPath()
-	
-	
 	loadQuestsToUI()
 	getInteractGroup()
 	FillCharacterArchive()
@@ -1352,8 +1342,9 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+						
 							arrayPath[value.tag] = {}
-							arrayPath[value.tag].gamepath = value
+							arrayPath[value.tag].path = value
 							arrayPath[value.tag].file = path
 							arrayPath[value.tag].datapack = datapackname
 							arrayPath[value.tag].scripttype = objtype

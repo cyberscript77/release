@@ -55,7 +55,8 @@
 	},
 	"entity": {
 		"key": "tag",
-		"prop": "tag"
+		"prop": "tag",
+		"tag": "tag"
 	},
 	"mappin": {
 		"tag": "tag",
