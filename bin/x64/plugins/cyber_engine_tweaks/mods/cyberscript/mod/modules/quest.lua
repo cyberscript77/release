@@ -59,11 +59,12 @@ function QuestThreadManager()
 				
 					
 					if(QuestManager.GetObjectiveState(objectif.tag).isActive == true) then
-					--logme(10,objectif.tag.." active "..tostring(QuestManager.GetObjectiveState(objectif.tag).isActive))
+					logme(10,objectif.tag.." active "..tostring(QuestManager.GetObjectiveState(objectif.tag).isActive))
 						
 						local result = false
+						logme(10,objectif.tag.." trigger "..tostring(dump(objectif.trigger)))
 						result = checkTriggerRequirement(objectif.requirement,objectif.trigger)
-						--logme(2,objectif.tag.." result "..tostring(result))
+						logme(10,objectif.tag.." result "..tostring(result))
 					
 						
 						if(result == true and workerTable[objectif.tag.."_action"] == nil) then
@@ -105,7 +106,7 @@ function QuestThreadManager()
 								completedobjective = completedobjective +1
 							
 					end
-					--print(completedobjective)
+				
 					if(objectif.isoptionnal == false) then
 						totalobjectivenotoptionnal = totalobjectivenotoptionnal +1
 							
@@ -381,7 +382,7 @@ function resetQuest()
 	
 	QuestManager.MarkQuestAsInactive(currentQuest.tag)
 	QuestManager.MarkAllObjectiveOfQuestAs(currentQuest.tag,1)
-	QuestManager.MarkQuestAsUnVisited(entryId)
+	QuestManager.MarkQuestAsUnVisited(currentQuest.tag)
 	setScore(currentQuest.tag,"Score",0)
 	
 	

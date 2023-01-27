@@ -6,8 +6,35 @@ cyberscript.module = cyberscript.module +1
 		local wordpos = this:GetMappin():GetWorldPosition()
 		for _,v in pairs(mappinManager) do 
 					local mappin = v
-					if(math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
+					if(mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
+						
+						if(mappin.range ~= 0) then 
+							if( check3DPos(curPos, mappin.position.x,  mappin.position.y,  mappin.position.z, mappin.range) ) then
+								this:SetRootVisible(true)
+							else
+								this:SetRootVisible(false)
+							end
+						
+						end
 						v.widget = this.iconWidget
+						
+
+						if(mappin.style ~= nil) then
+						
+							if(mappin.style.icon ~= nil) then
+							
+								local record = TweakDBInterface.GetUIIconRecord("ChoiceIcons."..mappin.style.icon)
+								v.widget:SetTexturePart(record:AtlasPartName())
+								v.widget:SetAtlasResource(record:AtlasResourcePath())
+
+								
+							end
+							
+							if(mappin.style.color ~= nil) then
+							
+								this.iconWidget:SetTintColor(gamecolorStyle(mappin.style.color))
+							end
+						end
 						
 						break
 					end
@@ -436,12 +463,12 @@ cyberscript.module = cyberscript.module +1
 			local indextoremove = 0
 			for i,v in ipairs(entityTargetPlayer) do
 				
-				
-				if(evt.objectThatTargets:GetEntityID()==v:GetEntityID())then
-					indextoremove = i
-					break
+				if(evt.objectThatTargets:IsA("entEntity")) then
+					if(evt.objectThatTargets:GetEntityID()==v:GetEntityID())then
+						indextoremove = i
+						break
+					end
 				end
-				
 				
 			end
 			if indextoremove > 0 then
@@ -1047,27 +1074,35 @@ cyberscript.module = cyberscript.module +1
 		end
 	
 	end
+	
+	function ShardsVirtualNestedListController_SetData(this,data, keepToggledLevels, sortOnce)
+		-- print("yo"..#data)
+		-- for k,v in ipairs(data) do
+		
+		-- spdlog.error(GameDump(v.data))
+		
+		-- end
+	
+	end
 		
 	function ShardsMenuGameController_PopulateData(thos,data, keepToggledLevels, sortOnce)
 	
 		if(moddisabled == true) then return end
 	
-			
-			
 		
-			if(ActiveSubMenu == "Shards" and firstexecutionshard == nil ) then
-			firstexecutionshard = true
-			local count = 1
+			local count = 0
 			
-			local test = data
+			local test = deepcopy(data,nil)
 			
 			
 			for k,v in pairs(arrayShard) do
+		
 				local shard = v.shard
 				checkContext(shard)
 			
 				
 				if((getScoreKey(shard.tag,"Score") == nil and shard.locked == false) or getScoreKey(shard.tag,"Score") == 0) then
+					count = count + 1
 					
 					local shardData =  ShardEntryData.new()
 					shardData.title = shard.title
@@ -1100,6 +1135,9 @@ cyberscript.module = cyberscript.module +1
 				end
 			end
 			
+			if(count > 0) then
+			
+			
 			local groupData = ShardEntryData.new()
 			groupData.title = "CyberScript"
 			groupData.isNew = false
@@ -1126,10 +1164,29 @@ cyberscript.module = cyberscript.module +1
 			table.insert(test, groupVirtualListData)
 			data = test
 			
+			local castedData = test
+		 
+			if not keepToggledLevels then
+				thos.toggledLevels = {}
+			end
 			
-			thos:SetData(data, keepToggledLevels, sortOnce)
-			shardpopulate = false
-		end
+			thos.dataSource:Reset(castedData)
+			--thos.dataView:SetToggledLevels(thos.toggledLevels, thos.defaultCollapsed) this line break missingperson ?!
+			thos:EnableSorting()
+			
+			if sortOnce then
+			thos:DisableSorting()
+			end
+					
+		
+			end
+			
+			
+		
+			
+			
+		
+			
 	end
 	
 	function WorldMapMenuGameController_OnSelectedDistrictChanged(thos,oldDistrict,newDistrict)
@@ -1163,6 +1220,29 @@ cyberscript.module = cyberscript.module +1
 		
 	end
 	
+	function ShardsNestedListDataView_SortItems(this, compareBuilder, left, right, wrapped)
+		
+		
+			local leftData = ShardEntryData.new()
+			local rightData = ShardEntryData.new()
+			
+			
+			
+			leftData = left.data
+			rightData = right.data
+			
+		
+			
+			if IsDefined(leftData) and IsDefined(rightData) then
+			
+		
+			
+			compareBuilder:BoolTrue(leftData.isNew, rightData.isNew):StringAsc(Game.GetLocalizedText(leftData.title), Game.GetLocalizedText(rightData.title))
+			end
+		
+	end
+	
+	
 	function WorldMapMenuGameController_OnZoomLevelChanged(thos,oldLevel,newLevel)
 		if(moddisabled == true) then return end
 		
@@ -1178,6 +1258,7 @@ cyberscript.module = cyberscript.module +1
 	
 	function WorldMapMenuGameController_OnSetUserData(thos,userData)
 		if(moddisabled == true) then return end
+		
 		setNewFixersPoint()
 		setCustomLocationPoint() 
 		
@@ -1219,7 +1300,8 @@ cyberscript.module = cyberscript.module +1
 		if(moddisabled == true) then return end
 		
 		GameController["BaseWorldMapMappinController"]  = self
-		if(self.mappin ~= nil and self:IsTracked() and self.mappin:IsActive()) then
+		if(self.mappin ~= nil ) then
+		
 			if lastId ~= nil then Game.GetMappinSystem():SetMappinActive(lastId,true) end
 			SelectedMappinMetro = nil
 			SelectedScriptMappin = nil
@@ -1242,6 +1324,7 @@ cyberscript.module = cyberscript.module +1
 			mappinType == gamedataMappinVariant.ServicePointJunkVariant) then
 			local haveFounded = false
 			-- local test = {}
+			
 			-- table.insert(test,arrayHouse["playerhouse01"])
 			for _,v in pairs(arrayHouse) do 
 				if(math.floor(v.house.posX) == math.floor(wordpos.x) and math.floor(v.house.posY) == math.floor(wordpos.y) and math.floor(v.house.posZ) == math.floor(wordpos.z)) then
@@ -1252,6 +1335,7 @@ cyberscript.module = cyberscript.module +1
 			else
 			if(mappinType == gamedataMappinVariant.Zzz01_CarForPurchaseVariant) then
 				--logme(2,"Metro ?")
+			
 				local haveFounded = false
 				for k,v in pairs(arrayNode) do 
 					local mappin = v.node
@@ -1266,9 +1350,13 @@ cyberscript.module = cyberscript.module +1
 				end
 				else
 				local haveFounded = false
-				for _,v in pairs(mappinManager) do 
+				
+				for k,v in pairs(mappinManager) do 
 					local mappin = v
+					
 					if(math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
+						
+						print(k)
 						SelectedScriptMappin = mappin
 						break
 					end
@@ -4030,6 +4118,15 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		
 				wrappedMethod(gameController,widgetsData)
 		
+		local indexweb = 0
+		for k,v in pairs(arrayWebpage) do
+		
+		indexweb = indexweb+1
+		
+		
+		end
+		
+		if(indexweb>0) then
 			local test = thos
 			local gameCon = gameController
 			----print("inirt"..widgetsData[2].widgetName)
@@ -4061,7 +4158,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 			thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
 
 
-			
+		end
 			
 	end
 	
@@ -4231,6 +4328,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	--endregion Browser
 	function WorldMapTooltipController_SetData(self,data,menu)
+	
 	if(moddisabled == true) then return end
 		local mappinVariant = nil
 		
@@ -4240,10 +4338,16 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 			
 		end
 		if(SelectedScriptMappin ~= nil) then
+		
 			if(mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant) then
 			
 				local fixer = getFixerByTag(SelectedScriptMappin.tag)
-				
+			
+				self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetVisible(true)
+				self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(1):SetVisible(false)
+				self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(2):SetVisible(false)
+				self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(3):SetVisible(false)
+				self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetText("Cyberscript Fixer")
 				inkTextRef.SetText(self.gigBarCompletedText, "100")
 				inkTextRef.SetText(self.gigBarTotalText, "100")
 				self.gigProgress = 1
@@ -4505,10 +4609,28 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				table.insert(contactDataArray,itemData)
 			end
 		end
-		-- for i = 1,#contactDataArray do
-		------printGameDump(contactDataArray[i]))
-		-- end
-		--table.sort(contactDataArray)
+		
+		
+		if GetMod('corruptNCPD') then 
+							
+			local corruptNCPD= GetMod('corruptNCPD')			
+			
+			for name, data in pairs(corruptNCPD.messenger.contacts) do
+				local c = ContactData.new()
+				c.id = "trainer_fred"
+				c.avatarID = TweakDBID.new("PhoneAvatars.Avatar_Unknown")
+				c.localizedName = "CORRUPT NCPD"
+				c.hash = data.hash
+				c.timeStamp = data.timeStamp
+				c.questRelated = EnumInt(Game.GetScriptableSystemsContainer():Get("PreventionSystem"):GetHeatStage()) ~= 0
+				table.insert(contactDataArray, c)
+			end
+			
+			
+		end
+		
+		
+		
 		thos.dataView:EnableSorting();
 		thos.dataSource:Reset(contactDataArray);
 		thos.dataView:DisableSorting();
@@ -5590,75 +5712,34 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		if(currentDialogHub ~= nil and self.ActiveTextRef ~= nil) then
 			
 			local isphoneDialog = currentDialogHub.dial.speaker.way == "phone"
+		
+			local dialogoption = currentDialogHub.dial.options[interactionUI.selectedIndex+1]
+		
+			if(dialogoption ~= nil and dialogoption.Description == self.ActiveTextRef:GetText()) then
+				
 			
-			self.isPhoneLockActive = false
-			inkWidgetRef.SetVisible(self.phoneIcon, false)
-			inkWidgetRef.SetVisible(self.InputView.TopArrowRef, (self.InputView.CurrentNum ~= 0 or self.InputView.HasAbove))
-			inkWidgetRef.SetVisible(self.InputView.BotArrowRef, (self.InputView.CurrentNum ~= (self.InputView.AllItemsNum - 1) or self.InputView.HasBelow))
-			
-			local dialogoption = currentDialogHub.dial.options[currentDialogHub.index]
-			
-			if(dialogoption.Description == self.ActiveTextRef:GetText()) then
 				
+				self.ActiveTextRef:SetTintColor(gamecolor(0, 0, 0,0))
 				
-				
-				
-				
-				inkWidgetRef.SetVisible(self.VerticalLineWidget, false)
-				self.InputView:SetVisible(true)
-				self.isSelected = true
-				
-				
-				if(dialogoption.requirement ~= nil and checkTriggerRequirement(dialogoption.requirement,dialogoption.trigger) == false)then
-				--------print(dialogoption.Description)
-					self.ActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
+				if (dialogoption.requirement ~= nil and checkTriggerRequirement(dialogoption.requirement,dialogoption.trigger) == false) then
 					self.InActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
+					self.ActiveTextRef:SetTintColor(gamecolor(237, 124, 109,1))
+					
+				
 					self.SelectedBg:SetTintColor(gamecolor(255, 86, 64,0))
-						inkWidgetRef.SetOpacity(self.ActiveTextRef, 1)
-					inkWidgetRef.SetOpacity(self.InActiveTextRef,0)
-			
-				self.VerticalLineWidget.widget:SetTintColor(gamecolor(237, 124, 109,1))
-				
-					self.InputView:SetVisible(true)
-				
-					self.isSelected = true
-				
-				
-				self.SelectedBg:SetOpacity(0.0)
 				else
-					if(dialogoption.style == nil or dialogoption.style.color == nil  or dialogoption.style.color.red == nil or dialogoption.style.color.green == nil or dialogoption.style.color.blue == nil) then
+						
+					if not (dialogoption.style == nil or dialogoption.style.color == nil  or dialogoption.style.color.red == nil or dialogoption.style.color.green == nil or dialogoption.style.color.blue == nil) then
 					
-					self.ActiveTextRef.widget:SetTintColor(gamecolor(0,0,0,1))
-					self.InActiveTextRef.widget:SetTintColor(gamecolor(0,0,0,1))
+						
+						local fontcolor = dialogoption.style.color
+		
+						self.SelectedBg:SetTintColor(gamecolorStyle(fontcolor))
+						
 					
-					
-					self.SelectedBg:SetTintColor(gamecolor(0,255,255,1))
-					
-					else
-					
-					local fontcolor = dialogoption.style.color
-	
-					self.ActiveTextRef.widget:SetTintColor(gamecolor(0,0,0,1))
-					self.InActiveTextRef.widget:SetTintColor(gamecolor(0,0,0,1))
-					
-					self.SelectedBg:SetTintColor(gamecolorStyle(fontcolor))
-					
-					
+				
+					end
 				end
-				end
-				
-				
-					local captionParts = {}
-				
-				
-				
-				
-				
-				
-				inkWidgetRef.SetOpacity(self.ActiveTextRef, 1)
-				inkWidgetRef.SetOpacity(self.InActiveTextRef, 1)
-				self.SelectedBg:SetOpacity(0.6)
-				
 				
 				
 				
@@ -5668,75 +5749,70 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				
 				
 				
-				else
+			end
 				
-				local dialogoption_unselect = nil
+			local dialogoption_unselect = nil
 				
 				
 				for i,v in ipairs(currentDialogHub.dial.options) do
 					
-					if(v.Description == self.ActiveTextRef:GetText()) then
+					if(v.Description == self.ActiveTextRef:GetText() and v.Description ~=  currentDialogHub.dial.options[interactionUI.selectedIndex+1].Description) then
 					
 					dialogoption_unselect = v
 					
-					end
-				
-				
-				end
-				
-				inkWidgetRef.SetVisible(self.VerticalLineWidget, true)
-				self.InputView:SetVisible(false)
-				
-				
-				if(dialogoption_unselect ~= nil and dialogoption_unselect.requirement ~= nil and checkTriggerRequirement(dialogoption_unselect.requirement,dialogoption_unselect.trigger) == false)then
-					self.ActiveTextRef.widget:SetTintColor(gamecolor(255, 86, 64,0))
-					self.InActiveTextRef.widget:SetTintColor(gamecolor(255, 86, 64,0))
 					
-				else
-					if(dialogoption_unselect ~= nil and dialogoption_unselect.style ~= nil and dialogoption_unselect.style.color ~= nil  and dialogoption_unselect.style.color.red ~= nil and dialogoption_unselect.style.color.green ~= nil and dialogoption_unselect.style.color.blue ~= nil) then
+		
+				if (dialogoption_unselect ~= nil and dialogoption_unselect.requirement ~= nil and checkTriggerRequirement(dialogoption_unselect.requirement,dialogoption_unselect.trigger) == false)then
+					pcall(function()
+					self.SelectedBg.widget:SetTintColor(gamecolor(237, 124, 109,1))
+					self.InActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
+					self.ActiveTextRef:SetTintColor(gamecolor(255, 86, 64,0))
+					end)
+					else
+				
+					if (dialogoption_unselect ~= nil and dialogoption_unselect.style ~= nil and dialogoption_unselect.style.color ~= nil  and dialogoption_unselect.style.color.red ~= nil and dialogoption_unselect.style.color.green ~= nil and dialogoption_unselect.style.color.blue ~= nil) then
 					
 						local fontcolor = dialogoption_unselect.style.color
-						self.ActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
+					
 						self.InActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
+						self.ActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
+					
+						else
 						
-					else
-						self.ActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
-						self.InActiveTextRef.widget:SetTintColor(gamecolor(0,255,255,1))
-						
+							self.ActiveTextRef:SetTintColor(HDRColor.new({ Red=0.368627, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
+						self.InActiveTextRef:SetTintColor(HDRColor.new({ Red=1, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
+			
 					
 					end
 					
 					
 				end
+					
+					end
+				
+				
+				end
 				
 				
 				
-				self.isSelected = true
-				self.SelectedBg:SetTintColor(gamecolor(0,0,0,0))
-				inkWidgetRef.SetOpacity(self.ActiveTextRef, 1)
-				inkWidgetRef.SetOpacity(self.InActiveTextRef,0)
+				
+				
+				
 			
-				self.VerticalLineWidget.widget:SetTintColor(gamecolor(0,255,255,1))
 				
 				
 				
 			
-				
-				
-				self.SelectedBg:SetOpacity(0.0)
-				
-				
-			end
 			
 			else
 			
 			return wrappedMethod()
-			
+		end
 		end
 		
 		
 		
-	end
+	
 	
 	
 function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,iconColor)
@@ -7396,91 +7472,91 @@ function listenPlayerInput(action)
 			-- logme(1,actionName)
 			-- logme(1,actionType)
 			local inputHitted = false
-			if(isdialogactivehub == true ) then
+			-- if(isdialogactivehub == true ) then
 				
-				local inputIndex = 0
+				-- local inputIndex = 0
 				
-				if(string.find(tostring(actionName), "hoice1_Release")and (actionType == "BUTTON_RELEASED") and (currentDialogHub.dial.options[currentDialogHub.index].locked == nil or currentDialogHub.dial.options[currentDialogHub.index].locked == false)) then
+				-- if(string.find(tostring(actionName), "hoice1_Release")and (actionType == "BUTTON_RELEASED") and (currentDialogHub.dial.options[currentDialogHub.index].locked == nil or currentDialogHub.dial.options[currentDialogHub.index].locked == false)) then
 					
 					
-					if(currentDialogHub.dial.options[currentDialogHub.index].requirement == nil or checkTriggerRequirement(currentDialogHub.dial.options[currentDialogHub.index].requirement,currentDialogHub.dial.options[currentDialogHub.index].trigger))then
-						ClickOnDialog(currentDialogHub.dial.options[currentDialogHub.index],currentDialogHub.dial.speaker.value,currentDialogHub.dial.speaker.way)
-					end
+					-- if(currentDialogHub.dial.options[currentDialogHub.index].requirement == nil or checkTriggerRequirement(currentDialogHub.dial.options[currentDialogHub.index].requirement,currentDialogHub.dial.options[currentDialogHub.index].trigger))then
+						-- ClickOnDialog(currentDialogHub.dial.options[currentDialogHub.index],currentDialogHub.dial.speaker.value,currentDialogHub.dial.speaker.way)
+					-- end
 					
-				end
+				-- end
 				
 				
 				
 				
-				if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp"))and (actionType == "BUTTON_PRESSED")) then
-					
-					
-					if(currentDialogHub.index == nil) then
-						currentDialogHub.index = 1
-					end
-					currentDialogHub.index = currentDialogHub.index-1
-					----logme(2,"currentDialogHub.index "..currentDialogHub.index )
-					if(currentDialogHub.index < 1) then
-						currentDialogHub.index = #currentDialogHub.dial.options
-					end
-					
-					Game.GetBlackboardSystem():Get(Game.GetAllBlackboardDefs().UIInteractions):SetInt(Game.GetAllBlackboardDefs().UIInteractions.SelectedIndex, currentDialogHub.index, true)
-				end
-				
-				
-				
-				
-				if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "hoiceScrollDown"))and (actionType == "BUTTON_PRESSED")) then
-					if(currentDialogHub.index == nil) then
-						currentDialogHub.index = 1
-					end
+				-- if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp"))and (actionType == "BUTTON_PRESSED")) then
 					
 					
-					currentDialogHub.index = currentDialogHub.index+1
+					-- if(currentDialogHub.index == nil) then
+						-- currentDialogHub.index = 1
+					-- end
+					-- currentDialogHub.index = currentDialogHub.index-1
+					-- ----logme(2,"currentDialogHub.index "..currentDialogHub.index )
+					-- if(currentDialogHub.index < 1) then
+						-- currentDialogHub.index = #currentDialogHub.dial.options
+					-- end
 					
-					if(currentDialogHub.index >  #currentDialogHub.dial.options) then
-						currentDialogHub.index =  1
-					end
+					-- Game.GetBlackboardSystem():Get(Game.GetAllBlackboardDefs().UIInteractions):SetInt(Game.GetAllBlackboardDefs().UIInteractions.SelectedIndex, currentDialogHub.index, true)
+				-- end
+				
+				
+				
+				
+				-- if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "hoiceScrollDown"))and (actionType == "BUTTON_PRESSED")) then
+					-- if(currentDialogHub.index == nil) then
+						-- currentDialogHub.index = 1
+					-- end
 					
-					Game.GetBlackboardSystem():Get(Game.GetAllBlackboardDefs().UIInteractions):SetInt(Game.GetAllBlackboardDefs().UIInteractions.SelectedIndex, currentDialogHub.index, true)
 					
-				end
+					-- currentDialogHub.index = currentDialogHub.index+1
+					
+					-- if(currentDialogHub.index >  #currentDialogHub.dial.options) then
+						-- currentDialogHub.index =  1
+					-- end
+					
+					-- Game.GetBlackboardSystem():Get(Game.GetAllBlackboardDefs().UIInteractions):SetInt(Game.GetAllBlackboardDefs().UIInteractions.SelectedIndex, currentDialogHub.index, true)
+					
+				-- end
 				
 				
 				
 				
 				
 				
-				if currentDialogHub~= nil and currentDialogHub.dial ~= nil then
-					if(inputIndex >  #currentDialogHub.dial.options) then
-						inputIndex = #currentDialogHub.dial.options
-					end
-					if(#currentDialogHub.dial.options == 0 or currentDialogHub.dial.options == nil) then
-						currentDialogHub.dial.options = {}
-						local option = {}
-						option.Description = getLang("talk_later")
-						option.action = {}
-						option.trigger = {}
-						option.trigger.auto = {}
-						option.trigger.auto.name = "auto"
-						option.requirement = {}
-						option.input = 1
-						local requirem = {}
+				-- if currentDialogHub~= nil and currentDialogHub.dial ~= nil then
+					-- if(inputIndex >  #currentDialogHub.dial.options) then
+						-- inputIndex = #currentDialogHub.dial.options
+					-- end
+					-- if(#currentDialogHub.dial.options == 0 or currentDialogHub.dial.options == nil) then
+						-- currentDialogHub.dial.options = {}
+						-- local option = {}
+						-- option.Description = getLang("talk_later")
+						-- option.action = {}
+						-- option.trigger = {}
+						-- option.trigger.auto = {}
+						-- option.trigger.auto.name = "auto"
+						-- option.requirement = {}
+						-- option.input = 1
+						-- local requirem = {}
 						
-						table.insert(requirem,"auto")
-						table.insert(option.requirement,requirem)
-						table.insert(currentDialogHub.dial.options,option)
-					end
-					-- if(currentDialogHub ~= nil) then
-					-- for i = 1, #currentDialogHub.dial.options do
-					-- if(currentDialogHub ~= nil and currentDialogHub.dial.options[i].input == inputIndex) then
-					-- --	------print"input choice detexted")
-					-- --	----printcurrentDialogHub.dial.options[i].Description)
+						-- table.insert(requirem,"auto")
+						-- table.insert(option.requirement,requirem)
+						-- table.insert(currentDialogHub.dial.options,option)
 					-- end
-					-- end
-					-- end
-				end
-			end
+					-- -- if(currentDialogHub ~= nil) then
+					-- -- for i = 1, #currentDialogHub.dial.options do
+					-- -- if(currentDialogHub ~= nil and currentDialogHub.dial.options[i].input == inputIndex) then
+					-- -- --	------print"input choice detexted")
+					-- -- --	----printcurrentDialogHub.dial.options[i].Description)
+					-- -- end
+					-- -- end
+					-- -- end
+				-- end
+			-- end
 			if(isdialogactivehub == false and candisplayInteract == true) then
 				--		------print"event detexted")
 				local inputIndex = 0

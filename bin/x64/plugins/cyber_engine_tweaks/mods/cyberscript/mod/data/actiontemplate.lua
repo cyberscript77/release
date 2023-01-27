@@ -765,6 +765,58 @@ return {
 		["typemap"] = "ExclamationMarkVariant",
 		["wall"] = true,
 		["mapgroup"] = "",
+		["range"] = 0,
+		["position"] = "at",
+		["desc"] = "mydesc",
+		["active"] = true,
+		["helper"] = "This action will summon a custom mappin with several custom parameter. Range 0 means always visible, instead range X means visible when in range ",
+		["z"] = 0,
+		["position_house_way"] = "default",
+		["tag"] = "mymappintag",
+		["position_lookatdistance"] = 0,
+		["name"] = "set_mappin",
+		["x"] = 0,
+		["y"] = 0,
+		["color"] = {
+			{
+				["red"] = 255,
+				["green"] = 255,
+				["blue"] = 255
+			},
+		},
+		["icon"] = ""
+	},
+	["edit_mappin"] = {
+		["help"] = "This action will edit a custom npc with several custom parameter ",
+		["helperTitle"] = "Map : Edit Mappin",
+		["position_tag"] = "judy01",
+		["position_way"] = "normal",
+		["position_distance"] = 5,
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_house_tag"] = "playerhouse01",
+		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
+ For poi if you write 'current' in position_poi_district you will get the current district, \
+ if you write 'current in position_poi_subdistrict you will get the current subdistrict. \
+ also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+		["position_node_usegameplay"] = false,
+		["position_range"] = 50,
+		["title"] = "myttitle",
+		["position_tag_helper"] = "judy01||playerhouse01||playerhouse_bed||",
+		["position_way_helper"] = "normal||behind||forward",
+		["position_poi_district"] = "",
+		["position_poi_subdistrict"] = "",
+		["position_poi_is_for_car"] = false,
+		["position_poi_from_position"] = false,
+		["position_poi_from_position_x"] = 0,
+		["position_poi_from_position_y"] = 0,
+		["position_poi_from_position_z"] = 0,
+		["position_poi_search"] = "type|subdistrict|district|tag",
+		["position_poi_searchdistance"] = "near|far|random",
+		["position_poi_use_location_tag"] = false,
+		["position_poi_type"] = 1,
+		["position_house_way_helper"] = "default||enter||exit",
+		["typemap"] = "ExclamationMarkVariant",
+		["mapgroup"] = "",
 		["position"] = "at",
 		["desc"] = "mydesc",
 		["active"] = true,
@@ -776,6 +828,14 @@ return {
 		["name"] = "set_mappin",
 		["x"] = 0,
 		["y"] = 0,
+		["color"] = {
+			{
+				["red"] = 255,
+				["green"] = 255,
+				["blue"] = 255
+			},
+		},
+		["icon"] = ""
 	},
 	["despawn_entity"] = {
 		["helper"] = "This action will despawn a custom entity ",
@@ -802,11 +862,11 @@ return {
 		["name"] = "vehicle_go_to_current_fasttravel_point",
 		["tag"] = "myvehiculetag",
 	},
-	["delete_map_point"] = {
+	["delete_mappin"] = {
 		["helper"] = "This action will delete a specific mapPin",
 		["tag"] = "mymappintag",
 		["helperTitle"] = "Map : Delete Point",
-		["name"] = "delete_map_point",
+		["name"] = "delete_mappin",
 	},
 	["concate_custom_variable"] = {
 		["helper"] = "This action will concate the value of a key of a custom variable with a value store into a result variable",
@@ -924,11 +984,11 @@ return {
 		["helperTitle"] = "UI : Open Shard Popup",
 		["name"] = "open_shard",
 	},
-	["set_map_point_position"] = {
+	["set_mappin_position"] = {
 		["helper"] = "This action will change position of a specific mapPin",
 		["tag"] = "mymappintag",
 		["helperTitle"] = "Map : Set Map Pin position",
-		["name"] = "set_map_point_position",
+		["name"] = "set_mappin_position",
 	},
 	["play_game_sound"] = {
 		["helper"] = "This action will Play an Game's Sound",
@@ -952,12 +1012,12 @@ return {
 		["x"] = 0,
 		["y"] = 0,
 	},
-	["set_map_point_tracking_to"] = {
+	["set_mappin_tracking_to"] = {
 		["helper"] = "This action will make a specific mapPin track a specific target",
 		["helperTitle"] = "Map : Set Map Pin tracking a entity",
 		["target"] = "myentitytag",
 		["tag"] = "mymappintag",
-		["name"] = "set_map_point_tracking_to",
+		["name"] = "set_mappin_tracking_to",
 	},
 	["move_entity_at_entity_relative"] = {
 		["help"] = "Walk||Run||Sprint",
@@ -978,12 +1038,12 @@ return {
 		["name"] = "stop_game_sound",
 		["help"] = "Stop an Game's Sound",
 	},
-	["set_map_point_type"] = {
+	["set_mappin_type"] = {
 		["helper"] = "This action will change type of a specific mapPin",
 		["typemap"] = "ExclamationMarkVariant",
 		["tag"] = "mymappintag",
 		["helperTitle"] = "Map : Set Map Pin type ",
-		["name"] = "set_map_point_type",
+		["name"] = "set_mappin_type",
 	},
 	["rentCurrentHouse"] = {
 		["helper"] = "This action will start a business in these house, if open for business ",
@@ -1554,6 +1614,7 @@ return {
 		["z"] = 0,
 		["y"] = 0,
 		["roll"] = 0,
+		["despawntimer"] = 300,
 		["pitch"] = 0,
 		["yaw"] = 0,
 		["name"] = "spawn_npc",
@@ -1653,6 +1714,7 @@ return {
 		["position_lookatdistance"] = 0,
 		["position_tag_helper"] = "judy01||playerhouse01||playerhouse_bed||",
 		["scriptlevel"] = 0,
+		["despawntimer"] = 300,
 		["position_way_helper"] = "normal||behind||forward",
 		["position_poi_district"] = "",
 		["position_poi_subdistrict"] = "",
@@ -2031,6 +2093,7 @@ return {
 		["position_poi_is_for_car"] = false,
 		["surveillance"] = false,
 		["position_poi_from_position_x"] = 0,
+		["despawntimer"] = 300,
 		["position_poi_from_position_y"] = 0,
 		["position_poi_from_position_z"] = 0,
 		["position_poi_search"] = "type|subdistrict|district|tag",
@@ -2096,6 +2159,7 @@ return {
 	["spawn_item"] = {
 		["roll"] = 0,
 		["pitch"] = 0,
+		["despawntimer"] = 300,
 		["yaw"] = 0,
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
@@ -2266,11 +2330,11 @@ return {
 		["helperTitle"] = "Entity : Switch weapons",
 		["name"] = "switch_primary_secondary_weapon_entity",
 	},
-	["active_map_point"] = {
+	["active_mappin"] = {
 		["helper"] = "This action will active a specific mapPin",
 		["tag"] = "mymappintag",
 		["helperTitle"] = "Map : Active a specific map Pin",
-		["name"] = "active_map_point",
+		["name"] = "active_mappin",
 	},
 	["concate_variable_with_score"] = {
 		["scorekey"] = "MyKey2",

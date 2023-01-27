@@ -35,6 +35,7 @@ function loadexternal()
 	RES_skills =  dofile('mod/external/skills.lua')
 	RES_TweakDB =  dofile('mod/external/tweakdb-ids.lua')
 	RES_TweakDBmeta =  dofile('mod/external/tweakdb-meta.lua')
+	interactionUI = dofile("mod/external/interactionUI")
 	
 end
 
@@ -217,7 +218,7 @@ function SaveLoading()
 	Jump_Height = getUserSettingWithDefault("Jump_Height",Jump_Height)
 	Double_Jump_Height = getUserSettingWithDefault("Double_Jump_Height",Double_Jump_Height)
 
-	
+	debugLog = getUserSettingWithDefault("debugLog",debugLog)
 	
 	
 	
@@ -716,7 +717,7 @@ registerForEvent("onInit", function()
 	end)
 	
 	loadexternal()
-	
+	interactionUI.init()
 	cyberscript.var = dofile('mod/modules/var.lua')
 	cyberscript.observercontroller = dofile('mod/modules/observer_call.lua')
 	if GetMod('AppearanceMenuMod') then 
@@ -773,7 +774,7 @@ registerForEvent("onUpdate", function(delta)
 		
 		
 		
-		
+		  interactionUI.update()
 		
 		
 		end

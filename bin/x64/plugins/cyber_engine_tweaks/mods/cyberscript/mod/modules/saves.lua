@@ -611,7 +611,17 @@ function setVariable(tag,key,score)
 		if(currentSave.Variable[tag] == nil) then
 		
 		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = ""
+		currentSave.Variable[tag][key] = true
+		end
+		
+		currentSave.Variable[tag][key] = score
+	end
+	
+	if(type(score) ~= "string" and type(score) ~= "number" and type(score) ~= "boolean" ) then
+		if(currentSave.Variable[tag] == nil) then
+		
+		currentSave.Variable[tag] = {}
+		currentSave.Variable[tag][key] = {}
 		end
 		
 		currentSave.Variable[tag][key] = score

@@ -230,28 +230,31 @@ function ClickOnDialog(currentdialoption, npcId, way)
 	
 	
 	
-	local havedial = false
-	-- if(#currentdialoption.action > 0) then
-		-- for i = 1,#currentdialoption.action do
+	-- local havedial = false
+	-- -- if(#currentdialoption.action > 0) then
+		-- -- for i = 1,#currentdialoption.action do
 		
-			-- if(currentdialoption.action[i].name == "dialog" or currentdialoption.action[i].name == "do_random_dialog") then
-			-- havedial = true
-			-- end
+			-- -- if(currentdialoption.action[i].name == "dialog" or currentdialoption.action[i].name == "do_random_dialog") then
+			-- -- havedial = true
+			-- -- end
 			
-		-- end
-	-- else
+		-- -- end
+	-- -- else
 	
-		-- havedial = false
-	-- end
+		-- -- havedial = false
+	-- -- end
 	
-	isdialogactivehub = havedial
+	-- isdialogactivehub = havedial
 	
 	
-	if(isdialogactivehub == false) then
-		removeDialog()
-		currentDialogHub = nil
-	
+	-- if(isdialogactivehub == false) then
+		-- removeDialog()
+		-- currentDialogHub = nil
+	if(playerisstopped == true) then
+		StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+		playerisstopped = false
 	end
+	-- end
 	doOptionAction(currentdialoption,way)
 	
 	--SetDialogPhoneUI(currentPhoneDialog)

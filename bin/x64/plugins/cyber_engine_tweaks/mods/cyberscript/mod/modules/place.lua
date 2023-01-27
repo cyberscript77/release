@@ -171,7 +171,7 @@ function setCustomLocationPoint()
 			
 			if(mappinManager[h.house.tag] == nil) then
 		
-			registerMappin( h.house.posX, h.house.posY, h.house.posZ, h.house.tag ,variantType,true,false,nil,nil)
+			registerMappin( h.house.posX, h.house.posY, h.house.posZ, h.house.tag ,variantType,true,false,nil,nil,nil,nil)
 			end
 		
 		
@@ -187,7 +187,7 @@ function setCustomLocationPoint()
 		
 			if(mappinManager[node.tag] == nil) then
 		
-				registerMappin(node.GameplayX, node.GameplayY, node.GameplayZ, node.tag ,"Zzz01_CarForPurchaseVariant",true,false,nil,nil)
+				registerMappin(node.GameplayX, node.GameplayY, node.GameplayZ, node.tag ,"Zzz01_CarForPurchaseVariant",true,false,nil,nil,nil,nil)
 			end
 			
 			

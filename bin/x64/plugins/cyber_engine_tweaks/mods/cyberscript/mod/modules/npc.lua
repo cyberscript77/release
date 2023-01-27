@@ -54,6 +54,8 @@ if spawnRegion then
 						entity.name = tag
 						entity.isMP = false
 						entity.isWorkspot = true
+						entity.spawntimespan = os.time(os.date("!*t"))+0
+						entity.despawntimespan = os.time(os.date("!*t"))+300
 						
 						cyberscript.EntityManager[tag]=entity
 						
@@ -122,7 +124,8 @@ if spawnRegion then
 						entity.name = tag
 						entity.isMP = false
 						entity.workspottag = workspot
-						
+						entity.spawntimespan = os.time(os.date("!*t"))+0
+						entity.despawntimespan = os.time(os.date("!*t"))+300
 						cyberscript.EntityManager[tag]=entity
 						
 					end
@@ -175,6 +178,8 @@ if spawnRegion then
 						entity.name = tag
 						entity.isMP = false
 						entity.isitem = true
+						entity.spawntimespan = os.time(os.date("!*t"))+0
+						entity.despawntimespan = os.time(os.date("!*t"))+300
 						cyberscript.EntityManager[tag]=entity
 						
 					end
@@ -236,7 +241,7 @@ if spawnRegion then
 		
 	end
 	
-	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation)
+	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation,despawntimer)
 		
 		
 		
@@ -256,7 +261,7 @@ if spawnRegion then
 				local firstspawn = false
 				range = 5
 				
-				
+				if despawntimer == nil then despawntimer = 0 end
 				
 				--local vec4 = getBehindPosition(player,range)
 				
@@ -287,7 +292,8 @@ if spawnRegion then
 					if(NPC ~= nil and isprevention == false ) then
 					local entity = {}
 					entity.id = NPC
-					
+					entity.spawntimespan = os.time(os.date("!*t"))+0
+					entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 					entity.tag = tag
 					entity.tweak = chara
 					entity.isprevention = isprevention
@@ -388,6 +394,8 @@ if spawnRegion then
 								
 								entity.tag = tag
 								entity.tweak = chara
+								entity.spawntimespan = os.time(os.date("!*t"))+0
+								entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 								entity.isprevention = isprevention
 								if(scriptlevel == nil) then
 									entity.scriptlevel = 0
@@ -640,7 +648,8 @@ if spawnRegion then
 					entity.takenSeat = {}
 					entity.isAV = isAV
 					entity.name = chara
-					
+					entity.spawntimespan = os.time(os.date("!*t"))+0
+					entity.despawntimespan = os.time(os.date("!*t"))+300
 					local veh = Game.FindEntityByID(NPC)
 					entity.availableSeat = GetSeats(veh)
 					--entity.availableSeat = {}
@@ -664,6 +673,8 @@ if spawnRegion then
 				entity.takenSeat = {}
 				entity.isAV = isAV
 				entity.name = chara
+				entity.spawntimespan = os.time(os.date("!*t"))+0
+					entity.despawntimespan = os.time(os.date("!*t"))+300
 				
 				local veh = Game.FindEntityByID(NPC)
 				entity.availableSeat = GetSeats(veh)
@@ -739,7 +750,8 @@ if spawnRegion then
 				entity.id = NPC
 				entity.tag = tag
 				entity.tweak = chara
-				
+				entity.spawntimespan = os.time(os.date("!*t"))+0
+					entity.despawntimespan = os.time(os.date("!*t"))+300
 				local npgc = getNPCByTweakId(chara)
 				
 				entity.name = npgc.Names
@@ -783,6 +795,8 @@ if spawnRegion then
 				local entity = {}
 				entity.id = NPC
 				entity.tag = tag
+				entity.spawntimespan = os.time(os.date("!*t"))+0
+					entity.despawntimespan = os.time(os.date("!*t"))+300
 				entity.tweak = chara
 				entity.takenSeat = {}
 				entity.isAV = isAV
@@ -830,7 +844,8 @@ if spawnRegion then
 				entity.tag = tag
 				entity.tweak = chara
 				cyberscript.EntityManager[tag]=entity
-				
+				entity.spawntimespan = os.time(os.date("!*t"))+0
+					entity.despawntimespan = os.time(os.date("!*t"))+300
 				
 				
 				
@@ -877,6 +892,8 @@ if spawnRegion then
 			entity.tag = tag
 			entity.tweak = chara
 			entity.newmethod = true
+			entity.spawntimespan = os.time(os.date("!*t"))+0
+					entity.despawntimespan = os.time(os.date("!*t"))+300
 			cyberscript.EntityManager[tag]=entity
 			
 			
@@ -3023,7 +3040,7 @@ if vehiculeRegion then
 	--2 beta
 	--3 prevention
 	
-	function spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second,fakeav)
+	function spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second,fakeav,despawntimer)
 		
 		if (('string' == type(chara)) and (string.match(tostring(chara), "AMM_Vehicle.") == nil or (string.match(tostring(chara), "AMM_Vehicle.") ~= nil and AMM ~= nil)  )  )then
 			
@@ -3032,7 +3049,7 @@ if vehiculeRegion then
 			isAV = isAV or false
 			local firstspawn = false
 			local NPC = nil 
-			
+			if despawntimer == nil then despawntimer = 0 end
 			local param = isAV
 			
 			if(spawn_system == 1) then
@@ -3062,6 +3079,8 @@ if vehiculeRegion then
 						logme(10,npc)
 						local entity = {}
 						entity.id = NPC
+						entity.spawntimespan = os.time(os.date("!*t"))+0
+						entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 						entity.tag = tag
 						entity.tweak = chara
 						entity.takenSeat = {}
@@ -3113,6 +3132,8 @@ if vehiculeRegion then
 						entity.isprevention = isprevention
 						entity.fromgarage = true
 						entity.isMP = isMP
+						entity.spawntimespan = os.time(os.date("!*t"))+0
+						entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 						
 						if(isMP ~= nil and isMP == true)then
 							entity.name = tag
@@ -3183,6 +3204,8 @@ if vehiculeRegion then
 				----print("check "..tostring(NPC.hash))
 				entity.id = NPC
 				entity.tag = tag
+				entity.spawntimespan = os.time(os.date("!*t"))+0
+				entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 				entity.tweak = chara
 				entity.takenSeat = {}
 				entity.isAV = isAV
@@ -3305,7 +3328,8 @@ if vehiculeRegion then
 										
 									local entity = {}
 									entity.id = NPC
-									
+									entity.spawntimespan = os.time(os.date("!*t"))+0
+									entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 									entity.tag = tag
 									entity.tweak = chara
 									entity.takenSeat = {}
@@ -3520,6 +3544,8 @@ if vehiculeRegion then
 			local entity = {}
 			entity.id = NPC
 			entity.tag = tag
+			entity.spawntimespan = os.time(os.date("!*t"))+0
+			entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 			entity.tweak = chara
 			entity.takenSeat = {}
 			entity.isAV = isAV

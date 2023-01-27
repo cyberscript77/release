@@ -109,6 +109,8 @@ return {
 		["name"] = "player_in_poi",
 		["tag"] = "",
 		["uselocationtag"] = false,
+		["position_poi_search"] = "type|subdistrict|district|tag",
+		["position_poi_searchdistance"] = "near|far|random",
 		["iscar"] = false,
 	},
 	["datapack_is_enabled"] = {
@@ -742,6 +744,28 @@ return {
 		["to_x"] = 0,
 		["to_y"] = 0,
 		["to_z"] = 0,
+		["filters"] = {
+			"Dynamic",
+			"Vehicle",
+			"Static",
+			"Water",
+			"Terrain",
+			"PlayerBlocker"
+		
+		}
+	},
+	
+	["check_raycasting"] = {
+		["helper"] = "This trigger will check if there is collision betwen 2 points, it will check number of points (points field) in that line. Filter can be Dynamic,Vehicle,Static,Water,Terrain,PlayerBlocker",
+		["helperTitle"] = "Game : Check Raycasting",
+		["name"] = "check_raycasting",
+		["from_x"] = 0,
+		["from_y"] = 0,
+		["from_z"] = 0,
+		["to_x"] = 0,
+		["to_y"] = 0,
+		["to_z"] = 0,
+		["points"] = 10,
 		["filters"] = {
 			"Dynamic",
 			"Vehicle",

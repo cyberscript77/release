@@ -1552,6 +1552,7 @@ function scriptcheckTrigger(trigger)
 						1
 					)
 					
+					
 					-- local filters = {
 					
 					-- 'Static', -- Buildings, Concrete Roads, Crates, etc.
@@ -1577,7 +1578,7 @@ function scriptcheckTrigger(trigger)
 					
 					
 					for _, filter in ipairs(filters) do
-						local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
+						local success, physicsTraceResult = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
 						
 						if success then
 							collision = true
@@ -1592,6 +1593,93 @@ function scriptcheckTrigger(trigger)
 					
 				
 			end
+			
+			
+			if(trigger.name== "check_raycasting") then
+				
+					local collision = false
+				
+					local from = Vector4.new(
+						trigger.from_x,
+						trigger.from_y,
+						trigger.from_z,
+						1
+					)
+					
+					
+					local to = Vector4.new(
+						trigger.to_x,
+						trigger.to_y,
+						trigger.to_z,
+						1
+					)
+					
+					
+				
+					local filters = trigger.filters
+					local results = {}
+					
+					local points = {}
+					for i=1,action.points do
+                            points[i] = {}
+                            if(to.x > from.x) then
+							points[i].x = (math.abs(to.x - from.x) / action.points) * i + from.x;
+                            else
+                            
+                            points[i].x = 0-((math.abs(from.x - to.x) / action.points) * i - from.x);
+                            end
+    
+    
+                            if(to.y > from.y) then
+							points[i].y = (math.abs(to.y - from.y) / action.points) * i + from.y;
+                            else
+                            
+                            points[i].y = 0-((math.abs(from.y - to.y) / action.points) * i - from.y);
+                            end
+    
+                            
+                            if(to.z > from.z) then
+							points[i].z = (math.abs(to.z - from.z) / action.points) * i + from.z;
+                            else
+                            
+                            points[i].z = 0-((math.abs(from.z - to.z) / action.points) * i - from.z);
+                            end
+    
+    
+			end
+					
+					for i=1,#points do
+							local mypoint = Vector4.new(
+								points[i].x,
+								points[i].y,
+								points[i].z,
+								1
+							)
+							
+							
+							for _, filter in ipairs(filters) do
+								local success, physicsTraceResult = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, mypoint, filter, false, false)
+								
+								if success then
+									collision = true
+									
+									
+									
+								end
+							end
+					
+					
+					end
+					
+					
+				
+					
+					result = collision
+					
+					
+				
+			end
+			
 		end
 		
 		if relationregion then
@@ -2657,7 +2745,7 @@ end
 						position.x = position.x + (i*0.5)
 						
 					end
-					spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav)
+					spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav,action.despawntimer)
 					if(action.group ~= nil and action.group ~= "") then
 						
 						if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
@@ -5787,7 +5875,7 @@ end
 			local position = getPositionFromParameter(action)
 			if(action.position ~= "on_entity" and action.position ~= "on_group")then
 				if(position.x ~= nil)then
-					registerMappin(position.x,position.y,position.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
+					registerMappin(position.x,position.y,position.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc,action.color,action.icon)
 					else
 					error("can't make an mappin to this position")
 				end
@@ -5800,7 +5888,7 @@ end
 							enti = Game.FindEntityByID(obj.id)
 						end
 						if(enti ~= nil) then
-							registerMappintoEntity(enti,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
+							registerMappintoEntity(enti,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc,action.color,action.icon)
 							else
 							error("can't make an mappin to this entity")
 						end
@@ -5817,7 +5905,7 @@ end
 							local enti = Game.FindEntityByID(obj.id)
 							if(enti ~= nil) then
 								local mapTag = action.position_tag.."_"..i
-								registerMappintoEntity(enti,mapTag,action.typemap,action.wall,action.active,action.mapgroup,action.title,action.desc)
+								registerMappintoEntity(enti,mapTag,action.typemap,action.wall,action.active,action.mapgroup,action.title,action.desc,action.color,action.icon)
 								else
 								error("can't make an mappin to this entity")
 							end
@@ -5832,165 +5920,65 @@ end
 		
 		
 		
-		if(action.name == "new_map_point") then
-			registerMappin(action.x,action.y,action.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
-		end
-		if(action.name == "new_map_point_from_district") then
-			local currentpoi = nil
-			local poilist = {}
-			for i=1,#arrayPOI do
-				if(#arrayPOI[i].locations > 0) then
-					for y=1,#arrayPOI[i].locations do
-						local location = arrayPOI[i].locations[y]
-						if(location.district == action.district and (arrayPOI[i].isFor == nil or action.type == nil or(arrayPOI[i].isFor == action.type))) then
-							table.insert(poilist,location)
+		if(action.name == "edit_mappin") then
+			local position = getPositionFromParameter(action)
+			if(action.position ~= "on_entity" and action.position ~= "on_group")then
+				if(position.x ~= nil)then
+					editMappin(position.x,position.y,position.z,action.tag,action.typemap,action.active,action.mapgroup,nil,action.title,action.desc,action.color,action.icon)
+					else
+					error("can't make an mappin to this position")
+				end
+				else
+				if(action.position == "on_entity")then
+					if(action.position_tag ~= nil)then
+						local obj = getEntityFromManager(action.position_tag)
+						local enti = Game.GetPlayer()
+						if(action.position_tag ~= "player") then 
+							enti = Game.FindEntityByID(obj.id)
 						end
+						if(enti ~= nil) then
+							editMappin(enti,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc,action.color,action.icon)
+							setMappinTrackingByTag(tag,enti)
+							else
+							error("can't make an mappin to this entity")
+						end
+						else
+						error("can't make an mappin to this entity")
 					end
 				end
-			end
-			currentpoi = poilist[math.random(1,#poilist)]
-			registerMappin(currentpoi.x,currentpoi.y,currentpoi.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
-		end
-		if(action.name == "new_map_point_from_subdistrict") then
-			local currentpoi = nil
-			local poilist = {}
-			for i=1,#arrayPOI do
-				if(#arrayPOI[i].locations > 0) then
-					for y=1,#arrayPOI[i].locations do
-						local location = arrayPOI[i].locations[y]
-						if(location.subdistrict == action.subdistrict and (arrayPOI[i].isFor == nil or action.type == nil or(arrayPOI[i].isFor == action.type))) then
-							table.insert(poilist,location)
+				if(action.position == "on_group")then
+					local group =getGroupfromManager(action.position_tag)
+					if group ~= nil then
+						for i=1, #group.entities do 
+							local entityTag = group.entities[i]
+							local obj = getEntityFromManager(entityTag)
+							local enti = Game.FindEntityByID(obj.id)
+							if(enti ~= nil) then
+								local mapTag = action.position_tag.."_"..i
+							
+								editMappin(enti,action.mapTag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc,action.color,action.icon)
+								setMappinTrackingByTag(mapTag,enti)
+								else
+								error("can't make an mappin to this entity")
+							end
 						end
-					end
-				end
-			end
-			currentpoi = poilist[math.random(1,#poilist)]
-			registerMappin(currentpoi.x,currentpoi.y,currentpoi.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
-		end
-		if(action.name == "new_map_point_from_currentdistrict") then
-			local poilist = {}
-			local currentpoi = nil
-			for i=1,#arrayPOI do
-				if(#arrayPOI[i].locations > 0) then
-					for y=1,#arrayPOI[i].locations do
-						local location = arrayPOI[i].locations[y]
-						if(location.district == District2.customdistrict.EnumName and (arrayPOI[i].isFor == nil or action.type == nil or(arrayPOI[i].isFor == action.type))) then
-							table.insert(poilist,location)
-						end
-					end
-				end
-			end
-			currentpoi = poilist[math.random(1,#poilist)]
-			registerMappin(currentpoi.x,currentpoi.y,currentpoi.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
-		end
-		if(action.name == "new_map_point_from_currentsubdistrict") then
-			logme(3,currentDistricts2.districtLabels[2])
-			local currentpoi = nil
-			local poilist = {}
-			for i=1,#arrayPOI do
-				if(#arrayPOI[i].locations > 0) then
-					for y=1,#arrayPOI[i].locations do
-						local location = arrayPOI[i].locations[y]
-						if(location.subdistrict == currentDistricts2.districtLabels[2] and (arrayPOI[i].isFor == nil or action.type == nil or(arrayPOI[i].isFor == action.type))) then
-							table.insert(poilist,location)
-						end
-					end
-				end
-			end
-			currentpoi = poilist[math.random(1,#poilist)]
-			registerMappin(currentpoi.x,currentpoi.y,currentpoi.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
-		end
-		if(action.name == "new_map_point_from_random_district") then
-			local currentpoi = nil
-			local poilist = {}
-			local district = arrayDistricts[math.random(1,#arrayDistricts)]
-			for i=1,#arrayPOI do
-				if(#arrayPOI[i].locations > 0) then
-					for y=1,#arrayPOI[i].locations do
-						local location = arrayPOI[i].locations[y]
-						if(location.district == district.EnumName and (arrayPOI[i].isFor == nil or action.type == nil or(arrayPOI[i].isFor == action.type))) then
-							table.insert(poilist,location)
-						end
-					end
-				end
-			end
-			currentpoi = poilist[math.random(1,#poilist)]
-			if currentpoi ~= nil then
-				registerMappin(currentpoi.x,currentpoi.y,currentpoi.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
-			end
-		end
-		if(action.name == "new_map_point_from_random_subdistrict") then
-			local currentpoi = nil
-			local poilist = {}
-			local district = arrayDistricts[math.random(1,#arrayDistricts)]
-			local subdistrict = district.SubDistrict[math.random(1,#district.SubDistrict)]
-			for i=1,#arrayPOI do
-				if(#arrayPOI[i].locations > 0) then
-					for y=1,#arrayPOI[i].locations do
-						local location = arrayPOI[i].locations[y]
-						if(location.subdistrict == action.subdistrict and (arrayPOI[i].isFor == nil or action.type == nil or(arrayPOI[i].isFor == action.type))) then
-							table.insert(poilist,location)
-						end
-					end
-				end
-			end
-			currentpoi = poilist[math.random(1,#poilist)]
-			if currentpoi ~= nil then
-				registerMappin(currentpoi.x,currentpoi.y,currentpoi.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
-			end
-		end
-		if(action.name == "new_map_point_fast_travel") then
-			local markerref = nil
-			local position = nil
-			for i=1, #mappedFastTravelPoint do
-				local point = mappedFastTravelPoint[i]
-				if(point.markerref == action.destination) then
-					markerref = point.markerrefdata
-					position = registerMappin(point.position.x,point.position.y,point.position.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,point,action.title,action.desc)
-				end
-			end
-		end
-		if(action.name == "new_map_point_fast_travel_random") then
-			local markerref = nil
-			local position = nil
-			local index = math.random(1,#mappedFastTravelPoint)
-			local point = mappedFastTravelPoint[index]
-			logme(3,#mappedFastTravelPoint)
-			markerref = point.markerrefdata
-			markerref = point.markerrefdata
-			logme(3,dump(point))
-			position = registerMappin(point.position.x,point.position.y,point.position.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,point,action.title,action.desc)
-		end
-		if(action.name == "new_map_point_to_entity") then
-			local obj = getEntityFromManager(action.entity)
-			local enti = Game.GetPlayer()
-			if(action.entity ~= "player") then 
-				enti = Game.FindEntityByID(obj.id)
-			end
-			if(enti ~= nil) then
-				registerMappintoEntity(enti,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc)
-			end
-		end
-		if(action.name == "new_map_point_to_group") then
-			local group =getGroupfromManager(action.group)
-			if group ~= nil then
-				for i=1, #group.entities do 
-					local entityTag = group.entities[i]
-					local obj = getEntityFromManager(entityTag)
-					local enti = Game.FindEntityByID(obj.id)
-					if(enti ~= nil) then
-						local mapTag = action.group.."_"..i
-						registerMappintoEntity(enti,mapTag,action.typemap,action.wall,action.active,action.mapgroup,action.title,action.desc)
+						else
+						error("can't make an mappin to this group")
 					end
 				end
 			end
 		end
 		
 		
-		if(action.name == "delete_map_point") then
+		
+		
+		
+		
+		
+		if(action.name == "delete_map_point" or action.name == "delete_mappin") then
 			deleteMappinByTag(action.tag)
 		end
-		if(action.name == "delete_map_group") then
+		if(action.name == "delete_map_group" or action.name == "delete_mappin_group") then
 			local maplist = getMappinByGroup(action.mapgroup)
 			if(#maplist > 0) then
 				for i = 1,#maplist do 
@@ -5998,10 +5986,10 @@ end
 				end
 			end
 		end
-		if(action.name == "active_map_point") then
+		if(action.name == "active_map_point" or action.name == "active_mappin") then
 			activeMappinByTag(action.tag,action.active)
 		end
-		if(action.name == "active_map_group") then
+		if(action.name == "active_map_group" or action.name == "active_mappin_group") then
 			local maplist = getMappinByGroup(action.mapgroup)
 			if(#maplist > 0) then
 				for i = 1,#maplist do 
@@ -6010,33 +5998,12 @@ end
 			end
 		end
 		
-		if(action.name == "safe_execution") then
-			local status, result = pcall(executeAction(action.action,tag,parent,index,source,executortag))
-	
-	
-	
-			if status == false then
-				
-				if(action.output == true) then 
-				
-					logme(1,action.name)
-					logme(1,dump(action))
-					logme(1,tostring(result))
-				end
-				
-				logme(1,getLang("Action execution error") .. result.." Action : "..tostring(JSON:encode_pretty(action)))
-				
-				--Game.GetPlayer():SetWarningMessage("CyberScript Trigger error, check the log for more detail")
-				runActionList(action.failactions, tag, source,false,executortag)
-				
-			end
-	
-		end
 		
-		if(action.name == "set_map_point_position") then
+		
+		if(action.name == "set_map_point_position" or action.name == "set_mappin_position") then
 			setMappinPositionByTag(action.tag,action.x,action.y,action.z)
 		end
-		if(action.name == "set_map_group_position") then
+		if(action.name == "set_map_group_position" or action.name == "set_mappin_group_position") then
 			local maplist = getMappinByGroup(action.mapgroup)
 			if(#maplist > 0) then
 				for i = 1,#maplist do 
@@ -6044,10 +6011,10 @@ end
 				end
 			end
 		end
-		if(action.name == "set_map_point_type") then
+		if(action.name == "set_map_point_type" or action.name == "set_mappin_type") then
 			setMappinTypeByTag(action.tag,action.typemap)
 		end
-		if(action.name == "set_map_group_type") then
+		if(action.name == "set_map_group_type" or action.name == "set_mappin_group_type") then
 			local maplist = getMappinByGroup(action.mapgroup)
 			if(#maplist > 0) then
 				for i = 1,#maplist do 
@@ -6055,10 +6022,10 @@ end
 				end
 			end
 		end
-		if(action.name == "set_map_point_tracking_to") then
+		if(action.name == "set_map_point_tracking_to" or action.name == "set_mappin_tracking_to") then
 			setMappinTrackingByTag(action.tag,action.target)
 		end
-		if(action.name == "set_map_group_tracking_to") then
+		if(action.name == "set_map_group_tracking_to" or action.name == "set_mappin_group_tracking_to") then
 			local maplist = getMappinByGroup(action.mapgroup)
 			if(#maplist > 0) then
 				for i = 1,#maplist do 
@@ -6157,7 +6124,28 @@ end
 			end
 		end
 		
-		
+		if(action.name == "safe_execution") then
+			local status, result = pcall(executeAction(action.action,tag,parent,index,source,executortag))
+	
+	
+	
+			if status == false then
+				
+				if(action.output == true) then 
+				
+					logme(1,action.name)
+					logme(1,dump(action))
+					logme(1,tostring(result))
+				end
+				
+				logme(1,getLang("Action execution error") .. result.." Action : "..tostring(JSON:encode_pretty(action)))
+				
+				--Game.GetPlayer():SetWarningMessage("CyberScript Trigger error, check the log for more detail")
+				runActionList(action.failactions, tag, source,false,executortag)
+				
+			end
+	
+		end
 	end
 	
 	if relationregion then
@@ -7992,7 +7980,7 @@ end
 						position.x = position.x + (i*0.5)
 						
 					end
-					spawnNPC(chara,action.appearance, tag, position.x, position.y ,position.z,action.spawnlevel,action.use_police_prevention_system,false,action.scriptlevel,action.useEntpath)
+					spawnNPC(chara,action.appearance, tag, position.x, position.y ,position.z,action.spawnlevel,action.use_police_prevention_system,false,action.scriptlevel,action.useEntpath,nil,action.despawntimer)
 					if(action.group ~= nil and action.group ~= "") then
 						
 						if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
@@ -9870,7 +9858,7 @@ end
 							runActionList(event.action, action.value, tag,source,false,executortag)
 						end
 						else
-						error("can't do event : "..event.name)
+						logme(3,"can't do event : "..event.name)
 					end
 				end
 			end
@@ -9906,7 +9894,7 @@ end
 							runActionList(event.action, action.value, tag,source,false,executortag)
 						end
 						else
-						error("can't do event : "..event.name)
+						logme(3,"can't do event : "..event.name)
 					end
 				end
 				
@@ -9915,6 +9903,7 @@ end
 		end
 		if(action.name == "do_function") then
 			local boj = arrayFunction[action.value]
+			if( boj ~= nil) then
 			local event = boj.func
 			if( boj ~= nil) then
 				local exector = executortag
@@ -9936,7 +9925,7 @@ end
 					
 					
 				end
-				
+			end
 				
 			end
 			
@@ -12804,15 +12793,16 @@ function GeneratefromContext(context)
 	local text = context.text
 	
 	for k,v in pairs(context.values)do
-		
+	
 		if v.trigger == nil or checkTriggerRequirement(v.requirement,v.trigger)then
 		
 			if(v.action ~= nil and #v.action > 0) then
 				
 					runActionList(v.action, k, "see", false,"see",false)					
 			end
-		
+			
 			if(v.type ~= "object" and v.type ~= "list") then
+				
 				local value = GenerateTextFromContextValues(context, v)
 				text = text:gsub("##"..k, tostring(value)) 
 				
@@ -13132,7 +13122,7 @@ function GenerateTextFromContextValues(context, v)
 		if(obj.id ~= nil) then
 			local enti = Game.FindEntityByID(obj.id)	
 			if(enti ~= nil) then
-		--	--print("ok")
+	
 				if(v.key == "position") then
 					
 					local pos = enti:GetWorldPosition()
@@ -13174,6 +13164,32 @@ function GenerateTextFromContextValues(context, v)
 					end
 					
 					
+				
+				end
+					
+				if(v.key == "look_at") then
+				
+					local playerPos, playerAngle = targetS:GetCrosshairData(Game.GetPlayer())
+					local playerFootPos = Game.GetPlayer():GetWorldPosition()
+					playerPos.z = playerPos.z + 0.5
+					local playerDeltaWorldPos = Delta(playerPos, playerFootPos)
+					playerDeltaWorldPos.w = 1
+					local playerOldPos = playerPos
+					local playerDeltaPos = Delta(playerOldPos, playerPos)
+					local phi = math.atan2(playerAngle.y, playerAngle.x)
+					-- if (objPush == true) then
+						-- objectDist = objectDist + 0.5
+						-- objPush = false
+					-- end
+					-- if (objPull == true) then
+						-- objectDist = objectDist - 0.5
+						-- objPull = false
+					-- end
+					local poss = Vector4.new(((v.distance * math.cos(phi)) + playerPos.x), ((v.distance * math.sin(phi)) + playerPos.y), (v.distance * math.sin(playerAngle.z) + playerPos.z),1)
+					local obj = Vector4Add(playerDeltaWorldPos, poss)
+					
+					
+					value = obj[v.prop]
 				
 				end
 				

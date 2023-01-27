@@ -1264,7 +1264,7 @@ function makeNativeSettings()
 		
 		
 		
-		nativeSettings.addSwitch("/CM/script", getLang("Enable Logging"), getLang("Enable Logging"), debugLog, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+		nativeSettings.addSwitch("/CM/script", getLang("Enable Logging"), getLang("Enable Logging (can impact performance)"), debugLog, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			debugLog = state
 			updateUserSetting("debugLog", state)
 		end)
@@ -3409,23 +3409,23 @@ function cycleInteract()
 		--Game.GetPlayer():SetWarningMessage(getLang("current_interact_group")..currentInteractGroup[currentInteractGroupIndex])
 	end
 	
-	if GameController["interactionWidgetGameController"].currentOptions then
-		if GameController["interactionWidgetGameController"].id < 1 then
-			if currentDialogHub then
-				-- createInteraction(false)
-				createDialog(currentDialogHub.dial)
-				isdialogactivehub = true
-			end
-			else
-			--createInteraction(true)
-			isdialogactivehub = false
-			--logme(6,"tyu")
-		end
-		else
-		createInteraction(true)
-		isdialogactivehub = false
-		--logme(6,"tyuss")
-	end
+	-- if GameController["interactionWidgetGameController"].currentOptions then
+		-- if GameController["interactionWidgetGameController"].id < 1 then
+			-- if currentDialogHub then
+				-- -- createInteraction(false)
+				-- createDialog(currentDialogHub.dial)
+				-- isdialogactivehub = true
+			-- end
+			-- else
+			-- --createInteraction(true)
+			-- isdialogactivehub = false
+			-- --logme(6,"tyu")
+		-- end
+		-- else
+		-- createInteraction(true)
+		-- isdialogactivehub = false
+		-- --logme(6,"tyuss")
+	-- end
 	
 	
 end
@@ -4000,23 +4000,58 @@ end
 
 ---Native Dialog---
 function createDialog(dialog)
-	isdialogactivehub = true
-	candisplayInteract = false
-	createInteraction(false)
+	-- isdialogactivehub = true
+	-- candisplayInteract = false
+	--createInteraction(false)
 	
-	local dialogHub = createDialogHub(dialog,true)
+	
 	currentDialogHub = {}
 	currentDialogHub.hub= {}
 	currentDialogHub.dial = {}
 	currentDialogHub.index = 1
-	currentDialogHub.hub = dialogHub
+	
 	currentDialogHub.dial = dialog
 	
-	local blackboardDefs = Game.GetAllBlackboardDefs()
+	local choicelist = {}
 	
-	local interactionBB = Game.GetBlackboardSystem():Get(blackboardDefs.UIInteractions)
-	interactionBB:SetVariant(blackboardDefs.UIInteractions.DialogChoiceHubs, ToVariant(dialogHub), true)
-	isdialogactivehub = true
+	for i = 1, #dialog.options do
+		
+		local option = dialog.options[i]
+		
+		local icon = nil
+		if option.icon ~= nil then 
+			icon = TweakDBInterface.GetChoiceCaptionIconPartRecord("ChoiceCaptionParts."..option.icon)
+		end
+		
+		local choice1 = interactionUI.createChoice(option.Description, icon , gameinteractionsChoiceType.Selected) -- Icon and choiceType are optional
+		table.insert(choicelist,choice1)
+	end
+	
+	
+	
+    -- Setup, set and show hub
+    local hub = interactionUI.createHub(getDialogOwner(dialog.speaker.value), choicelist) -- Create hub and give it the list of choices
+    interactionUI.setupHub(hub) -- Set the hub
+    interactionUI.showHub() -- Show the previously set hub
+	currentDialogHub.hub = hub
+    -- Setup callbacks
+	
+	for i = 1, #dialog.options do
+		
+		
+	   interactionUI.callbacks[i] = function()
+				local option = dialog.options[i]
+				if(option.requirement == nil or checkTriggerRequirement(option.requirement,option.trigger))then
+					
+					ClickOnDialog(option,dialog.speaker.value,dialog.speaker.way)
+					interactionUI.hideHub()
+					
+				end
+		end
+		
+	end
+	
+  
 	
 	if(playerisstopped == false) then
 		StatusEffectHelper.ApplyStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")

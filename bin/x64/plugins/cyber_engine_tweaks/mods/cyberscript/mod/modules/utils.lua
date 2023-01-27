@@ -1061,12 +1061,12 @@ function draw3DCustomMappin(posx,posy,posz)
 	
 end
 
-function registerMappin(posx,posy,posz,tag,typemap,wall,active,mapgroup,extra,title,desc)
+function registerMappin(posx,posy,posz,tag,typemap,wall,active,mapgroup,extra,title,desc,color,icon,range)
 	if mappinManager[tag] == nil then
 		local mappinData = NewObject('gamemappinsMappinData')
 		mappinData.mappinType = TweakDBID.new('Mappins.DefaultStaticMappin')
 		mappinData.variant = Enum.new('gamedataMappinVariant', typemap)
-		
+		if range == nil then range = 0 end
 		mappinData.visibleThroughWalls = wall or true
 		
 		local posZ = posz or 200
@@ -1078,21 +1078,27 @@ function registerMappin(posx,posy,posz,tag,typemap,wall,active,mapgroup,extra,ti
 		local mapId = Game.GetMappinSystem():RegisterMappin(mappinData, position)
 		
 		
-		local activeMap = active or true
+		
 		
 		if title == nil then title = "Something happens here" end
 		if desc == nil then desc = "Something happens here" end 
 		
 		
-		Game.GetMappinSystem():SetMappinActive(mapId,activeMap)
+		Game.GetMappinSystem():SetMappinActive(mapId,active or true)
 		
 		local obj = {}
 		obj.id = mapId
 		obj.tag = tag
 		obj.position = position
-		obj.variant =  Enum.new('gamedataMappinVariant', typemap)
+		obj.variant =  typemap
+		obj.wall =  wall
+		obj.range = range
+		obj.active =  active or true
 		obj.title = getLang(title)
 		obj.desc = getLang(desc)
+		obj.style = {}
+		obj.style.color = color
+		obj.style.icon = icon
 		
 		if(mapgroup) then
 			obj.group = mapgroup
@@ -1109,7 +1115,56 @@ function registerMappin(posx,posy,posz,tag,typemap,wall,active,mapgroup,extra,ti
 	end
 end
 
-function registerMappintoEntity(target,tag,typemap,wall,active,mapgroup, title, desc)
+
+
+function editMappin(posx,posy,posz,tag,typemap,active,mapgroup,extra,title,desc,color,icon,range)
+	if mappinManager[tag] ~= nil then
+		local mappin = mappinManager[tag] 
+		Game.GetMappinSystem():ChangeMappinVariant(mappin.id,typemap)
+		
+		local position  = ToVector4{ x = posx, y = posy, z = posz , w = 1}
+		Game.GetMappinSystem():SetMappinPosition(mappin.id,position)
+		mappin.position = position
+		
+		Game.GetMappinSystem():SetMappinActive(mappin.id,active)
+		
+		if range == nil then range = 0 end
+		
+		
+		if title == nil then title = "Something happens here" end
+		if desc == nil then desc = "Something happens here" end 
+		
+		
+		
+		
+		mappin.tag = tag
+	
+		mappin.variant =  Enum.new('gamedataMappinVariant', typemap)
+		mappin.title = getLang(title)
+		mappin.desc = getLang(desc)
+		mappin.variant =  typemap
+		mappin.range = range
+		mappin.active =  active
+		mappin.style = {}
+		mappin.style.color = color
+		mappin.style.icon = icon
+		
+		if(mapgroup) then
+			mappin.group = mapgroup
+		end
+		if(extra) then
+			mappin.extra = extra
+		end
+		
+	
+		
+		
+		
+		
+	end
+end
+
+function registerMappintoEntity(target,tag,typemap,wall,active,mapgroup, title, desc,color,icon,range)
 	if mappinManager[tag] == nil then
 		
 		
@@ -1138,8 +1193,14 @@ function registerMappintoEntity(target,tag,typemap,wall,active,mapgroup, title, 
 			obj.tag = tag
 			obj.position = target:GetWorldPosition()
 			obj.title = title
+			obj.variant =  typemap
+			obj.range = range
+			obj.wall =  wall
+			obj.active =  activeMap
 			obj.desc = desc
-			
+			obj.style = {}
+			obj.style.color = color
+			obj.style.icon = icon
 			if(mapgroup) then
 				obj.group = mapgroup
 			end
@@ -1164,7 +1225,7 @@ end
 function activeMappinByTag(tag,active)
 	local mappin = getMappinByTag(tag)
 	if(mappin)then
-		Game.GetMappinSystem():UnregisterMappin(mappin.id)
+		Game.GetMappinSystem():SetMappinActive(mappin.id,active)
 	end
 end	
 
@@ -1596,7 +1657,7 @@ function setNewFixersPoint()
 		
 		if(mappinManager[arrayFixer[k].fixer.Tag] == nil) then
 			
-			registerMappin(arrayFixer[k].fixer.LOC_X,arrayFixer[k].fixer.LOC_Y,arrayFixer[k].fixer.LOC_Z,arrayFixer[k].fixer.Tag,'FixerVariant',true,false,"Fixer",nil,arrayFixer[k].fixer.Name,arrayFixer[k].fixer.Name)
+			registerMappin(arrayFixer[k].fixer.LOC_X,arrayFixer[k].fixer.LOC_Y,arrayFixer[k].fixer.LOC_Z,arrayFixer[k].fixer.Tag,'FixerVariant',true,false,"Fixer",nil,arrayFixer[k].fixer.Name,arrayFixer[k].fixer.Name,nil,nil,0)
 			
 		end
 		
