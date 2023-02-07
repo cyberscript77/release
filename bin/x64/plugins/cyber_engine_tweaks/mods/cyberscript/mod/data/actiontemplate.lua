@@ -17,6 +17,11 @@ return {
 		["helperTitle"] = "Group : Clean circuit",
 		["name"] = "clean_group_circuit",
 	},
+	["nothing"] = {
+		["helper"] = "Nothing",
+		["helperTitle"] = "Nothing",
+		["name"] = "nothing",
+	},
 	["change_hack_animation_percent"] = {
 		["value"] = 50,
 		["name"] = "change_hack_animation_percent",
@@ -33,6 +38,13 @@ return {
 		["helper"] = "This action will hide Hacking Progression bar",
 		["helperTitle"] = "UI : Hide Hacking Progression bar",
 		["name"] = "hide_hack_animation",
+	},
+	["change_radio_index"] = {
+		["helper"] = "This action will change current played radio for compatible entity \n Radio Vexelstrom 0, \n Night FM 1, \n The Dirge 2, \n Radio Pebkac 3,\n Pacific Dreams 4, \n Morro Rock Radio 5, \n Body Heat Radio 6, \n 30 Principales 7, \n Ritual FM 8",
+		["helperTitle"] = "Device : Change current played radio for compatible entity",
+		["tag"] = "grouptag",
+		["value"] = 1,
+		["name"] = "change_radio_index",
 	},
 	["vehicle_add_to_traffic"] = {
 		["helper"] = "This action will change vehicle as traffic",
@@ -1054,6 +1066,7 @@ return {
 	["update_faction_relation_attitude"] = {
 		["helper"] = "This action will set relation between a faction and an AttitudeGroup",
 		["helperTitle"] = "Gameplay : Update Attitude Relation for every Factions from Affinity board",
+		["apply_player"] = true,
 		["name"] = "update_faction_relation_attitude",
 	},
 	["move_entity_at_position"] = {
@@ -1121,8 +1134,7 @@ return {
 			["score"] = "myscore",
 			["key"] = "mykey",
 		},
-		["helper"] = "This action will check the targeted data. Can be number, boolean or text \
- Available Operator : + - * / positive negative random. store section is optionnal, remove it if no use",
+		["helper"] = "This action will check the targeted data. Can be number, boolean or text \n Operator can be + | -| * | / | positive | negative | random (who take min and max value) | ceil | floor \n store section is optionnal, remove it if no use",
 		["helperTitle"] = "Score : Do Math",
 		["modifier"] = 5,
 		["value"] = 5,
@@ -1160,6 +1172,20 @@ return {
 		["group"] = "mygroup",
 		["tag"] = "blue01",
 		["name"] = "register_entity_you_look_at",
+	},
+	["register_entities_around_you"] = {
+		["helper"] = "This action will register founded entity in the player's determined range and filter. \
+ The filter will check in the name, display name and appearance of the entity or hash \
+ leave filter at [] for take all. ",
+		["helperTitle"] = "Entity : Register entities around you",
+		["range"] = 5,
+		["filter"] = {
+			"mox",
+			"npc",
+		},
+		["group"] = "",
+		
+		["name"] = "register_entities_around_you",
 	},
 	["setup_gang_rival_affinity"] = {
 		["helper"] = "This action will  Setup Gang affinity toward their default Rival.",
@@ -1430,6 +1456,7 @@ return {
 		["relation"] = "hostile",
 		["target"] = "faction_scavengers",
 		["tag"] = "faction_maelstrom",
+		["apply_player"] = true,
 		["name"] = "set_relation_from_faction_to_faction",
 	},
 	["vehicle_go_to_fasttravel_point"] = {
@@ -1876,7 +1903,7 @@ return {
 		["name"] = "clean_subtitle",
 	},
 	["operate_score"] = {
-		["helper"] = "This action will operate a value for a key of a score. Operator can be + | -| * | / | positive | negative | random (who take min and max value) ",
+		["helper"] = "This action will operate a value for a key of a score. Can be number, boolean or text \n Operator can be + | -| * | / | positive | negative | random (who take min and max value) | ceil | floor",
 		["score"] = "MyScore",
 		["operator"] = "+",
 		["name"] = "operate_score",
@@ -2216,7 +2243,7 @@ return {
 		["helperTitle"] = "Score : Operate Score from another Score",
 		["targetkey"] = "MyKey2",
 		["targetscore"] = "MyScore2",
-		["helper"] = "This action will operate a value from a score/key combo to a key of a score. Operator can be + | -| * | / ",
+		["helper"] = "This action will operate a value from a score/key combo to a key of a score. Can be number, boolean or text \n Operator can be + | -| * | / | positive | negative | random (who take min and max value) | ceil | floor",
 		["operator"] = "+",
 		["name"] = "operate_score_from_another_score",
 		["key"] = "MyKey",
@@ -3330,5 +3357,37 @@ return {
 		["tag"] = "myentitytag",
 		["name"] = "clear_interface_to_inkwidget_entity",
 		["helperTitle"] = "UI : Clear Interface to InkWidget Entity",
-	}
+	},
+	["change_tv_index"] = {
+		["helper"] = "This action will change current played channel for compatible TV entity \n 0 54news \n 1 54 \n 2 wns news \n  3 wns \n  4 just adds",
+		["helperTitle"] = "Device : Change current played channel for compatible TV entity",
+		["tag"] = "grouptag",
+		["value"] = 1,
+		["name"] = "change_tv_index",
+	},
+	["device_turn_off"] = {
+		["helper"] = "This action will turn off compatible device",
+		["helperTitle"] = "Device : Turn off compatible entity",
+		["tag"] = "grouptag",
+		["name"] = "device_turn_off",
+	},
+	["device_turn_on"] = {
+		["helper"] = "This action will turn on compatible device",
+		["helperTitle"] = "Device : Turn on compatible entity",
+		["tag"] = "grouptag",
+		["name"] = "device_turn_on",
+	},
+	["device_glitch_on"] = {
+		["helper"] = "This action will glitch on compatible device \n 0 : Partial, 1 : Normal, 2 : Subliminal",
+		["helperTitle"] = "Device : Glitch on compatible entity ",
+		["tag"] = "grouptag",
+		["value"] = 1,
+		["name"] = "device_glitch_on",
+	},
+	["device_glitch_off"] = {
+		["helper"] = "This action will glitch off compatible device",
+		["helperTitle"] = "Device : Glitch off compatible entity",
+		["tag"] = "grouptag",
+		["name"] = "device_glitch_off",
+	},
 }

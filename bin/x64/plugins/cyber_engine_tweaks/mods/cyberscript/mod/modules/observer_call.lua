@@ -6,6 +6,9 @@ function SetObserver()
 	QuestJournalUI.Initialize()
 	
 	QuestTrackerUI.Initialize()
+	
+	
+	
 	ObserveAfter("ComputerMainLayoutWidgetController", "OnScreenSaverSpawned", function(this,widget,userData)
 		
 		 ComputerMainLayoutWidgetController_OnScreenSaverSpawned(this,widget,userData)

@@ -31,14 +31,14 @@ cyberscript.module = cyberscript.module +1
 
 function loadCustomPlace()
 	
-	for k,v  in pairs(arrayHouse) do
+	for k,v  in pairs(cyberscript.cache["place"]) do
 		
-		checkContext(v.house)
+		checkContext(v.data)
 		
-		if(curPos ~= nil and currentHouse == nil and check3DPos(curPos,v.house.posX,v.house.posY, v.house.posZ,v.house.range, v.house.Zrange))then
+		if(curPos ~= nil and currentHouse == nil and check3DPos(curPos,v.data.x,v.data.y, v.data.z,v.data.range, v.data.range_z))then
 			
-			if(checkTriggerRequirement(v.house.requirement,v.house.trigger)) then
-				currentHouse = v.house
+			if(checkTriggerRequirement(v.data.requirement,v.data.trigger)) then
+				currentHouse = v.data
 				
 				
 				
@@ -63,7 +63,7 @@ function loadCustomPlace()
 	
 	if(currentHouse ~= nil) then
 		
-		if(checkTriggerRequirement(currentHouse.requirement,currentHouse.trigger) and check3DPos(curPos,currentHouse.posX,currentHouse.posY, currentHouse.posZ,currentHouse.range, currentHouse.Zrange) ) then
+		if(checkTriggerRequirement(currentHouse.requirement,currentHouse.trigger) and check3DPos(curPos,currentHouse.x,currentHouse.y, currentHouse.z,currentHouse.range, currentHouse.range_z) ) then
 			
 			if ItemOfHouseSpawned == false  then
 			
@@ -92,7 +92,7 @@ function loadCustomPlace()
 				
 					checkContext(currentHouse.rooms[y])
 				
-					if(check3DPos(curPos,currentHouse.rooms[y].posX,currentHouse.rooms[y].posY,currentHouse.rooms[y].posZ,currentHouse.rooms[y].range,currentHouse.rooms[y].Zrange) )then
+					if(check3DPos(curPos,currentHouse.rooms[y].x,currentHouse.rooms[y].y,currentHouse.rooms[y].z,currentHouse.rooms[y].range,currentHouse.rooms[y].range_z) )then
 						if(checkTriggerRequirement(currentHouse.rooms[y].requirement,currentHouse.rooms[y].trigger)) then
 							currentRoom = currentHouse.rooms[y]
 							if(currentRoom.action ~= nil and #currentRoom.action >0) then
@@ -140,38 +140,38 @@ end
 
 function setCustomLocationPoint() 
 	
-	if(arrayHouse ~= nil) then
-	for _,h in pairs(arrayHouse) do
+	if(cyberscript.cache["place"] ~= nil) then
+	for _,h in pairs(cyberscript.cache["place"]) do
 		
 		
 		
 	
 		variantType = "FixerVariant"
 		
-		if h.house.type == 0 then --house
+		if h.data.type == 0 then --house
 			variantType = "ApartmentVariant"
-			elseif h.house.type == 1 then--bar
+			elseif h.data.type == 1 then--bar
 			variantType = "ServicePointBarVariant"
-			elseif h.house.type == 2 then--nightclub
+			elseif h.data.type == 2 then--nightclub
 			variantType = "ServicePointBarVariant"
-			elseif h.house.type == 3 then--restaurant
+			elseif h.data.type == 3 then--restaurant
 			variantType = "ServicePointFoodVariant"
-			elseif h.house.type == 4 then--shopping
+			elseif h.data.type == 4 then--shopping
 			variantType = "ServicePointJunkVariant"
 		end
 		
-		local score = getScoreKey(h.house.tag,"Score")
+		local score = getScoreKey(h.data.tag,"Score")
 		
 		
 		
-			if(h.house.type == 0 and (score == 0 or score == nil)) then
+			if(h.data.type == 0 and (score == 0 or score == nil)) then
 				variantType = "Zzz05_ApartmentToPurchaseVariant "
 			
 			end
 			
-			if(mappinManager[h.house.tag] == nil) then
+			if(mappinManager[h.data.tag] == nil) then
 		
-			registerMappin( h.house.posX, h.house.posY, h.house.posZ, h.house.tag ,variantType,true,false,nil,nil,nil,nil)
+			registerMappin( h.data.x, h.data.y, h.data.z, h.data.tag ,variantType,true,false,nil,nil,nil,nil)
 			end
 		
 		
@@ -179,15 +179,15 @@ function setCustomLocationPoint()
 	end
 	
 	
-	if(arrayNode ~= nil) then
-	for k,v in pairs(arrayNode)  do
+	if(cyberscript.cache["node"] ~= nil) then
+	for k,v in pairs(cyberscript.cache["node"])  do
 	
-	local node = v.node
+	local node = v.data
 		if(node.sort == "metro") then
 		
 			if(mappinManager[node.tag] == nil) then
 		
-				registerMappin(node.GameplayX, node.GameplayY, node.GameplayZ, node.tag ,"Zzz01_CarForPurchaseVariant",true,false,nil,nil,nil,nil)
+				registerMappin(node.gameplay_x, node.gameplay_y, node.gameplay_z, node.tag ,"Zzz01_CarForPurchaseVariant",true,false,nil,nil,nil,nil)
 			end
 			
 			

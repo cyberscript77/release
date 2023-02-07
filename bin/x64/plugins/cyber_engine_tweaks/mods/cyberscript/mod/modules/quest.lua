@@ -307,7 +307,7 @@ function TriggerQuest(unlockTagQuest)
 		if isAlreadyDo == false then
 			
 			
-			local quest = arrayQuest2[unlockTagQuest].quest
+			local quest = cyberscript.cache["mission"][unlockTagQuest].data
 			
 			startQuest(quest)
 			

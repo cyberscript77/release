@@ -131,7 +131,7 @@ local function addEventHandler(proxy, target, event, callback)
 
 		local observer = function(self, ...)
 			local hash = Ref.Hash(self)
-
+		
 			if handlers[hash] then
 				handlers[hash].callback(handlers[hash].target, select(1, ...))
 			end

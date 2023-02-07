@@ -18,9 +18,9 @@ end
 function spawnItemFromHouseTag(houseTag)
 	local itemsof = {}
 	
-	-- for each housing in arrayhousing, we check that items is already registred in user arrayhousing (means the user move it or edit it)
+	-- for each housing in cyberscript.cache["housing"], we check that items is already registred in user cyberscript.cache["housing"] (means the user move it or edit it)
 	-- if exist, we replace the item by user value and save it in itemsof
-	-- if not we spawn it as arrayhousing do
+	-- if not we spawn it as cyberscript.cache["housing"] do
 	-- then for each item in user save, if it not in items of (means not already spawn) we hceck the housetag then try to spawn it
 	
 	
@@ -29,17 +29,17 @@ function spawnItemFromHouseTag(houseTag)
 	
 	
 	
-	for k,v in pairs(arrayHousing) do
+	for k,v in pairs(cyberscript.cache["housing"]) do
 		
 		checkContext(v)
 		
-		if(v.housing.target == houseTag) then
+		if(v.data.target == houseTag) then
 		
 			
 			
-			if(checkTriggerRequirement(v.housing.requirement,v.housing.trigger))then
-				arrayHousing[k].togglehousing = true
-				for i,items in ipairs(v.housing.items) do
+			if(checkTriggerRequirement(v.data.requirement,v.data.trigger))then
+				cyberscript.cache["housing"][k].togglehousing = true
+				for i,items in ipairs(v.data.items) do
 					checkContext(items)
 					
 					local fromuser = getItemFromUserHousing(items.Tag,items.X,items.Y,items.Z,items.HouseTag,items.ItemPath)
@@ -170,9 +170,9 @@ function spawnItemFromHousingTag(houseTag, housingTag)
 	local itemsof = {}
 	
 	
-	local objhousing = arrayHousing[housingTag]
+	local objhousing = cyberscript.cache["housing"][housingTag]
 	if(objhousing ~= nil) then 
-	local housing = objhousing.housing
+	local housing = objhousing.data
 	checkContext(housing)
 		
 		if(housing.target == houseTag) then
@@ -594,7 +594,7 @@ function despawnItem(entityId)
 end
 function despawnItemFromHouse()
 	
-	for k,v in pairs(arrayHousing) do
+	for k,v in pairs(cyberscript.cache["housing"]) do
 		
 		checkContext(v)
 		
@@ -602,8 +602,8 @@ function despawnItemFromHouse()
 		
 			
 			
-			if(checkTriggerRequirement(v.housing.requirement,v.housing.trigger) == false)then
-				arrayHousing[k].togglehousing = false
+			if(checkTriggerRequirement(v.data.requirement,v.data.trigger) == false)then
+				cyberscript.cache["housing"][k].togglehousing = false
 				
 			end
 		
@@ -669,8 +669,8 @@ end
 
 function currentHouseApplyTemplate(tag,x,y,z)
 
-if(currentHouse ~=nil and arrayHousingTemplate[tag] ~= nil) then
-				local template = arrayHousingTemplate[tag].template
+if(currentHouse ~=nil and cyberscript.cache["housing_template"][tag] ~= nil) then
+				local template = cyberscript.cache["housing_template"][tag].data
 				
 				if(#template.items > 0) then
 					

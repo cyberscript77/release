@@ -77,14 +77,14 @@ function setAttitudeByGangScore()
 			--logme(2,npcCurrentName)
 			
 			
-			for k,v in pairs(arrayFaction) do
+			for k,v in pairs(cyberscript.cache["faction"]) do
 				
-				for y=1,#arrayFaction[k].faction.AttitudeGroup do
+				for y=1,#cyberscript.cache["faction"][k].data.attitude_group do
 					
-					if(string.find(group,arrayFaction[k].faction.AttitudeGroup[y]) ~= nil or string.find(npcCurrentName,arrayFaction[k].faction.AttitudeGroup[y]) ~= nil)then
+					if(string.find(group,cyberscript.cache["faction"][k].data.attitude_group[y]) ~= nil or string.find(npcCurrentName,cyberscript.cache["faction"][k].data.attitude_group[y]) ~= nil)then
 						if(string.find(npcCurrentName,"beyond_bouncer") == nil)then
 							
-							local score = getScorebyTag(arrayFaction[k].faction.Tag)
+							local score = getScorebyTag(cyberscript.cache["faction"][k].data.tag)
 	
 	
 									setAttituteByScore(targetAttAgent,score,objLook)
@@ -131,18 +131,18 @@ function checkAttitudeByGangScore(enti)
 			
 			--logme(10,tostring(group))
 			
-			for k,v in pairs(arrayFaction) do
+			for k,v in pairs(cyberscript.cache["faction"]) do
 				
-				for y=1,#arrayFaction[k].faction.AttitudeGroup do
+				for y=1,#cyberscript.cache["faction"][k].data.attitude_group do
 					
-					if(string.find(group,arrayFaction[k].faction.AttitudeGroup[y]) ~= nil or string.find(npcCurrentName,arrayFaction[k].faction.AttitudeGroup[y]) ~= nil)then
+					if(string.find(group,cyberscript.cache["faction"][k].data.attitude_group[y]) ~= nil or string.find(npcCurrentName,cyberscript.cache["faction"][k].data.attitude_group[y]) ~= nil)then
 						if(string.find(npcCurrentName,"beyond_bouncer") == nil)then
 							
-						local score = getScorebyTag(arrayFaction[k].faction.Tag)
+						local score = getScorebyTag(cyberscript.cache["faction"][k].data.tag)
 							
 							isAlly = checkAlliesByScore(score)
 							isAllyscore = checkAlliesScoreByScore(score)
-							lookedgang = arrayFaction[k].faction
+							lookedgang = cyberscript.cache["faction"][k].data
 							
 							
 						end
@@ -181,18 +181,18 @@ function getGangForEntity(enti)
 			
 			--logme(10,tostring(group))
 			
-			for k,v in pairs(arrayFaction) do
+			for k,v in pairs(cyberscript.cache["faction"]) do
 				
-				for y=1,#arrayFaction[k].faction.AttitudeGroup do
+				for y=1,#cyberscript.cache["faction"][k].data.attitude_group do
 					
-					if(string.find(group,arrayFaction[k].faction.AttitudeGroup[y]) ~= nil or string.find(npcCurrentName,arrayFaction[k].faction.AttitudeGroup[y]) ~= nil)then
+					if(string.find(group,cyberscript.cache["faction"][k].data.attitude_group[y]) ~= nil or string.find(npcCurrentName,cyberscript.cache["faction"][k].data.attitude_group[y]) ~= nil)then
 						if(string.find(npcCurrentName,"beyond_bouncer") == nil)then
 							
-						local score = getScorebyTag(arrayFaction[k].faction.Tag)
+						local score = getScorebyTag(cyberscript.cache["faction"][k].data.tag)
 							
 							
 							
-							lookedgang = arrayFaction[k].faction.Tag
+							lookedgang = cyberscript.cache["faction"][k].data.tag
 							
 							
 						end
@@ -621,10 +621,8 @@ function GangAffinityCalculator()
 				for y=1,#affinity.factionscore  do
 					local factionScore = affinity.factionscore[y]
 					
-					addFactionScoreByTagScore(factionScore.faction,factionScore.value)
-					--logme(10,"added score "..tostring(factionScore.value).." to faction "..factionScore.faction)
-					
-					
+					addFactionScoreByTagScore(factionScore.data,factionScore.value)
+				
 				end
 				
 				

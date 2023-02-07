@@ -2,9 +2,35 @@ logme(1,"CyberScript: observer function module loaded")
 cyberscript.module = cyberscript.module +1
 ----print("hot reload test")
 ---Observer and Overrider---
+
+
+--SetObserver()
+
+
+
+---part1
+	function ComputerMainLayoutWidgetController_OnScreenSaverSpawned(thos,widget,userData)
+		if(observerthread  == true or moddisabled == true)    then return end
+		local obj = widget:GetWidgetByIndex(2):GetWidgetByIndex(3):GetWidgetByIndex(1)
+		if(NetServiceOn == true and currentHouse ~= nil) then
+		
+			obj:SetText(myTag)
+			obj:SetFontSize(45)
+			--obj:SetMargin(inkMargin.new({top=0,left=10}))
+		end
+
+	end
+	function ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
+	if(observerthread  == true or moddisabled == true)    then return end
+	 -- logme(1,GameDump(this.mailsMenu))
+	 -- ----print("mark1")
+	 -- this.mailsMenu:SetVisible(false)
+	
+	end
 	function BaseMappinBaseController_UpdateRootState(this)
+		if(observerthread  == true or moddisabled == true)    then return end
 		local wordpos = this:GetMappin():GetWorldPosition()
-		for _,v in pairs(mappinManager) do 
+		for k,v in pairs(mappinManager) do 
 					local mappin = v
 					if(mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
 						
@@ -17,7 +43,8 @@ cyberscript.module = cyberscript.module +1
 						
 						end
 						v.widget = this.iconWidget
-						
+						v.mappinEntity = this:GetMappin()
+						v.distanceToPlayer = getDistance(Game.GetPlayer():GetWorldPosition(), v.position)
 
 						if(mappin.style ~= nil) then
 						
@@ -39,58 +66,6 @@ cyberscript.module = cyberscript.module +1
 						break
 					end
 		end
-	end
-	
-	function DeviceMappinsContainer_EvaluatePositions(this)
-	
-	----print("DeviceMappinsContainer_EvaluatePositions")
-	
-	end
-	
-	function SmartWindowInkGameController_InitializeMainLayout(this)
-	
-	Cron.After(1, function()
-	
-
-		for k,v in pairs(cyberscript.EntityManager) do
-			
-			if(v.id ~= nil) then
-				
-				if(v.id.hash== this:GetOwner():GetEntityID().hash) then
-					
-					v.widget = this.rootWidget
-					v.widget :RemoveAllChildren()
-					
-					if v.interface ~= nil then
-						
-						makeCustomInterface(v.widget,arrayInterfaces[v.interface].ui)
-					
-					end
-					
-					break
-				end
-			end
-		
-		end
-	end)
-	end
-	
-	function MappinBaseController_SetRootVisible(this,mappin, mappinVariant, customData)
-		
-		
-		local mappinType = mappin:GetVariant()
-		local wordpos = mappin:GetWorldPosition()
-	
-		for _,v in pairs(mappinManager) do 
-					local mappin = v
-					if(math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
-						v.mappinobj = mappin
-						break
-					end
-		end
-		
-		return result
-	
 	end
 	function PerksMainGameController_SetupLayout(this,screenType)
 		-- this.attributeSelectorsContainer.widget:GetWidgetByIndex(0):GetWidgetByIndex(0):SetVisible(false)
@@ -125,12 +100,6 @@ cyberscript.module = cyberscript.module +1
 		-- inkWidgetRef.SetVisible(this.johnnyConnectorRef, true)
 	
 	end
-	function PerkDisplayController_Setup(this,displayData, dataManager , startingIndex)
-	
-	------print(GameDump(displayData))
-	
-	end
-	
 	function PerkScreenController_Setup(this,displayData, dataManager , startingIndex,wrappedMethod)
 	
 	local proficiencies = displayData.proficiencies
@@ -209,21 +178,17 @@ cyberscript.module = cyberscript.module +1
     -- this:RebuildPerks(startingIndex)
     -- this:PlayLibraryAnimation("start_perk_screen")
 	end
+	function PerkDisplayController_Setup(this,displayData, dataManager , startingIndex)
 	
-	function ComputerMainLayoutWidgetController_OnScreenSaverSpawned(thos,widget,userData)
-		if(moddisabled == true) then return end
-		local obj = widget:GetWidgetByIndex(2):GetWidgetByIndex(3):GetWidgetByIndex(1)
-		if(NetServiceOn == true and currentHouse ~= nil) then
-		
-			obj:SetText(myTag)
-			obj:SetFontSize(45)
-			--obj:SetMargin(inkMargin.new({top=0,left=10}))
-		end
-
+	------print(GameDump(displayData))
+	
 	end
-	 
+	function ComputerInkGameController_ShowMails(this)
+	if(observerthread  == true or moddisabled == true)    then return end
+	-- ----print("mark3")
+	end
 	function ComputerMenuWidgetController_InitializeFiles(this,gameController,widgetsData)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 		-- for i,v in ipairs(widgetsData) do
 		
 		-- logme(1,GameDump(v))
@@ -231,27 +196,15 @@ cyberscript.module = cyberscript.module +1
 		-- end
 	
 	end
-	function ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
-	if(moddisabled == true) then return end
-	 -- logme(1,GameDump(this.mailsMenu))
-	 -- ----print("mark1")
-	 -- this.mailsMenu:SetVisible(false)
-	
-	end
-	function ComputerInkGameController_ShowMails(this)
-	if(moddisabled == true) then return end
-	-- ----print("mark3")
-	end
-	
 	function ComputerDocumentWidgetController_Initialize(this,gameController,widgetsData)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		-- ----print("mark4")
 		
 		-- this.titleWidget:SetText("Donk is bonl")
 		
 	end
 	function ComputerMenuWidgetController_InitializeFilesThumbnails(this,gameController,widgetsData)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 	-- this.thumbnailsListWidget:SetVisible(true)
 		-- local mymail = SDocumentThumbnailWidgetPackage.new()
 		-- mymail.displayName = "Donk no bonk"
@@ -295,39 +248,34 @@ cyberscript.module = cyberscript.module +1
 	
 	
 	end
-	
 	function FullscreenVendorGameController_PopulateVendorInventory(thos)
 	-- ----print("selll02")
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	end
-	
 	
 	function HUDProgressBarController_OnInitialize(thos)
-	GameController["HUDProgressBarController"] = thos
-	if(moddisabled == true) then return end
+
+	if(observerthread == true or moddisabled  == true)     then return end
+		GameController["HUDProgressBarController"] = thos
 	end
-	
-	
-	
-	
 	
 	function AnimationControllerComponent_ApplyFeature(thos,obj,inputName,value,delay)
 	----print("ApplyFeature "..NameToString(inputName))
 	----print("ApplyFeature "..GameDump(value))
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	end
-	
 	
 	function BackdoorInkGameController_OnInitialize(thos)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	GameController["BackdoorInkGameController"] = thos
 	
-	thos:GetRootWidget():SetVisible(true)
+	--thos:GetRootWidget():SetVisible(true) E3 smart windows issue
 	
 	end
 	
+	
 	function hudCorpoController_OnInitialize(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	
 	GameController["hudCorpoController"] = thos
 	hudCorpoControllerReady = true
@@ -336,13 +284,10 @@ cyberscript.module = cyberscript.module +1
 	
 	end
 	
-	
-	
-	
-	
+		
 	
 	function PanzerHUDGameController_OnInitialize(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	GameController["PanzerHUDGameController"] = thos
 	PanzerHUDGameControllerReady = true
 	logme(1,"PanzerHUDGameController")
@@ -352,14 +297,14 @@ cyberscript.module = cyberscript.module +1
 	
 	
 	function PanzerHUDGameController_OnUninitialize(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	logme(1,"PanzerHUDGameControllerOnUninitialize")
 	
 	
 	end
 	
 	function PanzerHUDGameController_OnVehicleStateChanged(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	logme(1,"PanzerHUDGameControllerOnVehicleStateChanged")
 	
 	
@@ -367,37 +312,37 @@ cyberscript.module = cyberscript.module +1
 
 
 	function PanzerHUDGameController_OnPlayerVehicleStateChange(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	logme(1,"PanzerHUDGameControllerOnPlayerVehicleStateChange")
 	
 	end
 	
 	function PanzerHUDGameController_EvaluateUIState(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	logme(1,"PanzerHUDGameControllerEvaluateUIState")
 	
 	end
 	
 	function PanzerHUDGameController_OnForwardVehicleQuestEnableUIEvent(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	logme(1,"PanzerHUDGameControllerOnForwardVehicleQuestEnableUIEvent")
 	
 	end
 	
 	function PanzerHUDGameController_OnPlayerAttach(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	logme(1,"PanzerHUDGameControllerOnPlayerAttach")
 	
 	end
 	
 	function PanzerHUDGameController_OnPlayerDetach(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	logme(1,"PanzerHUDGameControllerOnPlayerDetach")
 	
 	end
 	
 	function vehicleUIGameController_OnVehiclePanzerBootupUIQuestEvent(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)     then return end
 	logme(1,"vehicleUIGameControllerOnVehiclePanzerBootupUIQuestEvent")
 	
 	end
@@ -405,34 +350,34 @@ cyberscript.module = cyberscript.module +1
 	
 	
 	function ChatBoxGameController_OnInitialize(thos)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	GameController["ChatBoxGameController"]  = thos
 	inkWidgetRef.SetVisible(thos.chatBox, true)
 	----print("YYYYYYYYYYYYYYYESSS")
 	end
 	function HudPhoneAvatarController_OnInitialize(thos)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	GameController["HudPhoneAvatarController"]  = thos
 	end
 	function HudPhoneGameController_OnInitialize(thos)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	GameController["HudPhoneGameController"]  = thos
 	end
 	
 	function FlightController_Activate(thos)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	JackFlight = true
 	
 	end
 	
 	function FlightController_Deactivate(thos)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	JackFlight = false
 	
 	end
 	
 	function PlayerPuppet_ReactToHitProcess(thos,hitEvent)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 	
 	 --targetGodMode = GetImmortality(hitEvent.target)
 	 if  hitEvent.target:IsPlayer() == true then
@@ -449,14 +394,15 @@ cyberscript.module = cyberscript.module +1
 	end
 	
 	
+	
 	function PlayerPuppet_SetEntityNoticedPlayerBBValue(thos,b)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 		playerNoticed = b
 		--logme(10,"playerNoticed "..tostring(b))
 	end
 	
 	function PlayerPuppet_OnBeingTarget(thos,evt)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		if(evt.noLongerTarget == true) then
 			
@@ -503,14 +449,14 @@ cyberscript.module = cyberscript.module +1
 	
 	
 	function MinimapContainerController_OnInitialize(thos)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 		GameController["MinimapContainerController"]  = thos
 		
 		
 	end
 	
 	function healthbarWidgetGameController_OnInitialize(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["healthbarWidgetGameController"]  = thos
 		
 		
@@ -518,22 +464,23 @@ cyberscript.module = cyberscript.module +1
 	
 	
 	
+	
 	function StaminabarWidgetGameController_OnInitialize(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["StaminabarWidgetGameController"]  = thos
 		
 		
 	end
 	
 	function HotkeysWidgetController_OnInitialize(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["HotkeysWidgetController"]  = thos
 		
 		
 	end
 	
 	function NPCPuppet_CompileScannerChunks(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		local vehicleSummonDef = Game.GetAllBlackboardDefs().UI_ScannerModules
 		local scannerBlackboard = Game.GetBlackboardSystem():Get(vehicleSummonDef)
 		
@@ -654,7 +601,7 @@ cyberscript.module = cyberscript.module +1
 				currentScannerItem.secondaryname = Game.NameToString(thos:GetCurrentAppearanceName())
 				currentScannerItem.primaryname = LocKeyToString(thos:GetDisplayName())
 				currentScannerItem.attitude = tonumber(thos:GetAttitudeTowards(Game.GetPlayer()))
-				currentScannerItem.faction = tostring(NameToString(characterRecord:Affiliation():EnumName()))
+				currentScannerItem.data = tostring(NameToString(characterRecord:Affiliation():EnumName()))
 				currentScannerItem.rarity = tonumber(thos:GetPuppetRarity():Type())
 				currentScannerItem.text = ""
 				currentScannerItem.bounty = {}
@@ -752,7 +699,7 @@ cyberscript.module = cyberscript.module +1
 	end
 
 	function VehiclesManagerListItemController_OnDataChanged(thos,value)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		if(tostring(thos.vehicleData.displayName) == "None")then
 			inkTextRef.SetText(thos.label, tostring(NameToString(thos.vehicleData.data.name)));
@@ -761,7 +708,7 @@ cyberscript.module = cyberscript.module +1
 	end
 	
 	function VehiclesManagerListItemController_OnSelected(thos,itemController,discreteNav)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		if(tostring(thos.vehicleData.displayName) == "None")then
 			inkTextRef.SetText(thos.label, tostring(NameToString(thos.vehicleData.data.name)));
@@ -770,39 +717,39 @@ cyberscript.module = cyberscript.module +1
 	end
 	
 	function IncomingCallGameController_OnInitialize(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		GameController["IncomingCallGameController"]  = thos
 	end
 	
 	function IncomingCallGameController_GetIncomingContact(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["IncomingCallGameController"]  = thos
 	end
 	
 	function IncomingCallGameController_OnPhoneCall(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["IncomingCallGameController"]  = thos
 	end
 	
 	function TutorialPopupGameController_OnInitialize(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["TutorialPopupGameController"]  = thos
 	end
 	
 	function TutorialPopupGameController_OnPlayerAttach(thos,playerPuppet)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["TutorialPopupGameController"]  = thos
 	end
 	
 	function WorldMapMenuGameController_GetDistrictAnimation(thos,view ,show)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		logme(2,tostring(view))
 		
 	end
 	
 	function WorldMapMenuGameController_GetDistrictAnimation(thos,view ,show)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		if(show == true or view == gameuiEWorldMapDistrictView.None) then
 			
 			
@@ -821,7 +768,7 @@ cyberscript.module = cyberscript.module +1
 	end
 	
 	function TrackQuestNotificationAction_TrackFirstObjective(thos,questEntry)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		if(questEntry ~= nil and ( questEntry.id == nil or questEntry.id == ""))then
 			
@@ -858,8 +805,10 @@ cyberscript.module = cyberscript.module +1
 		end
 	end
 	
+	
+
 	function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdistrict)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		if(subdistrict ~= gamedataDistrict.Invalid) then
 			mapSubDistrict = subdistrict
 			else
@@ -883,7 +832,7 @@ cyberscript.module = cyberscript.module +1
 	end
 	
 	function CodexGameController_PopulateData(thos)
-	if(moddisabled == true) then return end
+	if(observerthread  == true or moddisabled == true)    then return end
 		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
 				
 			logme(10,"flib sort mod is enabled, custom codex is disabled")
@@ -952,10 +901,10 @@ cyberscript.module = cyberscript.module +1
 
 			
 			 textAffinity = "Gang Affinity"
-			for k,v in pairs(arrayFaction) do
+			for k,v in pairs(cyberscript.cache["faction"]) do
 				local score =getScoreKey("Affinity",k)
 				if score ~= nil then
-					textAffinity = textAffinity.."\n "..arrayFaction[k].faction.Name.." : "..score
+					textAffinity = textAffinity.."\n "..cyberscript.cache["faction"][k].data.name.." : "..score
 				end
 			end
 			
@@ -982,8 +931,8 @@ cyberscript.module = cyberscript.module +1
 			totalcount = totalcount +1
 			
 			
-			for k,v in pairs(arrayHelp) do
-				local codex = v.help
+			for k,v in pairs(cyberscript.cache["help"]) do
+				local codex = v.data
 				local description = ""
 				for i,section in ipairs(codex.section) do
 					if(section.message ~= nil) then
@@ -1018,8 +967,8 @@ cyberscript.module = cyberscript.module +1
 			end
 			
 			
-			for k,v in pairs(arrayCodex) do
-				local codex = v.entry
+			for k,v in pairs(cyberscript.cache["codex"]) do
+				local codex = v.data
 				if((getScoreKey(codex.tag,"Score") == nil and codex.locked == false) or getScoreKey(codex.tag,"Score") == 0) then
 					
 					local shardData =  CodexEntryData.new()
@@ -1087,7 +1036,7 @@ cyberscript.module = cyberscript.module +1
 		
 	function ShardsMenuGameController_PopulateData(thos,data, keepToggledLevels, sortOnce)
 	
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 	
 		
 			local count = 0
@@ -1095,9 +1044,9 @@ cyberscript.module = cyberscript.module +1
 			local test = deepcopy(data,nil)
 			
 			
-			for k,v in pairs(arrayShard) do
+			for k,v in pairs(cyberscript.cache["shard"]) do
 		
-				local shard = v.shard
+				local shard = v.data
 				checkContext(shard)
 			
 				
@@ -1191,7 +1140,7 @@ cyberscript.module = cyberscript.module +1
 	
 	function WorldMapMenuGameController_OnSelectedDistrictChanged(thos,oldDistrict,newDistrict)
 		
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		
 		if(currentMapDistrictView == gameuiEWorldMapDistrictView.Districts or currentMapDistrictView == nil or newDistrict == gamedataDistrict.Invalid) then
@@ -1220,31 +1169,8 @@ cyberscript.module = cyberscript.module +1
 		
 	end
 	
-	function ShardsNestedListDataView_SortItems(this, compareBuilder, left, right, wrapped)
-		
-		
-			local leftData = ShardEntryData.new()
-			local rightData = ShardEntryData.new()
-			
-			
-			
-			leftData = left.data
-			rightData = right.data
-			
-		
-			
-			if IsDefined(leftData) and IsDefined(rightData) then
-			
-		
-			
-			compareBuilder:BoolTrue(leftData.isNew, rightData.isNew):StringAsc(Game.GetLocalizedText(leftData.title), Game.GetLocalizedText(rightData.title))
-			end
-		
-	end
-	
-	
 	function WorldMapMenuGameController_OnZoomLevelChanged(thos,oldLevel,newLevel)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		local zoomlevel = thos:GetCurrentZoom()
 		
@@ -1257,14 +1183,14 @@ cyberscript.module = cyberscript.module +1
 	end
 	
 	function WorldMapMenuGameController_OnSetUserData(thos,userData)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		setNewFixersPoint()
 		setCustomLocationPoint() 
 		
 	end
 	function SettingsMainGameController_RequestClose (_, _, target) -- Check if activated button is the custom mods button
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		
 		local sessionFile = io.open("user/settings/cyberscript.json", 'w')
 		sessionFile:write(JSON:encode_pretty(arrayUserSetting))
@@ -1276,28 +1202,28 @@ cyberscript.module = cyberscript.module +1
 	end
 	
 	function PlayerPuppet_OnGameAttached(thos)
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["PlayerPuppet"]  = thos
 		startListeners(thos)
 	end
 	
 	function JournalNotificationQueue_OnMenuUpdate(self)
 		----logme(2,"obs2")
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 			GameController["JournalNotificationQueue"]  = self
 	end
 	
 	function JournalNotificationQueue_OnInitialize(self)
 		----logme(2,"obs2")
-		if(moddisabled == true) then return end
+		if(observerthread  == true or moddisabled == true)    then return end
 		GameController["JournalNotificationQueue"]  = self
 	end
 	
-
+---part2
 	
 	function BaseWorldMapMappinController_SelectMappin(self)
 		
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		
 		GameController["BaseWorldMapMappinController"]  = self
 		if(self.mappin ~= nil ) then
@@ -1310,11 +1236,50 @@ cyberscript.module = cyberscript.module +1
 			local mappinType = self.mappin:GetVariant()
 			local wordpos = self.mappin:GetWorldPosition()
 			ActivecustomMappin = self.mappin
+			
+			local obj = {}
+			obj.id = nil
+			obj.tag = "selected_mappin"
+			obj.position = self.mappin:GetWorldPosition()
+			obj.variant = tostring(mappinType)
+			obj.wall =  true
+			obj.range = 0
+			obj.active =  true
+			obj.title = ""
+			obj.desc = ""
+			obj.style = {}
+			obj.style.color = nil
+			obj.style.icon = nil
+				
+				
+				
+			mappinManager["selected_mappin"] = obj
+			
 			if mappinType == gamedataMappinVariant.FastTravelVariant then
 				ActiveFastTravelMappin = {}
 				
 				ActiveFastTravelMappin.markerRef = self.mappin:GetPointData():GetMarkerRef()
 				ActiveFastTravelMappin.position = self.mappin:GetWorldPosition()
+				
+				local obj = {}
+				obj.id = nil
+				obj.tag = "selected_fasttravel_mappin"
+				obj.position = self.mappin:GetWorldPosition()
+				obj.variant =  "FastTravelVariant"
+				obj.wall =  true
+				obj.range = 0
+				obj.active =  true
+				obj.title = ""
+				obj.desc = ""
+				obj.style = {}
+				obj.style.color = nil
+				obj.style.icon = nil
+				
+				mappinManager["selected_mappin"].id = nil
+				mappinManager["selected_mappin"].position = nil
+				
+				mappinManager["selected_fasttravel_mappin"] = obj
+				
 			end
 			if(
 				mappinType == gamedataMappinVariant.ApartmentVariant or
@@ -1325,10 +1290,10 @@ cyberscript.module = cyberscript.module +1
 			local haveFounded = false
 			-- local test = {}
 			
-			-- table.insert(test,arrayHouse["playerhouse01"])
-			for _,v in pairs(arrayHouse) do 
-				if(math.floor(v.house.posX) == math.floor(wordpos.x) and math.floor(v.house.posY) == math.floor(wordpos.y) and math.floor(v.house.posZ) == math.floor(wordpos.z)) then
-					SelectedMappinHouse = v.house
+			-- table.insert(test,cyberscript.cache["place"]["playerhouse01"])
+			for _,v in pairs(cyberscript.cache["place"]) do 
+				if(math.floor(v.data.x) == math.floor(wordpos.x) and math.floor(v.data.y) == math.floor(wordpos.y) and math.floor(v.data.z) == math.floor(wordpos.z)) then
+					SelectedMappinHouse = v.data
 					haveFounded = true
 				end
 			end
@@ -1337,8 +1302,8 @@ cyberscript.module = cyberscript.module +1
 				--logme(2,"Metro ?")
 			
 				local haveFounded = false
-				for k,v in pairs(arrayNode) do 
-					local mappin = v.node
+				for k,v in pairs(cyberscript.cache["node"]) do 
+					local mappin = v.data
 					if(mappin.sort == "metro") then
 						if(math.floor(mappin.GameplayX) == math.floor(wordpos.x) and math.floor(mappin.GameplayY) == math.floor(wordpos.y) and math.floor(mappin.GameplayZ) == math.floor(wordpos.z)) then
 							SelectedMappinMetro = mappin
@@ -1354,7 +1319,7 @@ cyberscript.module = cyberscript.module +1
 				for k,v in pairs(mappinManager) do 
 					local mappin = v
 					
-					if(math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
+					if(mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
 						
 						print(k)
 						SelectedScriptMappin = mappin
@@ -1366,46 +1331,82 @@ cyberscript.module = cyberscript.module +1
 		end
 	end
 	
+	
 	--region Browser
 	function PhotoModeGridButton_ButtonStateChanged(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		------print(NameToString(thos.currentImagePart))
 	
 	end
 	function BrowserController_OnInitialize(self)
 	
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 	GameController["BrowserController"]  = self
 	end
 	
 	
-	function printChild(widget)
-		if(moddisabled == true) then return end
-		if(widget ~= nil) then
-		logme(1,tostring(NameToString(widget.name)).." "..GameDump(widget))
-		local result = pcall(function() widget:GetNumChildren() end)
-		
-		if(result) then
-			if(widget:GetNumChildren() > 0) then
-				for i=0,widget:GetNumChildren() do
-					logme(1,tostring(NameToString(widget.name)).." ["..tostring(i).."]")
-					printChild(widget:GetWidgetByIndex(i))
-				
-				end
-			
-			end
-		end
-		end
+	
+	
+	function DeviceMappinsContainer_EvaluatePositions(this)
+	
+	----print("DeviceMappinsContainer_EvaluatePositions")
+	
 	end
 	
-	function WebPage_OnInitialize(self)
-		if(moddisabled == true) then return end
+	function SmartWindowInkGameController_InitializeMainLayout(this)
+	if(observerthread == true or moddisabled  == true)  then return  end
+	Cron.After(1, function()
+	
+
+		for k,v in pairs(cyberscript.EntityManager) do
+			
+			if(v.id ~= nil) then
+				
+				if(v.id.hash== this:GetOwner():GetEntityID().hash) then
+					
+					v.widget = this.rootWidget
+					v.widget :RemoveAllChildren()
+					
+					if v.interface ~= nil then
+						
+						makeCustomInterface(v.widget,cyberscript.cache["interfaces"][v.interface].data)
+					
+					end
+					
+					break
+				end
+			end
+		
+		end
+	end)
+	end
+	
+	function MappinBaseController_SetRootVisible(this,mappin, mappinVariant, customData)
+		
+		if(observerthread == true or moddisabled  == true)  then return  end
+		local mappinType = mappin:GetVariant()
+		local wordpos = mappin:GetWorldPosition()
+	
+		for _,v in pairs(mappinManager) do 
+					local mappin = v
+					if(mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
+						v.mappinobj = mappin
+						break
+					end
+		end
+		
+		return result
+	
+	end
+	
+ function WebPage_OnInitialize(self)
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["WebPage"]  = self
 	end
 	
 	
 	function WebPage_FillPageFromJournal(self,page)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		----print("ttot"..tostring(CurrentAddress))
 		----print("ttot"..tostring(BrowserCustomPlace))
 		defaultPage = page
@@ -1447,7 +1448,7 @@ cyberscript.module = cyberscript.module +1
 			
 			linkpanel:RemoveAllChildren()
 			
-			makeCustomInterface(linkpanel,arrayInterfaces["Keystone_Load"].ui)
+			makeCustomInterface(linkpanel,cyberscript.cache["interfaces"]["Keystone_Load"].data)
 			
 			
 			
@@ -2409,7 +2410,7 @@ cyberscript.module = cyberscript.module +1
 				local datapack = Keystone_currentSelectedDatapack
 				panel:RemoveAllChildren()
 				
-				makeCustomInterface(panel,arrayInterfaces["keystone_datapack_detail"].ui)
+				makeCustomInterface(panel,cyberscript.cache["interfaces"]["keystone_datapack_detail"].data)
 			
 			
 			elseif(BrowserCybserscript == "item_category") then
@@ -2634,7 +2635,7 @@ cyberscript.module = cyberscript.module +1
 
 			elseif(BrowserCybserscript == "keystone_item_market") then
 			
-			local interface = arrayInterfaces["keystone_item_market"].ui
+			local interface = cyberscript.cache["interfaces"]["keystone_item_market"].data
 			
 			local copyinterface = deepcopy(interface, nil)
 			
@@ -2801,7 +2802,7 @@ cyberscript.module = cyberscript.module +1
 				------print(BrowserCybserscript)
 				panel:RemoveAllChildren()
 				
-				makeCustomInterface(panel,arrayInterfaces[BrowserCybserscript].ui)
+				makeCustomInterface(panel,cyberscript.cache["interfaces"][BrowserCybserscript].data)
 			
 			
 		
@@ -2842,9 +2843,9 @@ cyberscript.module = cyberscript.module +1
 			local templist = {}
 						
 					
-			for k,wpage in pairs(arrayWebpage) do 
+			for k,wpage in pairs(cyberscript.cache["webpage"]) do 
 				
-				if(checkTriggerRequirement(wpage.entry.requirement,wpage.entry.trigger))then
+				if(checkTriggerRequirement(wpage.data.requirement,wpage.data.trigger))then
 					table.insert(templist,wpage)
 				end
 			end
@@ -2913,7 +2914,7 @@ cyberscript.module = cyberscript.module +1
 						
 						for y=1,#arrayList[i] do
 							
-								local webpage = arrayList[i][y].entry
+								local webpage = arrayList[i][y].data
 								------print(dump(webpage))
 								local verticalarea = inkVerticalPanelWidget.new()
 								verticalarea:SetName(StringToName(webpage.tag.."_vertical"))
@@ -2972,7 +2973,7 @@ cyberscript.module = cyberscript.module +1
 			
 			panel:RemoveAllChildren()
 				
-			makeCustomInterface(panel,arrayInterfaces[BrowserCybserscript].ui)
+			makeCustomInterface(panel,cyberscript.cache["interfaces"][BrowserCybserscript].data)
 			
 			
 			end
@@ -3269,9 +3270,9 @@ cyberscript.module = cyberscript.module +1
 				if(BrowserCustomPlace == "shopping") then
 					housetype = 4
 				end
-				for k,v in pairs(arrayHouse) do 
-					if(v.house.type == housetype) then
-						table.insert(templist,v.house)
+				for k,v in pairs(cyberscript.cache["place"]) do 
+					if(v.data.type == housetype) then
+						table.insert(templist,v.data)
 					end
 				end
 				logme(10,"House count :"..#templist)
@@ -3509,10 +3510,10 @@ cyberscript.module = cyberscript.module +1
 					local marginleft = 50
 					local topleft = 0
 					
-					for k,v in pairs(arrayHousingTemplate) do 
+					for k,v in pairs(cyberscript.cache["housing_template"]) do 
 						
-						if(v.template.target == currentHouse.tag) then
-							table.insert(templist,v.template)
+						if(v.data.target == currentHouse.tag) then
+							table.insert(templist,v.data)
 						end
 					end
 					
@@ -4086,7 +4087,7 @@ cyberscript.module = cyberscript.module +1
 		
 	
 function BrowserController_OnPageSpawned(thos, widget, userData)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["BrowserController"]  = thos
 		-- if(CurrentAddress == "CyberScript") then
 			-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod");
@@ -4112,224 +4113,10 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		
 	end
 	end
-	
-	function ComputerMainLayoutWidgetController_InitializeMenuButtons(thos, gameController, widgetsData,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(gameController,widgetsData)  end
-		
-				wrappedMethod(gameController,widgetsData)
-		
-		local indexweb = 0
-		for k,v in pairs(arrayWebpage) do
-		
-		indexweb = indexweb+1
-		
-		
-		end
-		
-		if(indexweb>0) then
-			local test = thos
-			local gameCon = gameController
-			----print("inirt"..widgetsData[2].widgetName)
-			
-			
-			
-			local widget = SComputerMenuButtonWidgetPackage.new()
-			widget.libraryID = widgetsData[2].libraryID 
-			widget.widgetTweakDBID = widgetsData[2].widgetTweakDBID 
-			widget.widget = widgetsData[2].widget 
-			widget.widgetName = widgetsData[2].widgetName 
-			widget.placement = widgetsData[2].placement 
-			widget.isValid = widgetsData[2].isValid 
-			widget.displayName = widgetsData[2].displayName 
-			widget.ownerID = widgetsData[2].ownerID 
-			widget.ownerIDClassName = widgetsData[2].ownerIDClassName 
-			widget.customData = widgetsData[2].customData 
-			widget.isWidgetInactive = widgetsData[2].isWidgetInactive 
-			widget.widgetState = widgetsData[2].widgetState 
-			widget.iconID = widgetsData[2].iconID 
-			widget.bckgroundTextureID = widgetsData[2].bckgroundTextureID 
-			widget.iconTextureID = widgetsData[2].iconTextureID 
-			widget.textData = widgetsData[2].textData 
-			widget.counter = widgetsData[2].counter 
-			widget.displayName = "CyberScript Web"
-			widget.widgetName = "CyberScriptWeb"
-			local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
-			thos:AddMenuButtonWidget(widgeto, widget, gameController)
-			thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
-
-
-		end
-			
-	end
-	
-	function ComputerMainLayoutWidgetController_ShowInternet(thos, startingPage,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(startingPage) end
-		-- if(startingPage == "CyberScript") then
-			-- -- thos:GetWindowContainer():SetVisible(false)
-			-- -- Keystone_Load()
-			-- -- if(currentInterface ~= nil and (currentInterface.type == "web")) then
-				
-				
-			
-				-- -- makeCustomInterface(thos:GetRootWidget())
-		
-			-- -- if(displayHUD["keystone_test"] == nil) then
-			
-			
-			-- -- -- displayHUD["keystone_container"] = inkCanvas.new()
-			-- -- -- displayHUD["keystone_container"]:SetName(CName.new("keystone_container"))
-			-- -- -- displayHUD["keystone_container"]:SetAnchor(inkEAnchor.Fill)
-			-- -- -- displayHUD["keystone_container"]:Reparent(thos:GetWindowContainer(), -1)
-		
-		
-			-- -- displayHUD["keystone_test"] = inkText.new()
-			-- -- displayHUD["keystone_test"]:SetName(CName.new("test"))
-			-- -- displayHUD["keystone_test"]:SetText("TEST")
-			-- -- displayHUD["keystone_test"]:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
-			-- -- displayHUD["keystone_test"]:SetFontStyle('Medium')
-			-- -- displayHUD["keystone_test"]:SetFontSize(54)
-			-- -- displayHUD["keystone_test"]:SetHorizontalAlignment(textHorizontalAlignment.Center)
-			-- -- displayHUD["keystone_test"]:SetVerticalAlignment(textVerticalAlignment.Center)
-			-- -- displayHUD["keystone_test"]:Reparent(thos:GetRootWidget(), -1)
-			
-			
-			-- -- end
-		
-			-- -- displayHUD["keystone_test"]:SetVisible(true)
-			
-			-- -- end
-		
-			-- -- else
-			 -- -- if(displayHUD["keystone_test"] ~= nil) then
-				 -- -- displayHUD["keystone_test"]:SetVisible(false)
-			 -- -- end
-			-- wrappedMethod(startingPage)
-			
-		-- end
-		
-		wrappedMethod(startingPage)
-	end
-	
-	function ComputerInkGameController_ResolveBreadcrumbLevel(thos,  wrappedMethod) 
-	if(moddisabled == true) then return wrappedMethod() end
-	----print("test")
-	wrappedMethod()
-	end
-		
-	function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
-	
-	if(moddisabled == true) then return wrappedMethod(elementName) end
-		-- if(elementName == "CyberScript") then
-			-- local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
-			-- thos:GetMainLayoutController():ShowInternet("CyberScript")
-			
-			-- thos:RequestMainMenuButtonWidgetsUpdate()
-			-- CurrentAddress = "CyberScript"
-			-- BrowserCybserscript = "loading"
-			-- else
-			-- wrappedMethod(elementName)
-		-- end
-		----print("ShowMenuByName "..elementName)
-		if(elementName == "CyberScriptWeb") then
-			----print("ShowMenuByName2 "..elementName)
-			local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
-			thos:GetMainLayoutController():ShowInternet("CyberScriptWeb")
-			thos:RequestMainMenuButtonWidgetsUpdate()
-			CurrentAddress = "CyberScriptWeb"
-			BrowserCybserscript = "home"
-			else
-			wrappedMethod(elementName)
-		end
-	end
-	
--- function BrowserController_TryGetWebsiteData(thos, address, wrappedMethod)
-	
-		-- BrowserController = thos
-		
-		-- ----print("02 - TryGetWebsiteData "..address)
-		-- if(address == "CyberScript" or address == "CyberScriptWeb") then
-			
-			
-			-- return wrappedMethod("NETdir://ncity.pub")
-			
-			
-			
-			
-			-- else
-			-- return wrappedMethod(address)
-		-- end
-	-- end
-	
-	
-	function BrowserController_LoadWebPage(self,address,wrappedMethod)
-	--	CurrentAddress = address
-	if(moddisabled == true) then return wrappedMethod(address) end
-	----print("LoadWebPage : "..address)
-	if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
-		if(BrowserController == nil) then BrowserController = self end
-		
-		
-		if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
-			
-			CurrentAddress = address
-			
-		else
-			CurrentAddress = nil
-			
-		
-		end
-		
-		if(CurrentAddress == nil) then
-		
-			BrowserCybserscript = nil
-			BrowserCustomPlace = nil
-			
-		end
-		
-		if(CurrentAddress == "CyberScript" and BrowserCybserscript == nil) then
-			BrowserCybserscript = "loading"
-			BrowserCustomPlace = nil
-		end
-		
-		if(CurrentAddress == "CyberScriptWeb" and BrowserCybserscript == nil) then
-			BrowserCybserscript = "home"
-			BrowserCustomPlace = nil
-		end
-		
-		-- Cron.NextTick(function()
-		if(CurrentAddress ~= "NETdir://ezestates.web/makeovers") then
-			BrowserCustomPlace = nil
-			
-		end
-		
-		
-		if(address == "CyberScript" or address == "CyberScriptWeb" ) then
-		----print("testlogic0")
-		return wrappedMethod("NETdir://ncity.pub")
-		
-		else
-		----print("testlogic1")
-		return wrappedMethod(address)
-		
-		end
-	
-	else
-		CurrentAddress = nil
-		BrowserCybserscript = nil
-		BrowserCustomPlace = nil
-		
-		return wrappedMethod(address)
-		
-	end
-	
-	end
-
-	
-	
 	--endregion Browser
 	function WorldMapTooltipController_SetData(self,data,menu)
 	
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		local mappinVariant = nil
 		
 		if( data.mappin ~= nil) then
@@ -4367,7 +4154,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function WorldMapTooltipContainer_SetData(self,target,data,menu)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		local displayXYZ = getUserSetting("displayXYZ")
 		local mappinVariant = nil
 		
@@ -4431,13 +4218,13 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function WorldMapMenuGameController_UntrackCustomPositionMappin(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		ActivecustomMappin = nil
 		--logme(2,"obs3")
 	end
 	
 	function BraindanceGameController_OnInitialize(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["BraindanceGameController"]  = self
 	
 		GameController["BraindanceGameControllerRoot"] = self:GetRootWidget().parentWidget
@@ -4448,7 +4235,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function QuestTrackerGameController_OnInitialize()
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		if not isGameLoaded then
 			--logme(2,'Game Session Started')
 			isGameLoaded = true
@@ -4457,7 +4244,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function QuestTrackerGameController_OnUninitialize()
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		if Game.GetPlayer() == nil then
 			--logme(2,'Game Session Ended')
 			workerTable = {}
@@ -4468,7 +4255,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function interactionWidgetGameController_OnInitialize(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		Cron.NextTick(function()
 			
 				GameController["interactionWidgetGameController"]  = self
@@ -4477,7 +4264,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ChattersGameController_OnInitialize(self) 
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["ChattersGameController"]  = self
 		
 		--logme(2,"Chat Sub Controller Init")
@@ -4485,20 +4272,20 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ChattersGameController_OnPlayerAttach(self,playerGameObject) 
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["ChattersGameController"]  = self
 		
 		--logme(2,"Chat Sub Controller Init")
 	end
 	
 	function SubtitlesGameController_OnInitialize(self) 
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["SubtitlesGameController"]  = self
 	end
 	
 	
 	function interactionWidgetGameController_OnItemSpawned(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		if(GameController["interactionWidgetGameController"] == nil) then
 			Cron.NextTick(function()
 				
@@ -4509,7 +4296,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function ChattersGameController_SetupLine(self) 
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		if(currentChattersGameController == nil) then
 			--logme(2,"obs99")
 			Cron.NextTick(function()
@@ -4521,7 +4308,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function SubtitlesGameController_SetupLine(self) 
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		if(currentSubtitlesGameController == nil) then
 			Cron.NextTick(function()
 				
@@ -4532,14 +4319,14 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function BaseSubtitlesGameController_OnUninitialize(self) 
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		currentChattersGameController = nil
 		currentSubtitlesGameController = nil
 	end
 	
 	
 	function NPCPuppet_SendAfterDeathOrDefeatEvent(target)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		-- ----print("target.shouldDie".." "..tostring(target.shouldDie))
 		-- ----print("target.myKiller ~= nil".." "..tostring(target.myKiller ~= nil))
 		-- ----print("target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash".." "..tostring(target.myKiller:GetEntityID().hash == Game.GetPlayer():GetEntityID().hash))
@@ -4587,7 +4374,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 		
 	function PhoneDialerGameController_PopulateData(thos)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		local contactDataArray = thos.journalManager:GetContactDataArray(false)
 		------printdump(contactDataArray))
 		if(#contactList > 0) then
@@ -4619,9 +4406,9 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				local c = ContactData.new()
 				c.id = "trainer_fred"
 				c.avatarID = TweakDBID.new("PhoneAvatars.Avatar_Unknown")
-				c.localizedName = "CORRUPT NCPD"
+				c.localizedName = CorruptNCPDLang.getText(data.name)
 				c.hash = data.hash
-				c.timeStamp = data.timeStamp
+				c.timeStamp = Game.GetTimeSystem():GetGameTime()
 				c.questRelated = EnumInt(Game.GetScriptableSystemsContainer():Get("PreventionSystem"):GetHeatStage()) ~= 0
 				table.insert(contactDataArray, c)
 			end
@@ -4639,7 +4426,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerGameController_PopulateData(thos) 
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 	GameController["MessengerGameController"] = thos
 		if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
 			
@@ -4735,14 +4522,14 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 					-- end
 				-- end
 			-- end
-			for k,v in pairs(arrayPhoneConversation) do
+			for k,v in pairs(cyberscript.cache["phone_dialog"]) do
 				local phoneConversation = v.conv
 				logme(1,phoneConversation.tag)
 				if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
 					if phoneConversation.hash == nil then
-						arrayPhoneConversation[k].conv.hash = 0 - tonumber("1308"..math.random(1,999))
+						cyberscript.cache["phone_dialog"][k].data.hash = 0 - tonumber("1308"..math.random(1,999))
 						
-						phoneConversation.hash = arrayPhoneConversation[k].conv.hash
+						phoneConversation.hash = cyberscript.cache["phone_dialog"][k].data.hash
 					end
 					local itemData = ContactData.new()
 					itemData.id = phoneConversation.tag
@@ -4799,8 +4586,8 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 							itemData.unreadMessegeCount  = unreadcount
 							itemData.playerIsLastSender   =  false
 							itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
-							arrayPhoneConversation[k].conv.conversation[z].hash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
-							conversation.hash = arrayPhoneConversation[k].conv.conversation[z].hash
+							cyberscript.cache["phone_dialog"][k].data.conversation[z].hash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
+							conversation.hash = cyberscript.cache["phone_dialog"][k].data.conversation[z].hash
 							
 							itemData.threadsCount  = 0
 							itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
@@ -4820,9 +4607,9 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		end
 	end
 	
-	
+	---part3
 	function MessengerGameController_OnContactActivated(self,evt) 
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		GameController["MessengerGameController"] = self
 		logme(1,"MessengerGameController.OnContactActivated")
 		
@@ -4832,7 +4619,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 			messageprocessing = true
 			logme(2,tostring(evt.type))
 			if (string.find(tostring(evt.entryHash), "1308")and evt.type == MessengerContactType.Thread) then
-				for k,v in pairs(arrayPhoneConversation) do
+				for k,v in pairs(cyberscript.cache["phone_dialog"]) do
 					local phoneConversation = v.conv
 					for z=1,#phoneConversation.conversation do
 						local conversation = phoneConversation.conversation[z]
@@ -4869,7 +4656,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_SetVisited(thos, records) 
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		logme(1,"MessengerDialogViewController.SetVisited")
 		local messages = thos.messages
 		local choices = thos.replyOptions
@@ -4934,20 +4721,20 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function MessengerDialogViewController_AttachJournalManager(thos, journalManager) 
 		
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["MessengerDialogViewController"]  = thos
 		
 	end
 	
 	function MessengerDialogViewController_OnInitialize(thos) 
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 
 		GameController["MessengerDialogViewController"]  = thos
 		
 	end
 	
 	function PhoneMessagePopupGameController_SetupData(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		logme(2,"PhoneMessagePopupGameController.SetupData")
 		if (currentPhoneDialogPopup ~= nil and MessengerGameController ~= nil) then
 			
@@ -4961,7 +4748,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_ShowThread(self,thread)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 	
 		if(thread == nil) then
 			local message = {}
@@ -4972,7 +4759,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_ShowDialog(self,contact)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		if(contact == nil) then
 			local message = {}
 			logme(1,"test2")
@@ -4982,7 +4769,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_UpdateData(self,animateLastMessage)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		logme(1,GameDump(self))
 		if(contact == nil) then
 			local message = {}
@@ -4995,7 +4782,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessangerItemRenderer_GetData(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		local choicepress = false
 		if(currentPhoneConversation ~= nil) then
 			for i = 1, #currentPhoneConversation.currentchoices do
@@ -5028,11 +4815,11 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessangerReplyItemRenderer_OnDataChanged(self,value)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 	end
 	
 	function MessangerItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		--	----printmessage.id)
 		logme(1,"MessangerItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
 		Cron.NextTick(function()
@@ -5094,7 +4881,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	
 	function MessangerReplyItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		--	----printmessage.id)
 		logme(1,"MessangerReplyItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
 		Cron.NextTick(function()
@@ -5158,9 +4945,8 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function MessengerDialogViewController_ActivateReply(self,target)
-	logme(1,GameDump(target))
-	logme(1,target.labelPathRef:GetText())
-	if(moddisabled == true) then return end
+	
+	if(observerthread == true or moddisabled  == true)   then return end
 		local choicepress = false
 		if(currentPhoneConversation ~= nil) then
 			for i = 1, #currentPhoneConversation.currentchoices do
@@ -5208,13 +4994,13 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	
 	function MenuScenario_HubMenu_OnSelectMenuItem(_, menuItemData)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		--------print"toto"..menuItemData.menuData.label)
 		--logme(2,"obs17")
 	end
 	
 	function PhoneDialerGameController_CallSelectedContact_Observer(thos)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		-- let item: ref<PhoneContactItemVirtualController> = thos.m_listController.GetSelectedItem() as PhoneContactItemVirtualController;
 		-- let contactData: ref<ContactData> = item.GetContactData();
 		-- if IsDefined(contactData) {
@@ -5317,7 +5103,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 						
 					end
 					if(contactList[i].phonetype == "Service") then
-						local interact = arrayInteract[contactList[i].id].interact
+						local interact = cyberscript.cache["interact"][contactList[i].id].data
 						runActionList(interact.action,interact.tag,"interact",false,"player")
 					end
 					if(contactList[i].phonetype == "Fixer") then
@@ -5332,7 +5118,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 							
 							action.name = "hacking_notification"
 							action.title =  getLang("observer_callselectedcontact_v_answer")
-							action.title = getLang("download_quest_from_01")..phoned.Name..getLang("download_quest_from_02")
+							action.title = getLang("download_quest_from_01")..phoned.name..getLang("download_quest_from_02")
 							action.duration = 3
 							
 							table.insert(actionlist,action)
@@ -5351,7 +5137,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PhoneSystem_OnTriggerCall(thos, request)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		logme(2,"called")
 		logme(2,GameDump(request))
 		
@@ -5366,7 +5152,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PhoneSystem_OnUsePhone(thos, request)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 
 		
 		
@@ -5374,25 +5160,25 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PhoneDialerGameController_Show(_,contactsList)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		refreshContact()
 		openPhone = true
 	end
 	
 	function PhoneDialerGameController_Hide()
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		openPhone = false
 	end
 	
 	function VehicleRadioPopupGameController_VirtualListReady(self)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		----logme(2,#self.dataSource:GetArray())
 		-- 1. Remove stations that are not supported by the radio device
 		-- 2. Select currently playing station
 		local radio = RadioListItemData.new()
 		radio.record = gamedataRadioStation_Record.new()
-		------print(radio.record:Index())
-		for k,v in pairs(arrayRadio) do
+		print(radio.record:Index())
+		for k,v in pairs(cyberscript.cache["radio"]) do
 			self.dataSource:AppendItem(radio)
 		end
 		----logme(2,#self.dataSource:GetArray())
@@ -5413,7 +5199,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function VehicleSummonWidgetGameController_OnVehicleSummonStateChanged(state,value ) 
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		local vehicleSummonDef = Game.GetAllBlackboardDefs().VehicleSummonData
 		local vehicleSummonBB = Game.GetBlackboardSystem():Get(vehicleSummonDef)
 		vehicleEntId = vehicleSummonBB:GetEntityID(vehicleSummonDef.SummonedVehicleEntityID)
@@ -5513,18 +5299,18 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function PopupsManager_OnPlayerAttach(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		
 		GameController["PopupsManager"]  = self
 	end
 	
 	function PopupsManager_OnPlayerDetach()
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		radiopopup = nil
 	end
 	
 	function RadioStationListItemController_OnDataChanged(self,value)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		-- --logme(2,"thos is it 2")
 		-- -- --logme(2,GameDump(self.label))
 		-- if(self.stationData.record == nil) then
@@ -5545,18 +5331,18 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function VehicleRadioPopupGameController_Activate(self)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 	------print("test")
 		
 		
 		if(self.selectedItem.stationData.record == nil or self.selectedItem.stationData.record:DisplayName() == nil or self.selectedItem.stationData.record:DisplayName() == "") then
 		
 			local radioToPut = nil
-			for k,v in pairs(arrayRadio) do
+			for k,v in pairs(cyberscript.cache["radio"]) do
 				
 				if(self.selectedItem.label:GetText() == nil or self.selectedItem.label:GetText() == "") then
-					if(arrayRadio[k].enabled == false ) then
-						currentRadio = arrayRadio[k]
+					if(cyberscript.cache["radio"][k].enabled == false ) then
+						currentRadio = cyberscript.cache["radio"][k]
 				--		------print(k)
 						if(selectedradioIndex ~= nil) then
 						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, selectedradioIndex)
@@ -5569,8 +5355,8 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 						break
 					end
 					else
-					if(arrayRadio[k].radio.name == self.selectedItem.label:GetText() ) then
-						currentRadio = arrayRadio[k]
+					if(cyberscript.cache["radio"][k].data.name == self.selectedItem.label:GetText() ) then
+						currentRadio = cyberscript.cache["radio"][k]
 					--	------print(k)
 						if(selectedradioIndex ~= nil) then
 						GetPlayer():GetQuickSlotsManager():SendRadioEvent(false, false, selectedradioIndex)
@@ -5612,33 +5398,33 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function VehicleRadioPopupGameController_OnScrollChanged(self)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 	
-		for k,v in pairs(arrayRadio) do
-			arrayRadio[k].enabled = false
+		for k,v in pairs(cyberscript.cache["radio"]) do
+			cyberscript.cache["radio"][k].enabled = false
 		end
 		
 	end
 	
 	function RadioStationListItemController_OnSelected(self,itemController,discreteNav)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 			if(self.stationData.record == nil or self.stationData.record:DisplayName() == nil or self.stationData.record:DisplayName() == "") then
 			
 			local radioToPut = nil
-			for k,v in pairs(arrayRadio) do
+			for k,v in pairs(cyberscript.cache["radio"]) do
 				
 				if(self.label:GetText() == nil or self.label:GetText() == "") then
-					if(arrayRadio[k].enabled == false ) then
-					--	currentRadio = arrayRadio[k]
+					if(cyberscript.cache["radio"][k].enabled == false ) then
+					--	currentRadio = cyberscript.cache["radio"][k]
 					--	------print(k)
 					--	self.quickSlotsManager:SendRadioEvent(false, false, -1)
-						inkTextRef.SetText(self.label, arrayRadio[k].radio.name)
-						arrayRadio[k].enabled = true
+						inkTextRef.SetText(self.label, cyberscript.cache["radio"][k].data.name)
+						cyberscript.cache["radio"][k].enabled = true
 						break
 					end
 					else
-					if(arrayRadio[k].radio.name == self.label:GetText() ) then
---currentRadio = arrayRadio[k]
+					if(cyberscript.cache["radio"][k].data.name == self.label:GetText() ) then
+--currentRadio = cyberscript.cache["radio"][k]
 						
 					--	self.quickSlotsManager:SendRadioEvent(false, false, -1)
 						break
@@ -5655,22 +5441,25 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	end
 	
 	function VehicleRadioPopupGameController_OnClose()
-	if(moddisabled == true) then return end
-		for k,v in pairs(arrayRadio) do
-			arrayRadio[k].enabled = false
+	if(observerthread == true or moddisabled  == true)   then return end
+		for k,v in pairs(cyberscript.cache["radio"]) do
+			cyberscript.cache["radio"][k].enabled = false
 		end
 		popupActive = false
 	end
 	
+	
+	
 	function PlayerPuppet_OnDeath()
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		isdead = true
 	end
 	
+		
 	function interactionItemLogicController_SetData(self,data,skillcheck)
-	
-	if(arrayInteract[data.localizedName] ~= nil) then
-		local interact = arrayInteract[data.localizedName].interact
+	if(observerthread == true or moddisabled  == true)  then return  end
+	if(cyberscript.cache["interact"][data.localizedName] ~= nil) then
+		local interact = cyberscript.cache["interact"][data.localizedName].data
 		
 		
 		self.label:SetText(interact.name)
@@ -5708,14 +5497,14 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 	function DialogChoiceLogicController_UpdateView(self,wrappedMethod)
 		
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		if(currentDialogHub ~= nil and self.ActiveTextRef ~= nil) then
 			
-			local isphoneDialog = currentDialogHub.dial.speaker.way == "phone"
+			local isphoneDialog = true
 		
 			local dialogoption = currentDialogHub.dial.options[interactionUI.selectedIndex+1]
 		
-			if(dialogoption ~= nil and dialogoption.Description == self.ActiveTextRef:GetText()) then
+			if(dialogoption ~= nil and dialogoption.description == self.ActiveTextRef:GetText()) then
 				
 			
 				
@@ -5756,7 +5545,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				
 				for i,v in ipairs(currentDialogHub.dial.options) do
 					
-					if(v.Description == self.ActiveTextRef:GetText() and v.Description ~=  currentDialogHub.dial.options[interactionUI.selectedIndex+1].Description) then
+					if(v.description == self.ActiveTextRef:GetText() and v.description ~=  currentDialogHub.dial.options[interactionUI.selectedIndex+1].description) then
 					
 					dialogoption_unselect = v
 					
@@ -5811,28 +5600,244 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		end
 		
 		
+	
+	
+	---part4
+	
+	
+	
+	
+	
+	function printChild(widget)
+		if(observerthread == true or moddisabled  == true)   then return end
+		if(widget ~= nil) then
+		logme(1,tostring(NameToString(widget.name)).." "..GameDump(widget))
+		local result = pcall(function() widget:GetNumChildren() end)
 		
+		if(result) then
+			if(widget:GetNumChildren() > 0) then
+				for i=0,widget:GetNumChildren() do
+					logme(1,tostring(NameToString(widget.name)).." ["..tostring(i).."]")
+					printChild(widget:GetWidgetByIndex(i))
+				
+				end
+			
+			end
+		end
+		end
+	end
+	
+	
+	function ComputerMainLayoutWidgetController_InitializeMenuButtons(thos, gameController, widgetsData,wrappedMethod)
+	if(observerthread == true or moddisabled  == true)   then return wrappedMethod(gameController,widgetsData)  end
+		
+				wrappedMethod(gameController,widgetsData)
+		
+		
+		
+		if(isEmpty(cyberscript.cache["webpage"]) == false) then
+			local test = thos
+			local gameCon = gameController
+			----print("inirt"..widgetsData[2].widgetName)
+		
+			local widget = deepcopy(widgetsData[2],nil)
+			
+			widget.displayName = "CyberScript Web"
+			widget.widgetName = "CyberScriptWeb"
+			local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
+			thos:AddMenuButtonWidget(widgeto, widget, gameController)
+			thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
+
+
+		end
+			
+	end
+	
+	function ComputerMainLayoutWidgetController_ShowInternet(thos, startingPage,wrappedMethod)
+	if(observerthread == true or moddisabled  == true)   then return wrappedMethod(startingPage) end
+		-- if(startingPage == "CyberScript") then
+			-- -- thos:GetWindowContainer():SetVisible(false)
+			-- -- Keystone_Load()
+			-- -- if(currentInterface ~= nil and (currentInterface.type == "web")) then
+				
+				
+			
+				-- -- makeCustomInterface(thos:GetRootWidget())
+		
+			-- -- if(displayHUD["keystone_test"] == nil) then
+			
+			
+			-- -- -- displayHUD["keystone_container"] = inkCanvas.new()
+			-- -- -- displayHUD["keystone_container"]:SetName(CName.new("keystone_container"))
+			-- -- -- displayHUD["keystone_container"]:SetAnchor(inkEAnchor.Fill)
+			-- -- -- displayHUD["keystone_container"]:Reparent(thos:GetWindowContainer(), -1)
+		
+		
+			-- -- displayHUD["keystone_test"] = inkText.new()
+			-- -- displayHUD["keystone_test"]:SetName(CName.new("test"))
+			-- -- displayHUD["keystone_test"]:SetText("TEST")
+			-- -- displayHUD["keystone_test"]:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+			-- -- displayHUD["keystone_test"]:SetFontStyle('Medium')
+			-- -- displayHUD["keystone_test"]:SetFontSize(54)
+			-- -- displayHUD["keystone_test"]:SetHorizontalAlignment(textHorizontalAlignment.Center)
+			-- -- displayHUD["keystone_test"]:SetVerticalAlignment(textVerticalAlignment.Center)
+			-- -- displayHUD["keystone_test"]:Reparent(thos:GetRootWidget(), -1)
+			
+			
+			-- -- end
+		
+			-- -- displayHUD["keystone_test"]:SetVisible(true)
+			
+			-- -- end
+		
+			-- -- else
+			 -- -- if(displayHUD["keystone_test"] ~= nil) then
+				 -- -- displayHUD["keystone_test"]:SetVisible(false)
+			 -- -- end
+			-- wrappedMethod(startingPage)
+			
+		-- end
+		
+		wrappedMethod(startingPage)
+	end
+	
+	function ComputerInkGameController_ResolveBreadcrumbLevel(thos,  wrappedMethod) 
+	if(observerthread == true or moddisabled  == true)   then return wrappedMethod() end
+	----print("test")
+	wrappedMethod()
+	end
+		
+	function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
+	
+	if(observerthread == true or moddisabled  == true)   then return wrappedMethod(elementName) end
+		-- if(elementName == "CyberScript") then
+			-- local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
+			-- thos:GetMainLayoutController():ShowInternet("CyberScript")
+			
+			-- thos:RequestMainMenuButtonWidgetsUpdate()
+			-- CurrentAddress = "CyberScript"
+			-- BrowserCybserscript = "loading"
+			-- else
+			-- wrappedMethod(elementName)
+		-- end
+		----print("ShowMenuByName "..elementName)
+		if(elementName == "CyberScriptWeb") then
+			----print("ShowMenuByName2 "..elementName)
+			local internetData = (thos:GetOwner():GetDevicePS()):GetInternetData()
+			thos:GetMainLayoutController():ShowInternet("CyberScriptWeb")
+			thos:RequestMainMenuButtonWidgetsUpdate()
+			CurrentAddress = "CyberScriptWeb"
+			BrowserCybserscript = "home"
+			else
+			wrappedMethod(elementName)
+		end
+	end
+	
+-- function BrowserController_TryGetWebsiteData(thos, address, wrappedMethod)
+	
+		-- BrowserController = thos
+		
+		-- ----print("02 - TryGetWebsiteData "..address)
+		-- if(address == "CyberScript" or address == "CyberScriptWeb") then
+			
+			
+			-- return wrappedMethod("NETdir://ncity.pub")
+			
+			
+			
+			
+			-- else
+			-- return wrappedMethod(address)
+		-- end
+	-- end
+	
+	
+	function BrowserController_LoadWebPage(self,address,wrappedMethod)
+	--	CurrentAddress = address
+	if(observerthread == true or moddisabled  == true)   then return wrappedMethod(address) end
+	----print("LoadWebPage : "..address)
+	if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
+		if(BrowserController == nil) then BrowserController = self end
+		
+		
+		if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
+			
+			CurrentAddress = address
+			
+		else
+			CurrentAddress = nil
+			
+		
+		end
+		
+		if(CurrentAddress == nil) then
+		
+			BrowserCybserscript = nil
+			BrowserCustomPlace = nil
+			
+		end
+		
+		if(CurrentAddress == "CyberScript" and BrowserCybserscript == nil) then
+			BrowserCybserscript = "loading"
+			BrowserCustomPlace = nil
+		end
+		
+		if(CurrentAddress == "CyberScriptWeb" and BrowserCybserscript == nil) then
+			BrowserCybserscript = "home"
+			BrowserCustomPlace = nil
+		end
+		
+		-- Cron.NextTick(function()
+		if(CurrentAddress ~= "NETdir://ezestates.web/makeovers") then
+			BrowserCustomPlace = nil
+			
+		end
+		
+		
+		if(address == "CyberScript" or address == "CyberScriptWeb" ) then
+		----print("testlogic0")
+		return wrappedMethod("NETdir://ncity.pub")
+		
+		else
+		----print("testlogic1")
+		return wrappedMethod(address)
+		
+		end
+	
+	else
+		CurrentAddress = nil
+		BrowserCybserscript = nil
+		BrowserCustomPlace = nil
+		
+		return wrappedMethod(address)
+		
+	end
+	
+	end
+
+	
+	
 	
 	
 	
 function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,iconColor)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		
 	end
 	
 	
 	function ShardNotificationController_OnInitialize(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["ShardNotificationController"]  = self
 	end
 	
 	function ShardNotificationController_OnPlayerAttach(self,playerPuppet)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["ShardNotificationController"]  = self
 	end
 	
 	function ShardNotificationController_SetButtonHints(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		if not UIPopupsManager.IsOwnPopup(self) then
 			return
 		end
@@ -5856,7 +5861,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		end
 	
 	function ShardNotificationController_Close(self)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)   then return end
 		buttonsData = {}
 		if UIPopupsManager.IsOwnPopup(self) then
 			UIPopupsManager.ClosePopup()
@@ -5864,17 +5869,17 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function gameuiInGameMenuGameController_OnHandleMenuInput(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["gameuiInGameMenuGameController"]  = self
 	end
 	
 	function gameuiInGameMenuGameController_SpawnMenuInstanceEvent(self) -- Get Controller to spawn popup
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["gameuiInGameMenuGameController"]  = self
 	end
 	
 	function PopupsManager_ShowPhoneMessage(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		
 		if self.phoneMessageData ~= nil and self.phoneMessageData.journalEntry == nil then
 			
@@ -5888,7 +5893,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function PopupsManager_OnMessagePopupUseCloseRequest(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		if(currentPhoneConversation ~= nil) then
 			currentPhoneConversation = nil
 		end
@@ -5897,7 +5902,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuestCodexLinkController_Setup(self)
-		if(moddisabled == true) then return end
+		if(observerthread == true or moddisabled  == true)   then return end
 		----print("test")
 		
 	end
@@ -5918,7 +5923,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	-- end)
 	function PreventionSpawnSystem_SpawnCallback(thos,spawnedObject,wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(spawnedObject) end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(spawnedObject) end
 	
 		local contain = false
 		if(cachedespawn[tostring(spawnedObject:GetEntityID().hash)] ~= nil) then
@@ -5991,7 +5996,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuestMappinLinkController_Setup(thos,mappinEntry,jumpTo,wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(mappinEntry,jumpTo) end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(mappinEntry,jumpTo) end
 		if mappinEntry == nil and journalQuestMapPinBase ~= nil then
 		
 			local mappin = getMappinByTag(journalQuestMapPinBase)
@@ -6013,7 +6018,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuestCodexLinkController_SetupCodexLink(thos,codexEntry,wrappedMethod)
-			if(moddisabled == true) then return wrappedMethod(codexEntry) end
+			if(observerthread == true or moddisabled  == true)  then return wrappedMethod(codexEntry) end
 		if codexEntry == nil and codexEntryTag ~= nil then
 			
 		
@@ -6025,7 +6030,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 			thos.journalEntry = entry
 						
 			
-			local codexObj = arrayCodex[codexEntryTag].entry
+			local codexObj = cyberscript.cache["codex"][codexEntryTag].data
 			
 			inkTextRef.SetText(thos.linkLabel, codexObj.title)
 			
@@ -6052,7 +6057,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function CodexPopupGameController_SetupData(thos,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod() end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod() end
 		  thos.data = thos:GetRootWidget():GetUserData("CodexPopupData")
 		  
 			if string.match(thos.data.entry.id,"CS_customcodex:") then
@@ -6060,7 +6065,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 				local splittext = split(thos.data.entry.id,':')
 				
 			
-				local codex = arrayCodex[splittext[2]].entry
+				local codex = cyberscript.cache["codex"][splittext[2]].data
 			
 			
 		
@@ -6090,10 +6095,10 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	function CodexEntryViewController_ShowEntry(thos,data,wrappedMethod)
 		
-		  if(moddisabled == true) then return wrappedMethod() end
+		  if(observerthread == true or moddisabled  == true)  then return wrappedMethod() end
 		if data.hash == 13081991 then
 			
-			local codex = arrayCodex[data.title].entry
+			local codex = cyberscript.cache["codex"][data.title].data
 			
 			checkContext(codex)
 			
@@ -6118,13 +6123,13 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function PlayerPuppet_OnLookAtObjectChangedEvent(thos)
-	if(moddisabled == true) then return end
+	if(observerthread == true or moddisabled  == true)  then return end
 		thos.isAimingAtFriendly = false
 		thos.isAimingAtChild = false
 	end
 	
 	function NcartTimetableControllerPS_UpdateCurrentTimeToDepart(self,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod() end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod() end
 		if(activeMetroDisplay == true) then
 			self.currentTimeToDepart = MetroCurrentTime
 			--NewMetroTime = 0
@@ -6135,7 +6140,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function PhoneDialerGameController_CallSelectedContact(thos, wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod() end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod() end
 		local callRequest = nil
 		local item = thos.listController:GetSelectedItem()
 		local contactData = item:GetContactData()
@@ -6149,7 +6154,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function DoubleJumpDecisions_EnterCondition(thos,stateContext,scriptInterface, wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(stateContext,scriptInterface) end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(stateContext,scriptInterface) end
 		if(getUserSetting('InfiniteDoubleJump') == true) then
 			
 			
@@ -6221,7 +6226,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function LocomotionAirEvents_OnUpdate(thos,timeDelta, stateContext, scriptInterface, wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(stateContext,scriptInterface) end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(stateContext,scriptInterface) end
 		if(getUserSetting('DisableFallDamage') == true) then
 			
 			
@@ -6312,16 +6317,16 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function WorldMapMenuGameController_OnGangListItemSpawned(self,gangWidget,userData) 
-		if(moddisabled == true) then return  end
+		if(observerthread == true or moddisabled  == true)  then return  end
 	end
 	
 	function WorldMapMenuGameController_OnSelectedDistrictChanged(self,oldDistrict,newDistrict) 
-	if(moddisabled == true) then return  end
+	if(observerthread == true or moddisabled  == true)  then return  end
 		self:ShowGangsInfo(newDistrict)
 	end
 	
 	function WorldMapGangItemController_SetData(self,affiliationRecord) 
-	if(moddisabled == true) then return  end
+	if(observerthread == true or moddisabled  == true)  then return  end
 		
 		if(CurrentGang ~= nil) then
 			
@@ -6332,12 +6337,12 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		end
 	end
 	
-	
+	---part5
 	
 
 	
 	function RipperdocIdPanel_SetName(thos,vendorName,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(vendorName)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(vendorName)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6358,7 +6363,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function VendorHubMenuGameController_SetupTopBar(thos,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod()  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod()  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6379,7 +6384,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function FullscreenVendorGameController_PopulateVendorInventory(thos,wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod() end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod() end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6447,7 +6452,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	---Scanner
 	function ScannervehicleGameController_OnVehicleInfoChanged(thos, value,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6499,7 +6504,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function ScannerNPCHeaderGameController_OnNameChanged(thos, value,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6537,7 +6542,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function ScannerNPCHeaderGameController_OnLevelChanged(thos, value,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6568,7 +6573,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function ScannerNPCHeaderGameController_OnAttitudeChange(thos, value,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6609,15 +6614,15 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function ScannerNPCBodyGameController_OnFactionChanged(thos, value,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
 			if(entity.id ~= nil) and (getScannerdataFromEntityOrGroupOfEntity(entity) ~= nil) then
 				
-				if(ScannerInfoManager[entity.tag].faction ~= nil) then
-					local gang = getFactionByTag(ScannerInfoManager[entity.tag].faction)
-					inkTextRef.SetText(thos.factionText, "CS faction "..gang.Name)
+				if(ScannerInfoManager[entity.tag].data ~= nil) then
+					local gang = getFactionByTag(ScannerInfoManager[entity.tag].data)
+					inkTextRef.SetText(thos.dataText, "CS faction "..gang.Name)
 					thos.isValidFaction = true;
 					
 					else
@@ -6639,7 +6644,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	
 	function ScannerNPCBodyGameController_OnRarityChanged(thos, value,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6670,7 +6675,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickHackDescriptionGameController_OnQuickHackDataChanged(thos, value,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		
 			local vehicleInfoData = QuickhackData.new()
 			vehicleInfoData = FromVariant(value)
@@ -6680,7 +6685,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function ScannerBountySystemGameController_OnBountySystemChanged(thos, value,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6820,7 +6825,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function scannerDetailsGameController_RefreshLayout(thos,wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod()  end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod()  end
 		if(objLook ~= nil) then
 			local entid = objLook:GetEntityID()
 			local entity = getEntityFromManagerById(entid)
@@ -6912,47 +6917,47 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(data)  end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(data)  end
 		----print("step 00")
 		wrappedMethod(data)
 		
-		for k,v in pairs(arrayQuickhack) do
+		for k,v in pairs(cyberscript.cache["quickhack"]) do
 			
-			if(checkTriggerRequirement(v.entry.requirement,v.entry.trigger))then
+			if(checkTriggerRequirement(v.data.requirement,v.data.trigger))then
 				
 				
-			CName.add("cyberscript_hack:"..v.entry.tag)
+			CName.add("cyberscript_hack:"..v.data.tag)
 			
 			CName.add("cyberscript_hack_category")
 			
 			local mydata = QuickhackData.new()
-			mydata.action = nil
+
 			mydata.actionOwner = Game.GetPlayer()
-			mydata.actionOwnerName = CName("cyberscript_hack:"..v.entry.tag)
-			mydata.icon = TweakDBID.new(v.entry.icon)
+			mydata.actionOwnerName = CName("cyberscript_hack:"..v.data.tag)
+			mydata.icon = TweakDBID.new(v.data.icon)
 			mydata.iconCategory = CName("cyberscript_hack_category")
-			mydata.title = v.entry.title
-			mydata.titleAlternative = v.entry.titlealternative
-			mydata.description = v.entry.description
-			mydata.inactiveReason = v.entry.inactivereason
-			mydata.isLocked = checkTriggerRequirement(v.entry.unlockrequirement,v.entry.unlocktrigger) == false
-			mydata.type = v.entry.actiontype
-			mydata.cost = v.entry.cost
-			mydata.costRaw = v.entry.cost
-			mydata.uploadTime = v.entry.uploadtime
-			mydata.duration =  v.entry.duration
-			mydata.ICELevelVisible = v.entry.icelevelvisible
-			mydata.ICELevel =  v.entry.iceLevel
+			mydata.title = v.data.title
+			mydata.titleAlternative = v.data.titlealternative
+			mydata.description = v.data.description
+			mydata.inactiveReason = v.data.inactivereason
+			mydata.isLocked = checkTriggerRequirement(v.data.unlockrequirement,v.data.unlocktrigger) == false
+			mydata.type = v.data.actiontype
+			mydata.cost = v.data.cost
+			mydata.costRaw = v.data.cost
+			mydata.uploadTime = v.data.uploadtime
+			mydata.duration =  v.data.duration
+			mydata.ICELevelVisible = v.data.icelevelvisible
+			mydata.ICELevel =  v.data.iceLevel
 			mydata.vulnerabilities = nil
-			mydata.quality =  v.entry.quality
-			mydata.isInstant =  v.entry.isinstant
-			mydata.cooldown  = v.entry.cooldown
+			mydata.quality =  v.data.quality
+			mydata.isInstant =  v.data.isinstant
+			mydata.cooldown  = v.data.cooldown
 			mydata.cooldownTweak  = nil
 			mydata.actionMatchesTarget  = false
 			mydata.maxListSize  =  13
 			mydata.category  =  nil
 			mydata.actionCompletionEffects  = nil
-			mydata.networkBreached  =  v.entry.networkbreached
+			mydata.networkBreached  =  v.data.networkbreached
 			
 			this.listController:PushData(mydata, false)
 			
@@ -6968,14 +6973,14 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListItemController_UpdateState(this,wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod()  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod()  end
 		wrappedMethod()
 		
 	
 	end
 	
 	function QuickhacksListGameController_OnAction(this,action,consumer,wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(action,consumer)  end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(action,consumer)  end
 		wrappedMethod(action,consumer)
 		
 	
@@ -6983,14 +6988,14 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	
 	function QuickhacksListGameController_ApplyQuickHack(this,wrappedMethod)
 		------print("step 02")
-		if(moddisabled == true) then return wrappedMethod()  end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod()  end
 		
 		local value = wrappedMethod()
 		if string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
 			
 				local splittext = split(NameToString(this.selectedData.actionOwnerName),':')
 			
-				if(checkTriggerRequirement(arrayQuickhack[splittext[2]].entry.requirement,arrayQuickhack[splittext[2]].entry.trigger))then
+				if(checkTriggerRequirement(cyberscript.cache["quickhack"][splittext[2]].data.requirement,cyberscript.cache["quickhack"][splittext[2]].data.trigger))then
 				
 					usedCells = this.selectedData.cost
 					maxCells =  this.lastMaxCells
@@ -7027,13 +7032,13 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListGameController_OnQuickhackStarted(this,value,wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(value)  end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		wrappedMethod(value)
 		if string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
 			
 				local splittext = split(NameToString(this.selectedData.actionOwnerName),':')
 			
-				if(checkTriggerRequirement(arrayQuickhack[splittext[2]].entry.requirement,arrayQuickhack[splittext[2]].entry.trigger))then
+				if(checkTriggerRequirement(cyberscript.cache["quickhack"][splittext[2]].data.requirement,cyberscript.cache["quickhack"][splittext[2]].data.trigger))then
 					
 					local availablecell = maxCells-usedCells
 					
@@ -7042,7 +7047,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 					local fillCells =  math.floor(maxCells * percent *0.01)
 					
 					if(fillCells > -1) then
-						runActionList(arrayQuickhack[splittext[2]].entry.action,arrayQuickhack[splittext[2]].entry.tag,"interact",false,"player")
+						runActionList(cyberscript.cache["quickhack"][splittext[2]].data.action,cyberscript.cache["quickhack"][splittext[2]].data.tag,"interact",false,"player")
 					end
 				
 				end
@@ -7054,7 +7059,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListGameController_SetVisibility(this,value,wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(value)  end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		wrappedMethod(value)
 		
 		
@@ -7066,7 +7071,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListItemController_OnMemoryPercentUpdate(this,value, wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod(value)  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		wrappedMethod(value)
 		
 		
@@ -7075,7 +7080,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function QuickhacksListItemController_UpdateQuickhacksMemoryBarSize(this,size, wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod(size)  end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(size)  end
 		wrappedMethod(size)
 			
 		
@@ -7109,7 +7114,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	function QuickhacksListItemController_PlayChoiceAcceptedAnimation(this,wrappedMethod)
 	
 	
-	if(moddisabled == true) then return wrappedMethod()  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod()  end
 		wrappedMethod()
 		if this.isSelected then
 			
@@ -7126,7 +7131,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	---Scanner
 	function VehiclesManagerPopupGameController_SetupData(this, wrappedMethod)
-	if(moddisabled == true) then return wrappedMethod()  end
+	if(observerthread == true or moddisabled  == true)  then return wrappedMethod()  end
 	
 		local currnetData 
 		
@@ -7151,9 +7156,9 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 		end
 		
 		
-		for k,data in pairs(arrayGarage) do
+		for k,data in pairs(cyberscript.cache["garage"]) do
 		
-			local vehicle = data.entry
+			local vehicle = data.data
 			
 			currnetData =  VehicleListItemData.new()
 			currnetData.displayName = vehicle.name
@@ -7201,10 +7206,11 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 
 
 	function VehiclesManagerListItemController_OnDataChanged(this,value, wrappedMethod)
-		 this.vehicleData = FromVariant(value)
-		 if(arrayGarage[NameToString(this.vehicleData.data.name)] ~= nil) then
+		if(observerthread == true or moddisabled  == true)  then return  end
+		this.vehicleData = FromVariant(value)
+		 if(cyberscript.cache["garage"][NameToString(this.vehicleData.data.name)] ~= nil) then
 				
-				local myvehicle = arrayGarage[NameToString(this.vehicleData.data.name)].entry
+				local myvehicle = cyberscript.cache["garage"][NameToString(this.vehicleData.data.name)].data
 				------print(dump(myvehicle))
 					
 				inkTextRef.SetText(this.label, myvehicle.name)
@@ -7226,7 +7232,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 	
 	function VehiclesManagerPopupGameController_Activate(this, wrappedMethod)
-		if(moddisabled == true) then return wrappedMethod()  end
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod()  end
 			
 			
 		   local selectedItem = this.listController:GetSelectedItem()
@@ -7234,9 +7240,9 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 			local vehicleData = selectedItem:GetVehicleData()
 			------print(GameDump(vehicleData))
 			------print(GameDump(vehicleData.data))
-			if(arrayGarage[NameToString(vehicleData.data.name)] ~= nil) then
+			if(cyberscript.cache["garage"][NameToString(vehicleData.data.name)] ~= nil) then
 			
-				local myvehicle = arrayGarage[NameToString(vehicleData.data.name)].entry
+				local myvehicle = cyberscript.cache["garage"][NameToString(vehicleData.data.name)].data
 				------print(dump(myvehicle))
 				runActionList(myvehicle.action,myvehicle.tag,"interact",false,"player")
 				this:Close()
@@ -7251,7 +7257,7 @@ function CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,icon
 	end
 
 function WorldMapMenuGameController_ShowGangsInfo(self,district)
-		if(moddisabled == true) then return  end
+		if(observerthread == true or moddisabled  == true)  then return  end
 		local zoomlevel = self:GetCurrentZoom()
 		logme(2,zoomlevel)
 		
@@ -7331,8 +7337,8 @@ function WorldMapMenuGameController_ShowGangsInfo(self,district)
 							local gang = getFactionByTag(gangs[i].tag)
 							
 							if(gang ~= nil) then
-								CurrentGang = gang.Name.." ("..gangs[i].score..")"
-								CurrentGangLogo = gang.Logo
+								CurrentGang = gang.name.." ("..gangs[i].score..")"
+								CurrentGangLogo = gang.logo
 								
 								
 								gangController:SetData(gamedataAffiliation_Record.new())
@@ -7359,6 +7365,7 @@ function WorldMapMenuGameController_ShowGangsInfo(self,district)
 
 ---Misc Function---
 function startListeners(player)
+	if(observerthread == true or moddisabled  == true)  then return  end
 	player:UnregisterInputListener(player, 'QuickMelee')
 	player:UnregisterInputListener(player, 'CameraAim')
 	player:UnregisterInputListener(player, 'DeviceAttack')
@@ -7371,7 +7378,7 @@ end
 
 
 function listenPlayerInput(action)
-	if(moddisabled == true) then return  end
+	if(observerthread == true or moddisabled  == true)  then return  end
 		actionName = Game.NameToString(action:GetName(action))
 		actionType = action:GetType(action).value
 		actionValue = action:GetValue(action)
@@ -7466,97 +7473,9 @@ function listenPlayerInput(action)
 		
 
 		if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
-			----printactionName)+
-			-- --logme(2,actionName)
-			-- --logme(2,actionType)
-			-- logme(1,actionName)
-			-- logme(1,actionType)
+			
 			local inputHitted = false
-			-- if(isdialogactivehub == true ) then
-				
-				-- local inputIndex = 0
-				
-				-- if(string.find(tostring(actionName), "hoice1_Release")and (actionType == "BUTTON_RELEASED") and (currentDialogHub.dial.options[currentDialogHub.index].locked == nil or currentDialogHub.dial.options[currentDialogHub.index].locked == false)) then
-					
-					
-					-- if(currentDialogHub.dial.options[currentDialogHub.index].requirement == nil or checkTriggerRequirement(currentDialogHub.dial.options[currentDialogHub.index].requirement,currentDialogHub.dial.options[currentDialogHub.index].trigger))then
-						-- ClickOnDialog(currentDialogHub.dial.options[currentDialogHub.index],currentDialogHub.dial.speaker.value,currentDialogHub.dial.speaker.way)
-					-- end
-					
-				-- end
-				
-				
-				
-				
-				-- if((string.find(tostring(actionName), "NextWeapon") or string.find(tostring(actionName), "hoiceScrollUp"))and (actionType == "BUTTON_PRESSED")) then
-					
-					
-					-- if(currentDialogHub.index == nil) then
-						-- currentDialogHub.index = 1
-					-- end
-					-- currentDialogHub.index = currentDialogHub.index-1
-					-- ----logme(2,"currentDialogHub.index "..currentDialogHub.index )
-					-- if(currentDialogHub.index < 1) then
-						-- currentDialogHub.index = #currentDialogHub.dial.options
-					-- end
-					
-					-- Game.GetBlackboardSystem():Get(Game.GetAllBlackboardDefs().UIInteractions):SetInt(Game.GetAllBlackboardDefs().UIInteractions.SelectedIndex, currentDialogHub.index, true)
-				-- end
-				
-				
-				
-				
-				-- if((string.find(tostring(actionName), "PreviousWeapon") or string.find(tostring(actionName), "hoiceScrollDown"))and (actionType == "BUTTON_PRESSED")) then
-					-- if(currentDialogHub.index == nil) then
-						-- currentDialogHub.index = 1
-					-- end
-					
-					
-					-- currentDialogHub.index = currentDialogHub.index+1
-					
-					-- if(currentDialogHub.index >  #currentDialogHub.dial.options) then
-						-- currentDialogHub.index =  1
-					-- end
-					
-					-- Game.GetBlackboardSystem():Get(Game.GetAllBlackboardDefs().UIInteractions):SetInt(Game.GetAllBlackboardDefs().UIInteractions.SelectedIndex, currentDialogHub.index, true)
-					
-				-- end
-				
-				
-				
-				
-				
-				
-				-- if currentDialogHub~= nil and currentDialogHub.dial ~= nil then
-					-- if(inputIndex >  #currentDialogHub.dial.options) then
-						-- inputIndex = #currentDialogHub.dial.options
-					-- end
-					-- if(#currentDialogHub.dial.options == 0 or currentDialogHub.dial.options == nil) then
-						-- currentDialogHub.dial.options = {}
-						-- local option = {}
-						-- option.Description = getLang("talk_later")
-						-- option.action = {}
-						-- option.trigger = {}
-						-- option.trigger.auto = {}
-						-- option.trigger.auto.name = "auto"
-						-- option.requirement = {}
-						-- option.input = 1
-						-- local requirem = {}
-						
-						-- table.insert(requirem,"auto")
-						-- table.insert(option.requirement,requirem)
-						-- table.insert(currentDialogHub.dial.options,option)
-					-- end
-					-- -- if(currentDialogHub ~= nil) then
-					-- -- for i = 1, #currentDialogHub.dial.options do
-					-- -- if(currentDialogHub ~= nil and currentDialogHub.dial.options[i].input == inputIndex) then
-					-- -- --	------print"input choice detexted")
-					-- -- --	----printcurrentDialogHub.dial.options[i].Description)
-					-- -- end
-					-- -- end
-					-- -- end
-				-- end
-			-- end
+			
 			if(isdialogactivehub == false and candisplayInteract == true) then
 				--		------print"event detexted")
 				local inputIndex = 0
@@ -7575,7 +7494,7 @@ function listenPlayerInput(action)
 				
 				
 				if(#loadInteract > 0) then
-					local interact = arrayInteract[loadInteract[inputIndex]].interact
+					local interact = cyberscript.cache["interact"][loadInteract[inputIndex]].data
 					runActionList(interact.action,interact.tag,"interact",false,"player")
 					
 					else
@@ -7606,7 +7525,7 @@ function listenPlayerInput(action)
 		if #currentInputHintList > 0 then
 			for i = 1, #currentInputHintList do
 				if(currentInputHintList[i].key == actionName and actionType == "BUTTON_RELEASED") then
-					local inter = arrayInteract[currentInputHintList[i].tag].interact
+					local inter = cyberscript.cache["interact"][currentInputHintList[i].tag].data
 					runActionList(inter.action,inter.tag,"interact",false,"player")
 				end
 			end

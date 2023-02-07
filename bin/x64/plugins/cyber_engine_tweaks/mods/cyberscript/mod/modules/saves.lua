@@ -6,9 +6,9 @@ cyberscript.module = cyberscript.module +1
 function initGangDistrictScore()
 	
 	
-for k,v in pairs(arrayFaction) do
+for k,v in pairs(cyberscript.cache["faction"]) do
 	
-	if(arrayFaction[k].faction.haveterritory == nil or arrayFaction[k].faction.haveterritory == true) then 
+	if(cyberscript.cache["faction"][k].data.haveterritory == nil or cyberscript.cache["faction"][k].data.haveterritory == true) then 
 	
 	if(currentSave.Variable[k] == nil) then
 	
@@ -23,7 +23,7 @@ for k,v in pairs(arrayFaction) do
 	
 		local isOwner = false
 		
-		if(arrayFaction[k].faction.DistrictTag == arrayDistricts[j].Tag) then
+		if(cyberscript.cache["faction"][k].data.district_tag == arrayDistricts[j].Tag) then
 		
 		currentSave.Variable[k][arrayDistricts[j].Tag] = 100
 		 isOwner = true
@@ -60,7 +60,7 @@ function initGangRelation()
 	
 	
 	
-for k,v in pairs(arrayFaction) do
+for k,v in pairs(cyberscript.cache["faction"]) do
 	
 	
 	
@@ -72,12 +72,12 @@ for k,v in pairs(arrayFaction) do
 	end
 	
 	
-	for x,y in pairs(arrayFaction) do
+	for x,y in pairs(cyberscript.cache["faction"]) do
 	
 		local isrival = false
-		for i=1, #v.faction.Rivals do
+		for i=1, #v.data.rivals do
 		
-			if(v.faction.Rivals[i] == x) then
+			if(v.data.rivals[i] == x) then
 			isrival = true
 			break
 			end
@@ -314,14 +314,14 @@ function getNPCCallableByAffinity()
 	end
 	
 	
-	for k,v in pairs(arrayInteract) do 
+	for k,v in pairs(cyberscript.cache["interact"]) do 
 							
 	
-			if(v.interact.display == "phone_service")then
+			if(v.data.display == "phone_service")then
 			
 				local contactdata = {}
-				contactdata.name =  v.interact.name
-				contactdata.id =  v.interact.tag
+				contactdata.name =  v.data.name
+				contactdata.id =  v.data.tag
 				contactdata.avatarID = "Character.Delamain"
 				contactdata.phonetype = "Service"
 				
@@ -335,17 +335,17 @@ function getNPCCallableByAffinity()
 	end
 	
 	
-	for k,v in pairs(arrayFixer) do
+	for k,v in pairs(cyberscript.cache["fixer"]) do
 			
-			local score = getScoreKey("Affinity",arrayFixer[k].fixer.Faction)
+			local score = getScoreKey("Affinity",cyberscript.cache["fixer"][k].data.Faction)
 			if score ~= nil and score > 50 then 
 				
 				
 			
 				local contactdata = {}
-				contactdata.name =  getLang("save_phone_cmfixer")..arrayFixer[k].fixer.Name
+				contactdata.name =  getLang("save_phone_cmfixer")..cyberscript.cache["fixer"][k].data.name
 				contactdata.id =  k
-				contactdata.avatarID = arrayFixer[k].fixer.NPCId
+				contactdata.avatarID = cyberscript.cache["fixer"][k].data.tweakid
 				contactdata.phonetype = "Fixer"
 				
 				table.insert(contactList,contactdata)

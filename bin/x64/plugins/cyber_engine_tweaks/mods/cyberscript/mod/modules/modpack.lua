@@ -422,7 +422,7 @@ function loadDatapackObject(namespace)
 	
 	for i=1,#datapackObjectType do
 		local objtype = datapackObjectType[i]
-		if(objtype == "functions") then objtype = "function" end
+	
 		local reader = dir("datapack/"..namespace.."/"..objtype)
 		if(reader ~= nil) then
 			arrayDatapack[namespace][objtype] = {}
@@ -443,6 +443,7 @@ function loadDatapackObject(namespace)
 					
 					imageobj.name = reader[i].name
 					imageobj.path="datapack/"..namespace.."/"..objtype.."/"..reader[i].name
+					imageobj.file="datapack/"..namespace.."/"..objtype.."/"..reader[i].name
 					imageobj.namespace = namespace
 					
 					
@@ -498,7 +499,7 @@ function loadAssetsObject()
 	
 	for i=1,#datapackObjectType do
 		local objtype = datapackObjectType[i]
-		if(objtype == "functions") then objtype = "function" end
+		
 		local reader = dir("assets/"..objtype)
 		if(reader ~= nil) then
 			arrayDatapack[namespace][objtype] = {}
@@ -839,45 +840,78 @@ function flagChecker(myflag)
 end
 
 
+	function LoadDataPackCacheSingle(k)
+	
+	
+	
+	
+	
+			local v = arrayDatapack[k]
+			if('table' == type(v) and v.enabled ~= nil and v.enabled == true) then
+				
+				if(DatapackChecker(v.metadata)) then
+				
+					for y=1,#datapackObjectType do
+					
+						local objtype = datapackObjectType[y]
+						
+					
+					
+						if(arrayDatapack[k][objtype] ~= nil) then
+							
+							try {
+								function()
+							FillList(objtype,arrayDatapack[k][objtype],k)
+								end,
+							
+							catch {
+								function(error)
+									logme(1,'Error during loading cache for datatpack: '..error,true)
+									
+								end
+							}
+							}
+							else
+						--	logme(10,"can't find "..objtype.." for "..k)
+							
+						end
+						
+					end
+				else
+				logme(1,"Output : "..tostring(DatapackChecker(v.metadata)),true)
+				logme(1,"can't load : "..k.." data :"..tostring(dump(v.metadata)),true)
+				
+				end
+			end
+			
+			
+		
+		
+	
+	
 
+	loadQuestsToUI()
+	getInteractGroup()
+	FillCharacterArchive()
+	
+	
+	calculatePOIList()
+	
+	end
 
 
 	
 	function LoadDataPackCache()
 	
-	arrayQuest2 = {}
-	arrayInteract = {}
-	arrayDialog = {}
-	arrayHouse = {}
-	arrayFixer = {}
-	arrayScene = {}
-	arrayHUD = {}
-	arrayFaction = {}
-	arrayPOI = {}
-	arrayEvent = {}
-	arrayCodex = {}
-	arrayWebpage = {}
-	arrayEmail = {}
 	
-	arrayFunction = {}
-	arrayHousing = {}
-	arrayHelp = {}
-	arrayInterfaces = {}
-	arrayCustomNPC = {}
-	arrayPhoneConversation = {}
-	arrayShard = {}
-	arrayNode = {}
-	arrayPath = {}
-	arrayCircuit = {}
-	arrayRadio = {}
-	arraySound = {}
-	arrayTexture = {}
-	arrayCorpo = {}
-	arraySetting = {}
-	arrayHousingTemplate = {}
-	arrayCharacterArchive = {}
-	arrayQuickhack = {}
-	arrayGarage = {}
+	cyberscript.cache = {}
+	for y=1,#datapackObjectType do
+						
+		local objtype = datapackObjectType[y]
+		
+		cyberscript.cache[objtype] = {}
+							
+	end
 	
 	if(arrayDatapack ~= nil) then
 	
@@ -892,7 +926,7 @@ end
 						
 							local objtype = datapackObjectType[y]
 							
-							if objtype == "functions" then objtype = "function" end
+						
 						
 							if(arrayDatapack[k][objtype] ~= nil) then
 								
@@ -921,6 +955,8 @@ end
 					end
 				end
 			end
+			else 
+			print("NULLL")
 		end
 		
 	
@@ -932,7 +968,7 @@ end
 	
 	
 	calculatePOIList()
-	
+
 	end
 	
 	function calculatePOIList()
@@ -942,15 +978,15 @@ end
 	poi_type = {}
 	poi_tag = {}
 	
-	for k,v in pairs(arrayPOI) do
+	for k,v in pairs(cyberscript.cache["poi"]) do
 		
 		
-		for i,location in ipairs(v.poi.locations) do
+		for i,location in ipairs(v.data.locations) do
 			
 			
 			local obj = {}
 			obj.tag = location.Tag
-			obj.type = v.poi.isFor
+			obj.type = v.data.isFor
 			obj.district =location.district
 			obj.subdistrict = location.subdistrict
 			obj.inVehicule = location.inVehicule
@@ -1031,49 +1067,49 @@ end
 								for i=1,#value do
 									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 									rootpath = path
-									arrayCircuit[value[i].tag] = {}
-									arrayCircuit[value[i].tag].circuit = value[i]
-									arrayCircuit[value[i].tag].file = path
-									arrayCircuit[value[i].tag].datapack = datapackname
-									arrayCircuit[value[i].tag].scripttype = objtype
+									cyberscript.cache["circuit"][value[i].tag] = {}
+									cyberscript.cache["circuit"][value[i].tag].data = value[i]
+									cyberscript.cache["circuit"][value[i].tag].file = path
+									cyberscript.cache["circuit"][value[i].tag].datapack = datapackname
+									cyberscript.cache["circuit"][value[i].tag].scripttype = objtype
 								end
 							else
 								if(value.tag ~= nil) then
 									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 									rootpath = path
-									arrayCircuit[value.tag] = {}
-									arrayCircuit[value.tag].circuit = value
-									arrayCircuit[value.tag].file = path
-									arrayCircuit[value.tag].datapack = datapackname
-									arrayCircuit[value.tag].scripttype = objtype
+									cyberscript.cache["circuit"][value.tag] = {}
+									cyberscript.cache["circuit"][value.tag].data = value
+									cyberscript.cache["circuit"][value.tag].file = path
+									cyberscript.cache["circuit"][value.tag].datapack = datapackname
+									cyberscript.cache["circuit"][value.tag].scripttype = objtype
 								end
 							end
 						end
-						elseif(objtype == "dialog") then
+						elseif(objtype == "choice") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							if(#value > 0) then
 								for i=1,#value do
-									arrayDialog[tostring(value[i].Tag)] = {}
-									arrayDialog[tostring(value[i].Tag)].dialog = value[i]
-									arrayDialog[tostring(value[i].Tag)].path = path
-									arrayDialog[tostring(value[i].Tag)].datapack = datapackname
-									arrayDialog[tostring(value[i].Tag)].scripttype = objtype
-									if(arrayDialog[tostring(value[i].Tag)]["dialog"] == nil) then
-										arrayDialog[tostring(value[i].Tag)]["dialog"]["havequitoption"] = true
+									cyberscript.cache["choice"][tostring(value[i].tag)] = {}
+									cyberscript.cache["choice"][tostring(value[i].tag)].data = value[i]
+									cyberscript.cache["choice"][tostring(value[i].tag)].file = path
+									cyberscript.cache["choice"][tostring(value[i].tag)].datapack = datapackname
+									cyberscript.cache["choice"][tostring(value[i].tag)].scripttype = objtype
+									if(cyberscript.cache["choice"][tostring(value[i].tag)]["data"] == nil) then
+										cyberscript.cache["choice"][tostring(value[i].tag)]["data"]["havequitoption"] = true
 									end
 								end
 							else
 								if(value.tag ~= nil) then
 								
-									arrayDialog[tostring(value.Tag)] = {}
-									arrayDialog[tostring(value.Tag)].dialog = value
-									arrayDialog[tostring(value.Tag)].path = path
-									arrayDialog[tostring(value.Tag)].datapack = datapackname
-									arrayDialog[tostring(value.Tag)].scripttype = objtype
-									if(arrayDialog[tostring(value.Tag)]["dialog"] == nil) then
-										arrayDialog[tostring(value.Tag)]["dialog"]["havequitoption"] = true
+									cyberscript.cache["choice"][tostring(value.tag)] = {}
+									cyberscript.cache["choice"][tostring(value.tag)].data = value
+									cyberscript.cache["choice"][tostring(value.tag)].file = path
+									cyberscript.cache["choice"][tostring(value.tag)].datapack = datapackname
+									cyberscript.cache["choice"][tostring(value.tag)].scripttype = objtype
+									if(cyberscript.cache["choice"][tostring(value.tag)]["data"] == nil) then
+										cyberscript.cache["choice"][tostring(value.tag)]["data"]["havequitoption"] = true
 									end
 								
 								end
@@ -1083,52 +1119,52 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayEvent[value.tag] = {}
-							arrayEvent[value.tag].event = value
-							arrayEvent[value.tag].file = path
-							arrayEvent[value.tag].datapack = datapackname
-							arrayEvent[value.tag].scripttype = objtype
+							cyberscript.cache["event"][value.tag] = {}
+							cyberscript.cache["event"][value.tag].data = value
+							cyberscript.cache["event"][value.tag].file = path
+							cyberscript.cache["event"][value.tag].datapack = datapackname
+							cyberscript.cache["event"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "faction") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayFaction[value.Tag] = {}
-							arrayFaction[value.Tag].faction = value
-							arrayFaction[value.Tag].file = path
-							arrayFaction[value.Tag].datapack = datapackname
-							arrayFaction[value.Tag].scripttype = objtype
+							cyberscript.cache["faction"][value.tag] = {}
+							cyberscript.cache["faction"][value.tag].data = value
+							cyberscript.cache["faction"][value.tag].file = path
+							cyberscript.cache["faction"][value.tag].datapack = datapackname
+							cyberscript.cache["faction"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "fixer") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayFixer[value.Tag] = {}
-							arrayFixer[value.Tag].fixer = value
-							arrayFixer[value.Tag].file = path
-							arrayFixer[value.Tag].datapack = datapackname
-							arrayFixer[value.Tag].scripttype = objtype
+							cyberscript.cache["fixer"][value.tag] = {}
+							cyberscript.cache["fixer"][value.tag].data = value
+							cyberscript.cache["fixer"][value.tag].file = path
+							cyberscript.cache["fixer"][value.tag].datapack = datapackname
+							cyberscript.cache["fixer"][value.tag].scripttype = objtype
 						end
-						elseif(objtype == "function") then
+						elseif(objtype == "functions") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 						
-							arrayFunction[value.tag] = {}
-							arrayFunction[value.tag].func = value
-							arrayFunction[value.tag].file = path
-							arrayFunction[value.tag].datapack = datapackname
-							arrayFunction[value.tag].scripttype = "functions"
+							cyberscript.cache["functions"][value.tag] = {}
+							cyberscript.cache["functions"][value.tag].data = value
+							cyberscript.cache["functions"][value.tag].file = path
+							cyberscript.cache["functions"][value.tag].datapack = datapackname
+							cyberscript.cache["functions"][value.tag].scripttype = "functions"
 						end
 						elseif(objtype == "help") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayHelp[value.tag] = {}
-							arrayHelp[value.tag].help = value
-							arrayHelp[value.tag].file = path
-							arrayHelp[value.tag].datapack = datapackname
-							arrayHelp[value.tag].scripttype = objtype
+							cyberscript.cache["help"][value.tag] = {}
+							cyberscript.cache["help"][value.tag].data = value
+							cyberscript.cache["help"][value.tag].file = path
+							cyberscript.cache["help"][value.tag].datapack = datapackname
+							cyberscript.cache["help"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "housing") then
 						for key, value in pairs(tabl) do 
@@ -1221,11 +1257,11 @@ end
 								
 								
 								
-								arrayHousing[newobj.tag] = {}
-								arrayHousing[newobj.tag].housing = newobj
-								arrayHousing[newobj.tag].file = path
-								arrayHousing[newobj.tag].datapack = datapackname
-								arrayHousing[newobj.tag].scripttype = objtype
+								cyberscript.cache["housing"][newobj.tag] = {}
+								cyberscript.cache["housing"][newobj.tag].data = newobj
+								cyberscript.cache["housing"][newobj.tag].file = path
+								cyberscript.cache["housing"][newobj.tag].datapack = datapackname
+								cyberscript.cache["housing"][newobj.tag].scripttype = objtype
 								
 								if(statutfile == true) then logme(1,"Cyberscript : AMM housing : "..path..". Convertion successfull !") else logme(1,"Cyberscript : AMM housing : "..path..". Convertion failed !") end
 								
@@ -1233,11 +1269,11 @@ end
 								
 								if(value.tag ~= nil) then
 							
-								arrayHousing[value.tag] = {}
-								arrayHousing[value.tag].housing = value
-								arrayHousing[value.tag].file = path
-								arrayHousing[value.tag].datapack = datapackname
-								arrayHousing[value.tag].scripttype = objtype
+								cyberscript.cache["housing"][value.tag] = {}
+								cyberscript.cache["housing"][value.tag].data = value
+								cyberscript.cache["housing"][value.tag].file = path
+								cyberscript.cache["housing"][value.tag].datapack = datapackname
+								cyberscript.cache["housing"][value.tag].scripttype = objtype
 								
 								else
 								
@@ -1259,22 +1295,22 @@ end
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayInteract[value.tag] = {}
-							arrayInteract[value.tag].interact = value
-							arrayInteract[value.tag].interact.group = datapackname
-							arrayInteract[value.tag].file = path
-							arrayInteract[value.tag].datapack = datapackname
-							arrayInteract[value.tag].scripttype = objtype
+							cyberscript.cache["interact"][value.tag] = {}
+							cyberscript.cache["interact"][value.tag].data = value
+							cyberscript.cache["interact"][value.tag].data.group = datapackname
+							cyberscript.cache["interact"][value.tag].file = path
+							cyberscript.cache["interact"][value.tag].datapack = datapackname
+							cyberscript.cache["interact"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "interfaces") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayInterfaces[value.tag] = {}
-							arrayInterfaces[value.tag].ui = value
-							arrayInterfaces[value.tag].file = path
-							arrayInterfaces[value.tag].datapack = datapackname
-							arrayInterfaces[value.tag].scripttype = objtype
+							cyberscript.cache["interfaces"][value.tag] = {}
+							cyberscript.cache["interfaces"][value.tag].data = value
+							cyberscript.cache["interfaces"][value.tag].file = path
+							cyberscript.cache["interfaces"][value.tag].datapack = datapackname
+							cyberscript.cache["interfaces"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "lang") then
 						local path = "datapack/"..datapackname.."/"..objtype.."/"
@@ -1289,11 +1325,11 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayQuest2[value.tag] = {}
-							arrayQuest2[value.tag].quest = value
-							arrayQuest2[value.tag].file = path
-							arrayQuest2[value.tag].datapack = datapackname
-							arrayQuest2[value.tag].scripttype = objtype
+							cyberscript.cache["mission"][value.tag] = {}
+							cyberscript.cache["mission"][value.tag].data = value
+							cyberscript.cache["mission"][value.tag].file = path
+							cyberscript.cache["mission"][value.tag].datapack = datapackname
+							cyberscript.cache["mission"][value.tag].scripttype = objtype
 							
 						end
 						elseif(objtype == "node") then
@@ -1302,20 +1338,20 @@ end
 							rootpath = path
 							if(#value > 0) then
 								for i=1,#value do
-									arrayNode[tostring(value[i].tag)] = {}
-									arrayNode[tostring(value[i].tag)].node = value[i]
-									arrayNode[tostring(value[i].tag)].file = path
-									arrayNode[tostring(value[i].tag)].datapack = datapackname
-									arrayNode[tostring(value[i].tag)].scripttype = objtype
+									cyberscript.cache["node"][tostring(value[i].tag)] = {}
+									cyberscript.cache["node"][tostring(value[i].tag)].data = value[i]
+									cyberscript.cache["node"][tostring(value[i].tag)].file = path
+									cyberscript.cache["node"][tostring(value[i].tag)].datapack = datapackname
+									cyberscript.cache["node"][tostring(value[i].tag)].scripttype = objtype
 								end
 								
 							else
 								if(value.tag ~= nil) then
-									arrayNode[tostring(value.tag)] = {}
-									arrayNode[tostring(value.tag)].node = value
-									arrayNode[tostring(value.tag)].file = path
-									arrayNode[tostring(value.tag)].datapack = datapackname
-									arrayNode[tostring(value.tag)].scripttype = objtype
+									cyberscript.cache["node"][tostring(value.tag)] = {}
+									cyberscript.cache["node"][tostring(value.tag)].data = value
+									cyberscript.cache["node"][tostring(value.tag)].file = path
+									cyberscript.cache["node"][tostring(value.tag)].datapack = datapackname
+									cyberscript.cache["node"][tostring(value.tag)].scripttype = objtype
 								end
 							end
 							
@@ -1324,67 +1360,67 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayCustomNPC[value.tag] = {}
-							arrayCustomNPC[value.tag].npc = value
-							arrayCustomNPC[value.tag].npc.isspawn=false
-							arrayCustomNPC[value.tag].npc.init=false
-							arrayCustomNPC[value.tag].npc.spawnforced=false
-							arrayCustomNPC[value.tag].npc.dospawnaction=true
-							arrayCustomNPC[value.tag].npc.doroutineaction=true
-							arrayCustomNPC[value.tag].npc.dodeathaction=true
-							arrayCustomNPC[value.tag].npc.dodespawnaction=true
-							arrayCustomNPC[value.tag].npc.workinglocation=value.location
-							arrayCustomNPC[value.tag].datapack = datapackname
-							arrayCustomNPC[value.tag].file = path
-							arrayCustomNPC[value.tag].scripttype = objtype
+							cyberscript.cache["npc"][value.tag] = {}
+							cyberscript.cache["npc"][value.tag].data = value
+							cyberscript.cache["npc"][value.tag].data.isspawn=false
+							cyberscript.cache["npc"][value.tag].data.init=false
+							cyberscript.cache["npc"][value.tag].data.spawnforced=false
+							cyberscript.cache["npc"][value.tag].data.dospawnaction=true
+							cyberscript.cache["npc"][value.tag].data.doroutineaction=true
+							cyberscript.cache["npc"][value.tag].data.dodeathaction=true
+							cyberscript.cache["npc"][value.tag].data.dodespawnaction=true
+							cyberscript.cache["npc"][value.tag].data.workinglocation=value.location
+							cyberscript.cache["npc"][value.tag].datapack = datapackname
+							cyberscript.cache["npc"][value.tag].file = path
+							cyberscript.cache["npc"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "path") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 						
-							arrayPath[value.tag] = {}
-							arrayPath[value.tag].path = value
-							arrayPath[value.tag].file = path
-							arrayPath[value.tag].datapack = datapackname
-							arrayPath[value.tag].scripttype = objtype
+							cyberscript.cache["path"][value.tag] = {}
+							cyberscript.cache["path"][value.tag].data = value
+							cyberscript.cache["path"][value.tag].file = path
+							cyberscript.cache["path"][value.tag].datapack = datapackname
+							cyberscript.cache["path"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "phone_dialog") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayPhoneConversation[value.tag] = {}
-							arrayPhoneConversation[value.tag].conv = value
-							arrayPhoneConversation[value.tag].file = path
-							arrayPhoneConversation[value.tag].datapack = datapackname
-							arrayPhoneConversation[value.tag].scripttype = objtype
-							if(arrayPhoneConversation[tostring(value.tag)].conv.unlock == false ) then
-								if(getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked") == 0 or getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked") == nil ) then
-									setScore(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked",0)
+							cyberscript.cache["phone_dialog"][value.tag] = {}
+							cyberscript.cache["phone_dialog"][value.tag].data = value
+							cyberscript.cache["phone_dialog"][value.tag].file = path
+							cyberscript.cache["phone_dialog"][value.tag].datapack = datapackname
+							cyberscript.cache["phone_dialog"][value.tag].scripttype = objtype
+							if(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.unlock == false ) then
+								if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked") == nil ) then
+									setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked",0)
 								end
 								else
-								if(getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked") == 0 or getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked") == nil ) then
-									setScore(arrayPhoneConversation[tostring(value.tag)].conv.tag,"unlocked",1)
+								if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked") == nil ) then
+									setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked",1)
 								end
 							end
-							for z =1, #arrayPhoneConversation[tostring(value.tag)].conv.conversation do
-								if(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].unlock == false ) then
-									if(getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].tag,"unlocked") == 0 or getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].tag,"unlocked") == nil ) then
-										setScore(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].tag,"unlocked",0)
+							for z =1, #cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation do
+								if(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].unlock == false ) then
+									if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked") == nil ) then
+										setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked",0)
 									end
 									else
-									if(getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].tag,"unlocked") == 0 or getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].tag,"unlocked") == nil) then
-										setScore(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].tag,"unlocked",1)
+									if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked") == nil) then
+										setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked",1)
 									end
 								end
-								for y=1, #arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].message do
-									if(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].message[y].unlock == false ) then
-										if(getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].message[y].tag,"unlocked") == 0 or getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].message[y].tag,"unlocked") == nil ) then
-											setScore(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].message[y].tag,"unlocked",0)
+								for y=1, #cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message do
+									if(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].unlock == false ) then
+										if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked") == nil ) then
+											setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked",0)
 										end
 										else
-										if(getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].message[y].tag,"unlocked") == 0 or getScoreKey(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].message[y].tag,"unlocked") == nil) then
-											setScore(arrayPhoneConversation[tostring(value.tag)].conv.conversation[z].message[y].tag,"unlocked",1)
+										if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked") == nil) then
+											setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked",1)
 										end
 									end
 								end
@@ -1394,11 +1430,11 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayHouse[value.tag] = {}
-							arrayHouse[value.tag].house = value
-							arrayHouse[value.tag].file = path
-							arrayHouse[value.tag].datapack = datapackname
-							arrayHouse[value.tag].scripttype = objtype
+							cyberscript.cache["place"][value.tag] = {}
+							cyberscript.cache["place"][value.tag].data = value
+							cyberscript.cache["place"][value.tag].file = path
+							cyberscript.cache["place"][value.tag].datapack = datapackname
+							cyberscript.cache["place"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "poi") then
 						for key, value in pairs(tabl) do 
@@ -1407,33 +1443,33 @@ end
 							if(value.tag == nil) then
 								value.tag = key..tostring(math.random(1,99999))
 							end
-							arrayPOI[value.tag] = {}
-							arrayPOI[value.tag].poi = value
-							arrayPOI[value.tag].file = path
-							arrayPOI[value.tag].datapack = datapackname
-							arrayPOI[value.tag].scripttype = objtype
+							cyberscript.cache["poi"][value.tag] = {}
+							cyberscript.cache["poi"][value.tag].data = value
+							cyberscript.cache["poi"][value.tag].file = path
+							cyberscript.cache["poi"][value.tag].datapack = datapackname
+							cyberscript.cache["poi"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "radio") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayRadio[value.tag] = {}
-							arrayRadio[value.tag].radio = value
-							arrayRadio[value.tag].file = path
-							arrayRadio[value.tag].datapack = datapackname
-							arrayRadio[value.tag].namespace = datapackname
-							arrayRadio[value.tag].enabled = false
-							arrayRadio[value.tag].scripttype = objtype
+							cyberscript.cache["radio"][value.tag] = {}
+							cyberscript.cache["radio"][value.tag].data = value
+							cyberscript.cache["radio"][value.tag].file = path
+							cyberscript.cache["radio"][value.tag].datapack = datapackname
+							cyberscript.cache["radio"][value.tag].namespace = datapackname
+							cyberscript.cache["radio"][value.tag].enabled = false
+							cyberscript.cache["radio"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "shard") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayShard[value.tag] = {}
-							arrayShard[value.tag].shard = value
-							arrayShard[value.tag].file = path
-							arrayShard[value.tag].datapack = datapackname
-							arrayShard[value.tag].scripttype = objtype
+							cyberscript.cache["shard"][value.tag] = {}
+							cyberscript.cache["shard"][value.tag].data = value
+							cyberscript.cache["shard"][value.tag].file = path
+							cyberscript.cache["shard"][value.tag].datapack = datapackname
+							cyberscript.cache["shard"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "sound") then
 						for key, value in pairs(tabl) do 
@@ -1442,20 +1478,20 @@ end
 							
 							if(#value > 0) then
 								for i=1,#value do
-									arraySound[value[i].tag] = {}
-									arraySound[value[i].tag].sound = value[i]
-									arraySound[value[i].tag].file = path
-									arraySound[value[i].tag].scripttype = objtype
+									cyberscript.cache["sound"][value[i].tag] = {}
+									cyberscript.cache["sound"][value[i].tag].data = value[i]
+									cyberscript.cache["sound"][value[i].tag].file = path
+									cyberscript.cache["sound"][value[i].tag].scripttype = objtype
 									
 								end
 								
 								
 							else
 								if(value.tag ~= nil) then
-									arraySound[value.tag] = {}
-									arraySound[value.tag].sound = value
-									arraySound[value.tag].file = path
-									arraySound[value.tag].scripttype = objtype
+									cyberscript.cache["sound"][value.tag] = {}
+									cyberscript.cache["sound"][value.tag].data = value
+									cyberscript.cache["sound"][value.tag].file = path
+									cyberscript.cache["sound"][value.tag].scripttype = objtype
 								end
 							end
 						end
@@ -1464,65 +1500,65 @@ end
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayTexture[key] = {}
-							arrayTexture[key].texture = path
-							arrayTexture[key].file = path
-							arrayTexture[key].scripttype = objtype
+							cyberscript.cache["texture"][key] = {}
+							cyberscript.cache["texture"][key].data = path
+							cyberscript.cache["texture"][key].file = path
+							cyberscript.cache["texture"][key].scripttype = objtype
 						end
 						elseif(objtype == "scene") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayScene[value.tag] = {}
-							arrayScene[value.tag].scene = value
-							arrayScene[value.tag].file = path
-							arrayScene[value.tag].datapack = datapackname
-							arrayScene[value.tag].scripttype = objtype
+							cyberscript.cache["scene"][value.tag] = {}
+							cyberscript.cache["scene"][value.tag].data = value
+							cyberscript.cache["scene"][value.tag].file = path
+							cyberscript.cache["scene"][value.tag].datapack = datapackname
+							cyberscript.cache["scene"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "housing_template") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayHousingTemplate[value.tag] = {}
-							arrayHousingTemplate[value.tag].template = value
-							arrayHousingTemplate[value.tag].file = path
-							arrayHousingTemplate[value.tag].datapack = datapackname
-							arrayHousingTemplate[value.tag].scripttype = objtype
+							cyberscript.cache["housing_template"][value.tag] = {}
+							cyberscript.cache["housing_template"][value.tag].data = value
+							cyberscript.cache["housing_template"][value.tag].file = path
+							cyberscript.cache["housing_template"][value.tag].datapack = datapackname
+							cyberscript.cache["housing_template"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "hud") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayHUD[value.tag] = {}
-							arrayHUD[value.tag].hud = value
-							arrayHUD[value.tag].file = path
-							arrayHUD[value.tag].datapack = datapackname
-							arrayHUD[value.tag].scripttype = objtype
+							cyberscript.cache["hud"][value.tag] = {}
+							cyberscript.cache["hud"][value.tag].data = value
+							cyberscript.cache["hud"][value.tag].file = path
+							cyberscript.cache["hud"][value.tag].datapack = datapackname
+							cyberscript.cache["hud"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "setting") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arraySetting[value.tag] = {}
-							arraySetting[value.tag].setting = value
-							arraySetting[value.tag].file = path
-							arraySetting[value.tag].datapack = datapackname
-							arraySetting[value.tag].scripttype = objtype
+							cyberscript.cache["setting"][value.tag] = {}
+							cyberscript.cache["setting"][value.tag].data = value
+							cyberscript.cache["setting"][value.tag].file = path
+							cyberscript.cache["setting"][value.tag].datapack = datapackname
+							cyberscript.cache["setting"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "codex") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayCodex[value.tag] = {}
-							arrayCodex[value.tag].entry = value
-							arrayCodex[value.tag].file = path
-							arrayCodex[value.tag].datapack = datapackname
-							arrayCodex[value.tag].scripttype = objtype
+							cyberscript.cache["codex"][value.tag] = {}
+							cyberscript.cache["codex"][value.tag].data = value
+							cyberscript.cache["codex"][value.tag].file = path
+							cyberscript.cache["codex"][value.tag].datapack = datapackname
+							cyberscript.cache["codex"][value.tag].scripttype = objtype
 						end
 						
 						elseif(objtype == "webpage") then
@@ -1530,54 +1566,54 @@ end
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayWebpage[value.tag] = {}
-							arrayWebpage[value.tag].entry = value
-							arrayWebpage[value.tag].file = path
-							arrayWebpage[value.tag].datapack = datapackname
-							arrayWebpage[value.tag].scripttype = objtype
+							cyberscript.cache["webpage"][value.tag] = {}
+							cyberscript.cache["webpage"][value.tag].data = value
+							cyberscript.cache["webpage"][value.tag].file = path
+							cyberscript.cache["webpage"][value.tag].datapack = datapackname
+							cyberscript.cache["webpage"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "email") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayEmail[value.tag] = {}
-							arrayEmail[value.tag].entry = value
-							arrayEmail[value.tag].file = path
-							arrayEmail[value.tag].datapack = datapackname
-							arrayEmail[value.tag].scripttype = objtype
+							cyberscript.cache["email"][value.tag] = {}
+							cyberscript.cache["email"][value.tag].data = value
+							cyberscript.cache["email"][value.tag].file = path
+							cyberscript.cache["email"][value.tag].datapack = datapackname
+							cyberscript.cache["email"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "character") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							arrayCharacterArchive[value.name] = {}
-							arrayCharacterArchive[value.name].obj = value
-							arrayCharacterArchive[value.name].file = path
-							arrayCharacterArchive[value.name].datapack = datapackname
-							arrayCharacterArchive[value.tag].scripttype = objtype
+							cyberscript.cache["character"][value.name] = {}
+							cyberscript.cache["character"][value.name].data = value
+							cyberscript.cache["character"][value.name].file = path
+							cyberscript.cache["character"][value.name].datapack = datapackname
+							cyberscript.cache["character"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "quickhack") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayQuickhack[value.tag] = {}
-							arrayQuickhack[value.tag].entry = value
-							arrayQuickhack[value.tag].file = path
-							arrayQuickhack[value.tag].datapack = datapackname
-							arrayQuickhack[value.tag].scripttype = objtype
+							cyberscript.cache["quickhack"][value.tag] = {}
+							cyberscript.cache["quickhack"][value.tag].data = value
+							cyberscript.cache["quickhack"][value.tag].file = path
+							cyberscript.cache["quickhack"][value.tag].datapack = datapackname
+							cyberscript.cache["quickhack"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "garage") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							arrayGarage[value.tag] = {}
-							arrayGarage[value.tag].entry = value
-							arrayGarage[value.tag].file = path
-							arrayGarage[value.tag].datapack = datapackname
-							arrayGarage[value.tag].scripttype = objtype
+							cyberscript.cache["garage"][value.tag] = {}
+							cyberscript.cache["garage"][value.tag].data = value
+							cyberscript.cache["garage"][value.tag].file = path
+							cyberscript.cache["garage"][value.tag].datapack = datapackname
+							cyberscript.cache["garage"][value.tag].scripttype = objtype
 						end
 					
 					end
@@ -1619,17 +1655,17 @@ end
 	
 	function FillCharacterArchive()
 	
-	for k, ent in pairs(arrayCharacterArchive) do
+	for k, ent in pairs(cyberscript.cache["character"]) do
 		
-		TweakDB:CloneRecord(ent.obj.name, ent.obj.source)
-		TweakDB:SetFlat(ent.obj.name..".entityTemplatePath", ent.obj.path)
+		TweakDB:CloneRecord(ent.data.name, ent.data.source)
+		TweakDB:SetFlat(ent.data.name..".entityTemplatePath", ent.data.path)
 	end
 	
 	end
 	
 	function loadQuestsToUI()
-		for k,v in pairs(arrayQuest2) do
-			local questos = arrayQuest2[k].quest
+		for k,v in pairs(cyberscript.cache["mission"]) do
+			local questos = cyberscript.cache["mission"][k].data
 			local data = {}
 			checkContext(questos)
 			
@@ -1792,10 +1828,10 @@ end
 							
 							local jsonf = trydecodeJSOn(lines,f,path)
 							
-							arrayPath[jsonf.tag] = {}
-							arrayPath[jsonf.tag].gamepath = jsonf
-							arrayPath[jsonf.tag].file = path
-							arrayPath[jsonf.tag].datapack = k
+							cyberscript.cache["path"][jsonf.tag] = {}
+							cyberscript.cache["path"][jsonf.tag].data = jsonf
+							cyberscript.cache["path"][jsonf.tag].file = path
+							cyberscript.cache["path"][jsonf.tag].datapack = k
 							f:close()
 							else
 							res = false

@@ -36,7 +36,10 @@ function loadexternal()
 	RES_TweakDB =  dofile('mod/external/tweakdb-ids.lua')
 	RES_TweakDBmeta =  dofile('mod/external/tweakdb-meta.lua')
 	interactionUI = dofile("mod/external/interactionUI")
+	if GetMod('corruptNCPD') then 
 	
+	CorruptNCPDLang =  dofile('mod/external/CorruptNCPDLang.lua')
+	end
 end
 
 -- logme(2,"Start Mod")
@@ -53,7 +56,7 @@ function ModInitialisation()
 	
 	
 	--version of compiled cache
-	cacheVersion = 2
+	cacheVersion = 3
 	
 	
 	--print("test")
@@ -271,7 +274,7 @@ function SaveLoading()
 	loadModule()
 	
 	makeNativeSettings()
-	
+	print("save me")
 end
 -- ----------------------------------------------------------------------
 -------------------------------Var Loading-------------------------------
@@ -577,7 +580,8 @@ function initCore() --Setup session, mod/external observer and trigger mod core 
 	tick = 0
 end
 function inGameInit() -- init some function after save loaded
-	--loadHUD()
+	loadHUD()
+	
 	LoadDataPackCache()
 	candrwMapPinFixer= false
 	cancheckmission = true
@@ -592,9 +596,9 @@ function inGameInit() -- init some function after save loaded
 	color = CPS.color
 	cyberscript.GroupManager = {}
 	cyberscript.EntityManager = {}
-	Game.SetTimeDilation(0)
+	--Game.SetTimeDilation(0)
 	
-	doInitEvent()
+  doInitEvent()
 
 	
 	local entity = {}
@@ -613,13 +617,15 @@ function inGameInit() -- init some function after save loaded
 	local blackboardDefs = Game.GetAllBlackboardDefs()
 	local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
 	blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
-	Game.SetTimeDilation(0)
+	--Game.SetTimeDilation(0)
 
 pcall(function()
 	Game.GetSettingsSystem():GetVar("/gameplay/performance", "CrowdDensity"):SetValue("High")
 end)
 	print(getLang("seestarted"))
 end
+
+
 function shutdownManager() -- setup some function at shutdown
 	
 	CheckandUpdateDatapack()
@@ -698,7 +704,7 @@ function SetFlatFromSetting()
 	end
 	
 	
-		TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
+	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	
 end
 -- ------------------------------------------------------------------
@@ -743,41 +749,28 @@ registerForEvent('onDraw', function()
 	
 	if(moddisabled == false) then
 	windowsManager()
+	
 	end
 	
 end)
+
 registerForEvent("onUpdate", function(delta)
 		
-		if(moddisabled == false) then
-		
-		
-		if(hotreload == true and inMenu == false) then
-			hotreload = false
-			Game.GetPlayer():SetWarningMessage(getLang("CyberScript : Hot Reload in progress..."))
-			loadModule()
+			if(moddisabled == false) then
 			
-			Game.GetPlayer():SetWarningMessage(getLang("CyberScript : Hot Reload finished !"))
-			TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
-		else
-	
-		if saveLocationEnabled then
-			savePath(recordRotation,recordRelative,recordRotationOnly)
-		end
-		if playLocationEnabled then
-			playPath()
-			playtick = playtick+1
-		end
-		refresh(delta)
 			
-	
-		end
+			
+			refresh(delta)
+			interactionUI.update()
+		
+			end
 		
 		
 		
-		  interactionUI.update()
+		  
 		
 		
-		end
+		
 	
 	
 

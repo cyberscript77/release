@@ -34,7 +34,50 @@ function getVendorId()
 	return ripperDocList[1].vendorId
 	
 end
-
+	function __genOrderedIndex( t )
+			local orderedIndex = {}
+			for key in pairs(t) do
+				table.insert( orderedIndex, key )
+			end
+			table.sort( orderedIndex )
+			return orderedIndex
+		end
+		
+		function orderedNext(t, state)
+			-- Equivalent of the next function, but returns the keys in the alphabetic
+			-- order. We use a temporary ordered key table that is stored in the
+			-- table being iterated.
+			
+			local key = nil
+			----logme(2,"orderedNext: state = "..tostring(state) )
+			if state == nil then
+				-- the first time, generate the index
+				t.__orderedIndex = __genOrderedIndex( t )
+				key = t.__orderedIndex[1]
+				else
+				-- fetch the next value
+				for i = 1,table.getn(t.__orderedIndex) do
+					if t.__orderedIndex[i] == state then
+						key = t.__orderedIndex[i+1]
+					end
+				end
+			end
+			
+			if key then
+				return key, t[key]
+			end
+			
+			-- no more value to return, cleanup
+			t.__orderedIndex = nil
+			return
+		end
+		
+		function orderedPairs(t)
+			-- Equivalent of the pairs() function on tables. Allows to iterate
+			-- in order
+			return orderedNext, t, nil
+		end
+		
 
 function hex2rgb(hex)
     local hex = hex:gsub("#","")
@@ -858,15 +901,15 @@ end
 
 function checkWithFixer(curPos)
 	
-	for k,v in pairs(arrayFixer) do
-		--logme(2,arrayFixer[i].Name)
+	for k,v in pairs(cyberscript.cache["fixer"]) do
+		--logme(2,cyberscript.cache["fixer"][i].Name)
 		
-		checkContext(v.fixer)
+		checkContext(v.data)
 		
-		if(v.fixer.Name ~= "Delamain")then
-			if(checkPosFixer(curPos,v.fixer.LOC_X,v.fixer.LOC_Y,v.fixer.range))then
+		if(v.data.name ~= "Delamain")then
+			if(checkPosFixer(curPos,v.data.x,v.data.y,v.data.range))then
 				Game.ChangeZoneIndicatorSafe()
-				return deepcopy(v.fixer,nil)
+				return deepcopy(v.data,nil)
 				
 			end
 			
@@ -879,7 +922,7 @@ function checkWithFixer(curPos)
 					isDelamainDrived = (string.find(vehicule:GetDisplayName(), "Delamain") ~= nil)
 					if isDelamainDrived then
 						
-						return deepcopy(v.fixer,nil)
+						return deepcopy(v.data,nil)
 						
 					end
 				end
@@ -1653,11 +1696,11 @@ function setNewFixersPoint()
 	
 	
 	
-	for k,v in pairs(arrayFixer) do
+	for k,v in pairs(cyberscript.cache["fixer"]) do
 		
-		if(mappinManager[arrayFixer[k].fixer.Tag] == nil) then
+		if(mappinManager[cyberscript.cache["fixer"][k].data.tag] == nil) then
 			
-			registerMappin(arrayFixer[k].fixer.LOC_X,arrayFixer[k].fixer.LOC_Y,arrayFixer[k].fixer.LOC_Z,arrayFixer[k].fixer.Tag,'FixerVariant',true,false,"Fixer",nil,arrayFixer[k].fixer.Name,arrayFixer[k].fixer.Name,nil,nil,0)
+			registerMappin(cyberscript.cache["fixer"][k].data.x,cyberscript.cache["fixer"][k].data.y,cyberscript.cache["fixer"][k].data.z,cyberscript.cache["fixer"][k].data.tag,'FixerVariant',true,false,"Fixer",nil,cyberscript.cache["fixer"][k].data.name,cyberscript.cache["fixer"][k].data.name,nil,nil,0)
 			
 		end
 		
@@ -1902,6 +1945,34 @@ function isArray(t)
 		else
 		return false
 	end
+end
+
+function isEmpty(t)
+	local res = true
+	if('table' == type(t) and t[1] ~= nil) then
+		res = false
+		
+		else
+		if('table' == type(t)) then
+		
+			for k,v in pairs(t) do
+				if(t[k] ~= nil) then
+				
+					res = false
+					break
+						
+				
+				end
+			
+			end
+			
+		end
+		
+	
+		
+	end
+	
+	return res
 end
 
 

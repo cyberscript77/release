@@ -295,6 +295,7 @@ if spawnRegion then
 					entity.spawntimespan = os.time(os.date("!*t"))+0
 					entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 					entity.tag = tag
+					entity.isitem = isitem
 					entity.tweak = chara
 					entity.isprevention = isprevention
 					if(scriptlevel == nil) then
@@ -2145,7 +2146,6 @@ if actionRegion then
 					else
 						
 						if(isplayer) then
-							logme(10,tostring(rot.pitch))
 							
 							--print("TP Player")
 							Game.GetTeleportationFacility():Teleport(Game.GetPlayer(), Vector4.new(position.x, position.y, position.z,1) , rot)
@@ -4113,11 +4113,20 @@ if vehiculeRegion then
 		
 		
 		if action == "open" then
-			getTargetPS:OpenAllVehWindows()
+			getTargetPS:SetWindowState(0, 1)
+			getTargetPS:SetWindowState(1, 1)
+			getTargetPS:SetWindowState(2, 1)
+			getTargetPS:SetWindowState(3, 1)
+			getTargetPS:SetWindowState(4, 1)
+			getTargetPS:SetWindowState(5, 1)
 			
 			elseif action == "close" then
-			getTargetPS:CloseAllVehWindows()
-			
+			getTargetPS:SetWindowState(0, 0)
+			getTargetPS:SetWindowState(1, 0)
+			getTargetPS:SetWindowState(2, 0)
+			getTargetPS:SetWindowState(3, 0)
+			getTargetPS:SetWindowState(4, 0)
+			getTargetPS:SetWindowState(5, 0)
 			
 			
 		end
@@ -4283,5 +4292,4 @@ if vehiculeRegion then
 	
 	
 end
-
 

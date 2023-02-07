@@ -195,7 +195,7 @@ function windowsManager() -- manage and toggle UI windows
 				
 				UpdateGuild.Id = currentGuild.Id
 				UpdateGuild.Title = currentGuild.Title
-				UpdateGuild.Description = currentGuild.Description
+				UpdateGuild.description = currentGuild.description
 				UpdateGuild.Owner = currentGuild.Owner
 				UpdateGuild.FactionTag = currentGuild.FactionTag
 				UpdateGuild.LastUpdateDate = currentGuild.LastUpdateDate
@@ -783,7 +783,7 @@ function makeCustomInterface(parentroot,interface)
 						action = control.action
 					}
 					local fontsize = uifont
-					widgetcontrol = UIButton.Create(buttonData.name, buttonData.text,fontsize, width, height,control.margin,bgcolor,textcolor)
+					widgetcontrol = UIButton.Create(buttonData.name, buttonData.text,fontsize, control.size.width, control.size.height,control.margin,bgcolor,textcolor)
 					
 					widgetcontrol:RegisterCallback('OnRelease', function(button, evt)
 				
@@ -1046,65 +1046,75 @@ function openanpage(page)
 	irpmenu[page] = true
 end
 function buildnativesetting()
-	nativeSettings.data["CMCUSTOM"] = nil
-	nativeSettings.addTab("/CMCUSTOM", getLang("ui_setting_customsetting")) -- Add our mods tab (path, label)
 	
-	if arraySetting ~= nil then
-		for k,v in pairs(arraySetting) do
-			local setting = v.setting
-			
-			if nativeSettings.data["CMCUSTOM"].subcategories[setting.category] == nil then
-				nativeSettings.addSubcategory("/CMCUSTOM/"..setting.category, setting.categorylibelle) -- Optional: Add a subcategory (path, label), you can add as many as you want
+	if(isEmpty(cyberscript.cache["setting"]) == false) then
+		nativeSettings.data["CMCUSTOM"] = nil
+		nativeSettings.addTab("/CMCUSTOM", getLang("ui_setting_customsetting")) -- Add our mods tab (path, label)
+		if cyberscript.cache["setting"] ~= nil then
+			for k,v in pairs(cyberscript.cache["setting"]) do
+				local setting = v.data
+				
+				if nativeSettings.data["CMCUSTOM"].subcategories[setting.category] == nil then
+					nativeSettings.addSubcategory("/CMCUSTOM/"..setting.category, setting.categorylibelle) -- Optional: Add a subcategory (path, label), you can add as many as you want
+					
+				end
+				
+				if setting.type == "button" then
+					nativeSettings.addButton("/CMCUSTOM/"..setting.category, setting.label, setting.description,setting.buttonlabel, setting.textsize, function()
+						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
+						
+					end)
+				end
+				
+				if setting.type == "toggle" then
+					nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+						setVariable(setting.variable.tag,setting.variable.key,value)
+						
+						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
+						
+					end)
+				end
+				
+				if setting.type == "sliderInt" then
+					nativeSettings.addRangeInt("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+						
+						setScore(setting.target.tag,setting.target.key,value)
+						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
+						
+					end)
+				end
+				
+				
+				if setting.type == "sliderFloat" then
+					nativeSettings.addRangeFloat("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step,"%.2f", getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+						
+						setScore(setting.target.tag,setting.target.key,value)
+						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
+						
+					end)
+				end
+				
+				if setting.type == "sliderText" then
+					nativeSettings.addSelectorString("/CMCUSTOM/"..setting.category, setting.label, setting.description, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue), setting.defaultvalue, function(value)
+						
+						setScore(setting.target.tag,setting.target.key,getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue)[value])
+						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
+						
+					end)
+				end
+				
 				
 			end
-			
-			if setting.type == "button" then
-				nativeSettings.addButton("/CMCUSTOM/"..setting.category, setting.label, setting.description,setting.buttonlabel, setting.textsize, function()
-					runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
-					
-				end)
-			end
-			
-			if setting.type == "toggle" then
-				nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
-					setVariable(setting.variable.tag,setting.variable.key,value)
-					
-					runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
-					
-				end)
-			end
-			
-			if setting.type == "sliderInt" then
-				nativeSettings.addRangeInt("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
-					
-					setScore(setting.target.tag,setting.target.key,value)
-					runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
-					
-				end)
-			end
-			
-			
-			if setting.type == "sliderFloat" then
-				nativeSettings.addRangeFloat("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step,"%.2f", getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
-					
-					setScore(setting.target.tag,setting.target.key,value)
-					runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
-					
-				end)
-			end
-			
-			if setting.type == "sliderText" then
-				nativeSettings.addSelectorString("/CMCUSTOM/"..setting.category, setting.label, setting.description, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue), setting.defaultvalue, function(value)
-					
-					setScore(setting.target.tag,setting.target.key,getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue)[value])
-					runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
-					
-				end)
-			end
-			
-			
 		end
+		
+	else
+	
+		nativeSettings.data["CMCUSTOM"] = nil
 	end
+	
+	
+	
+	
 end
 function getcurrentpage()
 	
@@ -1335,7 +1345,7 @@ function makeNativeSettings()
 		nativeSettings.addButton("/CM/affinity", getLang("ui_setting_actions_recalculateaffinity"), getLang("ui_setting_actions_recalculateaffinity_msg"),"Recalculate", 45, function()
 			
 			
-			for k,v in pairs(arrayFaction) do
+			for k,v in pairs(cyberscript.cache["faction"]) do
 				setScore(k, "Score", 0)
 			end
 			
@@ -1355,7 +1365,7 @@ function makeNativeSettings()
 		end)
 		
 		nativeSettings.addButton("/CM/affinity", getLang("ui_setting_actions_cleareaffinity"), getLang("ui_setting_actions_recalculateaffinity_msg"),"Clear", 45, function()
-			for k,v in pairs(arrayFaction) do
+			for k,v in pairs(cyberscript.cache["faction"]) do
 				setScore("Affinity",k, 0)
 			end
 			for k,v in pairs(cyberscript.entitieshash) do
@@ -1677,21 +1687,21 @@ function loadHUD()
 	
 	
 	
-	for k,v in pairs(arrayHUD) do
-		local hud = v.hud
+	for k,v in pairs(cyberscript.cache["hud"]) do
+		local hud = v.data
 		if(hud.type == "container") then
 			displayHUD[k] = inkCanvas.new()
 			displayHUD[k]:SetName(CName.new(hud.tag))
 			displayHUD[k]:SetAnchor(inkEAnchor.Fill)
 			displayHUD[k]:Reparent(rootContainer, -1)
-			logme(10,"create "..hud.tag)
+			logme(1,"create "..hud.tag)
 			
 		end
 	end
 	
 	
-	for k,v in pairs(arrayHUD) do
-		local hud = v.hud
+	for k,v in pairs(cyberscript.cache["hud"]) do
+		local hud = v.data
 		if(hud.type == "container") then
 			if(hud.container == nil or hud.container == "default" or  hud.container == "") then
 				displayHUD[k]:Reparent(rootContainer, -1)
@@ -1703,8 +1713,8 @@ function loadHUD()
 		end
 	end
 	
-	for k,v in pairs(arrayHUD) do
-		local hud = v.hud
+	for k,v in pairs(cyberscript.cache["hud"]) do
+		local hud = v.data
 		if(hud.type == "widget") then
 			displayHUD[k] = inkText.new()
 			displayHUD[k]:SetName(CName.new(hud.tag))
@@ -1722,7 +1732,7 @@ function loadHUD()
 				else
 				displayHUD[k]:Reparent(displayHUD[hud.container], -1)
 			end
-			logme(10,"create "..hud.tag)
+			logme(1,"create "..hud.tag)
 		end
 		
 	end
@@ -1871,14 +1881,14 @@ function debugWindows()
 				despawnAll()
 			end
 			ImGui.Spacing()
-			for k,v  in pairs(arrayFaction) do
+			for k,v  in pairs(cyberscript.cache["faction"]) do
 				
-				if CPS:CPButton("Increase "..arrayFaction[k].faction.Name.." Affinity by 5") then
+				if CPS:CPButton("Increase "..cyberscript.cache["faction"][k].data.name.." Affinity by 5") then
 					addFactionScoreByTagScore(k, 5)
 					
 				end
 				
-				if CPS:CPButton("Decrease "..arrayFaction[k].faction.Name.." Affinity by 5") then
+				if CPS:CPButton("Decrease "..cyberscript.cache["faction"][k].data.name.." Affinity by 5") then
 					addFactionScoreByTagScore(k, -5)
 					
 				end
@@ -1909,7 +1919,7 @@ function debugWindows()
 			ImGui.Spacing()
 			
 			if CPS:CPButton("Reset All Affinity") then
-				for k,v in pairs(arrayFaction) do
+				for k,v in pairs(cyberscript.cache["faction"]) do
 					updateFactionScore(k, 0)
 					reloadDB()
 				end
@@ -1959,7 +1969,7 @@ function debugWindows()
 			ImGui.Spacing()
 			
 			if CPS:CPButton("showFaction")  then
-				for k,v in pairs(arrayFaction)do
+				for k,v in pairs(cyberscript.cache["faction"])do
 					logme(6,k)
 				end
 			end
@@ -2897,7 +2907,7 @@ function ActivatedGroup()
 		
 		for i = 1, #currentInteractGroup do 
 			
-			
+		
 			local buttons = {}
 			buttons.type = "button"
 			buttons.title = "Choose "..currentInteractGroup[i]
@@ -2931,6 +2941,7 @@ function ActivatedGroup()
 			local close_action = {}
 			close_action.name = "close_interface" 
 			table.insert(buttons.action,close_action)
+			print(dump(buttons))
 			table.insert(ui.controls,buttons)
 		end
 		currentInterface = ui
@@ -3598,7 +3609,7 @@ function playRandomfromRadio()
 				if(shuffleall) then
 					local numitems = 0 -- find the size of the table
 					
-					for k,v in pairs(arrayRadio) do
+					for k,v in pairs(cyberscript.cache["radio"]) do
 						numitems = numitems + 1
 					end
 					
@@ -3607,7 +3618,7 @@ function playRandomfromRadio()
 					local randentry
 					local count = 0
 					
-					for k,v in pairs(arrayRadio) do
+					for k,v in pairs(cyberscript.cache["radio"]) do
 						count = count + 1
 						if(count == randentry) then
 							currentRadio = v.radio
@@ -3664,7 +3675,7 @@ function RadioWindows()
 		
 		if ImGui.BeginTabBar("RadioTabs", ImGuiTabBarFlags.NoTooltip) then
 			CPS.styleBegin("TabRounding", 0)
-			for k,v in pairs(arrayRadio) do
+			for k,v in pairs(cyberscript.cache["radio"]) do
 				
 				local radio = v.radio
 				
@@ -3934,7 +3945,7 @@ function createInteractionHub(active)
 		
 		if(#loadInteract > 0) then
 			for z=1,#loadInteract do 
-				local interact = arrayInteract[loadInteract[z]].interact
+				local interact = cyberscript.cache["interact"][loadInteract[z]].data
 				if(interact.type == nil or interact.type == "interact") then
 					
 					checkContext(interact)
@@ -4023,14 +4034,14 @@ function createDialog(dialog)
 			icon = TweakDBInterface.GetChoiceCaptionIconPartRecord("ChoiceCaptionParts."..option.icon)
 		end
 		
-		local choice1 = interactionUI.createChoice(option.Description, icon , gameinteractionsChoiceType.Selected) -- Icon and choiceType are optional
+		local choice1 = interactionUI.createChoice(option.description, icon , gameinteractionsChoiceType.Selected) -- Icon and choiceType are optional
 		table.insert(choicelist,choice1)
 	end
 	
 	
 	
     -- Setup, set and show hub
-    local hub = interactionUI.createHub(getDialogOwner(dialog.speaker.value), choicelist) -- Create hub and give it the list of choices
+    local hub = interactionUI.createHub(getDialogOwner(dialog.speaker), choicelist) -- Create hub and give it the list of choices
     interactionUI.setupHub(hub) -- Set the hub
     interactionUI.showHub() -- Show the previously set hub
 	currentDialogHub.hub = hub
@@ -4043,7 +4054,7 @@ function createDialog(dialog)
 				local option = dialog.options[i]
 				if(option.requirement == nil or checkTriggerRequirement(option.requirement,option.trigger))then
 					
-					ClickOnDialog(option,dialog.speaker.value,dialog.speaker.way)
+					ClickOnDialog(option,dialog.speaker,"speak")
 					interactionUI.hideHub()
 					
 				end
@@ -4085,7 +4096,7 @@ function createDialogTitle(dialogIIRP,active)
 	
 	dialog.flags = Enum.new('gameinteractionsvisEVisualizerDefinitionFlags', 'HeadlineSelection')
 	dialog.isPhoneLockActive = true
-	dialog.title =  getDialogOwner(dialogIIRP.speaker.value)
+	dialog.title =  getDialogOwner(dialogIIRP.speaker)
 	dialog.hubPriority  = 0
 	dialog.activityState  =  Enum.new('gameinteractionsvisEVisualizerActivityState', 'Active')
 	
@@ -4094,7 +4105,7 @@ function createDialogTitle(dialogIIRP,active)
 		
 		local option = dialogIIRP.options[i]
 		dialogIIRP.options[i].input = i
-		table.insert(choices, creatDialogChoice('Choice'..i, getLang(option.Description),option.icon,option.choicetype))
+		table.insert(choices, creatDialogChoice('Choice'..i, getLang(option.description),option.icon,option.choicetype))
 	end
 	dialog.choices = choices
 	return dialog

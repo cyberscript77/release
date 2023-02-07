@@ -387,7 +387,7 @@ return {
 	["if_entities_around_you"] = {
 		["range"] = 5,
 		["helper"] = "this trigger will check for if there is an entity founded in the player's view in an determined range and filter. \
- The filter will check in the name, display name and appearance of the entity \
+ The filter will check in the name, display name and appearance of the entity or hash \
  leave filter at [] for take all. ",
 		["helperTitle"] = "Entity : Entities around you",
 		["name"] = "if_entities_around_you",
@@ -775,5 +775,13 @@ return {
 			"PlayerBlocker"
 		
 		}
+	},
+	
+	["entity_hash"] = {
+		["helper"] = "This trigger will be triggered when entity have the expected hash",
+		["helperTitle"] = "Entity : Have hash",
+		["value"] = "16570246047455160070ULL",
+		["tag"] = "judy01",
+		["name"] = "entity_hash",
 	},
 }

@@ -191,7 +191,8 @@ function resetVar()
 		"character",
 		"circuit",
 		"codex",
-		"dialog",
+		"corpo",
+		"choice",
 		"event",
 		"faction",
 		"fixer",
@@ -340,7 +341,7 @@ function resetVar()
 	updatefinished = false
 	currentInputHintList = {}
 	needupdate = false
-	arrayhouse = {}
+
 	arrayroom = {}
 	arrayNPCInteract ={}
 	cyberscript.customHouse = true
@@ -1717,7 +1718,7 @@ function resetVar()
 	
 	possiblecategory = {}
 	corpoNews = {}
-	arrayCorpo = {}
+	
 	
 	arrayDatapack3 = {}
 	arrayMyDatapack = {}
@@ -1998,7 +1999,7 @@ function resetVar()
 	AVrollCam = 0
 	AVPitch = 0
 	
-	arrayFixer = {}
+	
 	
 	
 	--Var and Init 

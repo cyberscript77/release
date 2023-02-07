@@ -384,7 +384,7 @@ end
 
 function QuestManager.resetQuestfromJson(questId)
 	
-	local questos = arrayQuest2[questId].quest
+	local questos = cyberscript.cache["mission"][questId].data
 	
 	local data = {}
 	checkContext(questos)		

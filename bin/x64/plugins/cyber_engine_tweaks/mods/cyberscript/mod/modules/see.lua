@@ -78,7 +78,7 @@ function scriptcheckTrigger(trigger)
 				end
 				if(trigger.way == "fixer") then
 					if currentfixer ~= nil then
-						if(currentfixer.Tag == trigger.value)then
+						if(currentfixer.tag == trigger.value)then
 							result = true
 						end
 					end
@@ -383,6 +383,21 @@ function scriptcheckTrigger(trigger)
 					result = false
 				end
 			end
+			if(trigger.name == "entity_hash") then
+			local obj = getEntityFromManager(trigger.tag)
+				if(obj.id ~= nil) then
+					local enti = Game.FindEntityByID(obj.id)	
+					if(enti ~= nil) then
+						
+						if(trigger.value == tostring(enti:GetEntityID().hash)) then
+							result = true
+							
+						end
+					end
+				end
+			
+			
+			end
 			if(trigger.name == "entity_script_level") then
 				local obj = getEntityFromManager(trigger.tag)
 				if(obj.id ~= nil) then
@@ -434,7 +449,7 @@ function scriptcheckTrigger(trigger)
 						if(entName ~= nil and entAppName ~= nil)then
 							for i,filter in ipairs(trigger.filter) do
 								
-								if(goodEntity == false and string.match(entName, filter) or string.match(entAppName, filter) or string.match(entDispName, filter))then 
+								if(goodEntity == false and string.match(entName, filter) or string.match(entAppName, filter) or string.match(entDispName, filter) or filter == tostring(newent:GetEntityID().hash))then 
 									goodEntity = true
 								end
 							end
@@ -1076,12 +1091,12 @@ function scriptcheckTrigger(trigger)
 			end
 			if(trigger.name == "is_in_custom_place_entry") then
 				if currentHouse ~= nil then
-					result = check3DPos(Game.GetPlayer():GetWorldPosition(), currentHouse.EnterX, currentHouse.EnterY, currentHouse.EnterZ, trigger.range)
+					result = check3DPos(Game.GetPlayer():GetWorldPosition(), currentHouse.enter_x, currentHouse.enter_y, currentHouse.enter_z, trigger.range)
 				end
 			end
 			if(trigger.name == "is_in_custom_place_exit") then
 				if currentHouse ~= nil then
-					result = check3DPos(Game.GetPlayer():GetWorldPosition(), currentHouse.ExitX, currentHouse.ExitY, currentHouse.ExitZ, trigger.range)
+					result = check3DPos(Game.GetPlayer():GetWorldPosition(), currentHouse.exit_x, currentHouse.exit_y, currentHouse.exit_z, trigger.range)
 				end
 			end
 			if(trigger.name == "is_in_custom_room") then
@@ -1162,7 +1177,7 @@ function scriptcheckTrigger(trigger)
 				if(enti ~= nil and currentHouse ~= nil )then
 					if(trigger.value == currentHouse.type) then
 						local targetPosition = enti:GetWorldPosition()
-						if check3DPos(targetPosition, currentHouse.posX, currentHouse.posX, currentHouse.posZ,currentHouse.range,currentHouse.Zrange) then
+						if check3DPos(targetPosition, currentHouse.x, currentHouse.x, currentHouse.z,currentHouse.range,currentHouse.range_z) then
 							result = true
 							else
 							result = false
@@ -1175,7 +1190,7 @@ function scriptcheckTrigger(trigger)
 				local enti = Game.FindEntityByID(obj.id)	
 				if(enti ~= nil and currentRoom ~= nil )then
 					local targetPosition = enti:GetWorldPosition()
-					if( check3DPos(targetPosition, currentRoom.posX, currentRoom.posX, currentRoom.posZ,currentRoom.range,currentRoom.Zrange)) then
+					if( check3DPos(targetPosition, currentRoom.x, currentRoom.x, currentRoom.z,currentRoom.range,currentRoom.range_z)) then
 						for i=1,#currentRoom.type do
 							
 							if(trigger.value == currentRoom.type[i]) then
@@ -1241,7 +1256,7 @@ function scriptcheckTrigger(trigger)
 				end
 			end
 			if(trigger.name == "entity_looked_is_specific_gang") then
-				if lookatgang ~= nil and lookatgang.Tag == trigger.value then
+				if lookatgang ~= nil and lookatgang.tag == trigger.value then
 					result = true
 				end
 			end
@@ -1254,8 +1269,8 @@ function scriptcheckTrigger(trigger)
 					local npcCurrentName = Game.NameToString(enti:GetCurrentAppearanceName())
 					local faction = getFactionByTag(trigger.faction)
 					if(faction ~= nil) then
-						for y=1,#faction.AttitudeGroup do
-							if(string.find(group,faction.AttitudeGroup[y]) ~= nil or string.find(npcCurrentName,faction.AttitudeGroup[y]) ~= nil)then
+						for y=1,#faction.attitude_group do
+							if(string.find(group,faction.attitude_group[y]) ~= nil or string.find(npcCurrentName,faction.attitude_group[y]) ~= nil)then
 								result = true
 							end
 						end
@@ -1369,7 +1384,7 @@ function scriptcheckTrigger(trigger)
 				if lastTargetKilled ~= nil then
 					local killComp, killGangScore, killGang = checkAttitudeByGangScore(lastTargetKilled)
 					
-					if killGang ~= nil and killGang.Tag == trigger.value then
+					if killGang ~= nil and killGang.tag == trigger.value then
 						result = true
 					end
 				end
@@ -1729,17 +1744,17 @@ function scriptcheckTrigger(trigger)
 				local obj = getEntityFromManager(trigger.tag)
 				local enti = Game.FindEntityByID(obj.id)
 				if(enti ~= nil) then
-					for k,v in pairs(arrayNode) do
-						local location = v.node
+					for k,v in pairs(cyberscript.cache["node"]) do
+						local location = v.data
 						local range = 50
 						if(trigger.range ~= nil) then
 							range = trigger.range
 						end
 						if(founded == false)then
 							if(trigger.atgameplayposition) then
-								result = check3DPos(enti:GetWorldPosition(), location.GameplayX, location.GameplayY, location.GameplayZ, range)
+								result = check3DPos(enti:GetWorldPosition(), location.gameplay_x, location.gameplay_y, location.gameplay_z, range)
 								else
-								result = check3DPos(enti:GetWorldPosition(), location.X, location.Y, location.Z, range)
+								result = check3DPos(enti:GetWorldPosition(), location.x, location.y, location.z, range)
 							end
 							if result == true and(trigger.sorttag == nil or (trigger.sorttag == location.sort)) then
 								result = true
@@ -1760,8 +1775,8 @@ function scriptcheckTrigger(trigger)
 				local founded = false
 				local obj = getEntityFromManager(trigger.tag)
 				local enti = Game.FindEntityByID(obj.id)	
-				local node = getNode(trigger.node)
-				--logme(3,"check for node"..node.tag)
+				local node = getNode(trigger.data)
+				--logme(3,"check for node"..data.tag)
 				if(enti ~= nil) then
 					--logme(3,"check for entity"..trigger.tag)
 					local location = node
@@ -1771,9 +1786,9 @@ function scriptcheckTrigger(trigger)
 							range = trigger.range
 						end
 						if(trigger.atgameplayposition) then
-							result = check3DPos(enti:GetWorldPosition(), location.GameplayX, location.GameplayY, location.GameplayZ, range)
+							result = check3DPos(enti:GetWorldPosition(), location.gameplay_x, location.gameplay_y, location.gameplay_z, range)
 							else
-							result = check3DPos(enti:GetWorldPosition(), location.X, location.Y, location.Z, range)
+							result = check3DPos(enti:GetWorldPosition(), location.x, location.y, location.z, range)
 						end
 						if result == true then
 							result = true
@@ -1851,7 +1866,7 @@ function scriptcheckTrigger(trigger)
 						end
 					end
 					else
-					print("notarray")
+				
 					for k,v in pairs(trigger.triggers) do 
 						counttrigger = counttrigger+1
 						
@@ -2537,7 +2552,7 @@ end
 				if(enti ~= nil) then
 					if(obj.scriptlevel == nil or obj.scriptlevel <= action.scriptlevel) then
 						
-						runSubActionList(action.action, "execute_at_level_"..math.random(1,99999), tag,source,false,obj.tag)
+						runSubActionList(action.action, tag.."_execute_at_level", tag,source,false,obj.tag)
 						
 					end
 				end
@@ -2604,11 +2619,11 @@ end
 				if(action.source == "faction") then
 					local gang = getFactionByTag(action.source_tag)
 					if(action.source_use_rival == true) then
-						gang = getFactionByTag(gang.Rivals[1])
+						gang = getFactionByTag(gang.rivals[1])
 					end
-					if(#gang.SpawnableVehicule > 0) then
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+					if(#gang.spawnable_vehicle > 0) then
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 					end
 				end
 				if(action.source == "district_leader" or action.source == "subdistrict_leader") then
@@ -2616,11 +2631,11 @@ end
 					if(#gangs > 0) then
 						local gang = getFactionByTag(gangs[1].tag)
 						if(action.source_use_rival == true) then
-							gang = getFactionByTag(gang.Rivals[1])
+							gang = getFactionByTag(gang.rivals[1])
 						end
-						if(#gang.SpawnableVehicule > 0) then
-							local index = math.random(1,#gang.SpawnableVehicule)
-							chara = gang.SpawnableVehicule[index]
+						if(#gang.spawnable_vehicle > 0) then
+							local index = math.random(1,#gang.spawnable_vehicle)
+							chara = gang.spawnable_vehicle[index]
 						end
 					end
 				end
@@ -2629,11 +2644,11 @@ end
 					if(#gangs > 0) then
 						local gang = getFactionByTag(gangs[1].tag)
 						if(action.source_use_rival == true) then
-							gang = getFactionByTag(gang.Rivals[1])
+							gang = getFactionByTag(gang.rivals[1])
 						end
-						if(#gang.SpawnableVehicule > 0) then
-							local index = math.random(1,#gang.SpawnableVehicule)
-							chara = gang.SpawnableVehicule[index]
+						if(#gang.spawnable_vehicle > 0) then
+							local index = math.random(1,#gang.spawnable_vehicle)
+							chara = gang.spawnable_vehicle[index]
 						end
 					end
 				end
@@ -2651,12 +2666,12 @@ end
 						local gang = getFactionByTag(gangs[1].tag)
 						
 						if(action.source_use_rival == true) then
-							gang = getFactionByTag(gang.Rivals[1])
+							gang = getFactionByTag(gang.rivals[1])
 						end
 						
-						if(#gang.SpawnableVehicule > 0) then
-							local index = math.random(1,#gang.SpawnableVehicule)
-							chara = gang.SpawnableVehicule[index]
+						if(#gang.spawnable_vehicle > 0) then
+							local index = math.random(1,#gang.spawnable_vehicle)
+							chara = gang.spawnable_vehicle[index]
 						end
 						
 					end
@@ -2679,9 +2694,9 @@ end
 						
 						local gang = getFactionByTag(gangs[1].tag)
 						
-						if(#gang.SpawnableVehicule > 0) then
-							local index = math.random(1,#gang.SpawnableVehicule)
-							chara = gang.SpawnableVehicule[index]
+						if(#gang.spawnable_vehicle > 0) then
+							local index = math.random(1,#gang.spawnable_vehicle)
+							chara = gang.spawnable_vehicle[index]
 						end
 					end
 				end
@@ -2697,9 +2712,9 @@ end
 					if(#gangs > 0) then
 						local gang = getFactionByTag(gangs[1].tag)
 						
-						if(#gang.SpawnableVehicule > 0) then
-							local index = math.random(1,#gang.SpawnableVehicule)
-							chara = gang.SpawnableVehicule[index]
+						if(#gang.spawnable_vehicle > 0) then
+							local index = math.random(1,#gang.spawnable_vehicle)
+							chara = gang.spawnable_vehicle[index]
 						end
 					end
 				end
@@ -2724,9 +2739,9 @@ end
 					if(#gangs > 0) then
 						local gang = getFactionByTag(gangs[1].tag)
 						
-						if(#gang.SpawnableVehicule > 0) then
-							local index = math.random(1,#gang.SpawnableVehicule)
-							chara = gang.SpawnableVehicule[index]
+						if(#gang.spawnable_vehicle > 0) then
+							local index = math.random(1,#gang.spawnable_vehicle)
+							chara = gang.spawnable_vehicle[index]
 						end
 					end
 				end
@@ -2845,8 +2860,10 @@ end
 			local vehiculeobj =  getTrueEntityFromManager(action.tag)
 			local vehicule = Game.FindEntityByID(vehiculeobj.id)
 			if(vehicule ~= nil and ActiveFastTravelMappin ~= nil) then
+			
 				vehiculeobj.destination = ActiveFastTravelMappin.position
 				VehicleGoToGameNode(action.tag, ActiveFastTravelMappin.markerRef, action.speed, action.forcegreenlight, action.needdriver, action.usetraffic, action.useKinematic)
+				
 			end
 		end
 		if(action.name == "vehicle_go_to_fasttravel_point") then
@@ -2888,13 +2905,13 @@ end
 				action.amount = math.random(1,6)
 			end
 			for i=1,action.amount do
-				if(#gang.SpawnableVehicule > 0) then
+				if(#gang.spawnable_vehicle > 0) then
 					local tag = action.tag
 					if(action.amount > 1) then
 						tag = action.tag.."_"..i
 					end
-					local index = math.random(1,#gang.SpawnableVehicule)
-					chara = gang.SpawnableVehicule[index]
+					local index = math.random(1,#gang.spawnable_vehicle)
+					chara = gang.spawnable_vehicle[index]
 					local isAV = false
 					if(action.isAV ~= nil) then
 						isAV = action.isAV
@@ -2909,7 +2926,7 @@ end
 		end
 		if(action.name == "summon_vehicule_from_faction_rival") then
 			local gang = getFactionByTag(action.faction)
-			gang = getFactionByTag(gang.Rivals[1])
+			gang = getFactionByTag(gang.rivals[1])
 			if(action.amount == nil) then
 				action.amount = 1
 			end
@@ -2917,13 +2934,13 @@ end
 				action.amount = math.random(1,6)
 			end
 			for i=1,action.amount do
-				if(#gang.SpawnableVehicule > 0) then
+				if(#gang.spawnable_vehicle > 0) then
 					local tag = action.tag
 					if(action.amount > 1) then
 						tag = action.tag.."_"..i
 					end
-					local index = math.random(1,#gang.SpawnableVehicule)
-					chara = gang.SpawnableVehicule[index]
+					local index = math.random(1,#gang.spawnable_vehicle)
+					chara = gang.spawnable_vehicle[index]
 					local isAV = false
 					if(action.isAV ~= nil) then
 						isAV = action.isAV
@@ -2940,7 +2957,7 @@ end
 			local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
 			if(#gangs > 0) then
 				local gang = gangs[1]
-				if(#gang.SpawnableVehicule > 0) then
+				if(#gang.spawnable_vehicle > 0) then
 					if(action.amount == nil) then
 						action.amount = 1
 					end
@@ -2952,8 +2969,8 @@ end
 						if(action.amount > 1) then
 							tag = action.tag.."_"..i
 						end
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 						local isAV = false
 						if(action.isAV ~= nil) then
 							isAV = action.isAV
@@ -2979,7 +2996,7 @@ end
 			end
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag)
-				if(#gang.SpawnableVehicule > 0) then
+				if(#gang.spawnable_vehicle > 0) then
 					if(action.amount == nil) then
 						action.amount = 1
 					end
@@ -2991,8 +3008,8 @@ end
 						if(action.amount > 1) then
 							tag = action.tag.."_"..i
 						end
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 						local isAV = false
 						if(action.isAV ~= nil) then
 							isAV = action.isAV
@@ -3010,9 +3027,9 @@ end
 			local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag) 
-				local rivalindex = math.random(1,#gang.Rivals)
-				gang = getFactionByTag(gang.Rivals[rivalindex])
-				if(#gang.SpawnableVehicule > 0) then
+				local rivalindex = math.random(1,#gang.rivals)
+				gang = getFactionByTag(gang.rivals[rivalindex])
+				if(#gang.spawnable_vehicle > 0) then
 					if(action.amount == nil) then
 						action.amount = 1
 					end
@@ -3024,8 +3041,8 @@ end
 						if(action.amount > 1) then
 							tag = action.tag.."_"..i
 						end
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 						local isAV = false
 						if(action.isAV ~= nil) then
 							isAV = action.isAV
@@ -3051,9 +3068,9 @@ end
 			end
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag) 
-				local rivalindex = math.random(1,#gang.Rivals)
-				gang = getFactionByTag(gang.Rivals[rivalindex])
-				if(#gang.SpawnableVehicule > 0) then
+				local rivalindex = math.random(1,#gang.rivals)
+				gang = getFactionByTag(gang.rivals[rivalindex])
+				if(#gang.spawnable_vehicle > 0) then
 					if(action.amount == nil) then
 						action.amount = 1
 					end
@@ -3065,8 +3082,8 @@ end
 						if(action.amount > 1) then
 							tag = action.tag.."_"..i
 						end
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 						local isAV = false
 						if(action.isAV ~= nil) then
 							isAV = action.isAV
@@ -3082,7 +3099,7 @@ end
 		end
 		if(action.name == "summon_vehicule_at_entity_relative_from_faction") then
 			local gang = getFactionByTag(action.faction)
-			if(#gang.SpawnableVehicule > 0) then
+			if(#gang.spawnable_vehicle > 0) then
 				if(action.amount == nil) then
 					action.amount = 1
 				end
@@ -3094,8 +3111,8 @@ end
 					if(action.amount > 1) then
 						tag = action.tag.."_"..i
 					end
-					local index = math.random(1,#gang.SpawnableVehicule)
-					chara = gang.SpawnableVehicule[index]
+					local index = math.random(1,#gang.spawnable_vehicle)
+					chara = gang.spawnable_vehicle[index]
 					if(chara == "" or chara == nil) then
 						chara = "Vehicle.arr_05_objective_truck"
 					end
@@ -3145,9 +3162,9 @@ end
 		end
 		if(action.name == "summon_vehicule_at_entity_relative_from_faction_rival") then
 			local gang = getFactionByTag(action.faction)
-			local rivalindex = math.random(1,#gang.Rivals)
-			gang = getFactionByTag(gang.Rivals[rivalindex])
-			if(#gang.SpawnableVehicule > 0) then
+			local rivalindex = math.random(1,#gang.rivals)
+			gang = getFactionByTag(gang.rivals[rivalindex])
+			if(#gang.spawnable_vehicle > 0) then
 				if(action.amount == nil) then
 					action.amount = 1
 				end
@@ -3159,8 +3176,8 @@ end
 					if(action.amount > 1) then
 						tag = action.tag.."_"..i
 					end
-					local index = math.random(1,#gang.SpawnableVehicule)
-					chara = gang.SpawnableVehicule[index]
+					local index = math.random(1,#gang.spawnable_vehicle)
+					chara = gang.spawnable_vehicle[index]
 					local isAV = false
 					if(action.isAV ~= nil and action.isAV==true) then
 						logme(3,"AV is "..tostring(action.isAV))
@@ -3209,7 +3226,7 @@ end
 			local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag)
-				if(#gang.SpawnableVehicule > 0) then
+				if(#gang.spawnable_vehicle > 0) then
 					if(action.amount == nil) then
 						action.amount = 1
 					end
@@ -3221,8 +3238,8 @@ end
 						if(action.amount > 1) then
 							tag = action.tag.."_"..i
 						end
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 						local isAV = false
 						if(action.isAV ~= nil and action.isAV==true) then
 							logme(3,"AV is "..tostring(action.isAV))
@@ -3281,7 +3298,7 @@ end
 			end
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag)
-				if(#gang.SpawnableVehicule > 0) then
+				if(#gang.spawnable_vehicle > 0) then
 					if(action.amount == nil) then
 						action.amount = 1
 					end
@@ -3293,8 +3310,8 @@ end
 						if(action.amount > 1) then
 							tag = action.tag.."_"..i
 						end
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 						local isAV = false
 						if(action.isAV ~= nil and action.isAV==true) then
 							logme(3,"AV is "..tostring(action.isAV))
@@ -3345,9 +3362,9 @@ end
 			local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag)
-				local rivalindex = math.random(1,#gang.Rivals)
-				gang = getFactionByTag(gang.Rivals[rivalindex])
-				if(#gang.SpawnableVehicule > 0) then
+				local rivalindex = math.random(1,#gang.rivals)
+				gang = getFactionByTag(gang.rivals[rivalindex])
+				if(#gang.spawnable_vehicle > 0) then
 					if(action.amount == nil) then
 						action.amount = 1
 					end
@@ -3359,8 +3376,8 @@ end
 						if(action.amount > 1) then
 							tag = action.tag.."_"..i
 						end
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 						local isAV = false
 						if(action.isAV ~= nil and action.isAV==true) then
 							logme(3,"AV is "..tostring(action.isAV))
@@ -3419,9 +3436,9 @@ end
 			end
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag)
-				local rivalindex = math.random(1,#gang.Rivals)
-				gang = getFactionByTag(gang.Rivals[rivalindex])
-				if(#gang.SpawnableVehicule > 0) then
+				local rivalindex = math.random(1,#gang.rivals)
+				gang = getFactionByTag(gang.rivals[rivalindex])
+				if(#gang.spawnable_vehicle > 0) then
 					if(action.amount == nil) then
 						action.amount = 1
 					end
@@ -3433,8 +3450,8 @@ end
 						if(action.amount > 1) then
 							tag = action.tag.."_"..i
 						end
-						local index = math.random(1,#gang.SpawnableVehicule)
-						chara = gang.SpawnableVehicule[index]
+						local index = math.random(1,#gang.spawnable_vehicle)
+						chara = gang.spawnable_vehicle[index]
 						local isAV = false
 						if(action.isAV ~= nil and action.isAV==true) then
 							logme(3,"AV is "..tostring(action.isAV))
@@ -3601,7 +3618,12 @@ end
 			if(action.operator == "random") then
 				score = math.random(action.min,action.max)
 			end
-			
+			if(action.operator == "floor") then
+				score = math.floor(score)
+			end
+			if(action.operator == "ceil") then
+				score = math.ceil(score)
+			end
 			
 			
 			setScore(action.score,action.key,score)
@@ -3624,6 +3646,12 @@ end
 			end
 			if(action.operator == "/") then
 				score = score / score2
+			end
+			if(action.operator == "floor") then
+				score = math.floor(score)
+			end
+			if(action.operator == "ceil") then
+				score = math.ceil(score)
 			end
 			if(action.operator == "positive") then
 				if(score > 0) then
@@ -3671,7 +3699,12 @@ end
 			if(action.operator == "/") then
 				score = score /score2
 			end
-			
+			if(action.operator == "floor") then
+				score = math.floor(score)
+			end
+			if(action.operator == "ceil") then
+				score = math.ceil(score)
+			end
 			
 			
 			
@@ -3771,7 +3804,7 @@ end
 			end
 		end
 		if(action.name == "buyHouse") then
-			local house = arrayHouse[action.tag].house
+			local house = cyberscript.cache["place"][action.tag].data
 			if house ~= nil then
 				local isbuyable = house.isbuyable
 				local statut = getHouseStatut(house.tag)
@@ -3792,7 +3825,7 @@ end
 			end
 		end
 		if(action.name == "sellHouse") then
-			local house = arrayHouse[action.tag].house
+			local house = cyberscript.cache["place"][action.tag].data
 			if house ~= nil then
 				local isbuyable = house.isbuyable
 				local statut = getHouseStatut(house.tag)
@@ -3889,7 +3922,7 @@ end
 							end
 						end
 						if(collision == false) then
-							teleportTo(enti, Vector4.new( currentHouse.EnterX, currentHouse.EnterY, currentHouse.EnterZ,1), angle,isplayer)
+							teleportTo(enti, Vector4.new( currentHouse.enter_x, currentHouse.enter_y, currentHouse.enter_z,1), angle,isplayer)
 							else
 							if(action.pathfinding ~= nil and action.pathfinding == true) then
 								local newpath =  giveGoodPath(from,to,action.axis)
@@ -3898,7 +3931,7 @@ end
 						end
 						else
 						--logme(3,"angle.yaw = "..angle.yaw)
-						teleportTo(enti, Vector4.new( currentHouse.EnterX, currentHouse.EnterY, currentHouse.EnterZ,1), angle,isplayer)
+						teleportTo(enti, Vector4.new( currentHouse.enter_x, currentHouse.enter_y, currentHouse.enter_z,1), angle,isplayer)
 					end
 				end
 			end
@@ -3937,7 +3970,7 @@ end
 							end
 						end
 						if(collision == false) then
-							teleportTo(enti, Vector4.new( currentHouse.ExitX, currentHouse.ExitY, currentHouse.ExitZ,1), angle,isplayer)
+							teleportTo(enti, Vector4.new( currentHouse.exit_x, currentHouse.exit_y, currentHouse.exit_z,1), angle,isplayer)
 							else
 							if(action.pathfinding ~= nil and action.pathfinding == true) then
 								local newpath =  giveGoodPath(from,to,action.axis)
@@ -3946,7 +3979,7 @@ end
 						end
 						else
 						--logme(3,"angle.yaw = "..angle.yaw)
-						teleportTo(enti, Vector4.new( currentHouse.ExitX, currentHouse.ExitY, currentHouse.ExitZ,1), angle,isplayer)
+						teleportTo(enti, Vector4.new( currentHouse.exit_x, currentHouse.exit_y, currentHouse.exit_z,1), angle,isplayer)
 					end
 				end
 			end
@@ -4467,16 +4500,16 @@ end
 			setVariable(action.faction,action.district,action.value)
 		end
 		if(action.name == "gang_affinity_from_current_district_leader") then
-			local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
+			local gangs = getGangfromDistrict(currentDistricts2.tag,20)
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag)
-				local score = getScoreKey("Affinity",gang.Tag)
+				local score = getScoreKey("Affinity",gang.tag)
 				if(score == nil) then
 					score = 0
-					setScore("Affinity",gang.Tag,score)
+					setScore("Affinity",gang.tag,score)
 				end
 				score = score + action.score
-				setScore("Affinity",gang.Tag,score)
+				setScore("Affinity",gang.tag,score)
 			end
 		end
 		if(action.name == "gang_affinity_from_current_district_leader_rival") then
@@ -4484,15 +4517,15 @@ end
 			local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
 			if(#gangs > 0) then
 				local gang = getFactionByTag(gangs[1].tag)
-				local rivalindex = math.random(1,#gang.Rivals)
-				gang = getFactionByTag(gang.Rivals[rivalindex])
-				local score = getScoreKey("Affinity",gang.Tag)
+				local rivalindex = math.random(1,#gang.rivals)
+				gang = getFactionByTag(gang.rivals[rivalindex])
+				local score = getScoreKey("Affinity",gang.tag)
 				if(score == nil) then
 					score = 0
-					setScore("Affinity",gang.Tag,score)
+					setScore("Affinity",gang.tag,score)
 				end
 				score = score + action.score
-				setScore("Affinity",gang.Tag,score)
+				setScore("Affinity",gang.tag,score)
 			end
 		end
 		if(action.name == "gang_affinity_from_current_subdistrict_leader") then
@@ -4502,13 +4535,13 @@ end
 						local gangs = getGangfromDistrict(test,20)
 						if(#gangs > 0) then
 							local gang = getFactionByTag(gangs[1].tag)
-							local score = getScoreKey(gang.Tag,"Score")
+							local score = getScoreKey(gang.tag,"Score")
 							if(score == nil) then
 								score = 0
-								setScore("Affinity",gang.Tag,score)
+								setScore("Affinity",gang.tag,score)
 							end
 							score = score + action.score
-							setScore("Affinity",gang.Tag,score)
+							setScore("Affinity",gang.tag,score)
 							break
 						end
 					end
@@ -4522,15 +4555,15 @@ end
 						local gangs = getGangfromDistrict(test,20)
 						if(#gangs > 0) then
 							local gang = getFactionByTag(gangs[1].tag)
-							local rivalindex = math.random(1,#gang.Rivals)
-							gang = getFactionByTag(gang.Rivals[rivalindex])
-							local score = getScoreKey("Affinity",gang.Tag)
+							local rivalindex = math.random(1,#gang.rivals)
+							gang = getFactionByTag(gang.rivals[rivalindex])
+							local score = getScoreKey("Affinity",gang.tag)
 							if(score == nil) then
 								score = 0
-								setScore("Affinity",gang.Tag,score)
+								setScore("Affinity",gang.tag,score)
 							end
 							score = score + action.score
-							setScore("Affinity",gang.Tag,score)
+							setScore("Affinity",gang.tag,score)
 							break
 						end
 					end
@@ -4991,7 +5024,7 @@ end
 		end
 		if(action.name == "draw_3Dmappin_node") then
 			local node = getNode(action.tag)
-			draw3DMappin(node.X,node.Y,node.Z)
+			draw3DMappin(node.x,node.y,node.z)
 		end
 		if(action.name == "draw_custom_mappin") then
 			drawCustomMappin(action.x,action.y)
@@ -5007,9 +5040,15 @@ end
 		end
 		if(action.name == "clean_custommappin") then
 			ActivecustomMappin = nil
+			
+				
+				
+				
+			mappinManager["selected_mappin"] = nil
 		end
 		if(action.name == "clean_activefasttravelpoint") then
 				ActiveFastTravelMappin = nil
+				mappinManager["selected_fasttravel_mappin"] = nil
 		end
 		
 		if(action.name == "notify") then
@@ -5212,7 +5251,7 @@ end
 				userData.title = GetLocalizedText("UI-Notifications-ShardCollected") .. " " .. getLang(shard.title)
 				userData.text = getLang(shard.description)
 				userData.shardTitle = getLang(shard.title)
-				arrayShard[shard.tag].shard.locked = false
+				cyberscript.cache["shard"][shard.tag].data.locked = false
 				userData.isCrypted = shard.crypted
 			end
 			
@@ -5466,8 +5505,8 @@ end
 			
 			if(action.conversation ~= nil and action.conversation ~= "") then
 				
-				for k,v in pairs(arrayPhoneConversation) do
-					local phoneConversation = v.conv
+				for k,v in pairs(cyberscript.cache["phone_dialog"]) do
+					local phoneConversation = v.data
 					for z=1,#phoneConversation.conversation do
 						local conversation = phoneConversation.conversation[z]
 						if(conversation.tag == action.conversation)then
@@ -5570,14 +5609,14 @@ end
 			table.insert(phone_news_conv01.message,phone_news_conv01_msg)
 			table.insert(phone_news_conv.conversation,phone_news_conv01)
 			
-			arrayPhoneConversation["corpo_news"] = {}
-			arrayPhoneConversation["corpo_news"].conv = phone_news_conv
-			arrayPhoneConversation["corpo_news"].file = "default"
-			arrayPhoneConversation["corpo_news"].datapack = "default"
+			cyberscript.cache["phone_dialog"]["corpo_news"] = {}
+			cyberscript.cache["phone_dialog"]["corpo_news"].data = phone_news_conv
+			cyberscript.cache["phone_dialog"]["corpo_news"].file = "default"
+			cyberscript.cache["phone_dialog"]["corpo_news"].datapack = "default"
 			
 			
 			
-			currentPhoneConversation = arrayPhoneConversation["corpo_news"].conv.conversation[1]
+			currentPhoneConversation = cyberscript.cache["phone_dialog"]["corpo_news"].data.conversation[1]
 			currentPhoneConversation.currentchoices = {}
 			currentPhoneConversation.loaded = 0
 			
@@ -5639,7 +5678,7 @@ end
 			
 		end
 		if(action.name == "open_help") then
-			currentHelp = arrayHelp[action.tag].help
+			currentHelp = cyberscript.cache["help"][action.tag].data
 			--openInterface = true
 			
 			if currentHelp ~= nil then
@@ -6154,13 +6193,13 @@ end
 			local usedial =  SetNextDialog(action.dialog,source,executortag)
 			-- logme(3,source)
 			-- logme(3,executortag)
-			-- logme(3,usedial.Desc)
+			-- logme(3,usedial.desc)
 			createDialog(usedial)	
 			-- logme(3,source)
 			-- if(source == "quest") then
 			-- local dioal = SetNextDialog(action.value,source)
 			-- if dioal.havequitoption == nil then dioal.havequitoption = true end
-			-- logme(3,dioal.Desc)
+			-- logme(3,dioal.desc)
 			-- openQuestDialogWindow = false
 			-- currentQuestdialog = dioal
 			-- openQuestDialogWindow = true
@@ -6168,7 +6207,7 @@ end
 			-- if(source == "interact") then
 			-- local dioal = SetNextDialog(action.value,source)
 			-- if dioal.havequitoption == nil then dioal.havequitoption = true end
-			-- logme(3,dioal.Desc)
+			-- logme(3,dioal.desc)
 			-- openEventDialogWindow = false
 			-- currentEventDialog = dioal
 			-- openEventDialogWindow = true
@@ -6176,7 +6215,7 @@ end
 			-- if(source == "phone") then
 			-- local dioal = SetNextDialog(action.value,source)
 			-- if dioal.havequitoption == nil then dioal.havequitoption = true end
-			-- logme(3,dioal.Desc)
+			-- logme(3,dioal.desc)
 			-- openPhoneDialogWindow = false
 			-- currentPhoneDialog = dioal
 			-- openPhoneDialogWindow = true
@@ -6186,7 +6225,7 @@ end
 			-- if(source == "speak") then
 			-- local dioal = SetNextDialog(action.value,source)
 			-- if dioal.havequitoption == nil then dioal.havequitoption = true end
-			-- logme(3,dioal.Desc)
+			-- logme(3,dioal.desc)
 			-- openSpeakDialogWindow = false
 			-- currentSpeakDialog = dioal
 			-- openSpeakDialogWindow = true
@@ -6796,9 +6835,9 @@ end
 		if(action.name == "draw_custom_3Dmappin_node") then
 			local node = getNode(action.tag)
 			if(action.atgameplayposition)then
-				draw3DCustomMappin(node.GameplayX,node.GameplayY,node.GameplayZ)
+				draw3DCustomMappin(node.gameplay_x,node.gameplay_y,node.gameplay_z)
 				else
-				draw3DCustomMappin(node.X,node.Y,node.Z)
+				draw3DCustomMappin(node.x,node.y,node.z)
 			end
 		end
 		if(action.name == "set_entity_circuit") then
@@ -6809,7 +6848,7 @@ end
 		end
 		if(action.name == "set_entity_node_current") then
 			local obj = getEntityFromManager(action.tag)
-			obj.currentNode = getNode(action.node)
+			obj.currentNode = getNode(action.data)
 		end
 		if(action.name == "set_entity_node_current_auto") then
 			local obj = getEntityFromManager(action.tag)
@@ -6820,21 +6859,21 @@ end
 		if(action.name == "set_entity_node_next") then
 			local obj = getEntityFromManager(action.tag)
 			if(obj.circuit.reverse == false) then
-				local nextNodeIndex = getNodeIndexFromCircuit(action.node,obj.circuit.nodes)
-				obj.nextNode = obj.circuit.nodes[nextNodeIndex+1]
+				local nextNodeIndex = getNodeIndexFromCircuit(action.data,obj.circuit.datas)
+				obj.nextNode = obj.circuit.datas[nextNodeIndex+1]
 				else
-				local inversed_circuit = reverseTable(obj.circuit.nodes)
-				local nextNodeIndex = getNodeIndexFromCircuit(action.node,inversed_circuit)
+				local inversed_circuit = reverseTable(obj.circuit.datas)
+				local nextNodeIndex = getNodeIndexFromCircuit(action.data,inversed_circuit)
 				obj.nextNode = inversed_circuit[nextNodeIndex+1]
 			end
 		end
 		if(action.name == "set_entity_node_next_auto") then
 			local obj = getEntityFromManager(action.tag)
 			if(obj.circuit.reverse == false) then
-				local nextNodeIndex = getNodeIndexFromCircuit(obj.currentNode.tag,obj.circuit.nodes)
-				obj.nextNode = getNode(obj.circuit.nodes[nextNodeIndex+1])
+				local nextNodeIndex = getNodeIndexFromCircuit(obj.currentNode.tag,obj.circuit.datas)
+				obj.nextNode = getNode(obj.circuit.datas[nextNodeIndex+1])
 				else
-				local inversed_circuit = reverseTable(obj.circuit.nodes)
+				local inversed_circuit = reverseTable(obj.circuit.datas)
 				local nextNodeIndex = getNodeIndexFromCircuit(obj.currentNode.tag,inversed_circuit)
 				obj.nextNode = getNode(inversed_circuit[nextNodeIndex+1])
 			end
@@ -6989,7 +7028,7 @@ end
 				-- for i=1,#actionlist do 
 				-- executeAction(actionlist[i],tag,parent,index,source)
 				-- end
-				runSubActionList(actionlist, "run_path_"..math.random(1,99999), tag,source,false,executortag)
+				runSubActionList(actionlist, tag.."_run_path", tag,source,false,executortag)
 			end
 		end
 		
@@ -7125,7 +7164,7 @@ end
 				-- executeAction(actionlist[i],tag,parent,index,source)
 				-- end
 				spdlog.error(dump(actionlist))
-				runSubActionList(actionlist, "run_path_"..math.random(1,99999), tag,source,false,executortag)
+				runSubActionList(actionlist, tag.."_run_path", tag,source,false,executortag)
 			end
 		end
 		
@@ -7141,16 +7180,16 @@ end
 			end
 		end
 		if(action.name == "summon_entity_at_node") then
-			local node = getNode(action.node)
+			local node = getNode(action.data)
 			local isAV = false
 			if(action.isAV ~= nil) then
 				isAV = action.isAV
 			end
 			chara = action.npc
 			if(action.atgameplayposition) then
-				spawnEntity(chara, action.tag, node.GameplayX, node.GameplayY ,node.GameplayZ,action.spawnlevel,action.ambush, isAV,action.beta)
+				spawnEntity(chara, action.tag, node.gameplay_x, node.gameplay_y ,node.gameplay_z,action.spawnlevel,action.ambush, isAV,action.beta)
 				else
-				spawnEntity(chara, action.tag, node.X, node.Y ,node.Z,action.spawnlevel,action.ambush,isAV,action.beta)
+				spawnEntity(chara, action.tag, node.x, node.y ,node.z,action.spawnlevel,action.ambush,isAV,action.beta)
 			end
 			if(action.group ~= nil and action.group ~= "") then
 				
@@ -7173,7 +7212,7 @@ end
 			end
 		end
 		if(action.name == "teleport_entity_at_node") then
-			local node = getNode(action.node)
+			local node = getNode(action.data)
 			local obj = getEntityFromManager(action.tag)
 			local enti = Game.FindEntityByID(obj.id)
 			local isplayer = false
@@ -7184,9 +7223,9 @@ end
 			if(enti ~= nil) then
 				--logme(3,"moveit")
 				if(action.atgameplayposition) then
-					teleportTo(enti, Vector4.new( node.GameplayX+action.offset, node.GameplayY, node.GameplayZ,1), 1,isplayer)
+					teleportTo(enti, Vector4.new( node.gameplay_x+action.offset, node.gameplay_y, node.gameplay_z,1), 1,isplayer)
 					else
-					teleportTo(enti, Vector4.new( node.X+action.offset, node.Y, node.Z,1), 1,isplayer)
+					teleportTo(enti, Vector4.new( node.x+action.offset, node.y, node.z,1), 1,isplayer)
 				end
 			end
 		end
@@ -7206,11 +7245,11 @@ end
 			local node = getNodefromPosition(position.x,position.y,position.z,range)
 			if node ~= nil then
 				if(enti ~= nil) then
-					logme(3,"tp to node "..node.name)
+					logme(3,"tp to node "..data.name)
 					if(action.atgameplayposition) then
-						teleportTo(enti, Vector4.new( node.GameplayX+action.offset, node.GameplayY, node.GameplayZ,1), 1,isplayer)
+						teleportTo(enti, Vector4.new( node.gameplay_x+action.offset, node.gameplay_y, node.gameplay_z,1), 1,isplayer)
 						else
-						teleportTo(enti, Vector4.new( node.X+action.offset, node.Y, node.Z,1), 1,isplayer)
+						teleportTo(enti, Vector4.new( node.x+action.offset, node.y, node.z,1), 1,isplayer)
 					end
 				end
 			end
@@ -7229,9 +7268,9 @@ end
 					isAV = action.isAV
 				end
 				if(action.atgameplayposition) then
-					spawnEntity(chara, action.tag, node.GameplayX, node.GameplayY ,node.GameplayZ,action.spawnlevel,action.ambush,isAV,action.beta)
+					spawnEntity(chara, action.tag, node.gameplay_x, node.gameplay_y ,node.gameplay_z,action.spawnlevel,action.ambush,isAV,action.beta)
 					else
-					spawnEntity(chara, action.tag, node.X, node.Y ,node.Z,action.spawnlevel,action.ambush,isAV,action.beta)
+					spawnEntity(chara, action.tag, node.x, node.y ,node.z,action.spawnlevel,action.ambush,isAV,action.beta)
 				end
 				if(action.group ~= nil and action.group ~= "") then
 					
@@ -7260,7 +7299,7 @@ end
 			for i=1, #group.entities do 
 				local entityTag = group.entities[i]
 				local obj = getTrueEntityFromManager(entityTag)
-				obj.currentNode = getNode(action.node)
+				obj.currentNode = getNode(action.data)
 				setEntityFromManager(entityTag,obj)
 			end
 		end
@@ -7283,11 +7322,11 @@ end
 				local entityTag = group.entities[i]
 				local obj = getEntityFromManager(entityTag)
 				if(obj.circuit.reverse == false ) then
-					local nextNodeIndex = getNodeIndexFromCircuit(action.node,obj.circuit.nodes)
-					obj.nextNode = obj.circuit.nodes[nextNodeIndex+1]
+					local nextNodeIndex = getNodeIndexFromCircuit(action.data,obj.circuit.datas)
+					obj.nextNode = obj.circuit.datas[nextNodeIndex+1]
 					else
-					local inversed_circuit = reverseTable(obj.circuit.nodes)
-					local nextNodeIndex = getNodeIndexFromCircuit(action.node,inversed_circuit)
+					local inversed_circuit = reverseTable(obj.circuit.datas)
+					local nextNodeIndex = getNodeIndexFromCircuit(action.data,inversed_circuit)
 					obj.nextNode = inversed_circuit[nextNodeIndex+1]
 				end
 			end
@@ -7302,13 +7341,13 @@ end
 				logme(3,#obj.circuit)
 				logme(3,tostring(obj.circuit.reverse))
 				if(obj.circuit.reverse == false or obj.circuit.reverse == nil) then
-					local nextNodeIndex = getNodeIndexFromCircuit(obj.currentNode.tag,obj.circuit.nodes)
+					local nextNodeIndex = getNodeIndexFromCircuit(obj.currentNode.tag,obj.circuit.datas)
 					logme(3,"nextNodeIndex "..nextNodeIndex)
-					obj.nextNode = getNode(obj.circuit.nodes[nextNodeIndex+1])
+					obj.nextNode = getNode(obj.circuit.datas[nextNodeIndex+1])
 					logme(3,"nextNode "..obj.nextNode.tag)
 					setEntityFromManager(entityTag,obj)
 					else
-					local inversed_circuit = reverseTable(obj.circuit.nodes)
+					local inversed_circuit = reverseTable(obj.circuit.datas)
 					local nextNodeIndex = getNodeIndexFromCircuit(obj.currentNode.tag,inversed_circuit)
 					obj.nextNode = getNode(inversed_circuit[nextNodeIndex+1])
 					--setEntityFromManager(entityTag,obj)
@@ -7497,7 +7536,7 @@ end
 			-- for i=1,#actionlist do 
 			-- executeAction(actionlist[i],tag,parent,index,source)
 			-- end
-			runSubActionList(actionlist, "run_path_"..math.random(1,99999), tag,source,false,executortag)
+			runSubActionList(actionlist, tag.."_run_path", tag,source,false,executortag)
 		end
 		
 		-- end
@@ -7620,7 +7659,7 @@ end
 			-- for i=1,#actionlist do 
 			-- executeAction(actionlist[i],tag,parent,index,source)
 			-- end
-			runSubActionList(actionlist, "run_path_"..math.random(1,99999), tag,source,false,executortag)
+			runSubActionList(actionlist, tag.."_run_path", tag,source,false,executortag)
 		end
 		
 		
@@ -7692,8 +7731,8 @@ end
 		end
 		if(action.name == "play_custom_sound") then 
 			
-			if(arraySound[action.value] ~= nil) then
-				local path = arraySound[action.value].sound
+			if(cyberscript.cache["sound"][action.value] ~= nil) then
+				local path = cyberscript.cache["sound"][action.value].data
 				
 				local isradio = false
 				local needrepeat = false
@@ -7713,8 +7752,73 @@ end
 		if(action.name == "setGameVolume") then 
 			SetSoundSettingValue(action.value, action.score)
 		end
+		if(action.name == "change_radio_index") then 
+			local obj = getEntityFromManager(action.tag)
+			local enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				local ps = enti:GetDevicePS()
+				ps.activeStation = action.value
+				enti:PlayGivenStation()
+			
+			end
+		end
+		
+		if(action.name == "change_tv_index") then 
+			local obj = getEntityFromManager(action.tag)
+			local enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				local ps = enti:GetDevicePS()
+			
+				enti:SelectChannel(action.value)
+			
+			end
+		end
+		
+		if(action.name == "device_turn_on") then 
+			local obj = getEntityFromManager(action.tag)
+			local enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				local ps = enti:GetDevicePS()
+				
+				enti:TurnOnDevice()
+			
+			end
+		end
+		
+		if(action.name == "device_turn_off") then 
+			local obj = getEntityFromManager(action.tag)
+			local enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				local ps = enti:GetDevicePS()
+				
+				enti:TurnOffDevice()
+			
+			end
+		end
+		
+		
+		if(action.name == "device_glitch_on") then 
+			local obj = getEntityFromManager(action.tag)
+			local enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				local ps = enti:GetDevicePS()
+			
+				enti:StartGlitching(action.value, 1)
+			
+			end
+		end
+		
+		if(action.name == "device_glitch_off") then 
+			local obj = getEntityFromManager(action.tag)
+			local enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				local ps = enti:GetDevicePS()
+				
+				enti:StopGlitching()
+			
+			end
+		end
 	end
-	
 	if entityregion then
 		if(action.name == "spawn_npc") then
 			local chara = ""
@@ -7752,11 +7856,11 @@ end
 				if(action.source == "faction") then
 					local gang = getFactionByTag(action.source_tag)
 					if(action.source_use_rival == true) then
-						gang = getFactionByTag(gang.Rivals[1])
+						gang = getFactionByTag(gang.rivals[1])
 					end
 					if(action.source_use_vip == true) then
-						if(#gang.VIP > 0) then
-							local viptable = getVIPfromfactionbyscore(gang.Tag)
+						if(#gang.vip > 0) then
+							local viptable = getVIPfromfactionbyscore(gang.tag)
 							if(#viptable > 0) then
 								local index = math.random(1,#viptable)
 								
@@ -7768,9 +7872,9 @@ end
 						end
 						else
 						--spdlog.error(dump(gang))
-						if(gang.SpawnableNPC ~= nil and #gang.SpawnableNPC > 0) then
-							local index = math.random(1,#gang.SpawnableNPC)
-							chara = gang.SpawnableNPC[index]
+						if(gang.spawnable_npc ~= nil and #gang.spawnable_npc > 0) then
+							local index = math.random(1,#gang.spawnable_npc)
+							chara = gang.spawnable_npc[index]
 							
 							else
 							
@@ -7784,11 +7888,11 @@ end
 					if(#gangs > 0) then
 						local gang = getFactionByTag(gangs[1].tag)
 						if(action.source_use_rival == true) then
-							gang = getFactionByTag(gang.Rivals[1])
+							gang = getFactionByTag(gang.rivals[1])
 						end
 						if(action.source_use_vip == true) then
-							if(#gang.VIP > 0) then
-								local viptable = getVIPfromfactionbyscore(gang.Tag)
+							if(#gang.vip > 0) then
+								local viptable = getVIPfromfactionbyscore(gang.tag)
 								if(#viptable > 0) then
 									local index = math.random(1,#viptable)
 									
@@ -7796,9 +7900,9 @@ end
 								end
 							end
 							else
-							if(#gang.SpawnableNPC > 0) then
-								local index = math.random(1,#gang.SpawnableNPC)
-								chara = gang.SpawnableNPC[index]
+							if(#gang.spawnable_npc > 0) then
+								local index = math.random(1,#gang.spawnable_npc)
+								chara = gang.spawnable_npc[index]
 							end
 						end
 					end
@@ -7810,12 +7914,12 @@ end
 					if(#gangs > 0) then
 						local gang = getFactionByTag(gangs[1].tag)
 						if(action.source_use_rival == true) then
-							gang = getFactionByTag(gang.Rivals[1])
+							gang = getFactionByTag(gang.rivals[1])
 						end
 						
 						if(action.source_use_vip == true) then
-							if(#gang.VIP > 0) then
-								local viptable = getVIPfromfactionbyscore(gang.Tag)
+							if(#gang.vip > 0) then
+								local viptable = getVIPfromfactionbyscore(gang.tag)
 								if(#viptable > 0) then
 									local index = math.random(1,#viptable)
 									
@@ -7823,9 +7927,9 @@ end
 								end
 							end
 							else
-							if(#gang.SpawnableNPC > 0) then
-								local index = math.random(1,#gang.SpawnableNPC)
-								chara = gang.SpawnableNPC[index]
+							if(#gang.spawnable_npc > 0) then
+								local index = math.random(1,#gang.spawnable_npc)
+								chara = gang.spawnable_npc[index]
 							end
 						end
 					end
@@ -7843,11 +7947,11 @@ end
 					if(#gangs > 0) then
 						local gang = getFactionByTag(gangs[1].tag)
 						if(action.source_use_rival == true) then
-							gang = getFactionByTag(gang.Rivals[1])
+							gang = getFactionByTag(gang.rivals[1])
 						end
 						if(action.source_use_vip == true) then
-							if(#gang.VIP > 0) then
-								local viptable = getVIPfromfactionbyscore(gang.Tag)
+							if(#gang.vip > 0) then
+								local viptable = getVIPfromfactionbyscore(gang.tag)
 								if(#viptable > 0) then
 									local index = math.random(1,#viptable)
 									
@@ -7855,9 +7959,9 @@ end
 								end
 							end
 							else
-							if(#gang.SpawnableNPC > 0) then
-								local index = math.random(1,#gang.SpawnableNPC)
-								chara = gang.SpawnableNPC[index]
+							if(#gang.spawnable_npc > 0) then
+								local index = math.random(1,#gang.spawnable_npc)
+								chara = gang.spawnable_npc[index]
 							end
 						end
 					end
@@ -7880,8 +7984,8 @@ end
 						local gang = getFactionByTag(gangs[1].tag)
 						
 						if(action.source_use_vip == true) then
-							if(#gang.VIP > 0) then
-								local viptable = getVIPfromfactionbyscore(gang.Tag)
+							if(#gang.vip > 0) then
+								local viptable = getVIPfromfactionbyscore(gang.tag)
 								if(#viptable > 0) then
 									local index = math.random(1,#viptable)
 									
@@ -7889,9 +7993,9 @@ end
 								end
 							end
 							else
-							if(#gang.SpawnableNPC > 0) then
-								local index = math.random(1,#gang.SpawnableNPC)
-								chara = gang.SpawnableNPC[index]
+							if(#gang.spawnable_npc > 0) then
+								local index = math.random(1,#gang.spawnable_npc)
+								chara = gang.spawnable_npc[index]
 							end
 						end
 					end
@@ -7909,8 +8013,8 @@ end
 						local gang = getFactionByTag(gangs[1].tag)
 						
 						if(action.source_use_vip == true) then
-							if(#gang.VIP > 0) then
-								local viptable = getVIPfromfactionbyscore(gang.Tag)
+							if(#gang.vip > 0) then
+								local viptable = getVIPfromfactionbyscore(gang.tag)
 								if(#viptable > 0) then
 									local index = math.random(1,#viptable)
 									
@@ -7918,9 +8022,9 @@ end
 								end
 							end
 							else
-							if(#gang.SpawnableNPC > 0) then
-								local index = math.random(1,#gang.SpawnableNPC)
-								chara = gang.SpawnableNPC[index]
+							if(#gang.spawnable_npc > 0) then
+								local index = math.random(1,#gang.spawnable_npc)
+								chara = gang.spawnable_npc[index]
 							end
 						end
 					end
@@ -7947,8 +8051,8 @@ end
 						local gang = getFactionByTag(gangs[1].tag)
 						
 						if(action.source_use_vip == true) then
-							if(#gang.VIP > 0) then
-								local viptable = getVIPfromfactionbyscore(gang.Tag)
+							if(#gang.vip > 0) then
+								local viptable = getVIPfromfactionbyscore(gang.tag)
 								if(#viptable > 0) then
 									local index = math.random(1,#viptable)
 									
@@ -7956,9 +8060,9 @@ end
 								end
 							end
 							else
-							if(#gang.SpawnableNPC > 0) then
-								local index = math.random(1,#gang.SpawnableNPC)
-								chara = gang.SpawnableNPC[index]
+							if(#gang.spawnable_npc > 0) then
+								local index = math.random(1,#gang.spawnable_npc)
+								chara = gang.spawnable_npc[index]
 							end
 						end
 					end
@@ -8068,7 +8172,69 @@ end
 				end
 			end
 		end
-		
+		if(action.name == "register_entities_around_you") then
+				print("mark1")
+				player = Game.GetPlayer()
+				targetingSystem = Game.GetTargetingSystem()
+				parts = {}
+				local success= false
+				searchQuery = Game["TSQ_ALL;"]() -- Search ALL objects
+				searchQuery.maxDistance = action.range
+				success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
+				
+				print("mark1")
+				
+				local goodEntity = false
+				
+				for i, v in ipairs(parts) do
+					local newent = v:GetComponent(v):GetEntity() 
+					
+					
+					
+					
+						
+						
+							if #action.filter > 0 then
+							for i,filter in ipairs(action.filter) do
+								
+								if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
+									local entity = {}
+									entity.id = newent:GetEntityID()
+									entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
+									entity.tweak = "None"
+									entity.iscompanion = false
+									cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
+									if(action.group ~= nil and action.group ~= "") then
+										
+										table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
+									end
+								end
+							end
+							else
+									local entity = {}
+									entity.id = newent:GetEntityID()
+									entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
+									entity.tweak = "None"
+									entity.iscompanion = false
+									cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
+									if(action.group ~= nil and action.group ~= "") then
+										
+										table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
+									end
+							end
+						
+						
+						
+						
+						
+					
+					
+					
+					
+				end
+				
+				
+			end	
 		if(action.name == "register_last_killed_entity") then
 			if(lastTargetKilled ~= nil) then
 				local entity = getEntityFromManager(action.tag)
@@ -8776,23 +8942,7 @@ end
 		
 		end
 		
-		if(action.name == "attitude_entity_against_entity") then
-			if action.attitude == "hostile" then
-				setAggressiveAgainst(action.tag, action.entity)
-			end
-			if action.attitude == "passive"   then
-				setPassiveAgainst(action.tag, action.entity)
-			end
-			if action.attitude == "companion"   then
-				setFollower(action.tag)
-			end
-			if action.attitude == "friendly"   then
-				setFriendAgainst(action.tag, action.entity)
-			end
-			if action.attitude == "psycho" then
-				setPsycho(action.tag, action.entity)
-			end
-		end
+		
 		
 		if(action.name == "attitude_entity_against_entity") then
 			if action.attitude == "hostile" then
@@ -8834,9 +8984,9 @@ end
 			local faction = getFactionByTag(action.tag)
 			
 			
-			if(faction ~= nil and faction.AttitudeGroup ~= nil and #faction.AttitudeGroup > 0) then
+			if(faction ~= nil and faction.attitude_group ~= nil and #faction.attitude_group > 0) then
 			
-			for i,attitude in ipairs(faction.AttitudeGroup) do
+			for i,attitude in ipairs(faction.attitude_group) do
 			
 				local EAIAttitude = Enum.new("EAIAttitude", "AIA_Hostile")
 			
@@ -8861,11 +9011,11 @@ end
 			local factiontarget = getFactionByTag(action.target)
 			
 			
-			if(faction ~= nil and faction.AttitudeGroup ~= nil and #faction.AttitudeGroup > 0) and (factiontarget ~= nil and factiontarget.AttitudeGroup ~= nil and #factiontarget.AttitudeGroup > 0) then
+			if(faction ~= nil and faction.attitude_group ~= nil and #faction.attitude_group > 0) and (factiontarget ~= nil and factiontarget.attitude_group ~= nil and #factiontarget.attitude_group > 0) then
 			
-				for i,attitude01 in ipairs(faction.AttitudeGroup) do
+				for i,attitude01 in ipairs(faction.attitude_group) do
 					
-					for i,attitude02 in ipairs(factiontarget.AttitudeGroup) do
+					for i,attitude02 in ipairs(factiontarget.attitude_group) do
 					
 					
 					
@@ -8880,8 +9030,21 @@ end
 						end
 						
 						setAttitudeAgainstAttitude(attitude01,attitude02, EAIAttitude)
+						
+						if action.target == getVariableKey("player","current_gang") and action.apply_player == true then
+				
+							Game.GetAttitudeSystem():SetAttitudeRelation(CName.new(attitude01), CName.new("player"), EAIAttitude)
+						
+						end
+						
+						
+						
 					end
 				end
+			
+				
+			
+			
 			end
 		
 		end
@@ -8889,24 +9052,31 @@ end
 		
 		if(action.name == "update_faction_relation_attitude") then
 			
-			for key01,gang01 in pairs(arrayFaction) do
+			for key01,gang01 in pairs(cyberscript.cache["faction"]) do
 			
-					for key02,gang02 in pairs(arrayFaction) do
+					for key02,gang02 in pairs(cyberscript.cache["faction"]) do
 			
-							local relation = getFactionRelation(gang01.faction.Tag,gang02.faction.Tag)
+							local relation = getFactionRelation(gang01.data.tag,gang02.data.tag)
 							
 							if(relation == nil or relation == 0) then
 								
-								if(gang01.faction ~= nil and gang01.faction.AttitudeGroup ~= nil and #gang01.faction.AttitudeGroup > 0) and (gang02.faction ~= nil and gang02.faction.AttitudeGroup ~= nil and #gang02.faction.AttitudeGroup > 0) then
+								if(gang01.data ~= nil and gang01.data.attitude_group ~= nil and #gang01.data.attitude_group > 0) and (gang02.data ~= nil and gang02.data.attitude_group ~= nil and #gang02.data.attitude_group > 0) then
 			
-									for i,attitude01 in ipairs(gang01.faction.AttitudeGroup) do
+									for i,attitude01 in ipairs(gang01.data.attitude_group) do
 											
-											for i,attitude02 in ipairs(gang02.faction.AttitudeGroup) do
+											for i,attitude02 in ipairs(gang02.data.attitude_group) do
 											
 											
 											
 												local EAIAttitude = Enum.new("EAIAttitude", "AIA_Neutral")
 												setAttitudeAgainstAttitude(attitude01,attitude02, EAIAttitude)
+												
+												if key02 == getVariableKey("player","current_gang") and action.apply_player == true then
+				
+														Game.GetAttitudeSystem():SetAttitudeRelation(CName.new(attitude01), CName.new("player"), EAIAttitude)
+												
+										
+													end
 											end
 										end
 									end
@@ -8916,16 +9086,23 @@ end
 							
 							if(relation ~= nil and relation > 0) then
 								
-								if(gang01.faction ~= nil and gang01.faction.AttitudeGroup ~= nil and #gang01.faction.AttitudeGroup > 0) and (gang02.faction ~= nil and gang02.faction.AttitudeGroup ~= nil and #gang02.faction.AttitudeGroup > 0) then
+								if(gang01.data ~= nil and gang01.data.attitude_group ~= nil and #gang01.data.attitude_group > 0) and (gang02.data ~= nil and gang02.data.attitude_group ~= nil and #gang02.data.attitude_group > 0) then
 			
-									for i,attitude01 in ipairs(gang01.faction.AttitudeGroup) do
+									for i,attitude01 in ipairs(gang01.data.attitude_group) do
 											
-											for i,attitude02 in ipairs(gang02.faction.AttitudeGroup) do
+											for i,attitude02 in ipairs(gang02.data.attitude_group) do
 											
 											
 											
 												local EAIAttitude = Enum.new("EAIAttitude", "AIA_Friendly")
 												setAttitudeAgainstAttitude(attitude01,attitude02, EAIAttitude)
+												
+												if key02 == getVariableKey("player","current_gang") and action.apply_player == true then
+				
+														Game.GetAttitudeSystem():SetAttitudeRelation(CName.new(attitude01), CName.new("player"), EAIAttitude)
+												
+										
+													end
 											end
 										end
 									end
@@ -8935,23 +9112,33 @@ end
 							
 							if(relation ~= nil and relation < 0) then
 								
-								if(gang01.faction ~= nil and gang01.faction.AttitudeGroup ~= nil and #gang01.faction.AttitudeGroup > 0) and (gang02.faction ~= nil and gang02.faction.AttitudeGroup ~= nil and #gang02.faction.AttitudeGroup > 0) then
+								if(gang01.data ~= nil and gang01.data.attitude_group ~= nil and #gang01.data.attitude_group > 0) and (gang02.data ~= nil and gang02.data.attitude_group ~= nil and #gang02.data.attitude_group > 0) then
 			
-									for i,attitude01 in ipairs(gang01.faction.AttitudeGroup) do
+									for i,attitude01 in ipairs(gang01.data.attitude_group) do
 											
-											for i,attitude02 in ipairs(gang02.faction.AttitudeGroup) do
+											for i,attitude02 in ipairs(gang02.data.attitude_group) do
 											
 											
 											
 												local EAIAttitude = Enum.new("EAIAttitude", "AIA_Hostile")
 												setAttitudeAgainstAttitude(attitude01,attitude02, EAIAttitude)
+												
+												
+													if key02 == getVariableKey("player","current_gang") and action.apply_player == true then
+				
+														Game.GetAttitudeSystem():SetAttitudeRelation(CName.new(attitude01), CName.new("player"), EAIAttitude)
+												
+										
+													end
+							
 											end
 										end
 									end
 								
 								
 							end
-			
+							
+						
 					end
 			
 			end
@@ -9095,7 +9282,7 @@ end
 				table.insert(actionlist,newaction)
 				
 			end
-			runSubActionList(actionlist, "forlist_"..math.random(1,99999), tag,source,false,executortag)
+			runSubActionList(actionlist, tag.."_forlist", tag,source,false,executortag)
 		end
 		if(action.name == "player_look_at_forward") then
 			local position = getForwardPosition(Game.GetPlayer(),5)
@@ -9236,7 +9423,7 @@ end
 			if(enti ~= nil) then
 				if(obj.scriptlevel == nil or obj.scriptlevel <= action.scriptlevel) then
 					
-					runSubActionList(action.action, "execute_at_level_"..math.random(1,99999), tag,source,false,obj.tag)
+					runSubActionList(action.action, tag.."_execute_at_level", tag,source,false,obj.tag)
 					
 				end
 			end
@@ -9454,7 +9641,7 @@ end
 					
 					if(#action.action > 0) then
 						
-						runSubActionList(action.action, "forentitylist_"..math.random(1,99999),parent,source,false,entity.tag,false)
+						runSubActionList(action.action, tag.."_forentitylist",parent,source,false,entity.tag,false)
 					end
 				end
 				
@@ -9747,7 +9934,7 @@ end
 			
 			--logme(3,#actionlist)
 			--doActionofIndex(actionlist,"interact",listaction,currentindex)
-			runSubActionList(actionlist, "forlist_"..math.random(1,99999), tag,source,false,executortag)
+			runSubActionList(actionlist, tag.."_forlist", tag,source,false,executortag)
 			result = false
 			end
 		end
@@ -9835,13 +10022,13 @@ end
 		end
 		if(action.name == "do_random_event")then
 			local tago = math.random(1,#action.events)
-			local boj = arrayEvent[action.events[tago]]
+			local boj = cyberscript.cache["event"][action.events[tago]]
 			if( boj ~= nil) then
-				local event = boj.event
+				local event = boj.data
 				if(action.bypass ~= nil and action.bypass == true) then
 					logme(3,"Doing event : "..event.name)
 					if(action.parallele == nil or action.parallele == false)then
-						runSubActionList(event.action, action.value, tag,source,false,executortag)
+						runSubActionList(event.action, tag.."_event_"..action.value, tag,source,false,executortag)
 						result=false
 						else
 						runActionList(event.action, action.value, tag,source,false,executortag)
@@ -9849,10 +10036,10 @@ end
 					else
 					local trigger = event.trigger 
 					if(checkTriggerRequirement(event.requirement,trigger))then
-						--logme(3,"check for "..interact2.name)
+						--logme(3,"check for "..data2.name)
 						logme(3,"Doing event : "..event.name)
 						if(action.parallele == nil or action.parallele == false)then
-							runSubActionList(event.action, action.value, tag,source,false,executortag)
+							runSubActionList(event.action, tag.."_event_"..action.value, tag,source,false,executortag)
 							result=false
 							else
 							runActionList(event.action, action.value, tag,source,false,executortag)
@@ -9868,15 +10055,16 @@ end
 			result = false
 		end
 		if(action.name == "do_event") then
-			local boj = arrayEvent[action.value]
+			local boj = cyberscript.cache["event"][action.value]
 			logme(3,action.value)
 			if( boj ~= nil) then
-				local event = boj.event
-				logme(3,boj.event.tag)
+				local event = boj.data
+				
+				
 				if(action.bypass ~= nil and action.bypass == true) then
 					logme(3,"Doing event : "..event.name)
 					if(action.parallele == nil or action.parallele == false)then
-						runSubActionList(event.action, action.value, tag,source,false,executortag)
+						runSubActionList(event.action, tag.."_event_"..action.value, tag,source,false,executortag)
 						result=false
 						else
 						runActionList(event.action, action.value, tag,source,false,executortag)
@@ -9885,10 +10073,10 @@ end
 					else
 					local trigger = event.trigger
 					if(checkTriggerRequirement(event.requirement,trigger))then
-						--logme(3,"check for "..interact2.name)
+						--logme(3,"check for "..data2.name)
 						logme(3,"Doing event : "..event.name)
 						if(action.parallele == nil or action.parallele == false)then
-							runSubActionList(event.action, action.value, tag,source,false,executortag)
+							runSubActionList(event.action, tag.."_event_"..action.value, tag,source,false,executortag)
 							result=false
 							else
 							runActionList(event.action, action.value, tag,source,false,executortag)
@@ -9902,9 +10090,9 @@ end
 			
 		end
 		if(action.name == "do_function") then
-			local boj = arrayFunction[action.value]
+			local boj = cyberscript.cache["functions"][action.value]
 			if( boj ~= nil) then
-			local event = boj.func
+			local event = boj.data
 			if( boj ~= nil) then
 				local exector = executortag
 				local bypassmenu = false
@@ -9917,7 +10105,7 @@ end
 				if(action.parallele == nil or action.parallele == false)then
 					
 					
-					runSubActionList(event.action, action.value, tag,source,false,exector,bypassmenu)
+					runSubActionList(event.action, tag.."_event_"..action.value, tag,source,false,exector,bypassmenu)
 					
 					result=false
 					else
@@ -9935,10 +10123,7 @@ end
 			local list = workerTable[tag]["action"]
 			local parent = workerTable[tag]["parent"]
 			local pending = workerTable[tag]["pending"]	
-			logme(3,index)
-			logme(3,dump(list))
-			logme(3,parent)
-			logme(3,tostring(pending))
+			
 			if(list[index].parent == true) then
 				logme(3,"Go to"..action.index.." of "..parent)
 				workerTable[parent]["index"] = action.index-1
@@ -9984,7 +10169,7 @@ end
 		if(action.name == "do_random_function")then
 			local tago = math.random(1,#action.funcs)
 			logme(3,action.funcs[tago])
-			local boj = arrayFunction[action.funcs[tago]]
+			local boj = cyberscript.cache["functions"][action.funcs[tago]]
 			if( boj ~= nil) then
 				
 				
@@ -9996,10 +10181,10 @@ end
 				end
 				
 				if(action.parallele == nil or action.parallele == false)then
-					runSubActionList(boj.func.action, tago,parent,source,false,exector)
+					runSubActionList(boj.data.action, tag.."_event_"..tago,parent,source,false,exector)
 					result=false
 					else
-					runActionList(boj.func.action,tago,source,false,exector)
+					runActionList(boj.data.action,tago,source,false,exector)
 				end
 			end
 			
@@ -10007,10 +10192,10 @@ end
 		
 		
 		if(action.name == "subscribe_event_to_direct_execution") then
-			local boj = arrayEvent[action.tag]
+			local boj = cyberscript.cache["event"][action.tag]
 		
 			if( boj ~= nil) then
-				local event = boj.event
+				local event = boj.data
 				local trigger = event.trigger
 					if(checkTriggerRequirement(event.requirement,trigger))then
 						local obj = {}
@@ -10031,10 +10216,10 @@ end
 		end
 		
 		if(action.name == "subscribe_function_to_direct_execution") then
-			local boj = arrayFunction[action.tag]
+			local boj = cyberscript.cache["functions"][action.tag]
 		
 			if( boj ~= nil) then
-				local functio = boj.func
+				local functio = boj.data
 				
 				local obj = {}
 				obj.actionlist = functio.action
@@ -10071,10 +10256,10 @@ end
 	
 		
 		if(action.name == "subscribe_event_to_direct_action") then
-			local boj = arrayEvent[action.tag]
+			local boj = cyberscript.cache["event"][action.tag]
 		
 			if( boj ~= nil) then
-				local event = boj.event
+				local event = boj.data
 				local trigger = event.trigger
 					if(checkTriggerRequirement(event.requirement,trigger))then
 						local obj = {}
@@ -10095,10 +10280,10 @@ end
 		end
 		
 		if(action.name == "subscribe_function_to_direct_action") then
-			local boj = arrayFunction[action.tag]
+			local boj = cyberscript.cache["functions"][action.tag]
 		
 			if( boj ~= nil) then
-				local functio = boj.func
+				local functio = boj.data
 				
 				local obj = {}
 				obj.actionlist = functio.action
@@ -10173,7 +10358,7 @@ end
 			initGangDistrictScore()
 		end
 		if(action.name == "open_interface") then
-			currentInterface = arrayInterfaces[action.tag].ui
+			currentInterface = cyberscript.cache["interfaces"][action.tag].data
 			--logme(3,dump(currentInterface))
 			if(currentInterface ~= nil) then
 				--openInterface = true
@@ -10195,9 +10380,9 @@ end
 		
 		if(action.name == "open_shard") then
 			
-			local shard = arrayShard[action.tag]
+			local shard = cyberscript.cache["shard"][action.tag]
 			
-			if(shard ~= nil) then shard = arrayShard[action.tag].shard end
+			if(shard ~= nil) then shard = cyberscript.cache["shard"][action.tag].data end
 			
 			if(shard ~= nil) then
 			
@@ -10216,16 +10401,16 @@ end
 		
 		if(action.name == "apply_interface_to_inkwidget_entity") then
 			
-			if(cyberscript.EntityManager[action.entity] ~= nil and arrayInterfaces[action.tag] ~= nil) then
+			if(cyberscript.EntityManager[action.entity] ~= nil and cyberscript.cache["interfaces"][action.tag] ~= nil) then
 				
 				cyberscript.EntityManager[action.entity].interface = action.tag
 				cyberscript.EntityManager[action.entity].widget :RemoveAllChildren()
-				makeCustomInterface(cyberscript.EntityManager[action.entity].widget,arrayInterfaces[action.tag].ui)
+				makeCustomInterface(cyberscript.EntityManager[action.entity].widget,cyberscript.cache["interfaces"][action.tag].data)
 				
 				else
 				--print("no apply")
 				-- --print(tostring(GameDump(displayHUD[action.parent])))
-				-- --print(tostring(dump(arrayInterfaces[action.tag])))
+				-- --print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
 				
 			end
 		end
@@ -10239,21 +10424,21 @@ end
 				else
 				--print("no apply")
 				-- --print(tostring(GameDump(displayHUD[action.parent])))
-				-- --print(tostring(dump(arrayInterfaces[action.tag])))
+				-- --print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
 				
 			end
 		end
 		
 		if(action.name == "apply_interface_to_hud") then
 			
-			if(displayHUD[action.parent] ~= nil and arrayInterfaces[action.tag] ~= nil) then
+			if(displayHUD[action.parent] ~= nil and cyberscript.cache["interfaces"][action.tag] ~= nil) then
 				
-				makeCustomInterface(displayHUD[action.parent],arrayInterfaces[action.tag].ui)
+				makeCustomInterface(displayHUD[action.parent],cyberscript.cache["interfaces"][action.tag].data)
 				
 				else
 				--print("no apply")
 				-- --print(tostring(GameDump(displayHUD[action.parent])))
-				-- --print(tostring(dump(arrayInterfaces[action.tag])))
+				-- --print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
 				
 			end
 		end
@@ -10329,7 +10514,7 @@ end
 				
 			end
 			
-			runSubActionList(actionlist, "effect_tester"..math.random(1,99999), tag,source,false,executortag)
+			runSubActionList(actionlist, tag.."_effect_tester", tag,source,false,executortag)
 		end
 		
 		if(action.name == "effect_player_tester") then
@@ -10374,7 +10559,7 @@ end
 				
 			end
 			
-			runSubActionList(actionlist, "effect_tester"..math.random(1,99999), tag,source,false,executortag)
+			runSubActionList(actionlist, tag.."_effect_tester", tag,source,false,executortag)
 		end
 		
 		if(action.name == "effect_npc_tester") then
@@ -10419,7 +10604,7 @@ end
 				
 			end
 			
-			runSubActionList(actionlist, "effect_tester"..math.random(1,99999), tag,source,false,executortag)
+			runSubActionList(actionlist, tag.."_effect_tester", tag,source,false,executortag)
 		end
 		
 		if(action.name == "effect_car_tester") then
@@ -10464,7 +10649,7 @@ end
 				
 			end
 			
-			runSubActionList(actionlist, "effect_tester"..math.random(1,99999), tag,source,false,executortag)
+			runSubActionList(actionlist, tag.."_effect_tester", tag,source,false,executortag)
 		end
 		
 		if(action.name == "change_interface_label_text") then
@@ -10528,7 +10713,7 @@ end
 			
 			setVariable("Keystone_currentSelectedDatapack","version",Keystone_currentSelectedDatapack.version)
 			
-			setVariable("Keystone_currentSelectedDatapack","faction",Keystone_currentSelectedDatapack.faction)
+			setVariable("Keystone_currentSelectedDatapack","data",Keystone_currentSelectedDatapack.data)
 			
 			local localversion = CurrentDownloadedVersion(Keystone_currentSelectedDatapack.tag)
 			local serverversion = GetDatapackOnlineVersion(Keystone_currentSelectedDatapack.tag)
@@ -10885,7 +11070,7 @@ end
 				-- file:write(stringg)
 				-- file:close()
 				-- end
-				runSubActionList(actionlist, "av_autodrive_activate_"..math.random(1,99999), tag,source,false,executortag)
+				runSubActionList(actionlist, tag.."_av_autodrive_activate", tag,source,false,executortag)
 				result = false
 			end
 		end
@@ -11062,7 +11247,7 @@ end
 				end
 				
 				-- end
-				runSubActionList(actionlist, "av_autodrive_activate__custom_mappin_"..math.random(1,99999), tag,source,false,executortag)
+				runSubActionList(actionlist, tag.."_av_autodrive_activate__custom_mappin", tag,source,false,executortag)
 				result = false
 			end
 		end
@@ -12099,11 +12284,11 @@ end
 		
 		if(action.name == "load_scene") then
 			
-			local scene = arrayScene[action.tag]
+			local scene = cyberscript.cache["scene"][action.tag]
 			
 			if(scene ~= nil) then
 				
-				currentScene = scene.scene
+				currentScene = scene.data
 				currentScene.index = 0
 				if(GameController["BraindanceGameController"] ~= nil and currentScene.isbraindance == true) then
 					
@@ -12395,9 +12580,9 @@ end
 		
 		if(action.name == "change_hud_visibility") then
 			
-			if (arrayHUD[v.tag] ~= nil) then
+			if (cyberscript.cache["hud"][v.tag] ~= nil) then
 				
-				arrayHUD[v.tag].hud.visible = action.value
+				cyberscript.cache["hud"][v.tag].data.visible = action.value
 				
 			end
 			
@@ -12405,10 +12590,10 @@ end
 		
 		if(action.name == "change_hud_margin") then
 			
-			if (arrayHUD[v.tag] ~= nil) then
-				if(arrayHUD[v.tag].hud.margin == nil) then arrayHUD[v.tag].hud.margin = {} end
-				arrayHUD[v.tag].hud.margin.top = action.top
-				arrayHUD[v.tag].hud.margin.left = action.left
+			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+				if(cyberscript.cache["hud"][v.tag].data.margin == nil) then cyberscript.cache["hud"][v.tag].data.margin = {} end
+				cyberscript.cache["hud"][v.tag].data.margin.top = action.top
+				cyberscript.cache["hud"][v.tag].data.margin.left = action.left
 				
 			end
 			
@@ -12416,12 +12601,12 @@ end
 		
 		if(action.name == "change_hud_color") then
 			
-			if (arrayHUD[v.tag] ~= nil) then
-				if(arrayHUD[v.tag].hud.color == nil) then arrayHUD[v.tag].hud.color = {} end
+			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+				if(cyberscript.cache["hud"][v.tag].data.color == nil) then cyberscript.cache["hud"][v.tag].data.color = {} end
 				
-				arrayHUD[v.tag].hud.color.red = action.red
-				arrayHUD[v.tag].hud.color.green = action.green
-				arrayHUD[v.tag].hud.color.blue = action.blue
+				cyberscript.cache["hud"][v.tag].data.color.red = action.red
+				cyberscript.cache["hud"][v.tag].data.color.green = action.green
+				cyberscript.cache["hud"][v.tag].data.color.blue = action.blue
 				
 			end
 			
@@ -12429,10 +12614,10 @@ end
 		
 		if(action.name == "change_hud_fontfamily") then
 			
-			if (arrayHUD[v.tag] ~= nil) then
+			if (cyberscript.cache["hud"][v.tag] ~= nil) then
 				
 				
-				arrayHUD[v.tag].hud.fontfamily = action.value
+				cyberscript.cache["hud"][v.tag].data.fontfamily = action.value
 				
 			end
 			
@@ -12440,10 +12625,10 @@ end
 		
 		if(action.name == "change_hud_fontstyle") then
 			
-			if (arrayHUD[v.tag] ~= nil) then
+			if (cyberscript.cache["hud"][v.tag] ~= nil) then
 				
 				
-				arrayHUD[v.tag].hud.fontstyle = action.value
+				cyberscript.cache["hud"][v.tag].data.fontstyle = action.value
 				
 			end
 			
@@ -12451,10 +12636,10 @@ end
 		
 		if(action.name == "change_hud_fontsize") then
 			
-			if (arrayHUD[v.tag] ~= nil) then
+			if (cyberscript.cache["hud"][v.tag] ~= nil) then
 				
 				
-				arrayHUD[v.tag].hud.fontsize = action.value
+				cyberscript.cache["hud"][v.tag].data.fontsize = action.value
 				
 			end
 			
@@ -12462,10 +12647,10 @@ end
 		
 		if(action.name == "change_hud_text") then
 			
-			if (arrayHUD[v.tag] ~= nil) then
+			if (cyberscript.cache["hud"][v.tag] ~= nil) then
 				
 				
-				arrayHUD[v.tag].hud.text = action.value
+				cyberscript.cache["hud"][v.tag].data.text = action.value
 				
 			end
 			
@@ -12555,13 +12740,13 @@ function getPositionFromParameter(action)
 		
 		if node ~= nil then
 			if(action.position_node_usegameplay == true) then
-				position.x = node.GameplayX
-				position.y = node.GameplayY
-				position.z = node.GameplayZ
+				position.x = node.gameplay_x
+				position.y = node.gameplay_y
+				position.z = node.gameplay_z
 				else
-				position.x = node.X
-				position.y = node.Y
-				position.z = node.Z
+				position.x = node.x
+				position.y = node.y
+				position.z = node.z
 			end
 			else
 			error(getLang("see_action_nonode")..action.position_tag)
@@ -12706,19 +12891,19 @@ function getPositionFromParameter(action)
 		if(action.position_tag == "current")then
 			if(currentHouse ~= nil) then
 				if(action.position_house_way == "default") then
-					position.x = currentHouse.posX
-					position.y = currentHouse.posY
-					position.z = currentHouse.posZ
+					position.x = currentHouse.x
+					position.y = currentHouse.y
+					position.z = currentHouse.z
 				end
 				if(action.position_house_way == "Enter") then
-					position.x = currentHouse.EnterX
-					position.y = currentHouse.EnterY
-					position.z = currentHouse.EnterZ
+					position.x = currentHouse.enter_x
+					position.y = currentHouse.enter_y
+					position.z = currentHouse.enter_z
 				end
 				if(action.position_house_way == "Exit") then
-					position.x = currentHouse.ExitX
-					position.y = currentHouse.ExitY
-					position.z = currentHouse.ExitZ
+					position.x = currentHouse.exit_x
+					position.y = currentHouse.exit_y
+					position.z = currentHouse.exit_z
 				end
 				else
 				error("can't find an current custom place")
@@ -12727,19 +12912,19 @@ function getPositionFromParameter(action)
 			house = getHouseByTag(action.position_tag)
 			if(house ~= nil) then
 				if(action.position_house_way == "default") then
-					position.x = house.posX
-					position.y = house.posY
-					position.z = house.posZ
+					position.x = house.x
+					position.y = house.y
+					position.z = house.z
 				end
 				if(action.position_house_way == "enter") then
-					position.x = house.EnterX
-					position.y = house.EnterY
-					position.z = house.EnterZ
+					position.x = house.enter_x
+					position.y = house.enter_y
+					position.z = house.enter_z
 				end
 				if(action.position_house_way == "exit") then
-					position.x = house.ExitX
-					position.y = house.ExitY
-					position.z = house.ExitZ
+					position.x = house.exit_x
+					position.y = house.exit_y
+					position.z = house.exit_z
 				end
 				else
 				error("can't find an custom place with tag : "..action.position_tag)
@@ -12754,9 +12939,9 @@ function getPositionFromParameter(action)
 		if(action.position_tag == "current")then
 			
 			if(currentRoom ~= nil) then
-				position.x = currentRoom.posX
-				position.y = currentRoom.posY
-				position.z = currentRoom.posZ
+				position.x = currentRoom.x
+				position.y = currentRoom.y
+				position.z = currentRoom.z
 				else
 				error("can't find an current custom room")
 			end		
@@ -12764,9 +12949,9 @@ function getPositionFromParameter(action)
 			else
 			getRoomByTag(action.position_tag,action.position_house_tag)
 			if(room ~= nil) then
-				position.x = room.posX
-				position.y = room.posY
-				position.z = room.posZ
+				position.x = room.x
+				position.y = room.y
+				position.z = room.z
 				else
 				error("can't find an custom room with tag : "..action.position_tag.." for the house with tag :"..action.position_house_tag)
 			end
@@ -12883,21 +13068,21 @@ function GenerateTextFromContextValues(context, v)
 		
 		if(v.searchprops ~= nil) then
 			
-			value = SearchinTable(arrayFaction, v.searchprops, v.searchvalue,"faction")[v.prop]
+			value = SearchinTable(cyberscript.cache["faction"], v.searchprops, v.searchvalue,"data")[v.prop]
 			
 			else
 			if(v.tag == "random") then
 				
 				
 				
-				value = getRandomPairfromTable(arrayFaction).value.faction[v.prop]
+				value = getRandomPairfromTable(cyberscript.cache["faction"]).value.data[v.prop]
 			else
 				if(v.tag == "player") then
 					v.tag = getVariableKey("player","current_gang")
-					value = arrayFaction[v.tag].faction[v.prop]
+					value = cyberscript.cache["faction"][v.tag].data[v.prop]
 				
 				else
-					value = arrayFaction[v.tag].faction[v.prop]
+					value = cyberscript.cache["faction"][v.tag].data[v.prop]
 				end
 			
 			end
@@ -12911,17 +13096,17 @@ function GenerateTextFromContextValues(context, v)
 		
 		if(v.searchprops ~= nil) then
 			
-			value = SearchinTable(arrayShard, v.searchprops, v.searchvalue,"shard")[v.prop]
+			value = SearchinTable(cyberscript.cache["shard"], v.searchprops, v.searchvalue,"data")[v.prop]
 			
 			else
 			if(v.tag == "random") then
 				
 				
 				
-				value = getRandomPairfromTable(arrayShard).value.shard[v.prop]
+				value = getRandomPairfromTable(cyberscript.cache["shard"]).value.data[v.prop]
 			else
 				
-					value = arrayShard[v.tag].shard[v.prop]
+					value = cyberscript.cache["shard"][v.tag].data[v.prop]
 							
 			end
 			
@@ -12985,17 +13170,17 @@ function GenerateTextFromContextValues(context, v)
 		
 		if(v.searchprops ~= nil) then
 			
-			value = SearchinTable(arrayCorpo, v.searchprops, v.searchvalue,nil)[v.prop]
+			value = SearchinTable(cyberscript.cache["corpo"], v.searchprops, v.searchvalue,nil)[v.prop]
 			
 			else
 			
 				if(v.tag ~= "random") then
-					if(arrayCorpo[v.tag] ~= nil) then
+					if(cyberscript.cache["corpo"][v.tag] ~= nil) then
 					
-					value = arrayCorpo[v.tag][v.prop]
+					value = cyberscript.cache["corpo"][v.tag][v.prop]
 					end
 					else
-					local corpo = getRandomPairfromTable(arrayCorpo)
+					local corpo = getRandomPairfromTable(cyberscript.cache["corpo"])
 					
 					if(corpo ~= nil) then
 						
@@ -13026,7 +13211,7 @@ function GenerateTextFromContextValues(context, v)
 		local gangs = getGangfromDistrict(v.tag,0)
 		if(#gangs > 0) then
 			
-			value = arrayFaction[gangs[1].tag].faction[v.prop]
+			value = cyberscript.cache["faction"][gangs[1].tag].data[v.prop]
 			
 			
 		end
@@ -13035,7 +13220,7 @@ function GenerateTextFromContextValues(context, v)
 	if(v.type == "current_district_leader") then
 		local gangs = getGangfromDistrict(currentDistricts2.Tag,0)
 		if(#gangs > 0) then
-			value = arrayFaction[gangs[1].tag].faction[v.prop]
+			value = cyberscript.cache["faction"][gangs[1].tag].data[v.prop]
 			
 		end
 	end
@@ -13052,7 +13237,7 @@ function GenerateTextFromContextValues(context, v)
 		end
 		
 		if(#gangs > 0) then
-			value = arrayFaction[gangs[1].tag].faction[v.prop]
+			value = cyberscript.cache["faction"][gangs[1].tag].data[v.prop]
 			
 		end
 	end
@@ -13069,7 +13254,7 @@ function GenerateTextFromContextValues(context, v)
 		local gangs = getGangRivalfromDistrict(v.tag,v.district,0)
 		
 		if(#gangs > 0) then
-			value = arrayFaction[gangs[1].tag].faction[v.prop]
+			value = cyberscript.cache["faction"][gangs[1].tag].data[v.prop]
 			
 		end
 	end
@@ -13086,7 +13271,7 @@ function GenerateTextFromContextValues(context, v)
 		
 		local gangs = getGangRivalfromDistrict(v.tag,currentDistricts2.Tag,0)
 		if(#gangs > 0) then
-			value = arrayFaction[gangs[1].tag].faction[v.prop]
+			value = cyberscript.cache["faction"][gangs[1].tag].data[v.prop]
 			
 		end
 	end
@@ -13111,7 +13296,7 @@ function GenerateTextFromContextValues(context, v)
 			end
 		end
 		if(#gangs > 0) then
-			value = arrayFaction[gangs[1].tag].faction[v.prop]
+			value = cyberscript.cache["faction"][gangs[1].tag].data[v.prop]
 			
 		end
 	end
@@ -13135,6 +13320,38 @@ function GenerateTextFromContextValues(context, v)
 				--	--print(dump(obj))
 					
 					value = obj[v.prop]
+				
+				end
+				
+				if(v.key == "distance") then
+					
+					if(v.target == "entity") then
+						local obj = getEntityFromManager(v.targettag)
+						if(obj.id ~= nil) then
+							local enti = Game.FindEntityByID(obj.id)	
+							if(enti ~= nil) then
+							local pos = enti:GetWorldPosition()
+							value = getDistance(pos, mappinManager[v.tag]["position"])
+							end
+							
+							
+						end
+								
+					end			
+					
+					
+					if(v.target == "mappin") then
+						local obj = getMappinByTag(v.targettag)
+						if(obj ~= nil) then
+							
+							value = getDistance(obj.position, mappinManager[v.tag]["position"])
+							
+							
+						end
+								
+					end			
+					
+				
 				
 				end
 				
@@ -13317,18 +13534,53 @@ function GenerateTextFromContextValues(context, v)
 			
 			else
 			if(v.tag ~= "random") then
-				if(v.prop == "x" or v.prop =="y" or v.prop == "z") then
-					value = mappinManager[v.tag]["position"][v.prop]
+				if(v.prop == "distance") then
+					
+					if(v.target == "entity") then
+						local obj = getEntityFromManager(v.targettag)
+						if(obj.id ~= nil) then
+							local enti = Game.FindEntityByID(obj.id)	
+							if(enti ~= nil) then
+							local pos = enti:GetWorldPosition()
+							value = getDistance(pos, mappinManager[v.tag]["position"])
+							end
+							
+							
+						end
+								
+					end			
 					
 					
-					else
-					value = mappinManager[v.tag][v.prop]
+					if(v.target == "mappin") then
+						local obj = getMappinByTag(v.targettag)
+						if(obj ~= nil) then
+							
+							value = getDistance(obj.position, mappinManager[v.tag]["position"])
+							
+							
+						end
+								
+					end			
 					
-					
+				
+				
+				end
+				
+				if(v.prop ~= "distance") then
+					if(v.prop == "x" or v.prop =="y" or v.prop == "z") then
+						value = mappinManager[v.tag]["position"][v.prop]
+						
+						
+						
+						else
+						value = mappinManager[v.tag][v.prop]
+						
+						
+					end
 				end
 				
 				else
-				value = getRandomPairfromTable(mappinManager).value.faction[v.prop]
+			
 				
 				if(v.prop == "x" or v.prop =="y" or v.prop == "z") then
 					value = getRandomPairfromTable(mappinManager).value["position"][v.prop]
@@ -13348,14 +13600,14 @@ function GenerateTextFromContextValues(context, v)
 	if(v.type == "fixer") then
 		if(v.searchprops ~= nil) then
 			
-			value = SearchinTable(arrayFixer, v.searchprops, v.searchvalue,"fixer")[v.prop]
+			value = SearchinTable(cyberscript.cache["fixer"], v.searchprops, v.searchvalue,"data")[v.prop]
 			
 			else
 			if(v.tag ~= "random") then
-				value = arrayFixer[v.tag].fixer[v.prop]
+				value = cyberscript.cache["fixer"][v.tag].data[v.prop]
 				
 				else
-				value = getRandomPairfromTable(arrayFixer).value.fixer[v.prop]
+				value = getRandomPairfromTable(cyberscript.cache["fixer"]).value.data[v.prop]
 				
 			end
 		end
@@ -13373,14 +13625,14 @@ function GenerateTextFromContextValues(context, v)
 	if(v.type == "place") then
 		if(v.searchprops ~= nil) then
 			
-			value = SearchinTable(arrayHouse, v.searchprops, v.searchvalue,"house")[v.prop]
+			value = SearchinTable(cyberscript.cache["place"], v.searchprops, v.searchvalue,"data")[v.prop]
 			
 			else
 			if(v.tag ~= "random") then
-				value = arrayHouse[v.tag].house[v.prop]
+				value = cyberscript.cache["place"][v.tag].data[v.prop]
 				
 				else
-				value = getRandomPairfromTable(arrayHouse).value.house[v.prop]
+				value = getRandomPairfromTable(cyberscript.cache["place"]).value.data[v.prop]
 				
 			end
 		end
@@ -13399,16 +13651,16 @@ function GenerateTextFromContextValues(context, v)
 	end
 	
 	
-	if(v.type == "sound" and arraySound[v.tag] ~=nil) then
+	if(v.type == "sound" and cyberscript.cache["sound"][v.tag] ~=nil) then
 	
-		value = arraySound[v.tag].sound[v.prop]
+		value = cyberscript.cache["sound"][v.tag].sound[v.prop]
 	
 	end
 	
 	
-	if(v.type == "radio" and arrayRadio[v.tag] ~=nil) then
+	if(v.type == "radio" and cyberscript.cache["radio"][v.tag] ~=nil) then
 	
-		value = arrayRadio[v.tag].radio[v.prop]
+		value = cyberscript.cache["radio"][v.tag].data[v.prop]
 	
 	end
 	
@@ -13456,14 +13708,14 @@ function GenerateTextFromContextValues(context, v)
 	if(v.type == "node") then
 		if(v.searchprops ~= nil) then
 			
-			value = SearchinTable(arrayNode, v.searchprops, v.searchvalue,"node")[v.prop]
+			value = SearchinTable(cyberscript.cache["node"], v.searchprops, v.searchvalue,"data")[v.prop]
 			
 			else
 			if(v.tag ~= "random") then
-				value = arrayNode[v.tag].node[v.prop]
+				value = cyberscript.cache["node"][v.tag].data[v.prop]
 				
 				else
-				value = getRandomPairfromTable(arrayNode).value.node[v.prop]
+				value = getRandomPairfromTable(cyberscript.cache["node"]).value.data[v.prop]
 				
 			end
 		end
@@ -13472,17 +13724,17 @@ function GenerateTextFromContextValues(context, v)
 	if(v.type == "custom_npc") then
 		if(v.searchprops ~= nil) then
 			
-			value = SearchinTable(arrayCustomNPC, v.searchprops, v.searchvalue,"npc")[v.prop]
+			value = SearchinTable(cyberscript.cache["npc"], v.searchprops, v.searchvalue,"data")[v.prop]
 			
 			else
 			if(v.tag ~= "random") then
 				
 				if(v.prop == "x" or v.prop =="y" or v.prop == "z") then
-					value = arrayCustomNPC[v.tag].npc["location"][v.prop]
+					value = cyberscript.cache["npc"][v.tag].data["location"][v.prop]
 					
 					
 					else
-					value = arrayCustomNPC[v.tag].npc[v.prop]
+					value = cyberscript.cache["npc"][v.tag].data[v.prop]
 					
 					
 				end
@@ -13492,11 +13744,11 @@ function GenerateTextFromContextValues(context, v)
 				
 				
 				if(v.prop == "x" or v.prop =="y" or v.prop == "z") then
-					value = getRandomPairfromTable(arrayCustomNPC).value.npc["location"][v.prop]
+					value = getRandomPairfromTable(cyberscript.cache["npc"]).value.data["location"][v.prop]
 					
 					
 					else
-					value = getRandomPairfromTable(arrayCustomNPC).value.npc[v.prop]
+					value = getRandomPairfromTable(cyberscript.cache["npc"]).value.data[v.prop]
 					
 					
 				end
@@ -13841,7 +14093,13 @@ function GenerateTextFromContextValues(context, v)
 	return value
 	
 end		
+function getDistance(objA, objB)
+    -- Get the length for each of the components x and y
+    local xDist = objB.x - objA.x
+    local yDist = objB.y - objA.y
 
+    return math.sqrt( (xDist ^ 2) + (yDist ^ 2) ) 
+end
 
 function toboolean(str)
     local bool = false

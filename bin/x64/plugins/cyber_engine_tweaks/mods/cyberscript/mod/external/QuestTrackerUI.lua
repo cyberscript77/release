@@ -58,7 +58,7 @@ function TrackObjective()
 					if not objectiveState.isComplete and (objectiveState.state == gameJournalEntryState.Active or objectiveState.state == gameJournalEntryState.Failed)then
 						local objectiveEntry = QuestManager.GetObjectiveEntry(objectiveDef.id)
 						local objectiveWidget = QuestTrackerGameController:SpawnFromLocal(inkWidgetRef.Get(QuestTrackerGameController.ObjectiveContainer), "Objective")
-
+							print(trackedObjectiveId)
 						---@type QuestTrackerObjectiveLogicController
 						local objectiveController = objectiveWidget:GetController()
 						objectiveController:SetData(objectiveDef.title, objectiveDef.id == trackedObjectiveId, objectiveDef.isOptional, 0, 0, objectiveEntry,true)
@@ -80,6 +80,7 @@ function TrackObjective()
 			
 			
 		elseif currentObjectiveId ~= 0 then
+		print("here we are")
 				QuestTrackerGameController.root:SetVisible(false)
 				currentObjectiveId = 0
 				

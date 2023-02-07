@@ -23,6 +23,7 @@
     "entity_entpath": "base\\media\\characters\\activist.ent",
     "entity_entrigs": "base\\characters\\base_entities\\man_base\\man_base.rig"
   },
+  
   {
     "entity_id": "",
     "entity_name": "main_boss_adam_smasher",
@@ -5270,6 +5271,14 @@
     "entity_entname": "q000_nomad_radio_tower_circut.ent",
     "entity_entpath": "base\\quest\\main_quests\\prologue\\q000\\entities\\q000_nomad_radio_tower_circut.ent",
     "entity_entrigs": "base\\items\\interactive\\electronics\\int_electronics_002__fuse_box_module_02_a_fuses\\int_electronics_002__fuse_box_module_02_a_fuses.rig"
+  },
+  {
+    "entity_id":"",
+    "entity_name": "Invisible Radio",
+    "entity_tweak": "base\\quest\\main_quests\\prologue\\q000\\entities\\q000_invisible_radio.ent",
+    "entity_entname": "q000_invisible_radio.ent",
+    "entity_entpath": "base\\quest\\main_quests\\prologue\\q000\\entities\\q000_invisible_radio.ent",
+    "entity_entrigs": "base\\items\\prop_base_skeleton.rig"
   },
   {
     "entity_id": "",

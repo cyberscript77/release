@@ -233,7 +233,7 @@ function QuestJournalUI.Initialize()
 		
 				local questDef = QuestManager.GetQuest(questId)
 				
-				if( arrayQuest2[questId].quest.recurrent ~= nil and arrayQuest2[questId].quest.recurrent == true) then
+				if( cyberscript.cache["mission"][questId].data.recurrent ~= nil and cyberscript.cache["mission"][questId].data.recurrent == true) then
 					
 					inkTextRef.SetText(self.questTitle, "(Recurrent)"..getLang(questDef.title))
 					

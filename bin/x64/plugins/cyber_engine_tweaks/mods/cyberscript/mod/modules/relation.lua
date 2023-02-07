@@ -109,19 +109,14 @@ end
 
 
 function loadBasicDialog(npc,way)
-	--currentPhoneDialog = nil
-	-- currentPhoneDialog = arrayDialog["phone_default_basic_01"].dialog
-	-- logme(2,currentPhoneDialog.Desc)
-	
-	-- logme(2,#currentPhoneDialog.options)
-	--currentPhoneDialog.speaker.value = npc.ID
+
 	logme(10,way)
 	if(way == "phone") then
 	
 	
 	logme(10,"load for phone")
-	local dial = arrayDialog["phone_default_basic_01"].dialog
-	dial.speaker.value = npc.Names
+	local dial = cyberscript.cache["choice"]["phone_default_basic_01"].data
+	dial.speaker = npc.Names
 	
 	local usedial =  SetNextDialog("phone_default_basic_01","phone")
 	
@@ -131,8 +126,8 @@ function loadBasicDialog(npc,way)
 	
 	
 	logme(10,"load for speak")
-	local dial = arrayDialog["speak_default_basic_01"].dialog
-	dial.speaker.value = npc.Names
+	local dial = cyberscript.cache["choice"]["speak_default_basic_01"].data
+	dial.speaker = npc.Names
 	
 	local usedial =  SetNextDialog("speak_default_basic_01","speak",npc.Names)
 	
@@ -176,19 +171,17 @@ function GetDialogOptionBasicCustom(npc, source)
 	local currentdialogOptionList = {}
 	
 	
-	for key,value in pairs(arrayDialog) do --actualcode
+	for key,value in pairs(cyberscript.cache["choice"]) do --actualcode
 		
-		-- logme(2,arrayDialog[key].dialog.speaker.way)
-		-- logme(2,arrayDialog[key].dialog.Tag)
-		-- logme(2,"requirement "..#arrayDialog[key].dialog.requirement)
 		
-		local diag = arrayDialog[key].dialog
+		
+		local diag = cyberscript.cache["choice"][key].data
 		if(
-			(diag.speaker.value == npc.Names or diag.speaker.value == "any")
+			(diag.speaker == npc.Names or diag.speaker)
 			and #diag.requirement == 0 
-			and diag.speaker.way == source 
-			and string.match(diag.Tag, "phone_default_basic") == nil
-			and string.match(diag.Tag, "phone_default_custom_init") == nil
+			
+			and string.match(diag.tag, "phone_default_basic") == nil
+			and string.match(diag.tag, "phone_default_custom_init") == nil
 			)then
 			
 			for y=1, #diag.options do
@@ -204,7 +197,7 @@ function GetDialogOptionBasicCustom(npc, source)
 	
 	
 		local option = {}
-		option.Description = "We talk later."
+		option.description = "We talk later."
 		option.action = {}
 		option.trigger = {}
 		option.trigger.auto = {}
@@ -302,9 +295,9 @@ function SetNextDialog(tag,source)
 		
 		local dial = {}
 		
-		dial.speaker = speak
-		dial.Tag = "DialogCustomInitAnswer"
-		dial.Desc = lang.DialogCustomInitAnswer
+		dial.speaker = speak.value
+		dial.tag = "DialogCustomInitAnswer"
+		dial.desc = lang.dataCustomInitAnswer
 		
 		dial.trigger = {}
 		
@@ -320,11 +313,11 @@ function SetNextDialog(tag,source)
 		if(#dial.options > 0) then
 				for i=1,#dial.options do
 				
-					local title = dial.options[i].Description
+					local title = dial.options[i].description
 					
 					if(lang[title]) ~= nil then
-						dial.options[i].Description = lang[title]		
-						logme(1,"SetNextDialog DialogCustomInitAnswer dialog option "..tostring(dial.options[i].Description))
+						dial.options[i].description = lang[title]		
+						logme(1,"SetNextDialog DialogCustomInitAnswer dialog option "..tostring(dial.options[i].description))
 					end	
 				
 				end
@@ -333,7 +326,7 @@ function SetNextDialog(tag,source)
 		else
 		
 		local option = {}
-		option.Description = getLang("relation_talklater")
+		option.description = getLang("relation_talklater")
 		option.action = {}
 		option.trigger = {}
 		option.trigger.auto = {}
@@ -354,7 +347,7 @@ function SetNextDialog(tag,source)
 		
 		
 	else
-		local diag = arrayDialog[tag].dialog
+		local diag = cyberscript.cache["choice"][tag].data
 		
 		
 		
@@ -368,10 +361,10 @@ function SetNextDialog(tag,source)
 			haveDialogLoaded = true
 			local dialogy = diag
 			
-			local title = dialogy.Desc
+			local title = dialogy.desc
 		
 			if(lang[title]) ~= nil then
-				dialogy.Desc = lang[title]		
+				dialogy.desc = lang[title]		
 			end
 			
 			
@@ -385,10 +378,10 @@ function SetNextDialog(tag,source)
 				
 						
 				
-					local title = dialogy.options[i].Description
+					local title = dialogy.options[i].description
 					
 					if(lang[title]) ~= nil then
-						dialogy.options[i].Description = lang[title]		
+						dialogy.options[i].description = lang[title]		
 					end	
 			
 			
@@ -401,7 +394,7 @@ function SetNextDialog(tag,source)
 					dialogy.options = {}
 					
 					local option = {}
-					option.Description =getLang("relation_talklater")
+					option.description =getLang("relation_talklater")
 					option.action = {}
 					option.trigger = {}
 					option.trigger.auto = {}
@@ -420,7 +413,7 @@ function SetNextDialog(tag,source)
 				
 			end
 			
-			logme(10,dialogy.Desc)
+			logme(10,dialogy.desc)
 			return dialogy
 			
 		else
@@ -428,9 +421,9 @@ function SetNextDialog(tag,source)
 			
 			
 			local dialog = {}
-			dialog.Desc = lang.BadAnswer
+			dialog.desc = lang.BadAnswer
 			dialog.speaker = speak
-			dialog.Tag = "BadAnswer"
+			dialog.tag = "BadAnswer"
 			dialog.trigger = {}
 			dialog.requirement = {}
 			dialog.options = {}
@@ -473,14 +466,14 @@ function customEventMessage(message, npc)
 	
 	logme(2,"Event"..message)
 	currentEventDialog = {}
-	currentEventDialog.Desc = message
+	currentEventDialog.desc = message
 	
-	currentEventDialog.speaker =speak
-	currentEventDialog.Tag = "Event"
+	currentEventDialog.speaker = npc.Names
+	currentEventDialog.tag = "Event"
 	currentEventDialog.trigger = {}
 	currentEventDialog.options = {}
 	
-	logme(2,"Event"..currentEventDialog.Desc)
+	logme(2,"Event"..currentEventDialog.desc)
 	openEventDialogWindow = true
 	
 	
@@ -592,7 +585,7 @@ function npcCustomActions(npc,interact,way)--0
 	CPS.colorBegin("Button", { 48, 234, 247 ,0})  -- get color from styles.lua
 	CPS.colorBegin("Text", "28F0FF")-- get color from styles.lua
 
-	if ImGui.Button(" | "..interact.name, (screenWidth/12)*6, 0) then	
+	if ImGui.Button(" | "..data.name, (screenWidth/12)*6, 0) then	
 		waitingTag = interact.tag
 		
 		if(interact.message == nil) then
@@ -614,7 +607,7 @@ function StarEventManager()
 	if waitingTag ~= nil then
 	logme(2,waitingTag)
 		local interact = nil
-		interact = arrayInteract[waitingTag].interact
+		interact = cyberscript.cache["interact"][waitingTag].data
 		
 		
 		if interact ~= nil then
@@ -631,7 +624,7 @@ function StarEventManager()
 					
 						
 						local interact = nil
-						interact = arrayInteract[waitingTag].interact
+						interact = cyberscript.cache["interact"][waitingTag].data
 						waitingTag = nil
 						--doActionof(interact.action,"interact")
 						runActionList(interact.action,waitingTag,"interact",false,"see_engine")
