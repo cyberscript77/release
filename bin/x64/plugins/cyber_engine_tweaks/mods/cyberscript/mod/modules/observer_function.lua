@@ -7524,7 +7524,8 @@ function listenPlayerInput(action)
 		
 		if #currentInputHintList > 0 then
 			for i = 1, #currentInputHintList do
-				if(currentInputHintList[i].key == actionName and actionType == "BUTTON_RELEASED") then
+		
+				if(currentInputHintList[i] ~= nil and currentInputHintList[i].key == actionName and actionType == "BUTTON_RELEASED") then
 					local inter = cyberscript.cache["interact"][currentInputHintList[i].tag].data
 					runActionList(inter.action,inter.tag,"interact",false,"player")
 				end

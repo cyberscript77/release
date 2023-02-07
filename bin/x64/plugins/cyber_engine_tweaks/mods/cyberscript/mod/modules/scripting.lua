@@ -2211,8 +2211,9 @@ function getTriggeredActions()
 				
 				for i = 1, #currentInputHintList do
 					
-					if(currentInputHintList[i].tag == interact2.tag) then
+					if(currentInputHintList[i]~= nil and currentInputHintList[i].tag == interact2.tag) then
 						hideCustomHints(interact2.tag)
+						
 						currentInputHintList[i] = nil
 					end
 					
