@@ -1,17 +1,17 @@
 {
-    "Name": "6thStreet",
-    "Logo": "logo_6thstreet",
-    "Tag": "faction_sixthstreet",
-   "AttitudeGroup": [
+    "name": "6thStreet",
+    "logo": "logo_6thstreet",
+    "tag": "faction_sixthstreet",
+   "attitude_group": [
    "q103_6th_street", 
    "de_wbr_hil_06_6th_street",
    "de_std_rcr_06_6th_street",
   "sq012_6th_street"
    ],
-    "Rivals": [
+    "rivals": [
         "faction_valentinos"
     ],
-    "SpawnableNPC": [
+    "spawnable_npc": [
         "Character.mq008_6th_street_civ_judge_ma",
         "Character.mq008_6th_street_civ_judge_wa",
         "Character.mq008_6th_street_representative",
@@ -22,14 +22,14 @@
         "Character.sts_hey_gle_06_6th_street_smg_ma",
         "Character.sts_hey_gle_06_6th_street_smg_wa"
     ],
-    "SpawnableVehicule": [
+    "spawnable_vehicle": [
         "Vehicle.v_standard2_chevalier_thrax_sixth_street",
         "Vehicle.v_standard2_archer_hella_sixth_street",
         "Vehicle.v_standard25_villefort_columbus_sixth_street",
         "Vehicle.cs_savable_archer_hella_sixth_street"
     ],
-    "DistrictTag": "district_santodomingo",
-    "VIP": [{
+    "district_tag": "district_santodomingo",
+    "vip": [{
             "name": "Buck Arnold",
             "score": 0
         }, {

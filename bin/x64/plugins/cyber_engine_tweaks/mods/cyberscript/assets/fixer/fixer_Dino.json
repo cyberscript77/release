@@ -1,15 +1,15 @@
 {
 
-	"Name":"Dino Dinovic",
-	"LOC_X":-1967,
-	"LOC_Y":378,
-	"LOC_Z":0,
+	"name":"Dino Dinovic",
+	"x":-1967,
+	"y":378,
+	"z":0,
 	"range":5,
-	"Faction":"faction_scavengers",
-	"Tag": "fixer_dino",
+	"faction":"faction_scavengers",
+	"tag": "fixer_dino",
 	"exist":true,
 	"npcexist":true,
-	"NPCId":"Character.ow_dino_driver",
+	"tweakid":"Character.ow_dino_driver",
 	"trigger":{
 		"always_enable":{
 			"name":"auto"

@@ -1,12 +1,12 @@
 {
 
-	"Name": "TygerClaws",
-	"Logo": "logo_tygerclaws",
-	"Tag": "faction_tygerclaws",
-	"AttitudeGroup": [		
+	"name": "TygerClaws",
+	"logo": "logo_tygerclaws",
+	"tag": "faction_tygerclaws",
+	"attitude_group": [		
 		"q105_tyger_claws"
 	],
-	"Rivals": [
+	"rivals": [
 		"faction_mox",
 		"faction_militech",
 		"faction_kangtao",
@@ -14,7 +14,7 @@
 		"faction_maelstrom",
 		"faction_scavengers"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.jpn_tyger_claws_biker1_melee1_fists_wa",
 		"Character.jpn_tyger_claws_biker1_melee1_tireiron_ma",
 		"Character.jpn_tyger_claws_gangster1_melee1_fists_wa",
@@ -142,7 +142,7 @@
 		"Character.tyger_claws_martial_fmelee2_katana_ma_rare",
 		"Character.sts_wbr_jpn_12_tyger_claws_gangster1_ranged1_nue_wa"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.cs_savable_quadra_turbo_tyger_claw",
 		"Vehicle.cs_savable_mizutani_shion_tyger",
 		"Vehicle.cs_savable_archer_quartz_tyger",
@@ -152,8 +152,8 @@
 		"Vehicle.v_sportbike3_brennan_apollo_tyger",
 		"Vehicle.v_sportbike2_arch_tyger_player"
 	],
-	"DistrictTag": "district_westbrook",
-	"VIP": [{
+	"district_tag": "district_westbrook",
+	"vip": [{
 			"name": "Chang Hoon Nam",
 			"score": 0
 		},

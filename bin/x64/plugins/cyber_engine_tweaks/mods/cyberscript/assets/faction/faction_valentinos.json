@@ -1,15 +1,15 @@
 {
-	"Name": "Valentinos",
-	"Logo": "logo_valentinos",
-	"Tag": "faction_valentinos",
-	"AttitudeGroup": [
+	"name": "Valentinos",
+	"logo": "logo_valentinos",
+	"tag": "faction_valentinos",
+	"attitude_group": [
 		"valentinos_ow",
 		"valentinos"
 	],
-	"Rivals": [
+	"rivals": [
 		"faction_sixthstreet", "faction_ncpd", "faction_militech", "faction_maelstrom", "faction_tygerclaws", "faction_scavengers"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.gle_valentinos_grunt2_melee2_machete_wa",
 		"Character.gle_valentinos_grunt1_ranged1_nova_ma",
 		"Character.gle_valentinos_grunt1_ranged1_nova_wa",
@@ -45,15 +45,15 @@
 		"Character.valentinos_sniper_sniper3_grad_wa_elite",
 		"Character.valentinos_grunt4_hmelee2_fists_mb_rare"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.v_sport2_villefort_alvarado_cabrio",
 		"Vehicle.v_sport2_villefort_alvarado_valentinos",
 		"Vehicle.cs_savable_thorton_colby_valentinos",
 		"Vehicle.cs_savable_mizutani_shion",
 		"Vehicle.cs_savable_thorton_mackinaw_valentinos"
 	],
-	"DistrictTag": "district_heywood",
-	"VIP": [{
+	"district_tag": "district_heywood",
+	"vip": [{
 			"name": "Mama_Welles",
 			"score": 0
 		},

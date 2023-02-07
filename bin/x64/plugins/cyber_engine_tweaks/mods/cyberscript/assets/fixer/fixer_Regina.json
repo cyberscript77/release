@@ -1,16 +1,16 @@
 {
 
-	"Name":"Regina Jones",
+	"name":"Regina Jones",
 
-	"LOC_X":-1143.104,
-	"LOC_Y":1568.628,
-	"LOC_Z": 71.707,
+	"x":-1143.104,
+	"y":1568.628,
+	"z": 71.707,
 	"range":8,
-	"Faction":"faction_ncpd",
-	"Tag": "fixer_regina",
+	"faction":"faction_ncpd",
+	"tag": "fixer_regina",
 	"exist":true,
 	"npcexist":true,
-	"NPCId":"Character.Reginald",
+	"tweakid":"Character.Reginald",
 	"trigger":{
 		"always_enable":{
 			"name":"auto"

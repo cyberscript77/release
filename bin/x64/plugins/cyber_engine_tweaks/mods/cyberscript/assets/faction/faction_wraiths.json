@@ -1,16 +1,16 @@
 {
 
-	"Name": "wraiths",
-	"Logo": "logo_wraiths",
-	"Tag": "faction_wraiths",
-	"AttitudeGroup": [
+	"name": "wraiths",
+	"logo": "logo_wraiths",
+	"tag": "faction_wraiths",
+	"attitude_group": [
 		"wraiths",
 		"wraiths_ow"
 	],
-	"Rivals": [
+	"rivals": [
 		"faction_aldecaldos"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.wraiths_grunt2_ranged2_copperhead_wa",
 		"Character.wraiths_prisoner_fmelee3_fists_ma_elite",
 		"Character.wraiths_strongarms_hmelee3_fists_mb_elite",
@@ -19,13 +19,13 @@
 		"Character.wraiths_grunt2_ranged2_copperhead_ma",
 		"Character.wraiths_grunt2_melee2_crowbar_wa"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.v_sport2_quadra_type66_nomad_wraiths",
 		"Vehicle.v_sport2_mizutani_shion_nomad_wraiths",
 		"Vehicle.v_standard2_thorton_galena_nomad_wraiths"
 	],
-	"DistrictTag": "district_badland",
-	"VIP": [
+	"district_tag": "district_badland",
+	"vip": [
 		{
 			"name": "Santiago",
 			"score": 0

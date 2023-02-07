@@ -1,13 +1,13 @@
 {
 
-	"Name": "Muamar « El Captain » Reyes",
-	"LOC_X": 406,
-	"LOC_Y": -2361,
-	"LOC_Z": 0,
+	"name": "Muamar « El Captain » Reyes",
+	"x": 406,
+	"y": -2361,
+	"z": 0,
 	"range": 5,
-	"Faction": "faction_sixthstreet",
-	"Tag": "fixer_captain",
-	"NPCId": "Character.muamar_reyes",
+	"faction": "faction_sixthstreet",
+	"tag": "fixer_captain",
+	"tweakid": "Character.muamar_reyes",
 	"exist": true,
 	"npcexist": true,
 	"trigger": {

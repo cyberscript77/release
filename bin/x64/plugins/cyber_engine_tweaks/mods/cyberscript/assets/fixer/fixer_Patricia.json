@@ -1,15 +1,15 @@
 {
 
-	"Name":"Patricia",
-	"LOC_X":-1730,
-	"LOC_Y":2185,
-	"LOC_Z":86,
+	"name":"Patricia",
+	"x":-1730,
+	"y":2185,
+	"z":86,
 	"range":5,
-	"Faction":"faction_maelstrom",
-	"Tag": "fixer_patricia",
+	"faction":"faction_maelstrom",
+	"tag": "fixer_patricia",
 	"exist":false,
 	"npcexist":false,
-	"NPCId":"Character.sq011_patricia",
+	"tweakid":"Character.sq011_patricia",
 	"trigger":{
 		"always_enable":{
 			"name":"auto"

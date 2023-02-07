@@ -1,20 +1,16 @@
 {
 
-	"Name":"Michiko",
-	"oldLOC_X":-2077,
-	"oldLOC_Y":1844,
-	"oldLOC_Z":18,
-	
-	"LOC_X": -1444.9503173828,
-	"LOC_Y": 121.66790771484,
-	"LOC_Z": 15.353485107422,
+	"name":"Michiko",
+	"x": -1444.9503173828,
+	"y": 121.66790771484,
+	"z": 15.353485107422,
 
 	"range":8,
-	"Faction":"faction_arasaka",
-	"Tag": "fixer_michiko",
+	"faction":"faction_arasaka",
+	"tag": "fixer_michiko",
 	"exist":false,
 	"npcexist":false,
-	"NPCId":"Character.Michiko",
+	"tweakid":"Character.Michiko",
 	"trigger":{
 		"always_enable":{
 			"name":"auto"

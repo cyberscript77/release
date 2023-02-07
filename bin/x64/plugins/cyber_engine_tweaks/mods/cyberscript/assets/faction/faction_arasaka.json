@@ -1,18 +1,18 @@
 {
-	"Name": "Arasaka",
-	"Logo": "logo_arasaka",
-	"Tag": "faction_arasaka",
-	 "AttitudeGroup": [
+	"name": "Arasaka",
+	"logo": "logo_arasaka",
+	"tag": "faction_arasaka",
+	 "attitude_group": [
 	  "arasaka_ow",
 	  "arasaka"
 	 ],
-	"Rivals": [
+	"rivals": [
 		"faction_maelstrom",
 		"faction_kangtao",
 		"faction_militech",
 		"faction_afterlife"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.arasaka_bodyguard_ranged3_masamune_mb_rare",
 		"Character.arasaka_cyborg_franged3_shingen_ma_elite",
 		"Character.arasaka_agent_fmelee2rare_katana_wa_rare",
@@ -40,15 +40,15 @@
 		"Character.q113_smasher_arasaka_mantis_officer",
 		"Character.q113_smasher_arasaka_sniper"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.q108_arasaka_car",
 		"Vehicle.cs_savable_villefort_columbus_arasaka",
 		"Vehicle.v_standard2_villefort_cortes_arasaka",
 		"Vehicle.v_sportbike1_yaiba_kusanagi"
 		
 	],
-	"DistrictTag": "district_downtown",
-	"VIP": [{
+	"district_tag": "district_downtown",
+	"vip": [{
 			"name": "Arthur Jenkins",
 			"score": 5
 		},

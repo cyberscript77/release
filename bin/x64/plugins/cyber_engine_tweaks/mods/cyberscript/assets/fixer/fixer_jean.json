@@ -1,9 +1,9 @@
 {
-	"LOC_X": -2395.2976074219,
-	"Tag": "fixer_jean",
-	"LOC_Z": 17.934,
+	"x": -2395.2976074219,
+	"tag": "fixer_jean",
+	"z": 17.934,
 	"despawn_action": [],
-	"Name": "Jean Rochelin",
+	"name": "Jean Rochelin",
 	"spawn_action": [
 
 		{
@@ -12,7 +12,7 @@
 
 		}
 	],
-	"Faction": "faction_voodooboys",
+	"faction": "faction_voodooboys",
 	"trigger": {
 		"auto": {
 			"helperTitle": "Default",
@@ -20,12 +20,12 @@
 			"helper": "This trigger will be triggered without need anything (default)"
 		}
 	},
-	"LOC_Y": -1960.1765136719,
+	"y": -1960.1765136719,
 	"requirement": [
 		[]
 	],
 	"npcexist": false,
 	"exist": false,
-	"NPCId": "Character.mq006_jean",
+	"tweakid": "Character.mq006_jean",
 	"range": 10
 }

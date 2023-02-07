@@ -1,13 +1,13 @@
 {
 
-	"Name":"Wakako Okada",
-	"LOC_X":-668,
-	"LOC_Y":822,
-	"LOC_Z":0,
+	"name":"Wakako Okada",
+	"x":-668,
+	"y":822,
+	"z":0,
 	"range":5,
-	"Faction":"faction_tygerclaws",
-	"Tag": "fixer_wakako",
-	"NPCId":"Character.wakako_okada",
+	"faction":"faction_tygerclaws",
+	"tag": "fixer_wakako",
+	"tweakid":"Character.wakako_okada",
 	"exist":true,
 	"npcexist":true,
 	"trigger":{

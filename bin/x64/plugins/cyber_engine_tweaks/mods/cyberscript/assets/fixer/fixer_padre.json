@@ -1,13 +1,13 @@
 {
 
-	"Name":"Sebastian « Padre » Ibarra",
-	"LOC_X":-1804.899,
-	"LOC_Y":-1275.519,
-	"LOC_Z":21.841,
+	"name":"Sebastian « Padre » Ibarra",
+	"x":-1804.899,
+	"y":-1275.519,
+	"z":21.841,
 	"range": 5,
-	"Faction":"faction_valentinos",
-	"Tag": "fixer_padre",
-	"NPCId":"Character.Padre",
+	"faction":"faction_valentinos",
+	"tag": "fixer_padre",
+	"tweakid":"Character.Padre",
 	"exist":false,
 	"npcexist":false,
 	"trigger":{

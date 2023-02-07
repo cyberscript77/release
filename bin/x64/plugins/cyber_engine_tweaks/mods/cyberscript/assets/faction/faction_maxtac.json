@@ -1,9 +1,9 @@
 {
-	"Name":"MaxTac",
-	"Logo":"ico_district_center_large",
-	"Tag": "faction_maxtac",
-	"AttitudeGroup":["sq018_maxtac"],
-	"Rivals":[
+	"name":"MaxTac",
+	"logo":"ico_district_center_large",
+	"tag": "faction_maxtac",
+	"attitude_group":["sq018_maxtac"],
+	"rivals":[
 		"faction_aldecaldos",
 		"faction_animals",
 		"faction_maelstrom",
@@ -15,7 +15,7 @@
 		"faction_voodooboys",
 		"faction_wraiths"
 		],
-	"SpawnableNPC":[
+	"spawnable_npc":[
 	"Character.mq030_max_tac",
 	"Character.q001_maxtac_fem",
 	"Character.q001_maxtac_mb",
@@ -23,12 +23,12 @@
 	"Character.q001_maxtac_fem",
 	"Character.q001_maxtac_mb"
 	],
-	"SpawnableVehicule":[
+	"spawnable_vehicle":[
 		"Vehicle.q001_barricade_police_cars",
 		"Vehicle.v_007_interceptor_police"	 
 		],
-	"DistrictTag":"district_watson",
-	"VIP":[{
+	"district_tag":"district_watson",
+	"vip":[{
 			"name": "MaxTac Solider",
 			"score": 5
 		},

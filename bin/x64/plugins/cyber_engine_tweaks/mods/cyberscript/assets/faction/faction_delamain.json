@@ -1,10 +1,10 @@
 {
-	"Name": "Delamain",
-	"Logo": "logo_netwatch",
-	"Tag": "faction_delamain",
-	"AttitudeGroup": ["civilian"],
-	"Rivals": ["faction_kangtao"],
-	"SpawnableNPC": [
+	"name": "Delamain",
+	"logo": "logo_netwatch",
+	"tag": "faction_delamain",
+	"attitude_group": ["civilian"],
+	"rivals": ["faction_kangtao"],
+	"spawnable_npc": [
 		"Character.CitizenBikerFemale",
 		"Character.CitizenBikerMale",
 		"Character.CitizenRichFemale",
@@ -62,10 +62,10 @@
 		"Character.YoungsterMale",
 		"Character.SexworkerFemale"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.v_standard2_villefort_cortes_delamain",
 		"Vehicle.q101_delamain_cab",
 		"Vehicle.q108_delamain_cab"
 	],
-	"DistrictTag": ""
+	"district_tag": ""
 }

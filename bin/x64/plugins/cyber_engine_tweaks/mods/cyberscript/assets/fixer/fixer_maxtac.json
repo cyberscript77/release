@@ -1,15 +1,15 @@
 {
 
-	"Name": "MaxTac Agent",
-	"LOC_X": -1453.414,
-	"LOC_Y": 1230.756,
-	"LOC_Z": 23.001,
+	"name": "MaxTac Agent",
+	"x": -1453.414,
+	"y": 1230.756,
+	"z": 23.001,
 	"range": 8,
-	"Faction": "faction_maxtac",
-	"Tag": "fixer_maxtac",
+	"faction": "faction_maxtac",
+	"tag": "fixer_maxtac",
 	"exist": false,
 	"npcexist": false,
-	"NPCId": "Character.mq030_max_tac",
+	"tweakid": "Character.mq030_max_tac",
 	"trigger": {
 		"always_enable": {
 			"name": "auto"

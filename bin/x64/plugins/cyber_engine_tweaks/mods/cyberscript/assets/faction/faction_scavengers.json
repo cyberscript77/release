@@ -1,12 +1,12 @@
 {
-	"Name": "Scavengers",
-	"Logo": "logo_netwatch",
-	"Tag": "faction_scavengers",
-	 "AttitudeGroup":  [
+	"name": "Scavengers",
+	"logo": "logo_netwatch",
+	"tag": "faction_scavengers",
+	 "attitude_group":  [
 	 "scavenger", 
 	 "scavenger_ow"
 	 ],
-	"Rivals": [
+	"rivals": [
 		"faction_maelstrom",
 		"faction_ncpd",
 		"faction_voodooboys",
@@ -15,7 +15,7 @@
 		"faction_militech",
 		"faction_mox"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.cvi_scavenger_butcher3_hmelee2_machete_mb_rare",
 		"Character.cvi_scavenger_elite3_sniper2_grad_ma",
 		"Character.cvi_scavenger_fast3_fmelee3_machete_wa_elite",
@@ -112,15 +112,15 @@
 		"Character.scavenger_fast3_fmelee3_machete_wa_elite",
 		"Character.scavenger_netrunner2_netrunner2_nova_wa_rare"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.ma_cct_dtn_03_scavenger_van",
 		"Vehicle.v_sport1_quadra_turbo",
 		"Vehicle.sq025_delamain_cab",
 		"Vehicle.sq017_us_cracks_truck",
 		"Vehicle.v_sportbike1_yaiba_kusanagi"
 	],
-	"DistrictTag": "district_pacifica",
-	"VIP": [{
+	"district_tag": "district_pacifica",
+	"vip": [{
 		"name": "Cur Machete",
 		"score": 30
 	}]

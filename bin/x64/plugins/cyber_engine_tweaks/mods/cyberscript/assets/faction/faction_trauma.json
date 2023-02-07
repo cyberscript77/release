@@ -1,10 +1,10 @@
 {
 
-	"Name":"TraumaTeam",
-	"Logo":"ico_district_center_large",
-	"Tag": "faction_trauma",
-	 "AttitudeGroup": ["ncpd", "police"],
-	"Rivals":[
+	"name":"TraumaTeam",
+	"logo":"ico_district_center_large",
+	"tag": "faction_trauma",
+	 "attitude_group": ["ncpd", "police"],
+	"rivals":[
 		"faction_aldecaldos",
 		"faction_animals",
 		"faction_maelstrom",
@@ -15,7 +15,7 @@
 		"faction_valentinos",
 		"faction_voodooboys"
 		],
-	"SpawnableNPC":[
+	"spawnable_npc":[
 		"Character.kab_trauma_rare_officer_chao_ma",
 		"Character.kab_trauma_soldier_ranged2_dian_ma", 
 		"Character.sq021_traumateam", 
@@ -26,10 +26,10 @@
 		"Character.trauma_team_paramedic", 
 		"Character.trauma_team_pilot"	
 		],
-	"SpawnableVehicule":[
+	"spawnable_vehicle":[
 		"Vehicle.sq027_militech_suv"
 		],
-	"DistrictTag":"district_watson",
-	"VIP":[	
+	"district_tag":"district_watson",
+	"vip":[	
 		]
 }

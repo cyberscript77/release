@@ -1,27 +1,27 @@
 {
-	"Name": "The Mox",
-	"Logo": "logo_themox",
-	"Tag": "faction_mox",
-	"AttitudeGroup": [
+	"name": "The Mox",
+	"logo": "logo_themox",
+	"tag": "faction_mox",
+	"attitude_group": [
 		"nid_01_Lizzies"
 	],
-	"Rivals": [
+	"rivals": [
 		"faction_tygerclaws"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.the_mox_elite3_fmelee3_mantis_wa_elite",
 		"Character.the_mox_elite2_fmelee2_machete_wa_rare",
 		"Character.kab_the_mox_1_ranged1_lexington_wa",
 		"Character.kab_the_mox_1_ranged1_pulsar_wa"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.cs_savable_villefort_alvarado_mox",
 		"Vehicle.v_sport2_villefort_alvarado_mox",
 		"Vehicle.v_sportbike1_yaiba_kusanagi_mox",
 		"Vehicle.v_standard25_mahir_mox"
 	],
-	"DistrictTag": "district_watson",
-	"VIP": [{
+	"district_tag": "district_watson",
+	"vip": [{
 		"name": "Lizzies DJ",
 		"score": 0
 	}, {

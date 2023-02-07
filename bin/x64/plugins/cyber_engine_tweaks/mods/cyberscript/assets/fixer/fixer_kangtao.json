@@ -1,13 +1,13 @@
 {
 
-	"Name": "KangTao Agent",
-	"LOC_X": -1200.250,
-	"LOC_Y": -127.313,
-	"LOC_Z": 16.123,
+	"name": "KangTao Agent",
+	"x": -1200.250,
+	"y": -127.313,
+	"z": 16.123,
 	"range": 15,
-	"Faction": "faction_kangtao",
-	"Tag": "fixer_kangtao",
-	"NPCId": "Character.kangtao_officer_grenadier3_mah_elite",
+	"faction": "faction_kangtao",
+	"tag": "fixer_kangtao",
+	"tweakid": "Character.kangtao_officer_grenadier3_mah_elite",
 	"exist": false,
 	"npcexist": false,
 	"trigger": {

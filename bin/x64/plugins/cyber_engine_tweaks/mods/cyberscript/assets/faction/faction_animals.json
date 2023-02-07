@@ -1,14 +1,14 @@
 {
-	"Name": "Animals",
-	"Logo": "logo_animals",
-	"Tag": "faction_animals",
-	"AttitudeGroup": [
+	"name": "Animals",
+	"logo": "logo_animals",
+	"tag": "faction_animals",
+	"attitude_group": [
 		"wwd_05_animals",
 		"q110_mall_animals",
         "animals_ow"
 	],
-	"Rivals": ["faction_voodooboys", "faction_mox", "faction_wraiths", "faction_arasaka", "faction_valentinos"],
-	"SpawnableNPC": [
+	"rivals": ["faction_voodooboys", "faction_mox", "faction_wraiths", "faction_arasaka", "faction_valentinos"],
+	"spawnable_npc": [
 		"Character.q110_mall_animals_bouncer3_hmelee3_fists_mba_elite",
 		"Character.q110_mall_animals_grunt1_ranged1_nova_mb",
 		"Character.animals_elite3_hmelee3_fists_mba_elite",
@@ -23,13 +23,13 @@
 		"Character.q110_animals_mall_west_wing_zone_fists",
 		"Character.q110_animals_mall_workout_zone"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.v_standard2_chevalier_thrax_quest",
 		"Vehicle.v_sportbike1_yaiba_kusanagi_animal",
 		"Vehicle.v_standard25_villefort_columbus_quest"
 	],
-	"DistrictTag": "district_pacifica",
-	"VIP": [
+	"district_tag": "district_pacifica",
+	"vip": [
 		{
 			"name": "Rhino",
 			"score": 0

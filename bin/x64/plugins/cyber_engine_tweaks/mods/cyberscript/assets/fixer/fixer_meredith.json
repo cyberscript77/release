@@ -1,16 +1,16 @@
 {
 
-	"Name":"Meredith Stout",
-	"LOC_X": -1444.649,
-	"LOC_Y": -290.132,
-	"LOC_Z": 16.106,
+	"name":"Meredith Stout",
+	"x": -1444.649,
+	"y": -290.132,
+	"z": 16.106,
 
 	"range":8,
-	"Faction":"faction_militech",
-	"Tag": "fixer_meredith",
+	"faction":"faction_militech",
+	"tag": "fixer_meredith",
 	"exist":false,
 	"npcexist":false,
-	"NPCId":"Character.Stout",
+	"tweakid":"Character.Stout",
 	"trigger":{
 		"always_enable":{
 			"name":"auto"

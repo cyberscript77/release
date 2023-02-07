@@ -1,19 +1,19 @@
 {
-	"Name": "Militech",
-	"Logo": "logo_militech",
-	"Tag": "faction_militech",
-	 "AttitudeGroup": [
+	"name": "Militech",
+	"logo": "logo_militech",
+	"tag": "faction_militech",
+	 "attitude_group": [
 	 "militech",
 	"militech_ow"
 	 ],
-	"Rivals": [
+	"rivals": [
 		"faction_maelstrom",
 		"faction_tygerclaws",
 		"faction_arasaka",
 		"faction_kangtao",
 		"faction_afterlife"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.bls_se_militech_ranger1_ranged1_saratoga_ma",
 		"Character.bls_se_militech_tech_franged2_omaha_ma_rare",
 		"Character.cpz_militech_strong_elite_short_range_m_hard",
@@ -22,9 +22,9 @@
 		"Character.hil_militech_recon_sniper2_achilles_ma_rare",
 		"Character.ina_04_militech_android_android2_ajax_ma"
 	],
-	"SpawnableVehicule": ["Vehicle.q114_militech_response_car"],
-	"DistrictTag": "district_badland",
-	"VIP": [{
+	"spawnable_vehicle": ["Vehicle.q114_militech_response_car"],
+	"district_tag": "district_badland",
+	"vip": [{
 		"name": "Meredith Stout",
 		"score":0
 	}]

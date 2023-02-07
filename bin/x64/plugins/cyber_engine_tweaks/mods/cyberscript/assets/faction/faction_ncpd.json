@@ -1,11 +1,11 @@
 {
 
-	"Name": "NCPD",
-	"Logo": "ico_district_center_large",
-	"Tag": "faction_ncpd",
-	"AttitudeGroup": ["ncpd", "police"],
-	"DistrictTag": "district_watson",
-	"Rivals": [
+	"name": "NCPD",
+	"logo": "ico_district_center_large",
+	"tag": "faction_ncpd",
+	"attitude_group": ["ncpd", "police"],
+	"district_tag": "district_watson",
+	"rivals": [
 		"faction_aldecaldos",
 		"faction_animals",
 		"faction_maelstrom",
@@ -17,7 +17,7 @@
 		"faction_voodooboys",
 		"faction_wraiths"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.Police",
 		"Character.PoliceWoman",
 		"Character.Policeman",
@@ -107,7 +107,7 @@
 		"Character.wwd_ncpd_police_ranged2_lexington_ma",
 		"Character.wwd_ncpd_police_ranged2_saratoga_ma"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.cs_savable_archer_hella_police_siren",
 		"Vehicle.cs_savable_chevalier_emperor_police_siren",
 		"Vehicle.cs_savable_villefort_cortes_police",
@@ -130,7 +130,7 @@
 		"Vehicle.v_standard3_chevalier_emperor_police",
 		"Vehicle.v_standard3_chevalier_emperor_police_siren"
 	],
-	"VIP": [{
+	"vip": [{
 		"name": "Jefferson Peralez",
 		"score": 20
 	}]

@@ -1,18 +1,18 @@
 {
-	 "AttitudeGroup": [
+	 "attitude_group": [
 		"maelstrom",
 		"maelstrom_ow"
 		 ],
-	"DistrictTag": "district_watson",
-	"Name": "Maelstrom",
-	"Logo": "logo_maelstrom",
-	"Rivals": [
+	"district_tag": "district_watson",
+	"name": "Maelstrom",
+	"logo": "logo_maelstrom",
+	"rivals": [
 		"faction_scavengers",
 		"faction_afterlife",
 		"faction_ncpd",
 		"faction_tygerclaws"
 	],
-	"SpawnableNPC": [
+	"spawnable_npc": [
 		"Character.cpz_maelstrom_grunt2_ranged2_ajax_wa",
 		"Character.cpz_maelstrom_grunt1_ranged1_copperhead_ma",
 		"Character.cpz_maelstrom_grunt1_ranged1_lexington_ma",
@@ -73,14 +73,14 @@
 		"Character.maelstrom_netrunner_netrunner2_lexington_ma",
 		"Character.maelstrom_strong_gunner2_defender_mb_rare"
 	],
-	"SpawnableVehicule": [
+	"spawnable_vehicle": [
 		"Vehicle.v_standard2_chevalier_thrax_maelstrom", 
 		"Vehicle.v_sportbike3_brennan_apollo_sport",
 		"Vehicle.cs_savable_thorton_mackinaw",
 		"Vehicle.v_sport1_quadra_turbo"
 	],
-	"Tag": "faction_maelstrom",
-	"VIP": [{
+	"tag": "faction_maelstrom",
+	"vip": [{
 		"name": "Dum Dum",
 		"score": 0
 	}, {
