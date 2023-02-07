@@ -53,7 +53,8 @@ cyberscript = {
 		version = "0.16000069",
 		channel = "stable",
 		changelog ="",
-		editorDatapackInit = false
+		editorDatapackInit = false,
+		cache = {}
 		
 	}
 
