@@ -1,1559 +1,1324 @@
 {
+    "default": {
 
-	"takeKillMessage": "You take a Kill Contract",
+        "takeKillMessage": "You take a Kill Contract",
 
-	"takeEscortMessage": "You take an Escort Contract",
+        "takeEscortMessage": "You take an Escort Contract",
 
-	"takeExploreMessage": "You take an Explore Contract",
+        "takeExploreMessage": "You take an Explore Contract",
 
-	"ArrivedLocation": "You have arrived at the correct Location",
+        "ArrivedLocation": "You have arrived at the correct Location",
 
-	"ArrivedEmployer": "You have arrived at the employer",
+        "ArrivedEmployer": "You have arrived at the employer",
 
-	"ArrivedMeetingPoint": "You have arrived at the meeting point",
+        "ArrivedMeetingPoint": "You have arrived at the meeting point",
 
-	"ContractFinishedSuccess": "Contract Finished: You received",
+        "ContractFinishedSuccess": "Contract Finished: You received",
 
-	"ContractFinishedError": "Contract NOT Finished: Error:",
+        "ContractFinishedError": "Contract NOT Finished: Error:",
 
-	"ContractUnlock": "Contract Unlocked:",
+        "ContractUnlock": "Contract Unlocked:",
 
-	"Contract": "Contract",
+        "Contract": "Contract",
 
-	"CurrentPosition": "Current Position",
+        "CurrentPosition": "Current Position",
 
-	"CurrentDistrict": "Current District",
+        "CurrentDistrict": "Current District",
 
-	"DangerMessage": "DANGER: UNKNOWN",
+        "DangerMessage": "DANGER: UNKNOWN",
 
-	"Location": "Location",
+        "Location": "Location",
 
-	"ValidKillContractBtn": "Valid Kill Contract",
+        "ValidKillContractBtn": "Valid Kill Contract",
 
-	"TargetLocation": "Target Location",
+        "TargetLocation": "Target Location",
 
-	"AbortContractTitle": "Abort Contract",
+        "AbortContractTitle": "Abort Contract",
 
-	"AbortContractMessage": "You aborted the current contract",
+        "AbortContractMessage": "You aborted the current contract",
 
-	"NoContractTaken": "You did not take any contracts",
+        "NoContractTaken": "You did not take any contracts",
 
-	"NoContractLoaded01": "No Contract loaded! Import a pack or download one on the Nexus website",
+        "NoContractLoaded01": "No Contract loaded! Import a pack or download one on the Nexus website",
 
-	"NoContractLoaded02": "Import a pack or download one on the Nexus website",
+        "NoContractLoaded02": "Import a pack or download one on the Nexus website",
 
-	"NoContractLoaded03": "To import a pack, click on Tools > Import a Mission Pack",
+        "NoContractLoaded03": "To import a pack, click on Tools > Import a Mission Pack",
 
-	"ChooseContractFrom": "Choose a Contract from",
+        "ChooseContractFrom": "Choose a Contract from",
 
-	"KillContractBtn": "Kill Contract",
+        "KillContractBtn": "Kill Contract",
 
-	"EscortContractBtn": "Escort Contract",
+        "EscortContractBtn": "Escort Contract",
 
-	"ExploreContractBtn": "Explore Contract",
+        "ExploreContractBtn": "Explore Contract",
 
-	"NotNearFixer01": "You are not nearby a Fixer",
+        "NotNearFixer01": "You are not nearby a Fixer",
 
-	"NotNearFixer02": "Go to see a fixer (handshake icon) to take contracts",
+        "NotNearFixer02": "Go to see a fixer (handshake icon) to take contracts",
 
-	"FixerDisable01": "You can't interact with This Fixer",
+        "FixerDisable01": "You can't interact with This Fixer",
 
-	"FixerDisable02": "For now, come back later.",
+        "FixerDisable02": "For now, come back later.",
 
-	"GangRelationTitle": "Gang Relation",
+        "GangRelationTitle": "Gang Relation",
 
-	"ToolsTitle": "Tools",
+        "ToolsTitle": "Tools",
 
-	"ImportMission": "Import a MissionPack",
+        "ImportMission": "Import a MissionPack",
 
-	"ResetDB": "Reset Database",
+        "ResetDB": "Reset Database",
 
-	"Close": "Close",
+        "Close": "Close",
 
-	"SixthStreet": "6th Street",
+        "SixthStreet": "6th Street",
 
-	"Valentinos": "Valentinos",
+        "Valentinos": "Valentinos",
 
-	"TygerClaws": "TygerClaws",
+        "TygerClaws": "TygerClaws",
 
-	"Maelstrom": "Maelstrom",
+        "Maelstrom": "Maelstrom",
 
-	"VoodooBoys": "VoodooBoys",
+        "VoodooBoys": "VoodooBoys",
 
-	"Animals": "Animals",
+        "Animals": "Animals",
 
-	"Mox": "Mox",
+        "Mox": "Mox",
 
-	"Scavenger": "Scan vengers",
+        "Scavenger": "Scan vengers",
 
-	"ResetDBTitle": "Are You sure You want to reset the DB?",
+        "ResetDBTitle": "Are You sure You want to reset the DB?",
 
-	"ResetDBMsg01": "!! All Your Custom Missions and Your current",
+        "ResetDBMsg01": "!! All Your Custom Missions and Your current",
 
-	"ResetDBMsg02": "progress will be erased, be can reful when",
+        "ResetDBMsg02": "progress will be erased, be can reful when",
 
-	"ResetDBMsg03": "You use it!",
+        "ResetDBMsg03": "You use it!",
 
-	"No": "NO",
+        "No": "NO",
 
-	"MissionPackTitle": "Are You sure You want to import a MissionPack?",
+        "MissionPackTitle": "Are You sure You want to import a MissionPack?",
 
-	"MissionPackMsg01": "! Files are not deleted after the import but they will be emptied!",
+        "MissionPackMsg01": "! Files are not deleted after the import but they will be emptied!",
 
-	"MissionPackMsg02": "so be can reful when You use it,",
+        "MissionPackMsg02": "so be can reful when You use it,",
 
-	"MissionPackMsg03": "always make a backup before import if needed!!",
+        "MissionPackMsg03": "always make a backup before import if needed!!",
 
-	"MissionPackMsg04": "! Importing a large amount of Quests can take some time (1 min for 1000 quest approx.)!",
+        "MissionPackMsg04": "! Importing a large amount of Quests can take some time (1 min for 1000 quest approx.)!",
 
-	"MissionPackMsg05": "and freeze the interface, please wait a moment ...",
+        "MissionPackMsg05": "and freeze the interface, please wait a moment ...",
 
-	"MissionPackBtn": "Import a MissionPack",
+        "MissionPackBtn": "Import a MissionPack",
 
-	"KillContractTitle": "Kill Contract Selection",
+        "KillContractTitle": "Kill Contract Selection",
 
-	"EscortContractTitle": "Escort Contract Selection",
+        "EscortContractTitle": "Escort Contract Selection",
 
-	"ExploreContractTitle": "Explore Contract Selection",
+        "ExploreContractTitle": "Explore Contract Selection",
 
-	"DialogWindows": "Dialogue with",
+        "DialogWindows": "Dialogue with",
 
-	"Neutral": "Neutral",
+        "Neutral": "Neutral",
 
-	"Friendly": "Friendly",
+        "Friendly": "Friendly",
 
-	"Hostile": "Hostile",
+        "Hostile": "Hostile",
 
-	"ShowHideWindows": "Press to show/hide UI of the Mod",
+        "ShowHideWindows": "Press to show/hide UI of the Mod",
 
-	"LoadLang": "Reload Language",
+        "LoadLang": "Reload Language",
 
-	"SelectTeamTitle": "Select a companion",
+        "SelectTeamTitle": "Select a companion",
 
-	"SelectCompanionBtn": "Follow Me!",
+        "SelectCompanionBtn": "Follow Me!",
 
-	"DespawnCompanion": "Leave me!",
+        "DespawnCompanion": "Leave me!",
 
-	"EnableDisableGangWars": "Enable/Disable Gang Wars",
+        "EnableDisableGangWars": "Enable/Disable Gang Wars",
 
-	"EnableDisableAmbush": "Enable/Disable Ambush Mode",
+        "EnableDisableAmbush": "Enable/Disable Ambush Mode",
 
-	"SetAmbushMinTime": "Set Ambush Script frenquency Time (x= minutes)",
+        "SetAmbushMinTime": "Set Ambush Script frenquency Time (x= minutes)",
 
-	"SetAmbushMaxTime": "Set Ambush Max Time (x= minutes)",
+        "SetAmbushMaxTime": "Set Ambush Max Time (x= minutes)",
 
-	"Enabled": "Enable",
+        "Enabled": "Enable",
 
-	"Disabled": "Disabled",
+        "Disabled": "Disabled",
 
-	"Save": "Save",
+        "Save": "Save",
 
-	"SettingTitle": "Setting",
+        "SettingTitle": "Setting",
 
-	"BadAnswer": "I don't think This is a good idea, we wil Talk later.",
+        "BadAnswer": "I don't think This is a good idea, we wil Talk later.",
 
-	"ThanksForMeet": "Thanks for the invitation!",
+        "ThanksForMeet": "Thanks for the invitation!",
 
-	"JoinYou01": "Thanks, share the Address to a Place, You want, and I will see You there!",
+        "JoinYou01": "Thanks, share the Address to a Place, You want, and I will see You there!",
 
-	"Phone": "Phone",
+        "Phone": "Phone",
 
-	"NPCActionCoffee": "Drink coffee",
+        "NPCActionCoffee": "Drink coffee",
 
-	"NPCActionBeer": "Drink a beer",
+        "NPCActionBeer": "Drink a beer",
 
-	"NPCActionNightclub": "Go to the Nightclub",
+        "NPCActionNightclub": "Go to the Nightclub",
 
-	"NPCActionHelp": "Ask to help You for a mission",
+        "NPCActionHelp": "Ask to help You for a mission",
 
-	"NPCActionMovie": "Watch a movie at Your Place.",
+        "NPCActionMovie": "Watch a movie at Your Place.",
 
-	"NPCActionDinner": "Invite to a Restaurant",
+        "NPCActionDinner": "Invite to a Restaurant",
 
-	"NPCActionSleep": "Invite to sleepover at Your Place.",
+        "NPCActionSleep": "Invite to sleepover at Your Place.",
 
-	"NPCActionShopping": "Do some shopping",
+        "NPCActionShopping": "Do some shopping",
 
-	"HouseActionRest": "Rest for 6 hours",
+        "HouseActionRest": "Rest for 6 hours",
 
-	"HouseActionSleep": "Sleep for 12 hours",
+        "HouseActionSleep": "Sleep for 12 hours",
 
-	"HouseActionDrinkCoffee": "Drink Coffee",
+        "HouseActionDrinkCoffee": "Drink Coffee",
 
-	"HouseActionDrinkBeer": "Drink a Beer",
+        "HouseActionDrinkBeer": "Drink a Beer",
 
-	"HouseActionEatSnack": "Eat a snack",
+        "HouseActionEatSnack": "Eat a snack",
 
-	"HouseActionEatMeal": "Eat a meal",
+        "HouseActionEatMeal": "Eat a meal",
 
-	"HouseActionSport": "Do some exercising",
+        "HouseActionSport": "Do some exercising",
 
-	"HouseActionComputer": "Use the Computer to take a contract",
+        "HouseActionComputer": "Use the Computer to take a contract",
 
-	"HouseActionShower": "Take a Shower",
+        "HouseActionShower": "Take a Shower",
 
-	"HouseActionInventory": "Manage Inventory",
+        "HouseActionInventory": "Manage Inventory",
 
-	"HouseActionTVTurnOn": "Turn on the TV",
+        "HouseActionTVTurnOn": "Turn on the TV",
 
-	"HouseActionTVTurnOff": "Turn off the TV",
+        "HouseActionTVTurnOff": "Turn off the TV",
 
-	"HouseActionTVChannel": "Change the TV show",
+        "HouseActionTVChannel": "Change the TV show",
 
-	"HouseEnter": "Enter",
+        "HouseEnter": "Enter",
 
-	"HouseExit": "Exit",
+        "HouseExit": "Exit",
 
-	"HouseCurrent": "You are in: ",
+        "HouseCurrent": "You are in: ",
 
-	"HouseBuyCrap": "Gamble Cyber-Craps",
+        "HouseBuyCrap": "Gamble Cyber-Craps",
 
-	"HousePlayGame": "Play some games",
+        "HousePlayGame": "Play some games",
 
-	"HouseWork": "Work",
+        "HouseWork": "Work",
 
-	"NPCEatSnack": "Yum!",
+        "NPCEatSnack": "Yum!",
 
-	"NPCEatMeal": "Thanks for the Dinner!",
+        "NPCEatMeal": "Thanks for the Dinner!",
 
-	"NPCDrinkCoffee": "Thanks for the Coffee",
+        "NPCDrinkCoffee": "Thanks for the Coffee",
 
-	"NPCDrinkBeer": "Kanpai!",
+        "NPCDrinkBeer": "Kanpai!",
 
-	"NPCBuyCrap": "Thank You for This Present!",
+        "NPCBuyCrap": "Thank You for This Present!",
 
-	"NPCPlayGame": "I will win!",
+        "NPCPlayGame": "I will win!",
 
-	"NPCFinishMeet": "Thanks for all of This, I need to go now. I'll See You later!",
+        "NPCFinishMeet": "Thanks for all of This, I need to go now. I'll See You later!",
 
-	"Quest": "Quest Log",
+        "Quest": "Quest Log",
 
-	"DialogQuestInit": "Do You need Something?",
+        "DialogQuestInit": "Do You need Something?",
 
-	"DialogCustomInit": "I want to Talk to You about Something",
+        "DialogCustomInit": "I want to Talk to You about Something",
 
-	"DialogCustomInitAnswer": "What do You want to Talk about?",
+        "DialogCustomInitAnswer": "What do You want to Talk about?",
 
-	"LookAroundBtn": "Look around",
+        "LookAroundBtn": "Look around",
 
-	"testOverwrite": "Overwrite",
+        "testOverwrite": "Overwrite",
 
-	"Next": "Next",
-	"Previous": "Previous",
+        "Next": "Next",
+        "Previous": "Previous",
 
-	"Help": "Help",
+        "Help": "Help",
 
-	"Multiplayer": "MultiPlayer",
+        "Multiplayer": "MultiPlayer",
 
-	"DatapackManager": "Datapack Manager",
+        "DatapackManager": "Datapack Manager",
 
-	"Editor": "Editor",
+        "Editor": "Editor",
 
-	"Option": "Option",
+        "Option": "Option",
 
-	"GangWars": "GangWars",
+        "GangWars": "GangWars",
 
-	"Ambush": "Ambush",
+        "Ambush": "Ambush",
 
-	"AmbushfrequencyTime": "Ambush frequency Time (minute):",
+        "AmbushfrequencyTime": "Ambush frequency Time (minute):",
 
-	"HideArasakaNetContractWindows": "Hide Arasaka NetContract windows (stay accessible in scan nner)",
+        "HideArasakaNetContractWindows": "Hide Arasaka NetContract windows (stay accessible in scan nner)",
 
-	"Toggle": "Toggle",
+        "Toggle": "Toggle",
 
-	"Selection": "Selection",
+        "Selection": "Selection",
 
-	"ChoosethisOne": "Choose This one",
+        "ChoosethisOne": "Choose This one",
 
-	"ImmersiveRoleplayModLoaded": "CyberScript Mod Booted",
+        "ImmersiveRoleplayModLoaded": "CyberScript Mod Booted",
 
-	"UpdateFinished": "Update Complete!",
+        "UpdateFinished": "Update Complete!",
 
-	"UpdateSuccessful": "Update of CyberScript Successful!",
+        "UpdateSuccessful": "Update of CyberScript Successful!",
 
-	"BackMainMenu": "please EXIT KEYSTONE, ",
+        "BackMainMenu": "please EXIT KEYSTONE, ",
 
-	"ReloadCET": "Reload CET, QuickSave, Load that new Save.",
+        "ReloadCET": "Reload CET, QuickSave, Load that new Save.",
 
-	"UpdateInProgress": "Update In Progress",
+        "UpdateInProgress": "Update In Progress",
 
-	"UpdateInProgressMsg01": "Update of CyberScript in progress",
+        "UpdateInProgressMsg01": "Update of CyberScript in progress",
 
-	"UpdateInProgressMsg02": "please don't touch anything!!!",
+        "UpdateInProgressMsg02": "please don't touch anything!!!",
 
-	"UpdateInProgressMsg03": "If You are still here after 5 minutes,",
+        "UpdateInProgressMsg03": "If You are still here after 5 minutes,",
 
-	"UpdateInProgressMsg04": "go back to main menu,reload CET",
+        "UpdateInProgressMsg04": "go back to main menu,reload CET",
 
-	"ShowHideLocationsWindows": "Toggle the Location Windows",
+        "ShowHideLocationsWindows": "Toggle the Location Windows",
 
-	"ShowHidePhoneWindows": "Show/Hide Phone",
+        "ShowHidePhoneWindows": "Show/Hide Phone",
 
-	"ShowHideOptionsWindows": "Show/Hide Options Windows",
+        "ShowHideOptionsWindows": "Show/Hide Options Windows",
 
-	"ToggleView": "Toggle View",
+        "ToggleView": "Toggle View",
 
-	"MissionInfoTrigger": "Mission is available when:",
+        "MissionInfoTrigger": "Mission is available when:",
 
-	"MissionInfoStart": "Start Conditions:",
+        "MissionInfoStart": "Start Conditions:",
 
-	"MissionInfoSuccess": "Success Conditions:",
+        "MissionInfoSuccess": "Success Conditions:",
 
-	"MissionInfoFail": "Fail Conditions:",
+        "MissionInfoFail": "Fail Conditions:",
 
-	"CurrentQuest": "Current Quest",
+        "CurrentQuest": "Current Quest",
 
-	"editor_main": "Welcome to CyberScript Editor:\\n\\n\\nHere You can use CyberScript to create Your own content like Quests, Events, Places, Dialog...\\n\\n\\nFirst, some basics: \\n\\n\\nAlmost every Element that You will see, will comply with CyberScript's Script System.\\n\\nA Script contains basic Properties like a Tag (Unique Identifier), a Name.\\n\\nIt will also have a Trigger Element that has several Properties.\\n\\nA Trigger is a Script Object that will, as the name implies, Is trigger to an Event, by the events Tag. \\n\\nBasically, when the Trigger's Condition is fullfilled, CyberScript's Script System Engine (SSE) will know that This event can play.\\n\\nUsually, Triggers have: \\n- A Name\\n- Some Conditional Properties\\n\\n\\n\\n\\nExample: \\n\\n{\\n'name':'3Dposition',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n}\\n\\n\\nIn This Example, the Trigger, '3Dposition', will check that Player's position is in a range of 50 meters from X:500, Y:500, Z:500.\\nIf yes, the Trigger will check SEE Engine, and will return True.\\nIf no, The Trigger wil check the Engine, and will return False.\\n\\n\\n\\nNow, an Element can have several Trigger Conditions. We wrap it into a Property, Labeled 'Requirement'.\\n\\n A 'Requirement' is an Order of how the Triggers need to be fullfilled.\\n\\nFor Example\\n\\nlet's say We have a Quest that has 3 Triggers:\\n\\n'trigger':\\n\\n'trigger01': {\\n'name':'3Dposition',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n},\\n'trigger02':{\\n'name':'in_car',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n},\\n'trigger03':{\\n'name':'time',\\n'min': 1800,\\n'max': 2300\\n}\\n\\n\\ntrigger01 will be fullfilled when the Player is in range of 50 Meters for the position: XYZ: 500,500,500.\\n\\ntrigger02 will be fullfilled when the Play is in a car.\\n\\ntrigger03 will be fullfilled when the game's time is between 18:00 (6pm) and 23:00 (11pm).\\n\\n\\n\\nLet's say we want our Quest to Run when: \\n\\ntrigger01 is fullfilled\\n\\nOR\\n\\ntrigger02 AND trigger03 is fullfilled\\n\\n\\nThese Conditions are what we call a requirement.\\n\\nIn json, it's formated like:\\n\\n'requirement':\\n[\\n ['trigger01'],\\n ['trigger02','trigger03']\\n \\n\\n]\\n\\n\\nYou can see it have 2 'groups': \\none contains trigger01\\nseconds contains trigger02 AND trigger03\\n\\n\\nWe can Translate it by:\\nrun my Quest when Group 1 is fullfilled (trigger01) OR group2 is fullfilled (trigger02 AND trigger03).\\n\\nEach group is a OR\\nEach Element in a Group is a AND\\n\\n\\n\\nNow, last Element that our Object has is an Action List.\\n\\nWhich is, by it's name, a List of Actions that the Script will run, in order, when Requirements are fullfilled.\\n\\nLet's look at an Example: \\n\\n'Actions':\\n[\\n\\n  {\\n'name':'notify',\\n'value':'Hello from CyberScript's Team:) '\\n},\\n{\\n'name':'wait_second',\\n'value':5\\n},\\n{\\n'name':'notify',\\n'value':'Judy is Love, Judy is Life '\\n}\\n\\n]\\n\\nIn This example: \\na notification message will show, with text: Hello from CyberScript's Team:)\\n\\nThen the script will wait 5 seconds\\n\\n A notification message will show, with text: Judy is Love, Judy is Life\\n\\n\\nAs You can see, Actions have a very similar syntax like Triggers. they both have a name, and some parameters that depend on the nature of the Action.\\n\\n\\nNow let's Describe every Element of the Editor:\\n\\n\\n\\nQuest: You can  make a Custom Quest with one, or several Objectives. It can  be chained, or can  be Active in parallels of other Objectives.\\n\\n\\n\\nDialog: You can  make a Custom Dialog with several Choices that will Launch Actions, specified by You, in Your Script.\\n\\n\\n\\nPhoneDialog: You can  make a Custom phone dialog(Text Msg Thread) with several Choices that will Launch Actions. It will show the in-game's 'Messages' Tab.\\n\\n\\n\\nInteract: You can  make a Custom Interact with several Choices that will Launch Actions.\\n\\n\\n\\nEvent: You can make an Event that will Launch in the Game World, with different actions happening Set by You, Example would be A gang Fight.\\n\\n\\n\\nFixer: You can make a fixer who can Trigger some Quests.\\n\\n\\n\\nFaction: You can make a Gang with several Options.\\n\\n\\n\\nRadio: You can make a Custom Radio station that will play Custom Music.\\n\\n\\n\\nLang: You can make Your own lang file to translate Datapack/ mod \\n\\n\\n\\nItems: If You are in a custom Place, You can make an exterior/interior, with Decor\\n\\n\\n\\nTheme: You can change CET color style for the mod's hud.\\n\\n\\n\\nInterface: You can make Your own Interface (a Native Popup that will show buttons and text, Made by You)\\n\\n\\n\\nHelp: You can make a Custom Shard that is Tagged as Help, Useful for typing out details about Your Datapack.\\n\\n\\n\\nPlace: You can define a Location as a Custom Place and setup several Events in it (Basically, Housing, or Own This Place)\\n\\n\\n\\nFunction: a Re-usuable Script/Object that contains a List of Actions, Made by You.\\n\\n\\n\\nNode: a Node is an XYZ Location that has a Tag and several Properties and can be bounded to a Circuit and a Path\\n\\n\\n\\nCircuit: it's an Order of Nodes.\\n\\n\\n\\nPath: it's a path that can be played (for vehicle like metro for example)\\n\\n\\n\\nCustom NPC: You can setup an NPC who will spawn when You reach it's Location, and Range.\\n\\n\\n\\nShard: You can setup a Custom Shard that You can Acces through the Shard Menu\\n\\n\\n\\nDatapack Builder: Here is the final step to make all of those Script/Objects that You created into a Datapack!:)\\n",
+        "editor_main": "Welcome to CyberScript Editor:\\n\\n\\nHere You can use CyberScript to create Your own content like Quests, Events, Places, Dialog...\\n\\n\\nFirst, some basics: \\n\\n\\nAlmost every Element that You will see, will comply with CyberScript's Script System.\\n\\nA Script contains basic Properties like a Tag (Unique Identifier), a Name.\\n\\nIt will also have a Trigger Element that has several Properties.\\n\\nA Trigger is a Script Object that will, as the name implies, Is trigger to an Event, by the events Tag. \\n\\nBasically, when the Trigger's Condition is fullfilled, CyberScript's Script System Engine (SSE) will know that This event can play.\\n\\nUsually, Triggers have: \\n- A Name\\n- Some Conditional Properties\\n\\n\\n\\n\\nExample: \\n\\n{\\n'name':'3Dposition',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n}\\n\\n\\nIn This Example, the Trigger, '3Dposition', will check that Player's position is in a range of 50 meters from X:500, Y:500, Z:500.\\nIf yes, the Trigger will check SEE Engine, and will return True.\\nIf no, The Trigger wil check the Engine, and will return False.\\n\\n\\n\\nNow, an Element can have several Trigger Conditions. We wrap it into a Property, Labeled 'Requirement'.\\n\\n A 'Requirement' is an Order of how the Triggers need to be fullfilled.\\n\\nFor Example\\n\\nlet's say We have a Quest that has 3 Triggers:\\n\\n'trigger':\\n\\n'trigger01': {\\n'name':'3Dposition',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n},\\n'trigger02':{\\n'name':'in_car',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n},\\n'trigger03':{\\n'name':'time',\\n'min': 1800,\\n'max': 2300\\n}\\n\\n\\ntrigger01 will be fullfilled when the Player is in range of 50 Meters for the position: XYZ: 500,500,500.\\n\\ntrigger02 will be fullfilled when the Play is in a car.\\n\\ntrigger03 will be fullfilled when the game's time is between 18:00 (6pm) and 23:00 (11pm).\\n\\n\\n\\nLet's say we want our Quest to Run when: \\n\\ntrigger01 is fullfilled\\n\\nOR\\n\\ntrigger02 AND trigger03 is fullfilled\\n\\n\\nThese Conditions are what we call a requirement.\\n\\nIn json, it's formated like:\\n\\n'requirement':\\n[\\n ['trigger01'],\\n ['trigger02','trigger03']\\n \\n\\n]\\n\\n\\nYou can see it have 2 'groups': \\none contains trigger01\\nseconds contains trigger02 AND trigger03\\n\\n\\nWe can Translate it by:\\nrun my Quest when Group 1 is fullfilled (trigger01) OR group2 is fullfilled (trigger02 AND trigger03).\\n\\nEach group is a OR\\nEach Element in a Group is a AND\\n\\n\\n\\nNow, last Element that our Object has is an Action List.\\n\\nWhich is, by it's name, a List of Actions that the Script will run, in order, when Requirements are fullfilled.\\n\\nLet's look at an Example: \\n\\n'Actions':\\n[\\n\\n  {\\n'name':'notify',\\n'value':'Hello from CyberScript's Team:) '\\n},\\n{\\n'name':'wait_second',\\n'value':5\\n},\\n{\\n'name':'notify',\\n'value':'Judy is Love, Judy is Life '\\n}\\n\\n]\\n\\nIn This example: \\na notification message will show, with text: Hello from CyberScript's Team:)\\n\\nThen the script will wait 5 seconds\\n\\n A notification message will show, with text: Judy is Love, Judy is Life\\n\\n\\nAs You can see, Actions have a very similar syntax like Triggers. they both have a name, and some parameters that depend on the nature of the Action.\\n\\n\\nNow let's Describe every Element of the Editor:\\n\\n\\n\\nQuest: You can  make a Custom Quest with one, or several Objectives. It can  be chained, or can  be Active in parallels of other Objectives.\\n\\n\\n\\nDialog: You can  make a Custom Dialog with several Choices that will Launch Actions, specified by You, in Your Script.\\n\\n\\n\\nPhoneDialog: You can  make a Custom phone dialog(Text Msg Thread) with several Choices that will Launch Actions. It will show the in-game's 'Messages' Tab.\\n\\n\\n\\nInteract: You can  make a Custom Interact with several Choices that will Launch Actions.\\n\\n\\n\\nEvent: You can make an Event that will Launch in the Game World, with different actions happening Set by You, Example would be A gang Fight.\\n\\n\\n\\nFixer: You can make a fixer who can Trigger some Quests.\\n\\n\\n\\nFaction: You can make a Gang with several Options.\\n\\n\\n\\nRadio: You can make a Custom Radio station that will play Custom Music.\\n\\n\\n\\nLang: You can make Your own lang file to translate Datapack/ mod \\n\\n\\n\\nItems: If You are in a custom Place, You can make an exterior/interior, with Decor\\n\\n\\n\\nTheme: You can change CET color style for the mod's hud.\\n\\n\\n\\nInterface: You can make Your own Interface (a Native Popup that will show buttons and text, Made by You)\\n\\n\\n\\nHelp: You can make a Custom Shard that is Tagged as Help, Useful for typing out details about Your Datapack.\\n\\n\\n\\nPlace: You can define a Location as a Custom Place and setup several Events in it (Basically, Housing, or Own This Place)\\n\\n\\n\\nFunction: a Re-usuable Script/Object that contains a List of Actions, Made by You.\\n\\n\\n\\nNode: a Node is an XYZ Location that has a Tag and several Properties and can be bounded to a Circuit and a Path\\n\\n\\n\\nCircuit: it's an Order of Nodes.\\n\\n\\n\\nPath: it's a path that can be played (for vehicle like metro for example)\\n\\n\\n\\nCustom NPC: You can setup an NPC who will spawn when You reach it's Location, and Range.\\n\\n\\n\\nShard: You can setup a Custom Shard that You can Acces through the Shard Menu\\n\\n\\n\\nDatapack Builder: Here is the final step to make all of those Script/Objects that You created into a Datapack!:)\\n",
 
-	"bebought": "can be Bought:",
+        "bebought": "can be Bought:",
 
-	"price": "Price:",
+        "price": "Price:",
 
-	"canhavebusiness": "can open a Business:",
+        "canhavebusiness": "can open a Business:",
 
-	"defaultsalary": "Default salary:",
+        "defaultsalary": "Default salary:",
 
-	"prestige": "Prestige:",
+        "prestige": "Prestige:",
 
-	"boarding": "Now Boarding: ",
+        "boarding": "Now Boarding: ",
 
-	"to": " To ",
+        "to": " To ",
 
-	"metro_station": "Metro Station:",
+        "metro_station": "Metro Station:",
 
-	"metro_available": "Metro is available here",
+        "metro_available": "Metro is available here",
 
-	"download_quest_from_01": "Downloaded: Quests from ",
+        "download_quest_from_01": "Downloaded: Quests from ",
 
-	"download_quest_from_02": " available in Journal",
+        "download_quest_from_02": " available in Journal",
 
-	"talk_later": "We will Talk later.",
+        "talk_later": "We will Talk later.",
 
-	"current_interact_group": "Current Interact Group: ",
+        "current_interact_group": "Current Interact Group: ",
 
-	"back": "Back",
+        "back": "Back",
 
-	"tools": "Tools",
+        "tools": "Tools",
 
-	"editor": "Editor",
+        "editor": "Editor",
 
-	"AutoAmbush": "Auto Ambush: Ambush 'type' event scripts are automatically Disabled if You track a Main or Side Quest",
+        "AutoAmbush": "Auto Ambush: Ambush 'type' event scripts are automatically Disabled if You track a Main or Side Quest",
 
-	"AutoAmbushToggle": "Toggle Auto OFF Ambush",
+        "AutoAmbushToggle": "Toggle Auto OFF Ambush",
 
-	"compilefound": "CyberScript: Compiled Datapacks Found, Importing...",
+        "compilefound": "CyberScript: Compiled Datapacks Found, Importing...",
 
-	"compileok": "CyberScript: Compiled Datapacks are OK!",
+        "compileok": "CyberScript: Compiled Datapacks are OK!",
 
-	"compileoutdated": "CyberScript: Version of compiled Datapacks is outdated, Generating a New...",
+        "compileoutdated": "CyberScript: Version of compiled Datapacks is outdated, Generating a New...",
 
-	"compileuptodate": "CyberScript:Is up to date!",
+        "compileuptodate": "CyberScript:Is up to date!",
 
-	"datatpackimporterror": "Error during Import datatpack init: (Datapack:data/compiled_Datapack.lua) ",
+        "datatpackimporterror": "Error during Import datatpack init: (Datapack:data/compiled_Datapack.lua) ",
 
-	"compileloaded": "CyberScript: Compiled Datapacks loaded!",
+        "compileloaded": "CyberScript: Compiled Datapacks loaded!",
 
-	"compilecorrupted": "CyberScript: Compiled Datapacks corrupted!, Rebuilding...",
+        "compilecorrupted": "CyberScript: Compiled Datapacks corrupted!, Rebuilding...",
 
-	"nonattivesetting": "!!!!!!!! CyberScript: No nativeSettings Mod detected, the mod will Not Work!!!!!!!! ",
+        "nonattivesetting": "!!!!!!!! CyberScript: No nativeSettings Mod detected, the mod will Not Work!!!!!!!! ",
 
-	"ammoutdated": "CyberScript: AMM Mod Version has Outdated Components that can't be called with CyberScript's SEE system, some props and appearance will not be handled if you have AMM components called in your CM Scripts",
+        "ammoutdated": "CyberScript: AMM Mod Version has Outdated Components that can't be called with CyberScript's SEE system, some props and appearance will not be handled if you have AMM components called in your CM Scripts",
 
-	"ammnotfound": "CyberScript: No AMM Mod detected, some props and appearance will not be handled correctly if you have scripts that call for both mod components.",
+        "ammnotfound": "CyberScript: No AMM Mod detected, some props and appearance will not be handled correctly if you have scripts that call for both mod components.",
 
-	"immersivepersonenabled": "CyberScript: ImmersiveFirstPerson Mod detected, CyberScript will disable so it can avoid some conflicts",
+        "immersivepersonenabled": "CyberScript: ImmersiveFirstPerson Mod detected, CyberScript will disable so it can avoid some conflicts",
 
-	"cpstylingnotfound": "!!!!!! CyberScript: No CPStyling Mod detected, the mod will NOT Work!!!!!! ",
+        "cpstylingnotfound": "!!!!!! CyberScript: No CPStyling Mod detected, the mod will NOT Work!!!!!! ",
 
-	"CyberScriptinit": "CyberScript Initialized",
+        "CyberScriptinit": "CyberScript Initialized",
 
-	"ui_hud_place": "Place: ",
+        "ui_hud_place": "Place: ",
 
-	"ui_hud_room": "Room: ",
+        "ui_hud_room": "Room: ",
 
-	"ui_hud_multi_place": "MultiPlayer Place: ",
+        "ui_hud_multi_place": "MultiPlayer Place: ",
 
-	"ui_hud_multi_disconnected": "CyberScript Service: Disconnected",
+        "ui_hud_multi_disconnected": "CyberScript Service: Disconnected",
 
-	"ui_hud_multi_connected": "CyberScript Service: Connected",
+        "ui_hud_multi_connected": "CyberScript Service: Connected",
 
-	"ui_hud_multi_multienabled": "CyberScript Service: MultiPlayer Enabled",
+        "ui_hud_multi_multienabled": "CyberScript Service: MultiPlayer Enabled",
 
-	"multi_phone_notification_01": "You Got ",
+        "multi_phone_notification_01": "You Got ",
 
-	"multi_phone_notification_02": " Online Messages.",
+        "multi_phone_notification_02": " Online Messages.",
 
-	"missingcontroller": "Some Game HUD/ UI controllers are missing after CET reload, reload a save to fix it.",
+        "missingcontroller": "Some Game HUD/ UI controllers are missing after CET reload, reload a save to fix it.",
 
-	"authfailed": "User Authentication at mod Boot up failed, please connect from CyberScript 'CM Menu', From the Overlay screen.",
+        "authfailed": "User Authentication at mod Boot up failed, please connect from CyberScript 'CM Menu', From the Overlay screen.",
 
-	"seestarted": "CyberScript Script Engine Execution Started",
+        "seestarted": "CyberScript Script Engine Execution Started",
 
-	"vehicleunlocked": "CyberScript: Vehicles unlocked",
+        "vehicleunlocked": "CyberScript: Vehicles unlocked",
 
-	"hotkey_cycleCustomInteract": "Cycle Custom Interact",
+        "hotkey_cycleCustomInteract": "Cycle Custom Interact",
 
-	"hotkey_onlineSendPopup": "Show Online Message Popup",
+        "hotkey_onlineSendPopup": "Show Online Message Popup",
 
-	"hotkey_onlineSendMessage": "Send a Message to Current Selected Player",
+        "hotkey_onlineSendMessage": "Send a Message to Current Selected Player",
 
-	"hotkey_openRadioPopup": "Open Radio Popup",
+        "hotkey_openRadioPopup": "Open Radio Popup",
 
-	"phone_default_basic_01": "Hey V, How are You ?",
+        "phone_default_basic_01": "Hey V, How are You ?",
 
-	"phone_default_basic_01_01": "I'm Fine, and You ?",
+        "phone_default_basic_01_01": "I'm Fine, and You ?",
 
-	"phone_default_basic_01_02": "Not Fine, what about You ?",
+        "phone_default_basic_01_02": "Not Fine, what about You ?",
 
+        "phone_default_basic_02_y": "I'm great too.Do You want to Talk about Something?",
 
+        "phone_default_basic_02_n": "Sorry to Hear that. Do you Want to Talk about it?",
 
-	"phone_default_basic_02_y": "I'm great too.Do You want to Talk about Something?",
+        "nash_special01": "Surprise to see me, right?",
 
-	"phone_default_basic_02_n": "Sorry to Hear that. Do you Want to Talk about it?",
+        "nash_special01_01": "How did You survive?",
 
-	"nash_special01": "Surprise to see me, right?",
+        "nash_special01_02": "Not really. I don't think I can recall you, in fact.",
 
-	"nash_special01_01": "How did You survive?",
+        "nash_special02": "I was thinking that it was the End. But I opened my Eyes after that Nap and I was Alive, still. Now, I think only about Revenge. Aldecaldos and that Piece of Shit, Panam, will pay!",
 
-	"nash_special01_02": "Not really. I don't think I can recall you, in fact.",
+        "nash_special03": "Huh.. That hurt my cold heart. Boohoo. Ok, What do you need from me?",
 
+        "test_judy_quest00_00": "Hey V, How are You?",
 
+        "test_judy_quest00_00a": "Are You Ok?",
 
-	"nash_special02": "I was thinking that it was the End. But I opened my Eyes after that Nap and I was Alive, still. Now, I think only about Revenge. Aldecaldos and that Piece of Shit, Panam, will pay!",
+        "test_judy_quest00_00b": "Don't want to Talk to You, right now.",
 
-	"nash_special03": "Huh.. That hurt my cold heart. Boohoo. Ok, What do you need from me?",
+        "test_judy_quest00_01": "I'm fine, so what's up?",
 
-	"test_judy_quest00_00": "Hey V, How are You?",
+        "test_judy_quest00_01a": "Just Chillin'",
 
-	"test_judy_quest00_00a": "Are You Ok?",
+        "test_judy_quest00_01b": "Oh Stop!",
 
-	"test_judy_quest00_00b": "Don't want to Talk to You, right now.",
+        "test_judy_quest00_02": "So what do You want to do?",
 
+        "test_judy_quest00_02a": "Maybe we can meet Somewhere?",
 
+        "test_judy_quest00_02b": "I'm gonna rain-check.",
 
-	"test_judy_quest00_01": "I'm fine, so what's up?",
+        "test_judy_quest00_03": "Sure!, where?",
 
-	"test_judy_quest00_01a": "Just Chillin'",
+        "test_judy_quest00_03a": "At the Afterlife, Later?",
 
-	"test_judy_quest00_01b": "Oh Stop!",
+        "test_judy_quest00_03b": "At Your home, later?",
 
+        "test_judy_quest00_04": "Yeah, we should think on it! I will see You later!",
 
+        "test_judy_quest00_05": "Oh, I know what You mean, I'm gonna enjoy this.I will see You later!",
 
-	"test_judy_quest00_02": "So what do You want to do?",
+        "AvailablesQuest": "Available Quest",
 
-	"test_judy_quest00_02a": "Maybe we can meet Somewhere?",
+        "editor_editor": "Editor",
 
-	"test_judy_quest00_02b": "I'm gonna rain-check.",
+        "editor_score": "Score Edition",
 
+        "editor_variable": "Variable Edition",
 
+        "editor_reset": "Reset",
 
-	"test_judy_quest00_03": "Sure!, where?",
+        "editor_Story": "Story",
 
-	"test_judy_quest00_03a": "At the Afterlife, Later?",
+        "editor_World": "World",
 
-	"test_judy_quest00_03b": "At Your home, later?",
+        "editor_UI": "UI",
 
+        "editor_error": "CyberScript Editor Error: ",
 
+        "editor_error_msg": "CyberScript Editor Error, Check the questmod.txt (log) for more detail on the Error",
 
-	"test_judy_quest00_04": "Yeah, we should think on it! I will see You later!",
+        "editor_Introduction": "Introduction",
 
+        "editor_Quest": "Quest",
 
+        "editor_load_script": "Load a Script",
 
-	"test_judy_quest00_05": "Oh, I know what You mean, I'm gonna enjoy this.I will see You later!",
+        "editor_load": "Load",
 
+        "editor_unload": "Unload",
 
+        "editor_copy_player_location": "Copy XYZ coords from Player Location",
 
-	"AvailablesQuest": "Available Quest",
+        "editor_copy_Player_orientation": "Copy from Player Orientation",
 
+        "editor_range": "Range",
 
+        "editor_x": "X",
 
+        "editor_y": "Y",
 
+        "editor_z": "Z",
 
+        "editor_roll": "Roll",
 
+        "editor_pitch": "Pitch",
 
-	"editor_editor": "Editor",
+        "editor_yaw": "Yaw",
 
-	"editor_score": "Score Edition",
+        "editor_title": "Title: ",
 
-	"editor_variable": "Variable Edition",
+        "editor_desc": "Description: ",
 
-	"editor_reset": "Reset",
+        "editor_content": "Content: ",
 
-	"editor_Story": "Story",
+        "editor_recommendedlevel": "Recommanded Level: ",
 
-	"editor_World": "World",
+        "editor_Quest_Type": "Quest Type: ",
 
-	"editor_UI": "UI",
+        "editor_district": "District: ",
 
-	"editor_error": "CyberScript Editor Error: ",
+        "editor_tag": "Tag: ",
 
-	"editor_error_msg": "CyberScript Editor Error, Check the questmod.txt (log) for more detail on the Error",
+        "editor_NPC": "NPC",
 
-	"editor_Introduction": "Introduction",
+        "trigger_condition": "Trigger condition:",
 
-	"editor_Quest": "Quest",
+        "editor_msg_phone_way": "Do not put any requirements if You want that dialog being enabled by default in phone or speak way.",
 
+        "trigger_condition_requirement": "Trigger requirement:",
 
+        "trigger_action": "Triggers Actions:",
 
-	"editor_load_script": "Load a Script",
+        "end_action": "End Actions:",
 
-	"editor_load": "Load",
+        "failure_action": "Failure Actions:",
 
-	"editor_unload": "Unload",
+        "reset_action": "Reset Actions:",
 
+        "need_requirement": "Need Requirement to unlock Action List",
 
+        "editor_save_for_build": "Save to Build Your Datapack",
 
-	"editor_copy_player_location": "Copy XYZ coords from Player Location",
+        "editor_test_in_game": "Test it!",
 
-	"editor_copy_Player_orientation": "Copy from Player Orientation",
+        "editor_export": "Export Script to path: cyberscript\\user\\editor_output",
 
-	"editor_range": "Range",
+        "editor_export_warning": "You need a `Tag` before testing or exporting!",
 
-	"editor_x": "X",
+        "editor_open_json_editor": "Open in Json Editor",
 
-	"editor_y": "Y",
+        "editor_Choices": "Choices",
 
-	"editor_z": "Z",
+        "editor_havequitoption": "Have a `Talk Later` Answer ",
 
-	"editor_roll": "Roll",
+        "editor_speaker_who": "Who is speaking?",
 
-	"editor_pitch": "Pitch",
+        "editor_speaker_way": "Source/Way of speaker?",
 
-	"editor_yaw": "Yaw",
+        "editor_answer": "Answers:",
 
+        "editor_phone_dialog": "Phone Dialog",
 
+        "editor_speaker": "Speaker",
 
-	"editor_title": "Title: ",
+        "editor_unlock": "Unlocked?",
 
-	"editor_desc": "Description: ",
+        "editor_Interact": "Interact",
 
-	"editor_content": "Content: ",
+        "editor_Name": "Name",
 
-	"editor_recommendedlevel": "Recommanded Level: ",
+        "editor_Interact_Timer": "Timer",
 
-	"editor_Quest_Type": "Quest Type: ",
+        "editor_Interact_Timer_msg": "Timer is available incase you want to use the interact script in a more 'Immersive' way.",
 
+        "editor_Interact_SortTag": "Your-Own-Text-Here",
 
+        "editor_Interact_SortTag_msg": "SortTag is a grouping method for sorting Interactions by this Tag type. If the interact is for an AV that is flying, put av_Interact",
 
-	"editor_district": "District: ",
+        "editor_Interact_Display": "Display",
 
-	"editor_tag": "Tag: ",
+        "editor_Interact_Display_msg": "Display is How You want the interaction to be displayed (event_Interact: like a ingame interaction,Place: like a custom Place interaction only, phone_service: like a contact in phone only)",
 
-	"editor_NPC": "NPC",
+        "editor_Interact_Type": "Type",
 
+        "editor_Interact_Type_msg": "Type is How You want the interaction to be showed (interact: like an ingame Interaction, hint: like a hint interaction (at the bottom of the screen)",
 
+        "editor_Interact_hold": "Hold input to trigger it?",
 
-	"trigger_condition": "Trigger condition:",
+        "editor_Interact_key": "Key",
 
-	"editor_msg_phone_way": "Do not put any requirements if You want that dialog being enabled by default in phone or speak way.",
+        "editor_Event": "Event",
 
-	"trigger_condition_requirement": "Trigger requirement:",
+        "editor_Event_way": "Way",
 
-	"trigger_action": "Triggers Actions:",
+        "editor_Event_way_msg": "Available ways: world|| init || ambush ||phone_service (world = Always Plays Action List once Trigger(s) are met.|| init = Plays on Loading the game, if it's Triggers are met.|| ambush = Specified, by ambush interval timer, Plays Action List)",
 
-	"end_action": "End Actions:",
+        "editor_Fixer": "Fixer",
 
-	"failure_action": "Failure Actions:",
+        "editor_Fixer_exist": "Does this Fixer Exist in the game's story missions and has a set location ?(Wakako, Rita, Regina, Rogue etc.) ",
 
-	"reset_action": "Reset Actions:",
+        "editor_Fixer_npc_exist": "Does this Fixer Exist already as a Side NPC and No set location? (River, Meredith, Judy, Etc.)",
 
-	"need_requirement": "Need Requirement to unlock Action List",
+        "editor_Faction": "Faction",
 
+        "editor_Faction_logo": "Logo",
 
+        "editor_Faction_AttitudeGroup": "Attitude Group",
 
+        "editor_Faction_AttitudeGroup_msg": "Put attitude group here. \n It will make the possibility for the mod to determine if an npc, in game, is in a Faction when You look at it.\n You can find the attitude Groups in the path: quest_mod/data/db/attitudegroup",
 
+        "editor_Faction_Rivals": "Rivals",
 
-	"editor_save_for_build": "Save to Build Your Datapack",
+        "editor_Faction_Rivals_msg": "Put Faction Tag Rivals here. Path: quest_mod/json/datapack/default/factions",
 
-	"editor_test_in_game": "Test it!",
+        "editor_Faction_SpawnableNPC": "Spawnable NPCs",
 
-	"editor_export": "Export Script to path: cyberscript\\user\\editor_output",
+        "editor_Faction_SpawnableNPC_msg": "Put TweakIDs of the Entities here, it can be used to make Spawnable NPCs for Ambush type events. \n You can find the Entity TweakIDs in the path: quest_mod/data/db/CharacterTable.xlsx",
 
-	"editor_export_warning": "You need a `Tag` before testing or exporting!",
+        "editor_Faction_SpawnableVehicule": "Spawnable Vehicle",
 
-	"editor_open_json_editor": "Open in Json Editor",
+        "editor_Faction_SpawnableVehicule_msg": "Put TweakIDs pf the Vehicle here. It can be used to make Spawnable Vehicles for Ambush type events. \n You can find Vehicle (TweakIDs) in the path: quest_mod/data/db/vehicles.json",
 
+        "editor_Faction_VIP": "VIP",
 
+        "editor_Faction_VIP_msg": "Put name of the VIPs here, it can be used to make Spawnable VIPs in the actions, catered for them. \n You can find Character Names in the path: quest_mod/data/db/CharacterTable.xlsx",
 
+        "editor_Radio": "Radio",
 
+        "editor_Radio_only_in_car": "Can be played only in the car?",
 
+        "editor_Radio_tracks": "Tracks",
 
+        "editor_Radio_tracks_msg": "Put tracks here. \n name of the sound file should look like `xxxx.mp3`. You need to put the audio file into \\YourDatapack\\song\\ folders. This path is just Reference.",
 
-	"editor_Choices": "Choices",
+        "editor_Radio_warning01": "Warning:",
 
-	"editor_havequitoption": "Have a `Talk Later` Answer ",
+        "editor_Radio_warning02": "You can't test them until You wrapped it into a Datapack and add Your song file!",
 
-	"editor_speaker_who": "Who is speaking?",
+        "editor_Radio_test": "Test (it will only show in radio List but nothing will play)",
 
-	"editor_speaker_way": "Source/Way of speaker?",
+        "editor_Lang": "Language Pack",
 
-	"editor_answer": "Answers:",
+        "editor_Lang_Filename": "Filename",
 
-	"editor_phone_dialog": "Phone Dialog",
+        "editor_Lang_Key": "Key/Value",
 
-	"editor_speaker": "Speaker",
+        "editor_Lang_Key_msg": "In any Text Element of framework, you Write the `key` instead of a Text. It will Use the value associated to the `key`. \n You can use it to Translate the whole CyberScript framework for your Datapack.",
 
-	"editor_unlock": "Unlocked?",
+        "editor_Housing": "Housing",
 
+        "editor_Housing_Export": "Export Housing and items",
 
+        "editor_Housing_Export_Current": "Export Current place items",
 
+        "editor_Housing_Save": "Save Housing and items for Datapack",
 
+        "editor_Housing_Buy": "Buy this Place",
 
+        "editor_Housing_Sell": "Sell this Place",
 
+        "editor_Housing_OpenBusiness": "Open Business in this Place",
 
+        "editor_Interfaces": "Interfaces",
 
+        "editor_Interfaces_Width": "Width",
 
-	"editor_Interact": "Interact",
+        "editor_Interfaces_Heigh": "Heigh",
 
-	"editor_Name": "Name",
+        "editor_Interfaces_Controls": "Controls",
 
-	"editor_Interact_Timer": "Timer",
+        "editor_Interfaces_Controls_msg": "Define Your controls (button,label..) here",
 
-	"editor_Interact_Timer_msg": "Timer is available incase you want to use the interact script in a more 'Immersive' way.",
+        "editor_Help": "Helps",
 
-	"editor_Interact_SortTag": "Your-Own-Text-Here",
+        "editor_Help_Sections": "Sections",
 
-	"editor_Interact_SortTag_msg": "SortTag is a grouping method for sorting Interactions by this Tag type. If the interact is for an AV that is flying, put av_Interact",
+        "editor_Help_Sections_msg": "Add different section of text for Your help.",
 
-	"editor_Interact_Display": "Display",
+        "editor_Place": "Place",
 
-	"editor_Interact_Display_msg": "Display is How You want the interaction to be displayed (event_Interact: like a ingame interaction,Place: like a custom Place interaction only, phone_service: like a contact in phone only)",
+        "editor_Place_EnterX": "Entrance X",
 
-	"editor_Interact_Type": "Type",
+        "editor_Place_EnterY": "Entrance Y",
 
-	"editor_Interact_Type_msg": "Type is How You want the interaction to be showed (interact: like an ingame Interaction, hint: like a hint interaction (at the bottom of the screen)",
+        "editor_Place_EnterZ": "Entrance Z",
 
-	"editor_Interact_hold": "Hold input to trigger it?",
+        "editor_Place_Enter_copy": "Copy Player's XYZ coords for the Entrance",
 
-	"editor_Interact_key": "Key",
+        "editor_Place_ExitX": "Exit X",
 
+        "editor_Place_ExitY": "Exit Y",
 
+        "editor_Place_ExitZ": "Exit Z",
 
+        "editor_Place_Exit_copy": "Copy Player's XYZ coords for the Exit",
 
+        "editor_Place_range": "Area (range)",
 
+        "editor_Place_Zrange": "Z area (vertical l range)",
 
+        "editor_Place_Coef": "Coef. (Prestige)",
 
-	"editor_Event": "Event",
+        "editor_Place_Coef_msg01": "Coef. is a multiplier for interaction that will cost or give money.",
 
-	"editor_Event_way": "Way",
+        "editor_Place_Coef_msg02": "For example: A Beerthat cost 5 will cost 10 in a Place who have a coef. of 2.",
 
-	"editor_Event_way_msg": "Available ways: world|| init || ambush ||phone_service (world = Always Plays Action List once Trigger(s) are met.|| init = Plays on Loading the game, if it's Triggers are met.|| ambush = Specified, by ambush interval timer, Plays Action List)",
+        "editor_Place_isbuyable": "can be Bought?",
 
+        "editor_Place_price": "Price: ",
 
+        "editor_Place_isrentable": "can have a Business in this Place ? (need to be Bought before)",
 
+        "editor_Place_isrentable_msg": "To get the Salary from a Business, You need to be in the Place. Possible to get a salary every 5 minutes. Can make your own Salary methods through various Actions made.",
 
+        "editor_Place_rent": "Business Salary",
 
-	"editor_Fixer": "Fixer",
+        "editor_Place_warning": "You need a Requirement (so it needs one trigger too) before testing or exporting!",
 
-	"editor_Fixer_exist": "Does this Fixer Exist in the game's story missions and has a set location ?(Wakako, Rita, Regina, Rogue etc.) ",
+        "editor_Place_msg01": "To unlock Item Tab: ",
 
-	"editor_Fixer_npc_exist": "Does this Fixer Exist already as a Side NPC and No set location? (River, Meredith, Judy, Etc.)",
+        "editor_Place_msg02": "You need to have a Datapack with a 'place' script inside it's 'place' folder.",
 
+        "editor_Place_msg03": "Enabled. As well as be inside the Custom Place. Test your Items and placements before exporting the Items and Housing Furnitures!",
 
+        "editor_Function": "Function",
 
-	"editor_Faction": "Faction",
+        "editor_Node": "Node",
 
-	"editor_Faction_logo": "Logo",
+        "editor_Node_sort_msg": "if (sorttag) is 'metro', the node will be displayed into metro tab in Phone",
 
-	"editor_Faction_AttitudeGroup": "Attitude Group",
+        "editor_Node_sort": "Sort",
 
-	"editor_Faction_AttitudeGroup_msg": "Put attitude group here. \n It will make the possibility for the mod to determine if an npc, in game, is in a Faction when You look at it.\n You can find the attitude Groups in the path: quest_mod/data/db/attitudegroup",
+        "editor_Node_xyz_msg": "XYZ coords are the pin-point position of the node",
 
-	"editor_Faction_Rivals": "Rivals",
+        "editor_Node_gameplayxyz_copy": "Copy GameplayXYZ coords from Player Location",
 
-	"editor_Faction_Rivals_msg": "Put Faction Tag Rivals here. Path: quest_mod/json/datapack/default/factions",
+        "editor_Node_gameplayxyz_msg": "GameplayXYZs are the position of the functionality for the node, Example: Node xyz could be placed at metro entrance, GameplayXYZ is where you can teleport the player to, like the boarding pad.",
 
-	"editor_Faction_SpawnableNPC": "Spawnable NPCs",
+        "editor_Node_gameplayx": "GameplayX",
 
-	"editor_Faction_SpawnableNPC_msg": "Put TweakIDs of the Entities here, it can be used to make Spawnable NPCs for Ambush type events. \n You can find the Entity TweakIDs in the path: quest_mod/data/db/CharacterTable.xlsx",
+        "editor_Node_gameplayy": "GameplayY",
 
-	"editor_Faction_SpawnableVehicule": "Spawnable Vehicle",
+        "editor_Node_gameplayz": "GameplayZ",
 
-	"editor_Faction_SpawnableVehicule_msg": "Put TweakIDs pf the Vehicle here. It can be used to make Spawnable Vehicles for Ambush type events. \n You can find Vehicle (TweakIDs) in the path: quest_mod/data/db/vehicles.json",
+        "editor_Circuit": "Circuit",
 
-	"editor_Faction_VIP": "VIP",
+        "editor_Circuit_Nodes": "Nodes",
 
-	"editor_Faction_VIP_msg": "Put name of the VIPs here, it can be used to make Spawnable VIPs in the actions, catered for them. \n You can find Character Names in the path: quest_mod/data/db/CharacterTable.xlsx",
+        "editor_Circuit_Nodes_msg": "Put nodes Tag here. \n The Order of how You put them is important!",
 
+        "editor_Path": "Path",
 
+        "editor_Path_StartNode": "Start Node Tag",
 
+        "editor_Path_EndNode": "End Node Tag",
 
+        "editor_Path_recordRotation": "Record Rotation?",
 
-	"editor_Radio": "Radio",
+        "editor_Path_recordRelative": "Position Relative to?",
 
-	"editor_Radio_only_in_car": "Can be played only in the car?",
+        "editor_Path_Record": "Record",
 
-	"editor_Radio_tracks": "Tracks",
+        "editor_Path_RecordTarget": "Record a Target:",
 
-	"editor_Radio_tracks_msg": "Put tracks here. \n name of the sound file should look like `xxxx.mp3`. You need to put the audio file into \\YourDatapack\\song\\ folders. This path is just Reference.",
+        "editor_Path_RecordPath": "Record a Path",
 
-	"editor_Radio_warning01": "Warning:",
+        "editor_Path_mgs": "You need a Tag before you Edit the item!",
 
-	"editor_Radio_warning02": "You can't test them until You wrapped it into a Datapack and add Your song file!",
+        "editor_Path_Record_Stop": "Stop recording Path",
 
-	"editor_Radio_test": "Test (it will only show in radio List but nothing will play)",
+        "editor_Path_Play": "Play",
 
+        "editor_Path_PlayTarget": "Test Path on Target:",
 
+        "editor_Path_PlayTargetCustom": "Use Custom entity",
 
+        "editor_Path_CurrentFrame": "Current Frame",
 
+        "editor_Path_DeleteFrame": "Delete frame ",
 
+        "editor_Path_CopyFrameBefore": "Copy frame Before",
 
+        "editor_Path_CopyFrameAfter": "Copy frame After",
 
-	"editor_Lang": "Language Pack",
+        "editor_Path_CurrentFrameAction": "Current Frame Action:",
 
-	"editor_Lang_Filename": "Filename",
+        "editor_Path_PlayPath": "Play Path",
 
-	"editor_Lang_Key": "Key/Value",
+        "editor_Path_NoRecord": "No recorded Data!",
 
-	"editor_Lang_Key_msg": "If in Dialog Text or Text Element, You Write the `key` instead of a Text. It will Use the value associated to the `key`. You can use it to Translate the whole CyberScript framework for your Datapack.",
+        "editor_POI": "POI",
 
-	"editor_Housing": "Housing",
+        "editor_POI_isFor": "POI Type",
 
-	"editor_Housing_Export": "Export Housing and items",
+        "editor_POI_locations": "Locations list",
 
-	"editor_Housing_Export_Current": "Export Current place items",
+        "editor_CustomNPC": "Custom NPC",
 
-	"editor_Housing_Save": "Save Housing and items for Datapack",
+        "editor_CustomNPC_appeareance": "Appeareance",
 
-	"editor_Housing_Buy": "Buy this Place",
+        "editor_CustomNPC_repeat_routine": "Loop Routine",
 
-	"editor_Housing_Sell": "Sell this Place",
+        "editor_CustomNPC_auto_despawn": "Auto Despawn",
 
-	"editor_Housing_OpenBusiness": "Open Business in this Place",
+        "editor_CustomNPC_useBetaSpawn": "Use Beta Spawn (NPC can't Fight.)",
 
+        "editor_Shard": "Shard",
 
+        "editor_Shard_locked": "Is Shard Locked?",
 
-	"editor_Interfaces": "Interfaces",
+        "editor_Shard_crypted": "Is Shard Crypted?",
 
-	"editor_Interfaces_Width": "Width",
+        "editor_Shard_new": "Is Shard New?",
 
-	"editor_Interfaces_Heigh": "Heigh",
+        "editor_Build": "Build my Datapack",
 
-	"editor_Interfaces_Controls": "Controls",
+        "editor_Build_Author": "Author",
 
-	"editor_Interfaces_Controls_msg": "Define Your controls (button,label..) here",
+        "editor_Build_Version": "Version (format MUST be `X.X.X`)",
 
+        "editor_Build_Flags": "Flags",
 
+        "editor_Build_Flags_msg": "Put flags here. \n possible flags:\n cm_version:x.x.x \n cm_version_strict:x.x.x \n compile \n beta \n amm \n amm_version:x.x.x \n amm_version_strict:x.x.x \n mod:test \n nfsw \n Datapack:test \n Datapack_version:test:x.x.x \n Datapack_version_strict:test:x.x.x",
 
+        "editor_Build_myDatapackQuest": "Saved Quest: ",
 
+        "editor_Build_myDatapackDialog": "Saved Choices: ",
 
+        "editor_Build_myDatapackEvent": "Saved Event: ",
 
+        "editor_Build_myDatapackInteract": "Saved Interact: ",
 
-	"editor_Help": "Helps",
+        "editor_Build_myDatapackFixer": "Saved Fixer: ",
 
-	"editor_Help_Sections": "Sections",
+        "editor_Build_myDatapackFaction": "Saved Faction: ",
 
-	"editor_Help_Sections_msg": "Add different section of text for Your help.",
+        "editor_Build_myDatapackFunction": "Saved Function: ",
 
+        "editor_Build_myDatapackNode": "Saved Node: ",
 
+        "editor_Build_myDatapackPath": "Saved Path: ",
 
+        "editor_Build_myDatapackCircuit": "Saved Circuit: ",
 
+        "editor_Build_myDatapackPlace": "Saved Place: ",
 
-	"editor_Place": "Place",
+        "editor_Build_myDatapackHousing": "Saved Housing: ",
 
-	"editor_Place_EnterX": "Entrance X",
+        "editor_Build_myDatapackRadio": "Saved Radio: ",
 
-	"editor_Place_EnterY": "Entrance Y",
+        "editor_Build_myDatapackLanguage": "Saved Language: ",
 
-	"editor_Place_EnterZ": "Entrance Z",
+        "editor_Build_myDatapackHelp": "Saved Help: ",
 
-	"editor_Place_Enter_copy": "Copy Player's XYZ coords for the Entrance",
+        "editor_Build_myDatapackInterfaces": "Saved Interfaces: ",
 
-	"editor_Place_ExitX": "Exit X",
+        "editor_Build_myDatapackCustomNPC": "Saved Custom NPC: ",
 
-	"editor_Place_ExitY": "Exit Y",
+        "editor_Build_myDatapackShard": "Saved Shard: ",
 
-	"editor_Place_ExitZ": "Exit Z",
+        "editor_Build_myDatapackPhoneDialog": "Saved Phone Conversation: ",
 
-	"editor_Place_Exit_copy": "Copy Player's XYZ coords for the Exit",
+        "editor_Build_myDatapackPOI": "Saved POI: ",
 
-	"editor_Place_range": "Area (range)",
+        "editor_Build_myDatapackScene": "Saved Scene: ",
 
-	"editor_Place_Zrange": "Z area (vertical l range)",
+        "editor_Build_Build": "Build Script Folders to Path quest_mod/json/myDatapack",
 
-	"editor_Place_Coef": "Coef. (Prestige)",
+        "editor_Build_Msg": "You need a Tag before You Build it!",
 
-	"editor_Place_Coef_msg01": "Coef. is a multiplier for interaction that will cost or give money.",
+        "editor_Build_Clean": "Clean (Erase) Saved Items",
 
-	"editor_Place_Coef_msg02": "For example: A Beerthat cost 5 will cost 10 in a Place who have a coef. of 2.",
+        "editor_Setting": "Editor Setting",
 
-	"editor_Place_isbuyable": "can be Bought?",
+        "editor_Setting_Camera": "camera",
 
-	"editor_Place_price": "Price: ",
+        "editor_Setting_Camera_Mode1": "Current Mode: Editor camera",
 
-	"editor_Place_isrentable": "can have a Business in this Place ? (need to be Bought before)",
+        "editor_Setting_Camera_Mode2": "Current Mode: Player camera",
 
-	"editor_Place_isrentable_msg": "To get the Salary from a Business, You need to be in the Place. Possible to get a salary every 5 minutes. Can make your own Salary methods through various Actions made.",
+        "editor_Setting_Camera_Switch": "Toggle between free camera and Player camera",
 
-	"editor_Place_rent": "Business Salary",
+        "editor_Setting_Camera_Reset": "Reset camera",
 
-	"editor_Place_warning": "You need a Requirement (so it needs one trigger too) before testing or exporting!",
+        "editor_Setting_Camera_lookat": "Look in camera",
 
-	"editor_Place_msg01": "To unlock Item Tab: ",
+        "editor_Setting_Cameras_exit": "exit camera",
 
-	"editor_Place_msg02": "You need to have a Datapack with a 'place' script inside it's 'place' folder.",
+        "editor_Setting_Freeze_Time": "Freeze Time",
 
-	"editor_Place_msg03": "Enabled. As well as be inside the Custom Place. Test your Items and placements before exporting the Items and Housing Furnitures!",
+        "editor_Setting_PlayerPosition": "Player Position:",
 
+        "editor_Setting_RunningScript": "Active Script Running:",
 
+        "editor_Setting_ScriptRunToggle": "Toggle automatic thread running",
 
+        "editor_Setting_ScriptAutoMode": "Automatic Mode: ",
 
+        "editor_Setting_ResetScript": "Erase all Active Script Threads",
 
+        "editor_Setting_ScriptManualStep": "Manually Activate Script Actions(step-by-step).",
 
+        "editor_Scene": "Placeholder",
 
-	"editor_Function": "Function",
+        "editor_Scene_isbraindance": "Is it a Braindance?(WIP)",
 
+        "editor_Scene_init_action": "At 'Start' Actions: (these Actions are intended to Setup your Scene)",
 
+        "editor_Scene_init_action_play": "Play 'Start' Actions",
 
-	"editor_Node": "Node",
+        "editor_Scene_end_action": "At 'End' Actions: (these Actions are intended to End your Scene)",
 
-	"editor_Node_sort_msg": "if (sorttag) is 'metro', the node will be displayed into metro tab in Phone",
+        "editor_Scene_end_action_play": "Play `End` Actions",
 
-	"editor_Node_sort": "Sort",
+        "editor_Scene_reset_action": "At `Reset` Actions: (these Actions are intended to use before you start a Scene)",
 
-	"editor_Node_xyz_msg": "XYZ coords are the pin-point position of the node",
+        "editor_Scene_reset_action_play": "Play `Reset` Actions",
 
-	"editor_Node_gameplayxyz_copy": "Copy GameplayXYZ coords from Player Location",
+        "editor_Scene_play": "Play the Scene",
 
-	"editor_Node_gameplayxyz_msg": "GameplayXYZs are the position of the functionality for the node, Example: Node xyz could be placed at metro entrance, GameplayXYZ is where you can teleport the player to, like the boarding pad.",
+        "editor_Scene_msg": "You need at least 1 init/Start action, 1 step in the actions, 1 end action and 1 reset action before testing or exporting!",
 
-	"editor_Node_gameplayx": "GameplayX",
+        "framework_modpack_updated": " updated to version ",
 
-	"editor_Node_gameplayy": "GameplayY",
+        "framework_modpack_deleted": " Delete ",
 
-	"editor_Node_gameplayz": "GameplayZ",
+        "datapack_datapack_created": "CyberScript: Compiled Datapacks created ",
 
+        "datapack_error_import": "'Error during Import datatpack: (Datapack:'",
 
+        "datapack_recover": "Recover Datapack has to be only with the default folder installed. Delete all others, then 'Rebuild Datapack Cache' in CyberScript Settings!",
 
+        "datapack_recover_fail": "Recovery: Error during Import datatpack: (Datapack:default) ",
 
+        "datapack_wrong_default": "Wrong Default Datapack??? Ask in the #help-and-bugs chat in our Discord. object: ",
 
+        "datapack_updated_01": "Updated Datapack ",
 
+        "datapack_updated_02": " To it's latest Version!",
 
-	"editor_Circuit": "Circuit",
+        "multi_welcome": "Welcome to Cyberpunk Multiverse Server!",
 
-	"editor_Circuit_Nodes": "Nodes",
+        "keystone_connect_btn": "Connect to CyberScript Service",
 
-	"editor_Circuit_Nodes_msg": "Put nodes Tag here. \n The Order of how You put them is important!",
+        "keystone_connect_msg": "Being Connected to the Server doesn't mean Your are Connected to Multi-Player. Connected to the Server grants access to the Datapacks.",
 
+        "npc_error_nocamera": "CyberScript: No camera Found",
 
+        "npc_spawnnpc_error_vehicle": "Vehicle is not allowed, use spawn_vehicle action for it!",
 
-	"editor_Path": "Path",
+        "npc_spawnnpc_error_amm": "CyberScript: AMM entity is not allowed to spawn if You don't have AMM",
 
-	"editor_Path_StartNode": "Start Node Tag",
+        "npc_car_seat_full": "This car is full. Choose another one.",
 
-	"editor_Path_EndNode": "End Node Tag",
+        "observer_callselectedcontact_msg01": "Hey V!",
 
-	"editor_Path_recordRotation": "Record Rotation?",
+        "observer_callselectedcontact_msg02": "V.",
 
-	"editor_Path_recordRelative": "Position Relative to?",
+        "observer_callselectedcontact_msg03": "I was thinking about You, I'll let You imagine why.",
 
-	"editor_Path_Record": "Record",
+        "observer_callselectedcontact_msg04": "V, Perfect time to call!",
 
-	"editor_Path_RecordTarget": "Record a Target:",
+        "observer_callselectedcontact_msg05": "V! Do You need something?",
 
-	"editor_Path_RecordPath": "Record a Path",
+        "observer_callselectedcontact_msg06": "V! Are You ok?",
 
-	"editor_Path_mgs": "You need a Tag before you Edit the item!",
+        "observer_callselectedcontact_msg07": "V!",
 
-	"editor_Path_Record_Stop": "Stop recording Path",
+        "observer_callselectedcontact_v_answer": "How are You?",
 
-	"editor_Path_Play": "Play",
+        "observer_callselectedcontact_fixer": "Downloading latest Quests into Your journal...",
 
-	"editor_Path_PlayTarget": "Test Path on Target:",
+        "observer_callselectedcontact_unknown": "Unknown Contact",
 
-	"editor_Path_PlayTargetCustom": "Use Custom entity",
+        "quest_finished": "Quest Finished: ",
 
-	"editor_Path_CurrentFrame": "Current Frame",
+        "quest_start": "Starting Quest: ",
 
-	"editor_Path_DeleteFrame": "Delete frame ",
+        "quest_trigger": "Mission: ",
 
-	"editor_Path_CopyFrameBefore": "Copy frame Before",
+        "relation_Talklater": "We will Talk later.",
 
-	"editor_Path_CopyFrameAfter": "Copy frame After",
+        "save_phone_cmaffinity": "CS Affinity: ",
 
-	"editor_Path_CurrentFrameAction": "Current Frame Action:",
+        "save_phone_cmservice": "CS Service: ",
 
-	"editor_Path_PlayPath": "Play Path",
+        "save_phone_cmfixer": "CS Fixer: Accept Quest from ",
 
-	"editor_Path_NoRecord": "No recorded Data!",
+        "scripting_error": "CyberScript Scripting Error: ",
 
+        "scripting_novip01": "no VIP Found for ",
 
+        "scripting_novip02": " where the Player score is ",
 
+        "see_trigger_error": "CyberScript Trigger error: ",
 
+        "see_action_nonode": "can't find a node who has this Tag: ",
 
-	"editor_POI": "POI",
+        "see_action_nocurrentnode": "can't find a current node",
 
-	"editor_POI_isFor": "POI Type",
+        "see_action_nocurrentpoi": "can't find the current Poi associated with Player's Position. data:",
 
-	"editor_POI_locations": "Locations list",
+        "see_action_nomappin": "can't find the mappin with this Tag:",
 
+        "see_action_nofasttravel": "can't find a Fast Travel point with this Tag: ",
 
+        "see_action_nocurrentfasttravel": "can't find a current fast travel point associated with Player's Position ",
 
+        "see_action_nocurrentmappin": "can't find a current custom point associated with Player's Position ",
 
+        "see_action_noPlace": "can't find a Custom Place with this Tag: ",
 
+        "see_action_noroom": "can't find a Custom Room with this Tag: ",
 
+        "see_action_nocurrentPlace": "can't find a current Custom Place associated with Player's Position",
 
-	"editor_CustomNPC": "Custom NPC",
+        "see_action_nocurrentroom": "can't find a current Custom Room associated with Player's Position",
 
-	"editor_CustomNPC_appeareance": "Appeareance",
+        "see_action_noposition": "Position is empty",
 
-	"editor_CustomNPC_repeat_routine": "Loop Routine",
+        "see_action_novehicle": "Can't Find a Vehicle",
 
+        "see_action_Place_price_toohigh": "This Place can't be bought, or the price is too high for You!",
 
-	"editor_CustomNPC_auto_despawn": "Auto Despawn",
+        "see_action_Place_rent_toohigh": "This Place can't be rented or the price is too high for You!",
 
-	"editor_CustomNPC_useBetaSpawn": "Use Beta Spawn (NPC can't Fight.)",
+        "see_action_phone_news_speaker": "CyberScript Networks",
 
+        "see_action_poup_fail": "Open,then Close Pause Menu before You Call for a Popup/Controller.",
 
+        "see_timer_already": "A Timer is already Active.",
 
+        "see_action_nopath": "There is no Path for These Two Nodes...",
 
+        "init_renew_setting": "CyberScript: Old settings have to be Found and migrated!",
 
+        "ui_setting_main": "CyberScript Settings",
 
+        "ui_setting_gameplay": "Gameplay",
 
-	"editor_Shard": "Shard",
+        "ui_setting_gameplay_controller": "Use Gamepad Configuration Controller mode",
 
-	"editor_Shard_locked": "Is Shard Locked?",
+        "ui_setting_gameplay_radio": "Custom Radio Volume",
 
-	"editor_Shard_crypted": "Is Shard Crypted?",
+        "ui_setting_gameplay_scroll": "CyberScript UI Scroll Speed(keep at max)",
 
-	"editor_Shard_new": "Is Shard New?",
+        "ui_setting_script": "Script Engine Settings",
 
+        "ui_setting_script_entity_affinity": "Scripted Entity Affinity",
 
+        "ui_setting_script_entity_affinity_msg": "Player's Gang Affinity affects Scripted/Spawned Entities From Script Engine",
 
+        "ui_setting_display": "Display",
 
+        "ui_setting_display_hud": "Show CyberScript HUD",
 
+        "ui_setting_display_hud_gang": "Show Gang Affinity on HUD",
 
+        "ui_setting_display_hud_xyz": "Display XYZ on Map when You hover over a point",
 
-	"editor_Build": "Build my Datapack",
+        "ui_setting_actions": "Actions",
 
-	"editor_Build_Author": "Author",
+        "ui_setting_actions_untrackquest": "Untrack Base Game Quest",
 
-	"editor_Build_Version": "Version (format MUST be `X.X.X`)",
+        "ui_setting_actions_resetquest": "Clear CyberScript Quest Thread",
 
-	"editor_Build_Flags": "Flags",
+        "ui_setting_actions_cleanthemess": "Clear all Threads (can't be in car)",
 
-	"editor_Build_Flags_msg": "Put flags here. \n possible flags:\n cm_version:x.x.x \n cm_version_strict:x.x.x \n compile \n beta \n amm \n amm_version:x.x.x \n amm_version_strict:x.x.x \n mod:test \n nfsw \n Datapack:test \n Datapack_version:test:x.x.x \n Datapack_version_strict:test:x.x.x",
+        "ui_setting_actions_recalculateaffinity": "Recalculate All Affinity from Game Facts",
 
-	"editor_Build_myDatapackQuest": "Saved Quest: ",
+        "ui_setting_actions_recalculateaffinity_msg": "Recalculate All Affinity (Gang and NPC), it will recalculate it from the Quests You already finished and Your choices",
 
-	"editor_Build_myDatapackDialog": "Saved Choices: ",
+        "ui_setting_actions_cleareaffinity": "Clear All Affinity",
 
-	"editor_Build_myDatapackEvent": "Saved Event: ",
+        "ui_setting_actions_cleareaffinity_msg": "Clear All Affinity (Gang and NPC), it will put all to 0",
 
-	"editor_Build_myDatapackInteract": "Saved Interact: ",
+        "ui_setting_actions_auto_refresh": "Auto Refresh Datapack at Pause Menu",
 
-	"editor_Build_myDatapackFixer": "Saved Fixer: ",
+        "ui_setting_actions_refresh": "Refresh Datapack Cache",
 
-	"editor_Build_myDatapackFaction": "Saved Faction: ",
+        "ui_setting_actions_rebuild": "Rebuild Datapack Cache",
 
-	"editor_Build_myDatapackFunction": "Saved Function: ",
+        "ui_setting_actions_rebuild_done": "CyberScript: Datapack Cache rebuild",
 
-	"editor_Build_myDatapackNode": "Saved Node: ",
+        "ui_menu": "CM menu",
 
-	"editor_Build_myDatapackPath": "Saved Path: ",
+        "ui_menu_online": "Online Service",
 
-	"editor_Build_myDatapackCircuit": "Saved Circuit: ",
+        "ui_menu_delete": "Delete",
 
-	"editor_Build_myDatapackPlace": "Saved Place: ",
+        "ui_setting_cheat": "CyberScript Cheat",
+        "ui_setting_cheat_infinite_doublejump": "Infinite Double Jump (require the Reinforced Tendons)",
+        "ui_setting_cheat_player_sprint": "Player Sprint Multiplier (Save and reload for apply)",
+        "ui_setting_cheat_player_run": "Player Run Multiplier (Save and reload for apply)",
+        "ui_setting_cheat_jump_height": "Player Jump Height Multiplier (Save and reload for apply)",
+        "ui_setting_cheat_doublejump_height": "Player Double Jump Height Multiplier (Save and reload for apply)",
+        "ui_setting_cheat_debug_options": "Enable Debug Menu",
+        "ui_setting_cheat_debug_log": "Enable CyberScript Log Windows",
+        "ui_setting_cheat_disable_fall_damage": "Disable Fall Damage and Animation",
 
-	"editor_Build_myDatapackHousing": "Saved Housing: ",
+        "ui_setting_customsetting": "CyberScript Custom Setting",
 
-	"editor_Build_myDatapackRadio": "Saved Radio: ",
+        "ui_multi_msg_tellto": "Send a Message To ",
 
-	"editor_Build_myDatapackLanguage": "Saved Language: ",
+        "ui_multi_msg_Talkto": "Whisper To ",
 
-	"editor_Build_myDatapackHelp": "Saved Help: ",
+        "ui_multi_msg_shooto": "Shoot Message ",
 
-	"editor_Build_myDatapackInterfaces": "Saved Interfaces: ",
+        "ui_multi_msg_send": "Send",
 
-	"editor_Build_myDatapackCustomNPC": "Saved Custom NPC: ",
+        "ui_multi_msg_close": "Close",
 
-	"editor_Build_myDatapackShard": "Saved Shard: ",
+        "ui_multi_instance_password": "Set Instance Password",
 
-	"editor_Build_myDatapackPhoneDialog": "Saved Phone Conversation: ",
+        "ui_multi_instance_password_msg": "Write the password of the Instance that You are trying to connect to:",
 
-	"editor_Build_myDatapackPOI": "Saved POI: ",
+        "ui_multi_instance_create": "Instance Creation",
 
-	"editor_Build_myDatapackScene": "Saved Scene: ",
+        "ui_multi_instance_create_title": "Title",
 
-	"editor_Build_Build": "Build Script Folders to Path quest_mod/json/myDatapack",
+        "ui_multi_instance_create_isreadonly": "Read Only (only the owner can Edit and build)",
 
-	"editor_Build_Msg": "You need a Tag before You Build it!",
+        "ui_multi_instance_create_nsfw": "NSFW (Explicit Content)",
 
-	"editor_Build_Clean": "Clean (Erase) Saved Items",
+        "ui_multi_instance_create_privacy": "Privacy",
 
+        "ui_multi_instance_create_password": "Password",
 
+        "ui_multi_instance_create_valid": "Create",
 
+        "ui_multi_instance_create_close": "Close",
 
+        "ui_multi_instance_edit": "Instance Edition",
 
+        "ui_multi_instance_edit_title": "Title",
 
+        "ui_multi_instance_edit_isreadonly": "Read Only (only the owner can Edit and build)",
 
+        "ui_multi_instance_edit_nsfw": "NSFW (Explicit Content)",
 
+        "ui_multi_instance_edit_privacy": "Privacy",
 
-	"editor_Setting": "Editor Setting",
+        "ui_multi_instance_edit_password": "Password",
 
-	"editor_Setting_Camera": "camera",
+        "ui_multi_instance_edit_valid": "Update",
 
-	"editor_Setting_Camera_Mode1": "Current Mode: Editor camera",
+        "ui_multi_instance_edit_close": "Close",
 
-	"editor_Setting_Camera_Mode2": "Current Mode: Player camera",
+        "ui_multi_instance_place_creation": "Instance Place Creation",
 
-	"editor_Setting_Camera_Switch": "Toggle between free camera and Player camera",
+        "ui_multi_instance_place_creation_name": "Name",
 
-	"editor_Setting_Camera_Reset": "Reset camera",
+        "ui_multi_instance_place_creation_tag": "Tag",
 
-	"editor_Setting_Camera_lookat": "Look in camera",
+        "ui_multi_instance_place_creation_x": "X",
 
-	"editor_Setting_Cameras_exit": "exit camera",
+        "ui_multi_instance_place_creation_y": "Y",
 
-	"editor_Setting_Freeze_Time": "Freeze Time",
+        "ui_multi_instance_place_creation_z": "Z",
 
-	"editor_Setting_PlayerPosition": "Player Position:",
+        "ui_multi_instance_place_creation_copy": "Copy XYZ from Player's Position",
 
-	"editor_Setting_RunningScript": "Active Script Running:",
+        "ui_multi_instance_place_creation_range": "Area(range)",
 
-	"editor_Setting_ScriptRunToggle": "Toggle automatic thread running",
+        "ui_multi_instance_place_creation_zrange": "Z area (vertical range)",
 
-	"editor_Setting_ScriptAutoMode": "Automatic Mode: ",
+        "ui_multi_instance_place_creation_spawnrange": "Spawn Range",
 
-	"editor_Setting_ResetScript": "Erase all Active Script Threads",
+        "ui_multi_instance_place_creation_save": "Save",
 
-	"editor_Setting_ScriptManualStep": "Manually Activate Script Actions(step-by-step).",
+        "ui_multi_instance_place_creation_msg": "You need a Tag before Saving it!",
 
+        "ui_multi_instance_place_creation_close": "Close",
 
+        "ui_multi_instance_place_items": "Edit Items Position",
 
+        "ui_multi_instance_guild_create": "Guild Creation",
 
+        "ui_multi_instance_guild_faction": "Faction",
 
+        "ui_multi_instance_guild_update_desc": "Description",
 
+        "ui_buyed_items": "Place Bought Items",
 
-	"editor_Scene": "Placeholder",
+        "ui_multi_buyed_items": "Place Bought Items (Multi)",
 
-	"editor_Scene_isbraindance": "Is it a Braindance?(WIP)",
+        "ui_datapack_choice": "Choose current Datapack Interaction",
 
-	"editor_Scene_init_action": "At 'Start' Actions: (these Actions are intended to Setup your Scene)",
+        "ui_manage_placed_item": "Manage Placed Items",
 
-	"editor_Scene_init_action_play": "Play 'Start' Actions",
+        "ui_multi_manage_placed_item": "Manage Placed Items (Multi)",
 
-	"editor_Scene_end_action": "At 'End' Actions: (these Actions are intended to End your Scene)",
+        "ui_keystone_loading": "CyberScript Loading...",
 
-	"editor_Scene_end_action_play": "Play `End` Actions",
+        "ui_keystone_update_title": "CyberScript Update",
+        "ui_keystone_update_msg": "!!! Save your game before update !!!\n (backup your files is good too:P )",
 
-	"editor_Scene_reset_action": "At `Reset` Actions: (these Actions are intended to use before you start a Scene)",
+        "ui_keystone_changelog_title": "CyberScript Changelog",
 
-	"editor_Scene_reset_action_play": "Play `Reset` Actions",
+        "ui_keystone_backmenu": "Back to Menu",
+        "ui_keystone_refresh": "Refresh",
 
-	"editor_Scene_play": "Play the Scene",
+        "ui_keystone_main_title": "CyberScript",
+        "ui_keystone_main_update_available": "New version available, Click here to Update CyberScript !",
+        "ui_keystone_main_datapack": "Datapacks",
+        "ui_keystone_main_downloaded_datapack": "Downloaded Datapacks",
+        "ui_keystone_main_corpowars": "Corpo Wars Network",
+        "ui_keystone_main_stocks": "Stock Market",
+        "ui_keystone_main_items": "Item market",
+        "ui_keystone_main_multiinfos": "Multi Info",
+        "ui_keystone_main_changelog": "CyberScript Changelog",
+        "ui_keystone_main_error": "Error, close and retry",
 
-	"editor_Scene_msg": "You need at least 1 init/Start action, 1 step in the actions, 1 end action and 1 reset action before testing or exporting!",
+        "ui_keystone_corpo_title": "Corpo Wars Network",
 
+        "ui_keystone_multiinfos_msg01": "Connected to CyberScript Service: ",
+        "ui_keystone_multiinfos_msg02": "Multiplayer enabled:",
+        "ui_keystone_multiinfos_msg03": "Your Corpo:",
+        "ui_keystone_multiinfos_msg04": "Rank: ",
+        "ui_keystone_multiinfos_msg05": "Cannot be changed on your own, contact an admin for ask an change.",
+        "ui_keystone_multiinfos_title": "Multiplayer Info",
 
+        "ui_keystone_stocks_msg01": "Your Money: ",
+        "ui_keystone_stocks_msg02": "Price: ",
+        "ui_keystone_stocks_msg03": "Inflate: ",
+        "ui_keystone_stocks_msg04": "Quantity: ",
+        "ui_keystone_stocks_msg05": "Buyed Quantity: ",
+        "ui_keystone_stocks_buy": "Buy",
+        "ui_keystone_stocks_sell": "Sell",
+        "ui_keystone_stocks_title": "Stock Market",
 
+        "ui_keystone_items_category_title": "Choose an Item Category",
 
+        "ui_keystone_items_title": "Item Market",
+        "ui_keystone_items_backcat": "Back to Categories",
+        "ui_keystone_items_msg01": "Your Money: ",
+        "ui_keystone_items_msg02": "Cart Total: ",
+        "ui_keystone_items_msg03": "Category: ",
+        "ui_keystone_items_msg04": "Sub Category: ",
+        "ui_keystone_items_msg05": "Flag: ",
+        "ui_keystone_items_msg06": "Price: ",
+        "ui_keystone_items_msg07": "Inflate: ",
+        "ui_keystone_items_msg08": "Quantity: ",
+        "ui_keystone_items_msg09": "Buyed Quantity: ",
+        "ui_keystone_items_msg10": "Add to Cart",
+        "ui_keystone_items_msg11": "Remove from Cart",
 
+        "ui_keystone_datapack": "Datapacks",
+        "ui_keystone_datapack_msg01": "Hover over a Datapack for it's Description, click on it to Manage the Datapack",
+        "ui_keystone_datapack_msg02": "Author: ",
+        "ui_keystone_datapack_msg03": "Version: ",
+        "ui_keystone_datapack_msg04": "Downloaded version: ",
+        "ui_keystone_datapack_msg05": "!!! UPDATE IS AVAILABLE !!!",
+        "ui_keystone_datapack_msg06": " (Update Available)",
+        "ui_keystone_datapack_msg07": "Require Mod version: ",
+        "ui_keystone_datapack_msg08": "Flags: ",
+        "ui_keystone_datapack_msg09": "Exclusive to your faction !",
+        "ui_keystone_datapack_msg10": "This datapack is not from CyberScript Server.",
+        "ui_keystone_datapack_msg11": " You would need to Update CyberScript first",
+        "ui_keystone_datapack_msg12": "Back to Datapack",
+        "ui_keystone_mydatapack": "Downloaded Datapacks",
+        "ui_keystone_datapack_detail": "Datapack Details",
+        "ui_keystone_datapack_detail_nope": "",
 
+        "ui_keystone_instance": "Choose an Instance",
+        "ui_keystone_instance_msg01": "Connected Players: ",
+        "ui_keystone_instance_msg02": "Owner: ",
+        "ui_keystone_instance_msg03": "readOnly: ",
+        "ui_keystone_instance_msg04": "This instance contains EXPLICIT CONTENT",
+        "ui_keystone_instance_msg05": "If you join it, we dont't take any responsabilities about what goes on in your play session. ",
+        "ui_keystone_instance_msg06": "You must respect the community rules.",
+        "ui_keystone_instance_msg07": "Check them on Discord. By Connecting, you Acknowledge You are connecting with other humans  ",
+        "ui_keystone_instance_msg08": " and are aware of the potential explicit content.",
+        "ui_keystone_instance_msg09": "Privacy: Open",
+        "ui_keystone_instance_msg10": "Privacy: Private",
+        "ui_keystone_instance_msg11": "Privacy: Secret (Password Required)",
+        "ui_keystone_instance_msg12": "Privacy: Special",
+        "ui_keystone_instance_msg13": "Open Password Popup",
+        "ui_keystone_instance_msg14": "Connect",
 
-	"framework_modpack_updated": " updated to version ",
+        "ui_keystone_guild": "Choose an Guild",
+        "ui_keystone_guild_msg01": "Description: ",
+        "ui_keystone_guild_msg02": "Total Players: ",
+        "ui_keystone_guild_msg03": "Owner: ",
+        "ui_keystone_guild_msg04": "Ask To Join",
+        "ui_keystone_guild_msg05": "Your request is pending, wait for the owner of the Guild to handle it",
+        "ui_keystone_guild_msg06": "Leave Guild",
+        "ui_keystone_guild_msg07": "You leave the guild",
+        "ui_keystone_guild_msg08": "Create Guild",
 
-	"framework_modpack_deleted": " Delete ",
+        "ui_keystone_guild_management_pending": "Manage the new members",
+        "ui_keystone_guild_management_pending_msg01": "Accept",
+        "ui_keystone_guild_management_pending_msg02": "Refuse",
 
+        "ui_keystone_guild_management": "Manage the members",
+        "ui_keystone_guild_management_msg04": "Remove",
 
+        "ui_keystone_avatar": "Choose an Avatar",
 
+        "ui_keystone_instance_user": "Choose a User",
+        "ui_keystone_instance_user_msg01": "Selected: ",
+        "ui_keystone_instance_user_msg02": "Avatar: ",
+        "ui_keystone_instance_user_msg03": "TP to User",
+        "ui_keystone_instance_user_msg04": "Friend Request",
+        "ui_keystone_instance_user_msg07": "Unblock User",
+        "ui_keystone_instance_user_msg08": "Send Message",
+        "ui_keystone_instance_user_msg09": "Block User",
 
+        "ui_keystone_instance_owner": "Manage Player in Instance",
+        "ui_keystone_instance_owner_msg01": "Kick User",
 
-	"datapack_datapack_created": "CyberScript: Compiled Datapacks created ",
+        "ui_keystone_friend": "Choose a Friend",
+        "ui_keystone_friend_join": "Join Friend's Instance",
+        "ui_keystone_friend_delete": "Delete Friend",
+        "ui_keystone_friend_block": "Block Friend",
 
-	"datapack_error_import": "'Error during Import datatpack: (Datapack:'",
+        "editor_Housing_template_set_center_player_pos": "Set Template Anchor Point from Player Position",
+        "editor_Housing_template_export": "Export Template in JSON",
+        "editor_Housing_template_save": "Save Template for Datapack Building",
+        "editor_Housing_load_template": "Load Template",
+        "editor_Housing_apply_template": "Apply Template",
+        "editor_Housing_clear_template": "Clear Template",
+        "editor_Housing_edit_template": "Edit Template Anchor Position",
+        "editor_Housing_template_test": "Import Template to CyberScript (Test)",
+        "editor_Housing_clear_all": "Delete All Items",
 
-	"datapack_recover": "Recover Datapack has to be only with the default folder installed. Delete all others, then 'Rebuild Datapack Cache' in CyberScript Settings!",
+        "editor_Housing_apply_template_multi": "Apply Template to Current Multiplayer Place",
+        "editor_Housing_clear_all_multi": "Clear Multiplayer Place Items (BE CAREFUL, it delele all !)",
 
-	"datapack_recover_fail": "Recovery: Error during Import datatpack: (Datapack:default) ",
+        "mission_start_look_map": ". Look at you map for track the objective"
 
-	"datapack_wrong_default": "Wrong Default Datapack??? Ask in the #help-and-bugs chat in our Discord. object: ",
-
-	"datapack_updated_01": "Updated Datapack ",
-
-	"datapack_updated_02": " To it's latest Version!",
-
-
-
-	"multi_welcome": "Welcome to Cyberpunk Multiverse Server!",
-
-	"keystone_connect_btn": "Connect to CyberScript Service",
-
-	"keystone_connect_msg": "Being Connected to the Server doesn't mean Your are Connected to Multi-Player. Connected to the Server grants access to the Datapacks.",
-
-
-
-	"npc_error_nocamera": "CyberScript: No camera Found",
-
-	"npc_spawnnpc_error_vehicle": "Vehicle is not allowed, use spawn_vehicle action for it!",
-
-	"npc_spawnnpc_error_amm": "CyberScript: AMM entity is not allowed to spawn if You don't have AMM",
-
-	"npc_car_seat_full": "This car is full. Choose another one.",
-
-
-
-
-
-
-
-
-
-
-
-	"observer_callselectedcontact_msg01": "Hey V!",
-
-	"observer_callselectedcontact_msg02": "V.",
-
-	"observer_callselectedcontact_msg03": "I was thinking about You, I'll let You imagine why.",
-
-	"observer_callselectedcontact_msg04": "V, Perfect time to call!",
-
-	"observer_callselectedcontact_msg05": "V! Do You need something?",
-
-	"observer_callselectedcontact_msg06": "V! Are You ok?",
-
-	"observer_callselectedcontact_msg07": "V!",
-
-	"observer_callselectedcontact_v_answer": "How are You?",
-
-	"observer_callselectedcontact_fixer": "Downloading latest Quests into Your journal...",
-
-	"observer_callselectedcontact_unknown": "Unknown Contact",
-
-
-
-
-
-	"quest_finished": "Quest Finished: ",
-
-	"quest_start": "Starting Quest: ",
-
-	"quest_trigger": "Mission: ",
-
-
-
-	"relation_Talklater": "We will Talk later.",
-
-
-
-
-
-
-
-	"save_phone_cmaffinity": "CS Affinity: ",
-
-	"save_phone_cmservice": "CS Service: ",
-
-	"save_phone_cmfixer": "CS Fixer: Accept Quest from ",
-
-
-
-
-
-	"scripting_error": "CyberScript Scripting Error: ",
-
-	"scripting_novip01": "no VIP Found for ",
-
-	"scripting_novip02": " where the Player score is ",
-
-
-
-
-
-
-
-	"see_trigger_error": "CyberScript Trigger error: ",
-
-	"see_action_nonode": "can't find a node who has this Tag: ",
-
-	"see_action_nocurrentnode": "can't find a current node",
-
-	"see_action_nocurrentpoi": "can't find the current Poi associated with Player's Position. data:",
-
-	"see_action_nomappin": "can't find the mappin with this Tag:",
-
-	"see_action_nofasttravel": "can't find a Fast Travel point with this Tag: ",
-
-	"see_action_nocurrentfasttravel": "can't find a current fast travel point associated with Player's Position ",
-
-	"see_action_nocurrentmappin": "can't find a current custom point associated with Player's Position ",
-
-	"see_action_noPlace": "can't find a Custom Place with this Tag: ",
-
-	"see_action_noroom": "can't find a Custom Room with this Tag: ",
-
-	"see_action_nocurrentPlace": "can't find a current Custom Place associated with Player's Position",
-
-	"see_action_nocurrentroom": "can't find a current Custom Room associated with Player's Position",
-
-	"see_action_noposition": "Position is empty",
-
-	"see_action_novehicle": "Can't Find a Vehicle",
-
-	"see_action_Place_price_toohigh": "This Place can't be bought, or the price is too high for You!",
-
-	"see_action_Place_rent_toohigh": "This Place can't be rented or the price is too high for You!",
-
-	"see_action_phone_news_speaker": "CyberScript Networks",
-
-	"see_action_poup_fail": "Open,then Close Pause Menu before You Call for a Popup/Controller.",
-
-	"see_timer_already": "A Timer is already Active.",
-
-	"see_action_nopath": "There is no Path for These Two Nodes...",
-
-
-
-	"init_renew_setting": "CyberScript: Old settings have to be Found and migrated!",
-
-
-
-
-
-
-
-	"ui_setting_main": "CyberScript Settings",
-
-	"ui_setting_gameplay": "Gameplay",
-
-
-	"ui_setting_gameplay_controller": "Use Gamepad Configuration Controller mode",
-
-	"ui_setting_gameplay_radio": "Custom Radio Volume",
-
-	"ui_setting_gameplay_scroll": "CyberScript UI Scroll Speed(keep at max)",
-
-	"ui_setting_script": "Script Engine Settings",
-
-	"ui_setting_script_entity_affinity": "Scripted Entity Affinity",
-
-	"ui_setting_script_entity_affinity_msg": "Player's Gang Affinity affects Scripted/Spawned Entities From Script Engine",
-
-
-
-	"ui_setting_display": "Display",
-
-	"ui_setting_display_hud": "Show CyberScript HUD",
-
-	"ui_setting_display_hud_gang": "Show Gang Affinity on HUD",
-
-	"ui_setting_display_hud_xyz": "Display XYZ on Map when You hover over a point",
-
-
-
-	"ui_setting_actions": "Actions",
-
-	"ui_setting_actions_untrackquest": "Untrack Base Game Quest",
-
-	"ui_setting_actions_resetquest": "Clear CyberScript Quest Thread",
-
-	"ui_setting_actions_cleanthemess": "Clear all Threads (can't be in car)",
-
-	"ui_setting_actions_recalculateaffinity": "Recalculate All Affinity from Game Facts",
-
-	"ui_setting_actions_recalculateaffinity_msg": "Recalculate All Affinity (Gang and NPC), it will recalculate it from the Quests You already finished and Your choices",
-
-	"ui_setting_actions_cleareaffinity": "Clear All Affinity",
-
-	"ui_setting_actions_cleareaffinity_msg": "Clear All Affinity (Gang and NPC), it will put all to 0",
-
-	"ui_setting_actions_auto_refresh": "Auto Refresh Datapack at Pause Menu",
-
-	"ui_setting_actions_refresh": "Refresh Datapack Cache",
-
-	"ui_setting_actions_rebuild": "Rebuild Datapack Cache",
-
-	"ui_setting_actions_rebuild_done": "CyberScript: Datapack Cache rebuild",
-
-
-
-	"ui_menu": "CM menu",
-
-	"ui_menu_online": "Online Service",
-
-
-
-	"ui_menu_delete": "Delete",
-
-	"ui_setting_cheat": "CyberScript Cheat",
-	"ui_setting_cheat_infinite_doublejump": "Infinite Double Jump (require the Reinforced Tendons)",
-	"ui_setting_cheat_player_sprint": "Player Sprint Multiplier (Save and reload for apply)",
-	"ui_setting_cheat_player_run": "Player Run Multiplier (Save and reload for apply)",
-	"ui_setting_cheat_jump_height": "Player Jump Height Multiplier (Save and reload for apply)",
-	"ui_setting_cheat_doublejump_height": "Player Double Jump Height Multiplier (Save and reload for apply)",
-	"ui_setting_cheat_debug_options": "Enable Debug Menu",
-	"ui_setting_cheat_debug_log": "Enable CyberScript Log Windows",
-	"ui_setting_cheat_disable_fall_damage": "Disable Fall Damage and Animation",
-
-	"ui_setting_customsetting": "CyberScript Custom Setting",
-
-
-	"ui_multi_msg_tellto": "Send a Message To ",
-
-	"ui_multi_msg_Talkto": "Whisper To ",
-
-	"ui_multi_msg_shooto": "Shoot Message ",
-
-	"ui_multi_msg_send": "Send",
-
-	"ui_multi_msg_close": "Close",
-
-
-
-	"ui_multi_instance_password": "Set Instance Password",
-
-	"ui_multi_instance_password_msg": "Write the password of the Instance that You are trying to connect to:",
-
-
-
-	"ui_multi_instance_create": "Instance Creation",
-
-	"ui_multi_instance_create_title": "Title",
-
-	"ui_multi_instance_create_isreadonly": "Read Only (only the owner can Edit and build)",
-
-	"ui_multi_instance_create_nsfw": "NSFW (Explicit Content)",
-
-	"ui_multi_instance_create_privacy": "Privacy",
-
-	"ui_multi_instance_create_password": "Password",
-
-	"ui_multi_instance_create_valid": "Create",
-
-	"ui_multi_instance_create_close": "Close",
-
-
-
-	"ui_multi_instance_edit": "Instance Edition",
-
-	"ui_multi_instance_edit_title": "Title",
-
-	"ui_multi_instance_edit_isreadonly": "Read Only (only the owner can Edit and build)",
-
-	"ui_multi_instance_edit_nsfw": "NSFW (Explicit Content)",
-
-	"ui_multi_instance_edit_privacy": "Privacy",
-
-	"ui_multi_instance_edit_password": "Password",
-
-	"ui_multi_instance_edit_valid": "Update",
-
-	"ui_multi_instance_edit_close": "Close",
-
-
-
-	"ui_multi_instance_place_creation": "Instance Place Creation",
-
-	"ui_multi_instance_place_creation_name": "Name",
-
-	"ui_multi_instance_place_creation_tag": "Tag",
-
-	"ui_multi_instance_place_creation_x": "X",
-
-	"ui_multi_instance_place_creation_y": "Y",
-
-	"ui_multi_instance_place_creation_z": "Z",
-
-	"ui_multi_instance_place_creation_copy": "Copy XYZ from Player's Position",
-
-	"ui_multi_instance_place_creation_range": "Area(range)",
-
-	"ui_multi_instance_place_creation_zrange": "Z area (vertical range)",
-
-	"ui_multi_instance_place_creation_spawnrange": "Spawn Range",
-
-	"ui_multi_instance_place_creation_save": "Save",
-
-	"ui_multi_instance_place_creation_msg": "You need a Tag before Saving it!",
-
-	"ui_multi_instance_place_creation_close": "Close",
-
-
-
-	"ui_multi_instance_place_items": "Edit Items Position",
-
-
-
-	"ui_multi_instance_guild_create": "Guild Creation",
-
-	"ui_multi_instance_guild_faction": "Faction",
-
-	"ui_multi_instance_guild_update_desc": "Description",
-
-
-
-
-
-	"ui_buyed_items": "Place Bought Items",
-
-	"ui_multi_buyed_items": "Place Bought Items (Multi)",
-
-	"ui_datapack_choice": "Choose current Datapack Interaction",
-
-	"ui_manage_placed_item": "Manage Placed Items",
-
-	"ui_multi_manage_placed_item": "Manage Placed Items (Multi)",
-
-
-
-
-
-
-
-
-	"ui_keystone_loading": "CyberScript Loading...",
-
-	"ui_keystone_update_title": "CyberScript Update",
-	"ui_keystone_update_msg": "!!! Save your game before update !!!\n (backup your files is good too:P )",
-
-	"ui_keystone_changelog_title": "CyberScript Changelog",
-
-	"ui_keystone_backmenu": "Back to Menu",
-	"ui_keystone_refresh": "Refresh",
-
-	"ui_keystone_main_title": "CyberScript",
-	"ui_keystone_main_update_available": "New version available, Click here to Update CyberScript !",
-	"ui_keystone_main_datapack": "Datapacks",
-	"ui_keystone_main_downloaded_datapack": "Downloaded Datapacks",
-	"ui_keystone_main_corpowars": "Corpo Wars Network",
-	"ui_keystone_main_stocks": "Stock Market",
-	"ui_keystone_main_items": "Item market",
-	"ui_keystone_main_multiinfos": "Multi Info",
-	"ui_keystone_main_changelog": "CyberScript Changelog",
-	"ui_keystone_main_error": "Error, close and retry",
-
-	"ui_keystone_corpo_title": "Corpo Wars Network",
-
-	"ui_keystone_multiinfos_msg01": "Connected to CyberScript Service: ",
-	"ui_keystone_multiinfos_msg02": "Multiplayer enabled:",
-	"ui_keystone_multiinfos_msg03": "Your Corpo:",
-	"ui_keystone_multiinfos_msg04": "Rank: ",
-	"ui_keystone_multiinfos_msg05": "Cannot be changed on your own, contact an admin for ask an change.",
-	"ui_keystone_multiinfos_title": "Multiplayer Info",
-
-	"ui_keystone_stocks_msg01": "Your Money: ",
-	"ui_keystone_stocks_msg02": "Price: ",
-	"ui_keystone_stocks_msg03": "Inflate: ",
-	"ui_keystone_stocks_msg04": "Quantity: ",
-	"ui_keystone_stocks_msg05": "Buyed Quantity: ",
-	"ui_keystone_stocks_buy": "Buy",
-	"ui_keystone_stocks_sell": "Sell",
-	"ui_keystone_stocks_title": "Stock Market",
-
-	"ui_keystone_items_category_title": "Choose an Item Category",
-
-	"ui_keystone_items_title": "Item Market",
-	"ui_keystone_items_backcat": "Back to Categories",
-	"ui_keystone_items_msg01": "Your Money: ",
-	"ui_keystone_items_msg02": "Cart Total: ",
-	"ui_keystone_items_msg03": "Category: ",
-	"ui_keystone_items_msg04": "Sub Category: ",
-	"ui_keystone_items_msg05": "Flag: ",
-	"ui_keystone_items_msg06": "Price: ",
-	"ui_keystone_items_msg07": "Inflate: ",
-	"ui_keystone_items_msg08": "Quantity: ",
-	"ui_keystone_items_msg09": "Buyed Quantity: ",
-	"ui_keystone_items_msg10": "Add to Cart",
-	"ui_keystone_items_msg11": "Remove from Cart",
-
-
-	"ui_keystone_datapack": "Datapacks",
-	"ui_keystone_datapack_msg01": "Hover over a Datapack for it's Description, click on it to Manage the Datapack",
-	"ui_keystone_datapack_msg02": "Author: ",
-	"ui_keystone_datapack_msg03": "Version: ",
-	"ui_keystone_datapack_msg04": "Downloaded version: ",
-	"ui_keystone_datapack_msg05": "!!! UPDATE IS AVAILABLE !!!",
-	"ui_keystone_datapack_msg06": " (Update Available)",
-	"ui_keystone_datapack_msg07": "Require Mod version: ",
-	"ui_keystone_datapack_msg08": "Flags: ",
-	"ui_keystone_datapack_msg09": "Exclusive to your faction !",
-	"ui_keystone_datapack_msg10": "This datapack is not from CyberScript Server.",
-	"ui_keystone_datapack_msg11": " You would need to Update CyberScript first",
-	"ui_keystone_datapack_msg12": "Back to Datapack",
-	"ui_keystone_mydatapack": "Downloaded Datapacks",
-	"ui_keystone_datapack_detail": "Datapack Details",
-	"ui_keystone_datapack_detail_nope": "",
-
-
-
-	"ui_keystone_instance": "Choose an Instance",
-	"ui_keystone_instance_msg01": "Connected Players: ",
-	"ui_keystone_instance_msg02": "Owner: ",
-	"ui_keystone_instance_msg03": "readOnly: ",
-	"ui_keystone_instance_msg04": "This instance contains EXPLICIT CONTENT",
-	"ui_keystone_instance_msg05": "If you join it, we dont't take any responsabilities about what goes on in your play session. ",
-	"ui_keystone_instance_msg06": "You must respect the community rules.",
-	"ui_keystone_instance_msg07": "Check them on Discord. By Connecting, you Acknowledge You are connecting with other humans  ",
-	"ui_keystone_instance_msg08": " and are aware of the potential explicit content.",
-	"ui_keystone_instance_msg09": "Privacy: Open",
-	"ui_keystone_instance_msg10": "Privacy: Private",
-	"ui_keystone_instance_msg11": "Privacy: Secret (Password Required)",
-	"ui_keystone_instance_msg12": "Privacy: Special",
-	"ui_keystone_instance_msg13": "Open Password Popup",
-	"ui_keystone_instance_msg14": "Connect",
-
-
-	"ui_keystone_guild": "Choose an Guild",
-	"ui_keystone_guild_msg01": "Description: ",
-	"ui_keystone_guild_msg02": "Total Players: ",
-	"ui_keystone_guild_msg03": "Owner: ",
-	"ui_keystone_guild_msg04": "Ask To Join",
-	"ui_keystone_guild_msg05": "Your request is pending, wait for the owner of the Guild to handle it",
-	"ui_keystone_guild_msg06": "Leave Guild",
-	"ui_keystone_guild_msg07": "You leave the guild",
-	"ui_keystone_guild_msg08": "Create Guild",
-
-
-	"ui_keystone_guild_management_pending": "Manage the new members",
-	"ui_keystone_guild_management_pending_msg01": "Accept",
-	"ui_keystone_guild_management_pending_msg02": "Refuse",
-
-	"ui_keystone_guild_management": "Manage the members",
-	"ui_keystone_guild_management_msg04": "Remove",
-
-	"ui_keystone_avatar": "Choose an Avatar",
-
-	"ui_keystone_instance_user": "Choose a User",
-	"ui_keystone_instance_user_msg01": "Selected: ",
-	"ui_keystone_instance_user_msg02": "Avatar: ",
-	"ui_keystone_instance_user_msg03": "TP to User",
-	"ui_keystone_instance_user_msg04": "Friend Request",
-	"ui_keystone_instance_user_msg07": "Unblock User",
-	"ui_keystone_instance_user_msg08": "Send Message",
-	"ui_keystone_instance_user_msg09": "Block User",
-
-
-	"ui_keystone_instance_owner": "Manage Player in Instance",
-	"ui_keystone_instance_owner_msg01": "Kick User",
-
-	"ui_keystone_friend": "Choose a Friend",
-	"ui_keystone_friend_join": "Join Friend's Instance",
-	"ui_keystone_friend_delete": "Delete Friend",
-	"ui_keystone_friend_block": "Block Friend",
-
-
-
-	"editor_Housing_template_set_center_player_pos": "Set Template Anchor Point from Player Position",
-	"editor_Housing_template_export": "Export Template in JSON",
-	"editor_Housing_template_save": "Save Template for Datapack Building",
-	"editor_Housing_load_template": "Load Template",
-	"editor_Housing_apply_template": "Apply Template",
-	"editor_Housing_clear_template": "Clear Template",
-	"editor_Housing_edit_template": "Edit Template Anchor Position",
-	"editor_Housing_template_test": "Import Template to CyberScript (Test)",
-	"editor_Housing_clear_all": "Delete All Items",
-
-	"editor_Housing_apply_template_multi": "Apply Template to Current Multiplayer Place",
-	"editor_Housing_clear_all_multi": "Clear Multiplayer Place Items (BE CAREFUL, it delele all !)",
-
-
-	"mission_start_look_map": ". Look at you map for track the objective"
-
-
-
-
-
+    }
 
 }

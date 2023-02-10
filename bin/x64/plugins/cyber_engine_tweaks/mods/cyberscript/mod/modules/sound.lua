@@ -4,9 +4,25 @@ cyberscript.module = cyberscript.module +1
 
 function PlaySound(sound,isradio,needrepeat)
 	
+	local playsound = sound.tag
+	
+	if sound.language ~= nil then
+		
+		if sound.language[cyberscript.language] ~= nil then
+		
+			playsound = sound.language[cyberscript.language]
+		
+		else
+			
+			if sound.language["default"] ~= nil then
+				playsound = sound.language["default"]
+			end
+		end
+	
+	end
 	
 	local audioEvent = SoundPlayEvent.new()
-	audioEvent.soundName = sound.tag
+	audioEvent.soundName = playsound
 	Game.GetPlayer():QueueEvent(audioEvent)
 	local times = os.date()
 	
@@ -23,8 +39,25 @@ end
 
 function Stop(sound)
 	
+	local playsound = sound.tag
+	
+	if sound.language ~= nil then
+		
+		if sound.language[cyberscript.language] ~= nil then
+		
+			playsound = sound.language[cyberscript.language]
+		
+		else
+			
+			if sound.language["default"] ~= nil then
+				playsound = sound.language["default"]
+			end
+		end
+	
+	end
+	
 	local audioEvent = SoundStopEvent.new()
-	audioEvent.soundName = sound
+	audioEvent.soundName = playsound
 	Game.GetPlayer():QueueEvent(audioEvent)
 	cyberscript.soundmanager[sound] = nil
 	

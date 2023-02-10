@@ -320,9 +320,9 @@ function getNPCCallableByAffinity()
 			if(v.data.display == "phone_service")then
 			
 				local contactdata = {}
-				contactdata.name =  v.data.name
+				contactdata.name =  getLang(v.data.name)
 				contactdata.id =  v.data.tag
-				contactdata.avatarID = "Character.Delamain"
+				contactdata.avatarID = "PhoneAvatars.Avatar_Unknown"
 				contactdata.phonetype = "Service"
 				
 				table.insert(contactList,contactdata)

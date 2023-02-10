@@ -1065,7 +1065,7 @@ end
 							
 							if(#value > 0) then
 								for i=1,#value do
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
 									cyberscript.cache["circuit"][value[i].tag] = {}
 									cyberscript.cache["circuit"][value[i].tag].data = value[i]
@@ -1087,10 +1087,11 @@ end
 						end
 						elseif(objtype == "choice") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
-							rootpath = path
+							
 							if(#value > 0) then
 								for i=1,#value do
+									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
+									rootpath = path
 									cyberscript.cache["choice"][tostring(value[i].tag)] = {}
 									cyberscript.cache["choice"][tostring(value[i].tag)].data = value[i]
 									cyberscript.cache["choice"][tostring(value[i].tag)].file = path
@@ -1102,7 +1103,8 @@ end
 								end
 							else
 								if(value.tag ~= nil) then
-								
+									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+									rootpath = path
 									cyberscript.cache["choice"][tostring(value.tag)] = {}
 									cyberscript.cache["choice"][tostring(value.tag)].data = value
 									cyberscript.cache["choice"][tostring(value.tag)].file = path
@@ -1313,13 +1315,17 @@ end
 							cyberscript.cache["interfaces"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "lang") then
-						local path = "datapack/"..datapackname.."/"..objtype.."/"
-						rootpath = path
+						
 						for key, value in pairs(tabl) do 
-							for k, v in pairs(value) do 
-								
-								lang[k] = v
-							end
+							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							rootpath = path
+							cyberscript.cache["lang"][value.tag] = {}
+							cyberscript.cache["lang"][value.tag].data = value
+							cyberscript.cache["lang"][value.tag].file = path
+							cyberscript.cache["lang"][value.tag].datapack = datapackname
+							cyberscript.cache["lang"][value.tag].scripttype = "lang"
+						
+							
 						end
 						elseif(objtype == "mission") then
 						for key, value in pairs(tabl) do 
@@ -1334,10 +1340,11 @@ end
 						end
 						elseif(objtype == "node") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
-							rootpath = path
+							
 							if(#value > 0) then
 								for i=1,#value do
+									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
+									rootpath = path
 									cyberscript.cache["node"][tostring(value[i].tag)] = {}
 									cyberscript.cache["node"][tostring(value[i].tag)].data = value[i]
 									cyberscript.cache["node"][tostring(value[i].tag)].file = path
@@ -1347,6 +1354,8 @@ end
 								
 							else
 								if(value.tag ~= nil) then
+									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+									rootpath = path
 									cyberscript.cache["node"][tostring(value.tag)] = {}
 									cyberscript.cache["node"][tostring(value.tag)].data = value
 									cyberscript.cache["node"][tostring(value.tag)].file = path
@@ -1473,11 +1482,12 @@ end
 						end
 						elseif(objtype == "sound") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
-							rootpath = path
+							
 							
 							if(#value > 0) then
 								for i=1,#value do
+									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
+									rootpath = path
 									cyberscript.cache["sound"][value[i].tag] = {}
 									cyberscript.cache["sound"][value[i].tag].data = value[i]
 									cyberscript.cache["sound"][value[i].tag].file = path
@@ -1488,6 +1498,8 @@ end
 								
 							else
 								if(value.tag ~= nil) then
+									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+									rootpath = path
 									cyberscript.cache["sound"][value.tag] = {}
 									cyberscript.cache["sound"][value.tag].data = value
 									cyberscript.cache["sound"][value.tag].file = path

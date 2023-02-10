@@ -311,7 +311,7 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 	MasterVolume = Game.GetSettingsSystem():GetVar("/audio/volume", "MasterVolume")
 	UIPopupsManager.Inititalize()
 	playerDeltaPos = Vector4.new(0, 0, 0, 1)
-
+	cyberscript.language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
 	targetS = Game.GetTargetingSystem()
 	tp = Game.GetTeleportationFacility()
 	SfxVolume = Game.GetSettingsSystem():GetVar("/audio/volume", "SfxVolume")
@@ -621,6 +621,7 @@ function inGameInit() -- init some function after save loaded
 
 pcall(function()
 	Game.GetSettingsSystem():GetVar("/gameplay/performance", "CrowdDensity"):SetValue("High")
+	cyberscript.language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
 end)
 	print(getLang("seestarted"))
 end

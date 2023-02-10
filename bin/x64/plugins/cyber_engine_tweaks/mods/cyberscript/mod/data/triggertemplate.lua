@@ -784,4 +784,11 @@ return {
 		["tag"] = "judy01",
 		["name"] = "entity_hash",
 	},
+	
+	["game_language"] = {
+		["helper"] = "This trigger will be triggered when game language is same than value. Can be : \n de-de,\n en-us,\n fr-fr,\n pl-pl,\n es-es,\n es-mx,\n it-it,\n kr-kr,\n zh-cn,\n zh-tw,\n ru-ru,\n jp-jp,\n ar-ar,\n cz-cz,\n hu-hu,\n tr-tr,\n pt-br",
+		["helperTitle"] = "Game : Language",
+		["value"] = "fr-fr",
+		["name"] = "game_language",
+	},
 }

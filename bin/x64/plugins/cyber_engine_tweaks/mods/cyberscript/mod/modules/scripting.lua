@@ -4268,10 +4268,50 @@ end
 
 function getLang(text)
 	
-	if(lang[text] ~= nil and lang[text] ~= "" )then
+	
+	
+	
+	if(cyberscript.language ~= nil and cyberscript.cache["lang"] ~= nil )then
 		
-		return lang[text]	
+		for k,languagefile in pairs(cyberscript.cache["lang"]) do
+			
+			if(languagefile.data.languages[cyberscript.language] ~= nil and languagefile.data.languages[cyberscript.language][text] ~= nil) then
+			
+				return languagefile.data.languages[cyberscript.language][text]
+			
+			end
+			
+			
+			
+		end
+		
+		
+		for k,languagefile in pairs(cyberscript.cache["lang"]) do
+			
+			if(languagefile.data.languages["default"] ~= nil and languagefile.data.languages["default"][text] ~= nil) then
+			
+				return languagefile.data.languages["default"][text]
+			
+			end
+			
+			
+			
+		end
+		
+		
+		
+		
+	
+		
+		
+		
 	end	
+	
+	if(lang["default"] ~= nil and lang["default"][text] ~= nil and lang["default"][text] ~= "" )then
+		
+			return lang["default"][text]	
+		
+	end
 	
 	return text
 	

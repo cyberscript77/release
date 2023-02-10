@@ -4034,7 +4034,7 @@ function createDialog(dialog)
 			icon = TweakDBInterface.GetChoiceCaptionIconPartRecord("ChoiceCaptionParts."..option.icon)
 		end
 		
-		local choice1 = interactionUI.createChoice(option.description, icon , gameinteractionsChoiceType.Selected) -- Icon and choiceType are optional
+		local choice1 = interactionUI.createChoice(getLang(option.description), icon , gameinteractionsChoiceType.Selected) -- Icon and choiceType are optional
 		table.insert(choicelist,choice1)
 	end
 	
@@ -4114,7 +4114,7 @@ end
 
 function getDialogOwner(speaker)
 	
-	local result = speaker
+	local result = getLang(speaker)
 	
 	if(speaker == "any") then
 		if(currentNPC ~= nil) then
@@ -4122,7 +4122,7 @@ function getDialogOwner(speaker)
 			elseif(currentStar ~= nil) then
 			result = currentStar.Names
 			else
-			result = speaker
+			result = getLang(speaker)
 		end
 	end
 	

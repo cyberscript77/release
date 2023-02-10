@@ -1196,6 +1196,8 @@ cyberscript.module = cyberscript.module +1
 		sessionFile:write(JSON:encode_pretty(arrayUserSetting))
 		sessionFile:close()
 		
+		cyberscript.language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
+		
 		if(AutoRefreshDatapack == true) then
 			LoadDataPackCache()
 		end
@@ -1319,9 +1321,9 @@ cyberscript.module = cyberscript.module +1
 				for k,v in pairs(mappinManager) do 
 					local mappin = v
 					
-					if(mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
+					if(k ~= "selected_mappin" and k ~= "selected_fasttravel_mappin" and mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
 						
-						print(k)
+						
 						SelectedScriptMappin = mappin
 						break
 					end
@@ -5462,7 +5464,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		local interact = cyberscript.cache["interact"][data.localizedName].data
 		
 		
-		self.label:SetText(interact.name)
+		self.label:SetText(getLang(interact.name))
 		
 	
 		if(interact	 ~= nil) then
@@ -5504,7 +5506,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		
 			local dialogoption = currentDialogHub.dial.options[interactionUI.selectedIndex+1]
 		
-			if(dialogoption ~= nil and dialogoption.description == self.ActiveTextRef:GetText()) then
+			if(dialogoption ~= nil and getLang(dialogoption.description) == self.ActiveTextRef:GetText()) then
 				
 			
 				
@@ -5545,7 +5547,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 				
 				for i,v in ipairs(currentDialogHub.dial.options) do
 					
-					if(v.description == self.ActiveTextRef:GetText() and v.description ~=  currentDialogHub.dial.options[interactionUI.selectedIndex+1].description) then
+					if(getLang(v.description) == self.ActiveTextRef:GetText() and getLang(v.description) ~=  getLang(currentDialogHub.dial.options[interactionUI.selectedIndex+1].description)) then
 					
 					dialogoption_unselect = v
 					
@@ -5568,7 +5570,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 					
 						else
 						
-							self.ActiveTextRef:SetTintColor(HDRColor.new({ Red=0.368627, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
+						self.ActiveTextRef:SetTintColor(HDRColor.new({ Red=0.368627, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
 						self.InActiveTextRef:SetTintColor(HDRColor.new({ Red=1, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
 			
 					
@@ -7507,7 +7509,7 @@ function listenPlayerInput(action)
 								runActionList(possibleInteractDisplay[currentPossibleInteractChunkIndex][i].action,possibleInteractDisplay[currentPossibleInteractChunkIndex][i].tag,"interact",false,"player")
 								if(currentHouse == nil or (currentHouse ~= nil and interactautohide == true)) then
 									currentPossibleInteractChunkIndex = 0
-									logme(1,"lol")
+									
 									createInteraction(false)
 									candisplayInteract = false
 								end

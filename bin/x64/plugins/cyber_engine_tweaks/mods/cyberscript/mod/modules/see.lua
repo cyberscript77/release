@@ -1695,6 +1695,11 @@ function scriptcheckTrigger(trigger)
 				
 			end
 			
+			if(trigger.name== "game_language") then
+			
+				result = cyberscript.language == trigger.value
+			
+			end
 		end
 		
 		if relationregion then
@@ -6307,7 +6312,7 @@ end
 				phoneCallInfo.isRejectable = action.isrejectable
 				GameController["IncomingCallGameController"]:GetRootWidget():SetVisible(true)
 				inkTextRef.SetLetterCase(GameController["IncomingCallGameController"].contactNameWidget, textLetterCase.UpperCase)
-				inkTextRef.SetText(GameController["IncomingCallGameController"].contactNameWidget, action.caller)
+				inkTextRef.SetText(GameController["IncomingCallGameController"].contactNameWidget, getLang(action.caller))
 				inkWidgetRef.SetVisible(GameController["IncomingCallGameController"].buttonHint,  action.isrejectable)
 				currentPhoneCall = action
 				GameController["IncomingCallGameController"]:GetRootWidget():SetVisible(true)
@@ -6331,8 +6336,8 @@ end
 				GameController["HudPhoneGameController"].RootWidget:SetVisible(true)
 				inkWidgetRef.SetVisible(GameController["HudPhoneAvatarController"].ContactAvatar, true)
 				
-				inkTextRef.SetText(GameController["HudPhoneAvatarController"].StatusText, action.desc)
-				inkTextRef.SetText(GameController["HudPhoneAvatarController"].ContactName,action.caller)
+				inkTextRef.SetText(GameController["HudPhoneAvatarController"].StatusText, getLang(action.desc))
+				inkTextRef.SetText(GameController["HudPhoneAvatarController"].ContactName,getLang(action.caller))
 				InkImageUtils.RequestSetImage(GameController["HudPhoneAvatarController"], GameController["HudPhoneAvatarController"].ContactAvatar, "PhoneAvatars."..action.image)
 				inkWidgetRef.SetVisible(GameController["HudPhoneAvatarController"].SignalRangeIcon, true)
 				inkWidgetRef.SetVisible(GameController["HudPhoneAvatarController"].WaveformPlaceholder, true)
@@ -6395,7 +6400,7 @@ end
 				dialogLine.text  = getLang(action.title)
 				dialogLine.type  = action.type
 				dialogLine.speaker = Game.GetPlayer()
-				dialogLine.speakerName  = action.speaker
+				dialogLine.speakerName  = getLang(action.speaker)
 				local candotext = true
 				if(action.speaker == "current_phone_npc") then
 					if(currentNPC ~= nil) then
@@ -6424,7 +6429,7 @@ end
 					end
 					candotext = true
 					else
-					dialogLine.speakerName = action.speaker
+					dialogLine.speakerName = getLang(action.speaker)
 					candotext = true
 				end
 				
@@ -6457,7 +6462,7 @@ end
 				dialogLine.text  = getLang(action.title)
 				dialogLine.type  = 5
 				dialogLine.speaker = Game.GetPlayer()
-				dialogLine.speakerName  = action.speaker
+				dialogLine.speakerName  =  getLang(action.speaker)
 				local candotext = true
 				if(action.speaker == "current_phone_npc") then
 					if(currentNPC ~= nil) then
@@ -6486,7 +6491,7 @@ end
 					end
 					candotext = true
 					else
-					dialogLine.speakerName = action.speaker
+					dialogLine.speakerName =  getLang(action.speaker)
 					
 					if(action.usecorponews == true) then
 						if(#corpoNews > 0) then
@@ -6524,7 +6529,7 @@ end
 				dialogLine.text  = getLang(action.title[tago])
 				dialogLine.type  = action.type
 				dialogLine.speaker = Game.GetPlayer()
-				dialogLine.speakerName  = action.speaker
+				dialogLine.speakerName  =  getLang(action.speaker)
 				local candotext = true
 				if(action.speaker == "current_phone_npc") then
 					if(currentNPC ~= nil) then
@@ -6543,7 +6548,7 @@ end
 					dialogLine.speakerName = obj.name
 					candotext = true
 					else
-					dialogLine.speakerName = action.speaker
+					dialogLine.speakerName =  getLang(action.speaker)
 					candotext = true
 				end
 				if(candotext == true) then
@@ -6577,7 +6582,7 @@ end
 					dialogLine.type  = action.type
 					local candotext = true
 					dialogLine.speaker = enti
-					dialogLine.speakerName  = action.speaker
+					dialogLine.speakerName  =  getLang(action.speaker)
 					if(action.speaker == "current_phone_npc") then
 						if(currentNPC ~= nil) then
 							dialogLine.speakerName  = currentNPC.Names
@@ -6633,7 +6638,7 @@ end
 					dialogLine.type  = action.type
 					local candotext = true
 					dialogLine.speaker = enti
-					dialogLine.speakerName  = action.speaker
+					dialogLine.speakerName  =  getLang(action.speaker)
 					if(action.speaker == "current_phone_npc") then
 						if(currentNPC ~= nil) then
 							dialogLine.speakerName  = currentNPC.Names
@@ -7740,6 +7745,8 @@ end
 				if action.isradio ~= nil then isradio = action.isradio end
 				if action.needrepeat ~= nil then needrepeat = action.needrepeat end
 				
+				
+				
 				PlaySound(path,isradio,needrepeat)
 				else
 				error("No sound founded")
@@ -7747,7 +7754,8 @@ end
 		end
 	
 		if(action.name == "stop_custom_sound") then 
-			Stop(action.value)
+			local path = cyberscript.cache["sound"][action.value].data
+			Stop(path)
 		end
 		if(action.name == "setGameVolume") then 
 			SetSoundSettingValue(action.value, action.score)

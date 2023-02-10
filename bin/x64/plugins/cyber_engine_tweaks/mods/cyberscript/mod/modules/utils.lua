@@ -451,24 +451,7 @@ function ImportLanguage()
 	
 	f:close()
 	
-	if file_exists("mod/lang/language.json") then
-		logme(2,"Language founded... overwrite default")
-		
-		local f = io.open("mod/lang/language.json")
-		
-		lines = f:read("*a")
-		if(lines ~= "") then
-			newlang =  trydecodeJSOn(lines, f,"mod/lang/language.json")
-			for key, value in pairs(newlang) do 
-				
-				lang[key] = value
-			end
-		end
-		
-		f:close()
-	end
 	
-	logme(2,lang.testOverwrite)
 	
 	return true
 end
@@ -2130,4 +2113,10 @@ function TweakDbextract(data)
 	end
 	
 	return data
+end
+
+
+function getGameLang()
+    local l = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
+    return l
 end
