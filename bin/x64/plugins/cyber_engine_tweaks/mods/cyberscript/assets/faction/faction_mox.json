@@ -14,6 +14,9 @@
 		"Character.kab_the_mox_1_ranged1_lexington_wa",
 		"Character.kab_the_mox_1_ranged1_pulsar_wa"
 	],
+	"keyword": [
+		"mox"
+	],
 	"spawnable_vehicle": [
 		"Vehicle.cs_savable_villefort_alvarado_mox",
 		"Vehicle.v_sport2_villefort_alvarado_mox",

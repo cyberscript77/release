@@ -6,6 +6,9 @@
 	"district_tag": "district_santodomingo",
 	"logo": "logo_kangtao",
 	"name": "Kang Tao",
+	"keyword": [
+		"kangtao"
+	],
 	"rivals": [
 		"faction_voodooboys",
 		"faction_scavengers",

@@ -12,6 +12,9 @@
 		"faction_ncpd",
 		"faction_tygerclaws"
 	],
+	"keyword": [
+		"maelstrom"
+	],
 	"spawnable_npc": [
 		"Character.cpz_maelstrom_grunt2_ranged2_ajax_wa",
 		"Character.cpz_maelstrom_grunt1_ranged1_copperhead_ma",

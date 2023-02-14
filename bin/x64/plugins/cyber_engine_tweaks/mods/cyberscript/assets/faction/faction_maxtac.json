@@ -15,6 +15,9 @@
 		"faction_voodooboys",
 		"faction_wraiths"
 		],
+		"keyword": [
+		"max_tac","maxtac"
+	],
 	"spawnable_npc":[
 	"Character.mq030_max_tac",
 	"Character.q001_maxtac_fem",

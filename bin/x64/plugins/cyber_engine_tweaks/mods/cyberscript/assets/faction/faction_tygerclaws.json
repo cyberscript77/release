@@ -6,6 +6,9 @@
 	"attitude_group": [		
 		"q105_tyger_claws"
 	],
+	"keyword": [
+		"tyger"
+	],
 	"rivals": [
 		"faction_mox",
 		"faction_militech",

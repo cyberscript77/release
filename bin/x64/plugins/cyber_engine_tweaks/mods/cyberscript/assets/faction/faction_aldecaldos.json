@@ -8,6 +8,9 @@
 		"aldecaldos"
 	],
 	"rivals": ["faction_wraiths"],
+	"keyword": [
+		"adelcaldos"
+	],
 	"spawnable_npc": [
 		"Character.wwd_adelcaldos_grunt1_ranged1_pulsar_ma",
 		"Character.adelcaldos_grunt1_ranged1_nova_wa",

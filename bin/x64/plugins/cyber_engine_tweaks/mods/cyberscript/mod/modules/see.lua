@@ -1268,13 +1268,52 @@ function scriptcheckTrigger(trigger)
 					local group = Game.NameToString(targetAttAgent:GetAttitudeGroup())
 					local npcCurrentName = Game.NameToString(enti:GetCurrentAppearanceName())
 					local faction = getFactionByTag(trigger.faction)
+					
+					local resultent,msg = pcall(function() enti:GetRecordID() end)
+								
+					
+					if(resultent == true and enti:GetRecordID().hash ~= nil and cyberscript.entitieshash[tostring(enti:GetRecordID().hash)] ~= nil) then
+									
+					local entity = cyberscript.entitieshash[tostring(enti:GetRecordID().hash)]
+									
+									
+									if(entity ~= nil) then
+										
+										if(faction ~= nil) then
+											for y=1,#faction.spawnable_npc do
+											
+											
+												
+												if(string.find(entity.entity_tweak,faction.spawnable_npc[y]) ~= nil)then
+													result = true
+												end
+											end
+											if(result == false) then
+											for y=1,#faction.keyword do
+											
+											
+												
+												if(string.find(entity.entity_tweak,faction.keyword[y]) ~= nil)then
+													result = true
+												end
+											end
+											end
+										end
+										
+									end
+	else
+									
 					if(faction ~= nil) then
 						for y=1,#faction.attitude_group do
+						
+						
+							
 							if(string.find(group,faction.attitude_group[y]) ~= nil or string.find(npcCurrentName,faction.attitude_group[y]) ~= nil)then
 								result = true
 							end
 						end
 					end
+				end
 				end
 			end
 			if(trigger.name == "check_gang_district_score") then

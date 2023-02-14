@@ -4,6 +4,9 @@
 	"logo":"ico_district_center_large",
 	"tag": "faction_trauma",
 	 "attitude_group": ["ncpd", "police"],
+	 "keyword": [
+		"trauma"
+	],
 	"rivals":[
 		"faction_aldecaldos",
 		"faction_animals",

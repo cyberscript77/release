@@ -2631,7 +2631,7 @@ return {
 		["title"] = "Judy Alvarez",
 	},
 	["attitude_entity_against_entity"] = {
-		["attitude"] = "hostile||companion||passive",
+		["attitude"] = "hostile||companion||passive||friendly||psycho",
 		["help"] = "companion will work only for entity player",
 		["helperTitle"] = "Entity : change attitude against another entity",
 		["helper"] = "This action will change attitude of a custom entity to another one",

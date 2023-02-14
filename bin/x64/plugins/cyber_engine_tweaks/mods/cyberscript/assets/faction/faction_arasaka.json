@@ -12,6 +12,9 @@
 		"faction_militech",
 		"faction_afterlife"
 	],
+	"keyword": [
+		"arasaka","smasher"
+	],
 	"spawnable_npc": [
 		"Character.arasaka_bodyguard_ranged3_masamune_mb_rare",
 		"Character.arasaka_cyborg_franged3_shingen_ma_elite",

@@ -4,6 +4,9 @@
 	"tag": "faction_delamain",
 	"attitude_group": ["civilian"],
 	"rivals": ["faction_kangtao"],
+	"keyword": [
+	
+	],
 	"spawnable_npc": [
 		"Character.CitizenBikerFemale",
 		"Character.CitizenBikerMale",

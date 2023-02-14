@@ -17,6 +17,9 @@
 		"faction_voodooboys",
 		"faction_wraiths"
 	],
+	"keyword": [
+		"police"
+	],
 	"spawnable_npc": [
 		"Character.Police",
 		"Character.PoliceWoman",

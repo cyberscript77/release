@@ -10,6 +10,9 @@
 	"rivals": [
 		"faction_aldecaldos"
 	],
+	"keyword": [
+		"wraiths"
+	],
 	"spawnable_npc": [
 		"Character.wraiths_grunt2_ranged2_copperhead_wa",
 		"Character.wraiths_prisoner_fmelee3_fists_ma_elite",

@@ -15,6 +15,9 @@
 		"faction_militech",
 		"faction_mox"
 	],
+	"keyword": [
+		"scavenger"
+	],
 	"spawnable_npc": [
 		"Character.cvi_scavenger_butcher3_hmelee2_machete_mb_rare",
 		"Character.cvi_scavenger_elite3_sniper2_grad_ma",

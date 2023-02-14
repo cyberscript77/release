@@ -8,6 +8,9 @@
         "animals_ow"
 	],
 	"rivals": ["faction_voodooboys", "faction_mox", "faction_wraiths", "faction_arasaka", "faction_valentinos"],
+	"keyword": [
+		"animals"
+	],
 	"spawnable_npc": [
 		"Character.q110_mall_animals_bouncer3_hmelee3_fists_mba_elite",
 		"Character.q110_mall_animals_grunt1_ranged1_nova_mb",

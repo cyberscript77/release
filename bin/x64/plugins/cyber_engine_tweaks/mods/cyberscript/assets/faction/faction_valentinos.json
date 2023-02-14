@@ -9,6 +9,9 @@
 	"rivals": [
 		"faction_sixthstreet", "faction_ncpd", "faction_militech", "faction_maelstrom", "faction_tygerclaws", "faction_scavengers"
 	],
+	"keyword": [
+		"valentinos"
+	],
 	"spawnable_npc": [
 		"Character.gle_valentinos_grunt2_melee2_machete_wa",
 		"Character.gle_valentinos_grunt1_ranged1_nova_ma",

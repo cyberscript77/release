@@ -13,6 +13,9 @@
 		"faction_kangtao",
 		"faction_afterlife"
 	],
+	"keyword": [
+		"militech"
+	],
 	"spawnable_npc": [
 		"Character.bls_se_militech_ranger1_ranged1_saratoga_ma",
 		"Character.bls_se_militech_tech_franged2_omaha_ma_rare",

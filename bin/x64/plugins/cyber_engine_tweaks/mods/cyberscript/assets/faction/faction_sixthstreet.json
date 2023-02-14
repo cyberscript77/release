@@ -11,6 +11,9 @@
     "rivals": [
         "faction_valentinos"
     ],
+	"keyword": [
+		"6th_street"
+	],
     "spawnable_npc": [
         "Character.mq008_6th_street_civ_judge_ma",
         "Character.mq008_6th_street_civ_judge_wa",
