@@ -506,15 +506,15 @@ end
 
 function displayGangScore(score, libelle)
 	local colorclass = "28F0FF"
-	local state = lang.Neutral
+	local state = getLang("Neutral")
 	
 	if(score > 0) then
 		colorclass = "009933"
-		state = lang.Friendly
+		state = getLang("Friendly")
 		elseif(score < 0) then
 		
 		colorclass = "ff0000"
-		state = lang.Hostile
+		state = getLang("Hostile")
 		
 	end
 	
@@ -528,7 +528,7 @@ end
 
 function displayGangScoreWidget(score, libelle,parent,top,isleader)
 	
-	local state = lang.Neutral
+	local state = getLang("Neutral")
 	local descText = inkText.new()
 	
 	if(score ~= nil) then
@@ -540,14 +540,14 @@ function displayGangScoreWidget(score, libelle,parent,top,isleader)
 	
 	if(score > 0) then
 		
-		state = lang.Friendly
+		state = getLang("Friendly")
 		
 		descText:SetTintColor(gamecolor(0,255,120,1))
 		
 		elseif(score < 0) then
 		descText:SetTintColor(gamecolor(223,10,10,1))
 		
-		state = lang.Hostile
+		state = getLang("Hostile")
 		
 	end
 	
