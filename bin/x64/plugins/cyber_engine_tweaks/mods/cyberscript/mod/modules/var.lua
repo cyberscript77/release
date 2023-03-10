@@ -161,6 +161,8 @@ function resetVar()
 	anim_rigs_list = {}
 	
 	
+	 currentObjectiveId = 0
+	 
 	
 	
 	
@@ -280,6 +282,10 @@ function resetVar()
 	currentScannerEntity = nil
 	
 	
+	
+	contractTypeLevel = 3 -- gameJournalQuestType.Contract
+	maxNestedLevel = 7
+	
 	fetcheddata = nil
 	npcpreventionlimit = 99999
 	
@@ -308,6 +314,9 @@ function resetVar()
 	enableCustomQuest = true
 	InfiniteDoubleJump = false
 	DisableFallDamage = false
+	Immortal = false
+	InfiniteStamina = false
+	InfiniteAmmo = false
 	
 	Player_Sprint_Multiplier = 1	--Default is 1 IMPORTANT as of 1.3, movement speed is capped somewhere.
 	Player_Run_Multiplier = 1 --Default 1

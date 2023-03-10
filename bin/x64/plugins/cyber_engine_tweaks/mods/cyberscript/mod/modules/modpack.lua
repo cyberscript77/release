@@ -1603,7 +1603,7 @@ end
 							cyberscript.cache["character"][value.name].data = value
 							cyberscript.cache["character"][value.name].file = path
 							cyberscript.cache["character"][value.name].datapack = datapackname
-							cyberscript.cache["character"][value.tag].scripttype = objtype
+							cyberscript.cache["character"][value.name].scripttype = objtype
 						end
 						elseif(objtype == "quickhack") then
 						for key, value in pairs(tabl) do 
@@ -1686,6 +1686,7 @@ end
 			data.id = questos.tag
 			data.title = getLang(questos.title)
 			data.description = getLang(questos.content)
+			data.extra = questos.extra
 			data.metadata = {}
 			data.metadata.level = questos.recommandedlevel
 			data.metadata.questType = questos.questtype
@@ -1718,6 +1719,7 @@ end
 		data.id = questos.tag
 		data.title = getLang(questos.title)
 		data.description = getLang(questos.content)
+		data.extra = questos.extra
 		data.metadata = {}
 		data.metadata.level = questos.recommandedlevel
 		data.metadata.questType = questos.questtype

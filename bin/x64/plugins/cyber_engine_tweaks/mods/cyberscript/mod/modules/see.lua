@@ -98,6 +98,8 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
+			
+			
 			if(trigger.name == "entity_tag_exist") then
 				result = cyberscript.EntityManager[trigger.tag] ~= nil
 			end
@@ -167,6 +169,16 @@ function scriptcheckTrigger(trigger)
 				if(enti ~= nil) then
 					--logme(3,"entity is active"..tostring(enti:IsActive()))
 					if (enti:IsDead() == true or enti:IsActive() == false)then
+						result = true
+					end
+				end
+			end
+			if(trigger.name == "entity_is_alive") then
+				local obj = getEntityFromManager(trigger.tag)
+				local enti = Game.FindEntityByID(obj.id)	
+				if(enti ~= nil) then
+					--logme(3,"entity is active"..tostring(enti:IsActive()))
+					if (enti:IsDead() == false and enti:IsActive() == true)then
 						result = true
 					end
 				end
@@ -344,6 +356,29 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
+			if(trigger.name == "entity_to_relative_entity_position") then
+				local obj = getEntityFromManager(trigger.tag)
+				local enti = Game.FindEntityByID(obj.id)	
+				local obj2 = getEntityFromManager(trigger.target)
+				local target = Game.FindEntityByID(obj2.id)	
+				if(enti ~= nil and target ~= nil) then
+					--logme(3,"test")
+					local entityposition = enti:GetWorldPosition()
+					local playerpos = target:GetWorldPosition()
+					
+						local targetedPostion = {}
+						targetedPostion.x = playerpos.x + trigger.x
+						targetedPostion.y = playerpos.y + trigger.y
+						targetedPostion.z = playerpos.z + trigger.z
+					
+				
+					if check3DPos(entityposition, targetedPostion.x, targetedPostion.y, targetedPostion.z,trigger.range) then
+						result = true
+						
+						
+					end
+				end
+			end
 			if(trigger.name == "entity_inbuilding")then
 				local obj = getEntityFromManager(trigger.tag)
 				local enti = Game.FindEntityByID(obj.id)	
@@ -511,10 +546,10 @@ function scriptcheckTrigger(trigger)
 						if(enti ~= nil) then
 							--logme(3,"entity is active"..tostring(enti:IsActive()))
 							if (enti:IsDead() == true or enti:IsActive() == false)then
-								--logme(3,"npc have be killed")
+							
 								enemy_count = enemy_count + 1
 							end
-							elseif(obj.id == nil) then
+						elseif(obj.id == nil or enti == nil) then
 							enemy_count = enemy_count + 1
 						end
 					end
@@ -561,6 +596,13 @@ function scriptcheckTrigger(trigger)
 			
 			if(trigger.name == "player_is_hit") then
 				result = PlayerisHitten
+			end
+			
+			if(trigger.name == "player_death") then
+				if(inMenu and ActiveMenu == "DeathMenu")then
+					result = true
+					
+				end
 			end
 			
 			-- if(trigger.name == "check_perk") then
@@ -718,7 +760,7 @@ function scriptcheckTrigger(trigger)
 				if (inVehicule) then
 					local vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
 					--logme(3,vehicule:GetDisplayName())
-					local isThiscar = (string.find(string.lower(vehicule:GetDisplayName()), trigger.value) ~= nil)
+					local isThiscar = (string.find(string.lower(Game.NameToString(vehicule:GetCurrentAppearanceName())), trigger.value) ~= nil)
 					if isThiscar then
 						result = true
 					end
@@ -733,7 +775,7 @@ function scriptcheckTrigger(trigger)
 				if (inVehicule) then
 					local vehicule = Game['GetMountedVehicle;GameObject'](enti)
 					--logme(3,vehicule:GetDisplayName())
-					local isThiscar = (string.find(string.lower(vehicule:GetDisplayName()), trigger.value) ~= nil)
+					local isThiscar = (string.find(string.lower(vehicule:GetCurrentAppearanceName()), trigger.value) ~= nil)
 					if isThiscar then
 						result = true
 					end
@@ -811,7 +853,7 @@ function scriptcheckTrigger(trigger)
 			end
 			if(trigger.name == "custom_variable" or trigger.name == "check_variable" or  trigger.name == "check_score") then
 				local score = getVariableKey(trigger.variable,trigger.key)
-				
+			
 				if(trigger.operator== nil) then
 					
 					if(score ~= nil and score == trigger.value) then
@@ -819,16 +861,16 @@ function scriptcheckTrigger(trigger)
 					end
 					
 				else
-					
 					if(type(score) == "number") then
 						
-						
+		
 						if(checkValue(trigger.operator,score,trigger.value, trigger.min, trigger.max)) then
-							
+						
 							result = true
 							
 						end
 					else
+		
 						if(trigger.operator == "=") then
 							
 							if(score ~= nil and score == trigger.value) then
@@ -1949,8 +1991,8 @@ function scriptcheckTrigger(trigger)
 				end
 				if(trigger.window == "phone")then
 					if(tostring(openPhoneDialogWindow) ==  string.lower(tostring(trigger.value)	)) then 
-						--logme(3,openPhoneDialogWindow)
-						result = true
+					                                                                           	--logme(3,openPhoneDialogWindow)
+					                                                                           	result = true
 					end
 				end
 				if(trigger.window == "event")then
@@ -1968,7 +2010,7 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name == "timer_is_finished") then
 				if(currentTimer ~= nil) then
 					
-					if( tick > currentTimer.time) then
+					if( os.time(os.date("!*t"))+0  > currentTimer.time) then
 						
 						
 						result = true
@@ -2285,6 +2327,9 @@ function scriptcheckTrigger(trigger)
 	end
 	
 	end
+	
+	if(trigger.expected ~= nil and trigger.name ~= "compare") then result = result == trigger.expected end
+	
 	return result
 end
 
@@ -2292,6 +2337,7 @@ end
 --execute actions core function
 function executeAction(action,tag,parent,index,source,executortag)
 	local result = true
+	local canDoaction = true
 	actionistaken = true
 	
 	if(action.tag == "this") then
@@ -2300,8 +2346,13 @@ function executeAction(action,tag,parent,index,source,executortag)
 	
 	checkContext(action)
 	
+	if(action.requirement ~= nil and action.triggers ~= nil)then
 	
+		canDoaction = checkTriggerRequirement(action.requirement,action.triggers)
 	
+	end
+	
+	if(canDoaction) then
 	
 	local entityregion = true
 	local groupregion = true
@@ -4242,18 +4293,18 @@ end
 					-- grabbedTarget = WorldFunctionalTests.SpawnEntity("base\\items\\interactive\\dining_accessories\\int_dining_accessories_001__bar_asset_h_sponge.ent", transform, '')
 				end
 				Cron.After(0.7,function()	
-					if (grabbedTarget ~= nil) then
-						targetPos = grabbedTarget:GetWorldPosition()
-						targetAngle = Vector4.ToRotation(grabbedTarget:GetWorldForward())
-						objectDist = Vector4.Distance(targetPos, playerPos)
-						phi = math.atan2(playerAngle.y, playerAngle.x)
-						targetDeltaPos = Vector4.new(((objectDist * math.cos(phi)) + playerPos.x), ((objectDist * math.sin(phi)) + playerPos.y), (objectDist * math.sin(playerAngle.z) + playerPos.z), targetPos.w)
-						targetDeltaPos = Delta(targetDeltaPos, targetPos)
-						logme(3,grabbedTarget, "grabbed.")
-						grabbed = true
-						else
-						logme(3,"No target!")
-					end
+				                         	if (grabbedTarget ~= nil) then
+				                         		targetPos = grabbedTarget:GetWorldPosition()
+				                         		targetAngle = Vector4.ToRotation(grabbedTarget:GetWorldForward())
+				                         		objectDist = Vector4.Distance(targetPos, playerPos)
+				                         		phi = math.atan2(playerAngle.y, playerAngle.x)
+				                         		targetDeltaPos = Vector4.new(((objectDist * math.cos(phi)) + playerPos.x), ((objectDist * math.sin(phi)) + playerPos.y), (objectDist * math.sin(playerAngle.z) + playerPos.z), targetPos.w)
+				                         		targetDeltaPos = Delta(targetDeltaPos, targetPos)
+				                         		logme(3,grabbedTarget, "grabbed.")
+				                         		grabbed = true
+				                         		else
+				                         		logme(3,"No target!")
+				                         	end
 				end)
 			end
 		end
@@ -5167,8 +5218,8 @@ end
 				
 				if(action.quest ~= nil and action.quest ~= "") then
 					local questentry = gameJournalQuest.new()
-					questentry.districtID = action.quest
-					
+					questentry.districtID = action.objective
+					questentry.id = action.quest
 					questAction.questEntry = questentry
 					
 				end
@@ -5209,7 +5260,8 @@ end
 				
 				if(action.quest ~= nil and action.quest ~= "") then
 					local questentry = gameJournalQuest.new()
-					questentry.districtID = action.quest
+					questentry.districtID = action.objective
+					questentry.id = action.quest
 					
 					questAction.questEntry = questentry
 					
@@ -5229,7 +5281,7 @@ end
 				
 				
 				
-				local userData = QuestUpdateNotificationViewData.new()
+				
 				userData.title = "UI-Notifications-QuestCompleted"
 				userData.canBeMerged = false
 				userData.soundEvent = CName("QuestSuccessPopup")
@@ -5251,7 +5303,7 @@ end
 			
 			if(action.type == "fail") then
 				
-				local userData = QuestUpdateNotificationViewData.new()
+				
 				userData.title = "LocKey#27566"
 				userData.canBeMerged = false
 				userData.soundEvent = CName("QuestFailedPopup")
@@ -5867,12 +5919,72 @@ end
 		if(action.name == "wanted_level") then
 			local preventionSystem = Game.GetScriptableSystemsContainer():Get("PreventionSystem")
 			preventionSystem:SetHeatStage(action.value)
-			preventionSystem:HeatPipeline()
+			preventionSystem:OnHeatChanged()
+			if(action.value == 0) then
+				
+
+					if preventionSystem:IsChasingPlayer() then
+						
+					
+					preventionSystem.systemDisabled = false
+					preventionSystem:WhipeBlinkData()
+					preventionSystem:ChangeAgentsAttitude(EAIAttitude.AIA_Neutral)
+					preventionSystem:WakeUpAllAgents(false)
+					preventionSystem:WhipeHitNPC()
+					preventionSystem:DespawnAllPolice()
+					preventionSystem:RemovePlayerFromSecuritySystemBlacklist()
+					preventionSystem:CancelAllDelayedEvents()
+					preventionSystem.isHidingFromPolice = false
+					preventionSystem.generalPercent = 0
+					
+					for _, veh in ipairs(preventionSystem.vehicles) do
+						if preventionSystem:IsVehicleValid(veh) then
+							Game.GetPreventionSpawnSystem():JoinTraffic(veh)
+						end
+					end
+
+					local playergroup = Game.GetPlayer():GetAttitudeAgent():GetAttitudeGroup()
+					Game.GetAttitudeSystem():SetAttitudeGroupRelationPersistent("police", playergroup, EAIAttitude.AIA_Neutral)
+					end
+			end
 		end
 		if(action.name == "change_zone") then
 			if(action.value == "safe") then
+				
+				Game.RemoveEffectPlayer("GameplayRestriction.NoCombat")
+				local preventionSystem = Game.GetScriptableSystemsContainer():Get("PreventionSystem")
+			
+				preventionSystem:SetHeatStage(0)
+				preventionSystem:OnHeatChanged()
+				
+					
+
+						if preventionSystem:IsChasingPlayer() then
+							
+						
+						preventionSystem.systemDisabled = false
+						preventionSystem:WhipeBlinkData()
+						preventionSystem:ChangeAgentsAttitude(EAIAttitude.AIA_Neutral)
+						preventionSystem:WakeUpAllAgents(false)
+						preventionSystem:WhipeHitNPC()
+						preventionSystem:DespawnAllPolice()
+						preventionSystem:RemovePlayerFromSecuritySystemBlacklist()
+						preventionSystem:CancelAllDelayedEvents()
+						preventionSystem.isHidingFromPolice = false
+						preventionSystem.generalPercent = 0
+						
+						for _, veh in ipairs(preventionSystem.vehicles) do
+							if preventionSystem:IsVehicleValid(veh) then
+								Game.GetPreventionSpawnSystem():JoinTraffic(veh)
+							end
+						end
+
+						local playergroup = Game.GetPlayer():GetAttitudeAgent():GetAttitudeGroup()
+						Game.GetAttitudeSystem():SetAttitudeGroupRelationPersistent("police", playergroup, EAIAttitude.AIA_Neutral)
+						end
+				
 				Game.ChangeZoneIndicatorSafe()
-				Game.ApplyEffectOnPlayer("GameplayRestriction.NoCombat")
+				
 			end
 			if(action.value == "neutral") then
 				Game.ChangeZoneIndicatorPublic()
@@ -5894,25 +6006,25 @@ end
 			end
 		end
 		if(action.name == "fade_in") then
-			local temp = tick
-			local nexttemp = temp
-			nexttemp = nexttemp + (action.value*60) 
+			local temp = os.time(os.date("!*t"))+0 
+					local nexttemp = temp
+					nexttemp =nexttemp +  action.value
 			fademessage = getLang(action.message)
 			action.tick = nexttemp
 			result = false
 		end
 		if(action.name == "fade_out") then
-			local temp = tick
-			local nexttemp = temp
-			nexttemp = nexttemp + (action.value*60) 
-			action.tick = nexttemp
-			result = false
+		   local temp = os.time(os.date("!*t"))+0 
+					local nexttemp = temp
+					nexttemp =nexttemp +  action.value
+		   	action.tick = nexttemp
+		   	result = false
 		end	
 		if(action.name == "set_timer") then
 			if(currentTimer == nil) then
-				local temp = tick
-				local nexttemp = temp
-				nexttemp = nexttemp + (action.value*60) 
+			local temp = os.time(os.date("!*t"))+0 
+					local nexttemp = temp
+					nexttemp =nexttemp +  action.value
 				currentTimer = {}
 				currentTimer.time = nexttemp
 				currentTimer.value = (action.value) 
@@ -5944,15 +6056,15 @@ end
 			end
 		end
 		if(action.name == "open_door") then	
-			if IsAFakeDoor(objLook) then
-				objLook:Dispose()
-				else
-				local handlePS = objLook:GetDevicePS()
-				if handlePS:IsLocked() then handlePS:ToggleLockOnDoor() end
-				if handlePS:IsSealed() then handlePS:ToggleSealOnDoor() end
-				if handlePS:IsSealed() then handlePS:ToggleSealOnDoor() end
-				objLook:OpenDoor()
-			end
+		                                   	if IsAFakeDoor(objLook) then
+		                                   		objLook:Dispose()
+		                                   		else
+		                                   		local handlePS = objLook:GetDevicePS()
+		                                   		if handlePS:IsLocked() then handlePS:ToggleLockOnDoor() end
+		                                   		if handlePS:IsSealed() then handlePS:ToggleSealOnDoor() end
+		                                   		if handlePS:IsSealed() then handlePS:ToggleSealOnDoor() end
+		                                   		objLook:OpenDoor()
+		                                   	end
 		end
 		if(action.name == "set_mappin") then
 			local position = getPositionFromParameter(action)
@@ -6080,8 +6192,42 @@ end
 				end
 			end
 		end
-		
-		
+		if(action.name == "track_mappin") then
+			if GameController["WorldMapMenuGameController"] ~= nil then
+			
+			
+				local mappin = getMappinByTag(action.tag)
+				if(mappin and mappin.controller ~= nil)then
+			
+					local startHub = StartHubMenuEvent.new()
+				
+					local userData = MapMenuUserData.new()
+					userData.moveTo = Vector3.new(mappin.position.x, mappin.position.y, mappin.position.z)					
+					startHub:SetStartMenu("world_map",nil,userData)
+					Game.GetUISystem():QueueEvent(startHub)
+					
+					Cron.After(0.2, function()
+																
+						GameController["WorldMapMenuGameController"]:TrackMappin(mappin.controller)
+						local closeHub = ForceCloseHubMenuEvent.new()
+						Game.GetUISystem():QueueEvent(closeHub)							
+						                                       										
+					end)
+				end
+			 end
+			
+			
+		end
+		if(action.name == "untrack_mappin") then
+			if GameController["WorldMapMenuGameController"] ~= nil and GameController["WorldMapMenuGameController"]:IsA("gameuiWorldMapMenuGameController") then
+				local mappin = getMappinByTag(action.tag)
+				if(mappin and mappin.controller ~= nil)then
+					GameController["WorldMapMenuGameController"]:UntrackMappin()
+				end
+			
+			
+			end
+		end
 		
 		if(action.name == "set_map_point_position" or action.name == "set_mappin_position") then
 			setMappinPositionByTag(action.tag,action.x,action.y,action.z)
@@ -6480,9 +6626,9 @@ end
 					dialogLine.isPersistent  = true
 					dialogLine.duration  = action.duration
 					GameController["SubtitlesGameController"]:SpawnDialogLine(dialogLine)
-					local temp = tick
+					local temp = os.time(os.date("!*t"))+0 
 					local nexttemp = temp
-					nexttemp =nexttemp +  math.ceil((action.duration*60))
+					nexttemp =nexttemp +  action.duration
 					action.tick = nexttemp
 					result = false
 				end
@@ -6546,9 +6692,9 @@ end
 					dialogLine.isPersistent  = true
 					dialogLine.duration  = action.duration
 					GameController["SubtitlesGameController"]:SpawnDialogLine(dialogLine)
-					local temp = tick
+					local temp = os.time(os.date("!*t"))+0 
 					local nexttemp = temp
-					nexttemp =nexttemp +  math.ceil((action.duration*60))
+					nexttemp =nexttemp +  action.duration
 					action.tick = nexttemp
 					result = false
 				end
@@ -6594,9 +6740,9 @@ end
 					dialogLine.isPersistent  = true
 					dialogLine.duration  = action.duration
 					GameController["SubtitlesGameController"]:SpawnDialogLine(dialogLine)
-					local temp = tick
+					local temp = os.time(os.date("!*t"))+0 
 					local nexttemp = temp
-					nexttemp =nexttemp +  math.ceil((action.duration*60))
+					nexttemp =nexttemp +  action.duration
 					action.tick = nexttemp
 					result = false
 				end
@@ -6645,11 +6791,9 @@ end
 						dialogLine.isPersistent  = true
 						dialogLine.duration  = action.duration
 						GameController["ChattersGameController"]:SpawnDialogLine(dialogLine)
-						local temp = tick
-						--logme(3,temp)
+						local temp = os.time(os.date("!*t"))+0 
 						local nexttemp = temp
-						--logme(3,math.ceil((action.value*60)))
-						nexttemp =nexttemp +  math.ceil((action.duration*60))
+						nexttemp =nexttemp +  action.duration
 						--logme(3,nexttemp)
 						action.tick = nexttemp
 						result = false
@@ -6701,11 +6845,9 @@ end
 						dialogLine.isPersistent  = true
 						dialogLine.duration  = action.duration
 						GameController["ChattersGameController"]:SpawnDialogLine(dialogLine)
-						local temp = tick
-						--logme(3,temp)
+						local temp = os.time(os.date("!*t"))+0 
 						local nexttemp = temp
-						--logme(3,math.ceil((action.value*60)))
-						nexttemp =nexttemp +  math.ceil((action.duration*60))
+						nexttemp =nexttemp +  action.duration
 						--logme(3,nexttemp)
 						action.tick = nexttemp
 						result = false
@@ -6821,7 +6963,6 @@ end
 			
 			TriggerQuest(action.value)
 			
-			--			QuestTrackerUI.TrackObjective()
 		end
 		if(action.name == "lock_mission") then
 			setScore(action.value,"Score",nil)
@@ -6832,6 +6973,9 @@ end
 			if(QuestManager.IsTrackedObjective(action.value)) then
 				QuestManager.UntrackObjective()
 			end
+		end
+		if(action.name == "set_objective_state") then
+			QuestManager.MarkObjectiveAs(action.value,action.state)
 		end
 		if(action.name == "unlock_objective") then
 			QuestManager.MarkObjectiveAsActive(action.value)
@@ -7357,7 +7501,7 @@ end
 				local positionVec4 = enti:GetWorldPosition()
 				obj.currentNode = getNodefromPosition(positionVec4.x, positionVec4.y, positionVec4.z, action.range)
 				logme(3,"currentNode "..obj.currentNode.tag)	
-				--	setEntityFromManager(entityTag,obj)
+				--                                          	setEntityFromManager(entityTag,obj)
 			end
 		end
 		if(action.name == "set_group_node_next") then
@@ -7855,6 +7999,27 @@ end
 			end
 		end
 		
+		
+		if(action.name == "device_stop_using") then 
+			local obj = getEntityFromManager(action.tag)
+			local enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				local ps = enti:GetDevicePS()
+			
+				enti:StopUsing()
+			end
+		end
+		
+		if(action.name == "device_start_using") then 
+			local obj = getEntityFromManager(action.tag)
+			local enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				local ps = enti:GetDevicePS()
+			
+				enti:StartUsing()
+			end
+		end
+		
 		if(action.name == "device_glitch_off") then 
 			local obj = getEntityFromManager(action.tag)
 			local enti = Game.FindEntityByID(obj.id)
@@ -7956,10 +8121,11 @@ end
 				end
 				if(action.source == "current_district_leader") then
 					
-					local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
+					local gangs = getGangfromDistrict(currentDistricts2.Tag,0)
 					
 					if(#gangs > 0) then
 						local gang = getFactionByTag(gangs[1].tag)
+						print(gangs[1].tag)
 						if(action.source_use_rival == true) then
 							gang = getFactionByTag(gang.rivals[1])
 						end
@@ -8220,67 +8386,67 @@ end
 			end
 		end
 		if(action.name == "register_entities_around_you") then
-				print("mark1")
-				player = Game.GetPlayer()
-				targetingSystem = Game.GetTargetingSystem()
-				parts = {}
-				local success= false
-				searchQuery = Game["TSQ_ALL;"]() -- Search ALL objects
-				searchQuery.maxDistance = action.range
-				success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
-				
-				print("mark1")
-				
-				local goodEntity = false
-				
-				for i, v in ipairs(parts) do
-					local newent = v:GetComponent(v):GetEntity() 
-					
-					
-					
-					
-						
-						
-							if #action.filter > 0 then
-							for i,filter in ipairs(action.filter) do
-								
-								if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
-									local entity = {}
-									entity.id = newent:GetEntityID()
-									entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
-									entity.tweak = "None"
-									entity.iscompanion = false
-									cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
-									if(action.group ~= nil and action.group ~= "") then
-										
-										table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
-									end
-								end
-							end
-							else
-									local entity = {}
-									entity.id = newent:GetEntityID()
-									entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
-									entity.tweak = "None"
-									entity.iscompanion = false
-									cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
-									if(action.group ~= nil and action.group ~= "") then
-										
-										table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
-									end
-							end
-						
-						
-						
-						
-						
-					
-					
-					
-					
-				end
-				
-				
+			   	print("mark1")
+			   	player = Game.GetPlayer()
+			   	targetingSystem = Game.GetTargetingSystem()
+			   	parts = {}
+			   	local success= false
+			   	searchQuery = Game["TSQ_ALL;"]() -- Search ALL objects
+			   	searchQuery.maxDistance = action.range
+			   	success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
+			   	
+			   	print("mark1")
+			   	
+			   	local goodEntity = false
+			   	
+			   	for i, v in ipairs(parts) do
+			   		local newent = v:GetComponent(v):GetEntity() 
+			   		
+			   		
+			   		
+			   		
+			   			
+			   			
+			   				if #action.filter > 0 then
+			   				for i,filter in ipairs(action.filter) do
+			   					
+			   					if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
+			   						local entity = {}
+			   						entity.id = newent:GetEntityID()
+			   						entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
+			   						entity.tweak = "None"
+			   						entity.iscompanion = false
+			   						cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
+			   						if(action.group ~= nil and action.group ~= "") then
+			   							
+			   							table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
+			   						end
+			   					end
+			   				end
+			   				else
+			   						local entity = {}
+			   						entity.id = newent:GetEntityID()
+			   						entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
+			   						entity.tweak = "None"
+			   						entity.iscompanion = false
+			   						cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
+			   						if(action.group ~= nil and action.group ~= "") then
+			   							
+			   							table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
+			   						end
+			   				end
+			   			
+			   			
+			   			
+			   			
+			   			
+			   		
+			   		
+			   		
+			   		
+			   	end
+			   	
+			   	
 			end	
 		if(action.name == "register_last_killed_entity") then
 			if(lastTargetKilled ~= nil) then
@@ -8371,6 +8537,9 @@ end
 				-- sp.Kill(enti,false,false)
 			end
 		end
+		
+		
+		
 		
 		if(action.name == "ressurect_entity") then
 			local obj = getEntityFromManager(action.tag)
@@ -8467,6 +8636,21 @@ end
 			local enti = Game.FindEntityByID(obj.id)
 			if(enti ~= nil) then
 				changeStance(enti,action.value)
+			end
+		end
+		
+		if(action.name == "kill_group") then
+			local group =getGroupfromManager(action.tag)
+			if(group ~= nil) then
+				for i,v in ipairs(group.entities) do 
+					local entityTag = v
+					local obj = getEntityFromManager(entityTag)
+					local enti = Game.FindEntityByID(obj.id)
+					if(enti ~= nil) then
+						enti:OnDied()
+			
+					end
+				end
 			end
 		end
 		
@@ -8571,11 +8755,13 @@ end
 							
 							local v2 = nil
 							
-							
-							
-							
-							
 							local rot =  GetSingleton('Quaternion'):ToEulerAngles(enti:GetWorldOrientation())
+							
+							if(action.yaw) ~= nil then
+								
+								rot = EulerAngles.new(action.roll, action.pitch,  action.yaw)
+							
+							end
 							
 							teleportTo(enti, position, rot,false)
 							
@@ -8605,7 +8791,11 @@ end
 						
 						
 						local rot =  GetSingleton('Quaternion'):ToEulerAngles(enti:GetWorldOrientation())
-						
+						if(action.yaw) ~= nil then
+								
+								rot = EulerAngles.new(action.roll, action.pitch,  action.yaw)
+							
+							end
 						teleportTo(enti, position, rot,isplayer)
 						
 						
@@ -8720,6 +8910,19 @@ end
 			end
 		end
 		
+		if(action.name == "entity_stop_movement") then
+			local enti = nil
+			local obj = nil 
+			obj = getEntityFromManager(action.tag)
+			enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil) then
+				if(enti:IsVehicle() ~= true) then
+					InterruptBehavior(enti)
+					
+				end
+			end
+		end
+		
 		if(action.name == "rotate_entity_to_entity") then
 			local obj = getEntityFromManager(action.tag)
 			local enti = Game.FindEntityByID(obj.id)
@@ -8739,6 +8942,12 @@ end
 				RotateEntityTo(enti, action.pitch, action.yaw, action.roll)
 			end
 		end
+		
+		if(action.name == "rotate_entity_to_position") then
+			action.output = true
+			entityLookAtDirection(action.tag,action.x, action.y, action.z)
+		end
+		
 		if(action.name == "choose_target") then
 			if(objLook ~= nil) then
 				selectTarget = objLook:GetEntityID()
@@ -8853,7 +9062,7 @@ end
 						local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
 						if success then
 							collision = true
-							--logme(3,"collision"..filter)
+							logme(1,"collision"..filter)
 						end
 					end
 					if(collision == false) then
@@ -8894,6 +9103,7 @@ end
 			local playerpos = Game.GetPlayer():GetWorldPosition()
 			Game.TeleportPlayerToPosition(playerpos.x+action.x,playerpos.y+action.y,playerpos.z+action.z)
 		end
+		
 		
 		
 		
@@ -9208,18 +9418,20 @@ end
 			if(enti ~= nil) then
 				if(action.tag == "player") then
 					if (action.immortal == true) then
+					
 						Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Invulnerable", CName.new("SecondHeart"))
 						if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
-							veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+							local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
 							if veh then
 								Game.GetGodModeSystem():AddGodMode(veh:GetEntityID(), "Invulnerable", CName.new("Default"))
 							end
 						end
-						else
-						ssc = Game.GetScriptableSystemsContainer()
-						es = ssc:Get(CName.new('EquipmentSystem'))
-						espd = es:GetPlayerData(Game.GetPlayer())
-						espd['GetItemInEquipSlot2'] = espd['GetItemInEquipSlot;gamedataEquipmentAreaInt32']
+					else
+							local hasSecondHeart = false
+							local ssc = Game.GetScriptableSystemsContainer()
+							local es = ssc:Get(CName.new('EquipmentSystem'))
+							local espd = es:GetPlayerData(Game.GetPlayer())
+							espd['GetItemInEquipSlot2'] = espd['GetItemInEquipSlot;gamedataEquipmentAreaInt32']
 						for i=0,2 do
 							if espd:GetItemInEquipSlot2("CardiovascularSystemCW", i).tdbid.hash == 3619482064 then
 								hasSecondHeart = true
@@ -9227,20 +9439,49 @@ end
 						end
 						if hasSecondHeart then
 							Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Immortal", CName.new("SecondHeart"))
-							else
+						else
 							Game.GetGodModeSystem():DisableOverride(Game.GetPlayer():GetEntityID(), CName.new("SecondHeart"))
 						end
 						if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
-							veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+							local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
 							if veh then
 								Game.GetGodModeSystem():ClearGodMode(veh:GetEntityID(), CName.new("Default"))
 							end
 						end
+						
 					end
 					else
 					ToggleImmortal(enti, action.immortal)
 				end
 			end
+			
+			
+			
+		end
+		
+		if(action.name == "toggle_infinite_stamina") then
+			Game.InfiniteStamina(action.value)
+			
+		end
+		if(action.name == "toggle_infinite_ammo") then
+			if(action.value == true) then
+				Game.GetInventoryManager().AddEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
+				local player = Game.GetPlayer()
+				local activeWeapon = GameObject.GetActiveWeapon(player)
+				-- The gist behind this is:
+				-- Reload the weapon in 0 seconds, end the reload
+				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
+				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
+			else
+				Game.GetInventoryManager().RemoveEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
+				local player = Game.GetPlayer()
+				local activeWeapon = GameObject.GetActiveWeapon(player)
+				-- The gist behind this is:
+				-- Reload the weapon in 0 seconds, end the reload
+				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
+				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
+			end
+			
 		end
 		if(action.name == "play_entity_facial") then
 			
@@ -9351,7 +9592,7 @@ end
 			local enti = Game.FindEntityByID(obj.id)
 			if(enti ~= nil) then
 				--logme(3,"go")
-				getAppearance(enti)
+				
 				setAppearance(enti,action.appearance)
 			end
 		end
@@ -9705,30 +9946,30 @@ end
 	if scannerregion then
 		
 		if(action.name == "set_scannerdata") then
-			
-			
-			
-			ScannerInfoManager[action.tag] = {}
-			ScannerInfoManager[action.tag].primaryname = getLang(action.primaryname)
-			ScannerInfoManager[action.tag].secondaryname = getLang(action.secondaryname)
-			ScannerInfoManager[action.tag].level = action.level
-			ScannerInfoManager[action.tag].rarity = action.rarity
-			ScannerInfoManager[action.tag].faction = action.faction
-			ScannerInfoManager[action.tag].networkstate = ""
-			ScannerInfoManager[action.tag].text = getLang("cyberscript_scanner_"..action.text)
+		  	
+		  	
+		  	
+		  	ScannerInfoManager[action.tag] = {}
+		  	ScannerInfoManager[action.tag].primaryname = getLang(action.primaryname)
+		  	ScannerInfoManager[action.tag].secondaryname = getLang(action.secondaryname)
+		  	ScannerInfoManager[action.tag].level = action.level
+		  	ScannerInfoManager[action.tag].rarity = action.rarity
+		  	ScannerInfoManager[action.tag].faction = action.faction
+		  	ScannerInfoManager[action.tag].networkstate = ""
+		  	ScannerInfoManager[action.tag].text = getLang("cyberscript_scanner_"..action.text)
 		--	--print(action.text)
-			ScannerInfoManager[action.tag].attitude = action.attitude
-			
-			if(action.bounty ~= nil) then
-				ScannerInfoManager[action.tag].bounty = action.bounty
-				ScannerInfoManager[action.tag].bounty.issuedby = getLang(action.bounty.issuedby)
-			end
-			
-			
-			
-			
-			
-			
+		  	ScannerInfoManager[action.tag].attitude = action.attitude
+		  	
+		  	if(action.bounty ~= nil) then
+		  		ScannerInfoManager[action.tag].bounty = action.bounty
+		  		ScannerInfoManager[action.tag].bounty.issuedby = getLang(action.bounty.issuedby)
+		  	end
+		  	
+		  	
+		  	
+		  	
+		  	
+		  	
 		end
 		if(action.name == "give_reward_from_scannerdata") then
 			if(ScannerInfoManager[action.tag] ~= nil and ScannerInfoManager[action.tag].bounty ~= nil) then
@@ -10008,11 +10249,21 @@ end
 			result = false
 		end
 		if(action.name == "wait_second") then
+			local temp = os.time(os.date("!*t"))+0 
+			--logme(3,temp)
+			local nexttemp = temp
+			--logme(3,math.ceil((action.value*60)))
+			nexttemp =nexttemp +  action.value
+			--logme(3,nexttemp)
+			action.tick = nexttemp
+			result = false
+		end
+		if(action.name == "wait_tick") then
 			local temp = tick
 			--logme(3,temp)
 			local nexttemp = temp
 			--logme(3,math.ceil((action.value*60)))
-			nexttemp =nexttemp +  math.ceil((action.value*60))
+			nexttemp =nexttemp + action.value
 			--logme(3,nexttemp)
 			action.tick = nexttemp
 			result = false
@@ -10248,7 +10499,7 @@ end
 						local obj = {}
 						obj.actionlist = event.action
 						obj.tag = event.tag
-						
+						obj.after = action.after
 						
 						
 						directWorkerTable[action.tag] = obj
@@ -10262,6 +10513,15 @@ end
 		
 		end
 		
+			if(action.name == "subscribe_actionlist_to_direct_execution") then
+			local obj = {}
+			obj.actionlist = action.action
+			obj.tag = action.tag
+			obj.after = action.after
+			directWorkerTable[action.tag] = obj
+		
+		end
+		
 		if(action.name == "subscribe_function_to_direct_execution") then
 			local boj = cyberscript.cache["functions"][action.tag]
 		
@@ -10271,7 +10531,7 @@ end
 				local obj = {}
 				obj.actionlist = functio.action
 				obj.tag = event.tag
-				
+				obj.after = action.after
 				
 				
 				directWorkerTable[action.tag] = obj
@@ -10295,6 +10555,7 @@ end
 			local obj = {}
 			obj.actionlist = action.action
 			obj.tag = action.tag
+			obj.after = action.after
 			directActionsWorkerTable[action.tag] = obj
 		
 		end
@@ -10312,7 +10573,7 @@ end
 						local obj = {}
 						obj.actionlist = event.action
 						obj.tag = event.tag
-						
+						obj.after = action.after
 						
 						
 						directActionsWorkerTable[action.tag] = obj
@@ -10718,6 +10979,16 @@ end
 			end
 		end
 		if(action.name == "set_datapack_group") then
+		
+			for i = 1, #currentInteractGroup do 
+			if(action.value == currentInteractGroup[i]) then
+				currentInteractGroupIndex = i
+			end
+		end
+			end
+		if(action.name == "set_datapack_group_index") then
+		
+		
 			currentInteractGroupIndex = action.value
 		end
 		
@@ -10914,16 +11185,20 @@ end
 		
 		if(action.name == "change_hack_animation_percent") then
 		
+		if(action.text ~= nil and action.text ~= "") then
+			
+			GameController["HUDProgressBarController"]:UpdateTimerHeader(getLang(action.text))
 		
+		end
 		GameController["HUDProgressBarController"]:UpdateTimerProgress((action.value/100))
 			
 		end
 		
 		if(action.name == "hide_hack_animation") then
 		
-		
+			
 			GameController["HUDProgressBarController"]:OnActivated(false)
-	
+			GameController["HUDProgressBarController"]:UpdateTimerProgress((0/100))
 		
 		end
 		
@@ -10938,362 +11213,233 @@ end
 			mappin.y = action.y
 			mappin.z = action.z
 			local actionlist = {}
-			logme(3,#actionlist)
+			
 			local obj = getEntityFromManager(action.tag)
 			local enti = Game.FindEntityByID(obj.id)
 			if(enti ~= nil) then
+				
+				
 				local myPos = enti:GetWorldPosition()
 				local newPos = myPos
-				local angle = EulerAngles.new(0,0,0)
+				local angle = enti:GetWorldOrientation():ToEulerAngles()
+				
 				local tempangle = {}
 				tempangle.roll = 0
 				tempangle.pitch = 0
 				tempangle.yaw = 0
+				
 				local numbertimes = 0
+				local zpath=action.zfly
+				
+			
+				
+				newaction = {}
+				newaction.name = "wait_second"
+				newaction.value = 0.5
+				table.insert(actionlist,newaction)
+				
 				if(action.isAV == true) then
 					local ztimes = action.zfly - myPos.z
-					logme(3,"ztimes "..ztimes)
-					numbertimes = math.floor(ztimes / action.speed)
-					logme(3,"ztimes "..ztimes)
-					for i=1,numbertimes do 
-						local oldPos = newPos
-						newPos.z = newPos.z +   action.speed
+					local zpos = deepcopy(newPos.z,nil)
+					numbertimes = ztimes / zpath
+					
+					for i=1,ztimes  do 
+						
+							
+						zpos = zpos + 1
+					
 						local newaction = {}
 						newaction.name = "teleport_entity_at_position"
 						newaction.tag = action.tag
 						newaction.x = newPos.x
 						newaction.y = newPos.y
-						newaction.z = newPos.z
+						newaction.z = zpos
 						newaction.angle = angle
 						newaction.collision = false
-						newaction.pathfinding = false
-						newaction.axis = "z"
-						table.insert(actionlist,newaction)
-					end
-				end
-				local destination = Vector4.new(mappin.x, myPos.y, myPos.z,1)			
-				local dirVector = diffVector(myPos, destination)
-				if(action.isAV == true) then
-					local newangle = GetSingleton('Vector4'):ToRotation(dirVector)
-					newangle.roll = 0
-					newangle.pitch = 0
-					logme(3,"tempangle.yaw "..tempangle.yaw)
-					local anglesub = newangle.yaw/100
-					for i=1,100 do 
-						local oldPos = newPos
-						tempangle.yaw = tempangle.yaw + anglesub
-					
-						local angletomake= tempangle
-						local newaction = {}
-						newaction.name = "rotate_entity"
-						newaction.tag = action.tag
-						
-						newaction.roll = 0
-						newaction.pitch = 0
-						newaction.yaw = anglesub*i
-						
-						
-						
-						table.insert(actionlist,newaction)
-					end
-					angle = GetSingleton('Vector4'):ToRotation(dirVector)
-					angle.roll = 0
-					angle.pitch = 0
-				end
-				local xtimes = mappin.x - myPos.x
-				numbertimes = math.floor(xtimes / action.speed)
-				newnumbertimes = 0
-				local isNegative = false
-				if(numbertimes <0) then
-					newnumbertimes = -numbertimes
-					isNegative = true
-					else
-					newnumbertimes = numbertimes
-				end
-				for i=1,newnumbertimes do 
-					local oldPos = newPos
-					if(isNegative == true) then
-						newPos.x = newPos.x -  action.speed
-						else
-						newPos.x = newPos.x +   action.speed
-					end
-					local newaction = {}
-					newaction.name = "teleport_entity_at_position"
-					newaction.tag = action.tag
-					newaction.x = newPos.x
-					newaction.y = newPos.y
-					newaction.z = newPos.z
-					newaction.angle = angle
-					newaction.pathfinding = action.pathfinding
-					newaction.collision = true
-					newaction.axis = "x"
-					table.insert(actionlist,newaction)
-				end
-				destination = Vector4.new(myPos.x, mappin.y, myPos.z,1)			
-				dirVector = diffVector(myPos, destination)
-				local newangle = GetSingleton('Vector4'):ToRotation(dirVector)
-				newangle.roll = 0
-				newangle.pitch = 0
-				local anglesub = newangle.yaw/100
-				if(action.do_rotation == nil or action.do_rotation == true ) then
-					for i=1,100 do 
-						local oldPos = newPos
-						tempangle.yaw =tempangle.yaw + anglesub
-						logme(3,"tempangle.yaw "..tempangle.yaw)
-						local angletomake= tempangle
-						local newaction = {}
-						newaction.name = "teleport_entity_at_position"
-						newaction.tag = action.tag
-						newaction.x = newPos.x
-						newaction.y = newPos.y
-						newaction.z = newPos.z
-						newaction.angle = {}
-						newaction.angle.roll = 0+angletomake.roll
-						newaction.angle.pitch = 0+angletomake.pitch
-						newaction.angle.yaw = anglesub*i
-						logme(3,"newaction.angle.yaw "..newaction.angle.yaw)
-						newaction.pathfinding = action.pathfinding
-						newaction.collision = false
-						newaction.axis = "y"
-						table.insert(actionlist,newaction)
-					end
-				end
-				angle = GetSingleton('Vector4'):ToRotation(dirVector)
-				angle.roll = 0
-				angle.pitch = 0
-				local ytimes = mappin.y - myPos.y
-				numbertimes = math.floor(ytimes /  action.speed)
-				newnumbertimes = 0
-				isNegative = false
-				if(numbertimes <0) then
-					newnumbertimes = -numbertimes
-					isNegative = true
-					else
-					newnumbertimes = numbertimes
-				end
-				for i=1,newnumbertimes do 
-					local oldPos = newPos
-					if(isNegative == true) then
-						newPos.y = newPos.y -  action.speed
-						else
-						newPos.y = newPos.y +  action.speed
-					end
-					local newaction = {}
-					newaction.name = "teleport_entity_at_position"
-					newaction.tag = action.tag
-					newaction.x = newPos.x
-					newaction.y = newPos.y
-					newaction.z = newPos.z
-					newaction.angle = angle
-					newaction.pathfinding = action.pathfinding
-					newaction.collision = true
-					newaction.axis = "y"
-					table.insert(actionlist,newaction)
-				end
-				if(action.isAV == true) then
-					ztimes = action.zfly - 0
-					numbertimes = math.floor(ztimes / action.speed)
-					numbertimes = numbertimes
-					for i=1,numbertimes do 
-						local oldPos = newPos
-						newPos.z = newPos.z - action.speed
-						local newaction = {}
-						newaction.name = "teleport_entity_at_position"
-						newaction.tag = action.tag
-						newaction.x = newPos.x
-						newaction.y = newPos.y
-						newaction.z = newPos.z
-						newaction.angle = angle
-						newaction.collision = true
-						newaction.pathfinding = false
-						newaction.axis = "z"
-						table.insert(actionlist,newaction)
-					end
-				end
-				local namescript = "vehicule_autodrive_activate_"..math.random(1,99999)
-				-- local file = assert(io.open("json/report/"..namescript..".json", "w"))
-				-- local stringg = dump(actionlist)
-				-- logme(3,stringg)
-				-- file:write(stringg)
-				-- file:close()
-				-- end
-				runSubActionList(actionlist, tag.."_av_autodrive_activate", tag,source,false,executortag)
-				result = false
-			end
-		end
-		if(action.name == "vehicule_autodrive_activate_custom_mappin") then
-			if(ActivecustomMappin ~= nil) then
-				local mappin = ActivecustomMappin:GetWorldPosition()
-				local actionlist = {}
-				logme(3,#actionlist)
-				--doActionofIndex(actionlist,"interact",listaction,currentindex)
-				local obj = getEntityFromManager(action.tag)
-				local enti = Game.FindEntityByID(obj.id)
-				local myPos = enti:GetWorldPosition()
-				local newPos = myPos
-				local angle = EulerAngles.new(0,0,0)
-				local tempangle = {}
-				tempangle.roll = 0
-				tempangle.pitch = 0
-				tempangle.yaw = 0
-				local numbertimes = 0
-				if(action.isAV == true) then
-					local ztimes = action.zfly - myPos.z
-					logme(3,"ztimes "..ztimes)
-					numbertimes = math.floor(ztimes / action.speed)
-					logme(3,"ztimes "..ztimes)
-					for i=1,numbertimes do 
-						local oldPos = newPos
-						newPos.z = newPos.z +   action.speed
-						local newaction = {}
-						newaction.name = "teleport_entity_at_position"
-						newaction.tag = action.tag
-						newaction.x = newPos.x
-						newaction.y = newPos.y
-						newaction.z = newPos.z
-						newaction.angle = angle
-						newaction.collision = false
-						newaction.pathfinding = false
-						newaction.axis = "z"
-						table.insert(actionlist,newaction)
-					end
-				end
-				local destination = Vector4.new(mappin.x, myPos.y, myPos.z,1)			
-				local dirVector = diffVector(myPos, destination)
-				local myyaw = 0
-				if(action.isAV == true) then
-					local newangle = GetSingleton('Vector4'):ToRotation(dirVector)
-					newangle.roll = 0
-					newangle.pitch = 0
-					myyaw = newangle.yaw
-					local anglesub = newangle.yaw/100
-					for i=1,100 do 
-						local oldPos = newPos
-						tempangle.yaw = anglesub
-					
-						local angletomake= tempangle
-						local newaction = {}
-						newaction.name = "rotate_entity"
-						newaction.tag = action.tag
-						
-						newaction.roll = 0
-						newaction.pitch = 0
-						newaction.yaw = anglesub*i
-					
-						table.insert(actionlist,newaction)
-					end
-					angle = GetSingleton('Vector4'):ToRotation(dirVector)
-					angle.roll = 0
-					angle.pitch = 0
-				end
-				local xtimes = mappin.x - myPos.x
-				numbertimes = math.floor(xtimes / action.speed)
-				newnumbertimes = 0
-				local isNegative = false
-				if(numbertimes <0) then
-					newnumbertimes = -numbertimes
-					isNegative = true
-					else
-					newnumbertimes = numbertimes
-				end
-				for i=1,newnumbertimes do 
-					local oldPos = newPos
-					if(isNegative == true) then
-						newPos.x = newPos.x -  action.speed
-						else
-						newPos.x = newPos.x +   action.speed
-					end
-					local newaction = {}
-					newaction.name = "teleport_entity_at_position"
-					newaction.tag = action.tag
-					newaction.x = newPos.x
-					newaction.y = newPos.y
-					newaction.z = newPos.z
-					newaction.angle = angle
-					newaction.pathfinding = action.pathfinding
-					newaction.collision = true
-					newaction.axis = "x"
-					table.insert(actionlist,newaction)
-				end
-				destination = Vector4.new(myPos.x, mappin.y, myPos.z,1)			
-				dirVector = diffVector(myPos, destination)
-				local newangle = GetSingleton('Vector4'):ToRotation(dirVector)
-				newangle.roll = 0
-				newangle.pitch = 0
-				logme(3,newangle.yaw-myyaw)
-				local anglesub = (newangle.yaw-myyaw)/100
-				if(action.do_rotation == nil or action.do_rotation == true or action.isAV == true ) then
-					for i=1,100 do 
-						local oldPos = newPos
-						tempangle.yaw = anglesub
-					
-						local angletomake= tempangle
-						local newaction = {}
-						newaction.name = "rotate_entity"
-						newaction.tag = action.tag
-						
-						newaction.roll = 0
-						newaction.pitch = 0
-						newaction.yaw = anglesub*i
-						logme(3,anglesub*i)
-						table.insert(actionlist,newaction)
-					end
-				end
-				angle = GetSingleton('Vector4'):ToRotation(dirVector)
-				angle.roll = 0
-				angle.pitch = 0
-				local ytimes = mappin.y - myPos.y
-				numbertimes = math.floor(ytimes /  action.speed)
-				newnumbertimes = 0
-				isNegative = false
-				if(numbertimes <0) then
-					newnumbertimes = -numbertimes
-					isNegative = true
-					else
-					newnumbertimes = numbertimes
-				end
-				for i=1,newnumbertimes do 
-					local oldPos = newPos
-					if(isNegative == true) then
-						newPos.y = newPos.y -  action.speed
-						else
-						newPos.y = newPos.y +  action.speed
-					end
-					local newaction = {}
-					newaction.name = "teleport_entity_at_position"
-					newaction.tag = action.tag
-					newaction.x = newPos.x
-					newaction.y = newPos.y
-					newaction.z = newPos.z
-					newaction.angle = angle
-					newaction.pathfinding = action.pathfinding
-					newaction.collision = true
-					newaction.axis = "y"
-					table.insert(actionlist,newaction)
-				end
-				if(action.isAV == true) then
-					ztimes = action.zfly -2 --safe floor
-					numbertimes = math.floor(ztimes / action.speed)
-					numbertimes = numbertimes
-					
-					for i=1,numbertimes do 
-						local oldPos = newPos
-						newPos.z = newPos.z - action.speed
-						local newaction = {}
-						newaction.name = "teleport_entity_at_position"
-						newaction.tag = action.tag
-						newaction.x = newPos.x
-						newaction.y = newPos.y
-						newaction.z = newPos.z
-						newaction.angle = angle
-						newaction.collision = true
 						newaction.pathfinding = false
 						newaction.axis = "z"
 						table.insert(actionlist,newaction)
 					end
 				end
 				
-				-- end
+				
+				local destination = Vector4.new(mappin.x, myPos.y, myPos.z,1)			
+				local dirVector = diffVector(myPos, destination)
+				local myyaw = 0
+				local vdepart = LVector.new(myPos.x,myPos.y)
+				local varrive = LVector.new(mappin.x,mappin.y)
+				local diag = varrive-vdepart
+				local point = action.speed
+				local newangle = GetSingleton('Vector4'):ToRotation(dirVector)
+				local numtimes = diag*(1/point)
+				local path = deepcopy(vdepart,nil)
+				for i = 1,point do
+					path = path+numtimes
+				
+				
+					local newaction = {}
+					newaction.name = "teleport_entity_at_position"
+					newaction.tag = action.tag
+					newaction.x = path.x
+					newaction.y = path.y
+					newaction.z = action.zfly
+					newaction.angle = angle
+					newaction.pathfinding = action.pathfinding
+					newaction.collision = false
+					newaction.axis = "x"
+					table.insert(actionlist,newaction)
+				end
+
+				newaction = {}
+				newaction.name = "wait_second"
+				newaction.value = 0.5
+				table.insert(actionlist,newaction)
+				
+				if(action.isAV == true) then
+					
+					local ztimes = action.zfly - mappin.z - 3
+					local zpos = deepcopy(ztimes,nil)
+					numbertimes = ztimes
+					
+					for i=1,numbertimes  do 
+						
+							
+						zpos = zpos - 1
+					
+						local newaction = {}
+						newaction.name = "teleport_entity_at_position"
+						newaction.tag = action.tag
+						newaction.x = path.x
+						newaction.y = path.y
+						newaction.z = zpos
+						newaction.angle = angle
+						newaction.collision = true
+						newaction.pathfinding = false
+						newaction.axis = "z"
+						table.insert(actionlist,newaction)
+					end
+					
+				
+				end
+				
+					
+				runSubActionList(actionlist, tag.."_av_autodrive_activate", tag,source,false,executortag)
+				result = false
+			end
+		end
+		if(action.name == "vehicule_autodrive_activate_custom_mappin") then
+			if(ActivecustomMappin ~= nil) then
+			
+				local mappin = ActivecustomMappin:GetWorldPosition()
+				local actionlist = {}
+				
+				local obj = getEntityFromManager(action.tag)
+				local enti = Game.FindEntityByID(obj.id)
+				local myPos = enti:GetWorldPosition()
+				local newPos = myPos
+				local angle = enti:GetWorldOrientation():ToEulerAngles()
+				
+				local tempangle = {}
+				tempangle.roll = 0
+				tempangle.pitch = 0
+				tempangle.yaw = 0
+				
+				local numbertimes = 0
+				local zpath=action.zfly
+				
+				
+				
+				
+				newaction = {}
+				newaction.name = "wait_second"
+				newaction.value = 0.5
+				table.insert(actionlist,newaction)
+				
+				if(action.isAV == true) then
+					local ztimes = action.zfly - myPos.z
+					local zpos = deepcopy(newPos.z,nil)
+					numbertimes = ztimes / zpath
+					
+					for i=1,ztimes  do 
+						
+							
+						zpos = zpos + 1
+					
+						local newaction = {}
+						newaction.name = "teleport_entity_at_position"
+						newaction.tag = action.tag
+						newaction.x = newPos.x
+						newaction.y = newPos.y
+						newaction.z = zpos
+						newaction.angle = angle
+						newaction.collision = false
+						newaction.pathfinding = false
+						newaction.axis = "z"
+						table.insert(actionlist,newaction)
+					end
+				end
+				
+				
+				local destination = Vector4.new(mappin.x, mappin.y, myPos.z,1)			
+				local dirVector = diffVector(myPos, destination)
+				local myyaw = 0
+				local vdepart = LVector.new(myPos.x,myPos.y)
+				local varrive = LVector.new(mappin.x,mappin.y)
+				local diag = varrive-vdepart
+				local point = action.speed
+				local newangle = GetSingleton('Vector4'):ToRotation(dirVector)
+				local numtimes = diag*(1/point)
+				local path = deepcopy(vdepart,nil)
+				for i = 1,point do
+					path = path+numtimes
+				
+				
+					local newaction = {}
+					newaction.name = "teleport_entity_at_position"
+					newaction.tag = action.tag
+					newaction.x = path.x
+					newaction.y = path.y
+					newaction.z = action.zfly
+					newaction.angle = angle
+					newaction.pathfinding = action.pathfinding
+					newaction.collision = false
+					newaction.axis = "x"
+					table.insert(actionlist,newaction)
+				end
+				
+				newaction = {}
+				newaction.name = "wait_second"
+				newaction.value = 0.5
+				table.insert(actionlist,newaction)
+				
+				if(action.isAV == true) then
+					
+					local ztimes = action.zfly - mappin.z - 3
+					local zpos = deepcopy(ztimes,nil)
+					numbertimes = ztimes
+					
+					for i=1,numbertimes  do 
+						
+							
+						zpos = zpos - 1
+					
+						local newaction = {}
+						newaction.name = "teleport_entity_at_position"
+						newaction.tag = action.tag
+						newaction.x = path.x
+						newaction.y = path.y
+						newaction.z = zpos
+						newaction.angle = angle
+						newaction.collision = true
+						newaction.pathfinding = false
+						newaction.axis = "z"
+						table.insert(actionlist,newaction)
+					end
+					
+				
+				end
+				
+				
 				runSubActionList(actionlist, tag.."_av_autodrive_activate__custom_mappin", tag,source,false,executortag)
 				result = false
 			end
@@ -12713,6 +12859,7 @@ end
 		
 	end
 	
+	end
 	
 	return result
 end	
@@ -13024,6 +13171,8 @@ function GeneratefromContext(context)
 	
 	local text = context.text
 	
+	if context.alpha == nil or context.alpha == false then
+	
 	for k,v in pairs(context.values)do
 	
 		if v.trigger == nil or checkTriggerRequirement(v.requirement,v.trigger)then
@@ -13033,18 +13182,46 @@ function GeneratefromContext(context)
 					runActionList(v.action, k, "see", false,"see",false)					
 			end
 			
-			if(v.type ~= "object" and v.type ~= "list") then
+		
+			local value = GenerateTextFromContextValues(context, v)
 				
-				local value = GenerateTextFromContextValues(context, v)
+			if((type(value) == "number" or type(value) == "string" or type(value) == "boolean") and v.type ~= "object" and v.type ~= "list") then
 				text = text:gsub("##"..k, tostring(value)) 
 				
-				else
-				local value = GenerateTextFromContextValues(context, v)
-				text = value
+			else
 				
+				text = value
 				
 			end
 		end
+	end
+	
+	else
+	
+	for k,v in orderedPairs(context.values)do
+		
+		if v.trigger == nil or checkTriggerRequirement(v.requirement,v.trigger)then
+		
+			if(v.action ~= nil and #v.action > 0) then
+				
+					runActionList(v.action, k, "see", false,"see",false)					
+			end
+			
+		
+			local value = GenerateTextFromContextValues(context, v)
+				
+			if((type(value) == "number" or type(value) == "string" or type(value) == "boolean") and v.type ~= "object" and v.type ~= "list") then
+				text = text:gsub("##"..k, tostring(value)) 
+				
+			else
+				
+				text = value
+				
+			end
+		end
+	end
+	
+	
 	end
 	
 	
@@ -13481,13 +13658,17 @@ function GenerateTextFromContextValues(context, v)
 				end
 				
 				if(v.key == "forward") then
-					
-					local pos = enti:GetWorldForward()
+					local pos = enti:GetWorldPosition()
+					local pos2 = enti:GetWorldForward()
 					local obj = {}
 					
-					obj.x = pos.x
-					obj.y = pos.y
-					obj.z = pos.z
+					if v.coef == nil then v.coef = 1 end
+					
+					-- if testcoef == nil then testcoef = 1 end
+					 -- v.coef = testcoef
+					obj.x = pos.x+(pos2.x*v.coef)
+					obj.y = pos.y+(pos2.y*v.coef)
+					obj.z = pos.z+(pos2.z*v.coef)
 					value = obj[v.prop]
 				
 				end
@@ -13828,13 +14009,9 @@ function GenerateTextFromContextValues(context, v)
 		end
 	end
 	
-	if(v.type == "score") then
-		value = getScoreKey(v.variable,v.key)
-		
-		
-	end
+
 	
-	if(v.type == "variable") then
+	if(v.type == "variable" or v.type == "score") then
 		value = getVariableKey(v.variable,v.key)
 		
 		if(isArray(value))then
@@ -13848,6 +14025,8 @@ function GenerateTextFromContextValues(context, v)
 				value = value[v.index]
 			end
 		end
+		
+		
 		
 	end
 		

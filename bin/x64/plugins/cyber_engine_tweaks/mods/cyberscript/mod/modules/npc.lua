@@ -18,6 +18,14 @@ if spawnRegion then
 		
 		if(enti ~= nil) then
 			
+			if obj.workspot ~= nil and cyberscript.EntityManager[obj.workspot] ~= nil then
+			
+				if(cyberscript.EntityManager[obj.workspot].workspottag ~= workspot) then
+					changeWorkSpot(entitytag,obj.workspot,workspot,unlockcamera)
+				end
+				
+				changeWorkSpotAnims(entitytag,anim_cname,isinstant)
+			else
 			
 			local spawnTransform = enti:GetWorldTransform()
 			spawnTransform:SetPosition(enti:GetWorldPosition())
@@ -46,7 +54,7 @@ if spawnRegion then
 					if(NPC ~= nil) then
 						local entity = {}
 						entity.id = NPC
-						local tag = entitytag.."_workspot_"..tostring(math.random(1,99999))
+						local tag = entitytag.."_workspot"
 						entity.tag =tag
 						entity.tweak = anim_cname
 						entity.isprevention = false
@@ -54,8 +62,10 @@ if spawnRegion then
 						entity.name = tag
 						entity.isMP = false
 						entity.isWorkspot = true
+						entity.workspottag = workspot
 						entity.spawntimespan = os.time(os.date("!*t"))+0
 						entity.despawntimespan = os.time(os.date("!*t"))+300
+						cyberscript.EntityManager[tag]=entity
 						
 						cyberscript.EntityManager[tag]=entity
 						
@@ -67,7 +77,7 @@ if spawnRegion then
 				end
 			end)
 		end
-		
+		end
 	end
 	
 	function spawnCustomAnimationWorkspot(entitytag,entname,anim_cname,workspot,isinstant,unlockcamera,angle)
@@ -123,9 +133,10 @@ if spawnRegion then
 						entity.scriptlevel = 0
 						entity.name = tag
 						entity.isMP = false
+						entity.isWorkspot = true
 						entity.workspottag = workspot
 						entity.spawntimespan = os.time(os.date("!*t"))+0
-						entity.despawntimespan = os.time(os.date("!*t"))+300
+						entity.despawntimespan = os.time(os.date("!*t"))+600
 						cyberscript.EntityManager[tag]=entity
 						
 					end
@@ -390,6 +401,7 @@ if spawnRegion then
 							
 							if ent then
 								--print("Founded")
+								Cron.Halt(timer)
 								local entity = {}
 								entity.id = NPC
 								
@@ -406,7 +418,7 @@ if spawnRegion then
 								entity.isMP = isMPplayer
 								
 								if(isitem == nil or isitem == false) then
-									
+									isitem = false
 									local npgc = getNPCByTweakId(chara)
 									if(npgc ~= nil) then
 										entity.name = npgc.Names
@@ -427,14 +439,12 @@ if spawnRegion then
 								if(appearance ~= "" and appearance ~= "none") then
 										setAppearance(ent,appearance)
 								end
-								--print(x)
-								--print(y)
-								--print(z)
+								
 								local postp = Vector4.new( x, y, z,1)
-								teleportTo(ent, postp, 1, false,isitem)
+								teleportTo(ent, postp, 1,false,entity)
 									
 							
-										Cron.Halt(timer)
+										
 									
 							end
 						end)
@@ -637,8 +647,8 @@ if spawnRegion then
 			calledfromgarage = false
 			if(beta == nil or beta == false) then
 				spawnVehicle(chara,beta,nil,nil)
-				local param = isAV
-				Cron.After(0.7, function(param)
+				
+				Cron.After(0.7, function()
 					
 					local NPC = vehicleEntId
 					logme(2,NPC)
@@ -788,8 +798,8 @@ if spawnRegion then
 			spawnVehicle(chara,nil,nil,nil)
 			
 			
-			local param = isAV
-			Cron.After(0.5, function(param)
+			
+			Cron.After(0.5, function()
 				
 				local NPC = vehicleEntId
 				logme(2,NPC)
@@ -1715,7 +1725,7 @@ if actionRegion then
 	
 	
 	function InterruptBehavior(objlook)
-		teleportTo(objlook, objlook:GetWorldPosition(), 1,false)
+		teleportTo(objlook, objlook:GetWorldPosition(), 1,false,nil)
 	end
 	
 	function IsMoving(tag)
@@ -1740,24 +1750,21 @@ if actionRegion then
 		end
 	end
 	
-	function entityLookAtDirection(x, y, z)
+	function entityLookAtDirection(tag,x, y, z)
 		
 		local obj = getEntityFromManager(tag)
 		local enti = Game.FindEntityByID(obj.id)
 		
-		local direction = {}
-		direction.x = x
-		direction.y = y
-		direction.z = z
-		direction.w = 1
+		local direction = Vector4.new(x,y,z,1)
+
 		
-		local dirVector = diffVector(enti:GetWorldPosition(), direction)
+		local dirVector = diffVector(direction,enti:GetWorldPosition())
 		local angle = GetSingleton('Vector4'):ToRotation(dirVector)
 		
 		local pitch0 = angle.pitch
 		local yaw0 = angle.yaw 
 		
-		Game.GetTeleportationFacility():Teleport(enti, enti:GetWorldPosition() , EulerAngles.new(0,pitch0,yaw0)) -- Set yaw when teleporting
+		Game.GetTeleportationFacility():Teleport(enti, enti:GetWorldPosition() , angle) -- Set yaw when teleporting
 		
 		
 		
@@ -2010,6 +2017,8 @@ if actionRegion then
 		
 		
 		enti:GetTargetTrackerComponent():ClearThreats()
+		Game['NPCPuppet::ChangeLocomotionMode;GameObjectgamedataLocomotionMode'](enti, 'Static')
+		
 		
 		Game['NPCPuppet::ChangeHighLevelState;GameObjectgamedataNPCHighLevelState'](enti, 'Relaxed')
 		Game['NPCPuppet::ChangeDefenseModeState;GameObjectgamedataDefenseMode'](enti, 'NoDefend')
@@ -2123,9 +2132,8 @@ if actionRegion then
 		if(objlook ~= nil) then
 			local item = nil
 			
-			
 			pcall(function()
-				if objlook:IsVehicle() == true then
+				if objlook:IsVehicle() == true or (obj ~= nil and obj.isWorkspot == true) then
 					-- logme(2,position.x)
 					-- logme(2,position.y)
 					-- logme(2,position.z)
@@ -2163,7 +2171,7 @@ if actionRegion then
 								
 								executeCmd(objlook, cmd)
 								test = "ok"
-								--print("testOK")
+								
 							end)
 							
 							if(test == nil) then
@@ -2188,7 +2196,9 @@ if actionRegion then
 			
 				Game.GetTeleportationFacility():Teleport(objlook, Vector4.new(position.x, position.y, position.z,1) , rot)
 			end
+			else
 			
+			print("nope")
 		end
 		
 		
@@ -3050,7 +3060,7 @@ if vehiculeRegion then
 			local firstspawn = false
 			local NPC = nil 
 			if despawntimer == nil then despawntimer = 0 end
-			local param = isAV
+			
 			
 			if(spawn_system == 1) then
 				
@@ -3073,7 +3083,7 @@ if vehiculeRegion then
 				logme(10,tostring(scriptlevel))
 				
 				if(from_behind == nil or from_behind == false) then
-					Cron.After(0.3, function(param)
+					Cron.After(0.3, function()
 						
 						local NPC = vehicleEntId
 						logme(10,npc)
@@ -3108,7 +3118,7 @@ if vehiculeRegion then
 						
 						cyberscript.EntityManager[entity.tag] = entity
 						local postp = Vector4.new( x, y, z,1)
-						teleportTo(Game.FindEntityByID(NPC), postp, 1, false)
+						teleportTo(Game.FindEntityByID(NPC), postp, 1, false,entity)
 						
 						calledfromgarage = true
 					end)
@@ -3118,7 +3128,7 @@ if vehiculeRegion then
 					
 					
 					else
-					Cron.After(0.7, function(param)
+					Cron.After(0.7, function()
 						
 						local NPC = vehicleEntId
 						logme(2,NPC)
@@ -3156,14 +3166,14 @@ if vehiculeRegion then
 							
 							Cron.After(wait_for_vehicle_second, function(param)
 								local postp = Vector4.new( x, y, z,1)
-								teleportTo(Game.FindEntityByID(NPC), postp, 1, false)
+								teleportTo(Game.FindEntityByID(NPC), postp, 1, false,entity)
 								-- logme(10,"tp "..wait_for_vehicle_second)
 								-- logme(10,"tp "..x.." "..y.." "..z)
 								
 							end)
 							else
 							local postp = Vector4.new( x, y, z,1)
-							teleportTo(Game.FindEntityByID(NPC), postp, 1, false)
+							teleportTo(Game.FindEntityByID(NPC), postp, 1, false,entity)
 							
 						end
 					end)
@@ -3516,8 +3526,7 @@ if vehiculeRegion then
 		isAV = isAV or false
 		
 		
-		local param = isAV
-		
+	
 		local vehicleSystem = Game.GetVehicleSystem()
 		
 		local garageVehicleId = GetSingleton('vehicleGarageVehicleID'):Resolve(vehiclePath)
@@ -3537,7 +3546,7 @@ if vehiculeRegion then
 		
 		
 		
-		Cron.After(0.7, function(param)
+		Cron.After(0.7, function()
 			
 			local NPC = vehicleEntId
 			logme(2,NPC)
@@ -3642,10 +3651,7 @@ if vehiculeRegion then
 			
 			
 		end
-		logme(2,"testing")
-		logme(2,vehicule)
-		logme(2,entity)
-		logme(2,tostring(vehicule:IsVehicle()))
+		
 		if(vehicule ~= nil and entity ~= nil and vehicule:IsVehicle() == true) then
 			logme(2,"ok")
 			
@@ -3663,19 +3669,7 @@ if vehiculeRegion then
 			
 			
 			
-			if IsSeatTaken(vehiculeobj,seat) == true then
-				
-				local newseat = nil
-				
-				for i=1, #seats do
-					if IsSeatTaken(vehiculeobj,seats[i]) == false then
-						newseat = seats[i]
-					end
-				end
-				
-				seat = newseat
-				
-			end
+			
 			
 			
 			
@@ -3717,12 +3711,12 @@ if vehiculeRegion then
 					mountData.isInstant = not wait
 					mountData.setEntityVisibleWhenMountFinish = true
 					mountData.removePitchRollRotationOnDismount = false
-					mountData.ignoreHLS = false
+					mountData.ignoreHLS = true
 					mountData.mountEventOptions = NewObject('handle:gameMountEventOptions')
 					mountData.mountEventOptions.silentUnmount = false
 					mountData.mountEventOptions.entityID = vehiculeobj.id
-					mountData.mountEventOptions.alive = true
-					mountData.mountEventOptions.occupiedByNeutral = true
+					mountData.mountEventOptions.alive = false
+					mountData.mountEventOptions.occupiedByNeutral = false
 					mountData.slotName = CName.new(seat)
 					cmd.mountData = mountData
 					cmd = cmd:Copy()

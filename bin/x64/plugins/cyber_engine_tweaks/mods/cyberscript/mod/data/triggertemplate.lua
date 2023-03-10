@@ -791,4 +791,21 @@ return {
 		["value"] = "fr-fr",
 		["name"] = "game_language",
 	},
+	["entity_to_relative_entity_position"] = {
+		["range"] = 0,
+		["helper"] = "This trigger will be triggered when a custom entity is at another entity's relative position",
+		["helperTitle"] = "Entity : At entity's relative position",
+		["tag"] = "judy01",
+		["target"] = "judy02",
+		["y"] = 0,
+		["name"] = "entity_to_relative_entity_position",
+		["x"] = 0,
+		["z"] = 0,
+	},
+	["entity_is_alive"] = {
+		["helper"] = "This trigger will be triggered when a custom entity is Alive",
+		["tag"] = "entitytag",
+		["helperTitle"] = "Entity : is Alive",
+		["name"] = "entity_is_alive",
+	},
 }

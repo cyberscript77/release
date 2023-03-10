@@ -463,6 +463,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 							if(v.data.type == "container" and displayHUD[k] ~= nil) then
 								
 								displayHUD[k]:SetMargin(inkMargin.new({ top = v.data.margin.top, left = v.data.margin.left}))
+							
 								displayHUD[k]:SetVisible(v.data.visible)
 								
 								
@@ -725,14 +726,130 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 	
 end
 
+function inGameInit() -- init some function after save loaded
+	loadHUD()
+	
+	LoadDataPackCache()
+	candrwMapPinFixer= false
+	cancheckmission = true
+	choiceHubData =  gameinteractionsvisInteractionChoiceHubData.new()
+	choiceHubData.active =true 
+	choiceHubData.flags = EVisualizerDefinitionFlags.Undefined
+	choiceHubData.title = "possibleInteractList" --'Test Interaction Hub'
+	
+	loadUIsetting()
+	
+	theme = CPS.theme
+	color = CPS.color
+	cyberscript.GroupManager = {}
+	cyberscript.EntityManager = {}
+	--Game.SetTimeDilation(0)
+	
+  doInitEvent()
+
+	
+	local entity = {}
+	entity.id = Game.GetPlayer():GetEntityID()
+	entity.tag = "player"
+	entity.tweak = "player"
+	cyberscript.EntityManager[entity.tag] = entity
+	
+	if (Immortal) then
+					
+						Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Invulnerable", CName.new("SecondHeart"))
+						if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
+							local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+							if veh then
+								Game.GetGodModeSystem():AddGodMode(veh:GetEntityID(), "Invulnerable", CName.new("Default"))
+							end
+						end
+			else
+							local hasSecondHeart = false
+							local ssc = Game.GetScriptableSystemsContainer()
+							local es = ssc:Get(CName.new('EquipmentSystem'))
+							local espd = es:GetPlayerData(Game.GetPlayer())
+							espd['GetItemInEquipSlot2'] = espd['GetItemInEquipSlot;gamedataEquipmentAreaInt32']
+						for i=0,2 do
+							if espd:GetItemInEquipSlot2("CardiovascularSystemCW", i).tdbid.hash == 3619482064 then
+								hasSecondHeart = true
+							end
+						end
+						if hasSecondHeart then
+							Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Immortal", CName.new("SecondHeart"))
+						else
+							Game.GetGodModeSystem():DisableOverride(Game.GetPlayer():GetEntityID(), CName.new("SecondHeart"))
+						end
+						if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
+							local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+							if veh then
+								Game.GetGodModeSystem():ClearGodMode(veh:GetEntityID(), CName.new("Default"))
+							end
+						end
+						
+		end
+		
+		
+		
+		Game.InfiniteStamina(InfiniteStamina)
+		
+		if(InfiniteAmmo) then
+				Game.GetInventoryManager().AddEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
+				local player = Game.GetPlayer()
+				local activeWeapon = GameObject.GetActiveWeapon(player)
+				-- The gist behind this is:
+				-- Reload the weapon in 0 seconds, end the reload
+				if(activeWeapon ~= nil) then
+				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
+				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
+				end
+			else
+				Game.GetInventoryManager().RemoveEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
+				local player = Game.GetPlayer()
+				local activeWeapon = GameObject.GetActiveWeapon(player)
+				-- The gist behind this is:
+				-- Reload the weapon in 0 seconds, end the reload
+				if(activeWeapon ~= nil) then
+				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
+				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
+				end
+			end
+	
+	
+	draw = true
+	
+	despawnAll()
+	
+	setNewFixersPoint()
+	setCustomLocationPoint() 
+	
+	--createInteraction(true)
+	local blackboardDefs = Game.GetAllBlackboardDefs()
+	local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
+	blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
+	--Game.SetTimeDilation(0)
+	 QuestManager.UntrackObjective()
+	
+	currentObjectiveId = 0
+	inkCompoundRef.RemoveAllChildren(GameController["QuestTrackerGameController"].ObjectiveContainer)
+	
+	
+pcall(function()
+	Game.GetSettingsSystem():GetVar("/gameplay/performance", "CrowdDensity"):SetValue("High")
+	cyberscript.language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
+end)
+	print(getLang("seestarted"))
+end
+
 
 function SEERefresh(active) 
 	if active == true then
-		executeRealTimeActions()
-		executeRealTimeScript()
+		executeRealTimeActions(false)
+		executeRealTimeScript(false)
 		CompileCachedThread()
 		ScriptExecutionEngine()
 		QuestThreadManager()
+		executeRealTimeActions(true)
+		executeRealTimeScript(true)
 	end
 end
 
@@ -801,12 +918,14 @@ function refresh(delta) -- update event (include thread refresh action and Quest
 end
 
 
-function executeRealTimeScript()
+function executeRealTimeScript(after)
 	
 	for key,value in pairs(directWorkerTable) do --actualcode
 		
-		if workerTable[key] == nil then
-			runActionList(value.actionlist,value.tag,"interact",false,"nothing")
+		if((value.after == nil and after == false) or (value.after ~= nil and value.after == after)) then
+			if workerTable[key] == nil then
+				runActionList(value.actionlist,value.tag,"interact",false,"nothing")
+			end
 		end
 	end
 	
@@ -814,26 +933,27 @@ function executeRealTimeScript()
 end
 
 
-function executeRealTimeActions()
+function executeRealTimeActions(after)
 	
 	for key,value in pairs(directActionsWorkerTable) do --actualcode
+		if((value.after == nil and after == false) or (value.after ~= nil and value.after == after)) then
 		
 		for i,v in ipairs(value.actionlist) do
 			
 			
-			local status, retval = pcall(executeAction,v,key,"",i,"interact","see_engine")
-			
-			
-			
-			if status == false then
+				local status, retval = pcall(executeAction,v,key,"",i,"interact","see_engine")
 				
 				
-				logme(1,getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((value.actionlist[i]))).." tag "..key.." parent ".."".." index "..i)
-				logme(1,getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((value.actionlist[i]))).." tag "..key.." parent ".."".." index "..i)
-				--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
 				
+				if status == false then
+					
+					
+					logme(1,getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((value.actionlist[i]))).." tag "..key.." parent ".."".." index "..i)
+					logme(1,getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty((value.actionlist[i]))).." tag "..key.." parent ".."".." index "..i)
+					--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
+					
+				end
 			end
-			
 			
 			
 		end
@@ -1062,13 +1182,21 @@ function checkWaitingAction(action,tag,parent,index)
 		
 		
 	end
-	
+	if(action.name == "wait_tick") then
+		
+		if(tick  >= action.tick) then
+			result = true
+		end
+		
+		
+		
+	end
 	
 	
 	
 	if(action.name == "wait_second") then
 		
-		if(tick >= action.tick) then
+		if(os.time(os.date("!*t"))+0  >= action.tick) then
 			result = true
 		end
 		
@@ -1079,7 +1207,7 @@ function checkWaitingAction(action,tag,parent,index)
 	
 	if(action.name == "subtitle" or action.name == "random_subtitle") then
 		
-		if(tick >= action.tick) then
+		if(os.time(os.date("!*t"))+0  >= action.tick) then
 			result = true
 			GameController["SubtitlesGameController"]:Cleanup()
 		end
@@ -1090,7 +1218,7 @@ function checkWaitingAction(action,tag,parent,index)
 	
 	if(action.name == "npc_chat" or action.name == "random_npc_chat") then
 		
-		if(tick >= action.tick) then
+		if(os.time(os.date("!*t"))+0  >= action.tick) then
 			result = true
 			GameController["ChattersGameController"]:Cleanup()
 		end
@@ -1108,7 +1236,7 @@ function checkWaitingAction(action,tag,parent,index)
 		--logme(4,opacity)
 		
 		
-		if(tick >= action.tick) then
+		if(os.time(os.date("!*t"))+0  >= action.tick) then
 			
 			
 			opacity = 1
@@ -1122,7 +1250,7 @@ function checkWaitingAction(action,tag,parent,index)
 			
 			
 			
-			local currentcursor = tonumber(tick)
+			local currentcursor = tonumber(os.time(os.date("!*t"))+0 )
 			
 			
 			--logme(4,fadeincursor)
@@ -1143,7 +1271,7 @@ function checkWaitingAction(action,tag,parent,index)
 		--logme(4,opacity)
 		
 		
-		if(tick >= action.tick) then
+		if(os.time(os.date("!*t"))+0  >= action.tick) then
 			
 			
 			opacity = 0
@@ -1157,7 +1285,7 @@ function checkWaitingAction(action,tag,parent,index)
 			
 			
 			
-			local currentcursor = tonumber(tick)
+			local currentcursor = tonumber(os.time(os.date("!*t"))+0 )
 			
 			
 			--logme(4,fadeincursor)
@@ -1316,7 +1444,7 @@ function checkTriggerRequirement(requirement,triggerlist)
 			
 		end	
 		
-		if(#requirement == 0 and #triggerlist == 0) then
+		if(#requirement == 0) or (requirement == nil and triggerlist == nil) then
 			result = true
 			
 		end
@@ -1326,33 +1454,33 @@ function checkTriggerRequirement(requirement,triggerlist)
 	return result
 end
 
-function testTriggerRequirement(requirement,triggerlist)
+function testTriggerRequirement(requirement,triggerlist, number)
 	local result = false
-	
+	if number == nil then number = 10 end
 	for i=1, #requirement do --pour chaque requirement de la quete
 		
 		local requirementcondition = requirement[i]
 		
 		local count = 0
-		logme(10,"Requirement : "..#requirementcondition)
-		logme(4,dump(requirementcondition))
+		logme(number,"Requirement : "..#requirementcondition)
+		logme(number,dump(requirementcondition))
 		for y =1,#requirementcondition do --pour chaque condition du requirement en cours
 			
-			logme(10,"Requirement : "..requirementcondition[y])
+			logme(number,"Requirement : "..requirementcondition[y])
 			if(result == false) then --si un requirement n'a pas été validé déja
-				logme(10,"Trigger : "..requirementcondition[y])
+				logme(number,"Trigger : "..requirementcondition[y])
 				local trigger = triggerlist[requirementcondition[y]]
-				logme(10,"Trigger : ")
-				logme(10,trigger.name)
+				logme(number,"Trigger : ")
+				logme(number,trigger.name)
 				
 				local triggerIsOk = checkTrigger(trigger) --on evalue le trigger
-				logme(10,triggerIsOk)
+				logme(number,triggerIsOk)
 				if(triggerIsOk) then --on incrémente le compteur si le trigger est ok
 					
 					
 					
 					count = count +1
-					logme(10,count)
+					logme(number,count)
 				end
 				
 				
@@ -1377,6 +1505,8 @@ function testTriggerRequirement(requirement,triggerlist)
 		result = true
 		
 	end
+	
+	logme(number,"Test Result : "..tostring(result))
 	
 	return result
 end
@@ -2022,7 +2152,7 @@ function checkNPC()
 								local enti = Game.FindEntityByID(obj.id)
 								if(enti ~= nil) then
 									
-									--getAppearance(enti)
+									
 									setAppearance(enti,npc.appeareance)
 									cyberscript.cache["npc"][k].data.appearancesetted = true
 								end

@@ -89,6 +89,26 @@ function hex2rgb(hex)
 end
 
 
+function makeListItemData(questDef, questEntry, questState, questtype)
+	local itemData = QuestListItemData.new()
+	itemData.questType = questtype
+	itemData.questData = questEntry
+	itemData.recommendedLevel = questDef.metadata.level
+	itemData.State = questState.state --gameJournalEntryState.Undefined
+	itemData.isVisited = questState.isVisited
+	itemData.isResolved = questState.isComplete
+	itemData.isTrackedQuest = questState.isTracked
+	
+	local listItemData = VirutalNestedListData.new()
+	listItemData.widgetType = 1
+	listItemData.level = questtype
+	listItemData.collapsable = true
+	listItemData.data = itemData
+	
+	return listItemData
+end
+
+
 function checkVersionNumber(current,new) --true means the current is outdated
 	
 	local currentVersion = current
@@ -1781,7 +1801,7 @@ function diffVector(from, to)
 	-- --print(dump(from))
 	-- --print(dump(to))
 	
-	return Vector4.new(to.x - from.x, to.y- from.y, to.z - from.z, to.w - from.w)
+	return Vector4.new(from.x - to.x, from.y- to.y, from.z - to.z, 1)
 end
 
 function reverseTable(mytable)

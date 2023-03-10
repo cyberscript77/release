@@ -145,6 +145,7 @@ function loadModule()
 	cyberscript.saves = dofile('mod/modules/saves.lua')
 	cyberscript.AV = dofile('mod/modules/av.lua')
 	
+	QuestManager = dofile('mod/modules/quest_manager.lua')
 	
 	if file_exists("mod/modules/editor.lua") then
 		cyberscript.editor = dofile('mod/modules/editor.lua')

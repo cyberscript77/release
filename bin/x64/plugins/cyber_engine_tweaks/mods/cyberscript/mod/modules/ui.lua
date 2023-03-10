@@ -428,10 +428,20 @@ function refreshUIWidget()
 					
 					
 					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"color")) or (table_contains(control.data.dynamic,"default") ) then 
+						
+						-- if(control.tag == "popup_border") then
+							
+							-- print(dump(control.data.textcolor))
+							
+						-- end
+							
+							
 						control.ink:SetTintColor(textcolor)
 					end
 					
 					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"visible") )or (table_contains(control.data.dynamic,"default") )  then 
+						
+					
 						control.ink:SetVisible(control.data.visible)
 					end
 					
@@ -725,13 +735,9 @@ function makeCustomInterface(parentroot,interface)
 					if(control.split and control.split > 0) then
 						
 						local desctab = splitByChunk(control.text, control.split)
-						local descc = ""
+						local descc = desctab
 						
-						for y=1,#desctab do
-							
-							
-							descc = descc.."\n"..desctab[y]
-						end
+						
 						widgetcontrol:SetText(descc)
 						else
 						widgetcontrol:SetText(control.text)
@@ -937,14 +943,11 @@ function makeCustomInterface(parentroot,interface)
 				
 				
 				if control.interactive == true then
-					
+				
 					for i,event in ipairs(control.event) do
-						--print("tiiit")
 						EventProxy.RegisterCallback(widgetcontrol, event.eventname, function(_, evt)
 							
-							--print("toot")
 							if( event.action ~= nil and #event.action > 0 and workerTable[control.tag..event.eventname] == nil) then
-								--print("teste")
 								runActionList(event.action, control.tag..event.eventname, "interact",false,"nothing",true)
 							end
 							
@@ -1484,6 +1487,77 @@ function makeNativeSettings()
 		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_disable_fall_damage"),  getLang("ui_setting_cheat_disable_fall_damage"), DisableFallDamage, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			DisableFallDamage = state
 			updateUserSetting("DisableFallDamage", DisableFallDamage)
+		end)
+		
+		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Immortal"),  getLang("Immortal"), Immortal, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			Immortal = state
+			updateUserSetting("Immortal", Immortal)
+			
+			if (Immortal) then
+					
+						Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Invulnerable", CName.new("SecondHeart"))
+						if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
+							local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+							if veh then
+								Game.GetGodModeSystem():AddGodMode(veh:GetEntityID(), "Invulnerable", CName.new("Default"))
+							end
+						end
+			else
+							local hasSecondHeart = false
+							local ssc = Game.GetScriptableSystemsContainer()
+							local es = ssc:Get(CName.new('EquipmentSystem'))
+							local espd = es:GetPlayerData(Game.GetPlayer())
+							espd['GetItemInEquipSlot2'] = espd['GetItemInEquipSlot;gamedataEquipmentAreaInt32']
+						for i=0,2 do
+							if espd:GetItemInEquipSlot2("CardiovascularSystemCW", i).tdbid.hash == 3619482064 then
+								hasSecondHeart = true
+							end
+						end
+						if hasSecondHeart then
+							Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Immortal", CName.new("SecondHeart"))
+						else
+							Game.GetGodModeSystem():DisableOverride(Game.GetPlayer():GetEntityID(), CName.new("SecondHeart"))
+						end
+						if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
+							local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+							if veh then
+								Game.GetGodModeSystem():ClearGodMode(veh:GetEntityID(), CName.new("Default"))
+							end
+						end
+						
+		end
+			
+		end)
+		
+		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Infinite Stamina"),  getLang("Infinite Stamina"), InfiniteStamina, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			InfiniteStamina = state
+			updateUserSetting("InfiniteStamina", InfiniteStamina)
+			
+			Game.InfiniteStamina(InfiniteStamina)
+		end)
+		
+		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Infinite Ammo"),  getLang("Infinite Ammo"), InfiniteAmmo, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			InfiniteAmmo = state
+			updateUserSetting("InfiniteAmmo", InfiniteAmmo)
+			
+			if(InfiniteAmmo) then
+				Game.GetInventoryManager().AddEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
+				local player = Game.GetPlayer()
+				local activeWeapon = GameObject.GetActiveWeapon(player)
+				-- The gist behind this is:
+				-- Reload the weapon in 0 seconds, end the reload
+				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
+				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
+			else
+				Game.GetInventoryManager().RemoveEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
+				local player = Game.GetPlayer()
+				local activeWeapon = GameObject.GetActiveWeapon(player)
+				-- The gist behind this is:
+				-- Reload the weapon in 0 seconds, end the reload
+				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
+				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
+			end
+			
 		end)
 		
 		nativeSettings.addRangeFloat("/CMCHEAT/player", getLang("ui_setting_cheat_player_sprint"),  getLang("ui_setting_cheat_player_sprint"), 1, 10, 0.1, "%.1f", Player_Sprint_Multiplier, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
@@ -2934,14 +3008,14 @@ function ActivatedGroup()
 			buttons.anchor = 0
 			
 			local spawn_item = {}
-			spawn_item.name = "set_datapack_group" 
+			spawn_item.name = "set_datapack_group_index" 
 			spawn_item.value = i
 			table.insert(buttons.action,spawn_item)
 			
 			local close_action = {}
 			close_action.name = "close_interface" 
 			table.insert(buttons.action,close_action)
-			print(dump(buttons))
+		
 			table.insert(ui.controls,buttons)
 		end
 		currentInterface = ui

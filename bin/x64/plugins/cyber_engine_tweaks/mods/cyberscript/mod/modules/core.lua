@@ -8,9 +8,8 @@ local modLoaded = false
 
 function loadexternal()
 	
-	QuestManager = dofile('mod/external/QuestManager.lua')
-	QuestJournalUI = dofile('mod/external/QuestJournalUI.lua')
-	QuestTrackerUI = dofile('mod/external/QuestTrackerUI.lua')
+
+	
 	GameUI = dofile('mod/external/GameUI.lua')
 	TargetingHelper = dofile('mod/external/TargetingHelper.lua')
 	AIControl = dofile('mod/external/AIControl.lua')
@@ -36,6 +35,7 @@ function loadexternal()
 	RES_TweakDB =  dofile('mod/external/tweakdb-ids.lua')
 	RES_TweakDBmeta =  dofile('mod/external/tweakdb-meta.lua')
 	interactionUI = dofile("mod/external/interactionUI")
+	LVector = dofile("mod/external/Vector2")
 	if GetMod('corruptNCPD') then 
 	
 	CorruptNCPDLang =  dofile('mod/external/CorruptNCPDLang.lua')
@@ -219,7 +219,11 @@ function SaveLoading()
 	Player_Sprint_Multiplier = getUserSettingWithDefault("Player_Sprint_Multiplier",Player_Sprint_Multiplier)
 	Player_Run_Multiplier = getUserSettingWithDefault("Player_Run_Multiplier",Player_Run_Multiplier)
 	Jump_Height = getUserSettingWithDefault("Jump_Height",Jump_Height)
-	Double_Jump_Height = getUserSettingWithDefault("Double_Jump_Height",Double_Jump_Height)
+	Immortal = getUserSettingWithDefault("Immortal",Immortal)
+	InfiniteStamina = getUserSettingWithDefault("InfiniteStamina",InfiniteStamina)
+	InfiniteAmmo = getUserSettingWithDefault("InfiniteAmmo",InfiniteAmmo)
+	
+	
 
 	debugLog = getUserSettingWithDefault("debugLog",debugLog)
 	
@@ -578,52 +582,6 @@ function initCore() --Setup session, mod/external observer and trigger mod core 
 	
 	logme(1,getLang("CyberScriptinit"))
 	tick = 0
-end
-function inGameInit() -- init some function after save loaded
-	loadHUD()
-	
-	LoadDataPackCache()
-	candrwMapPinFixer= false
-	cancheckmission = true
-	choiceHubData =  gameinteractionsvisInteractionChoiceHubData.new()
-	choiceHubData.active =true 
-	choiceHubData.flags = EVisualizerDefinitionFlags.Undefined
-	choiceHubData.title = "possibleInteractList" --'Test Interaction Hub'
-	
-	loadUIsetting()
-	
-	theme = CPS.theme
-	color = CPS.color
-	cyberscript.GroupManager = {}
-	cyberscript.EntityManager = {}
-	--Game.SetTimeDilation(0)
-	
-  doInitEvent()
-
-	
-	local entity = {}
-	entity.id = Game.GetPlayer():GetEntityID()
-	entity.tag = "player"
-	entity.tweak = "player"
-	cyberscript.EntityManager[entity.tag] = entity
-	
-	
-	
-	
-	draw = true
-	
-	despawnAll()
-	--createInteraction(true)
-	local blackboardDefs = Game.GetAllBlackboardDefs()
-	local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
-	blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
-	--Game.SetTimeDilation(0)
-
-pcall(function()
-	Game.GetSettingsSystem():GetVar("/gameplay/performance", "CrowdDensity"):SetValue("High")
-	cyberscript.language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
-end)
-	print(getLang("seestarted"))
 end
 
 

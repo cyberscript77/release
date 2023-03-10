@@ -3,10 +3,90 @@ cyberscript.module = cyberscript.module +1
 --print("hot reload test")
 ---Observer and Overrider---
 function SetObserver()
-	QuestJournalUI.Initialize()
 	
-	QuestTrackerUI.Initialize()
+	--QuestJournalUI
+	-- enum gameJournalQuestType
+-- {
+-- MainQuest = 0,
+-- SideQuest = 1,
+-- MinorQuest = 2,
+-- StreetStory = 3,
+-- Contract = 4,
+-- VehicleQuest = 5
+-- }
+
+	ObserveAfter('questLogGameController', 'BuildQuestList', function(self)
+		questLogGameController_BuildQuestList(self)
+	end)
 	
+	---@param e QuestlListItemClicked
+	ObserveAfter('questLogGameController', 'OnQuestListItemClicked', function(self, e)
+	 questLogGameController_OnQuestListItemClicked(self,e)
+		end)
+	---@param self questLogGameController
+	---@param e RequestChangeTrackedObjective
+	ObserveAfter('questLogGameController', 'OnRequestChangeTrackedObjective', function(self, e)
+		
+		 questLogGameController_OnRequestChangeTrackedObjective(self,e)
+	end)
+	---@param self QuestListItemController
+	ObserveAfter('QuestListItemController', 'UpdateDistance', function(self)
+		QuestListItemController_UpdateDistance(self)
+		end)
+	---@param self QuestDetailsPanelController
+	---@param questData JournalQuest
+	ObserveAfter('QuestDetailsPanelController', 'Setup', function(self, questData)
+		
+		 QuestDetailsPanelController_Setup(self, questData)
+	
+	end)
+	
+	ObserveAfter('GenericNotificationController', 'SetNotificationData', function(self, notificationData)
+		 GenericNotificationController_SetNotificationData(self, notificationData)
+		
+	
+	end)
+	
+	
+	ObserveAfter('QuestDetailsPanelController', 'OnUpdateTrackedObjectiveEvent', function(self, e)
+		
+		 QuestDetailsPanelController_OnUpdateTrackedObjectiveEvent(self, e)
+	end)
+	
+	Override('QuestListHeaderController', 'Setup', function(self, titleLocKey,questType,wrappedMethod)
+		
+		
+		 QuestListHeaderController_Setup(self, titleLocKey,questType,wrappedMethod)
+		
+		
+	end)
+	
+	
+	--QuestJournalUI
+	
+	
+	--QuestTrackerUI
+	
+	Observe('QuestTrackerGameController', 'OnTrackedEntryChanges', function(self)
+		
+		QuestTrackerGameController_OnTrackedEntryChanges(self)
+		
+	end)
+	
+	Override('QuestTrackerGameController', 'UpdateTrackerData', function(self, wrappedmethod)
+	
+		QuestTrackerGameController_UpdateTrackerData(self, wrappedmethod)
+	
+	end)
+
+	---@param self QuestTrackerGameController
+	ObserveAfter('QuestTrackerGameController', 'OnMenuUpdate', function(self, value)
+		
+		 QuestTrackerGameController_OnMenuUpdate(self, value)
+			
+	end)
+	
+	--QuestTrackerUI
 	
 	
 	ObserveAfter("ComputerMainLayoutWidgetController", "OnScreenSaverSpawned", function(this,widget,userData)
@@ -31,10 +111,10 @@ function SetObserver()
 	
 	
 	--perk
-	-- ObserveAfter("PerksMainGameController", "SetActiveScreen", function(this,screenType)
-	
+	 ObserveAfter("CodexUtils", "ConvertToCodexData", function(this,journal, currentEntry, currentGroupIndex, stateFilter, newEntries, activeDataSync, useFallbackImages)
+		print(currentEntry.id)
 		-- PerksMainGameController_SetupLayout(this,screenType)
-	-- end)
+	end)
 	
 	-- Override("PerkScreenController", "Setup", function(this,displayData, dataManager , startingIndex,wrappedMethod)
 	
@@ -301,11 +381,17 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	ObserveBefore('WorldMapMenuGameController', 'GetDistrictAnimation', function(this,view ,show)
 		WorldMapMenuGameController_GetDistrictAnimation(this,view ,show)
+			WorldMapMenuGameController_OnInitialize(this)
+	end)
+	
+	ObserveAfter('WorldMapMenuGameController', 'OnInitialize', function(this)
+		WorldMapMenuGameController_OnInitialize(this)
 		
 	end)
 	
 	ObserveAfter('WorldMapMenuGameController', 'GetDistrictAnimation', function(this,view ,show)
 		 WorldMapMenuGameController_GetDistrictAnimation(this,view ,show)
+		 	WorldMapMenuGameController_OnInitialize(this)
 	end)
 	
 	ObserveAfter('TrackQuestNotificationAction', 'TrackFirstObjective', function(this,questEntry)
@@ -316,7 +402,7 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	ObserveAfter('WorldMapMenuGameController', 'OnUpdateHoveredDistricts', function(this,district,subdistrict)
 		WorldMapMenuGameController_OnUpdateHoveredDistricts(this,district,subdistrict)
-		
+			WorldMapMenuGameController_OnInitialize(this)
 	end)
 	
 	ObserveBefore("ShardItemVirtualController", "OnToggledOn", function (this)
@@ -347,16 +433,18 @@ PanzerHUDGameController_OnInitialize(this)
 		
 		
 		WorldMapMenuGameController_OnSelectedDistrictChanged(this,oldDistrict,newDistrict)
+			WorldMapMenuGameController_OnInitialize(this)
 	end)
 	
 	ObserveAfter('WorldMapMenuGameController', 'OnZoomLevelChanged', function(this,oldLevel,newLevel)
 		
 		WorldMapMenuGameController_OnZoomLevelChanged(this,oldLevel,newLevel)
-		
+			WorldMapMenuGameController_OnInitialize(this)
 	end)
 	
 	ObserveBefore('WorldMapMenuGameController', 'OnSetUserData', function(this,userData )
 		WorldMapMenuGameController_OnSetUserData(this,userData)
+			WorldMapMenuGameController_OnInitialize(this)
 		
 	end)
 	Observe("SettingsMainGameController", "RequestClose", function (_, _, target) -- Check if activated button is the custom mods button
@@ -418,6 +506,7 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	Observe('WorldMapMenuGameController', 'UntrackCustomPositionMappin', function(self)
 		WorldMapMenuGameController_UntrackCustomPositionMappin(self)
+			WorldMapMenuGameController_OnInitialize(self)
 	end)
 	
 	ObserveAfter('BraindanceGameController','OnInitialize', function(self)
@@ -800,10 +889,12 @@ function SetOverrider()
 	
 	Override('WorldMapMenuGameController','OnGangListItemSpawned', function(self,gangWidget,userData) 
 		WorldMapMenuGameController_OnGangListItemSpawned(self,gangWidget,userData) 
+			WorldMapMenuGameController_OnInitialize(self)
 	end)
 	
 	Override('WorldMapMenuGameController','OnSelectedDistrictChanged', function(self,oldDistrict,newDistrict) 
 		 WorldMapMenuGameController_OnSelectedDistrictChanged(self,oldDistrict,newDistrict) 
+		 	WorldMapMenuGameController_OnInitialize(self)
 	end)
 	
 	Override('WorldMapGangItemController','SetData', function(self,affiliationRecord) 
@@ -1003,6 +1094,7 @@ function SetOverrider()
 	Override('WorldMapMenuGameController', 'ShowGangsInfo', function(self,district)
 		
 		WorldMapMenuGameController_ShowGangsInfo(self,district)
+			WorldMapMenuGameController_OnInitialize(self)
 	end)
 	
 	Override('ComputerInkGameController', 'ShowMenuByName', function(this, elementName,wrappedMethod)

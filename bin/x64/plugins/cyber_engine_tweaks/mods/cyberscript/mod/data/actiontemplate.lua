@@ -24,9 +24,17 @@ return {
 	},
 	["change_hack_animation_percent"] = {
 		["value"] = 50,
+		["text"] =  "Donk hacking you !",
 		["name"] = "change_hack_animation_percent",
 		["helperTitle"] = "UI : Set Hacking Progression bar percentage",
-		["helper"] = "This action will set Hacking Progression bar percentage",
+		["helper"] = "This action will set Hacking Progression bar percentage. Text is optionnal, leave blank if not used",
+	},
+	["set_datapack_group"] = {
+		["value"] = "cyberscript",
+		
+		["name"] = "set_datapack_group",
+		["helperTitle"] = "UI : Set Current Interaction Group",
+		["helper"] = "This action will set Current Interaction Group, use tag of the datapack",
 	},
 	["remove_group"] = {
 		["helper"] = "This action will remove a group ",
@@ -914,6 +922,7 @@ return {
 	["subscribe_function_to_direct_execution"] = {
 		["helper"] = "This action will subscribe function to direct execution engine",
 		["tag"] = "myshardtag",
+		["after"]=false,
 		["helperTitle"] = "Script : Register Function to Direct Execution",
 		["name"] = "subscribe_function_to_direct_execution",
 	},
@@ -937,6 +946,7 @@ return {
 	["subscribe_event_to_direct_execution"] = {
 		["helper"] = "This action will subscribe a Event to direct execution engine. !!! The triggers are checked once before register !!!",
 		["tag"] = "myeventtag",
+		["after"]=false,
 		["helperTitle"] = "Script : Register Event to Direct Execution",
 		["name"] = "subscribe_event_to_direct_execution",
 	},
@@ -965,6 +975,7 @@ return {
 				["name"] = "notify",
 			},
 		},
+		["after"]=false,
 		["tag"] = "myshardtag",
 		["name"] = "subscribe_actionlist_to_direct_execution",
 	},
@@ -1681,6 +1692,7 @@ return {
 		["helperTitle"] = "Entity : Kill",
 		["name"] = "kill_entity",
 	},
+
 	["vehicle_reset"] = {
 		["helper"] = "This action will reset the vehicle",
 		["tag"] = "myvehiculetag",
@@ -1785,6 +1797,7 @@ return {
 				["name"] = "notify",
 			},
 		},
+		["after"]=false,
 		["tag"] = "myshardtag",
 		["name"] = "subscribe_actionlist_to_direct_action",
 	},
@@ -2413,11 +2426,11 @@ return {
 		["x"] = -10,
 		["y"] = -10,
 	},
-	[" start_effect"] = {
+	["start_effect"] = {
 		["helper"] = "This action will play an FX animation to the target",
 		["helperTitle"] = "UI : Play FX",
 		["value"] = "blackout",
-		["name"] = " start_effect",
+		["name"] = "start_effect",
 		["tag"] = "lookat",
 	},
 	["vehicle_follow_entity"] = {
@@ -2537,12 +2550,14 @@ return {
 		["secondaryname"] = "Twin",
 	},
 	["quest_notification"] = {
-		["helper"] = "This action will make display a quest notification (type : new | update | success | fail)",
+		["helper"] = "This action will make display a quest notification (type : new | update | success | fail) \n field quest is for track a quest by tag. \n field objective is for track an objective by his tag \n of the quest that you filled in 'quest'",
 		["helperTitle"] = "UI : Quest Notification",
 		["type"] = "new",
 		["name"] = "quest_notification",
 		["desc"] = "Hey you, I was thinking about you... without any clothes",
 		["duration"] = 4,
+		["quest"] = "",
+		["objective"] = "",
 		["title"] = "Judy Alvarez",
 	},
 	["entity_unset_seat"] = {
@@ -2619,6 +2634,7 @@ return {
 	["subscribe_event_to_direct_action"] = {
 		["helper"] = "This action will subscribe a Event to direct execution Action Engine. !!! The triggers are checked once before register !!!",
 		["tag"] = "myeventtag",
+		["after"]=false,
 		["helperTitle"] = "Script : Register Event to Direct Action Engine",
 		["name"] = "subscribe_event_to_direct_action",
 	},
@@ -2642,6 +2658,7 @@ return {
 	["subscribe_function_to_direct_action"] = {
 		["helper"] = "This action will subscribe function to direct execution Action Engine",
 		["tag"] = "myshardtag",
+		["after"]=false,
 		["helperTitle"] = "Script : Register Function to Direct Action Engine",
 		["name"] = "subscribe_function_to_direct_action",
 	},
@@ -2784,11 +2801,11 @@ return {
 		["name"] = "set_gang_currentsubdistrict_score",
 		["faction"] = "faction_mox",
 	},
-	[" stop_effect"] = {
+	["stop_effect"] = {
 		["helper"] = "This action will stop an FX animation to the target",
 		["helperTitle"] = "UI : Stop FX",
 		["value"] = "blackout",
-		["name"] = " stop_effect",
+		["name"] = "stop_effect",
 		["tag"] = "lookat",
 	},
 	["delete_scannerdata"] = {
@@ -3329,6 +3346,15 @@ return {
 		["tag"] = "guy01",
 		["entity"] = "judy01||player",
 	},
+	["rotate_entity_to_position"] = {
+		["helper"] = "This action will rotate a custom entity to xyz position",
+		["helperTitle"] = "Entity : Rotate to entity to position",
+		["name"] = "rotate_entity_to_position",
+		["tag"] = "guy01",
+		["x"] = 5,
+		["y"] = 5,
+		["z"] = 5
+	},
 	["set_player_perk"] = {
 		["helper"] = "This action will set Player Perk",
 		["score"] = 5,
@@ -3389,5 +3415,67 @@ return {
 		["helperTitle"] = "Device : Glitch off compatible entity",
 		["tag"] = "grouptag",
 		["name"] = "device_glitch_off",
+	},
+	["device_start_using"] = {
+		["helper"] = "This action will start using compatible device",
+		["helperTitle"] = "Device : Start using compatible entity",
+		["tag"] = "grouptag",
+		["name"] = "device_start_using",
+	},
+	["device_stop_using"] = {
+		["helper"] = "This action will stop using compatible device",
+		["helperTitle"] = "Device : Stop using compatible entity",
+		["tag"] = "grouptag",
+		["name"] = "device_stop_using",
+	},
+	["track_mappin"] = {
+		["helper"] = "This action will track mappin",
+		["helperTitle"] = "Mappin : Track",
+		["tag"] = "grouptag",
+		["name"] = "track_mappin",
+	},
+	["untrack_mappin"] = {
+		["helper"] = "This action will stop tracking any mappin",
+		["helperTitle"] = "Mappin : Untrack",
+		["tag"] = "grouptag",
+		["name"] = "untrack_mappin",
+	},
+	["toggle_infinite_stamina"] = {
+		["helper"] = "This action will toggle Infinite Stamina",
+		["helperTitle"] = "Player : Toggle Infinite Stamina",
+		["value"] = true,
+		["name"] = "toggle_infinite_stamina",
+	},
+	["toggle_infinite_ammo"] = {
+		["helper"] = "This action will toggle Infinte Ammo",
+		["helperTitle"] = "Player : Toggle Infinte Ammo",
+		["value"] = true,
+		["name"] = "toggle_infinite_ammo",
+	},
+	["set_objective_state"] = {
+		["helper"] = "This action will set state to objective. It will not play the associated action. \n  -- Undefined = 0 \n   -- Inactive = 1 \n   -- Active = 2 \n   -- Succeeded = 3 \n   -- Failed = 4",
+		["helperTitle"] = "Quest : Set objective state",
+		["value"] = "myobjectivetag",
+		["state"] = 0,
+		["name"] = "set_objective_state",
+	},
+	["entity_stop_movement"] = {
+		["helper"] = "This action will stop the entity",
+		["helperTitle"] = "Entity : Stop Movement",
+		["tag"] = "judy01",
+		["name"] = "entity_stop_movement",
+	},
+	["wait_tick"] = {
+		["helper"] = "This action will wait x ticks. before perform the next action (60 ticks = 1 sec approx)",
+		["helperTitle"] = "Logic : Wait X ticks",
+		["value"] = 100,
+		["name"] = "wait_tick",
+		["help"] = "Wait x ticks",
+	},
+	["kill_group"] = {
+		["helper"] = "This action will kill a group ",
+		["tag"] = "blue01",
+		["helperTitle"] = "Group : Kill",
+		["name"] = "kill_group",
 	},
 }
