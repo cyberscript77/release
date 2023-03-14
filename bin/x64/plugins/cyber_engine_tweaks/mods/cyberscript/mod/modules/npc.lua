@@ -1316,9 +1316,15 @@ if actionRegion then
 		executeCmd(objlook, cmd)
 	end
 	
-	function EquipGivenWeapon(objlook, weapon, override)
+	function EquipGivenWeapon(objlook, weapon, override, slot)
 		local cmd = NewObject("AIEquipCommand")
+		if slot == nil then
 		cmd.slotId = TweakDBID.new("AttachmentSlots.WeaponRight")
+		
+		else
+		cmd.slotId = TweakDBID.new(slot)
+		end
+		
 		cmd.itemId = weapon
 		cmd.failIfItemNotFound = false
 		if override then
@@ -3709,14 +3715,11 @@ if vehiculeRegion then
 					local mountData = NewObject('handle:gameMountEventData')
 					mountData.mountParentEntityId = vehiculeobj.id
 					mountData.isInstant = not wait
-					mountData.setEntityVisibleWhenMountFinish = true
-					mountData.removePitchRollRotationOnDismount = false
-					mountData.ignoreHLS = true
+					
 					mountData.mountEventOptions = NewObject('handle:gameMountEventOptions')
 					mountData.mountEventOptions.silentUnmount = false
 					mountData.mountEventOptions.entityID = vehiculeobj.id
-					mountData.mountEventOptions.alive = false
-					mountData.mountEventOptions.occupiedByNeutral = false
+					
 					mountData.slotName = CName.new(seat)
 					cmd.mountData = mountData
 					cmd = cmd:Copy()

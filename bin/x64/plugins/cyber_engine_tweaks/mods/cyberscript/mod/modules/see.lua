@@ -9150,6 +9150,29 @@ end
 			end
 		end
 		
+		if(action.name == "equip_item_on_slot") then
+			local enti = nil
+			local obj = nil 
+			if(action.tag =="lookat") then 
+				enti = objLook
+				obj = getEntityFromManagerById(objLook:GetEntityID())
+				else
+				obj = getEntityFromManager(action.tag)
+				enti = Game.FindEntityByID(obj.id)
+			end
+			if(enti ~= nil and  enti:HasPrimaryOrSecondaryEquipment()) then
+				
+				if(action.tag =="player") then 
+				Game.AddToInventory(action.item,1)  
+				Game.GetTransactionSystem():AddItemToSlot(Game.GetPlayer(), TweakDBID.new("AttachmentSlots."..action.slot), ItemID.FromTDBID(TweakDBID.new(action.item)))
+				else
+				EquipGivenWeapon(enti, TweakDBID.new(action.item), true, "AttachmentSlots."..action.slot)
+				end
+			
+				
+			end
+		end
+		
 		
 		if(action.name == "equip_item") then
 			

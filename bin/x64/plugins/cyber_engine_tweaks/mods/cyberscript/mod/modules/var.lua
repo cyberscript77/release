@@ -313,6 +313,7 @@ function resetVar()
 	pathOffsetZ = 0
 	enableCustomQuest = true
 	InfiniteDoubleJump = false
+	numberOfMultiJumps = 100
 	DisableFallDamage = false
 	Immortal = false
 	InfiniteStamina = false

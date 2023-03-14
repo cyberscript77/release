@@ -3478,4 +3478,12 @@ return {
 		["helperTitle"] = "Group : Kill",
 		["name"] = "kill_group",
 	},
+	["equip_item_on_slot"] = {
+		["helper"] = "This action will equip item on slot for entity",
+		["tag"] = "player",
+		["item"] = "Items.crowd_cigarette_i_stick",
+		["slot"] = "",
+		["helperTitle"] = "Entity : Equip Item on Slot",
+		["name"] = "equip_item_on_slot",
+	},
 }

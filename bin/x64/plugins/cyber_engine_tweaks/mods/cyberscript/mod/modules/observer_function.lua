@@ -2223,7 +2223,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	--region Browser
 	function PhotoModeGridButton_ButtonStateChanged(thos)
 		if(observerthread == true or moddisabled  == true)   then return end
-		------print(NameToString(thos.currentImagePart))
+		--print(NameToString(thos.currentImagePart))
 		
 	end
 	function BrowserController_OnInitialize(self)
@@ -2317,6 +2317,9 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			local linkbar01 = panel:GetWidgetByIndex(1)
 			local linkbar02 = panel:GetWidgetByIndex(2)
 			local link01 = linkbar01:GetWidgetByIndex(0)
+			
+			printChild(link01)
+			
 			local link02 = linkbar01:GetWidgetByIndex(1)
 			local link03 = linkbar01:GetWidgetByIndex(2)
 			local link04 = linkbar01:GetWidgetByIndex(3)
@@ -2328,6 +2331,61 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			local link10 = linkbar02:GetWidgetByIndex(4)
 			
 			
+			
+			
+			if(isEmpty(cyberscript.cache["webpage"]) == false) then
+						
+					local linknew = inkVerticalPanelWidget.new()
+					linknew:SetName(StringToName("linknew"))
+					linknew:SetChildMargin(inkMargin.new({ left = 50.0, top = 30.0, right = 50.0, bottom = 30.0 }))
+				
+					linknew:SetFitToContent(true)
+					
+					
+					
+					
+					local imageprop = {}
+					imageprop.tag = "link03_img"
+					imageprop.tweak = "PhotoModeStickers.dcl_04"
+					imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+					imageprop.size = {}
+					imageprop.size.x = 200
+					imageprop.size.y = 200
+					imageprop.fittocontent = false
+					imageprop.scale = {}
+					imageprop.scale.x = 1.3
+					imageprop.scale.y = 1.3
+					
+					local textprop = {}
+					textprop.tag = "link03_text"
+					textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+					textprop.size = {}
+					textprop.size.x = 100
+					textprop.size.y = 32
+					textprop.text = "CyberScript Network"
+					textprop.fontsize = 32
+					textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+					textprop.scale = {}
+					textprop.scale.x = 1.0
+					textprop.scale.y = 1.0
+					
+					local link = linknew
+					local actionlist = {}
+					local action = {}
+					
+					action.name = "refreshBrowser" 
+					action.page = page
+					action.address = "CyberScriptWeb"
+					action.subaddress = "home"
+					table.insert(actionlist,action)
+					
+					
+					
+					buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+					linknew:Reparent(linkbar02, linkbar02:GetNumChildren()+1)
+		end
+		
+		
 			
 			
 			if(CurrentAddress == "CyberScript") then
@@ -3811,12 +3869,22 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 							verticalarea:SetFitToContent(false)
 							verticalarea:SetSize(Vector2.new({ X = 500, Y = 500 }))
 							verticalarea:Reparent(horizontalarea2, 1)
-							
+							local customimage = false
 							
 							local imageprop = {}
 							imageprop.tag = webpage.tag.."_img"
 							
-							imageprop.tweak = ('PhotoModeStickers.dcl_016')
+							if(webpage.tweak ~= nil and webpage.texture ~= nil and webpage.tweak ~= "" and webpage.texture ~= "") then
+							
+								imageprop.tweak = webpage.tweak
+								imageprop.texture = webpage.texture
+								 customimage = true
+							else
+							
+								imageprop.tweak = ('PhotoModeStickers.dcl_016')
+							end
+							
+						
 							imageprop.margin = inkMargin.new({ left = 100.0, right = 100, bottom = 0, top = 0.0 })
 							imageprop.size = {}
 							imageprop.size.x = 200
@@ -3851,7 +3919,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 							action.subaddress = webpage.target
 							table.insert(actionlist,action)
 							
-							buildWebPageBountonSquare(verticalarea,imageprop,textprop,page,actionlist)
+							buildWebPageBountonSquare(verticalarea,imageprop,textprop,page,actionlist,customimage)
 						end
 					end
 					
@@ -6527,21 +6595,21 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 		
 		
-		if(isEmpty(cyberscript.cache["webpage"]) == false) then
-			local test = thos
-			local gameCon = gameController
-			----print("inirt"..widgetsData[2].widgetName)
+		-- if(isEmpty(cyberscript.cache["webpage"]) == false) then
+			-- local test = thos
+			-- local gameCon = gameController
+			-- ----print("inirt"..widgetsData[2].widgetName)
 			
-			local widget = deepcopy(widgetsData[2],nil)
+			-- local widget = deepcopy(widgetsData[2],nil)
 			
-			widget.displayName = "CyberScript Web"
-			widget.widgetName = "CyberScriptWeb"
-			local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
-			thos:AddMenuButtonWidget(widgeto, widget, gameController)
-			thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
+			-- widget.displayName = "CyberScript Web"
+			-- widget.widgetName = "CyberScriptWeb"
+			-- local widgeto = thos:CreateMenuButtonWidget(gameController, inkWidgetRef.Get(thos.menuButtonList), widget);
+			-- thos:AddMenuButtonWidget(widgeto, widget, gameController)
+			-- thos:InitializeMenuButtonWidget(gameController, widgeto, widget)
 			
 			
-		end
+		-- end
 		
 	end
 	
@@ -7071,6 +7139,11 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			currentNumberOfJumps = stateContext:GetIntParameter("currentNumberOfJumps", true)
 			
+			if(getUserSetting('numberOfMultiJumps') ~= 100) then
+				if (currentNumberOfJumps >= getUserSetting('numberOfMultiJumps') ) then
+					return false
+				end
+			end
 			
 			if jumpPressedFlag or scriptInterface:IsActionJustPressed("Jump") then
 				
@@ -7082,7 +7155,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			return false
 			
 			
-			else
+		else
 			
 			if not jumpPressedFlag and not thos.jumpPressed then
 				thos:EnableOnEnterCondition(false)

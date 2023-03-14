@@ -278,7 +278,7 @@ function CheckandUpdateDatapack()
 			jsondesc = trydecodeJSOn(lines,desc,path)
 			
 			desc:close()
-			arrayDatapack[k].metadata=jsondesc
+			
 			
 			
 			else
@@ -298,11 +298,11 @@ function CheckandUpdateDatapack()
 			(
 					
 					(
-						(arrayDatapack[k] ~= nil and ((table_contains(arrayDatapack[k].metadata.flags,"compile",false) == true and DatapackChecker(arrayDatapack[k].metadata) == true ) or arrayDatapack[k].state == "new"))
+						(arrayDatapack[k] ~= nil and ((arrayDatapack[k].metadata ~= nil and jsondesc.version ~= arrayDatapack[k].metadata.version) or (table_contains(arrayDatapack[k].metadata.flags,"compile",false) == true and DatapackChecker(arrayDatapack[k].metadata) == true ) or arrayDatapack[k].state == "new"))
 					
 					or
 						arrayDatapack[k] == nil 
-						
+					
 					
 					)
 			)
@@ -311,7 +311,7 @@ function CheckandUpdateDatapack()
 			
 			local isenabled = false
 			haveupdate = true
-			
+			arrayDatapack[k].metadata=jsondesc
 			if((arrayDatapack[k] ~= nil and arrayDatapack[k].enabled == true)) then
 				
 				isenabled = true
@@ -1671,6 +1671,7 @@ end
 		
 		TweakDB:CloneRecord(ent.data.name, ent.data.source)
 		TweakDB:SetFlat(ent.data.name..".entityTemplatePath", ent.data.path)
+		print("Making Character "..ent.data.name)
 	end
 	
 	end

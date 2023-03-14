@@ -557,17 +557,29 @@ end
 
 
 
-function buildWebPageBountonSquare(parent,imageprop,textprop,page,action)
-	local stickerRecord = TDB.GetPhotoModeStickerRecord(imageprop.tweak)
-	
-	
+function buildWebPageBountonSquare(parent,imageprop,textprop,page,action,customimage)
 	local selectionImage = inkImage.new()
+	
+	if(customimage ~= nil and customimage == true) then 
+		selectionImage:SetAtlasResource(ResRef.FromName(imageprop.tweak))
+		selectionImage:SetTexturePart(imageprop.texture)
+		imageprop.scale.x = 1.3
+		imageprop.scale.y = 1
+		
+	else
+		local stickerRecord = TDB.GetPhotoModeStickerRecord(imageprop.tweak)
+		selectionImage:SetAtlasResource(stickerRecord:AtlasName())
+		selectionImage:SetTexturePart(stickerRecord:ImagePartName())
+
+	
+	end
+	
+	
 	selectionImage:SetName(CName.new(imageprop.tag))
 	selectionImage:SetMargin(imageprop.margin)
 	selectionImage:SetSize(Vector2.new({ X = imageprop.size.x, Y = imageprop.size.y }))
 	selectionImage:SetFitToContent(imageprop.fittocontent)
-	selectionImage:SetAtlasResource(stickerRecord:AtlasName())
-	selectionImage:SetTexturePart(stickerRecord:ImagePartName())
+	
 	selectionImage:SetScale(Vector2.new({ X = imageprop.scale.x, Y = imageprop.scale.y }))
 	selectionImage:Reparent(parent, 0)
 	selectionImage:SetInteractive(true)
@@ -1168,6 +1180,7 @@ function makeNativeSettings()
 	obj.showFactionAffinityHud = tostring(showFactionAffinityHud)
 	obj.displayXYZset = tostring(displayXYZset)
 	obj.InfiniteDoubleJump = tostring(InfiniteDoubleJump)
+	
 	obj.DisableFallDamage = tostring(DisableFallDamage)
 	obj.Player_Sprint_Multiplier = tostring(Player_Sprint_Multiplier)
 	obj.Player_Run_Multiplier = tostring(Player_Run_Multiplier)
@@ -1483,6 +1496,16 @@ function makeNativeSettings()
 			InfiniteDoubleJump = state
 			updateUserSetting("InfiniteDoubleJump", InfiniteDoubleJump)
 		end)
+		
+		 nativeSettings.addRangeInt("/CMCHEAT/player", getLang("Jump limit"),  getLang("100 = infinite"), 2, 100, 1, numberOfMultiJumps, 2, function(value)
+			pcall(function() 
+						numberOfMultiJumps = value
+						updateUserSetting("numberOfMultiJumps", numberOfMultiJumps)
+						
+						
+					end)
+		 end)
+		
 		
 		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_disable_fall_damage"),  getLang("ui_setting_cheat_disable_fall_damage"), DisableFallDamage, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			DisableFallDamage = state

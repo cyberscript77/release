@@ -1856,7 +1856,7 @@ function checkFixer()
 	if phonedFixer == false then
 		if curPos ~= nil then
 			--	logme(4,curPos)
-			currentfixer = checkWithFixer(curPos)
+			currentfixer =  deepcopy(checkWithFixer(curPos),nil)
 		end
 	end
 	
@@ -1871,11 +1871,16 @@ function checkFixer()
 		if(checkTriggerRequirement(currentfixer.requirement,currentfixer.trigger)) then --check that fixer can be spawn
 			
 			
-			oldfixer = currentfixer
+			oldfixer = deepcopy(currentfixer,nil)
 			
 			
-			if(cyberscript.EntityManager[currentfixer.tag] == nil and currentfixer.exist == false and currentfixer.npcexist == false and fixerIsSpawn == false) then
+			if(currentfixer.exist == false and currentfixer.npcexist == false and fixerIsSpawn == false) then
 				------print("spawn")
+				if (cyberscript.EntityManager[currentfixer.tag] ~= nil ) then
+					despawnEntity(currentfixer.tag)
+				
+				end
+				
 				
 				local twkVehi = TweakDBID.new(currentfixer.tweakid)
 				
@@ -1910,7 +1915,7 @@ function checkFixer()
 			
 		end
 		
-		else -- if we move away from fixer so currentfixer is nil
+	else -- if we move away from fixer so currentfixer is nil
 		
 		
 		Game.ChangeZoneIndicatorPublic()
