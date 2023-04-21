@@ -539,7 +539,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 							
 							
 						
-							if(#currentDistricts2.districtLabels > 0) then
+							if(currentDistricts2.districtLabels ~= nil and #currentDistricts2.districtLabels > 0) then
 								local gangslist = {}
 								if(#currentDistricts2.districtLabels > 1) then
 									local gangs = getGangfromDistrict(currentDistricts2.districtLabels[2],20)
@@ -818,6 +818,74 @@ function inGameInit() -- init some function after save loaded
 	draw = true
 	
 	despawnAll()
+	local storedentity =  Game.GetDynamicEntitySystem():GetTaggedIDs("CyberScript")
+	--print("storedentity"..dump(storedentity))
+	for i,entid in ipairs(storedentity) do
+		
+		local tags = Game.GetDynamicEntitySystem():GetTags(entid)
+		--print("tags"..dump(tags))
+		
+		local tagsString = {}
+		
+		for k,v in ipairs(tags) do
+			
+		--	print("vs"..Game.NameToString(v))
+			table.insert(tagsString,Game.NameToString(v))
+		
+		end
+		--print("tagsString"..dump(tagsString))
+		local cstag = ""
+		
+		if(table_contains(tagsString,"CyberScript.NPC")) then
+			for i,atg in ipairs(tagsString) do
+				if(string.match(atg,"CyberScript.NPC.")) then
+					local tagsplit = split(atg, ".")
+                   cstag = tagsplit[3]
+				end
+			end
+		end
+		
+		if(table_contains(tagsString,"CyberScript.Vehicle")) then
+			for i,atg in ipairs(tagsString) do
+				if(string.match(atg,"CyberScript.Vehicle.")) then
+					local tagsplit = split(atg, ".")
+                   cstag = tagsplit[3]
+				end
+			end
+		end
+		
+		if(cstag ~= "")then
+		
+			local entity = {}
+			entity.id = entid
+			entity.spawntimespan = os.time(os.date("!*t"))+0
+			entity.despawntimespan = os.time(os.date("!*t"))+0
+			entity.tag = cstag
+			entity.isitem = false
+			entity.tweak = cyberscript.entitieshash[tostring(Game.FindEntityByID(entid):GetRecordID().hash)].entity_tweak
+			--	print("tweak"..entity.tweak)
+			entity.isprevention = false
+			entity.iscodeware = true
+			entity.persistState = true
+			entity.persistSpawn = true
+			entity.alwaysSpawned = true
+			entity.spawnInView = true
+			entity.scriptlevel = 0
+		
+			entity.isMP = false
+			
+			local npgc = getNPCByTweakId(entity.tweak)
+			if(npgc ~= nil) then
+				entity.name = npgc.Names
+				else
+				entity.name = cstag
+			end
+			
+			cyberscript.EntityManager[cstag]=entity
+		end
+	
+	end
+	
 	
 	setNewFixersPoint()
 	setCustomLocationPoint() 
@@ -1874,20 +1942,20 @@ function checkFixer()
 			oldfixer = deepcopy(currentfixer,nil)
 			
 			
-			if(currentfixer.exist == false and currentfixer.npcexist == false and fixerIsSpawn == false) then
-				------print("spawn")
-				if (cyberscript.EntityManager[currentfixer.tag] ~= nil ) then
-					despawnEntity(currentfixer.tag)
+			-- if(currentfixer.exist == false and currentfixer.npcexist == false and fixerIsSpawn == false) then
+				-- ------print("spawn")
+				-- -- if (cyberscript.EntityManager[currentfixer.tag] ~= nil ) then
+					-- -- despawnEntity(currentfixer.tag)
 				
-				end
-				
-				
-				local twkVehi = TweakDBID.new(currentfixer.tweakid)
+				-- -- end
 				
 				
+				-- -- local twkVehi = TweakDBID.new(currentfixer.tweakid)
 				
-				cyberscript.EntityManager[currentfixer.tag] = {}
-				spawnNPC(currentfixer.tweakid,"", currentfixer.tag, currentfixer.x, currentfixer.y, currentfixer.z, 42, true, false, nil, false, nil)
+				
+				
+				-- -- cyberscript.EntityManager[currentfixer.tag] = {}
+			-- --	spawnNPC(currentfixer.tweakid,"", currentfixer.tag, currentfixer.x, currentfixer.y, currentfixer.z, 42, true, false, nil, false, nil)
 				
 				
 				
@@ -1895,8 +1963,7 @@ function checkFixer()
 				
 				
 				
-			end	
-			
+			-- end	
 			
 			if(fixerIsSpawn == false and currentfixer.spawn_action ~= nil and #currentfixer.spawn_action >0 ) then
 				
@@ -1923,20 +1990,13 @@ function checkFixer()
 		if(oldfixer ~= nil) then
 			
 			
-			local obj = getEntityFromManager(oldfixer.tag)
-			
-			
-			
-			
-			if(obj.id ~= nil) then
-				despawnEntity(oldfixer.tag)
 				
 				
 				
 				if(oldfixer ~= nil and oldfixer.despawn_action ~= nil and #oldfixer.despawn_action >0) then
 					
 					--doActionof(currentfixer.action,"interact")
-					runActionList(oldFixer.despawn_action, oldFixer.tag.."_Despawn",nil, nil,currentfixer.tag)
+					runActionList(oldfixer.despawn_action, oldfixer.tag.."_Despawn",nil, nil,oldfixer.tag)
 					
 					
 					
@@ -1945,11 +2005,13 @@ function checkFixer()
 				oldfixer = nil
 				
 				
-			end
+			
 			
 		end
 		
 		fixerIsSpawn = false
+		
+		
 	end
 	
 	
@@ -3384,7 +3446,8 @@ end
 function GetEntityGender(entity)
 	-- True = Female / False = Male
 	logme(4,tostring(Game.NameToString(entity:GetBodyType())))
-	if string.find(tostring(Game.NameToString(entity:GetBodyType())), "oman") then
+	logme(4,tostring(string.find(string.lower(tostring(Game.NameToString(entity:GetBodyType()))), "woman")))
+	if string.match(string.lower(tostring(Game.NameToString(entity:GetBodyType()))), "woman") then
 		return "female"
 		else
 		return "male"
@@ -4827,7 +4890,7 @@ function refreshModVariable(active)
 			
 			setVariable("current_district","tag", currentDistricts2.Tag)
 			local district =  getDistrictByTag(currentDistricts2.Tag)
-			setVariable("current_district","enum", district.EnumName)
+			if district~= nil then setVariable("current_district","enum", district.EnumName) end
 			if(districtState == nil) then
 				districtState = "loading"
 				

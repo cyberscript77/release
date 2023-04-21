@@ -51,4 +51,17 @@ function api.checkTriggerRequirement(requirement,triggerlist)
 	
 end
 
+
+function api.setVariable(tag,key,score)
+	
+	setVariable(tag,key,score)
+	
+end
+
+function api.getVariableKey(tag,key)
+	
+	getVariableKey(tag,key)
+	
+end
+
 return api

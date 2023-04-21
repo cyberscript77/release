@@ -242,14 +242,14 @@ function ClickOnDialog(currentdialoption, npcId, way)
 	
 	-- if(isdialogactivehub == false) then
 		-- removeDialog()
-		-- currentDialogHub = nil
+	
 	if(playerisstopped == true) then
 		StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
 		playerisstopped = false
 	end
 	-- end
 	doOptionAction(currentdialoption,way)
-	
+	currentDialogHub = nil
 	--SetDialogPhoneUI(currentPhoneDialog)
 end
 

@@ -845,7 +845,7 @@ return {
 		["position_house_way"] = "default",
 		["tag"] = "mymappintag",
 		["position_lookatdistance"] = 0,
-		["name"] = "set_mappin",
+		["name"] = "edit_mappin",
 		["x"] = 0,
 		["y"] = 0,
 		["color"] = {
@@ -1197,6 +1197,16 @@ return {
 		["group"] = "",
 		
 		["name"] = "register_entities_around_you",
+	},
+	["register_entity_by_hash"] = {
+		["helper"] = "This action will register founded entity in the player's determined range and hash. ",
+		["helperTitle"] = "Entity : Register entity around you by hash",
+		["range"] = 5,
+		["value"] = "9001172ULL",
+		["tag"] = "fixer_rita",
+		["group"] = "",
+		
+		["name"] = "register_entity_by_hash",
 	},
 	["setup_gang_rival_affinity"] = {
 		["helper"] = "This action will  Setup Gang affinity toward their default Rival.",
@@ -1668,6 +1678,11 @@ return {
 		["tag"] = "blue01",
 		["x"] = 0,
 		["use_police_prevention_system"] = true,
+		["usecodeware"] =  false,
+		["persiststate"] = false,
+		["persistspawn"] = false,
+		["alwaysspawned"] = false,
+		["spawninview"] = false,
 	},
 	["current_place_clear_all_template"] = {
 		["helper"] = "This action will clear all item that are from a template in the current place",
@@ -1769,7 +1784,7 @@ return {
 		["appearance"] = "none",
 		["helperTitle"] = "Vehicle : Spawn a Vehicle",
 		["position"] = "at",
-		["helper"] = "This action will summon Vehicle with several custom parameter ",
+		["helper"] = "This action will summon Vehicle with several custom parameter.\nSpawn system : \n-1 : From Garage\n-2 : ExEntity\n-3 : Prevention\n-4 : Codeware(recommended, need Codeware 1.1.0+)",
 		["help"] = "This action will summon a Vehicle with several custom parameter ",
 		["wait_for_vehicle_second"] = 7,
 		["isAV"] = false,
@@ -1787,6 +1802,10 @@ return {
 		["position_tag"] = "judy01",
 		["x"] = 0,
 		["y"] = 0,
+		["persiststate"] = false,
+		["persistspawn"] = false,
+		["alwaysspawned"] = false,
+		["spawninview"] = false
 	},
 	["subscribe_actionlist_to_direct_action"] = {
 		["helper"] = "This action will subscribe a list of action to direct Action Engine",
@@ -2887,6 +2906,7 @@ return {
 		["helper"] = "This action will fire a function",
 		["parallele"] = false,
 		["value"] = "myfunction",
+		["repeats"] = 0,
 		["name"] = "do_function",
 		["helperTitle"] = "Function : Do a function",
 		["applyto"] = "",
@@ -3485,5 +3505,12 @@ return {
 		["slot"] = "",
 		["helperTitle"] = "Entity : Equip Item on Slot",
 		["name"] = "equip_item_on_slot",
+	},
+	["unequip_item_on_slot"] = {
+		["helper"] = "This action will uneequip item on slot for entity",
+		["tag"] = "player",
+		["slot"] = "",
+		["helperTitle"] = "Entity : Unequip Item on Slot",
+		["name"] = "unequip_item_on_slot",
 	},
 }

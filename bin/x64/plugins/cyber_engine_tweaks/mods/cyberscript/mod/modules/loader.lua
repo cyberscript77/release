@@ -6,13 +6,17 @@ function loadModule()
 	actionorder = {
 		"helperTitle",
 		"helper",
-		"name"
+		"name",
+		"output",
+		"comment"
 	}
 	
 	triggerorder = {
 		"helperTitle",
 		"help",
-		"helper"
+		"helper",
+		"output",
+		"comment"
 		
 		
 	}

@@ -98,8 +98,12 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
-			
-			
+			if(trigger.name == "choice_is_opened") then
+				result = currentDialogHub ~= nil
+			end
+			if(trigger.name == "specific_choice_is_opened") then
+				result = currentDialogHub ~= nil and currentDialogHub.dial.tag == trigger.tag
+			end
 			if(trigger.name == "entity_tag_exist") then
 				result = cyberscript.EntityManager[trigger.tag] ~= nil
 			end
@@ -161,6 +165,16 @@ function scriptcheckTrigger(trigger)
 							end
 						end
 					end
+				end
+			end
+			if(trigger.name == "look_at_hash") then
+				if objLook ~= nil then
+					
+							if(trigger.value == tostring(objLook:GetEntityID().hash))then 
+								result = true
+							end
+						
+					
 				end
 			end
 			if(trigger.name == "killed_entity") then
@@ -389,19 +403,16 @@ function scriptcheckTrigger(trigger)
 				if(obj.id ~= nil) then
 					local enti = Game.FindEntityByID(obj.id)	
 					if(enti ~= nil) then
-						logme(3,GetEntityGender(enti))
-						if(trigger.value == GetEntityGender(enti)) then
+						logme(1,GetEntityGender(enti))
+						logme(1,trigger.value)
+						if(trigger.value == tostring(GetEntityGender(enti))) then
 							result = true
 							else
 							result =  false
 						end
 					end
 				end
-				if(trigger.value == GetPlayerGender()) then
-					result =  true
-					else
-					result = false
-				end
+				
 			end
 			if(trigger.name == "entity_is_at_mappin_position") then
 				local mappin = getMappinByTag(trigger.tag)
@@ -1781,6 +1792,32 @@ function scriptcheckTrigger(trigger)
 				result = cyberscript.language == trigger.value
 			
 			end
+	
+			if(trigger.name== "device_active_radio_channel_id") then
+			
+				local obj = getEntityFromManager(trigger.tag)
+				local enti = Game.FindEntityByID(obj.id)
+				if(enti ~= nil) then
+					local ps = enti:GetDevicePS()
+					result = ps.activeStation == trigger.value
+					
+				
+				end
+			end
+			
+			if(trigger.name== "device_active_tv_channel_id") then
+			
+				local obj = getEntityFromManager(trigger.tag)
+				local enti = Game.FindEntityByID(obj.id)
+				if(enti ~= nil) then
+					local ps = enti:GetController():GetPS():GetActiveStationIndex()
+					result = ps.activeStation == trigger.value
+					
+				
+				end
+			end
+	
+	
 		end
 		
 		if relationregion then
@@ -2855,7 +2892,7 @@ end
 						position.x = position.x + (i*0.5)
 						
 					end
-					spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav,action.despawntimer)
+					spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav,action.despawntimer,action.persiststate,action.persistspawn,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview)
 					if(action.group ~= nil and action.group ~= "") then
 						
 						if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
@@ -8297,7 +8334,7 @@ end
 						position.x = position.x + (i*0.5)
 						
 					end
-					spawnNPC(chara,action.appearance, tag, position.x, position.y ,position.z,action.spawnlevel,action.use_police_prevention_system,false,action.scriptlevel,action.useEntpath,nil,action.despawntimer)
+					spawnNPC(chara,action.appearance, tag, position.x, position.y ,position.z,action.spawnlevel,action.use_police_prevention_system,false,action.scriptlevel,action.useEntpath,nil,action.despawntimer,action.usecodeware,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview)
 					if(action.group ~= nil and action.group ~= "") then
 						
 						if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
@@ -8385,8 +8422,9 @@ end
 				end
 			end
 		end
-		if(action.name == "register_entities_around_you") then
-			   	print("mark1")
+		
+		if(action.name == "register_entity_by_hash") then
+				
 			   	player = Game.GetPlayer()
 			   	targetingSystem = Game.GetTargetingSystem()
 			   	parts = {}
@@ -8395,7 +8433,53 @@ end
 			   	searchQuery.maxDistance = action.range
 			   	success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
 			   	
-			   	print("mark1")
+			  
+			   	
+			   	local goodEntity = false
+			   	
+			   	for i, v in ipairs(parts) do
+			   		local newent = v:GetComponent(v):GetEntity() 
+			   		
+			   		
+			   		
+			   		
+			   			
+			   			
+			   			if(action.value == tostring(newent:GetEntityID().hash))then 
+			   						local entity = {}
+			   						entity.id = newent:GetEntityID()
+			   						entity.tag = action.tag
+			   						entity.tweak = "None"
+			   						entity.iscompanion = false
+			   						cyberscript.EntityManager[action.tag]=entity
+			   						if(action.group ~= nil and action.group ~= "") then
+			   							
+			   							table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
+			   						end
+			   					end
+			   			
+			   			
+			   			
+			   			
+			   			
+			   		
+			   		
+			   		
+			   		
+			   	end
+		end
+		
+		if(action.name == "register_entities_around_you") then
+			   
+			   	player = Game.GetPlayer()
+			   	targetingSystem = Game.GetTargetingSystem()
+			   	parts = {}
+			   	local success= false
+			   	searchQuery = Game["TSQ_ALL;"]() -- Search ALL objects
+			   	searchQuery.maxDistance = action.range
+			   	success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
+			   	
+			   
 			   	
 			   	local goodEntity = false
 			   	
@@ -8413,27 +8497,58 @@ end
 			   					if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
 			   						local entity = {}
 			   						entity.id = newent:GetEntityID()
+									
+									local canadd = true
+									
+									for k,v in pairs(cyberscript.EntityManager) do
+									
+									if(v.id == entity.id) then
+									
+									canadd = false
+									
+									end
+									
+									end
+									
 			   						entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
 			   						entity.tweak = "None"
 			   						entity.iscompanion = false
+									if(candd) then
 			   						cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
 			   						if(action.group ~= nil and action.group ~= "") then
 			   							
 			   							table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
 			   						end
+									end
 			   					end
 			   				end
 			   				else
+								
 			   						local entity = {}
 			   						entity.id = newent:GetEntityID()
+									
+									local canadd = true
+									
+									for k,v in pairs(cyberscript.EntityManager) do
+									
+									if(v.id == entity.id) then
+									
+									canadd = false
+									
+									end
+									
+									end
+									
 			   						entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
 			   						entity.tweak = "None"
 			   						entity.iscompanion = false
+									if(candd) then
 			   						cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
 			   						if(action.group ~= nil and action.group ~= "") then
 			   							
 			   							table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
 			   						end
+									end
 			   				end
 			   			
 			   			
@@ -9153,20 +9268,34 @@ end
 		if(action.name == "equip_item_on_slot") then
 			local enti = nil
 			local obj = nil 
-			if(action.tag =="lookat") then 
-				enti = objLook
-				obj = getEntityFromManagerById(objLook:GetEntityID())
-				else
-				obj = getEntityFromManager(action.tag)
-				enti = Game.FindEntityByID(obj.id)
-			end
-			if(enti ~= nil and  enti:HasPrimaryOrSecondaryEquipment()) then
+			obj = getEntityFromManager(action.tag)
+			enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil ) then
 				
 				if(action.tag =="player") then 
 				Game.AddToInventory(action.item,1)  
 				Game.GetTransactionSystem():AddItemToSlot(Game.GetPlayer(), TweakDBID.new("AttachmentSlots."..action.slot), ItemID.FromTDBID(TweakDBID.new(action.item)))
-				else
+			else
 				EquipGivenWeapon(enti, TweakDBID.new(action.item), true, "AttachmentSlots."..action.slot)
+				end
+			
+				
+			end
+		end
+		
+		
+		if(action.name == "unequip_item_on_slot") then
+			local enti = nil
+			local obj = nil 
+			obj = getEntityFromManager(action.tag)
+			enti = Game.FindEntityByID(obj.id)
+			if(enti ~= nil ) then
+				
+				if(action.tag =="player") then 
+				Game.AddToInventory(action.item,1)  
+				Game.GetTransactionSystem():RemoveItemFromSlot(Game.GetPlayer(), TweakDBID.new("AttachmentSlots."..action.slot), false,false,false)
+			else
+				UnEquipSlot(enti, true, "AttachmentSlots."..action.slot)
 				end
 			
 				
@@ -10422,7 +10551,7 @@ end
 					exector = action.applyto
 				end
 				
-				
+				if(action.repeats == nil or action.repeats < 2) then
 				if(action.parallele == nil or action.parallele == false)then
 					
 					
@@ -10433,6 +10562,31 @@ end
 					runActionList(event.action,action.value,source,false,exector,bypassmenu)
 					
 					
+				end
+				else
+				
+				local actionlist = {}
+					
+					for i=1,action.repeats do
+						for y=1, #event.action do 
+							table.insert(actionlist,event.action[y])
+						end
+					end
+					
+					
+				if(action.parallele == nil or action.parallele == false)then
+					
+					runSubActionList(actionlist, tag.."_event_"..action.value, tag,source,false,exector,bypassmenu)
+					
+					result=false
+					else
+					
+					runActionList(actionlist,action.value,source,false,exector,bypassmenu)
+					
+					
+				end
+				
+				
 				end
 			end
 				
@@ -13632,7 +13786,7 @@ function GenerateTextFromContextValues(context, v)
 				end
 					
 				if(v.key == "look_at") then
-				
+					if v.distance == nil then v.distance =0 end
 					local playerPos, playerAngle = targetS:GetCrosshairData(Game.GetPlayer())
 					local playerFootPos = Game.GetPlayer():GetWorldPosition()
 					playerPos.z = playerPos.z + 0.5

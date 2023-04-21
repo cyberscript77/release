@@ -169,9 +169,12 @@ function setCustomLocationPoint()
 			
 			end
 			
-			if(mappinManager[h.data.tag] == nil) then
-		
-			registerMappin( h.data.x, h.data.y, h.data.z, h.data.tag ,variantType,true,false,nil,nil,nil,nil)
+			if(mappinManager[h.data.tag] == nil and h.showMappin == true) then
+			local color = {}
+			color.red = 255
+			color.green = 255
+			color.blue = 255
+			registerMappin( h.data.x, h.data.y, h.data.z, h.data.tag ,variantType,true,false,nil,nil,nil,nil,color,"ApartmentIcon",0)
 			end
 		
 		

@@ -1704,7 +1704,24 @@ function setNewFixersPoint()
 		if(mappinManager[cyberscript.cache["fixer"][k].data.tag] == nil) then
 			
 			registerMappin(cyberscript.cache["fixer"][k].data.x,cyberscript.cache["fixer"][k].data.y,cyberscript.cache["fixer"][k].data.z,cyberscript.cache["fixer"][k].data.tag,'FixerVariant',true,false,"Fixer",nil,cyberscript.cache["fixer"][k].data.name,cyberscript.cache["fixer"][k].data.name,nil,nil,0)
+			if(v.data.exist == false and v.data.npcexist == false and cyberscript.EntityManager[v.data.tag] == nil) then
+				------print("spawn")
+				
+				
+				local twkVehi = TweakDBID.new(v.data.tweakid)
+				
+				
+				
+				cyberscript.EntityManager[v.data.tag] = {}
+				spawnNPC(v.data.tweakid,"", v.data.tag, v.data.x, v.data.y, v.data.z, 42, false, false, nil, false, nil,0,true,true,true,true,true)
+				logme(1,"Cyberscript : Spawn Fixer :"..v.data.tag)
+				
+				
 			
+				
+				
+				
+			end	
 		end
 		
 		

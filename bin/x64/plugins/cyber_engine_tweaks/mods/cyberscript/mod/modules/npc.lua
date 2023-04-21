@@ -47,13 +47,14 @@ if spawnRegion then
 				local ent = Game.FindEntityByID(NPC)
 				if ent then
 					-- stand_wall_lean180__rh_phone__ow__01
+					Game.GetWorkspotSystem():PlayInDeviceSimple(ent, enti, unlockcamera, workspot, nil, nil, 0, 1, nil)
 					
-					Game.GetWorkspotSystem():PlayInDeviceSimple(ent, enti, unlockcamera, workspot)
 					Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, anim_cname, isinstant)
 					
 					if(NPC ~= nil) then
 						local entity = {}
 						entity.id = NPC
+						entity.iscodeware = false
 						local tag = entitytag.."_workspot"
 						entity.tag =tag
 						entity.tweak = anim_cname
@@ -113,18 +114,19 @@ if spawnRegion then
 			
 			
 			local NPC = exEntitySpawner.Spawn(entname, spawnTransform, '')
-			----print("Spawned "..entname)
+			
 			Cron.Every(0.1, {tick = 1}, function(timer)
 				local ent = Game.FindEntityByID(NPC)
 				if ent then
-					-- stand_wall_lean180__rh_phone__ow__01
-					
-					Game.GetWorkspotSystem():PlayInDeviceSimple(ent, enti, unlockcamera, workspot)
-					Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, anim_cname, isinstant)
-					
+				
+				 Game.GetWorkspotSystem():PlayInDeviceSimple(ent, enti, unlockcamera, workspot, nil, nil, 0, 1, nil)
+				 Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, anim_cname, isinstant)
+		
+				
 					if(NPC ~= nil) then
 						local entity = {}
 						entity.id = NPC
+						entity.iscodeware = false
 						local tag = entitytag.."_workspot"
 						cyberscript.EntityManager[entitytag].workspot = tag
 						entity.tag =tag
@@ -181,7 +183,7 @@ if spawnRegion then
 						local entity = {}
 						entity.id = NPC
 						local tag = tag
-						
+						entity.iscodeware = false
 						entity.tag =tag
 						entity.tweak = [[base\cyberscript\entity\inkwidget.ent]]
 						entity.isprevention = false
@@ -232,7 +234,8 @@ if spawnRegion then
 		
 		if(enti ~= nil and entiwk ~= nil ) then
 			cyberscript.EntityManager[workspotEnttag].workspottag = workspot
-			Game.GetWorkspotSystem():PlayInDeviceSimple(entiwk, enti, unlockcamera, workspot)
+			
+			Game.GetWorkspotSystem():PlayInDeviceSimple(entiwk, enti, unlockcamera, workspot, nil, nil, 0, 1, nil)
 		end
 		
 	end
@@ -252,7 +255,7 @@ if spawnRegion then
 		
 	end
 	
-	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation,despawntimer)
+	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation,despawntimer,codeware,persistState,persistSpawn,AlwaysSpawned,SpawnInView)
 		
 		
 		
@@ -265,7 +268,7 @@ if spawnRegion then
 				error(getLang("npc_spawnnpc_error_vehicle"))
 				
 				
-				else
+			else
 				
 				local player = Game.GetPlayer()
 				local worldpos = player:GetWorldTransform()
@@ -282,6 +285,7 @@ if spawnRegion then
 				
 				local NPC = nil 
 				
+				if (codeware == nil or codeware == false) then
 				--ExEntity
 				if isprevention == false then
 					
@@ -303,6 +307,7 @@ if spawnRegion then
 					if(NPC ~= nil and isprevention == false ) then
 					local entity = {}
 					entity.id = NPC
+					entity.iscodeware = false
 					entity.spawntimespan = os.time(os.date("!*t"))+0
 					entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 					entity.tag = tag
@@ -404,7 +409,7 @@ if spawnRegion then
 								Cron.Halt(timer)
 								local entity = {}
 								entity.id = NPC
-								
+								entity.iscodeware = false
 								entity.tag = tag
 								entity.tweak = chara
 								entity.spawntimespan = os.time(os.date("!*t"))+0
@@ -457,7 +462,92 @@ if spawnRegion then
 				
 				
 				
-				
+				else
+					local postp = Vector4.new( x, y, z,1)
+					
+					worldpos:SetPosition(worldpos, postp)	
+					if(rotation ~= nil) then
+						
+						local rostp =  EulerAngles.new(rotation.roll,rotation.pitch,rotation.yaw)
+						
+						worldpos:SetOrientationEuler(worldpos, rostp)	
+						
+					end
+					
+					 local npcSpec =  DynamicEntitySpec.new()
+					npcSpec.recordID = chara
+					npcSpec.appearanceName = appearance
+					npcSpec.position = postp
+					npcSpec.persistState = persistState or false
+					npcSpec.persistSpawn = persistSpawn or false
+					npcSpec.alwaysSpawned = AlwaysSpawned or false
+					npcSpec.spawnInView = SpawnInView or false
+					
+					CName.add("CyberScript")
+					CName.add("CyberScript.NPC")
+					CName.add("CyberScript.NPC."..tag)
+					
+					npcSpec.tags = {"CyberScript","CyberScript.NPC","CyberScript.NPC."..tag}
+					if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.NPC."..tag) == false) then
+					NPC = Game.GetDynamicEntitySystem():CreateEntity(npcSpec)
+					
+					if(NPC ~= nil) then
+						local entity = {}
+						entity.id = NPC
+						entity.spawntimespan = os.time(os.date("!*t"))+0
+						entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
+						entity.tag = tag
+						entity.isitem = isitem
+						entity.tweak = chara
+						entity.isprevention = isprevention
+						entity.iscodeware = true
+						entity.persistState = persistState or false
+						entity.persistSpawn = persistSpawn or false
+						entity.alwaysSpawned = AlwaysSpawned or false
+						entity.spawnInView = SpawnInView or false
+						if(scriptlevel == nil) then
+							entity.scriptlevel = 0
+							else
+							entity.scriptlevel = scriptlevel
+						end
+						entity.isMP = isMPplayer
+						
+						if(isitem == nil or isitem == false) then
+							
+							local npgc = getNPCByTweakId(chara)
+							if(npgc ~= nil) then
+								entity.name = npgc.Names
+								else
+								entity.name = tag
+							end
+							else
+							
+							entity.name = tag
+							
+						end
+						
+						if(isMPplayer ~= nil and isMPplayer == true)then
+							entity.name = tag
+						end
+						cyberscript.EntityManager[tag]=entity
+						cyberscript.EntityManager["last_spawned"].tag=tag
+						
+						
+						-- Cron.After(0.5, function()
+						
+						
+						-- if isprevention == true then
+						-- local postp = Vector4.new( x, y, z,1)
+						-- teleportTo(Game.FindEntityByID(NPC), postp, 1,false)
+						-- end
+						
+						
+						
+						
+						-- end)
+					end
+					end
+				end
 				
 				
 				
@@ -654,6 +744,7 @@ if spawnRegion then
 					logme(2,NPC)
 					local entity = {}
 					entity.id = NPC
+					entity.iscodeware = false
 					entity.tag = tag
 					entity.tweak = chara
 					entity.takenSeat = {}
@@ -679,6 +770,7 @@ if spawnRegion then
 				logme(2,NPC)
 				local entity = {}
 				entity.id = NPC
+				entity.iscodeware = false
 				entity.tag = tag
 				entity.tweak = chara
 				entity.takenSeat = {}
@@ -759,6 +851,7 @@ if spawnRegion then
 			if(NPC ~= nil) then
 				local entity = {}
 				entity.id = NPC
+				entity.iscodeware = false
 				entity.tag = tag
 				entity.tweak = chara
 				entity.spawntimespan = os.time(os.date("!*t"))+0
@@ -805,6 +898,7 @@ if spawnRegion then
 				logme(2,NPC)
 				local entity = {}
 				entity.id = NPC
+				entity.iscodeware = false
 				entity.tag = tag
 				entity.spawntimespan = os.time(os.date("!*t"))+0
 					entity.despawntimespan = os.time(os.date("!*t"))+300
@@ -852,6 +946,7 @@ if spawnRegion then
 			if(NPC ~= nil) then
 				local entity = {}
 				entity.id = NPC
+				entity.iscodeware = false
 				entity.tag = tag
 				entity.tweak = chara
 				cyberscript.EntityManager[tag]=entity
@@ -900,6 +995,7 @@ if spawnRegion then
 			
 			local entity = {}
 			entity.id = NPC
+			entity.iscodeware = false
 			entity.tag = tag
 			entity.tweak = chara
 			entity.newmethod = true
@@ -932,14 +1028,7 @@ if spawnRegion then
 		local obj = getEntityFromManager(tag)
 		
 		local enti = Game.FindEntityByID(obj.id)
-		if(obj.lock == true) then
-			obj.id = nil
-			obj.tag = tag
-			obj.tweak = "None"
-			obj.lock = true
-		else
-		cyberscript.EntityManager[tag]=nil
-		end
+		
 		if enti ~= nil then
 			
 			-- else
@@ -964,14 +1053,26 @@ if spawnRegion then
 			-- Game.GetPreventionSpawnSystem():RequestDespawn(enti:GetEntityID())
 			-- end
 			-- end
+			if(obj.iscodeware == nil or obj.iscodeware == false) then
+				enti:Dispose()
 			
-			enti:Dispose()
+			else
 			
+				Game.GetDynamicEntitySystem():DeleteEntity(enti:GetEntityID())
+			
+			end
 			
 			
 		end
 		
-		
+		if(obj.lock == true) then
+			obj.id = nil
+			obj.tag = tag
+			obj.tweak = "None"
+			obj.lock = true
+		else
+		cyberscript.EntityManager[tag]=nil
+		end
 		
 		--enti:Dispose()	
 		
@@ -1335,6 +1436,24 @@ if actionRegion then
 		executeCmd(objlook, cmd)
 	end
 	
+	function UnEquipSlot(objlook, override, slot)
+		local cmd = NewObject("AIUnequipCommand")
+		if slot == nil then
+		cmd.slotId = TweakDBID.new("AttachmentSlots.WeaponRight")
+		
+		else
+		cmd.slotId = TweakDBID.new(slot)
+		end
+		
+		
+		
+		if override then
+			cmd.durationOverride = 99999
+		end
+		cmd = cmd:Copy()
+		
+		executeCmd(objlook, cmd)
+	end
 	
 	
 	
@@ -1918,7 +2037,7 @@ if actionRegion then
 				
 				
 				
-				Game["gameObject::PlayVoiceOver;GameObjectCNameCNameFloatEntityIDBool"](enti, CName.new(voiceText), CName.new(""), 1)
+				Game["gameObject::PlayVoiceOver;GameObjectCNameCNameFloatEntityIDBool"](enti, CName.new(voiceText), CName.new(""), 0)
 				
 				
 				
@@ -2652,31 +2771,11 @@ if attitudeRegion then
 			entity.isPlayerCompanionCachedTimeStamp = currTime
 			local targName = tostring(entity:GetTweakDBFullDisplayName(true))
 			local npcType = entity:IsCrowd()
-			if npcType == false then
-				if not string.match(targName, "Johnny") and not string.match(targName, "Nibbles") then
-					AIC:SetAIRole(roleComp)
+			if not string.match(targName, "Johnny") and not string.match(targName, "Nibbles") then
+				AIC:SetAIRole(roleComp)
 					entity.movePolicies:Toggle(true)
+				
 				end
-				else
-				local AIC = entity:GetAIControllerComponent()
-				local targetAttAgent = entity:GetAttitudeAgent()
-				local reactionComp = entity.reactionComponent
-				
-				local aiRole = NewObject('handle:AIRole')
-				aiRole:OnRoleSet(entity)
-				
-				entity:GetAIControllerComponent():OnAttach()	
-				Game['NPCPuppet::ChangeStanceState;GameObjectgamedataNPCStanceState'](entity, "Relaxed")
-				AIC:SetAIRole(aiRole)
-				entity.movePolicies:Toggle(true)
-				
-				targetAttAgent:SetAttitudeTowards(targets:GetAttitudeAgent(), Enum.new("EAIAttitude", "AIA_Friendly"))
-				
-				
-				
-				
-				ToggleImmortal(enti, false)
-			end
 			-- if objLook.isPlayerCompanionCached == false then
 			
 		end 
@@ -3056,7 +3155,7 @@ if vehiculeRegion then
 	--2 beta
 	--3 prevention
 	
-	function spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second,fakeav,despawntimer)
+	function spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second,fakeav,despawntimer,persistState,persistSpawn,AlwaysSpawned,SpawnInView)
 		
 		if (('string' == type(chara)) and (string.match(tostring(chara), "AMM_Vehicle.") == nil or (string.match(tostring(chara), "AMM_Vehicle.") ~= nil and AMM ~= nil)  )  )then
 			
@@ -3067,7 +3166,7 @@ if vehiculeRegion then
 			local NPC = nil 
 			if despawntimer == nil then despawntimer = 0 end
 			
-			
+			if(spawn_system ~= 4) then
 			if(spawn_system == 1) then
 				
 				local vehicleSystem = Game.GetVehicleSystem()
@@ -3095,6 +3194,7 @@ if vehiculeRegion then
 						logme(10,npc)
 						local entity = {}
 						entity.id = NPC
+						entity.iscodeware = false
 						entity.spawntimespan = os.time(os.date("!*t"))+0
 						entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 						entity.tag = tag
@@ -3140,6 +3240,7 @@ if vehiculeRegion then
 						logme(2,NPC)
 						local entity = {}
 						entity.id = NPC
+						entity.iscodeware = false
 						entity.tag = tag
 						entity.tweak = chara
 						entity.takenSeat = {}
@@ -3219,6 +3320,7 @@ if vehiculeRegion then
 				local entity = {}
 				----print("check "..tostring(NPC.hash))
 				entity.id = NPC
+				entity.iscodeware = false
 				entity.tag = tag
 				entity.spawntimespan = os.time(os.date("!*t"))+0
 				entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
@@ -3344,6 +3446,7 @@ if vehiculeRegion then
 										
 									local entity = {}
 									entity.id = NPC
+									entity.iscodeware = false
 									entity.spawntimespan = os.time(os.date("!*t"))+0
 									entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 									entity.tag = tag
@@ -3411,6 +3514,102 @@ if vehiculeRegion then
 				
 				
 				
+			
+			else
+					local player = Game.GetPlayer()
+					local worldpos = player:GetWorldTransform()
+				
+					local postp = Vector4.new( x, y, z,1)
+					
+					worldpos:SetPosition(worldpos, postp)	
+					if(rotation ~= nil) then
+						
+						local rostp =  EulerAngles.new(rotation.roll,rotation.pitch,rotation.yaw)
+						
+						worldpos:SetOrientationEuler(worldpos, rostp)	
+						
+					end
+					
+					local npcSpec =  DynamicEntitySpec.new()
+					npcSpec.recordID = chara
+					npcSpec.appearanceName = appearance
+					npcSpec.position = postp
+					npcSpec.persistState = persistState or false
+					npcSpec.persistSpawn = persistSpawn or false
+					npcSpec.alwaysSpawned = AlwaysSpawned or false
+					npcSpec.spawnInView = SpawnInView or false
+					CName.add("CyberScript")
+					CName.add("CyberScript.Vehicle")
+					CName.add("CyberScript.Vehicle."..tag)
+					
+					
+					npcSpec.tags = {"CyberScript","CyberScript.Vehicle","CyberScript.Vehicle."..tag}
+					if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.Vehicle."..tag) == false) then
+					NPC = Game.GetDynamicEntitySystem():CreateEntity(npcSpec)
+					
+					if(NPC ~= nil) then
+						local entity = {}
+						entity.id = NPC
+						entity.spawntimespan = os.time(os.date("!*t"))+0
+						entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
+						entity.tag = tag
+						entity.takenSeat = {}
+						entity.driver = {}
+						entity.isAV = isAV
+						entity.fakeAV = fakeav
+						entity.isitem = isitem
+						entity.tweak = chara
+						entity.isprevention = isprevention
+						entity.iscodeware = true
+						entity.persistState = persistState or false
+						entity.persistSpawn = persistSpawn or false
+						entity.alwaysSpawned = AlwaysSpawned or false
+						entity.spawnInView = SpawnInView or false
+						if(scriptlevel == nil) then
+							entity.scriptlevel = 0
+							else
+							entity.scriptlevel = scriptlevel
+						end
+						entity.isMP = isMPplayer
+						
+						if(isitem == nil or isitem == false) then
+							
+							local npgc = getNPCByTweakId(chara)
+							if(npgc ~= nil) then
+								entity.name = npgc.Names
+								else
+								entity.name = tag
+							end
+							else
+							
+							entity.name = tag
+							
+						end
+						
+						if(isMPplayer ~= nil and isMPplayer == true)then
+							entity.name = tag
+						end
+						cyberscript.EntityManager[tag]=entity
+						cyberscript.EntityManager["last_spawned"].tag=tag
+						
+						
+						-- Cron.After(0.5, function()
+						
+						
+						-- if isprevention == true then
+						-- local postp = Vector4.new( x, y, z,1)
+						-- teleportTo(Game.FindEntityByID(NPC), postp, 1,false)
+						-- end
+						
+						
+						
+						
+						-- end)
+					end
+					end
+			end
+			
+			
 			
 			
 			
@@ -3558,6 +3757,7 @@ if vehiculeRegion then
 			logme(2,NPC)
 			local entity = {}
 			entity.id = NPC
+			entity.iscodeware = false
 			entity.tag = tag
 			entity.spawntimespan = os.time(os.date("!*t"))+0
 			entity.despawntimespan = os.time(os.date("!*t"))+despawntimer

@@ -612,7 +612,7 @@ PanzerHUDGameController_OnInitialize(this)
 		MessengerDialogViewController_ShowDialog(self,contact)
 	end)
 	
-	Observe('MessengerDialogViewController', 'UpdateData', function(self,animateLastMessage)
+	ObserveAfter('MessengerDialogViewController', 'UpdateData', function(self,animateLastMessage)
 		MessengerDialogViewController_UpdateData(self,animateLastMessage)
 	end)
 	

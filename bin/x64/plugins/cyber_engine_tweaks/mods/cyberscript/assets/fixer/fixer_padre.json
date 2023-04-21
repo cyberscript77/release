@@ -8,8 +8,8 @@
 	"faction":"faction_valentinos",
 	"tag": "fixer_padre",
 	"tweakid":"Character.Padre",
-	"exist":false,
-	"npcexist":false,
+	"exist":true,
+	"npcexist":true,
 	"trigger":{
 		"always_enable":{
 			"name":"auto"

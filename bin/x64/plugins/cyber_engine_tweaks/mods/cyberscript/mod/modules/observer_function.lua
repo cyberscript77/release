@@ -5151,14 +5151,16 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 				elseif(SelectedScriptMappin ~= nil) then
 				
 				inkTextRef.SetText(self.defaultTooltipController.titleText, getLang(SelectedScriptMappin.title))
-				local position = ActivecustomMappin:GetWorldPosition()
-				local postext = "\n X :"..math.floor(position.x).." \n Y: "..math.floor(position.y).." \n Z: "..math.floor(position.z)
+				if(ActivecustomMappin ~= nil) then
 				if(displayXYZ ~= nil and displayXYZ == 1) then
+						local position = ActivecustomMappin:GetWorldPosition()
+				local postext = "\n X :"..math.floor(position.x).." \n Y: "..math.floor(position.y).." \n Z: "..math.floor(position.z)
+			
 					inkTextRef.SetText(self.defaultTooltipController.descText, getLang(SelectedScriptMappin.desc)..postext)
 					else
 					inkTextRef.SetText(self.defaultTooltipController.descText, getLang(SelectedScriptMappin.desc))
 				end
-				
+				end
 				SelectedScriptMappin = nil
 			end
 			else
@@ -5392,7 +5394,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			logme(4,"flib sort mod is enabled, custom message is disabled")
 			else
-			
+			print("tsetdsgshshnj")
 			local data = MessengerUtils.GetContactDataArray(thos.journalManager,true,true,thos.activeData)
 			-- for i=1,#data do
 			-- spdlog.info(GameDump(data[i].data))
@@ -5483,9 +5485,11 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			-- end
 			-- end
 			for k,v in pairs(cyberscript.cache["phone_dialog"]) do
-				local phoneConversation = v.conv
-				logme(1,phoneConversation.tag)
+				local phoneConversation = v.data
+				
+					print("HERE DONK ! "..phoneConversation.tag)
 				if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
+			
 					if phoneConversation.hash == nil then
 						cyberscript.cache["phone_dialog"][k].data.hash = 0 - tonumber("1308"..math.random(1,999))
 						
@@ -5572,7 +5576,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["MessengerGameController"] = self
 		logme(1,"MessengerGameController.OnContactActivated")
-		
+	
 		--if(currentSubtController == nil) then
 		currentPhoneConversation = nil
 		if (messageprocessing == false) then
@@ -5580,7 +5584,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			logme(2,tostring(evt.type))
 			if (string.find(tostring(evt.entryHash), "1308")and evt.type == MessengerContactType.Thread) then
 				for k,v in pairs(cyberscript.cache["phone_dialog"]) do
-					local phoneConversation = v.conv
+					local phoneConversation = v.data
 					for z=1,#phoneConversation.conversation do
 						local conversation = phoneConversation.conversation[z]
 						if(conversation.hash == evt.entryHash)then
@@ -5617,14 +5621,14 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	function MessengerDialogViewController_SetVisited(thos, records) 
 		if(observerthread == true or moddisabled  == true)   then return end
-		logme(1,"MessengerDialogViewController.SetVisited")
+		
 		local messages = thos.messages
 		local choices = thos.replyOptions
 		
 		
 		GameController["MessengerDialogViewController"]  = thos
 		if(currentPhoneConversation ~= nil) then
-			
+			logme(1,"cyberscript MessengerDialogViewController.SetVisited")
 			logme(2,currentPhoneConversation.loaded)
 			currentPhoneConversation.loaded = currentPhoneConversation.loaded + 1
 			if(currentPhoneConversation ~= nil and currentPhoneConversation.loaded >= 1) then
@@ -5712,8 +5716,8 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 		if(thread == nil) then
 			local message = {}
-			logme(1,"test")
-			table.insert(message,currentPhoneDialogPopup)
+			logme(1,"test1")
+			table.insert(message,currentPhoneConversation)
 			self.messages = message
 		end
 	end
@@ -5723,31 +5727,37 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		if(contact == nil) then
 			local message = {}
 			logme(1,"test2")
-			table.insert(message,currentPhoneDialogPopup)
+			table.insert(message,currentPhoneConversation)
 			self.messages = message
+			
 		end
 	end
 	
 	function MessengerDialogViewController_UpdateData(self,animateLastMessage)
+		Cron.NextTick(function()
+			
 		if(observerthread == true or moddisabled  == true)   then return end
 		logme(1,GameDump(self))
 		if(contact == nil) then
 			local message = {}
 			logme(1,"test3")
-			table.insert(message,currentPhoneDialogPopup)
+			table.insert(message,currentPhoneConversation)
 			self.messages = message
 			
 			
 		end
+		end)
 	end
 	
 	function MessangerItemRenderer_GetData(self)
 		if(observerthread == true or moddisabled  == true)   then return end
+			Cron.NextTick(function()
 		local choicepress = false
+		logme(1,"test4")
 		if(currentPhoneConversation ~= nil) then
 			for i = 1, #currentPhoneConversation.currentchoices do
-				logme(10,currentPhoneConversation.currentchoices[i].text)
-				logme(10,self.labelPathRef:GetText())
+				logme(1,currentPhoneConversation.currentchoices[i].text)
+				logme(1,self.labelPathRef:GetText())
 				
 				
 				if(tostring(getLang(currentPhoneConversation.currentchoices[i].text)) == tostring(self.labelPathRef:GetText())) then
@@ -5772,6 +5782,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			end
 			
 		end
+		end)
 	end
 	
 	function MessangerReplyItemRenderer_OnDataChanged(self,value)
@@ -5780,7 +5791,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	function MessangerItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
 		if(observerthread == true or moddisabled  == true)   then return end
-		--	----printmessage.id)
+	logme(1,"test5")
 		logme(1,"MessangerItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
 		Cron.NextTick(function()
 			local message = entry
@@ -5842,7 +5853,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	function MessangerReplyItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
 		if(observerthread == true or moddisabled  == true)   then return end
-		--	----printmessage.id)
+			logme(1,"test6")
 		logme(1,"MessangerReplyItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
 		Cron.NextTick(function()
 			local message = entry

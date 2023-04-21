@@ -188,57 +188,7 @@ function QuestThreadManager()
 			end
 			
 			
-			if(canDoEndAction) then
-				
-				if(DoedEndAction == false and canwaitend == false) then
-					
-					DoedEndAction = true
-					
-				end
-				
-				if(DoedEndAction == true) then
-					DoedEndAction = false
-					
-					local action = {}
-					action.name = "quest_notification"
-					action.title =  currentQuest.title
-					action.desc = currentQuest.title
-					if(currentQuest.extra ~= nil and currentQuest.extra.success ~= nil) then
-						action.desc = currentQuest.extra.success
-					end
-					action.duration = 4
-					action.type = "success"
-					executeAction(action,"success_mission","",0,"see","")
-					logme(2,"mark5")
-					if(currentQuest.isNCPD ~= nil and currentQuest.isNCPD == true ) then
-						local action = {}
-						action.name = "npcd_finish_notification"
-						action.levelXPAwarded = math.random(1,50)
-						action.streetCredXPAwarded = math.random(1,50)
-						
-						table.insert(currentQuest.end_action,action)
-					end
-					
-					doEndAction(currentQuest)
-					
-					
-					
-					
-					
-				end
-				
-				if(workerTable[currentQuest.tag.."_end"] == nil and canwaitend == true) then
-					
-					
-					closeQuest(currentQuest)
-					canDoEndAction = false
-					logme(2,"Quest End ACtion")
-					
-				end
-			end
-			
-			
-			if(
+				if(
 				(currentQuest.failure_condition_requirement ~= nil and currentQuest.failure_condition ~= nil) and
 				(#currentQuest.failure_condition_requirement ~= 0)
 			) then
@@ -303,6 +253,59 @@ function QuestThreadManager()
 				
 				
 			end
+			
+			
+			if(canDoEndAction) then
+				
+				if(DoedEndAction == false and canwaitend == false) then
+					
+					DoedEndAction = true
+					
+				end
+				
+				if(DoedEndAction == true) then
+					DoedEndAction = false
+					
+					local action = {}
+					action.name = "quest_notification"
+					action.title =  currentQuest.title
+					action.desc = currentQuest.title
+					if(currentQuest.extra ~= nil and currentQuest.extra.success ~= nil) then
+						action.desc = currentQuest.extra.success
+					end
+					action.duration = 4
+					action.type = "success"
+					executeAction(action,"success_mission","",0,"see","")
+					logme(2,"mark5")
+					if(currentQuest.isNCPD ~= nil and currentQuest.isNCPD == true ) then
+						local action = {}
+						action.name = "npcd_finish_notification"
+						action.levelXPAwarded = math.random(1,50)
+						action.streetCredXPAwarded = math.random(1,50)
+						
+						table.insert(currentQuest.end_action,action)
+					end
+					
+					doEndAction(currentQuest)
+					
+					
+					
+					
+					
+				end
+				
+				if(workerTable[currentQuest.tag.."_end"] == nil and canwaitend == true) then
+					
+					
+					closeQuest(currentQuest)
+					canDoEndAction = false
+					logme(2,"Quest End ACtion")
+					
+				end
+			end
+			
+			
+		
 			
 			
 			-- if(completedobjective == totalobjectivenotoptionnal and QuestManager.GetQuestState(currentQuest.tag).isComplete == true)then

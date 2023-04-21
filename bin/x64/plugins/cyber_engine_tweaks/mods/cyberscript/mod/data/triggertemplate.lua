@@ -57,6 +57,12 @@ return {
 		["helperTitle"] = "Player : Look at ",
 		["helper"] = "This trigger will be triggered when you look a entity who has the expected tag",
 	},
+	["look_at_hash"] = {
+		["value"] = "9001172ULL",
+		["name"] = "look_at_hash",
+		["helperTitle"] = "Player : Look at Entity Hash",
+		["helper"] = "This trigger will be triggered when you look a entity who has the expected hash",
+	},
 	["wanted_level"] = {
 		["value"] = 2,
 		["name"] = "wanted_level",
@@ -807,5 +813,29 @@ return {
 		["tag"] = "entitytag",
 		["helperTitle"] = "Entity : is Alive",
 		["name"] = "entity_is_alive",
+	},
+	["choice_is_opened"] = {
+		["helper"] = "This trigger will be triggered when a custom choice is open",
+		
+		["helperTitle"] = "UI : Custom Choice is Open",
+		["name"] = "choice_is_opened",
+	},
+	["specific_choice_is_opened"] = {
+		["helper"] = "This trigger will be triggered when a specific custom choice is open",
+		["tag"] = "choicetag",
+		["helperTitle"] = "UI : Specific Custom Choice is Open",
+		["name"] = "specific_choice_is_opened",
+	},
+	["device_active_radio_channel_id"] = {
+		["helper"] = "This trigger will be triggered when a specific active radio channel index is played",
+		["value"] = 1,
+		["helperTitle"] = "Device : Specific active radio channel index is player",
+		["name"] = "device_active_radio_channel_id",
+	},
+	["device_active_tv_channel_id"] = {
+		["helper"] = "This trigger will be triggered when a specific active tv channel index is played",
+		["value"] = 1,
+		["helperTitle"] = "Device : Specific active tv channel index is player",
+		["name"] = "device_active_tv_channel_id",
 	},
 }
