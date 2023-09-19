@@ -37,6 +37,45 @@ function PlaySound(sound,isradio,needrepeat)
 	
 end
 
+function PlaySoundAtEntity(sound,isradio,needrepeat,tag)
+	
+	local playsound = sound.tag
+	
+	if sound.language ~= nil then
+		
+		if sound.language[cyberscript.language] ~= nil then
+		
+			playsound = sound.language[cyberscript.language]
+		
+		else
+			
+			if sound.language["default"] ~= nil then
+				playsound = sound.language["default"]
+			end
+		end
+	
+	end
+	local obj = getEntityFromManager(tag)
+	if(obj ~= nil) then
+		local enti = Game.FindEntityByID(obj.id)
+		if(enti ~= nil) then
+			local audioEvent = SoundPlayEvent.new()
+			audioEvent.soundName = playsound
+			enti:QueueEvent(audioEvent)
+			local times = os.date()
+			
+			cyberscript.soundmanager[sound.tag] = {}
+			cyberscript.soundmanager[sound.tag] = sound
+			cyberscript.soundmanager[sound.tag].isplaying = true
+			cyberscript.soundmanager[sound.tag].isradio = isradio
+			cyberscript.soundmanager[sound.tag].needrepeat = needrepeat
+			cyberscript.soundmanager[sound.tag].startplaying = os.time(os.date("!*t"))+0
+			cyberscript.soundmanager[sound.tag].endplaying = os.time(os.date("!*t"))+sound.duration
+		end
+	end
+	
+end
+
 function Stop(sound)
 	
 	local playsound = sound.tag

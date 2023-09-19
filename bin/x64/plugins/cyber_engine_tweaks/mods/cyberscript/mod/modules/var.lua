@@ -222,7 +222,9 @@ function resetVar()
 		"webpage",
 		"email",
 		"quickhack",
-		"garage"
+		"garage",
+		"ai",
+		"aitemplate"
 		
 	}
 	cacheupdate = false
@@ -1819,7 +1821,7 @@ function resetVar()
 	takenQuest = {}
 	openQuestWindows = false
 	currentQuest = nil
-	
+	AIhandler = {}
 	currentQuestStarted = false
 	currentQuestFailed = false
 	
@@ -1839,7 +1841,7 @@ function resetVar()
 	DoedStartAction = false
 	DoedEndAction = false
 	DoedFailAction = false
-	
+	AIconversation = {}
 	DoedResetAction = false
 	
 	actionistaken = false

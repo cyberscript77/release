@@ -545,6 +545,28 @@ return {
 			"You were trying to cross the boarder right?",
 		},
 	},
+	["play_random_custom_sound_with_subtitle"] = {
+		["type"] = 1,
+		["helper"] = "This action will fire a random subtitle based on sound dialog on your bottom portion of the screen, The duration must complete in order for the next action to call. Type value just keep at 1 for now.",
+		["helperTitle"] = "Dialog : run Random Custom Sound Subtitle",
+		["speaker"] = "Judy",
+		["target"] = "player",
+		["name"] = "play_random_custom_sound_with_subtitle",
+		["value"] = {
+			"mysound1",
+			"mysound2",
+			"mysound3",
+		},
+	},
+	["play_custom_sound_with_subtitle"] = {
+		["type"] = 1,
+		["helper"] = "This action will fire a subtitle based on sound dialog on your bottom portion of the screen, The duration must complete in order for the next action to call. Type value just keep at 1 for now.",
+		["helperTitle"] = "Dialog : run Custom Sound Subtitle",
+		["speaker"] = "Judy",
+		["target"] = "player",
+		["name"] = "play_custom_sound_with_subtitle",
+		["value"] = "mysound1"
+	},
 	["unlock_mission"] = {
 		["value"] = "mymissiontag",
 		["name"] = "unlock_mission",
@@ -1124,6 +1146,16 @@ return {
 		["value"] = "youarebreathtaking",
 		["name"] = "play_custom_sound",
 		["needrepeat"] = false
+	},
+	["play_custom_sound_at_entity"] = {
+		["helper"] = "This action will play redmod custom sound at entity",
+		["help"] = "Value is name of the file wihtout extension",
+		["helperTitle"] = "Sound : Play Custom Sound At Entity",
+		["isradio"] = false,
+		["value"] = "youarebreathtaking",
+		["name"] = "play_custom_sound_at_entity",
+		["needrepeat"] = false,
+		["tag"] = "judy",
 	},
 	["set_relation_between_attitude"] = {
 		["attitude"] = "nid_04_maelstrom",
@@ -3513,4 +3545,89 @@ return {
 		["helperTitle"] = "Entity : Unequip Item on Slot",
 		["name"] = "unequip_item_on_slot",
 	},
+	["setup_ai_context"] = {
+		["helper"] = "This action will setup CyberAI context",
+		["value"] = "You are in cyberpunk 2077 world. I'm acting as V and you as bartender in Lizzie's bar in Kabuki. You know last news about gangs and street rumors. Answser me normally but bored ",
+		["helperTitle"] = "AI : Setup AI Context",
+		["name"] = "setup_ai_context",
+		["aitag"] = "myconversation01"
+	},
+	["ask_ai"] = {
+		["helper"] = "This action will ask CyberAI",
+		["value"] = "How are the gang ?",
+		["helperTitle"] = "AI : Ask AI",
+		["name"] = "ask_ai",
+		["aitag"] = "myconversation01"
+	},
+	["ask_ai_with_context"] = {
+		["helper"] = "This action will ask CyberAI with a system context",
+		["value"] = "How are the gang ?",
+		["helperTitle"] = "AI : Ask AI with System Context",
+		["name"] = "ask_ai_with_context",
+		["aitag"] = "myconversation01"
+	},
+	["get_ai_answer_in_score"] = {
+		["helper"] = "This action will get the CyberAI answer in variable",
+		["variable"] = "cyberAI",
+		["key"] = "answer",
+		["helperTitle"] = "AI : Get AI answer in Variable",
+		["name"] = "get_ai_answer_in_score",
+		["aitag"] = "myconversation01"
+	},
+	
+	
+	["wait_for_ai_answer"] = {
+		["helper"] = "This action will wait that the CyberAI finished to answer",
+		["helperTitle"] = "AI : Wait for answer",
+		["name"] = "wait_for_ai_answer",
+		["aitag"] = "myconversation01"
+	},
+	["ask_ai_from_item"] = {
+		["helper"] = "This action will ask the CyberAI mod from AI item",
+		["helperTitle"] = "AI : Ask from AI item",
+		["tag"] = "mytag",
+		["name"] = "ask_ai_from_item",
+		["aitag"] = "myconversation01"
+	},
+	["ask_ai_from_item_with_value"] = {
+		["helper"] = "This action will ask the CyberAI mod from AI item with a new User entry",
+		["helperTitle"] = "AI : Ask from AI item with new User entry",
+		["tag"] = "mytag",
+		["value"] = "How are Panam ?",
+		["name"] = "ask_ai_from_item_with_value",
+		["aitag"] = "myconversation01"
+	},
+	["ask_ai_from_item_with_new_contexts"] = {
+		["helper"] = "This action will ask the CyberAI mod from AI item with new contexts.\n Context Type : \n - System \n - Assistant \n - User",
+		["helperTitle"] = "AI : Ask from AI item with new contexts. ",
+		["tag"] = "mytag",
+		["contexts"] = {
+			{
+				["context_type"] = "System",
+				["value"] = "We are in Cyberpunk 20777 game universe. Act as Judy and I'm acting as male V. We are friend and Judy know about the relic and Johnny.",
+			},
+			{
+				["context_type"] = "System",
+				["value"] = "Evelyn is dead. Judy, who is lesbian, start to get feeling about V, who is male.",
+			},
+		},
+		["name"] = "ask_ai_from_item_with_new_contexts",
+		["aitag"] = "myconversation01"
+	},
+	["set_choice_from_ai"] = {
+		["helper"] = "This action will create a choice from the CyberAI mod answer",
+		["helperTitle"] = "AI : Display Choice from AI",
+		["name"] = "set_choice_from_ai",
+		["speaker"] = "Judy",
+		["aitag"] = "myconversation01"
+	},
+	["ai_phone_notification"] = {
+		["helper"] = "This action will display Phone Notification and Conversation the CyberAI mod answer",
+		["helperTitle"] = "AI : Display Phone Notification and Conversation From AI",
+		["name"] = "set_choice_from_ai",
+		["speaker"] = "Judy",
+		["conversation"] = "testtag",
+		["duration"] = 5,
+		["aitag"] = "myconversation01"
+	}
 }

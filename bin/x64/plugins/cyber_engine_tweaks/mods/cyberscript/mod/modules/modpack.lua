@@ -238,7 +238,7 @@ function CheckandUpdateDatapack()
 	if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil  ) then
 		nativeSettings.data["CMDT"].options = {}
 		else
-		nativeSettings.addTab("/CMDT", "CyberScript Datapack Manager") -- Add our mods tab (path, label)
+		nativeSettings.addTab("/CMDT", "CyberScript Mods Manager") -- Add our mods tab (path, label)
 		nativeSettings.data["CMDT"].options = {}
 	end
 	
@@ -1627,7 +1627,28 @@ end
 							cyberscript.cache["garage"][value.tag].datapack = datapackname
 							cyberscript.cache["garage"][value.tag].scripttype = objtype
 						end
-					
+						elseif(objtype == "ai") then
+							for key, value in pairs(tabl) do 
+								local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+								rootpath = path
+								
+								cyberscript.cache["ai"][value.tag] = {}
+								cyberscript.cache["ai"][value.tag].data = value
+								cyberscript.cache["ai"][value.tag].file = path
+								cyberscript.cache["ai"][value.tag].datapack = datapackname
+								cyberscript.cache["ai"][value.tag].scripttype = objtype
+							end
+					elseif(objtype == "aitemplate") then
+							for key, value in pairs(tabl) do 
+								local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+								rootpath = path
+								
+								cyberscript.cache["aitemplate"][value.tag] = {}
+								cyberscript.cache["aitemplate"][value.tag].data = value
+								cyberscript.cache["aitemplate"][value.tag].file = path
+								cyberscript.cache["aitemplate"][value.tag].datapack = datapackname
+								cyberscript.cache["aitemplate"][value.tag].scripttype = objtype
+							end
 					end
 				end
 			
@@ -1672,6 +1693,34 @@ end
 		TweakDB:CloneRecord(ent.data.name, ent.data.source)
 		TweakDB:SetFlat(ent.data.name..".entityTemplatePath", ent.data.path)
 		print("Making Character "..ent.data.name)
+		print("Falt Character "..GameDump(TweakDB:GetFlat(ent.data.name..".entityTemplatePath")))
+		local parent = {}
+		for i,v in ipairs(cyberscript.entities) do
+		
+			if(v.entity_tweak == ent.data.source) then parent = deepcopy(v, nil) end
+		
+		end
+					
+		
+		parent.entity_id = TweakDBID.new(ent.data.name).hash
+		parent.entity_entname = ent.data.path
+		parent.entity_name = ent.data.name
+		parent.entity_entpath = ent.data.path
+		parent.entity_tweak = ent.data.name
+		
+		local caninsert = true
+		
+		for i,v in ipairs(cyberscript.entities) do
+		
+			if(v.entity_id == parent.entity_id) then caninsert = false end
+		
+		end
+		
+		if caninsert == true then table.insert(cyberscript.entities,parent)end
+		
+					
+					
+				
 	end
 	
 	end

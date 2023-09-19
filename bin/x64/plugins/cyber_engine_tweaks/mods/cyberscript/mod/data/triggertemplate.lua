@@ -54,7 +54,7 @@ return {
 	["look_at_entity"] = {
 		["value"] = "cofee",
 		["name"] = "look_at_entity",
-		["helperTitle"] = "Player : Look at ",
+		["helperTitle"] = "Player : Look at Entity",
 		["helper"] = "This trigger will be triggered when you look a entity who has the expected tag",
 	},
 	["look_at_hash"] = {
@@ -837,5 +837,11 @@ return {
 		["value"] = 1,
 		["helperTitle"] = "Device : Specific active tv channel index is player",
 		["name"] = "device_active_tv_channel_id",
+	},
+	["ai_answer_is_ready"] = {
+		["helper"] = "This trigger will be triggered whe CyberAI answer is ready",
+		["helperTitle"] = "AI : Answer is ready",
+		["name"] = "ai_answer_is_ready",
+		["aitag"] = "myconversation01"
 	},
 }

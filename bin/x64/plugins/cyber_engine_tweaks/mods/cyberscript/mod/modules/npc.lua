@@ -88,17 +88,7 @@ if spawnRegion then
 	
 		
 		if(enti ~= nil) then
-			
-			if obj.workspot ~= nil and cyberscript.EntityManager[obj.workspot] ~= nil then
-			
-				if(cyberscript.EntityManager[obj.workspot].workspottag ~= workspot) then
-					changeWorkSpot(entitytag,obj.workspot,workspot,unlockcamera)
-				end
-				
-				changeWorkSpotAnims(entitytag,anim_cname,isinstant)
-			else
-			
-			local spawnTransform = enti:GetWorldTransform()
+		local spawnTransform = enti:GetWorldTransform()
 			spawnTransform:SetPosition(enti:GetWorldPosition())
 			local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
 			if(entitytag == "player")then
@@ -110,7 +100,24 @@ if spawnRegion then
 			
 			if(angle ~= nil) then
 			spawnTransform:SetOrientationEuler(EulerAngles.new(angle.roll, angle.pitch, angle.yaw))
-			end
+			end	
+			
+			
+			if obj.workspot ~= nil and cyberscript.EntityManager[obj.workspot] ~= nil then
+				
+				local objwk = getEntityFromManager(obj.workspot)
+		local entiwk = Game.FindEntityByID(objwk.id)
+				if(angle ~= nil) then
+			Game.GetTeleportationFacility():Teleport(entiwk, enti:GetWorldPosition(), EulerAngles.new(angle.roll, angle.pitch, angle.yaw))
+				end		
+				if(cyberscript.EntityManager[obj.workspot].workspottag ~= workspot) then
+					changeWorkSpot(entitytag,obj.workspot,workspot,unlockcamera)
+				end
+				
+				changeWorkSpotAnims(entitytag,anim_cname,isinstant)
+			else
+			
+			
 			
 			
 			local NPC = exEntitySpawner.Spawn(entname, spawnTransform, '')
@@ -166,7 +173,7 @@ if spawnRegion then
 			local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
 			local offset = 1
 			local postp = Vector4.new( x, y, z,1)
-					
+			                                 		
 			spawnTransform:SetPosition(postp)	
 			spawnTransform:SetOrientationEuler(EulerAngles.new(0, 0, angles.yaw - 180))
 						
@@ -2141,10 +2148,10 @@ if actionRegion then
 		end
 		
 		
-		enti:GetTargetTrackerComponent():ClearThreats()
+		
+			enti:SetDetectionPercentage(0)
+		
 		Game['NPCPuppet::ChangeLocomotionMode;GameObjectgamedataLocomotionMode'](enti, 'Static')
-		
-		
 		Game['NPCPuppet::ChangeHighLevelState;GameObjectgamedataNPCHighLevelState'](enti, 'Relaxed')
 		Game['NPCPuppet::ChangeDefenseModeState;GameObjectgamedataDefenseMode'](enti, 'NoDefend')
 		Game['NPCPuppet::ChangeUpperBodyState;GameObjectgamedataNPCUpperBodyState'](enti, 'Normal')

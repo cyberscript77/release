@@ -5629,7 +5629,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		GameController["MessengerDialogViewController"]  = thos
 		if(currentPhoneConversation ~= nil) then
 			logme(1,"cyberscript MessengerDialogViewController.SetVisited")
-			logme(2,currentPhoneConversation.loaded)
+			logme(1,currentPhoneConversation.loaded)
 			currentPhoneConversation.loaded = currentPhoneConversation.loaded + 1
 			if(currentPhoneConversation ~= nil and currentPhoneConversation.loaded >= 1) then
 				currentPhoneConversation.loaded = 0
@@ -5741,6 +5741,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		if(contact == nil) then
 			local message = {}
 			logme(1,"test3")
+			print(dump(currentPhoneConversation))
 			table.insert(message,currentPhoneConversation)
 			self.messages = message
 			
@@ -8392,8 +8393,8 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 		
 		if actionName == "popup_moveLeft" and actionType == "REPEAT" and currentController == "gamepad"   then 
-			hideInteract()
-			--logme(2,"tosto")
+			--hideInteract()
+			logme(1,"tosto")
 		end
 		if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and currentHelp == nil  then 
 			

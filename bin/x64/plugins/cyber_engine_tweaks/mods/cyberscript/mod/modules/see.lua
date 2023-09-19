@@ -9,7 +9,7 @@ function checkTrigger(trigger)
 	
 	
 	if status == false then
-		
+		logme(1,dump(trigger),true)
 		if(trigger.output == true) then 
 		
 			logme(1,trigger.name,true)
@@ -55,6 +55,7 @@ function scriptcheckTrigger(trigger)
 		local frameworkregion = true
 		local playerregion = true
 		local scannerregion = true
+		local airegion = true
 		
 		checkContext(trigger)
 		
@@ -160,6 +161,7 @@ function scriptcheckTrigger(trigger)
 					if(obj.id ~= nil) then
 						local enti = Game.FindEntityByID(obj.id)	
 						if(enti ~= nil) then
+							
 							if(enti:GetEntityID().hash == objLook:GetEntityID().hash)then 
 								result = true
 							end
@@ -1816,7 +1818,8 @@ function scriptcheckTrigger(trigger)
 				
 				end
 			end
-	
+			
+			
 	
 		end
 		
@@ -2354,6 +2357,12 @@ function scriptcheckTrigger(trigger)
 			
 		end
 		
+		if airegion then
+			if(trigger.name =="ai_answer_is_ready")then
+			return (getAIAnswerOrDefault(trigger.aitag) ~= nil )
+			end
+		end
+		
 	
 	if(trigger.output == true) then 
 		
@@ -2412,6 +2421,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 	local scannerregion = true
 	local hudregion = true
 	local animationregion = true
+	local airegion = true
 	
 	if groupregion then
 		if(action.name == "create_group") then
@@ -6459,6 +6469,7 @@ end
 			-- end
 		end
 		
+	
 		if(action.name == "speak_npc")then
 			
 			
@@ -7972,6 +7983,195 @@ end
 				error("No sound founded")
 			end
 		end
+		
+		if(action.name == "play_custom_sound_with_subtitle") then 
+			
+			if(cyberscript.cache["sound"][action.value] ~= nil) then
+			print(dump(cyberscript.cache["sound"][action.value].data))
+			print(math.ceil(cyberscript.cache["sound"][action.value].data.duration))
+			if(GameController["SubtitlesGameController"] ~= nil) then
+				--logme(3,"ye")
+				local linesToShow = {}
+				--GameController["SubtitlesGameController"]:Cleanup()
+				local dialogLine = scnDialogLineData.new()
+				local id = math.random(1,9999)
+				dialogLine.id = CRUID(id)
+				dialogLine.text  = getLang(cyberscript.cache["sound"][action.value].data.subtitle)
+				dialogLine.type  = action.type
+				dialogLine.speaker = Game.GetPlayer()
+				dialogLine.speakerName  = getLang(action.speaker)
+				local candotext = true
+				if(action.speaker == "current_phone_npc") then
+					if(currentNPC ~= nil) then
+						dialogLine.speakerName  = currentNPC.Names
+						else
+						candotext = false
+					end
+					elseif(action.speaker == "current_star") then
+					if(currentStar ~= nil) then
+						dialogLine.speakerName  = currentStar.Names
+						else
+						candotext = false
+					end
+					elseif(action.speaker == "entity") then
+					local obj = getEntityFromManager(action.speakertag)
+					dialogLine.speakerName = obj.name
+					candotext = true
+					elseif(action.speaker == "mp_player") then
+					dialogLine.speakerName = myTag
+					candotext = true
+					elseif(action.speaker == "mp_looked_player") then
+					if(multiName == "") then
+						dialogLine.speakerName = "Player"
+						else
+						dialogLine.speakerName = multiName
+					end
+					candotext = true
+					else
+					dialogLine.speakerName = getLang(action.speaker)
+					candotext = true
+				end
+				
+				
+				
+				
+				
+				if(candotext == true) then
+					dialogLine.isPersistent  = true
+					dialogLine.duration  = math.ceil(cyberscript.cache["sound"][action.value].data.duration)
+					GameController["SubtitlesGameController"]:SpawnDialogLine(dialogLine)
+					local temp = os.time(os.date("!*t"))+0 
+					local nexttemp = temp
+					nexttemp =nexttemp +  math.ceil(cyberscript.cache["sound"][action.value].data.duration)
+					action.tick = nexttemp
+					
+					local path = cyberscript.cache["sound"][action.value].data
+				
+					local isradio = false
+					local needrepeat = false
+					
+					if action.isradio ~= nil then isradio = action.isradio end
+					if action.needrepeat ~= nil then needrepeat = action.needrepeat end
+				
+				
+				
+					PlaySound(path,isradio,needrepeat)
+					
+					result = false
+				end
+				else
+				error("can't find Subtitle controller, please call an npc for load one")
+			end
+			
+				
+				else
+				error("No sound founded")
+			end
+		end
+		
+		if(action.name == "play_random_custom_sound_with_subtitle") then 
+			local tago = math.random(1,#action.value)
+			local tag = action.value[tago]
+			if(cyberscript.cache["sound"][tag] ~= nil) then
+			
+			if(GameController["SubtitlesGameController"] ~= nil) then
+				--logme(3,"ye")
+				local linesToShow = {}
+				--GameController["SubtitlesGameController"]:Cleanup()
+				local dialogLine = scnDialogLineData.new()
+				local id = math.random(1,9999)
+				dialogLine.id = CRUID(id)
+				dialogLine.text  = getLang(cyberscript.cache["sound"][tag].data.subtitle)
+				dialogLine.type  = action.type
+				dialogLine.speaker = Game.GetPlayer()
+				dialogLine.speakerName  = getLang(action.speaker)
+				local candotext = true
+				if(action.speaker == "current_phone_npc") then
+					if(currentNPC ~= nil) then
+						dialogLine.speakerName  = currentNPC.Names
+						else
+						candotext = false
+					end
+					elseif(action.speaker == "current_star") then
+					if(currentStar ~= nil) then
+						dialogLine.speakerName  = currentStar.Names
+						else
+						candotext = false
+					end
+					elseif(action.speaker == "entity") then
+					local obj = getEntityFromManager(action.speakertag)
+					dialogLine.speakerName = obj.name
+					candotext = true
+					elseif(action.speaker == "mp_player") then
+					dialogLine.speakerName = myTag
+					candotext = true
+					elseif(action.speaker == "mp_looked_player") then
+					if(multiName == "") then
+						dialogLine.speakerName = "Player"
+						else
+						dialogLine.speakerName = multiName
+					end
+					candotext = true
+					else
+					dialogLine.speakerName = getLang(action.speaker)
+					candotext = true
+				end
+				
+				
+				
+				
+				
+				if(candotext == true) then
+					dialogLine.isPersistent  = true
+					dialogLine.duration  = math.ceil(cyberscript.cache["sound"][tag].data.duration)
+					GameController["SubtitlesGameController"]:SpawnDialogLine(dialogLine)
+					local temp = os.time(os.date("!*t"))+0 
+					local nexttemp = temp
+					nexttemp =nexttemp +  math.ceil(cyberscript.cache["sound"][tag].data.duration)
+					action.tick = nexttemp
+					
+					local path = cyberscript.cache["sound"][tag].data
+				
+					local isradio = false
+					local needrepeat = false
+					
+					if action.isradio ~= nil then isradio = action.isradio end
+					if action.needrepeat ~= nil then needrepeat = action.needrepeat end
+				
+				
+				
+					PlaySound(path,isradio,needrepeat)
+					
+					result = false
+				end
+				else
+				error("can't find Subtitle controller, please call an npc for load one")
+			end
+			
+				
+				else
+				error("No sound founded for "..tag)
+			end
+		end
+		
+		if(action.name == "play_custom_sound_at_entity") then 
+			
+			if(cyberscript.cache["sound"][action.value] ~= nil) then
+				local path = cyberscript.cache["sound"][action.value].data
+				
+				local isradio = false
+				local needrepeat = false
+				
+				if action.isradio ~= nil then isradio = action.isradio end
+				if action.needrepeat ~= nil then needrepeat = action.needrepeat end
+				
+				
+				
+				PlaySoundAtEntity(path,isradio,needrepeat,action.tag)
+				else
+				error("No sound founded")
+			end
+		end
 	
 		if(action.name == "stop_custom_sound") then 
 			local path = cyberscript.cache["sound"][action.value].data
@@ -8446,6 +8646,52 @@ end
 			   			
 			   			
 			   			if(action.value == tostring(newent:GetEntityID().hash))then 
+			   						local entity = {}
+			   						entity.id = newent:GetEntityID()
+			   						entity.tag = action.tag
+			   						entity.tweak = "None"
+			   						entity.iscompanion = false
+			   						cyberscript.EntityManager[action.tag]=entity
+			   						if(action.group ~= nil and action.group ~= "") then
+			   							
+			   							table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
+			   						end
+			   					end
+			   			
+			   			
+			   			
+			   			
+			   			
+			   		
+			   		
+			   		
+			   		
+			   	end
+		end
+		
+		if(action.name == "register_entity_by_filter") then
+				
+			   	player = Game.GetPlayer()
+			   	targetingSystem = Game.GetTargetingSystem()
+			   	parts = {}
+			   	local success= false
+			   	searchQuery = Game["TSQ_ALL;"]() -- Search ALL objects
+			   	searchQuery.maxDistance = action.range
+			   	success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
+			   	
+			  
+			   	
+			   	local goodEntity = false
+			   	
+			   	for i, v in ipairs(parts) do
+			   		local newent = v:GetComponent(v):GetEntity() 
+			   		
+			   		
+			   		
+			   		
+			   			
+			   			
+			   			if(string.match(newent:ToString(), action.value) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), action.value) or string.match(newent:GetDisplayName(), action.value))then 
 			   						local entity = {}
 			   						entity.id = newent:GetEntityID()
 			   						entity.tag = action.tag
@@ -10427,6 +10673,10 @@ end
 			
 			result = false
 		end
+		if(action.name == "wait_for_ai_answer") then
+			
+			result = false
+		end
 		if(action.name == "wait_for_target") then
 			result = false
 		end
@@ -10643,7 +10893,7 @@ end
 		
 		if(action.name == "do_random_function")then
 			local tago = math.random(1,#action.funcs)
-			logme(3,action.funcs[tago])
+			logme(1,action.funcs[tago])
 			local boj = cyberscript.cache["functions"][action.funcs[tago]]
 			if( boj ~= nil) then
 				
@@ -11467,1578 +11717,2227 @@ end
 					table.insert(actionlist,newaction)
 				end
 
-				newaction = {}
-				newaction.name = "wait_second"
-				newaction.value = 0.5
-				table.insert(actionlist,newaction)
-				
-				if(action.isAV == true) then
-					
-					local ztimes = action.zfly - mappin.z - 3
-					local zpos = deepcopy(ztimes,nil)
-					numbertimes = ztimes
-					
-					for i=1,numbertimes  do 
-						
-							
-						zpos = zpos - 1
-					
-						local newaction = {}
-						newaction.name = "teleport_entity_at_position"
-						newaction.tag = action.tag
-						newaction.x = path.x
-						newaction.y = path.y
-						newaction.z = zpos
-						newaction.angle = angle
-						newaction.collision = true
-						newaction.pathfinding = false
-						newaction.axis = "z"
-						table.insert(actionlist,newaction)
-					end
-					
-				
-				end
-				
-					
-				runSubActionList(actionlist, tag.."_av_autodrive_activate", tag,source,false,executortag)
-				result = false
-			end
-		end
-		if(action.name == "vehicule_autodrive_activate_custom_mappin") then
-			if(ActivecustomMappin ~= nil) then
+   				newaction = {}
+   				newaction.name = "wait_second"
+   				newaction.value = 0.5
+   				table.insert(actionlist,newaction)
+   				
+   				if(action.isAV == true) then
+   					
+   					local ztimes = action.zfly - mappin.z - 3
+   					local zpos = deepcopy(ztimes,nil)
+   					numbertimes = ztimes
+   					
+   					for i=1,numbertimes  do 
+   						
+   							
+   						zpos = zpos - 1
+   					
+   						local newaction = {}
+   						newaction.name = "teleport_entity_at_position"
+   						newaction.tag = action.tag
+   						newaction.x = path.x
+   						newaction.y = path.y
+   						newaction.z = zpos
+   						newaction.angle = angle
+   						newaction.collision = true
+   						newaction.pathfinding = false
+   						newaction.axis = "z"
+   						table.insert(actionlist,newaction)
+   					end
+   					
+   				
+   				end
+   				
+   					
+   				runSubActionList(actionlist, tag.."_av_autodrive_activate", tag,source,false,executortag)
+   				result = false
+   			end
+   		end
+   		if(action.name == "vehicule_autodrive_activate_custom_mappin") then
+   			if(ActivecustomMappin ~= nil) then
+   			
+   				local mappin = ActivecustomMappin:GetWorldPosition()
+   				local actionlist = {}
+   				
+   				local obj = getEntityFromManager(action.tag)
+   				local enti = Game.FindEntityByID(obj.id)
+   				local myPos = enti:GetWorldPosition()
+   				local newPos = myPos
+   				local angle = enti:GetWorldOrientation():ToEulerAngles()
+   				
+   				local tempangle = {}
+   				tempangle.roll = 0
+   				tempangle.pitch = 0
+   				tempangle.yaw = 0
+   				
+   				local numbertimes = 0
+   				local zpath=action.zfly
+   				
+   				
+   				
+   				
+   				newaction = {}
+   				newaction.name = "wait_second"
+   				newaction.value = 0.5
+   				table.insert(actionlist,newaction)
+   				
+   				if(action.isAV == true) then
+   					local ztimes = action.zfly - myPos.z
+   					local zpos = deepcopy(newPos.z,nil)
+   					numbertimes = ztimes / zpath
+   					
+   					for i=1,ztimes  do 
+   						
+   							
+   						zpos = zpos + 1
+   					
+   						local newaction = {}
+   						newaction.name = "teleport_entity_at_position"
+   						newaction.tag = action.tag
+   						newaction.x = newPos.x
+   						newaction.y = newPos.y
+   						newaction.z = zpos
+   						newaction.angle = angle
+   						newaction.collision = false
+   						newaction.pathfinding = false
+   						newaction.axis = "z"
+   						table.insert(actionlist,newaction)
+   					end
+   				end
+   				
+   				
+   				local destination = Vector4.new(mappin.x, mappin.y, myPos.z,1)			
+   				local dirVector = diffVector(myPos, destination)
+   				local myyaw = 0
+   				local vdepart = LVector.new(myPos.x,myPos.y)
+   				local varrive = LVector.new(mappin.x,mappin.y)
+   				local diag = varrive-vdepart
+   				local point = action.speed
+   				local newangle = GetSingleton('Vector4'):ToRotation(dirVector)
+   				local numtimes = diag*(1/point)
+   				local path = deepcopy(vdepart,nil)
+   				for i = 1,point do
+   					path = path+numtimes
+   				
+   				
+   					local newaction = {}
+   					newaction.name = "teleport_entity_at_position"
+   					newaction.tag = action.tag
+   					newaction.x = path.x
+   					newaction.y = path.y
+   					newaction.z = action.zfly
+   					newaction.angle = angle
+   					newaction.pathfinding = action.pathfinding
+   					newaction.collision = false
+   					newaction.axis = "x"
+   					table.insert(actionlist,newaction)
+   				end
+   				
+   				newaction = {}
+   				newaction.name = "wait_second"
+   				newaction.value = 0.5
+   				table.insert(actionlist,newaction)
+   				
+   				if(action.isAV == true) then
+   					
+   					local ztimes = action.zfly - mappin.z - 3
+   					local zpos = deepcopy(ztimes,nil)
+   					numbertimes = ztimes
+   					
+   					for i=1,numbertimes  do 
+   						
+   							
+   						zpos = zpos - 1
+   					
+   						local newaction = {}
+   						newaction.name = "teleport_entity_at_position"
+   						newaction.tag = action.tag
+   						newaction.x = path.x
+   						newaction.y = path.y
+   						newaction.z = zpos
+   						newaction.angle = angle
+   						newaction.collision = true
+   						newaction.pathfinding = false
+   						newaction.axis = "z"
+   						table.insert(actionlist,newaction)
+   					end
+   					
+   				
+   				end
+   				
+   				
+   				runSubActionList(actionlist, tag.."_av_autodrive_activate__custom_mappin", tag,source,false,executortag)
+   				result = false
+   			end
+   		end
+   		if(action.name == "toggle_av_engine") then
+   			local obj = getEntityFromManager(action.tag)
+   			if(obj ~= nil) then
+   				if(obj.isAV == true) then
+   					obj.isAV = false
+   					else
+   					obj.isAV = true
+   				end
+   			end
+   		end
+   		if(action.name == "toggle_av_engine_for_current_drived_vehicule") then
+   			local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
+   			if (inVehicule) then
+   				local vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+   				if(vehicule ~= nil) then
+   					local obj = getEntityFromManagerById(vehicule:GetEntityID())
+   					if(obj.id == nil) then
+   						local entity = {}
+   						entity.id = vehicule:GetEntityID()
+   						entity.tag = "vehicule_"..math.random(1,9999)
+   						entity.tweak = "nope"
+   						entity.takenSeat = {}
+   						entity.isAV = false
+   						local group = getGroupfromManager("AV")
+   						entity.availableSeat = GetSeats(vehicule)
+   						entity.driver = "player"
+   						cyberscript.EntityManager[entity.tag]=entity
+   						--logme(3,"new "..entity.tag)
+   						obj = entity
+   					end
+   					logme(3,obj.tag)
+   					local obj = getTrueEntityFromManager(obj.tag)
+   					if(obj.isAV == true) then
+   						obj.isAV = false
+   						
+   						for i=1, #cyberscript.GroupManager["AV"].entities do 
+   							local entityTag = cyberscript.GroupManager["AV"].entities[i]
+   							if(entityTag == obj.tag) then
+   								table.remove(cyberscript.GroupManager["AV"].entities,i)
+   							end
+   						end
+   						--logme(3,"removedAV"..obj.tag)
+   						else
+   						
+   						obj.isAV = true
+   						if(cyberscript.GroupManager["AV"].entities == nil) then
+   							cyberscript.GroupManager["AV"].entities = {}
+   						end
+   						logme(3,"addedAV"..obj.tag)
+   						table.insert(cyberscript.GroupManager["AV"].entities,obj.tag)
+   					end
+   				end
+   			end
+   		end
+   	end
+   	
+   	if customnpcregion then 
+   		if(action.name == "npc_custom_summon_custom_npc_at_entity_relative") then
+   			local positionVec4 = Game.GetPlayer():GetWorldPosition()
+   			local entity = nil
+   			if(action.entity ~= "player") then
+   				local obj = getEntityFromManager(action.entity)
+   				entity = Game.FindEntityByID(obj.id)
+   				positionVec4 = entity:GetWorldPosition()
+   				else
+   				entity = Game.GetPlayer()
+   			end
+   			if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
+   				if(action.position == "behind") then
+   					positionVec4 = getBehindPosition(entity,action.distance)
+   				end
+   				if(action.position == "forward") then
+   					positionVec4 = getForwardPosition(entity,action.distance)
+   				end
+   				else
+   				positionVec4.x = positionVec4.x + action.x
+   				positionVec4.y = positionVec4.y + action.y
+   				positionVec4.z = positionVec4.z + action.z
+   			end
+   			local npc =  getCustomNPCbyTag(action.tag)
+   			npc.spawnforced=true
+   			npc.dospawnaction=action.dospawnaction
+   			npc.doroutineaction=action.doroutineaction
+   			npc.dodeathaction=action.dodeathaction
+   			npc.dodespawnaction=action.dodespawnaction
+   			if(action.replacelocation == true) then
+   				npc.workinglocation.x = positionVec4.x
+   				npc.workinglocation.y = positionVec4.y
+   				npc.workinglocation.z = positionVec4.z
+   			end
+   			if(npc.useBetaSpawn == true) then
+   				spawnEntity(npc.tweakDB, npc.tag,  positionVec4.x ,  positionVec4.y , positionVec4.z, 90, true, false,true)
+   				else
+   				spawnEntity(npc.tweakDB, npc.tag,  positionVec4.x ,  positionVec4.y , positionVec4.z, 90, true, false,false)
+   			end
+   			npc.isspawn=true
+   			npc.init=false
+   			if(action.group ~= nil and action.group ~= "") then
+   				
+   				table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
+   			end
+   		end
+   		if(action.name == "npc_custom_summon_custom_npc") then
+   			local npc =  getCustomNPCbyTag(action.tag)
+   			npc.spawnforced=true
+   			npc.dospawnaction=action.dospawnaction
+   			npc.doroutineaction=action.doroutineaction
+   			npc.dodeathaction=action.dodeathaction
+   			npc.dodespawnaction=action.dodespawnaction
+   			if(action.replacelocation == true) then
+   				npc.workinglocation.x = action.x
+   				npc.workinglocation.y = action.y
+   				npc.workinglocation.z = action.z
+   			end
+   			if(npc.useBetaSpawn == true) then
+   				spawnEntity(npc.tweakDB, npc.tag,  action.x ,  action.y , action.z, 90, true, false,true)
+   				else
+   				spawnEntity(npc.tweakDB, npc.tag,  action.x ,  action.y , action.z, 90, true, false,false)
+   			end
+   			npc.isspawn=true
+   			npc.init=false
+   			if(action.group ~= nil and action.group ~= "") then
+   				
+   				table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
+   			end
+   		end
+   		if(action.name == "npc_custom_edit_custom_npc") then
+   			local npc =  getCustomNPCbyTag(action.tag)
+   			npc.spawnforced=true
+   			npc.dospawnaction=action.dospawnaction
+   			npc.doroutineaction=action.doroutineaction
+   			npc.dodeathaction=action.dodeathaction
+   			npc.dodespawnaction=action.dodespawnaction
+   			npc.repeat_routine = action.repeat_routine
+   			npc.auto_despawn = action.auto_despawn
+   			if(action.replacelocation == true) then
+   				npc.workinglocation.x = action.x
+   				npc.workinglocation.y = action.y
+   				npc.workinglocation.z = action.z
+   				npc.workinglocation.range = action.range
+   			end
+   			if(action.appeareance ~= nil and action.appeareance ~= "") then
+   				npc.appeareance = action.appearance
+   			end
+   		end
+   		if(action.name == "npc_custom_despawn_custom_npc") then
+   			local npc =  getCustomNPCbyTag(action.tag)
+   			npc.isspawn=false
+   			npc.init=false
+   			npc.appearancesetted = nil
+   			npc.spawnforced=false
+   			npc.dospawnaction=true
+   			npc.doroutineaction=true
+   			npc.dodeathaction=true
+   			npc.dodespawnaction=true
+   			npc.workinglocation = npc.location
+   			if(workerTable[npc.tag.."_spawn"] ~= nil) then
+   				workerTable[npc.tag.."_spawn"] = nil
+   			end
+   			if(workerTable[npc.tag.."_death"] ~= nil) then
+   				workerTable[npc.tag.."_death"] = nil
+   			end
+   			if(workerTable[npc.tag.."_routine"] ~= nil) then
+   				workerTable[npc.tag.."_routine"] = nil
+   			end
+   			despawnEntity(npc.tag)
+   			if(workerTable[npc.tag.."_despawn"] == nil and #npc.despawnaction > 0) then
+   				runActionList(npc.despawnaction, npc.tag.."_despawn", "interact",false,npc.tag)
+   			end
+   		end
+   		if(action.name == "npc_custom_set_autodespawn") then 
+   			local npc = getCustomNPCByTag(action.tag)
+   			npc.auto_despawn = action.value
+   		end
+   		if(action.name == "npc_custom_set_autoroutine") then 
+   			local npc = getCustomNPCByTag(action.tag)
+   			npc.repeat_routine = action.value
+   		end
+   		if(action.name == "npc_custom_copy") then 
+   			local npc =  getCustomNPCbyTag(action.sourcetag)
+   			local newnpc =	deepcopy(npc, newnpc)
+   			newnpc.tag = action.newtag
+   			newnpc.name = action.newname
+   			addCustomNPC(newnpc)
+   		end
+   	end
+   	
+   	if multiregion then
+   		if not player_region then
+   			if(action.name == "send_action_to_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
+   				if action.tag == "lookat" and multiName ~= "" then
+   					action.tag = multiName
+   				end
+   				sendActionstoUser(action.tag,action.action)
+   				result = true
+   			end
+   			if(action.name == "help_faction") then
+   				if(MultiplayerOn)then
+   					HelpFaction()
+   					else
+   					Game.GetPlayer():SetWarningMessage(getLang("You need to be online for help your faction"))
+   				end
+   			end
+   			if(action.name == "disconnect") then
+   				if(NetServiceOn and MultiplayerOn) then
+   					disconnectUser()
+   					MultiplayerOn = false
+   					NetServiceOn = false
+   					
+   					
+   					friendIsSpaned = false
+   					lastFriendPos = {}
+   					Game.GetPreventionSpawnSystem():RequestDespawnPreventionLevel(-13)
+   					
+   					netontracthub.login = true
+   					netontracthub.register = false
+   					netontracthub.main = false
+   					
+   					openNetContract = false
+   					firstload = true
+   					firstloadMission = true
+   					firstloadMarket = true
+   					initfinish = false
+   				end
+   			end
+   			
+   			if(action.name == "connect") then
+   				
+   				connectUser()
+   				
+   			end
+   			if(action.name == "send_message") then
+   				if(NetServiceOn and MultiplayerOn) then
+   					MessageSenderController()
+   				end
+   			end
+   			if(action.name == "toggle_message_popup") then
+   				if(NetServiceOn and MultiplayerOn) then
+   					if onlineMessagePopup then
+   						onlineMessagePopup = false
+   						else
+   						onlineMessagePopup = true
+   					end
+   					else
+   					onlineMessagePopup = false
+   				end
+   			end
+   			if(action.name == "open_avatar_list" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
+   				
+   				Multi_AvatarList()
+   			end
+   			if(action.name == "change_avatar" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
+   				currentSave.myAvatar = action.value
+   				Cron.After(2,function()	
+   				                       	updatePlayerSkin()
+   				end)
+   			end
+   			if(action.name == "shoot_talk" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then 
+   				onlineShootMessage = true
+   			end
+   			if(action.name == "select_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil ) then
+   				selectedUser = action.value
+   				onlineReceiver = selectedUser.pseudo
+   			end
+   			if(action.name == "unblock_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
+   				UnblockFriend()
+   			end
+   			if(action.name == "delete_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
+   				DeleteFriend()
+   			end
+   			if(action.name == "block_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
+   				BlockFriend()
+   			end
+   			if(action.name == "add_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
+   				AddFriend()
+   			end
+   			if(action.name == "tp_to_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
+   				Game.GetTeleportationFacility():Teleport(Game.GetPlayer(), Vector4.new( selectedUser.x, selectedUser.y, selectedUser.z,1) ,EulerAngles.new(0,0,0))
+   			end
+   			if(action.name == "select_friend" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil ) then
+   				selectedFriend = action.value
+   				onlineReceiver = selectedUser.name	
+   			end
+   			if(action.name == "open_friend_list" and NetServiceOn and MultiplayerOn) then
+   				local next = next 
+   				if ActualFriendList == nil or next(ActualFriendList) == nil then
+   					Game.GetPlayer():SetWarningMessage("There is no connected friend..")
+   					else
+   					Multi_FriendList()
+   				end
+   			end
+   			if(action.name == "join_instance_friend" and NetServiceOn and MultiplayerOn) then
+   				if(NetServiceOn and MultiplayerOn) then
+   					MessageSenderController()
+   				end
+   			end
+   		end
+   		if not instance_region then
+   			if(action.name == "open_players_list"  and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
+   				if #ActualPlayersList > 0 then
+   					
+   					Multi_InstanceUserList()
+   					else
+   					Game.GetPlayer():SetWarningMessage("There is no players around..")
+   				end
+   			end
+   			if(action.name == "open_instance_list" and NetServiceOn) then
+   				
+   				Multi_InstanceList()
+   			end
+   			if(action.name == "select_instance" and NetServiceOn ) then
+   				selectedInstance = action.value
+   			end
+   			if(action.name == "connect_instance" and NetServiceOn ) then
+   				connectMultiplayer(action.value, action.password)
+   			end
+   			if(action.name == "get_instance_list" and NetServiceOn) then
+   				GetInstances()
+   			end
+   			if(action.name == "open_instance_creation" and NetServiceOn) then
+   				onlineInstanceCreation = true
+   			end
+   			if(action.name == "notify_instance" and NetServiceOn and MultiplayerOn and CurrentInstance.Title ~= nil) then
+   				Game.GetPlayer():SetWarningMessage("Welcome to "..CurrentInstance.Title)
+   			end
+   			if(action.name == "close_instance_password_popup" and NetServiceOn) then
+   				onlinePasswordPopup = false
+   			end
+   			if(action.name == "open_instance_password_popup" and NetServiceOn) then
+   				selectedInstancePassword="nothing"
+   				onlinePasswordPopup = true
+   			end
+   			if(action.name == "open_instance_management" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
+   				onlineInstanceUpdate = true
+   			end
+   			if(action.name == "open_instance_management_users" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
+   				
+   				Multi_InstanceOwnerUserList()
+   			end
+   			if(action.name == "block_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
+   				banUserFromInstance()
+   			end
+   			if(action.name == "kick_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
+   				kickUserFromInstance()
+   			end
+   			if(action.name == "unban_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
+   				unBanUserFromInstance()
+   			end
+   		end
+   		if not instance_place_management_region then
+   			if(action.name == "open_instance_management_create_custom_place" ) then
+   				if(ActualPlayerMultiData.currentPlaces ~= nil and #ActualPlayerMultiData.currentPlaces == 0 and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
+   					onlineInstancePlaceCreation = true
+   					else
+   					Game.GetPlayer():SetWarningMessage("There is already an custom place here..")
+   				end
+   			end
+   			if(action.name == "delete_custom_place" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
+   				if(ActualPlayerMultiData.currentPlaces ~= nil and #ActualPlayerMultiData.currentPlaces > 0) then
+   					deleteInstancePlace()
+   				end
+   			end
+   		end
+   		if not instance_place_item_region then
+   			if(action.name == "open_placed_item_ui_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if (ActualPlayerMultiData.currentPlaces[1] ~= nil) then
+   					
+   					PlacedItemsUIMulti()
+   				end
+   			end
+   			if(action.name == "open_buyed_item_ui_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if(ActualPlayerMultiData.currentPlaces[1] ~= nil) then
+   					
+   					BuyedItemsUIMulti()
+   				end
+   			end
+   			if(action.name == "set_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if grabbedTarget ~= nil then
+   					--	tp:Teleport(grabbedTarget, targetPos, targetAngle)
+   					-- if(Game.FindEntityByID(selectedItemMulti.entityId):IsA('gameObject') == false)then
+   					-- grabbedTarget:Destroy()
+   					-- end
+   					updateItemPositionMulti(selectedItemMulti, targetPos, targetAngle,true)
+   					UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
+   					enabled = false
+   					grabbedTarget = nil
+   					grabbed = false
+   					objPush = false
+   					objPull = false
+   					id = false
+   				end
+   			end
+   			if(action.name == "grab_select_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					enabled = true
+   					id = true
+   					grabbedTarget = Game.FindEntityByID(selectedItemMulti.entityId)
+   					if(grabbedTarget~= nil and grabbedTarget:IsA('gameObject') == false)then
+   						grabbedTarget = nil
+   						grabbed = false
+   						objPush = false
+   						objPull = false
+   						enabled = false
+   						id = false
+   						--Game.GetPlayer():SetWarningMessage(getLang(action.value))
+   						-- local objpos = grabbedTarget:GetWorldPosition()
+   						-- local worldpos = Game.GetPlayer():GetWorldTransform()
+   						-- local qat = grabbedTarget:GetWorldOrientation()
+   						-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+   						-- local transform = Game.GetPlayer():GetWorldTransform()
+   						-- transform:SetPosition(objpos)
+   						-- transform:SetOrientationEuler(angle)
+   						-- grabbedTarget = WorldFunctionalTests.SpawnEntity("base\\items\\interactive\\dining_accessories\\int_dining_accessories_001__bar_asset_h_sponge.ent", transform, '')
+   					end
+   					Cron.After(0.7,function()	
+   					                         	if (grabbedTarget ~= nil) then
+   					                         		targetPos = grabbedTarget:GetWorldPosition()
+   					                         		targetAngle = Vector4.ToRotation(grabbedTarget:GetWorldForward())
+   					                         		objectDist = Vector4.Distance(targetPos, playerPos)
+   					                         		phi = math.atan2(playerAngle.y, playerAngle.x)
+   					                         		targetDeltaPos = Vector4.new(((objectDist * math.cos(phi)) + playerPos.x), ((objectDist * math.sin(phi)) + playerPos.y), (objectDist * math.sin(playerAngle.z) + playerPos.z), targetPos.w)
+   					                         		targetDeltaPos = Delta(targetDeltaPos, targetPos)
+   					                         		logme(3,grabbedTarget, "grabbed.")
+   					                         		grabbed = true
+   					                         		else
+   					                         		error("No target!")
+   					                         	end
+   					end)
+   				end
+   			end
+   			if(action.name == "select_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if(#currentItemMultiSpawned > 0 )then
+   					for i = 1, #currentItemMultiSpawned do 
+   						local mitems = currentItemMultiSpawned[i]
+   						if(mitems.Id == action.value) then
+   							selectedItemMulti = nil
+   							selectedItemMulti = mitems
+   						end
+   					end
+   				end
+   			end
+   			if(action.name == "unselect_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				selectedItemMulti = nil
+   				grabbedTarget = nil
+   				grabbed = false
+   				objPush = false
+   				objPull = false
+   				enabled = false
+   				id = false
+   			end
+   			if(action.name == "move_select_item_to_player_position_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					local objpos = Game.GetPlayer():GetWorldPosition()
+   					local qat = Game.GetPlayer():GetWorldOrientation()
+   					local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+   					updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
+   					UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
+   					
+   				end
+   			end
+   			if(action.name == "move_selected_item_Z_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					logme(3,"yep01")
+   					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
+   					if(entity ~= nil) then
+   						local objpos = entity:GetWorldPosition()
+   						logme(3,"yep02")
+   						local worldpos = Game.GetPlayer():GetWorldTransform()
+   						objpos.z = objpos.z + action.value
+   						local qat = entity:GetWorldOrientation()
+   						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+   						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
+   						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
+   						else
+   						logme(3,"Nope")
+   					end
+   				end
+   			end
+   			if(action.name == "move_selected_item_X_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
+   					if(entity ~= nil) then
+   						local objpos = entity:GetWorldPosition()
+   						local worldpos = Game.GetPlayer():GetWorldTransform()
+   						objpos.x = objpos.x + action.value
+   						local qat = entity:GetWorldOrientation()
+   						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+   						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
+   						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
+   					end
+   				end
+   			end
+   			if(action.name == "move_selected_item_Y_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
+   					if(entity ~= nil) then
+   						local objpos = entity:GetWorldPosition()
+   						local worldpos = Game.GetPlayer():GetWorldTransform()
+   						objpos.y = objpos.y + action.value
+   						local qat = entity:GetWorldOrientation()
+   						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+   						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
+   						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
+   					end
+   				end
+   			end
+   			if(action.name == "open_precision_mod_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					selectedItemMultiBackup = selectedItemMulti
+   					openEditItemsMulti = true
+   				end
+   			end
+   			if(action.name == "yaw_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
+   					if(entity ~= nil) then
+   						local objpos = entity:GetWorldPosition()
+   						local worldpos = Game.GetPlayer():GetWorldTransform()
+   						local qat = entity:GetWorldOrientation()
+   						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+   						angle.yaw = angle.yaw + action.value
+   						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
+   						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
+   					end
+   				end
+   			end
+   			if(action.name == "roll_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
+   					if(entity ~= nil) then
+   						local objpos = entity:GetWorldPosition()
+   						local worldpos = Game.GetPlayer():GetWorldTransform()
+   						local qat = entity:GetWorldOrientation()
+   						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+   						angle.roll = angle.roll + action.value
+   						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
+   						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
+   					end
+   				end
+   			end
+   			if(action.name == "pitch_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
+   					if(entity ~= nil) then
+   						local objpos = entity:GetWorldPosition()
+   						local worldpos = Game.GetPlayer():GetWorldTransform()
+   						local qat = entity:GetWorldOrientation()
+   						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+   						angle.pitch = angle.pitch + action.value
+   						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
+   						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
+   					end
+   				end
+   			end
+   			if(action.name == "selected_item_remove_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if selectedItemMulti ~= nil then
+   					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
+   					if(entity ~= nil) then
+   						Game.FindEntityByID(selectedItemMulti.entityId):GetEntity():Destroy()
+   						logme(3,"toto")
+   						updatePlayerItemsQuantity(selectedItemMulti,1)
+   						
+   						
+   						local index = getItemEntityIndexFromManager(selectedItemMulti.entityId)
+   						
+   						table.remove(currentItemMultiSpawned,index)
+   						DeleteItem(selectedItemMulti.Tag)
+   						
+   						else
+   						logme(3,"nope")
+   					end
+   				end
+   			end
+   			if(action.name == "spawn_buyed_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if action.tag ~= nil then
+   					local pos = Game.GetPlayer():GetWorldPosition()
+   					local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
+   					local spawnedItem = {}
+   					local mitems =  getPlayerItemsbyTag(action.tag)
+   					if(#ActualPlayerMultiData.currentPlaces > 0 and mitems ~= nil and mitems.Quantity > 0 and (string.match(tostring(mitems.Tag), "AMM_Props.") == nil or (string.match(tostring(mitems.Tag), "AMM_Props.") ~= nil and AMM ~= nil)  )    ) then
+   						spawnedItem.Tag = mitems.Tag
+   						spawnedItem.HouseTag = ActualPlayerMultiData.currentPlaces[1].tag
+   						spawnedItem.ItemPath = mitems.Path
+   						spawnedItem.X = pos.x
+   						spawnedItem.Y = pos.y
+   						spawnedItem.Z = pos.z
+   						spawnedItem.Yaw = angles.yaw
+   						spawnedItem.Pitch = angles.pitch
+   						spawnedItem.Roll = angles.roll
+   						spawnedItem.Title = mitems.Title
+   						saveHousing(spawnedItem)
+   						local housing = getHousing(spawnedItem.Tag,spawnedItem.X,spawnedItem.Y,spawnedItem.Z)
+   						spawnedItem.Id = housing.Id
+   						updatePlayerItemsQuantity(mitems,-1)
+   						spawnedItem.entityId = spawnItem(spawnedItem, pos, angles)
+   						local entity = Game.FindEntityByID(spawnedItem.entityId)
+   						local components = checkForValidComponents(entity)
+   						if components then
+   							local visualScale = checkDefaultScale(components)
+   							spawnedItem.defaultScale = {
+   								x = visualScale.x * 100,
+   								y = visualScale.x * 100,
+   								z = visualScale.x * 100,
+   							}
+   							spawnedItem.scale = {
+   								x = visualScale.x * 100,
+   								y = visualScale.y * 100,
+   								z = visualScale.z * 100,
+   							}
+   						end
+   						table.insert(currentItemMultiSpawned,spawnedItem)
+   						SetItem(spawnedItem.Tag,spawnedItem.X,spawnedItem.Y,spawnedItem.Z,spawnedItem.Roll,spawnedItem.Pitch,spawnedItem.Yaw)
+   						selectedItemMulti = spawnedItem
+   					end
+   				end
+   			end
+   			if(action.name == "despawn_placed_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
+   				if action.tag ~= nil then
+   					local pos = Game.GetPlayer():GetWorldPosition()
+   					local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
+   					local spawnedItem = {}
+   					DeleteItem(action.tag)
+   					if(entity ~= nil) then
+   						for i =1, #currentSave.arrayPlayerItems do
+   							local mitem = currentSave.arrayPlayerItems[i]
+   							if(mitem.Tag == entity.Tag) then
+   								local housingitem = getHousing(entity.Tag,entity.X,entity.Y,entity.Z)
+   								despawnItem(entity.entityId)
+   								deleteHousing(housingitem.Id)
+   								updatePlayerItemsQuantity(mitem,1)
+   							end
+   						end
+   						else
+   						logme(3,"nope")
+   					end
+   				end
+   			end
+   		end
+   		if not guild_region then
+   			if(action.name == "open_guild_list" and NetServiceOn and MultiplayerOn) then
+   				if(NetServiceOn and MultiplayerOn) then
+   					
+   					Multi_GuildList()
+   				end
+   			end
+   			if(action.name == "open_guild_pending" and NetServiceOn and MultiplayerOn) then
+   				if(NetServiceOn and MultiplayerOn) then
+   					Multi_GuildPendingList()
+   				end
+   			end
+   			if(action.name == "open_guild_members" and NetServiceOn and MultiplayerOn) then
+   				if(NetServiceOn and MultiplayerOn) then
+   					
+   					Multi_GuildUserList()
+   				end
+   			end
+   			if(action.name == "open_guild_creation" and NetServiceOn and MultiplayerOn) then
+   				if(NetServiceOn and MultiplayerOn) then
+   					onlineGuildCreation = true
+   				end
+   			end
+   			
+   			if(action.name == "open_guild_update" and NetServiceOn and MultiplayerOn) then
+   				if(NetServiceOn and MultiplayerOn) then
+   					onlineGuildUpdate = true
+   				end
+   			end
+   			
+   			if(action.name == "select_guild") then
+   				if(NetServiceOn and MultiplayerOn ) then
+   					selectedGuild = action.parameter
+   				end
+   			end
+   			if(action.name == "select_guild_user") then
+   				if(NetServiceOn and MultiplayerOn ) then
+   					selectedGuildUser = action.parameter
+   				end
+   			end
+   			if(action.name == "join_guild") then
+   				if(NetServiceOn and MultiplayerOn and selectedGuild ~= nil) then
+   					joinGuild(mytag,selectedGuild)
+   				end
+   			end
+   			if(action.name == "leave_guild") then
+   				if(NetServiceOn and MultiplayerOn and mytag ~= "") then
+   					leaveGuild(mytag)
+   				end
+   			end
+   			if(action.name == "accept_to_guild") then
+   				if(NetServiceOn and MultiplayerOn and selectedGuildUser ~= "") then
+   					acceptGuild(selectedGuildUser)
+   				end
+   			end
+   			if(action.name == "refuse_to_guild") then
+   				if(NetServiceOn and MultiplayerOn and selectedGuildUser ~= "") then
+   					refuseGuild(selectedGuildUser)
+   				end
+   			end
+   			if(action.name == "remove_to_guild") then
+   				if(NetServiceOn and MultiplayerOn and multiName ~= "") then
+   					removeGuild(selectedGuildUser)
+   				end
+   			end
+   		end
+   		if not server_player_score_region then
+   			if(action.name == "operate_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
+   				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
+   					local score = ActualPlayerMultiData.instance.scores[action.value]
+   					if(score ~= nil) then
+   						score = score + action.score
+   						else
+   						score = 0 + action.score
+   					end
+   					operateInstanceScore(myTag,action.value,score)
+   				end
+   			end
+   			if(action.name == "set_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
+   				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
+   					local score = ActualPlayerMultiData.instance.scores[action.value]
+   					if(score ~= nil) then
+   						score = action.score
+   						else
+   						score = action.score
+   					end
+   					setInstanceScore(myTag,action.value,score)
+   				end
+   			end
+   			if(action.name == "delete_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
+   				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
+   					deleteInstanceScore(myTag,action.value)
+   				end
+   			end
+   			if(action.name == "edit_server_score_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
+   				editServerScoreUser(action.score,action.value)
+   				result = true
+   			end
+   		end
+   	end
+   	
+   	if framework then
+   		if(action.name == "download_datapack") then
+   			arrayDatapack[action.tag] = {}
+   			arrayDatapack[action.tag].state = "new"
+   			spdlog.error(dump(action))
+   			DownloadModpack(action.value)
+   			
+   		end
+   		if(action.name == "update_datapack") then
+   			arrayDatapack[action.tag] = {}
+   			arrayDatapack[action.tag].state = "new"
+   			UpdateModpack(action.value,action.tag)
+   		end
+   		if(action.name == "delete_datapack") then
+   			DeleteModpack(action.tag)
+   		end
+   		if(action.name == "enable_datapack") then
+   			EnableDatapack(action.tag)
+   		end
+   		if(action.name == "refresh_datapack_cache") then
+   			LoadDataPackCache()
+   		end
+   		if(action.name == "check_datapack_cache") then
+   			CheckandUpdateDatapack()
+   		end
+   		if(action.name == "disable_datapack") then
+   			DisableDatapack(action.tag)
+   		end
+   		if(action.name == "update_mod") then
+   			UpdateMods()
+   		end
+   		if(action.name == "refresh_news") then
+   			GetCorpoNews()
+   		end
+   		if(action.name == "refresh_market") then
+   			GetScores()
+   		end
+   		if(action.name == "select_stock") then
+   			CurrentStock = action.value
+   			logme(3,dump(CurrentStock))
+   		end
+   		if(action.name == "clean_current_stock") then
+   			CurrentStock = nil
+   		end
+   		if(action.name == "buy_score") then
+   			if(arrayMarket ~= nil and #arrayMarket > 0) then
+   			
+   				for k,stock in ipairs(arrayMarket) do
+   					
+   					if(stock.tag == action.tag) then
+   						
+   						BuyScore(stock.tag)
+   						
+   					end
+   					
+   				end
+   				
+   			end
+   			
+   		end
+   		if(action.name == "sell_score") then
+   			
+   			if(arrayMarket ~= nil and #arrayMarket > 0) then
+   			
+   				for k,stock in ipairs(arrayMarket) do
+   					
+   					if(stock.tag == action.tag) then
+   						
+   						SellScore(stock.tag)
+   						
+   					end
+   					
+   				end
+   				
+   			end
+   		end
+   		if(action.name == "refresh_item_market") then
+   			GetItems()
+   		end
+   		
+   		if(action.name == "set_selected_item_category") then
+   			Keystone_currentSelectedItemCategory = action.value
+   			setVariable("Item_Market","CurrentCategory", action.value)
+   			setScore("Item_Market","CurrentCategory_TotalPage",  #arrayMarketItem[Keystone_currentSelectedItemCategory])
+   		end
+   		
+   		
+   		
+   		if(action.name == "buy_cart") then
+   			if(checkStackableItemAmount("Items.money",CartPrice)) then
+   			--print("tttest")
+   			   	local itemCartTagList = {}
+   			   	
+   			   	for i = 1,#ItemsCart do
+   			   		local items = ItemsCart[i]
+   			   		table.insert(itemCartTagList,items.Tag)
+   			   		updatePlayerItemsQuantity(items,1)
+   			   		local player = Game.GetPlayer()
+   			   		local ts = Game.GetTransactionSystem()
+   			   		local tid = TweakDBID.new("Items.money")
+   			   		local itemid = ItemID.new(tid)
+   			   		local amount = tonumber(items.Price)
+   			   		local result = ts:RemoveItem(player, itemid, amount)
+   			   	end
+   			   	BuyItemsCart(itemCartTagList)
+   			   	for i,item in ipairs(ItemsCart) do
+   			   	
+   			   	setScore("Item_MarketCart",item.Tag,0)
+   			   	local playerItems = getPlayerItemsbyTag(item.Tag)
+   			   						
+   			   	if playerItems == nil then 
+   			   		
+   			   		setScore("owned_item",item.Tag,0)
+   			   	else
+   			   		setScore("owned_item",item.Tag,playerItems.Quantity)
+   			   	
+   			   	end
+   			   	end
+   			   	ItemsCart = {}
+   			   	             	setScore("Item_Market","CartPrice",0)
+   			   	             	setScore("Item_Market","CartAmount",0)
+   			   	CartPrice = 0	
+   			end	
+   		end
+   		if(action.name == "add_to_cart") then
+   			table.insert(ItemsCart,Keystone_currentSelectedItem)
+   			CartPrice = CartPrice + Keystone_currentSelectedItem.Price
+   			setScore("Item_Market","CartPrice",CartPrice)
+   		end
+   		if(action.name == "set_current_item_page") then
+   		
+   		CurrentItemPage = action.value
+   		setScore("Item_Market","CurrentItemPage",CurrentItemPage)
+   		end
+   		if(action.name == "add_to_cart_item") then
+   		--print(action.tag)
+   			for i = 1,#arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage]  do
+   				
+   				if(arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i].Tag == action.tag) then
+   					--print("Motoiiiii")
+   					
+   					
+   					table.insert(ItemsCart,arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i])
+   					CartPrice = CartPrice + arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i].Price
+   						setScore("Item_Market","CartPrice",CartPrice)
+   						setScore("Item_Market","CartAmount",#ItemsCart)
+   						
+   						local num = getScoreKey("Item_MarketCart",action.tag)
+   						
+   						if num == nil then num = 0 end
+   						num = num + 1
+   						setScore("Item_MarketCart",action.tag,num)
+   					break
+   				end
+   			
+   			end
+   			
+   		end
+   		if(action.name == "remove_to_cart") then
+   			local res = removeItemInCart(Keystone_currentSelectedItem.tag)
+   			if(res == true) then
+   				CartPrice = CartPrice - Keystone_currentSelectedItem.Price
+   			end
+   		end
+   		if(action.name == "remove_to_cart_item") then
+   			for i = 1,#ItemsCart  do
+   				
+   				if(ItemsCart[i].Tag==action.tag) then
+   					
+   					
+   					CartPrice = CartPrice - ItemsCart[i].Price
+   						setScore("Item_Market","CartPrice",CartPrice)
+   					
+   					break
+   				end
+   			
+   			end
+   			removeItemInCart(action.tag)
+   			local num = getScoreKey("Item_MarketCart",action.tag)
+   						
+   			if num == nil then num = 0 end
+   			num = num - 1
+   			setScore("Item_MarketCart",action.tag,num)
+   			setScore("Item_Market","CartAmount",#ItemsCart)
+   		end
+   		if(action.name == "select_item_stock") then
+   			CurrentItemStock = action.value
+   		end
+   		if(action.name == "connectUser") then
+   			connectUser()
+   		end
+   		if(action.name == "userversion") then
+   			setUserVersion()
+   		end
+   		if(action.name == "get_datapacklist") then
+   			GetModpackList()
+   		end
+   		if(action.name == "get_branch") then
+   			GetBranch()
+   		end
+   		if(action.name == "get_role") then
+   			GetRole()
+   		end
+   		if(action.name == "fetch_data") then
+   			FetchData()
+   		end
+   		if(action.name == "get_faction") then
+   			GetFaction()
+   		end
+   		if(action.name == "get_possiblebranch") then
+   			GetPossibleBranch()
+   		end
+   		if(action.name == "get_factionrank") then
+   			GetFactionRank()
+   		end
+   		if(action.name == "getitemcat") then
+   			GetItemCat()
+   		end
+   		if(action.name == "get_itemlist") then
+   			GetItems()
+   		end
+   		if(action.name == "get_modversion") then
+   			GetModVersion()
+   		end
+   	end
+   	
+   	if scene then 
+   		if(action.name == "show_braindance_ui") then
+   			
+   			if(GameController["BraindanceGameController"] ~= nil) then
+   				local root = GameController["BraindanceGameController"].rootWidget 
+   				
+   				
+   				
+   				root:SetVisible(true)
+   				
+   				GameController["BraindanceGameController"].PlayLibraryAnimation(CName("SHOW"))
+   				
+   				
+   			end
+   			
+   		end
+   			
+   		if(action.name == "bound_scene_to_braindance") then
+   			
+   			if(GameController["BraindanceGameController"] ~= nil and currentScene ~= nil) then
+   				local margin = inkMargin.new({ top = -45})
+   				inkWidgetRef.SetMargin(GameController["BraindanceGameController"].cursorPoint, margin)
+   				local margin = inkMargin.new({ left = 0})
+   				inkWidgetRef.SetMargin(GameController["BraindanceGameController"].currentTimerMarker, margin)
+   				inkTextRef.SetText(GameController["BraindanceGameController"].currentTimerText, "0 : 0")
+   				currentScene.isbraindance = true
+   				
+   				
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "unbound_scene_to_braindance") then
+   			
+   			if(GameController["BraindanceGameController"] ~= nil and currentScene ~= nil) then
+   				local margin = inkMargin.new({ top = -45})
+   				inkWidgetRef.SetMargin(GameController["BraindanceGameController"].cursorPoint, margin)
+   				currentScene.isbraindance = false
+   				
+   				
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "hide_braindance_ui") then
+   			
+   			if(GameController["BraindanceGameController"] ~= nil) then
+   				local root = GameController["BraindanceGameController"].rootWidget 
+   				
+   				
+   				
+   				root:SetVisible(false)
+   				
+   				
+   				
+   				
+   			end
+   			
+   		end
+   		
+   		
+   		
+   		
+   		
+   		if(action.name == "load_scene") then
+   			
+   			local scene = cyberscript.cache["scene"][action.tag]
+   			
+   			if(scene ~= nil) then
+   				
+   				currentScene = scene.data
+   				currentScene.index = 0
+   				if(GameController["BraindanceGameController"] ~= nil and currentScene.isbraindance == true) then
+   					
+   					local root = GameController["BraindanceGameController"].rootWidget 
+   					
+   					
+   				
+   				
+   					root:SetVisible(true)
+   					
+   					GameController["BraindanceGameController"].PlayLibraryAnimation(CName("SHOW"))
+   				
+   					local margin = inkMargin.new({ top = -45})
+   					inkWidgetRef.SetMargin(GameController["BraindanceGameController"].cursorPoint, margin)
+   					local margin = inkMargin.new({ left = 0})
+   					inkWidgetRef.SetMargin(GameController["BraindanceGameController"].currentTimerMarker, margin)
+   					inkTextRef.SetText(GameController["BraindanceGameController"].currentTimerText, "0 : 0")
+   					
+   					
+   					
+   					
+   				end
+   				else
+   				
+   				error("No scene founded for the tag "..action.tag)
+   				
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "unload_scene") then
+   			
+   			
+   			
+   			if(currentScene ~= nil) then
+   				
+   				currentScene = nil
+   				
+   				
+   				
+   				
+   			end
+   		end
+   		
+   		if(action.name == "play_scene") then
+   			
+   			
+   			
+   			if(currentScene ~= nil) then
+   				
+   				
+   				
+   				
+   				runActionList(currentScene.reset_action, currentScene.tag.."_reset", "interact",false,"scene")
+   				
+   				local actionlist = {}
+   				
+   				local actiontd = {}
+   				actiontd.name = "wait_for_trigger"
+   				actiontd.trigger = {}
+   				actiontd.trigger.name = "event_is_finished"
+   				actiontd.trigger.tag = currentScene.tag.."_reset"
+   				
+   				table.insert(actionlist,actiontd)
+   				
+   				for i=1,#currentScene.init_action do
+   					
+   					table.insert(actionlist,currentScene.init_action[i])
+   					
+   				end
+   				
+   				
+   				runActionList(actionlist, currentScene.tag.."_init", "interact",false,"scene")
+   				
+   				
+   				actionlist = {}
+   				
+   				actiontd = {}
+   				actiontd.name = "wait_for_trigger"
+   				actiontd.trigger = {}
+   				actiontd.trigger.name = "event_is_finished"
+   				actiontd.trigger.tag = currentScene.tag.."_init"
+   				
+   				table.insert(actionlist,actiontd)
+   				
+   				for i=1,#currentScene.step do
+   					
+   					
+   					local step = currentScene.step[i]
+   					
+   					
+   					
+   					for y=1,#step.action do
+   						
+   						table.insert(actionlist,step.action[y])
+   						
+   					end
+   					
+   				end
+   				
+   				
+   				for i=1,#currentScene.end_action do
+   					
+   					table.insert(actionlist,currentScene.end_action[i])
+   					
+   				end
+   				
+   				
+   				runActionList(actionlist, currentScene.tag.."_full", "interact",false,"scene")
+   				else
+   				
+   				error("No scene loaded")
+   				
+   			end
+   		end
+   		
+   		if(action.name == "reset_scene") then
+   			
+   			
+   			
+   			if(currentScene ~= nil) then
+   				
+   				
+   				
+   				
+   				runActionList(currentScene.reset_action, currentScene.tag.."_reset", "interact",false,"scene")
+   				currentScene.index = 0
+   				
+   			end
+   		end
+   		
+   		if(action.name == "init_scene") then
+   			
+   			
+   			
+   			if(currentScene ~= nil) then
+   				
+   				
+   				
+   				
+   				runActionList(currentScene.init_action, currentScene.tag.."_init", "interact",false,"scene")
+   				currentScene.index = 0
+   				else
+   				
+   				error("No scene loaded")
+   			end
+   		end
+   		
+   		if(action.name == "play_scene_step_index") then
+   			
+   			
+   			
+   			if(currentScene ~= nil) then
+   				
+   				
+   				
+   				if(currentScene.step[action.value] ~= nil) then
+   					if (currentScene.isbraindance == true) then 
+   						
+   						GameController["BraindanceGameController"].currentTime = (100/#currentScene.step * action.value)/100
+   						GameController["BraindanceGameController"]:SetBraindanceProgress()
+   						
+   					end
+   					runActionList(currentScene.step[action.value].action, currentScene.tag.."_"..action.value, "interact",false,"scene")
+   					currentScene.index = action.value
+   				end
+   				
+   			end
+   		end
+   		
+   		if(action.name == "play_scene_step_by_tag") then
+   			
+   			
+   			
+   			if(currentScene ~= nil) then
+   				
+   				
+   				for i=1,#currentScene.step do
+   					if(currentScene.step[i].tag == action.tag) then
+   						if (currentScene.isbraindance == true) then 
+   							
+   							GameController["BraindanceGameController"].currentTime = (100/#currentScene.step * i)/100
+   							GameController["BraindanceGameController"]:SetBraindanceProgress()
+   							
+   						end
+   						runActionList(currentScene.step[i].action, currentScene.tag.."_"..i, "interact",false,"scene")
+   						currentScene.index = i
+   					end
+   				end
+   				
+   			end
+   		end
+   		
+   		if(action.name == "play_next_scene_step") then
+   			
+   			
+   			
+   			if(currentScene ~= nil) then
+   				
+   				
+   				local index = currentScene.index +1
+   				
+   				if(currentScene.step[index] ~= nil) then
+   					if (currentScene.isbraindance == true) then 
+   						
+   						GameController["BraindanceGameController"].currentTime = (100/#currentScene.step * index)/100
+   						GameController["BraindanceGameController"]:SetBraindanceProgress()
+   						
+   					end
+   					
+   					runActionList(currentScene.step[index].action, currentScene.tag.."_"..index, "interact",false,"scene")
+   					currentScene.index = index
+   					
+   				end
+   				
+   			end
+   		end
+   		
+   		if(action.name == "play_previous_scene_step") then
+   			
+   			
+   			
+   			if(currentScene ~= nil) then
+   				
+   				
+   				local index = currentScene.index -1
+   				
+   				if(currentScene.step[index] ~= nil) then
+   					if (currentScene.isbraindance == true) then 
+   						
+   						GameController["BraindanceGameController"].currentTime = (100/#currentScene.step * index)/100
+   						GameController["BraindanceGameController"]:SetBraindanceProgress()
+   						
+   					end
+   					runActionList(currentScene.step[index].action, currentScene.tag.."_"..index, "interact",false,"scene")
+   					currentScene.index = index
+   					
+   				end
+   				
+   			end
+   		end
+   		
+   		
+   		
+   		
+   		
+   		if(action.name == "spawn_camera") then
+   			local position = {}
+   			local position = getPositionFromParameter(action)
+   				
+   			
+   			local angle = {}
+   			angle.roll = action.roll
+   			angle.pitch = action.pitch
+   			angle.yaw = action.yaw
+   			
+   			spawnCamera(action.tag,position,action.surveillance,angle)
+   			
+   		end
+   		
+   		if(action.name == "move_camera") then
+   			local position = {}
+   			local position = getPositionFromParameter(action)
+   			
+   			local angle = {}
+   			angle.roll = action.roll
+   			angle.pitch = action.pitch
+   			angle.yaw = action.yaw
+   			
+   			moveCamera(action.tag,position,angle)
+   		end
+   		
+   		if(action.name == "activate_camera") then
+   			enableCamera(action.tag)
+   		end
+   		
+   		if(action.name == "stop_camera") then
+   			stopCamera(action.tag)
+   		end
+   		
+   		
+   		
+   		
+   		
+   	end
+   	
+   	if hudregion then 
+   		
+   		if(action.name == "change_hud_visibility") then
+   			
+   			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+   				
+   				cyberscript.cache["hud"][v.tag].data.visible = action.value
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "change_hud_margin") then
+   			
+   			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+   				if(cyberscript.cache["hud"][v.tag].data.margin == nil) then cyberscript.cache["hud"][v.tag].data.margin = {} end
+   				cyberscript.cache["hud"][v.tag].data.margin.top = action.top
+   				cyberscript.cache["hud"][v.tag].data.margin.left = action.left
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "change_hud_color") then
+   			
+   			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+   				if(cyberscript.cache["hud"][v.tag].data.color == nil) then cyberscript.cache["hud"][v.tag].data.color = {} end
+   				
+   				cyberscript.cache["hud"][v.tag].data.color.red = action.red
+   				cyberscript.cache["hud"][v.tag].data.color.green = action.green
+   				cyberscript.cache["hud"][v.tag].data.color.blue = action.blue
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "change_hud_fontfamily") then
+   			
+   			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+   				
+   				
+   				cyberscript.cache["hud"][v.tag].data.fontfamily = action.value
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "change_hud_fontstyle") then
+   			
+   			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+   				
+   				
+   				cyberscript.cache["hud"][v.tag].data.fontstyle = action.value
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "change_hud_fontsize") then
+   			
+   			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+   				
+   				
+   				cyberscript.cache["hud"][v.tag].data.fontsize = action.value
+   				
+   			end
+   			
+   		end
+   		
+   		if(action.name == "change_hud_text") then
+   			
+   			if (cyberscript.cache["hud"][v.tag] ~= nil) then
+   				
+   				
+   				cyberscript.cache["hud"][v.tag].data.text = action.value
+   				
+   			end
+   			
+   		end
+   		
+   	end
+   	
+   	if airegion then
+   		if(action.name == "setup_ai_context") then
+   			
+			AIhandler[action.aitag] = {}
+			AIhandler[action.aitag].context = action.value
+   			
+   		end
+		
+		if(action.name == "flush_ai") then
+   			FlushChat(action.aitag)
+			AIhandler[action.aitag] = nil
+   			
+   		end
+   		
+   		if(action.name == "ask_ai") then
+			setupAIkey(action.aitag)
+   			if(ScheduleChatCompletionRequest ~= null) then
+   			ScheduleChatCompletionRequest(action.aitag,{
+   				{"User", action.value}
+   				});
+   			else
+   				print("ai not found")
+   			end
+   			
+   		end
+		
+		if(action.name == "ask_ai_with_context") then
+   			setupAIkey(action.aitag)
+   			if(ScheduleChatCompletionRequest ~= null) then
+   			ScheduleChatCompletionRequest(action.aitag,{
+   				{"User", action.value},
+				getAIContextOrDefault(action.aitag)
+   				});
+   			else
+   				print("ai not found")
+   			end
+   			
+   		end
+		if(action.name == "ask_ai_from_item") then
+   			setupAIkey(action.aitag)
+   			if(ScheduleChatCompletionRequest ~= null and
+				cyberscript.cache["ai"][action.tag]~=nil) then
+			local contextAI = {}
 			
-				local mappin = ActivecustomMappin:GetWorldPosition()
-				local actionlist = {}
-				
-				local obj = getEntityFromManager(action.tag)
-				local enti = Game.FindEntityByID(obj.id)
-				local myPos = enti:GetWorldPosition()
-				local newPos = myPos
-				local angle = enti:GetWorldOrientation():ToEulerAngles()
-				
-				local tempangle = {}
-				tempangle.roll = 0
-				tempangle.pitch = 0
-				tempangle.yaw = 0
-				
-				local numbertimes = 0
-				local zpath=action.zfly
-				
-				
-				
-				
-				newaction = {}
-				newaction.name = "wait_second"
-				newaction.value = 0.5
-				table.insert(actionlist,newaction)
-				
-				if(action.isAV == true) then
-					local ztimes = action.zfly - myPos.z
-					local zpos = deepcopy(newPos.z,nil)
-					numbertimes = ztimes / zpath
-					
-					for i=1,ztimes  do 
-						
-							
-						zpos = zpos + 1
-					
-						local newaction = {}
-						newaction.name = "teleport_entity_at_position"
-						newaction.tag = action.tag
-						newaction.x = newPos.x
-						newaction.y = newPos.y
-						newaction.z = zpos
-						newaction.angle = angle
-						newaction.collision = false
-						newaction.pathfinding = false
-						newaction.axis = "z"
-						table.insert(actionlist,newaction)
-					end
-				end
-				
-				
-				local destination = Vector4.new(mappin.x, mappin.y, myPos.z,1)			
-				local dirVector = diffVector(myPos, destination)
-				local myyaw = 0
-				local vdepart = LVector.new(myPos.x,myPos.y)
-				local varrive = LVector.new(mappin.x,mappin.y)
-				local diag = varrive-vdepart
-				local point = action.speed
-				local newangle = GetSingleton('Vector4'):ToRotation(dirVector)
-				local numtimes = diag*(1/point)
-				local path = deepcopy(vdepart,nil)
-				for i = 1,point do
-					path = path+numtimes
-				
-				
-					local newaction = {}
-					newaction.name = "teleport_entity_at_position"
-					newaction.tag = action.tag
-					newaction.x = path.x
-					newaction.y = path.y
-					newaction.z = action.zfly
-					newaction.angle = angle
-					newaction.pathfinding = action.pathfinding
-					newaction.collision = false
-					newaction.axis = "x"
-					table.insert(actionlist,newaction)
-				end
-				
-				newaction = {}
-				newaction.name = "wait_second"
-				newaction.value = 0.5
-				table.insert(actionlist,newaction)
-				
-				if(action.isAV == true) then
-					
-					local ztimes = action.zfly - mappin.z - 3
-					local zpos = deepcopy(ztimes,nil)
-					numbertimes = ztimes
-					
-					for i=1,numbertimes  do 
-						
-							
-						zpos = zpos - 1
-					
-						local newaction = {}
-						newaction.name = "teleport_entity_at_position"
-						newaction.tag = action.tag
-						newaction.x = path.x
-						newaction.y = path.y
-						newaction.z = zpos
-						newaction.angle = angle
-						newaction.collision = true
-						newaction.pathfinding = false
-						newaction.axis = "z"
-						table.insert(actionlist,newaction)
-					end
-					
-				
-				end
-				
-				
-				runSubActionList(actionlist, tag.."_av_autodrive_activate__custom_mappin", tag,source,false,executortag)
-				result = false
+			for i,con in ipairs(cyberscript.cache["ai"][action.tag].data.contexts) do
+				local item = {}
+				checkContext(con)
+				table.insert(item,con.context_type)
+				table.insert(item,con.value)
+				table.insert(contextAI,item)
 			end
-		end
-		if(action.name == "toggle_av_engine") then
-			local obj = getEntityFromManager(action.tag)
-			if(obj ~= nil) then
-				if(obj.isAV == true) then
-					obj.isAV = false
-					else
-					obj.isAV = true
-				end
+			print(dump(contextAI))
+   			ScheduleChatCompletionRequest(action.aitag,contextAI);
+   			else
+   				print("ai not found")
+   			end
+   			
+   		end
+		
+		if(action.name == "ask_ai_from_item_with_value") then
+   			setupAIkey(action.aitag)
+		if(ScheduleChatCompletionRequest ~= nil and
+				cyberscript.cache["ai"][action.tag]~=nil) then
+			local contextAI = {}
+			
+			for i,con in ipairs(cyberscript.cache["ai"][action.tag].data.contexts) do
+				local item = {}
+				checkContext(con)
+				table.insert(item,con.context_type)
+				table.insert(item,con.value)
+				table.insert(contextAI,item)
 			end
-		end
-		if(action.name == "toggle_av_engine_for_current_drived_vehicule") then
-			local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
-			if (inVehicule) then
-				local vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
-				if(vehicule ~= nil) then
-					local obj = getEntityFromManagerById(vehicule:GetEntityID())
-					if(obj.id == nil) then
-						local entity = {}
-						entity.id = vehicule:GetEntityID()
-						entity.tag = "vehicule_"..math.random(1,9999)
-						entity.tweak = "nope"
-						entity.takenSeat = {}
-						entity.isAV = false
-						local group = getGroupfromManager("AV")
-						entity.availableSeat = GetSeats(vehicule)
-						entity.driver = "player"
-						cyberscript.EntityManager[entity.tag]=entity
-						--logme(3,"new "..entity.tag)
-						obj = entity
-					end
-					logme(3,obj.tag)
-					local obj = getTrueEntityFromManager(obj.tag)
-					if(obj.isAV == true) then
-						obj.isAV = false
-						
-						for i=1, #cyberscript.GroupManager["AV"].entities do 
-							local entityTag = cyberscript.GroupManager["AV"].entities[i]
-							if(entityTag == obj.tag) then
-								table.remove(cyberscript.GroupManager["AV"].entities,i)
-							end
-						end
-						--logme(3,"removedAV"..obj.tag)
-						else
-						
-						obj.isAV = true
-						if(cyberscript.GroupManager["AV"].entities == nil) then
-							cyberscript.GroupManager["AV"].entities = {}
-						end
-						logme(3,"addedAV"..obj.tag)
-						table.insert(cyberscript.GroupManager["AV"].entities,obj.tag)
-					end
-				end
+			
+			local item = {}
+			table.insert(item,"User")
+			table.insert(item,action.value)
+			table.insert(contextAI,item)
+
+			print(dump(contextAI))
+			
+   			ScheduleChatCompletionRequest(action.aitag,contextAI);
+   			else
+   				print("ai not found")
+   			end
+   			
+   		end
+		
+		if(action.name == "ask_ai_from_item_with_new_contexts") then
+   			setupAIkey(action.aitag)
+		if(ScheduleChatCompletionRequest ~= nil and
+				cyberscript.cache["ai"][action.tag]~=nil) then
+			local contextAI = {}
+			
+			for i,con in ipairs(cyberscript.cache["ai"][action.tag].data.contexts) do
+				local item = {}
+				checkContext(con)
+				table.insert(item,con.context_type)
+				table.insert(item,con.value)
+				table.insert(contextAI,item)
 			end
+			
+			for i,con in ipairs(action.contexts) do
+				checkContext(con)
+				local item = {}
+				table.insert(item,con.context_type)
+				table.insert(item,con.value)
+				table.insert(contextAI,item)
+			end
+
+			print(dump(contextAI))
+			
+   			ScheduleChatCompletionRequest(action.aitag,contextAI);
+   			else
+   				print("ai not found")
+   			end
+   			
+   		end
+   		
+   		if(action.name == "get_ai_answer_in_score") then
+   			
+   			if(ScheduleChatCompletionRequest ~= null) then
+   				setVariable(action.variable,action.key,AIhandler[action.aitag].answer)
+   			else
+   				print("ai not found")
+   			end
+   			
+   		end
+   		
+   	
+		if(action.name == "set_choice_from_ai") then
+			--logme(3,"is logme(10,source)
+			local usedial =  {}
+			
+			usedial.desc = ""
+			usedial.speaker = "V"
+			
+			usedial.header = {}
+			usedial.header.version = 3
+			
+			usedial.requirement = {}
+			usedial.trigger = {}
+			usedial.context = {}
+			
+			usedial.options = {}
+			
+			print(getAIAnswerOrDefault(action.aitag))
+			local item = json.decode(getAIAnswerOrDefault(action.aitag))
+			
+			
+			
+			if(item.questions ~= nil) then
+			
+			_,n = item.answer:gsub("%S+","")
+			
+			local actionss = {}
+			actionss.name = "subtitle"
+			actionss.type = 1
+			actionss.speaker = action.speaker
+			actionss.target = "player"
+			actionss.duration = math.ceil(n*0.2)
+			actionss.title = item.answer
+			local actionlist = {}
+			table.insert(actionlist,actionss)
+			
+		
+			
+			for i,v in ipairs(item.questions) do
+				local answer = {}
+				answer.requirement = {}
+				answer.trigger = {}
+				answer.context = {}
+				answer.description = v
+				answer.style = {}
+				answer.style.color = {}
+				answer.action = {}
+				
+				local actionss = {}
+				actionss.name = "ask_ai"
+				actionss.tag = "dialog_template"
+				actionss.value = v
+				actionss.aitag = action.aitag
+				
+				table.insert(answer.action,actionss)
+				
+				local actionss = {}
+				actionss.name = "subtitle"
+				actionss.type = 1
+				actionss.speaker = "V"
+				actionss.target = "player"
+				actionss.duration = 5
+				actionss.title = v
+				table.insert(answer.action,actionss)
+				
+				local actionss = {}
+				actionss.name = "wait_for_ai_answer"
+			
+				actionss.aitag = action.aitag
+				
+				table.insert(answer.action,actionss)
+				
+				local actionss = {}
+				actionss.name = "set_choice_from_ai"
+				actionss.speaker = action.speaker
+				actionss.aitag = action.aitag
+				
+				table.insert(answer.action,actionss)
+				
+				
+				table.insert(usedial.options,answer)
+			end
+			
+			
+			
+			local answer = {}
+			answer.requirement = {}
+			answer.trigger = {}
+			answer.context = {}
+			answer.description = "Tell me more about it."
+			answer.style = {}
+			answer.style.color = {}
+			answer.action = {}
+			
+			local actionss = {}
+			actionss.name = "ask_ai"
+			actionss.tag = "dialog_template"
+			actionss.value = "Tell me more about it."
+			actionss.aitag = action.aitag
+			
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "subtitle"
+			actionss.type = 1
+			actionss.speaker = "V"
+			actionss.target = "player"
+			actionss.duration = 5
+			actionss.title = "Tell me more about it."
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "wait_for_ai_answer"
+		
+			actionss.aitag = action.aitag
+			
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "set_choice_from_ai"
+			actionss.speaker = action.speaker
+			actionss.aitag = action.aitag
+			
+			table.insert(answer.action,actionss)
+			table.insert(usedial.options,answer)
+			
+			local answer = {}
+			answer.requirement = {}
+			answer.trigger = {}
+			answer.context = {}
+			answer.description = "Wait... Can you repeat what you said ?"
+			answer.style = {}
+			answer.style.color = {}
+			answer.action = {}
+			
+			local actionss = {}
+			actionss.name = "ask_ai"
+			actionss.tag = "dialog_template"
+			actionss.value = "Wait... Can you repeat what you said ?"
+			actionss.aitag = action.aitag
+			
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "subtitle"
+			actionss.type = 1
+			actionss.speaker = "V"
+			actionss.target = "player"
+			actionss.duration = 5
+			actionss.title = "Wait... Can you repeat what you said ?"
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "wait_for_ai_answer"
+		
+			actionss.aitag = action.aitag
+			
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "set_choice_from_ai"
+			actionss.speaker = action.speaker
+			actionss.aitag = action.aitag
+			
+			table.insert(answer.action,actionss)
+			table.insert(usedial.options,answer)
+			
+			
+			local answer = {}
+			answer.requirement = {}
+			answer.trigger = {}
+			answer.context = {}
+			answer.description = "Got someone for that ?"
+			answer.style = {}
+			answer.style.color = {}
+			answer.action = {}
+			
+			local actionss = {}
+			actionss.name = "ask_ai_from_item"
+			actionss.tag = "quest"
+		
+			actionss.aitag = action.aitag
+			
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "subtitle"
+			actionss.type = 1
+			actionss.speaker = "V"
+			actionss.target = "player"
+			actionss.duration = 5
+			actionss.title = "Got someone for that ?"
+			table.insert(answer.action,actionss)
+			
+			
+			local actionss = {}
+			actionss.name = "subtitle"
+			actionss.type = 1
+			actionss.speaker = action.speaker
+			actionss.target = "player"
+			actionss.duration = 5
+			actionss.title = "I will send you the informations later. Walls got mics here."
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "subtitle"
+			actionss.type = 1
+			actionss.speaker = "V"
+			actionss.target = "player"
+			actionss.duration = 5
+			actionss.title = "Thanks !"
+			table.insert(answer.action,actionss)
+			
+			local actionss = {}
+			actionss.name = "wait_for_ai_answer"
+		
+			actionss.aitag = action.aitag
+			
+			table.insert(answer.action,actionss)
+			
+			table.insert(usedial.options,answer)
+			
+			
+			
+			local answer = {}
+			answer.requirement = {}
+			answer.trigger = {}
+			answer.context = {}
+			answer.description = "We talk later."
+			answer.style = {}
+			answer.style.color = {}
+			answer.action = {}
+			local actionss = {}
+			actionss.name = "subtitle"
+			actionss.type = 1
+			actionss.speaker = "V"
+			actionss.target = "player"
+			actionss.duration = 5
+			actionss.title = "We talk later."
+			table.insert(answer.action,actionss)
+			local actionss = {}
+			actionss.name = "subtitle"
+			actionss.type = 1
+			actionss.speaker = action.speaker
+			actionss.target = "player"
+			actionss.duration = 5
+			actionss.title = "See ya around !"
+			table.insert(answer.action,actionss)
+			local actionss = {}
+			actionss.name = "flush_ai"
+			actionss.aitag = action.aitag
+			table.insert(answer.action,actionss)
+				
+			table.insert(usedial.options,answer)
+			local actionss = {}
+			actionss.name = "set_generated_dialog"
+			actionss.item = usedial
+			
+			table.insert(actionlist,actionss)
+			runSubActionList(actionlist, tag.."_event_", tag,source,false,exector,bypassmenu)
+				
+			
+		
+			else
+			
+			print("Noep")
+			end
+			
+			
 		end
-	end
+		
+		
+		if(action.name == "create_quest_from_ai") then
+		
+			local questos = json.decode(getAIAnswerOrDefault(action.aitag))
+			local data = {}
+			local missiontag = "ai_quest_tag_"..math.random(1,99999)
+			
+			cyberscript.cache["mission"][missiontag] = {}
+			cyberscript.cache["mission"][missiontag].data = {}
+			cyberscript.cache["mission"][missiontag].file = "datapack/".."cyberai".."/".."mission".."/"..missiontag..".json"
+			cyberscript.cache["mission"][missiontag].datapack = "cyberai"
+			cyberscript.cache["mission"][missiontag].scripttype = "mission"
+			
+			local quest = {}
+			quest.header = {}
+			quest.header.version = 1
+			
+			quest.tag = missiontag
+			quest.objectives = {}
+			
+			for i,aiobj in ipairs(questos.objectives) do
+			
+			local objective = {}
+			
+			
+			
+			objective.resume_action = {}
+			objective.extra  = {}
+			objective.action = {}
+			objective.tag = missiontag.."_".."obj_"..i
+			objective.title = aiobj.title
+			objective.id = missiontag.."_".."obj_"..i
+			objective.trigger =  {}
+			objective.state = {}
+			objective.failaction = {}
+			objective.isOptional = false
+			objective.isoptionnal = false
+			objective.requirement ={}
+			objective.unlock = {}
+			
+			
+			table.insert(quest.objectives,objective)
+			
+			
+			end
+			
+			
+			
+			quest.district = EgamedataDistrict[questos.place]
+			
+			quest.failure_condition = {}
+			quest.failure_condition.player_death = {}
+			quest.failure_condition.player_death.name = "player_death"
+			quest.failure_condition.player_death.helperTitle = "Player : is Dead"
+			quest.failure_condition.player_death.helper = "This trigger will be triggered when you are dead"
+			quest.failure_condition_requirement = {}
+			quest.failure_condition_requirement[1] = {"player_death"}
+			quest.failure_action = {}
+			
+			
+			quest.trigger_condition = {}
+			quest.trigger_condition.auto = {}
+			quest.trigger_condition.auto.name = "auto"
+			quest.trigger_condition.auto.helperTitle = "auto"
+			quest.trigger_condition.auto.helper = "auto"
+			quest.trigger_condition_requirement = {}
+			quest.trigger_condition_requirement[1] = {"auto"}
+			
+			quest.failure_action = {}
+			
+			quest.extra ={}
+			quest.context = {}
+			
+			
+			quest.end_action = {}
+			quest.reset_action = {}
+			
+			quest.unlock_action = {}
+			quest.content = questos.description
+			quest.recommandedlevel = 5
+			quest.title = questos.title
+			quest.questtype = 2
+			quest.recurrent = false
+			
+			quest.alreadyStart = false
+			quest.column = 1
+			quest.row = 1
+			
+			
+			cyberscript.cache["mission"][missiontag].data = quest
+			
+			pcall(function()				
+				QuestManager.RemoveQuest(missiontag)
+				setScore(missiontag,"Score",nil)
+				QuestManager.MarkQuestAsInactive(missiontag)
+				QuestManager.MarkAllObjectiveOfQuestAs(missiontag,1)
+				QuestManager.MarkQuestAsUnVisited(missiontag)
+			end)
+				loadQuestToUI(quest)  
+		end
+		
+		if(action.name == "set_generated_dialog") then
+			print(dump(action.item))
+			createDialog(action.item)	
+			
+		end
+		if(action.name == "ai_phone_notification") then
+		local itemjson = json.decode(getAIAnswerOrDefault(action.aitag))
+			
+		print("mar1"..itemjson.answer)
+			
+		if(itemjson.questions ~= nil) then
+			local test = getLang(action.speaker)
+			local openAction = OpenMessengerNotificationAction.new()
+			openAction.eventDispatcher = GameController["JournalNotificationQueue"]
+			local userData = PhoneMessageNotificationViewData.new()
+			userData.title = test
+			print("mar2"..itemjson.answer)
+			userData.SMSText = itemjson.answer
+			userData.action = openAction
+			userData.animation = CName('notification_phone_MSG')
+			userData.soundEvent = CName('PhoneSmsPopup')
+			userData.soundAction = CName('OnOpen')
+			currentPhoneDialogPopup = gameJournalPhoneMessage.new()
+			currentPhoneDialogPopup.sender = 1
+			currentPhoneDialogPopup.text = itemjson.answser
+			currentPhoneDialogPopup.delay = -9999
+			currentPhoneDialogPopup.id = test
+			
+			
+			
 	
-	if customnpcregion then 
-		if(action.name == "npc_custom_summon_custom_npc_at_entity_relative") then
-			local positionVec4 = Game.GetPlayer():GetWorldPosition()
-			local entity = nil
-			if(action.entity ~= "player") then
-				local obj = getEntityFromManager(action.entity)
-				entity = Game.FindEntityByID(obj.id)
-				positionVec4 = entity:GetWorldPosition()
-				else
-				entity = Game.GetPlayer()
-			end
-			if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
-				if(action.position == "behind") then
-					positionVec4 = getBehindPosition(entity,action.distance)
-				end
-				if(action.position == "forward") then
-					positionVec4 = getForwardPosition(entity,action.distance)
-				end
-				else
-				positionVec4.x = positionVec4.x + action.x
-				positionVec4.y = positionVec4.y + action.y
-				positionVec4.z = positionVec4.z + action.z
-			end
-			local npc =  getCustomNPCbyTag(action.tag)
-			npc.spawnforced=true
-			npc.dospawnaction=action.dospawnaction
-			npc.doroutineaction=action.doroutineaction
-			npc.dodeathaction=action.dodeathaction
-			npc.dodespawnaction=action.dodespawnaction
-			if(action.replacelocation == true) then
-				npc.workinglocation.x = positionVec4.x
-				npc.workinglocation.y = positionVec4.y
-				npc.workinglocation.z = positionVec4.z
-			end
-			if(npc.useBetaSpawn == true) then
-				spawnEntity(npc.tweakDB, npc.tag,  positionVec4.x ,  positionVec4.y , positionVec4.z, 90, true, false,true)
-				else
-				spawnEntity(npc.tweakDB, npc.tag,  positionVec4.x ,  positionVec4.y , positionVec4.z, 90, true, false,false)
-			end
-			npc.isspawn=true
-			npc.init=false
-			if(action.group ~= nil and action.group ~= "") then
-				
-				table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
-			end
-		end
-		if(action.name == "npc_custom_summon_custom_npc") then
-			local npc =  getCustomNPCbyTag(action.tag)
-			npc.spawnforced=true
-			npc.dospawnaction=action.dospawnaction
-			npc.doroutineaction=action.doroutineaction
-			npc.dodeathaction=action.dodeathaction
-			npc.dodespawnaction=action.dodespawnaction
-			if(action.replacelocation == true) then
-				npc.workinglocation.x = action.x
-				npc.workinglocation.y = action.y
-				npc.workinglocation.z = action.z
-			end
-			if(npc.useBetaSpawn == true) then
-				spawnEntity(npc.tweakDB, npc.tag,  action.x ,  action.y , action.z, 90, true, false,true)
-				else
-				spawnEntity(npc.tweakDB, npc.tag,  action.x ,  action.y , action.z, 90, true, false,false)
-			end
-			npc.isspawn=true
-			npc.init=false
-			if(action.group ~= nil and action.group ~= "") then
-				
-				table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
-			end
-		end
-		if(action.name == "npc_custom_edit_custom_npc") then
-			local npc =  getCustomNPCbyTag(action.tag)
-			npc.spawnforced=true
-			npc.dospawnaction=action.dospawnaction
-			npc.doroutineaction=action.doroutineaction
-			npc.dodeathaction=action.dodeathaction
-			npc.dodespawnaction=action.dodespawnaction
-			npc.repeat_routine = action.repeat_routine
-			npc.auto_despawn = action.auto_despawn
-			if(action.replacelocation == true) then
-				npc.workinglocation.x = action.x
-				npc.workinglocation.y = action.y
-				npc.workinglocation.z = action.z
-				npc.workinglocation.range = action.range
-			end
-			if(action.appeareance ~= nil and action.appeareance ~= "") then
-				npc.appeareance = action.appearance
-			end
-		end
-		if(action.name == "npc_custom_despawn_custom_npc") then
-			local npc =  getCustomNPCbyTag(action.tag)
-			npc.isspawn=false
-			npc.init=false
-			npc.appearancesetted = nil
-			npc.spawnforced=false
-			npc.dospawnaction=true
-			npc.doroutineaction=true
-			npc.dodeathaction=true
-			npc.dodespawnaction=true
-			npc.workinglocation = npc.location
-			if(workerTable[npc.tag.."_spawn"] ~= nil) then
-				workerTable[npc.tag.."_spawn"] = nil
-			end
-			if(workerTable[npc.tag.."_death"] ~= nil) then
-				workerTable[npc.tag.."_death"] = nil
-			end
-			if(workerTable[npc.tag.."_routine"] ~= nil) then
-				workerTable[npc.tag.."_routine"] = nil
-			end
-			despawnEntity(npc.tag)
-			if(workerTable[npc.tag.."_despawn"] == nil and #npc.despawnaction > 0) then
-				runActionList(npc.despawnaction, npc.tag.."_despawn", "interact",false,npc.tag)
-			end
-		end
-		if(action.name == "npc_custom_set_autodespawn") then 
-			local npc = getCustomNPCByTag(action.tag)
-			npc.auto_despawn = action.value
-		end
-		if(action.name == "npc_custom_set_autoroutine") then 
-			local npc = getCustomNPCByTag(action.tag)
-			npc.repeat_routine = action.value
-		end
-		if(action.name == "npc_custom_copy") then 
-			local npc =  getCustomNPCbyTag(action.sourcetag)
-			local newnpc = 	deepcopy(npc, newnpc)
-			newnpc.tag = action.newtag
-			newnpc.name = action.newname
-			addCustomNPC(newnpc)
-		end
-	end
-	
-	if multiregion then
-		if not player_region then
-			if(action.name == "send_action_to_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-				if action.tag == "lookat" and multiName ~= "" then
-					action.tag = multiName
-				end
-				sendActionstoUser(action.tag,action.action)
-				result = true
-			end
-			if(action.name == "help_faction") then
-				if(MultiplayerOn)then
-					HelpFaction()
-					else
-					Game.GetPlayer():SetWarningMessage(getLang("You need to be online for help your faction"))
-				end
-			end
-			if(action.name == "disconnect") then
-				if(NetServiceOn and MultiplayerOn) then
-					disconnectUser()
-					MultiplayerOn = false
-					NetServiceOn = false
-					
-					
-					friendIsSpaned = false
-					lastFriendPos = {}
-					Game.GetPreventionSpawnSystem():RequestDespawnPreventionLevel(-13)
-					
-					netontracthub.login = true
-					netontracthub.register = false
-					netontracthub.main = false
-					
-					openNetContract = false
-					firstload = true
-					firstloadMission = true
-					firstloadMarket = true
-					initfinish = false
-				end
+			
+			if(AIconversation[action.conversation] == nil and action.conversation ~= "") then 
+				AIconversation[action.conversation] = {} 
+				AIconversation[action.conversation].unlock = true
+				AIconversation[action.conversation].speaker = action.speaker 
+				AIconversation[action.conversation].message = {}
 			end
 			
-			if(action.name == "connect") then
-				
-				connectUser()
-				
-			end
-			if(action.name == "send_message") then
-				if(NetServiceOn and MultiplayerOn) then
-					MessageSenderController()
-				end
-			end
-			if(action.name == "toggle_message_popup") then
-				if(NetServiceOn and MultiplayerOn) then
-					if onlineMessagePopup then
-						onlineMessagePopup = false
-						else
-						onlineMessagePopup = true
-					end
-					else
-					onlineMessagePopup = false
-				end
-			end
-			if(action.name == "open_avatar_list" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-				
-				Multi_AvatarList()
-			end
-			if(action.name == "change_avatar" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-				currentSave.myAvatar = action.value
-				Cron.After(2,function()	
-					updatePlayerSkin()
-				end)
-			end
-			if(action.name == "shoot_talk" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then 
-				onlineShootMessage = true
-			end
-			if(action.name == "select_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil ) then
-				selectedUser = action.value
-				onlineReceiver = selectedUser.pseudo
-			end
-			if(action.name == "unblock_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-				UnblockFriend()
-			end
-			if(action.name == "delete_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-				DeleteFriend()
-			end
-			if(action.name == "block_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-				BlockFriend()
-			end
-			if(action.name == "add_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-				AddFriend()
-			end
-			if(action.name == "tp_to_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-				Game.GetTeleportationFacility():Teleport(Game.GetPlayer(), Vector4.new( selectedUser.x, selectedUser.y, selectedUser.z,1) ,EulerAngles.new(0,0,0))
-			end
-			if(action.name == "select_friend" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil ) then
-				selectedFriend = action.value
-				onlineReceiver = selectedUser.name	
-			end
-			if(action.name == "open_friend_list" and NetServiceOn and MultiplayerOn) then
-				local next = next 
-				if ActualFriendList == nil or next(ActualFriendList) == nil then
-					Game.GetPlayer():SetWarningMessage("There is no connected friend..")
-					else
-					Multi_FriendList()
-				end
-			end
-			if(action.name == "join_instance_friend" and NetServiceOn and MultiplayerOn) then
-				if(NetServiceOn and MultiplayerOn) then
-					MessageSenderController()
-				end
-			end
-		end
-		if not instance_region then
-			if(action.name == "open_players_list"  and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-				if #ActualPlayersList > 0 then
-					
-					Multi_InstanceUserList()
-					else
-					Game.GetPlayer():SetWarningMessage("There is no players around..")
-				end
-			end
-			if(action.name == "open_instance_list" and NetServiceOn) then
-				
-				Multi_InstanceList()
-			end
-			if(action.name == "select_instance" and NetServiceOn ) then
-				selectedInstance = action.value
-			end
-			if(action.name == "connect_instance" and NetServiceOn ) then
-				connectMultiplayer(action.value, action.password)
-			end
-			if(action.name == "get_instance_list" and NetServiceOn) then
-				GetInstances()
-			end
-			if(action.name == "open_instance_creation" and NetServiceOn) then
-				onlineInstanceCreation = true
-			end
-			if(action.name == "notify_instance" and NetServiceOn and MultiplayerOn and CurrentInstance.Title ~= nil) then
-				Game.GetPlayer():SetWarningMessage("Welcome to "..CurrentInstance.Title)
-			end
-			if(action.name == "close_instance_password_popup" and NetServiceOn) then
-				onlinePasswordPopup = false
-			end
-			if(action.name == "open_instance_password_popup" and NetServiceOn) then
-				selectedInstancePassword="nothing"
-				onlinePasswordPopup = true
-			end
-			if(action.name == "open_instance_management" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-				onlineInstanceUpdate = true
-			end
-			if(action.name == "open_instance_management_users" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-				
-				Multi_InstanceOwnerUserList()
-			end
-			if(action.name == "block_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-				banUserFromInstance()
-			end
-			if(action.name == "kick_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-				kickUserFromInstance()
-			end
-			if(action.name == "unban_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-				unBanUserFromInstance()
-			end
-		end
-		if not instance_place_management_region then
-			if(action.name == "open_instance_management_create_custom_place" ) then
-				if(ActualPlayerMultiData.currentPlaces ~= nil and #ActualPlayerMultiData.currentPlaces == 0 and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-					onlineInstancePlaceCreation = true
-					else
-					Game.GetPlayer():SetWarningMessage("There is already an custom place here..")
-				end
-			end
-			if(action.name == "delete_custom_place" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-				if(ActualPlayerMultiData.currentPlaces ~= nil and #ActualPlayerMultiData.currentPlaces > 0) then
-					deleteInstancePlace()
-				end
-			end
-		end
-		if not instance_place_item_region then
-			if(action.name == "open_placed_item_ui_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if (ActualPlayerMultiData.currentPlaces[1] ~= nil) then
-					
-					PlacedItemsUIMulti()
-				end
-			end
-			if(action.name == "open_buyed_item_ui_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if(ActualPlayerMultiData.currentPlaces[1] ~= nil) then
-					
-					BuyedItemsUIMulti()
-				end
-			end
-			if(action.name == "set_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if grabbedTarget ~= nil then
-					--	tp:Teleport(grabbedTarget, targetPos, targetAngle)
-					-- if(Game.FindEntityByID(selectedItemMulti.entityId):IsA('gameObject') == false)then
-					-- grabbedTarget:Destroy()
-					-- end
-					updateItemPositionMulti(selectedItemMulti, targetPos, targetAngle,true)
-					UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-					enabled = false
-					grabbedTarget = nil
-					grabbed = false
-					objPush = false
-					objPull = false
-					id = false
-				end
-			end
-			if(action.name == "grab_select_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					enabled = true
-					id = true
-					grabbedTarget = Game.FindEntityByID(selectedItemMulti.entityId)
-					if(grabbedTarget~= nil and grabbedTarget:IsA('gameObject') == false)then
-						grabbedTarget = nil
-						grabbed = false
-						objPush = false
-						objPull = false
-						enabled = false
-						id = false
-						--Game.GetPlayer():SetWarningMessage(getLang(action.value))
-						-- local objpos = grabbedTarget:GetWorldPosition()
-						-- local worldpos = Game.GetPlayer():GetWorldTransform()
-						-- local qat = grabbedTarget:GetWorldOrientation()
-						-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-						-- local transform = Game.GetPlayer():GetWorldTransform()
-						-- transform:SetPosition(objpos)
-						-- transform:SetOrientationEuler(angle)
-						-- grabbedTarget = WorldFunctionalTests.SpawnEntity("base\\items\\interactive\\dining_accessories\\int_dining_accessories_001__bar_asset_h_sponge.ent", transform, '')
-					end
-					Cron.After(0.7,function()	
-						if (grabbedTarget ~= nil) then
-							targetPos = grabbedTarget:GetWorldPosition()
-							targetAngle = Vector4.ToRotation(grabbedTarget:GetWorldForward())
-							objectDist = Vector4.Distance(targetPos, playerPos)
-							phi = math.atan2(playerAngle.y, playerAngle.x)
-							targetDeltaPos = Vector4.new(((objectDist * math.cos(phi)) + playerPos.x), ((objectDist * math.sin(phi)) + playerPos.y), (objectDist * math.sin(playerAngle.z) + playerPos.z), targetPos.w)
-							targetDeltaPos = Delta(targetDeltaPos, targetPos)
-							logme(3,grabbedTarget, "grabbed.")
-							grabbed = true
-							else
-							error("No target!")
-						end
-					end)
-				end
-			end
-			if(action.name == "select_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if(#currentItemMultiSpawned > 0 )then
-					for i = 1, #currentItemMultiSpawned do 
-						local mitems = currentItemMultiSpawned[i]
-						if(mitems.Id == action.value) then
-							selectedItemMulti = nil
-							selectedItemMulti = mitems
-						end
-					end
-				end
-			end
-			if(action.name == "unselect_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				selectedItemMulti = nil
-				grabbedTarget = nil
-				grabbed = false
-				objPush = false
-				objPull = false
-				enabled = false
-				id = false
-			end
-			if(action.name == "move_select_item_to_player_position_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					local objpos = Game.GetPlayer():GetWorldPosition()
-					local qat = Game.GetPlayer():GetWorldOrientation()
-					local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-					updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-					UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-					
-				end
-			end
-			if(action.name == "move_selected_item_Z_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					logme(3,"yep01")
-					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-					if(entity ~= nil) then
-						local objpos = entity:GetWorldPosition()
-						logme(3,"yep02")
-						local worldpos = Game.GetPlayer():GetWorldTransform()
-						objpos.z = objpos.z + action.value
-						local qat = entity:GetWorldOrientation()
-						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-						else
-						logme(3,"Nope")
-					end
-				end
-			end
-			if(action.name == "move_selected_item_X_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-					if(entity ~= nil) then
-						local objpos = entity:GetWorldPosition()
-						local worldpos = Game.GetPlayer():GetWorldTransform()
-						objpos.x = objpos.x + action.value
-						local qat = entity:GetWorldOrientation()
-						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-					end
-				end
-			end
-			if(action.name == "move_selected_item_Y_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-					if(entity ~= nil) then
-						local objpos = entity:GetWorldPosition()
-						local worldpos = Game.GetPlayer():GetWorldTransform()
-						objpos.y = objpos.y + action.value
-						local qat = entity:GetWorldOrientation()
-						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-					end
-				end
-			end
-			if(action.name == "open_precision_mod_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					selectedItemMultiBackup = selectedItemMulti
-					openEditItemsMulti = true
-				end
-			end
-			if(action.name == "yaw_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-					if(entity ~= nil) then
-						local objpos = entity:GetWorldPosition()
-						local worldpos = Game.GetPlayer():GetWorldTransform()
-						local qat = entity:GetWorldOrientation()
-						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-						angle.yaw = angle.yaw + action.value
-						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-					end
-				end
-			end
-			if(action.name == "roll_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-					if(entity ~= nil) then
-						local objpos = entity:GetWorldPosition()
-						local worldpos = Game.GetPlayer():GetWorldTransform()
-						local qat = entity:GetWorldOrientation()
-						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-						angle.roll = angle.roll + action.value
-						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-					end
-				end
-			end
-			if(action.name == "pitch_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-					if(entity ~= nil) then
-						local objpos = entity:GetWorldPosition()
-						local worldpos = Game.GetPlayer():GetWorldTransform()
-						local qat = entity:GetWorldOrientation()
-						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-						angle.pitch = angle.pitch + action.value
-						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-					end
-				end
-			end
-			if(action.name == "selected_item_remove_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if selectedItemMulti ~= nil then
-					local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-					if(entity ~= nil) then
-						Game.FindEntityByID(selectedItemMulti.entityId):GetEntity():Destroy()
-						logme(3,"toto")
-						updatePlayerItemsQuantity(selectedItemMulti,1)
-						
-						
-						local index = getItemEntityIndexFromManager(selectedItemMulti.entityId)
-						
-						table.remove(currentItemMultiSpawned,index)
-						DeleteItem(selectedItemMulti.Tag)
-						
-						else
-						logme(3,"nope")
-					end
-				end
-			end
-			if(action.name == "spawn_buyed_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if action.tag ~= nil then
-					local pos = Game.GetPlayer():GetWorldPosition()
-					local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
-					local spawnedItem = {}
-					local mitems =  getPlayerItemsbyTag(action.tag)
-					if(#ActualPlayerMultiData.currentPlaces > 0 and mitems ~= nil and mitems.Quantity > 0 and (string.match(tostring(mitems.Tag), "AMM_Props.") == nil or (string.match(tostring(mitems.Tag), "AMM_Props.") ~= nil and AMM ~= nil)  )    ) then
-						spawnedItem.Tag = mitems.Tag
-						spawnedItem.HouseTag = ActualPlayerMultiData.currentPlaces[1].tag
-						spawnedItem.ItemPath = mitems.Path
-						spawnedItem.X = pos.x
-						spawnedItem.Y = pos.y
-						spawnedItem.Z = pos.z
-						spawnedItem.Yaw = angles.yaw
-						spawnedItem.Pitch = angles.pitch
-						spawnedItem.Roll = angles.roll
-						spawnedItem.Title = mitems.Title
-						saveHousing(spawnedItem)
-						local housing = getHousing(spawnedItem.Tag,spawnedItem.X,spawnedItem.Y,spawnedItem.Z)
-						spawnedItem.Id = housing.Id
-						updatePlayerItemsQuantity(mitems,-1)
-						spawnedItem.entityId = spawnItem(spawnedItem, pos, angles)
-						local entity = Game.FindEntityByID(spawnedItem.entityId)
-						local components = checkForValidComponents(entity)
-						if components then
-							local visualScale = checkDefaultScale(components)
-							spawnedItem.defaultScale = {
-								x = visualScale.x * 100,
-								y = visualScale.x * 100,
-								z = visualScale.x * 100,
-							}
-							spawnedItem.scale = {
-								x = visualScale.x * 100,
-								y = visualScale.y * 100,
-								z = visualScale.z * 100,
-							}
-						end
-						table.insert(currentItemMultiSpawned,spawnedItem)
-						SetItem(spawnedItem.Tag,spawnedItem.X,spawnedItem.Y,spawnedItem.Z,spawnedItem.Roll,spawnedItem.Pitch,spawnedItem.Yaw)
-						selectedItemMulti = spawnedItem
-					end
-				end
-			end
-			if(action.name == "despawn_placed_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-				if action.tag ~= nil then
-					local pos = Game.GetPlayer():GetWorldPosition()
-					local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
-					local spawnedItem = {}
-					DeleteItem(action.tag)
-					if(entity ~= nil) then
-						for i =1, #currentSave.arrayPlayerItems do
-							local mitem = currentSave.arrayPlayerItems[i]
-							if(mitem.Tag == entity.Tag) then
-								local housingitem = getHousing(entity.Tag,entity.X,entity.Y,entity.Z)
-								despawnItem(entity.entityId)
-								deleteHousing(housingitem.Id)
-								updatePlayerItemsQuantity(mitem,1)
-							end
-						end
-						else
-						logme(3,"nope")
-					end
-				end
-			end
-		end
-		if not guild_region then
-			if(action.name == "open_guild_list" and NetServiceOn and MultiplayerOn) then
-				if(NetServiceOn and MultiplayerOn) then
-					
-					Multi_GuildList()
-				end
-			end
-			if(action.name == "open_guild_pending" and NetServiceOn and MultiplayerOn) then
-				if(NetServiceOn and MultiplayerOn) then
-					Multi_GuildPendingList()
-				end
-			end
-			if(action.name == "open_guild_members" and NetServiceOn and MultiplayerOn) then
-				if(NetServiceOn and MultiplayerOn) then
-					
-					Multi_GuildUserList()
-				end
-			end
-			if(action.name == "open_guild_creation" and NetServiceOn and MultiplayerOn) then
-				if(NetServiceOn and MultiplayerOn) then
-					onlineGuildCreation = true
-				end
-			end
 			
-			if(action.name == "open_guild_update" and NetServiceOn and MultiplayerOn) then
-				if(NetServiceOn and MultiplayerOn) then
-					onlineGuildUpdate = true
-				end
-			end
 			
-			if(action.name == "select_guild") then
-				if(NetServiceOn and MultiplayerOn ) then
-					selectedGuild = action.parameter
-				end
-			end
-			if(action.name == "select_guild_user") then
-				if(NetServiceOn and MultiplayerOn ) then
-					selectedGuildUser = action.parameter
-				end
-			end
-			if(action.name == "join_guild") then
-				if(NetServiceOn and MultiplayerOn and selectedGuild ~= nil) then
-					joinGuild(mytag,selectedGuild)
-				end
-			end
-			if(action.name == "leave_guild") then
-				if(NetServiceOn and MultiplayerOn and mytag ~= "") then
-					leaveGuild(mytag)
-				end
-			end
-			if(action.name == "accept_to_guild") then
-				if(NetServiceOn and MultiplayerOn and selectedGuildUser ~= "") then
-					acceptGuild(selectedGuildUser)
-				end
-			end
-			if(action.name == "refuse_to_guild") then
-				if(NetServiceOn and MultiplayerOn and selectedGuildUser ~= "") then
-					refuseGuild(selectedGuildUser)
-				end
-			end
-			if(action.name == "remove_to_guild") then
-				if(NetServiceOn and MultiplayerOn and multiName ~= "") then
-					removeGuild(selectedGuildUser)
-				end
-			end
-		end
-		if not server_player_score_region then
-			if(action.name == "operate_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.instance.scores[action.value]
-					if(score ~= nil) then
-						score = score + action.score
-						else
-						score = 0 + action.score
-					end
-					operateInstanceScore(myTag,action.value,score)
-				end
-			end
-			if(action.name == "set_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.instance.scores[action.value]
-					if(score ~= nil) then
-						score = action.score
-						else
-						score = action.score
-					end
-					setInstanceScore(myTag,action.value,score)
-				end
-			end
-			if(action.name == "delete_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					deleteInstanceScore(myTag,action.value)
-				end
-			end
-			if(action.name == "edit_server_score_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-				editServerScoreUser(action.score,action.value)
-				result = true
-			end
-		end
-	end
-	
-	if framework then
-		if(action.name == "download_datapack") then
-			arrayDatapack[action.tag] = {}
-			arrayDatapack[action.tag].state = "new"
-			spdlog.error(dump(action))
-			DownloadModpack(action.value)
-			
-		end
-		if(action.name == "update_datapack") then
-			arrayDatapack[action.tag] = {}
-			arrayDatapack[action.tag].state = "new"
-			UpdateModpack(action.value,action.tag)
-		end
-		if(action.name == "delete_datapack") then
-			DeleteModpack(action.tag)
-		end
-		if(action.name == "enable_datapack") then
-			EnableDatapack(action.tag)
-		end
-		if(action.name == "refresh_datapack_cache") then
-			LoadDataPackCache()
-		end
-		if(action.name == "check_datapack_cache") then
-			CheckandUpdateDatapack()
-		end
-		if(action.name == "disable_datapack") then
-			DisableDatapack(action.tag)
-		end
-		if(action.name == "update_mod") then
-			UpdateMods()
-		end
-		if(action.name == "refresh_news") then
-			GetCorpoNews()
-		end
-		if(action.name == "refresh_market") then
-			GetScores()
-		end
-		if(action.name == "select_stock") then
-			CurrentStock = action.value
-			logme(3,dump(CurrentStock))
-		end
-		if(action.name == "clean_current_stock") then
-			CurrentStock = nil
-		end
-		if(action.name == "buy_score") then
-			if(arrayMarket ~= nil and #arrayMarket > 0) then
-			
-				for k,stock in ipairs(arrayMarket) do
-					
-					if(stock.tag == action.tag) then
-						
-						BuyScore(stock.tag)
-						
-					end
-					
-				end
-				
-			end
-			
-		end
-		if(action.name == "sell_score") then
-			
-			if(arrayMarket ~= nil and #arrayMarket > 0) then
-			
-				for k,stock in ipairs(arrayMarket) do
-					
-					if(stock.tag == action.tag) then
-						
-						SellScore(stock.tag)
-						
-					end
-					
-				end
-				
-			end
-		end
-		if(action.name == "refresh_item_market") then
-			GetItems()
-		end
 		
-		if(action.name == "set_selected_item_category") then
-			Keystone_currentSelectedItemCategory = action.value
-			setVariable("Item_Market","CurrentCategory", action.value)
-			setScore("Item_Market","CurrentCategory_TotalPage",  #arrayMarketItem[Keystone_currentSelectedItemCategory])
-		end
-		
-		
-		
-		if(action.name == "buy_cart") then
-			if(checkStackableItemAmount("Items.money",CartPrice)) then
-			--print("tttest")
-				local itemCartTagList = {}
-				
-				for i = 1,#ItemsCart do
-					local items = ItemsCart[i]
-					table.insert(itemCartTagList,items.Tag)
-					updatePlayerItemsQuantity(items,1)
-					local player = Game.GetPlayer()
-					local ts = Game.GetTransactionSystem()
-					local tid = TweakDBID.new("Items.money")
-					local itemid = ItemID.new(tid)
-					local amount = tonumber(items.Price)
-					local result = ts:RemoveItem(player, itemid, amount)
-				end
-				BuyItemsCart(itemCartTagList)
-				for i,item in ipairs(ItemsCart) do
-				
-				setScore("Item_MarketCart",item.Tag,0)
-				local playerItems = getPlayerItemsbyTag(item.Tag)
-									
-				if playerItems == nil then 
-					
-					setScore("owned_item",item.Tag,0)
-				else
-					setScore("owned_item",item.Tag,playerItems.Quantity)
-				
-				end
-				end
-				ItemsCart = {}
-					setScore("Item_Market","CartPrice",0)
-					setScore("Item_Market","CartAmount",0)
-				CartPrice = 0	
-			end	
-		end
-		if(action.name == "add_to_cart") then
-			table.insert(ItemsCart,Keystone_currentSelectedItem)
-			CartPrice = CartPrice + Keystone_currentSelectedItem.Price
-			setScore("Item_Market","CartPrice",CartPrice)
-		end
-		if(action.name == "set_current_item_page") then
-		
-		CurrentItemPage = action.value
-		setScore("Item_Market","CurrentItemPage",CurrentItemPage)
-		end
-		if(action.name == "add_to_cart_item") then
-		--print(action.tag)
-			for i = 1,#arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage]  do
-				
-				if(arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i].Tag == action.tag) then
-					--print("Motoiiiii")
-					
-					
-					table.insert(ItemsCart,arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i])
-					CartPrice = CartPrice + arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i].Price
-						setScore("Item_Market","CartPrice",CartPrice)
-						setScore("Item_Market","CartAmount",#ItemsCart)
-						
-						local num = getScoreKey("Item_MarketCart",action.tag)
-						
-						if num == nil then num = 0 end
-						num = num + 1
-						setScore("Item_MarketCart",action.tag,num)
-					break
-				end
 			
+			AIconversation[action.conversation].tag = action.conversation
+			
+			local message = {}
+			message.tag = action.conversation.."_"..(#AIconversation[action.conversation].message+1)
+			
+			message.text= itemjson.answer
+			message.unlock = true
+			message.readed = true
+			message.unlocknext = ""
+			message.sender = 0
+			message.choices = {}
+			
+			for i,v in ipairs(itemjson.questions) do
+				local answer = {}
+				answer.action_bypassmenu_execution = false
+				answer.tag = action.conversation.."_"..(#AIconversation[action.conversation].message+1).."_".."choice"..i
+			
+				answer.unlocknext = ""
+				answer.text = v
+				answer.trigger = {}
+				answer.context = {}
+				answer.action = {}
+				answer.requirement = {}
+				
+				local actionss = {}
+				actionss.name = "ask_ai_from_item_with_value"
+				actionss.tag = "dialog_template"
+				actionss.value = v
+				actionss.aitag = action.aitag
+				
+				table.insert(answer.action,actionss)
+				
+				local actionss = {}
+				actionss.name = "wait_for_ai_answer"
+				actionss.aitag = action.aitag
+				table.insert(answer.action,actionss)
+				
+				local actionss = {}
+				actionss.name = "add_v_message_to_ai_phone"
+				actionss.value = v
+				actionss.conversation = action.conversation
+				table.insert(answer.action,actionss)
+				
+				
+				
+				
+				
+				local actionss = {}
+				actionss.name = "ai_phone_notification"
+				actionss.speaker = action.speaker
+				actionss.duration = 5
+				actionss.conversation = action.conversation
+				table.insert(answer.action,actionss)
+				
+				
+				table.insert(message.choices,answer)
 			end
 			
-		end
-		if(action.name == "remove_to_cart") then
-			local res = removeItemInCart(Keystone_currentSelectedItem.tag)
-			if(res == true) then
-				CartPrice = CartPrice - Keystone_currentSelectedItem.Price
-			end
-		end
-		if(action.name == "remove_to_cart_item") then
-			for i = 1,#ItemsCart  do
+		
+			table.insert(AIconversation[action.conversation].message,message)
+			currentPhoneConversation = AIconversation[action.conversation] 
+			currentPhoneConversation.currentchoices = {}
+			currentPhoneConversation.loaded = 0	
 				
-				if(ItemsCart[i].Tag==action.tag) then
-					
-					
-					CartPrice = CartPrice - ItemsCart[i].Price
-						setScore("Item_Market","CartPrice",CartPrice)
-					
-					break
-				end
 			
-			end
-			removeItemInCart(action.tag)
-			local num = getScoreKey("Item_MarketCart",action.tag)
-						
-			if num == nil then num = 0 end
-			num = num - 1
-			setScore("Item_MarketCart",action.tag,num)
-			setScore("Item_Market","CartAmount",#ItemsCart)
-		end
-		if(action.name == "select_item_stock") then
-			CurrentItemStock = action.value
-		end
-		if(action.name == "connectUser") then
-			connectUser()
-		end
-		if(action.name == "userversion") then
-			setUserVersion()
-		end
-		if(action.name == "get_datapacklist") then
-			GetModpackList()
-		end
-		if(action.name == "get_branch") then
-			GetBranch()
-		end
-		if(action.name == "get_role") then
-			GetRole()
-		end
-		if(action.name == "fetch_data") then
-			FetchData()
-		end
-		if(action.name == "get_faction") then
-			GetFaction()
-		end
-		if(action.name == "get_possiblebranch") then
-			GetPossibleBranch()
-		end
-		if(action.name == "get_factionrank") then
-			GetFactionRank()
-		end
-		if(action.name == "getitemcat") then
-			GetItemCat()
-		end
-		if(action.name == "get_itemlist") then
-			GetItems()
-		end
-		if(action.name == "get_modversion") then
-			GetModVersion()
-		end
-	end
-	
-	if scene then 
-		if(action.name == "show_braindance_ui") then
+			print(dump(currentPhoneConversation))
 			
-			if(GameController["BraindanceGameController"] ~= nil) then
-				local root = GameController["BraindanceGameController"].rootWidget 
-				
-				
-				
-				root:SetVisible(true)
-				
-				GameController["BraindanceGameController"].PlayLibraryAnimation(CName("SHOW"))
-				
-				
+			
+			local notificationData = gameuiGenericNotificationData.new()
+			notificationData.time = action.duration
+			notificationData.widgetLibraryItemName = CName('notification_message')
+			notificationData.notificationData = userData
+			GameController["JournalNotificationQueue"]:AddNewNotificationData(notificationData)
+			
+			
+		end
+		end
+   	
+		if(action.name == "add_v_message_to_ai_phone") then
+			if(AIconversation[action.conversation] == nil and action.conversation ~= "") then 
+				AIconversation[action.conversation] = {} 
+				AIconversation[action.conversation].unlock = true
+				AIconversation[action.conversation].speaker = action.speaker 
+				AIconversation[action.conversation].message = {}
 			end
 			
+			
+			
+		
+			
+			AIconversation[action.conversation].tag = action.conversation
+			
+			local message = {}
+			message.tag = action.conversation.."_"..(#AIconversation[action.conversation].message+1)
+			
+			message.text= action.value
+			message.unlock = true
+			message.readed = true
+			message.unlocknext = ""
+			message.sender = 1
+			message.choices = {}
 		end
-			
-		if(action.name == "bound_scene_to_braindance") then
-			
-			if(GameController["BraindanceGameController"] ~= nil and currentScene ~= nil) then
-				local margin = inkMargin.new({ top = -45})
-				inkWidgetRef.SetMargin(GameController["BraindanceGameController"].cursorPoint, margin)
-				local margin = inkMargin.new({ left = 0})
-				inkWidgetRef.SetMargin(GameController["BraindanceGameController"].currentTimerMarker, margin)
-				inkTextRef.SetText(GameController["BraindanceGameController"].currentTimerText, "0 : 0")
-				currentScene.isbraindance = true
-				
-				
-				
-			end
-			
-		end
-		
-		if(action.name == "unbound_scene_to_braindance") then
-			
-			if(GameController["BraindanceGameController"] ~= nil and currentScene ~= nil) then
-				local margin = inkMargin.new({ top = -45})
-				inkWidgetRef.SetMargin(GameController["BraindanceGameController"].cursorPoint, margin)
-				currentScene.isbraindance = false
-				
-				
-				
-			end
-			
-		end
-		
-		if(action.name == "hide_braindance_ui") then
-			
-			if(GameController["BraindanceGameController"] ~= nil) then
-				local root = GameController["BraindanceGameController"].rootWidget 
-				
-				
-				
-				root:SetVisible(false)
-				
-				
-				
-				
-			end
-			
-		end
-		
-		
-		
-		
-		
-		if(action.name == "load_scene") then
-			
-			local scene = cyberscript.cache["scene"][action.tag]
-			
-			if(scene ~= nil) then
-				
-				currentScene = scene.data
-				currentScene.index = 0
-				if(GameController["BraindanceGameController"] ~= nil and currentScene.isbraindance == true) then
-					
-					local root = GameController["BraindanceGameController"].rootWidget 
-					
-					
-				
-				
-					root:SetVisible(true)
-					
-					GameController["BraindanceGameController"].PlayLibraryAnimation(CName("SHOW"))
-				
-					local margin = inkMargin.new({ top = -45})
-					inkWidgetRef.SetMargin(GameController["BraindanceGameController"].cursorPoint, margin)
-					local margin = inkMargin.new({ left = 0})
-					inkWidgetRef.SetMargin(GameController["BraindanceGameController"].currentTimerMarker, margin)
-					inkTextRef.SetText(GameController["BraindanceGameController"].currentTimerText, "0 : 0")
-					
-					
-					
-					
-				end
-				else
-				
-				error("No scene founded for the tag "..action.tag)
-				
-				
-			end
-			
-		end
-		
-		if(action.name == "unload_scene") then
-			
-			
-			
-			if(currentScene ~= nil) then
-				
-				currentScene = nil
-				
-				
-				
-				
-			end
-		end
-		
-		if(action.name == "play_scene") then
-			
-			
-			
-			if(currentScene ~= nil) then
-				
-				
-				
-				
-				runActionList(currentScene.reset_action, currentScene.tag.."_reset", "interact",false,"scene")
-				
-				local actionlist = {}
-				
-				local actiontd = {}
-				actiontd.name = "wait_for_trigger"
-				actiontd.trigger = {}
-				actiontd.trigger.name = "event_is_finished"
-				actiontd.trigger.tag = currentScene.tag.."_reset"
-				
-				table.insert(actionlist,actiontd)
-				
-				for i=1,#currentScene.init_action do
-					
-					table.insert(actionlist,currentScene.init_action[i])
-					
-				end
-				
-				
-				runActionList(actionlist, currentScene.tag.."_init", "interact",false,"scene")
-				
-				
-				actionlist = {}
-				
-				actiontd = {}
-				actiontd.name = "wait_for_trigger"
-				actiontd.trigger = {}
-				actiontd.trigger.name = "event_is_finished"
-				actiontd.trigger.tag = currentScene.tag.."_init"
-				
-				table.insert(actionlist,actiontd)
-				
-				for i=1,#currentScene.step do
-					
-					
-					local step = currentScene.step[i]
-					
-					
-					
-					for y=1,#step.action do
-						
-						table.insert(actionlist,step.action[y])
-						
-					end
-					
-				end
-				
-				
-				for i=1,#currentScene.end_action do
-					
-					table.insert(actionlist,currentScene.end_action[i])
-					
-				end
-				
-				
-				runActionList(actionlist, currentScene.tag.."_full", "interact",false,"scene")
-				else
-				
-				error("No scene loaded")
-				
-			end
-		end
-		
-		if(action.name == "reset_scene") then
-			
-			
-			
-			if(currentScene ~= nil) then
-				
-				
-				
-				
-				runActionList(currentScene.reset_action, currentScene.tag.."_reset", "interact",false,"scene")
-				currentScene.index = 0
-				
-			end
-		end
-		
-		if(action.name == "init_scene") then
-			
-			
-			
-			if(currentScene ~= nil) then
-				
-				
-				
-				
-				runActionList(currentScene.init_action, currentScene.tag.."_init", "interact",false,"scene")
-				currentScene.index = 0
-				else
-				
-				error("No scene loaded")
-			end
-		end
-		
-		if(action.name == "play_scene_step_index") then
-			
-			
-			
-			if(currentScene ~= nil) then
-				
-				
-				
-				if(currentScene.step[action.value] ~= nil) then
-					if (currentScene.isbraindance == true) then 
-						
-						GameController["BraindanceGameController"].currentTime = (100/#currentScene.step * action.value)/100
-						GameController["BraindanceGameController"]:SetBraindanceProgress()
-						
-					end
-					runActionList(currentScene.step[action.value].action, currentScene.tag.."_"..action.value, "interact",false,"scene")
-					currentScene.index = action.value
-				end
-				
-			end
-		end
-		
-		if(action.name == "play_scene_step_by_tag") then
-			
-			
-			
-			if(currentScene ~= nil) then
-				
-				
-				for i=1,#currentScene.step do
-					if(currentScene.step[i].tag == action.tag) then
-						if (currentScene.isbraindance == true) then 
-							
-							GameController["BraindanceGameController"].currentTime = (100/#currentScene.step * i)/100
-							GameController["BraindanceGameController"]:SetBraindanceProgress()
-							
-						end
-						runActionList(currentScene.step[i].action, currentScene.tag.."_"..i, "interact",false,"scene")
-						currentScene.index = i
-					end
-				end
-				
-			end
-		end
-		
-		if(action.name == "play_next_scene_step") then
-			
-			
-			
-			if(currentScene ~= nil) then
-				
-				
-				local index = currentScene.index +1
-				
-				if(currentScene.step[index] ~= nil) then
-					if (currentScene.isbraindance == true) then 
-						
-						GameController["BraindanceGameController"].currentTime = (100/#currentScene.step * index)/100
-						GameController["BraindanceGameController"]:SetBraindanceProgress()
-						
-					end
-					
-					runActionList(currentScene.step[index].action, currentScene.tag.."_"..index, "interact",false,"scene")
-					currentScene.index = index
-					
-				end
-				
-			end
-		end
-		
-		if(action.name == "play_previous_scene_step") then
-			
-			
-			
-			if(currentScene ~= nil) then
-				
-				
-				local index = currentScene.index -1
-				
-				if(currentScene.step[index] ~= nil) then
-					if (currentScene.isbraindance == true) then 
-						
-						GameController["BraindanceGameController"].currentTime = (100/#currentScene.step * index)/100
-						GameController["BraindanceGameController"]:SetBraindanceProgress()
-						
-					end
-					runActionList(currentScene.step[index].action, currentScene.tag.."_"..index, "interact",false,"scene")
-					currentScene.index = index
-					
-				end
-				
-			end
-		end
-		
-		
-		
-		
-		
-		if(action.name == "spawn_camera") then
-			local position = {}
-			local position = getPositionFromParameter(action)
-				
-			
-			local angle = {}
-			angle.roll = action.roll
-			angle.pitch = action.pitch
-			angle.yaw = action.yaw
-			
-			spawnCamera(action.tag,position,action.surveillance,angle)
-			
-		end
-		
-		if(action.name == "move_camera") then
-			local position = {}
-			local position = getPositionFromParameter(action)
-			
-			local angle = {}
-			angle.roll = action.roll
-			angle.pitch = action.pitch
-			angle.yaw = action.yaw
-			
-			moveCamera(action.tag,position,angle)
-		end
-		
-		if(action.name == "activate_camera") then
-			enableCamera(action.tag)
-		end
-		
-		if(action.name == "stop_camera") then
-			stopCamera(action.tag)
-		end
-		
-		
-		
-		
-		
-	end
-	
-	if hudregion then 
-		
-		if(action.name == "change_hud_visibility") then
-			
-			if (cyberscript.cache["hud"][v.tag] ~= nil) then
-				
-				cyberscript.cache["hud"][v.tag].data.visible = action.value
-				
-			end
-			
-		end
-		
-		if(action.name == "change_hud_margin") then
-			
-			if (cyberscript.cache["hud"][v.tag] ~= nil) then
-				if(cyberscript.cache["hud"][v.tag].data.margin == nil) then cyberscript.cache["hud"][v.tag].data.margin = {} end
-				cyberscript.cache["hud"][v.tag].data.margin.top = action.top
-				cyberscript.cache["hud"][v.tag].data.margin.left = action.left
-				
-			end
-			
-		end
-		
-		if(action.name == "change_hud_color") then
-			
-			if (cyberscript.cache["hud"][v.tag] ~= nil) then
-				if(cyberscript.cache["hud"][v.tag].data.color == nil) then cyberscript.cache["hud"][v.tag].data.color = {} end
-				
-				cyberscript.cache["hud"][v.tag].data.color.red = action.red
-				cyberscript.cache["hud"][v.tag].data.color.green = action.green
-				cyberscript.cache["hud"][v.tag].data.color.blue = action.blue
-				
-			end
-			
-		end
-		
-		if(action.name == "change_hud_fontfamily") then
-			
-			if (cyberscript.cache["hud"][v.tag] ~= nil) then
-				
-				
-				cyberscript.cache["hud"][v.tag].data.fontfamily = action.value
-				
-			end
-			
-		end
-		
-		if(action.name == "change_hud_fontstyle") then
-			
-			if (cyberscript.cache["hud"][v.tag] ~= nil) then
-				
-				
-				cyberscript.cache["hud"][v.tag].data.fontstyle = action.value
-				
-			end
-			
-		end
-		
-		if(action.name == "change_hud_fontsize") then
-			
-			if (cyberscript.cache["hud"][v.tag] ~= nil) then
-				
-				
-				cyberscript.cache["hud"][v.tag].data.fontsize = action.value
-				
-			end
-			
-		end
-		
-		if(action.name == "change_hud_text") then
-			
-			if (cyberscript.cache["hud"][v.tag] ~= nil) then
-				
-				
-				cyberscript.cache["hud"][v.tag].data.text = action.value
-				
-			end
-			
-		end
-		
-	end
-	
-	if(action.output == true) then 
-		
-		logme(1,action.name,true)
-		logme(1,dump(action),true)
-		logme(1,tostring(result),true)
-		
-	end
+   	
 	
 	end
-	
-	return result
+   	
+   	if(action.output == true) then 
+   		
+   		logme(1,action.name,true)
+   		logme(1,dump(action),true)
+   		logme(1,tostring(result),true)
+   		
+   	end
+   	
+   	end
+   	
+   	return result
 end	
 
 
@@ -13429,6 +14328,29 @@ function GeneratefromContext(context)
 	if(context.type ~= nil and context.type =="text") then
 		text = tostring(text)
 	end
+	
+	if(context.type ~= nil and context.type =="funcs") then
+		if (text ~= "") then
+			
+			local funcs = loadstring("return " .. tostring(text),"")
+			
+			local res,msg = pcall(function() 
+			
+			text = tostring(funcs())
+			end)
+			
+			if res == false then
+			
+				text = tostring("")
+			
+			end
+			
+			else
+			
+			text = tostring(text)
+		end
+	end
+	
 	if(context.type ~= nil and context.type =="boolean") then
 		text = toboolean(text)
 	end

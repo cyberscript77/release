@@ -47,8 +47,8 @@ function QuestThreadManager()
 		
 		if(getScoreKey(currentQuest.tag,"Score") == 2)then
 			
-			local completedobjective = 0
-			local totalobjectivenotoptionnal = 0
+			completedobjective = 0
+			totalobjectivenotoptionnal = 0
 			
 			for i=1, #currentQuest.objectives do
 				
@@ -165,24 +165,23 @@ function QuestThreadManager()
 					else
 					
 				end
-				-- print("test1 "..completedobjective)
-				-- print("test2 "..totalobjectivenotoptionnal)
+				
 				if(QuestManager.GetObjectiveState(objectif.tag).state == gameJournalEntryState.Succeeded and objectif.isoptionnal == false) then
 					completedobjective = completedobjective +1
-					
+				--	print("completedobjective "..objectif.tag)
 				end
 				
 				if(QuestManager.GetObjectiveState(objectif.tag).state ~= gameJournalEntryState.Undefined and objectif.isoptionnal == false) then
 					totalobjectivenotoptionnal = totalobjectivenotoptionnal +1
-					
+					--print("totalobjectivenotoptionnal "..objectif.tag)
 				end
 				
 				
 				
 			end
-			
+		
 			if(completedobjective >= totalobjectivenotoptionnal) then
-				
+			--	print("test3 ")
 				canDoEndAction = true
 				
 			end
@@ -256,7 +255,7 @@ function QuestThreadManager()
 			
 			
 			if(canDoEndAction) then
-				
+				print("test5 ")
 				if(DoedEndAction == false and canwaitend == false) then
 					
 					DoedEndAction = true

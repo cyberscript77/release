@@ -272,8 +272,8 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 			setVariable("current_timer","text","")
 		end
 		
-		end
 		
+		end
 		if mainrefreshstep5 then
 		--Timers 
 		if (tick % 6 == 0) then --every 0.5 second
@@ -687,12 +687,24 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 				end
 			end
 			
+			for k,v in pairs(AIhandler) do
 			
+				local cacheaiLoadinganswer = GetAnswer(k)
+				
+				if(cacheaiLoadinganswer ~= nil and cacheaiLoadinganswer ~= "") then
+					logme(1,k)
+					logme(1,cacheaiLoadinganswer)
+					AIhandler[k].answer = cacheaiLoadinganswer
+					
+				end
+			end
+		
 			
 		end
 		
 		if (tick % 120 == 0) then --every 2 second
 			playRadio()
+			
 		end
 		
 		if (tick % 180 == 0) then --every 3 second
@@ -1273,7 +1285,7 @@ function checkWaitingAction(action,tag,parent,index)
 	end
 	
 	
-	if(action.name == "subtitle" or action.name == "random_subtitle") then
+	if(action.name == "subtitle" or action.name == "random_subtitle" or action.name == "play_random_custom_sound_with_subtitle" or action.name == "play_custom_sound_with_subtitle" ) then
 		
 		if(os.time(os.date("!*t"))+0  >= action.tick) then
 			result = true
@@ -1382,6 +1394,16 @@ function checkWaitingAction(action,tag,parent,index)
 		------print("wait_for_framework "..tostring(waiting).." "..tostring(result))
 		
 	end
+	
+	if(action.name == "wait_for_ai_answer") then
+		
+		
+		
+		result = (getAIAnswerOrDefault(action.aitag) ~= nil)
+		------print("wait_for_framework "..tostring(waiting).." "..tostring(result))
+		
+	end
+	
 	
 	
 	if(action.name == "wait_for_target") then
@@ -5017,7 +5039,33 @@ function refreshModVariable(active)
 end
 
 
+function getAIContextOrDefault(tag)
+	
+	if(AIhandler[tag] ~= nil and AIhandler[tag].context ~= nil) then
+		return {"System", AIhandler[tag].context} 
+	end
+	
+	return nil
+	
+end
 
+function getAIAnswerOrDefault(tag)
+	
+	if(AIhandler[tag] ~= nil and AIhandler[tag].answer ~= nil) then
+	print(AIhandler[tag].answer)
+		return AIhandler[tag].answer
+	end
+	
+	return nil
+	
+end
+
+function setupAIkey(tag)
+	
+	if(AIhandler[tag] == nil) then AIhandler[tag] = {} end
+	AIhandler[tag].answer = nil
+
+end
 
 
 
