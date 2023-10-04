@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_SQ017_Nightclub_Guards",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "sq017_nightclub_guards",
-    ".isState": false
-  }
-}

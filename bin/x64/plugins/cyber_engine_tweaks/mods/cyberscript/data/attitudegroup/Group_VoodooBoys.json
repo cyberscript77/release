@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_VoodooBoys",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "voodooBoys",
-    ".isState": false
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Panam",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "panam",
-    ".isState": false
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Sobchak",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "sobchak",
-    ".isState": false
-  }
-}

@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_spr_06_Animals",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Animals_OW",
+    ".name": "spr_06_animals",
+    ".isState": false
+  }
+}

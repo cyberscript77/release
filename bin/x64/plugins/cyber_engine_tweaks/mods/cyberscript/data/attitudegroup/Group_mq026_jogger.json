@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_mq026_jogger",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "mq026_jogger",
-    ".isState": false
-  }
-}

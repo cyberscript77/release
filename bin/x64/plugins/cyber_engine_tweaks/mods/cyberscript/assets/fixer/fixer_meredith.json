@@ -1,0 +1,29 @@
+{
+
+	"name":"Meredith Stout",
+	"x": -1444.649,
+	"y": -290.132,
+	"z": 16.106,
+
+	"range":8,
+	"faction":"faction_militech",
+	"tag": "fixer_meredith",
+	"exist":false,
+	"npcexist":false,
+	"tweakid":"Character.Stout",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+	"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"despawn_action":[]
+}

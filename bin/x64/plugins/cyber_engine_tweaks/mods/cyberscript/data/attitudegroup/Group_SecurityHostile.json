@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_SecurityHostile",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Hostile",
-    ".name": "securityHostile",
-    ".isState": false
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Q005_arasaka_hotel",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Arasaka",
-    ".name": "q005_arasaka_hotel",
-    ".isState": false
-  }
-}

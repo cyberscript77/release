@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Haru",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "haru",
-    ".isState": false
-  }
-}

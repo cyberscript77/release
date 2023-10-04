@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Vendor_OW",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "vendor_ow",
-    ".isState": false
-  }
-}

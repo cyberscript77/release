@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Yorinobu_Guards",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "yorinobu_guards",
-    ".isState": false
-  }
-}

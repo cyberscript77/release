@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_kab_04_Akulov",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Civilian",
-    ".name": "kab_04_akulov",
-    ".isState": false
-  }
-}

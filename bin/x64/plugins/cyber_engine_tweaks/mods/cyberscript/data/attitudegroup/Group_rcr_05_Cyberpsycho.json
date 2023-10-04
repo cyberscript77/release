@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_rcr_05_Cyberpsycho",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "rcr_05_cyberpsycho",
-    ".isState": false
-  }
-}

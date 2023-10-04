@@ -1,0 +1,21 @@
+{
+	"tag":"factiontitle",
+	"type":"widget",
+	"container":"factionwidget",
+	"fontfamily":"base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily",
+	"fontstyle":"Medium",
+	"fontsize":35,
+	"color":{
+		"red":183,
+		"green":255,
+		"blue":255
+		
+	},
+	"visible":true,
+	"margin":{
+	"top":0,
+	"left":0
+	},
+	"text":"Faction : "
+
+}

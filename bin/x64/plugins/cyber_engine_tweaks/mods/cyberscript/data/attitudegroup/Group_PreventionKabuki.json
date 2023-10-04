@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_PreventionKabuki",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "preventionKabuki",
-    ".isState": false
-  }
-}

@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Security_OW",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Guard",
+    ".name": "security_ow",
+    ".isState": false
+  }
+}

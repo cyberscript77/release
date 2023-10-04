@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Animals_e3",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Animals",
+    ".name": "animals_e3",
+    ".isState": false
+  }
+}

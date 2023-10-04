@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.QuickHack_Madness",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "quickhack_madness",
+    ".isState": false
+  }
+}

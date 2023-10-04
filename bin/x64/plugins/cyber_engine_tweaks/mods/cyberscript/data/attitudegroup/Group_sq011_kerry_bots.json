@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_sq011_kerry_bots",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "sq011_kerry_bots",
-    ".isState": false
-  }
-}

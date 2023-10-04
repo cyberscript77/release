@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_VoodooBoys_OW",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_VoodooBoys",
+    ".name": "voodooBoys_ow",
+    ".isState": false
+  }
+}

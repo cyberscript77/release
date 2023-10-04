@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Q103_6th_Street",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "q103_6th_street",
+    ".isState": false
+  }
+}

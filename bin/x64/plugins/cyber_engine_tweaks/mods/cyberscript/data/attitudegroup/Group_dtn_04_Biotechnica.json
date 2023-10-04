@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_dtn_04_Biotechnica",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "dtn_04_biotechnica",
-    ".isState": false
-  }
-}

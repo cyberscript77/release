@@ -1,0 +1,61 @@
+{
+	"tag":"posWidget",
+	"type":"widget",
+	"container":"",
+	"fontfamily":"base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily",
+	"fontstyle":"Medium",
+	"fontsize":22,
+	"color":{
+		"red":0,
+		"green":255,
+		"blue":255
+		
+	},
+	"visible":true,
+	"margin":{
+	"top":125,
+	"left":3400
+	},
+	"text":"Hello There !",
+	"context": [
+        {
+			
+            "trigger": {
+                "auto": {
+                    "name": "auto"
+                }
+            },
+            "requirement": [["auto"]],
+            "prop": 
+			{
+			
+				"text": {
+					"text": "x: ##playerpositionx  y: ##playerpositiony z: ##playerpositionz",
+					"values":{
+						"playerpositionx": {
+							"type": "variable",
+							"variable":"player_position",
+							"key":"x"
+						},
+						
+						"playerpositiony": {
+							"type": "variable",
+							"variable":"player_position",
+							"key":"y"
+						},
+						
+						"playerpositionz": {
+							"type": "variable",
+							"variable":"player_position",
+							"key":"z"
+						},
+
+					}
+				
+				}
+			}
+		}
+	]
+
+
+}

@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_sq023_joshua",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "sq023_joshua",
+    ".isState": false
+  }
+}

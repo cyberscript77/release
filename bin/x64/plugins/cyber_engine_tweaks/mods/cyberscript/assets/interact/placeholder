@@ -1,0 +1,21 @@
+{
+	"name": "Do",
+	"tag": "test_sit_d",
+	"display": "event_interact",
+	"timer": 0,
+	"sorttag": "",
+	"trigger": {
+		"condition01": {
+			"name": "auto"
+		}
+	},
+	"requirement": [
+		[
+			"condition01"
+		]
+	],
+	"action": [{
+           "name":"dialog",
+            "dialog": "test_sit_d",
+        }]
+}

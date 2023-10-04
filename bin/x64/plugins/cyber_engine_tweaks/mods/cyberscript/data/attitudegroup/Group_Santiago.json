@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Santiago",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "santiago",
-    ".isState": false
-  }
-}

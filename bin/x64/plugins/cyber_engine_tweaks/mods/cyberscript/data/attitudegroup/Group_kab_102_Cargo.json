@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_kab_102_Cargo",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "kab_102_Cargo",
-    ".isState": false
-  }
-}

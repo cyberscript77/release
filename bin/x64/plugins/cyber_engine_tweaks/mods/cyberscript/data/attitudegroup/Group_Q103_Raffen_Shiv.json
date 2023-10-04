@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Q103_Raffen_Shiv",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "q103_raffen_shiv",
-    ".isState": false
-  }
-}

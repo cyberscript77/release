@@ -1,0 +1,27 @@
+{
+
+	"name": "MaxTac Agent",
+	"x": -1453.414,
+	"y": 1230.756,
+	"z": 23.001,
+	"range": 8,
+	"faction": "faction_maxtac",
+	"tag": "fixer_maxtac",
+	"exist": false,
+	"npcexist": false,
+	"tweakid": "Character.mq030_max_tac",
+	"trigger": {
+		"always_enable": {
+			"name": "auto"
+		}
+	},
+	"requirement": [
+		["always_enable"]
+	],
+	"spawn_action": [{
+		"name": "rotate_entity_to_entity",
+		"entity": "player",
+		"tag": "fixer_maxtac"
+	}],
+	"despawn_action": []
+}

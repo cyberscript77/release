@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_q203_arasaka",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "q203_arasaka",
-    ".isState": false
-  }
-}

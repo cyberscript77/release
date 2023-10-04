@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_rey_01_Valentinos_ground_floor",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Valentinos_OW",
-    ".name": "rey_01_Valentinos_ground_floor",
-    ".isState": false
-  }
-}

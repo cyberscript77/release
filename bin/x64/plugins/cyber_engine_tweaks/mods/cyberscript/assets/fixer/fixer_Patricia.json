@@ -1,0 +1,28 @@
+{
+
+	"name":"Patricia",
+	"x":-1730,
+	"y":2185,
+	"z":86,
+	"range":5,
+	"faction":"faction_maelstrom",
+	"tag": "fixer_patricia",
+	"exist":false,
+	"npcexist":false,
+	"tweakid":"Character.sq011_patricia",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"despawn_action":[]
+}

@@ -1,0 +1,29 @@
+{
+
+	"name":"Michiko",
+	"x": -1444.9503173828,
+	"y": 121.66790771484,
+	"z": 15.353485107422,
+
+	"range":8,
+	"faction":"faction_arasaka",
+	"tag": "fixer_michiko",
+	"exist":false,
+	"npcexist":false,
+	"tweakid":"Character.Michiko",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+	"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"despawn_action":[]
+}

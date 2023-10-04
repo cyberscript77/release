@@ -1,0 +1,31 @@
+{
+	"x": -2395.2976074219,
+	"tag": "fixer_jean",
+	"z": 17.934,
+	"despawn_action": [],
+	"name": "Jean Rochelin",
+	"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"faction": "faction_voodooboys",
+	"trigger": {
+		"auto": {
+			"helperTitle": "Default",
+			"name": "auto",
+			"helper": "This trigger will be triggered without need anything (default)"
+		}
+	},
+	"y": -1960.1765136719,
+	"requirement": [
+		[]
+	],
+	"npcexist": false,
+	"exist": false,
+	"tweakid": "Character.mq006_jean",
+	"range": 10
+}

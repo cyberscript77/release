@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_kab_01_Militech",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Militech_OW",
-    ".name": "kab_01_militech",
-    ".isState": false
-  }
-}

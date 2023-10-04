@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_sq011_animals",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "sq011_animals",
-    ".isState": false
-  }
-}

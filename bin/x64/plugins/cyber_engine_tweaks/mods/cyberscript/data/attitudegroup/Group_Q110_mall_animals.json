@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Q110_mall_animals",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Animals",
-    ".name": "q110_mall_animals",
-    ".isState": false
-  }
-}

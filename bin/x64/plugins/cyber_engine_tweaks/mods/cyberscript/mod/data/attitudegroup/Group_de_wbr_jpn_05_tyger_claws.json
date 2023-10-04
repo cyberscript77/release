@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_de_wbr_jpn_05_tyger_claws",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "de_wbr_jpn_05_tyger_claws",
+    ".isState": false
+  }
+}

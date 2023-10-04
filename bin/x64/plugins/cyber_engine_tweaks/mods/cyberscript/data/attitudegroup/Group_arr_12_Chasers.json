@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_arr_12_Chasers",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "arr_12_chasers",
-    ".isState": false
-  }
-}

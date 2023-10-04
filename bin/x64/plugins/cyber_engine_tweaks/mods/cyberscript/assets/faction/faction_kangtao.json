@@ -1,0 +1,38 @@
+{
+	"attitude_group": [
+		"kangtao",
+		"kangtao_ow"
+	],
+	"district_tag": "district_santodomingo",
+	"logo": "logo_kangtao",
+	"name": "Kang Tao",
+	"keyword": [
+		"kangtao"
+	],
+	"rivals": [
+		"faction_voodooboys",
+		"faction_scavengers",
+		"faction_arasaka",
+		"faction_militech",
+		"faction_ncpd"
+	],
+	"spawnable_npc": [
+		"Character.sts_std_arr_06_kangtao_ranger1_ranged2_dian_ma",
+		"Character.gle_kangtao_android_android2_dian_ma",
+		"Character.gle_kangtao_drone_wyvern_hard",
+		"Character.gle_kangtao_officer_grenadier3_mah_elite",
+		"Character.gle_kangtao_ranger1_ranged2_dian_ma",
+		"Character.kangtao_android_android2_dian_ma",
+		"Character.kangtao_drone_bombus_medium",
+		"Character.kangtao_drone_griffin_medium",
+		"Character.kangtao_officer_grenadier3_mah_elite",
+	    "Character.kangtao_ranger1_ranged2_dian_ma"
+	],
+	"spawnable_vehicle": [
+		"Vehicle.cs_savable_villefort_columbus_kangtao",
+		"Vehicle.cs_savable_villefort_cortes_kangtao",		
+	    "Vehicle.v_sportbike3_brennan_apollo_nomad"
+	],
+	"tag": "faction_kangtao",
+	"vip": []
+}

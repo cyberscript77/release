@@ -1,0 +1,155 @@
+{
+    "name": "V's Apartement",
+    "x": -1382,
+    "y": 1271,
+    "z": 123,
+    "range": 9,
+	"range_z": 3,
+    "enter_x": 0,
+    "enter_y": 0,
+    "enter_z": 0,
+    "exit_x": 0,
+    "exit_y": 0,
+    "exit_z": 0,
+    "type": 0,
+    "coef": 1,
+    "tag": "worldlife_v_apart",
+    "isbuyable": true,
+    "price": 0,
+    "isrentable": false,
+    "rent": 0,
+    "rooms": [{
+            "name": "Main",
+            "x": -1382,
+            "y": 1271,
+            "z": 123,
+            "range": 5,
+            "type": [0, 1, 2],
+            "tag": "worldlife_v_apart_main",
+            "trigger": {
+                "auto": {
+                    "name": "auto"
+                }
+            },
+            "requirement": [["auto"]],
+            "action": []
+        }, {
+            "name": "Bedroom",
+            "x": -1377,
+            "y": 1275,
+            "z": 123,
+            "range": 1,
+            "type": [2],
+            "tag": "worldlife_v_apart_bedroom",
+            "trigger": {
+                "auto": {
+                    "name": "auto"
+                }
+            },
+            "requirement": [["auto"]],
+            "action": []
+        }, {
+            "name": "Bathroom",
+            "x": -1381,
+            "y": 1277,
+            "z": 123,
+            "range": 3,
+            "type": [2],
+            "tag": "worldlife_v_apart_bathroom",
+            "trigger": {
+                "auto": {
+                    "name": "auto"
+                }
+            },
+            "requirement": [["auto"]],
+            "action": []
+        }, {
+            "name": "Armory",
+            "x": -1382,
+            "y": 1264,
+            "z": 123,
+            "range": 2,
+            "type": [2],
+            "tag": "worldlife_v_apart_armory",
+            "trigger": {
+                "auto": {
+                    "name": "auto"
+                }
+            },
+            "requirement": [["auto"]],
+            "action": []
+        }
+    ],
+    "trigger": {
+        "auto": {
+            "name": "auto"
+        }
+    },
+    "requirement": [["auto"]],
+    "action": [],
+	"step":[
+		{
+			"title":"Upgrade 01",
+			"desc":"Add an sofa",
+			"price":1000,
+			"template":"mytemplate",
+			"anchor":{
+				"x": -1382,
+				"y": 1271,
+				"z": 123
+				
+			}
+		},
+		{
+			"title":"Upgrade 02",
+			"desc":"Add sofa, TV",
+			"price":2000,
+			"template":"mytemplate",
+			"anchor":{
+				"x": -1382,
+				"y": 1271,
+				"z": 123
+				
+			}
+		},
+		{
+			"title":"Upgrade 03",
+			"desc":"Add sofa, tv, Fridge",
+			"price":3000,
+			"template":"mytemplate",
+			"anchor":{
+				"x": -1382,
+				"y": 1271,
+				"z": 123
+				
+			}
+		},
+		{
+			"title":"Upgrade 04",
+			"desc":"Add sofa, tv, Fridge, Coffee machine",
+			"price":4000,
+			"template":"mytemplate",
+			"anchor":{
+				"x": -1382,
+				"y": 1271,
+				"z": 123
+				
+			}
+		},
+		{
+			"title":"Upgrade 05",
+			"desc":"Add sofa, tv, Fridge,Pillows",
+			"price":5000,
+			"template":"mytemplate",
+			"anchor":{
+				"x": -1382,
+				"y": 1271,
+				"z": 123
+				
+			}
+		}
+	]
+		
+		
+	}
+

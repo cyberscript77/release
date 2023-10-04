@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_sq011_patricia",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Neutral",
+    ".name": "sq011_patricia",
+    ".isState": false
+  }
+}

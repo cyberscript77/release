@@ -1,0 +1,310 @@
+[
+	{
+		"Name": "WestBrook",
+		"EnumName": "WestBrook",
+		"SubDistrict": ["CharterHill","NorthOaks","JapanTown"],
+		"Tag":"district_westbrook",
+		"Polygon": [
+			{
+				"x": -45,
+				"y": 2215
+			},
+			{
+				"x": 1100,
+				"y": 1185
+			},
+			{
+				"x": 1050,
+				"y": 510
+			},
+			{
+				"x": 1000,
+				"y": -435
+			},
+			{
+				"x": 350,
+				"y": -575
+			},
+			{
+				"x": -645,
+				"y": 135
+			},
+			{
+				"x": -1055,
+				"y": 907
+			}
+		]
+	},
+	{
+		"Name": "Santo Domingo",
+		"EnumName": "SantoDomingo",
+		"SubDistrict": ["Arroyo","RanchoCoronado"],
+		"Tag":"district_santodomingo",
+		"Polygon": [
+			{
+				"x": -450,
+				"y": -220
+			},
+			{
+				"x": 435,
+				"y": -650
+			},
+			{
+				"x": 975,
+				"y": -600
+			},
+			{
+				"x": 1160,
+				"y": -800
+			},
+			{
+				"x": 440,
+				"y": -2360
+			},
+			{
+				"x": 0,
+				"y": -2360
+			},
+			{
+				"x": -450,
+				"y": -2300
+			},
+			{
+				"x": -1320,
+				"y": -1520
+			}
+		]
+	},
+	{
+		"Name": "Pacifica",
+		"EnumName": "Pacifica",
+		"Tag":"district_pacifica",
+		"SubDistrict": ["Coastview","WestWindEstate"],
+		"Polygon": [
+			{
+				"x": -2145,
+				"y": -1510
+			},
+			{
+				"x": -1385,
+				"y": -1325
+			},
+			{
+				"x": -720,
+				"y": -2235
+			},
+			{
+				"x": -1275,
+				"y": -2725
+			},
+			{
+				"x": -2435,
+				"y": -3185
+			},
+			{
+				"x": -3025,
+				"y": -2580
+			},
+			{
+				"x": -2750,
+				"y": -1820
+			}
+		]
+	},
+	{
+		"Name": "Heywood",
+		"EnumName": "Heywood",
+		"SubDistrict": ["Wellsprings","VistaDelRey","Glen"],
+		"Tag":"district_heywood",
+		"Polygon": [
+			{
+				"x": -2545,
+				"y": -85
+			},
+			{
+				"x": -1755,
+				"y": -85
+			},
+			{
+				"x": -1660,
+				"y": -420
+			},
+			{
+				"x": -1140,
+				"y": -420
+			},
+			{
+				"x": -980,
+				"y": 0
+			},
+			{
+				"x": -775,
+				"y": 50
+			},
+			{
+				"x": -470,
+				"y": -170
+			},
+			{
+				"x": -1330,
+				"y": -1395
+			},
+			{
+				"x": -2158,
+				"y": -1320
+			},
+			{
+				"x": -2555,
+				"y": -955
+			}
+		]
+	},
+	{
+		"Name": "Downtown",
+		"EnumName": "CityCenter",
+		"SubDistrict": ["CorpoPlaza","Downtown"],
+		"Tag":"district_downtown",
+		"Polygon": [
+			{
+				"x": -2090,
+				"y": 735
+			},
+			{
+				"x": -1120,
+				"y": 630
+			},
+			{
+				"x": -765,
+				"y": 45
+			},
+			{
+				"x": -1090,
+				"y": -20
+			},
+			{
+				"x": -1160,
+				"y": -260
+			},
+			{
+				"x": -1500,
+				"y": -395
+			},
+			{
+				"x": -1660,
+				"y": -220
+			},
+			{
+				"x": -2450,
+				"y": 72
+			},
+			{
+				"x": -2925,
+				"y": 524
+			},
+			{
+				"x": -2810,
+				"y": 647
+			}
+		]
+	},
+	{
+		"Name": "Watson",
+		"EnumName": "Watson",
+		"SubDistrict": ["ArasakaWaterfront","Northside","LittleChina","Kabuki"],
+		"Tag":"district_watson",
+		"Polygon": [
+			{
+				"x": -1135,
+				"y": 3665
+			},
+			{
+				"x": -515,
+				"y": 2510
+			},
+			{
+				"x": -325,
+				"y": 2030
+			},
+			{
+				"x": -1420,
+				"y": 925
+			},
+			{
+				"x": -2030,
+				"y": 1050
+			},
+			{
+				"x": -3190,
+				"y": 1915
+			},
+			{
+				"x": -2645,
+				"y": 2900
+			}
+		]
+	},
+	{
+		"Name": "Badlands",
+		"EnumName": "Badlands",
+		"SubDistrict":[
+			"Badlands_BiotechnicaFlats",
+			"Badlands_DryCreek",
+			"Badlands_JacksonPlains",
+			"Badlands_LagunaBend",
+			"Badlands_LasPalapas",
+			"Badlands_NorthSunriseOilField",
+			"Badlands_RattlesnakeCreek",
+			"Badlands_RedPeaks",
+			"Badlands_RockyRidge",
+			"Badlands_SantaClara",
+			"Badlands_SierraSonora",
+			"Badlands_SoCalBorderCrossing",
+			"Badlands_VasquezPass",
+			"Badlands_Yucca",
+			"Badlands_YuccaGarage",
+			"Badlands_YuccaRadioTower"
+			],
+		"Tag":"district_badland",
+		"Polygon": [
+			{
+				"x": -525,
+				"y": 2510
+			},
+			{
+				"x": 5400,
+				"y": -1075
+			},
+			{
+				"x": 5400,
+				"y": -2000
+			},
+			{
+				"x": 3400,
+				"y": -2400
+			},
+			{
+				"x": -3200,
+				"y": -6200
+			},
+			{
+				"x": -4700,
+				"y": -3700
+			},
+			{
+				"x": -2720,
+				"y": -2730
+			}
+			,
+			{
+				"x": 911,
+				"y": -3500
+			}
+			,
+			{
+				"x": 600,
+				"y": 1100
+			}
+		]
+	}
+	
+]

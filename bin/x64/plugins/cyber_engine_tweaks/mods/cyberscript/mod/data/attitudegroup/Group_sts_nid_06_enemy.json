@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_sts_nid_06_enemy",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Maelstrom_OW",
+    ".name": "sts_nid_06_enemy",
+    ".isState": false
+  }
+}

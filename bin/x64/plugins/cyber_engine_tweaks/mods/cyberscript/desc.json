@@ -1,1 +1,5 @@
-{"version":"9999.0.2022010435","channel":"testing","changelog":"commit :  b7dea9d79d38194b8ae6f57902dec2d21cb53d7b\\nFix Json Viewer bug"}
+{
+  "version": "2.9.0",
+  "channel": "stable",
+  "changelog": ""
+}

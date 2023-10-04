@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_arr_03_Kendachi",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "arr_03_Kendachi",
+    ".isState": false
+  }
+}

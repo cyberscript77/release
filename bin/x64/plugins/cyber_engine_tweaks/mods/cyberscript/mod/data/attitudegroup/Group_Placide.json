@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Placide",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Friendly",
+    ".name": "placide",
+    ".isState": false
+  }
+}

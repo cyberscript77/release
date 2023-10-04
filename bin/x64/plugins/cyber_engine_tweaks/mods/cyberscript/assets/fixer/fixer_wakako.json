@@ -1,0 +1,28 @@
+{
+
+	"name":"Wakako Okada",
+	"x":-668,
+	"y":822,
+	"z":0,
+	"range":5,
+	"faction":"faction_tygerclaws",
+	"tag": "fixer_wakako",
+	"tweakid":"Character.wakako_okada",
+	"exist":true,
+	"npcexist":true,
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+	"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"despawn_action":[]
+}

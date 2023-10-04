@@ -1,0 +1,26 @@
+{
+	"name": "Select active Interactions Group",
+	"tag": "default_open_datapack_group_ui",
+	"timer": 0,
+	"display":"event_interact",
+	"sorttag": "tools",
+	"trigger": {
+		"inbuyed": {
+			"name": "auto"
+		}
+	},
+	"requirement": [
+		[
+			"inbuyed"
+		]
+	],
+	"action": [
+		{
+			"name": "set_scroll_speed",
+			"value": 0.2
+		},
+		{
+			"name": "open_datapack_group_ui"
+		}
+	]
+}

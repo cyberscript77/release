@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_6thStreet_OW",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_6thStreet",
-    ".name": "6thStreet_ow",
-    ".isState": false
-  }
-}

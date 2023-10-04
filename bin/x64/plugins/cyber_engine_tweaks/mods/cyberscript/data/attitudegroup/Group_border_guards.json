@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_border_guards",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "border_guards",
-    ".isState": false
-  }
-}

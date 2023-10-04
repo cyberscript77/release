@@ -1,0 +1,49 @@
+{
+	"name": "The Mox",
+	"logo": "logo_themox",
+	"tag": "faction_mox",
+	"attitude_group": [
+		"nid_01_Lizzies"
+	],
+	"rivals": [
+		"faction_tygerclaws"
+	],
+	"spawnable_npc": [
+		"Character.the_mox_elite3_fmelee3_mantis_wa_elite",
+		"Character.the_mox_elite2_fmelee2_machete_wa_rare",
+		"Character.kab_the_mox_1_ranged1_lexington_wa",
+		"Character.kab_the_mox_1_ranged1_pulsar_wa"
+	],
+	"keyword": [
+		"mox"
+	],
+	"spawnable_vehicle": [
+		"Vehicle.cs_savable_villefort_alvarado_mox",
+		"Vehicle.v_sport2_villefort_alvarado_mox",
+		"Vehicle.v_sportbike1_yaiba_kusanagi_mox",
+		"Vehicle.v_standard25_mahir_mox"
+	],
+	"district_tag": "district_watson",
+	"vip": [{
+		"name": "Lizzies DJ",
+		"score": 0
+	}, {
+		"name": "Lizzies Waitress",
+		"score": 5
+	}, {
+		"name": "Lizzies Joytoy",
+		"score": 15
+	}, {
+		"name": "Lizzies Male Gimp",
+		"score": 15
+	}, {
+		"name": "Mateo Thiago",
+		"score": 20
+	}, {
+		"name": "Susanna Quinn",
+		"score": 30
+	}, {
+		"name": "Judy",
+		"score": 50
+	}]
+}

@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_de_hey_gle_05_police",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "de_hey_gle_05_police",
+    ".isState": false
+  }
+}

@@ -1,0 +1,108 @@
+{
+	 "attitude_group": [
+		"maelstrom",
+		"maelstrom_ow"
+		 ],
+	"district_tag": "district_watson",
+	"name": "Maelstrom",
+	"logo": "logo_maelstrom",
+	"rivals": [
+		"faction_scavengers",
+		"faction_afterlife",
+		"faction_ncpd",
+		"faction_tygerclaws"
+	],
+	"keyword": [
+		"maelstrom"
+	],
+	"spawnable_npc": [
+		"Character.cpz_maelstrom_grunt2_ranged2_ajax_wa",
+		"Character.cpz_maelstrom_grunt1_ranged1_copperhead_ma",
+		"Character.cpz_maelstrom_grunt1_ranged1_lexington_ma",
+		"Character.cpz_maelstrom_grunt1_ranged1_lexington_wa",
+		"Character.cpz_maelstrom_grunt2_melee2_machete_ma",
+		"Character.dtn_maelstrom_grunt1_ranged1_copperhead_ma",
+		"Character.dtn_maelstrom_grunt1_ranged1_copperhead_wa",
+		"Character.dtn_maelstrom_grunt1_ranged1_lexington_ma",
+		"Character.dtn_maelstrom_grunt2_melee2_machete_wa",
+		"Character.hil_maelstrom_fast_fmelee2_machete_ma_rare",
+		"Character.hil_maelstrom_fast_franged2_pulsar_ma_rare",
+		"Character.kab_maelstrom_grunt2_melee2_machete_ma",
+		"Character.kab_maelstrom_grunt2_ranged2_ajax_ma",
+		"Character.kab_maelstrom_grunt2_ranged2_copperhead_wa",
+		"Character.kab_maelstrom_grunt1_melee1_wrench_wa",
+		"Character.kab_maelstrom_grunt1_ranged1_copperhead_ma",
+		"Character.kab_maelstrom_grunt1_ranged1_copperhead_wa",
+		"Character.kab_maelstrom_grunt1_ranged1_lexington_ma",
+		"Character.lch_maelstrom_grunt1_ranged1_copperhead_ma",
+		"Character.lch_maelstrom_grunt1_melee1_wrench_ma",
+		"Character.lch_maelstrom_grunt1_ranged1_lexington_ma",
+		"Character.lch_maelstrom_grunt1_ranged1_lexington_wa",
+		"Character.lch_maelstrom_grunt2_melee2_machete_ma",
+		"Character.lch_maelstrom_grunt2_ranged2_ajax_ma",
+		"Character.lch_maelstrom_grunt2_ranged2_ajax_wa",
+		"Character.lch_maelstrom_grunt2_ranged2_copperhead_ma",
+		"Character.lch_maelstrom_grunt_medium_range_m_medium",
+		"Character.lch_maelstrom_fast_sniper2_grad_ma",
+		"Character.nid_maelstrom_fast_fmelee3_mantis_wa_elite",
+		"Character.nid_maelstrom_android_android2_pulsar_ma",
+		"Character.nid_maelstrom_drone_wyvern_easy",
+		"Character.nid_maelstrom_fast_franged2_pulsar_ma_rare",
+		"Character.nid_maelstrom_fast_grunt_melee_w_hard",
+		"Character.nid_maelstrom_fast_sniper2_grad_ma",
+		"Character.nid_maelstrom_grunt1_melee1_wrench_ma",
+		"Character.nid_maelstrom_grunt1_melee1_wrench_wa",
+		"Character.nid_maelstrom_grunt1_ranged1_copperhead_ma",
+		"Character.nid_maelstrom_grunt1_ranged1_copperhead_wa",
+		"Character.nid_maelstrom_grunt1_ranged1_lexington_ma",
+		"Character.nid_maelstrom_grunt1_ranged1_lexington_wa",
+		"Character.nid_maelstrom_grunt2_melee2_machete_ma",
+		"Character.nid_maelstrom_grunt2_melee2_machete_wa",
+		"Character.nid_maelstrom_grunt2_ranged2_ajax_ma",
+		"Character.nid_maelstrom_grunt2_ranged2_ajax_wa",
+		"Character.nid_maelstrom_grunt2_ranged2_copperhead_ma",
+		"Character.nid_maelstrom_grunt2_ranged2_copperhead_wa",
+		"Character.nid_maelstrom_grunt_medium_range_m_hard",
+		"Character.nid_maelstrom_grunt_medium_range_w_easy",
+		"Character.nid_maelstrom_netrunner_m_medium",
+		"Character.nid_maelstrom_netrunner_netrunner2_lexington_ma",
+		"Character.nid_maelstrom_strong_grunt_short_range_m_hard",
+		"Character.nid_maelstrom_strong_grunt_short_range_m_medium",
+		"Character.nid_maelstrom_strong_gunner2_defender_mb_rare",
+		"Character.nid_maelstrom_techie_grenadier2_lexington_ma",
+		"Character.maelstrom_techie_grenadier2_lexington_ma",
+		"Character.maelstrom_grunt2_melee2_machete_ma",
+		"Character.maelstrom_grunt2_ranged2_ajax_wa",
+		"Character.maelstrom_netrunner_netrunner2_lexington_ma",
+		"Character.maelstrom_strong_gunner2_defender_mb_rare"
+	],
+	"spawnable_vehicle": [
+		"Vehicle.v_standard2_chevalier_thrax_maelstrom", 
+		"Vehicle.v_sportbike3_brennan_apollo_sport",
+		"Vehicle.cs_savable_thorton_mackinaw",
+		"Vehicle.v_sport1_quadra_turbo"
+	],
+	"tag": "faction_maelstrom",
+	"vip": [{
+		"name": "Dum Dum",
+		"score": 0
+	}, {
+		"name": "Brick",
+		"score": 5
+	}, {
+		"name": "StoopQueen",
+		"score": 10
+	}, {
+		"name": "Dietlinde",
+		"score": 10
+	}, {
+		"name": "Grace",
+		"score": 20
+	}, {
+		"name": "Royce",
+		"score": 30
+	}, {
+		"name": "Gorira",
+		"score": 40
+	}]
+}

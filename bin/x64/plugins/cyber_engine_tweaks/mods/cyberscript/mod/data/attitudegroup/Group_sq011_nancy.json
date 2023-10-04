@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_sq011_nancy",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Friendly",
+    ".name": "sq011_nancy",
+    ".isState": false
+  }
+}

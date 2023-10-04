@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_q003_maelstrom",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "q003_maelstrom",
-    ".isState": false
-  }
-}

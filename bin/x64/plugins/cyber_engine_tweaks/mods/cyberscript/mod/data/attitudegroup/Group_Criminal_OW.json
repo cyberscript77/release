@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Criminal_OW",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Neutral",
+    ".name": "criminal_ow",
+    ".isState": false
+  }
+}

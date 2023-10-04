@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_de_hey_gle_05_valentinos",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "de_hey_gle_05_valentinos",
-    ".isState": false
-  }
-}

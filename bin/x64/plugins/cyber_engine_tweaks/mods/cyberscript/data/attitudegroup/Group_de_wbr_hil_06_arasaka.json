@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_de_wbr_hil_06_arasaka",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "de_wbr_hil_06_arasaka",
-    ".isState": false
-  }
-}

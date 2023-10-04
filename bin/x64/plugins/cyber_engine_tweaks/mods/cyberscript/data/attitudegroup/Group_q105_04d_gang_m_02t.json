@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_q105_04d_gang_m_02t",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "q105_04d_gang_m_02",
-    ".isState": false
-  }
-}

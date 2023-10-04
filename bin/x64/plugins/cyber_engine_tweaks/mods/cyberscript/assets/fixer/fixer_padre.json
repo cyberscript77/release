@@ -1,0 +1,24 @@
+{
+
+	"name":"Sebastian « Padre » Ibarra",
+	"x":-1804.899,
+	"y":-1275.519,
+	"z":21.841,
+	"range": 5,
+	"faction":"faction_valentinos",
+	"tag": "fixer_padre",
+	"tweakid":"Character.Padre",
+	"exist":true,
+	"npcexist":true,
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+"spawn_action": [
+		{
+		}
+	],
+	"despawn_action":[]
+}

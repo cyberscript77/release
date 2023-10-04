@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_rcr_03_turrets",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "rcr_03_turrets",
+    ".isState": false
+  }
+}

@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_de_wbr_hil_06_6th_street",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "de_wbr_hil_06_6th_street",
-    ".isState": false
-  }
-}

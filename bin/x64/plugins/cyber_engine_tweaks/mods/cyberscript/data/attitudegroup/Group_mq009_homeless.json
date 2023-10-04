@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_mq009_homeless",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "mq009_homeless",
-    ".isState": false
-  }
-}

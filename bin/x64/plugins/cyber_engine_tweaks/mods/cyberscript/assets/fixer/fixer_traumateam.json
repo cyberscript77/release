@@ -1,0 +1,29 @@
+{
+
+	"name":"TraumaTeam Agent",
+	"x": -1334.792,
+	"y": 1742.348,
+	"z": 18.190,
+
+	"range":10,
+	"faction":"faction_trauma",
+	"tag": "fixer_traumateam",
+	"exist":false,
+	"npcexist":false,
+	"tweakid":"Character.trauma_team_operator",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+	"spawn_action": [
+
+		{
+
+
+
+		}
+	],
+	"despawn_action":[]
+}

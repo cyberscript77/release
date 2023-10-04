@@ -1,0 +1,8 @@
+["253283519"] = {
+		["entity_entrigs"] = "base\\items\\prop_base_skeleton.rig",
+		["entity_entpath"] = "base\\quest\\main_quests\\prologue\\q000\\entities\\q000_invisible_radio.ent",
+		["entity_tweak"] = "base\\quest\\main_quests\\prologue\\q000\\entities\\q000_invisible_radio.ent",
+		["entity_name"] = "Invisible Radio",
+		["entity_entname"] = "q000_invisible_radio.ent",
+		["entity_id"] = 253283519,
+	},

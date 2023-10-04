@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_kab_04_Nadezhda",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Militech_OW",
+    ".name": "kab_04_nadezhda",
+    ".isState": false
+  }
+}

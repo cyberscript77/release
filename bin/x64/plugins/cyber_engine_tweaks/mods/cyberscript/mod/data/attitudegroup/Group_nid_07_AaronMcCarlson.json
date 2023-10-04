@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_nid_07_AaronMcCarlson",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "nid_07_aaronmccarlson",
+    ".isState": false
+  }
+}

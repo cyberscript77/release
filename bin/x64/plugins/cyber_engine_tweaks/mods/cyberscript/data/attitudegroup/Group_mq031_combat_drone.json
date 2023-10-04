@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_mq031_combat_drone",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_EnemyHostile",
-    ".name": "mq031_combat_drone",
-    ".isState": false
-  }
-}

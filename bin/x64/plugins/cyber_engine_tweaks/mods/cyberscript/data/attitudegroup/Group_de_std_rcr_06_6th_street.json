@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_de_std_rcr_06_6th_street",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "de_std_rcr_06_6th_street",
-    ".isState": false
-  }
-}

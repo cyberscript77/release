@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_kab_06_Animals",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Animals_OW",
+    ".name": "kab_06_Animals",
+    ".isState": false
+  }
+}

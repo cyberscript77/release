@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_SQ018_Valentinos",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "sq018_valentinos",
+    ".isState": false
+  }
+}

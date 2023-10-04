@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Maiko",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Friendly",
+    ".name": "maiko",
+    ".isState": false
+  }
+}

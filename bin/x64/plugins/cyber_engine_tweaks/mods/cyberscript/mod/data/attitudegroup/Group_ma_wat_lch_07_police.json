@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_ma_wat_lch_07_police",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "ma_wat_lch_07_police",
+    ".isState": false
+  }
+}

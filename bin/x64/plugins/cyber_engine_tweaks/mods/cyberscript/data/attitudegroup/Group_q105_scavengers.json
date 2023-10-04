@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_q105_scavengers",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_EnemyNautral",
-    ".name": "q105_scavengers",
-    ".isState": false
-  }
-}

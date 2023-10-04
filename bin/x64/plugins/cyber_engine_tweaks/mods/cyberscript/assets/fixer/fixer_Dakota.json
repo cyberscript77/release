@@ -1,0 +1,27 @@
+{
+
+	"name":"Dakota",
+	"x":2420,
+	"y":-795,
+	"z":0,
+	"range":5,
+	"faction":"faction_aldecaldos",
+	"tag": "fixer_dakota",
+	"exist":true,
+	"npcexist":true,
+	"tweakid":"Character.dakota_smith",
+	"trigger":{
+		"always_enable":{
+			"name":"auto"
+		}
+	},
+	"requirement":[["always_enable"]],
+	"spawn_action":[
+		{
+			
+		
+		}
+		
+		],
+	"despawn_action":[]
+}

@@ -1,0 +1,64 @@
+{
+
+	"name": "Aldecaldos",
+	"logo": "logo_aldecados",
+	"tag": "faction_aldecaldos",
+	"attitude_group": [
+		"aldecaldos_ow",
+		"aldecaldos"
+	],
+	"rivals": ["faction_wraiths"],
+	"keyword": [
+		"adelcaldos"
+	],
+	"spawnable_npc": [
+		"Character.wwd_adelcaldos_grunt1_ranged1_pulsar_ma",
+		"Character.adelcaldos_grunt1_ranged1_nova_wa",
+		"Character.aldecaldos_grunt2_melee2__ma",
+		"Character.wwd_adelcaldos_grunt2_ranged2_copperhead_ma",
+		"Character.wwd_adelcaldos_grunt2_ranged2_sidewinder_ma"
+	],
+	"spawnable_vehicle": [
+		"Vehicle.v_sport2_quadra_type66_nomad",
+		"Vehicle.v_sportbike3_brennan_apollo_nomad",		
+		"Vehicle.v_standard25_thorton_colby_nomad",		
+		"Vehicle.v_standard2_archer_quartz_nomad",		
+		"Vehicle.v_standard2_thorton_galena_nomad",		
+	    "Vehicle.v_sport2_mizutani_shion_nomad"
+	],
+	"district_tag": "district_badland",
+	"vip": [
+		{
+			"name": "Cassidy",
+	    	"score": 0
+		},
+		{
+			"name": "Carol",
+			"score": 5
+		},
+		{
+			"name": "Jake Scooter",
+			"score": 5
+		},
+		{
+			"name": "Teddy Simos",
+			"score": 10
+		},
+		{
+			"name": "Female Nomad",
+			"score": 15
+		},
+		{
+			"name": "Bob",
+			"score": 20
+		},
+		{
+			"name": "Mia",
+			"score": 20
+		},
+		{
+			"name": "Panam",
+			"score": 50
+		}
+	]
+}

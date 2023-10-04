@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_mq029_james",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Friendly",
-    ".name": "mq029_james",
-    ".isState": false
-  }
-}

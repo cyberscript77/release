@@ -52,7 +52,9 @@ cyberscript = {
 	description = "CyberScript",
 		version = "0.16000069",
 		channel = "stable",
-		changelog =""
+		changelog ="",
+		editorDatapackInit = false,
+		cache = {}
 		
 	}
 
@@ -81,24 +83,35 @@ function file_exists(filename)
 end
 
 
-function logme(level,msg) 
+function logme(level,msg,force) 
 	
-	local obj = {}
-	obj.date = os.date('*t')
-	obj.datestring = "["..obj.date.year.."-"..obj.date.month.."-"..obj.date.day.."  "..obj.date.hour.." : "..obj.date.min .." : "..obj.date.sec.."]"
-	obj.msg = tostring(msg)
-	obj.level = level
-	
+if(debugLog == true or (force ~= nil and force == true)) then
 	if(level == 1) then
+		
+		local obj = {}
+		obj.date = os.date('*t')
+		obj.datestring = "["..obj.date.year.."-"..obj.date.month.."-"..obj.date.day.."  "..obj.date.hour.." : "..obj.date.min .." : "..obj.date.sec.."]"
+		obj.msg = tostring(msg)
+		obj.level = level
+	
 		print(obj.msg)
 		
 		
 	end
 	
 	if logrecordlevel == nil or (logrecordlevel ~= nil and level <= logrecordlevel )then
+		
+		local obj = {}
+		obj.date = os.date('*t')
+		obj.datestring = "["..obj.date.year.."-"..obj.date.month.."-"..obj.date.day.."  "..obj.date.hour.." : "..obj.date.min .." : "..obj.date.sec.."]"
+		obj.msg = tostring(msg)
+		obj.level = level
+		
 		table.insert(logTable,obj)
+		
 		spdlog.error(obj.msg)
 	end 
+end
 end
 
 
@@ -107,45 +120,15 @@ if file_exists("cyberscript.log") then
 	io.open("cyberscript.log", "w")
 end
 
-cyberscript.core = dofile('modules/core')
+
+
+cyberscript.loader = dofile('mod/modules/loader')
+cyberscript.core = dofile('mod/modules/core')
 
 
 
-function loadModule()
-	
-	
-	
-	
-
-	
-	
-	
-	
-
-	cyberscript.db       = dofile("modules/db.lua")
-	cyberscript.modpack   = dofile("modules/modpack.lua")
-	cyberscript.npc      = dofile("modules/npc.lua")
-	cyberscript.utils    = dofile("modules/utils.lua")
-	cyberscript.place    = dofile("modules/place.lua")
-	cyberscript.relation = dofile("modules/relation.lua")
-	cyberscript.gang     = dofile("modules/gang.lua")
-	cyberscript.quest   = dofile("modules/quest.lua")
-	cyberscript.location   = dofile("modules/location.lua")
-	cyberscript.housing = dofile('modules/housing.lua')
-	cyberscript.saves = dofile('modules/saves.lua')
-	cyberscript.AV = dofile('modules/av.lua')
-	cyberscript.editor = dofile('modules/editor.lua')
-	cyberscript.see = dofile('modules/see.lua')
-	cyberscript.scripting = dofile('modules/scripting.lua')
-	cyberscript.observer = dofile('modules/observer_function.lua')
-	cyberscript.ui = dofile('modules/ui.lua')
-	
-	
-	--external library
-
-	modLoaded = true
-end
 
 
 
-return quest_mod
+
+return cyberscript

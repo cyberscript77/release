@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_Royce",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "None",
-    ".name": "royce",
-    ".isState": false
-  }
-}

@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_Q110_voodoo_boys",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "q110_voodoo_boys",
+    ".isState": false
+  }
+}

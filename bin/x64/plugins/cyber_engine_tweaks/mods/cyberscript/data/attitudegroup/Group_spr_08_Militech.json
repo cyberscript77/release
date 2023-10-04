@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_spr_08_Militech",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Militech_OW",
-    ".name": "spr_08_Militech",
-    ".isState": false
-  }
-}

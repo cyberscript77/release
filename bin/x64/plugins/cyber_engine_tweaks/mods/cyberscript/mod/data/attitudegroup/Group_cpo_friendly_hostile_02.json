@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_cpo_friendly_hostile_02",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Friendly",
+    ".name": "cpo_friendly_hostile_02",
+    ".isState": false
+  }
+}

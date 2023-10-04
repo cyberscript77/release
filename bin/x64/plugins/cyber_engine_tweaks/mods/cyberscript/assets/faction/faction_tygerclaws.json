@@ -1,0 +1,207 @@
+{
+
+	"name": "TygerClaws",
+	"logo": "logo_tygerclaws",
+	"tag": "faction_tygerclaws",
+	"attitude_group": [		
+		"q105_tyger_claws"
+	],
+	"keyword": [
+		"tyger"
+	],
+	"rivals": [
+		"faction_mox",
+		"faction_militech",
+		"faction_kangtao",
+		"faction_ncpd",
+		"faction_maelstrom",
+		"faction_scavengers"
+	],
+	"spawnable_npc": [
+		"Character.jpn_tyger_claws_biker1_melee1_fists_wa",
+		"Character.jpn_tyger_claws_biker1_melee1_tireiron_ma",
+		"Character.jpn_tyger_claws_gangster1_melee1_fists_wa",
+		"Character.jpn_tyger_claws_biker1_ranged1_nue_ma",
+		"Character.jpn_tyger_claws_biker1_ranged1_nue_wa",
+		"Character.jpn_tyger_claws_biker1_ranged1_saratoga_ma",
+		"Character.jpn_tyger_claws_biker2_ranged2_copperhead_ma",
+		"Character.jpn_tyger_claws_biker2_ranged2_copperhead_wa",
+		"Character.jpn_tyger_claws_gangster1_ranged1_copperhead_ma",
+		"Character.jpn_tyger_claws_gangster1_ranged1_copperhead_wa",
+		"Character.jpn_tyger_claws_gangster1_ranged1_nue_ma",
+		"Character.jpn_tyger_claws_gangster1_ranged1_nue_wa",
+		"Character.jpn_tyger_claws_gangster2_ranged2_copperhead_wa",
+		"Character.jpn_tyger_claws_gangster2_ranged2_shingen_ma",
+		"Character.jpn_tyger_claws_gangster2_ranged2_shingen_wa",
+		"Character.jpn_tyger_claws_gangster2_ranged2_sidewinder_ma",
+		"Character.jpn_tyger_claws_gangster2_ranged2_sidewinder_wa",
+		"Character.jpn_tyger_claws_gangster3_ranged3_sidewinder_ma",
+		"Character.jpn_tyger_claws_kunoichi_fmelee3_fists_ma_elite",
+		"Character.jpn_tyger_claws_kunoichi_fmelee3_katana_wa_elite",
+		"Character.jpn_tyger_claws_martial_fmelee2_katana_ma_rare",
+		"Character.jpn_tyger_claws_martial_hmelee3_StrongArms_mb",
+		"Character.jpn_tygerclaw_gangster3_netrunner_nue_wa_rare",
+		"Character.dtn_tyger_claws_biker1_ranged1_nue_wa",
+		"Character.dtn_tyger_claws_biker1_ranged1_saratoga_ma",
+		"Character.dtn_tyger_claws_biker2_ranged2_copperhead_ma",
+		"Character.dtn_tyger_claws_biker2_ranged2_shingen_wa",
+		"Character.dtn_tyger_claws_biker2_ranged2_shingen_wa",
+		"Character.dtn_tyger_claws_gangster1_ranged1_copperhead_ma",
+		"Character.dtn_tyger_claws_gangster1_ranged1_nue_ma",
+		"Character.dtn_tyger_claws_strong_elite_short_range_m_hard",
+		"Character.dtn_tyger_claws_biker2_ranged2_shingen_ma",
+		"Character.dtn_tyger_claws_biker1_ranged1_saratoga_wa",
+		"Character.dtn_tyger_claws_martial_fmelee2_katana_ma_rare",
+		"Character.dtn_tygerclaw_gangster3_netrunner_nue_wa_rare",
+		"Character.dtn_tyger_claws_enemy_smg_smart",
+		"Character.hil_tyger_claws_biker1_ranged1_nue_ma",
+		"Character.hil_tyger_claws_biker2_ranged2_copperhead_ma",
+		"Character.hil_tyger_claws_gangster1_ranged1_copperhead_wa",
+		"Character.hil_tyger_claws_gangster1_ranged1_nue_ma",
+		"Character.hil_tyger_claws_gangster1_ranged1_nue_wa",
+		"Character.kab_tyger_claws_biker1_melee1_fists_wa",
+		"Character.kab_tyger_claws_biker1_melee1_tireiron_ma",
+		"Character.kab_tyger_claws_biker1_melee1_tireiron_wa",
+		"Character.kab_tyger_claws_biker1_ranged1_nue_ma",
+		"Character.kab_tyger_claws_biker1_ranged1_nue_wa",
+		"Character.kab_tyger_claws_biker1_ranged1_saratoga_ma",
+		"Character.kab_tyger_claws_biker1_ranged1_saratoga_wa",
+		"Character.kab_tyger_claws_biker2_ranged2_copperhead_ma",
+		"Character.kab_tyger_claws_biker2_ranged2_copperhead_wa",
+		"Character.kab_tyger_claws_biker2_ranged2_shingen_ma",
+		"Character.kab_tyger_claws_biker2_ranged2_shingen_wa",
+		"Character.kab_tyger_claws_gangster1_melee1_fists_ma",
+		"Character.kab_tyger_claws_gangster1_ranged1_copperhead_ma",
+		"Character.kab_tyger_claws_gangster1_ranged1_copperhead_wa",
+		"Character.kab_tyger_claws_gangster1_ranged1_nue_ma",
+		"Character.kab_tyger_claws_gangster1_ranged1_nue_wa",
+		"Character.kab_tyger_claws_gangster2_ranged2_copperhead_ma",
+		"Character.kab_tyger_claws_gangster2_ranged2_copperhead_wa",
+		"Character.kab_tyger_claws_gangster2_ranged2_shingen_ma",
+		"Character.kab_tyger_claws_gangster2_ranged2_shingen_wa",
+		"Character.kab_tyger_claws_gangster2_ranged2_sidewinder_ma",
+		"Character.kab_tyger_claws_gangster2_ranged2_sidewinder_wa",
+		"Character.kab_tyger_claws_gangster3_ranged3_sidewinder_ma",
+		"Character.kab_tyger_claws_martial_fmelee2_katana_ma_rare",
+		"Character.kab_tyger_claws_ozeki_hmelee3_kanabo_mb",
+		"Character.bls_se_tyger_claws_biker1_ranged1_nue_wa",
+		"Character.bls_se_tyger_claws_biker1_ranged1_saratoga_wa",
+		"Character.bls_se_tyger_claws_gangster1_ranged1_copperhead_wa",
+		"Character.bls_se_tyger_claws_gangster3_ranged3_sidewinder_ma",
+		"Character.lch_tyger_claws_biker1_melee1_tireiron_ma",
+		"Character.lch_tyger_claws_biker1_ranged1_nue_ma",
+		"Character.lch_tyger_claws_biker1_ranged1_nue_wa",
+		"Character.lch_tyger_claws_biker1_ranged1_saratoga_ma",
+		"Character.lch_tyger_claws_biker1_ranged1_saratoga_wa",
+		"Character.lch_tyger_claws_biker2_ranged2_copperhead_ma",
+		"Character.lch_tyger_claws_biker2_ranged2_copperhead_wa",
+		"Character.lch_tyger_claws_gangster1_melee1_fists_ma",
+		"Character.lch_tyger_claws_gangster1_ranged1_copperhead_ma",
+		"Character.lch_tyger_claws_gangster1_ranged1_copperhead_wa",
+		"Character.lch_tyger_claws_gangster1_ranged1_nue_ma",
+		"Character.lch_tyger_claws_gangster1_ranged1_nue_wa",
+		"Character.lch_tyger_claws_gangster2_ranged2_copperhead_ma",
+		"Character.lch_tyger_claws_gangster2_ranged2_copperhead_wa",
+		"Character.lch_tyger_claws_gangster2_ranged2_shingen_ma",
+		"Character.lch_tyger_claws_gangster2_ranged2_shingen_wa",
+		"Character.lch_tyger_claws_gangster2_ranged2_sidewinder_wa",
+		"Character.lch_tyger_claws_gangster2_ranged2_sidewinder_ma",
+		"Character.lch_tyger_claws_grunt_medium_range_m_hard",
+		"Character.lch_tyger_claws_grunt_medium_range_w_easy",
+		"Character.lch_tyger_claws_grunt_medium_range_w_medium",
+		"Character.lch_tyger_claws_martial_fmelee2_katana_ma_rare",
+		"Character.lch_tyger_claws_ozeki_hmelee3_kanabo_mb",
+		"Character.lch_tygerclaw_gangster3_netrunner_nue_wa_rare",
+		"Character.nid_03_tyger_claws_biker1_ranged1_saratoga_ma",
+		"Character.nid_tyger_claws_biker1_melee1_tireiron_wa",
+		"Character.nid_tyger_claws_biker1_ranged1_nue_ma",
+		"Character.nid_tyger_claws_biker1_ranged1_nue_wa",
+		"Character.nid_tyger_claws_biker1_ranged1_saratoga_ma",
+		"Character.nid_tyger_claws_biker1_ranged1_saratoga_wa",
+		"Character.nid_tyger_claws_biker2_ranged2_copperhead_wa",
+		"Character.nid_tyger_claws_biker2_ranged2_shingen_ma",
+		"Character.nid_tyger_claws_biker2_ranged2_shingen_wa",
+		"Character.nid_tyger_claws_gangster1_ranged1_copperhead_ma",
+		"Character.nid_tyger_claws_gangster1_ranged1_nue_ma",
+		"Character.nid_tyger_claws_gangster2_ranged2_copperhead_wa",
+		"Character.nid_tyger_claws_gangster2_ranged2_copperhead_ma",
+		"Character.nid_tyger_claws_gangster2_ranged2_copperhead_wa",
+		"Character.nid_tyger_claws_gangster2_ranged2_sidewinder_wa",
+		"Character.nid_tyger_claws_kunoichi_fmelee3_katana_wa_elite",
+		"Character.nok_tyger_claws_gangster1_ranged1_copperhead_ma",
+		"Character.nok_tyger_claws_gangster1_ranged1_copperhead_wa",
+		"Character.nok_tyger_claws_gangster1_ranged1_nue_ma",
+		"Character.nok_tyger_claws_gangster1_ranged1_nue_wa",
+		"Character.nok_tyger_claws_gangster2_ranged2_copperhead_ma",
+		"Character.nok_tyger_claws_gangster2_ranged2_copperhead_wa",
+		"Character.nok_tyger_claws_gangster2_ranged2_sidewinder_wa",
+		"Character.nok_tyger_claws_martial_fmelee2_katana_ma_rare",
+		"Character.tyger_claws_gangster1_melee1_fists_ma",
+		"Character.tyger_claws_biker1_melee1_fists_wa",
+		"Character.tyger_claws_gangster2_ranged2_sidewinder_wa",
+		"Character.tyger_claws_gangster2_ranged2_sidewinder_ma",
+		"Character.tyger_claws_kunoichi_fmelee3_katana_wa_elite",
+		"Character.tyger_claws_ozeki_hmelee3_kanabo_mb",
+		"Character.tyger_claws_martial_fmelee2_katana_ma_rare",
+		"Character.sts_wbr_jpn_12_tyger_claws_gangster1_ranged1_nue_wa"
+	],
+	"spawnable_vehicle": [
+		"Vehicle.cs_savable_quadra_turbo_tyger_claw",
+		"Vehicle.cs_savable_mizutani_shion_tyger",
+		"Vehicle.cs_savable_archer_quartz_tyger",
+		"Vehicle.v_standard25_villefort_columbus_tyger",
+		"Vehicle.v_sportbike1_yaiba_kusanagi_tyger_player",
+		"Vehicle.v_sportbike1_yaiba_kusanagi_tyger",
+		"Vehicle.v_sportbike3_brennan_apollo_tyger",
+		"Vehicle.v_sportbike2_arch_tyger_player"
+	],
+	"district_tag": "district_westbrook",
+	"vip": [{
+			"name": "Chang Hoon Nam",
+			"score": 0
+		},
+		{
+			"name": "Pachinko Bouncer",
+			"score": 5
+		},
+		{
+			"name": "Maiko",
+			"score": 15
+
+		},
+		{
+			"name": "Shinobu Imai",
+			"score": 15
+		},
+		{
+			"name": "Hotel Escort",
+			"score": 15
+		},
+		{
+			"name": "Skye",
+			"score": 20
+		},
+		{
+			"name": "Angel",
+			"score": 20
+		},
+		{
+			"name": "Taki Kenmochi",
+			"score": 20
+		},
+		{
+			"name": "Akira",
+			"score": 30
+		},
+		{
+			"name": "Jotaro Shobo",
+			"score": 30
+		}, {
+			"name": "Cheri from Clouds",
+			"score": 30
+		}, {
+			"name": "Hideo Kojima",
+			"score": 50
+		}
+	]
+}

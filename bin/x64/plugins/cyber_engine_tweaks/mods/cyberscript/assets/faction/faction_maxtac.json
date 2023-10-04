@@ -1,0 +1,42 @@
+{
+	"name":"MaxTac",
+	"logo":"ico_district_center_large",
+	"tag": "faction_maxtac",
+	"attitude_group":["sq018_maxtac"],
+	"rivals":[
+		"faction_aldecaldos",
+		"faction_animals",
+		"faction_maelstrom",
+		"faction_mox",
+		"faction_scavengers",
+		"faction_sixthstreet",
+		"faction_tygerclaws",
+		"faction_valentinos",
+		"faction_voodooboys",
+		"faction_wraiths"
+		],
+		"keyword": [
+		"max_tac","maxtac"
+	],
+	"spawnable_npc":[
+	"Character.mq030_max_tac",
+	"Character.q001_maxtac_fem",
+	"Character.q001_maxtac_mb",
+	"Character.mq030_max_tac",
+	"Character.q001_maxtac_fem",
+	"Character.q001_maxtac_mb"
+	],
+	"spawnable_vehicle":[
+		"Vehicle.q001_barricade_police_cars",
+		"Vehicle.v_007_interceptor_police"	 
+		],
+	"district_tag":"district_watson",
+	"vip":[{
+			"name": "MaxTac Solider",
+			"score": 5
+		},
+		{
+			"name": "Melissa Rory",
+			"score": 30
+	}]
+}

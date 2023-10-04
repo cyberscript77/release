@@ -1,9 +1,0 @@
-{
-  "path": "Attitudes.Group_sq012_6th_street",
-  "base": "AttitudeGroup",
-  "properties": {
-    ".parent": "Attitudes.Group_Neutral",
-    ".name": "sq012_6th_street",
-    ".isState": false
-  }
-}

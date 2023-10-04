@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_ina_02_Wraiths",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "Attitudes.Group_Wraiths_OW",
+    ".name": "ina_02_wraiths",
+    ".isState": false
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "path": "Attitudes.Group_roadblocks_prolog_Arasaka",
+  "base": "AttitudeGroup",
+  "properties": {
+    ".parent": "None",
+    ".name": "roadblocks_prolog_Arasaka",
+    ".isState": false
+  }
+}
