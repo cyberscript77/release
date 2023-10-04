@@ -1331,6 +1331,7 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							
 							cyberscript.cache["mission"][value.tag] = {}
 							cyberscript.cache["mission"][value.tag].data = value
 							cyberscript.cache["mission"][value.tag].file = path

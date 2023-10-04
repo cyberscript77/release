@@ -1,0 +1,31 @@
+[
+
+  
+    
+	{
+		"version":2,
+		"comment":"unify object",
+		"migrate":{
+			"x" : "X",
+			"y" :  "Y",
+			"z" :  "Z",
+			"gameplay_x" : "GameplayX",
+			"gameplay_y" :  "GameplayY",
+			"gameplay_z" :  "GameplayZ",
+			
+        },
+		"add":{
+			
+			},
+		
+		"remove":{
+			
+			}
+        
+    },
+	
+	
+	
+	
+
+]

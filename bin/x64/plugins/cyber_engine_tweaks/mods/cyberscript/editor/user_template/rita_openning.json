@@ -1,0 +1,51 @@
+{
+  "type": "event",
+  "tag": "rita_openning",
+  "template": {
+    "context": [],
+    "action": [ {
+      "helperTitle": "Dialog : run a subtitle",
+      "type": 2,
+      "duration": 3,
+      "helper": "This action will fire a subtitle on your bottom portion of the screen, The duration must complete in order for the next action to call. Type value just keep at 1 for now.",
+      "title": "Hey you, wanna work ?",
+      "target": "player",
+      "speaker": "Rita Wheeler",
+      "name": "subtitle"
+    }, {
+      "key": "state",
+      "variable": "joytoy_mission",
+      "value": "rita_speaking",
+      "helperTitle": "Variable : Set Variable",
+      "helper": "This action will set a value for a key of a Variable ",
+      "name": "set_variable"
+    } ],
+    "tag": "rita_openning",
+    "name": "",
+    "way": "world",
+    "header": {
+      "version": 1
+    },
+    "trigger": {
+      "rita_openning_trigger_new": {
+        "value_help": "use value (write the Name) for phone or Speak or value (write a tag text) for fixer",
+        "way_help": "phone||speak||fixer",
+        "helper": "This trigger will be triggered when you talk with a specific NPC",
+        "value": "fixer_rita",
+        "helperTitle": "NPC : who is talking",
+        "way": "fixer",
+        "name": "npc"
+      },
+      "rita_openning_trigger_new1": {
+        "variable": "joytoy_mission",
+        "key": "state",
+        "operator": "=",
+        "helper": "This trigger will be triggered when the value of the key of custom variable is the same that trigger value. Operator can be =, !=, contains, empty, notempty",
+        "helperTitle": "Score : Custom Variable",
+        "value": "idle",
+        "name": "check_variable"
+      }
+    },
+    "requirement": [ [ "rita_openning_trigger_new", "rita_openning_trigger_new1" ] ]
+  }
+}

@@ -1,0 +1,33 @@
+[
+
+  
+    
+	{
+		"version":2,
+		"comment":"unify object",
+		"migrate":{
+			"tag" : "Tag",
+			"desc" :  "Desc"
+        },
+		"remove":{
+			"speaker":""
+			}
+    },
+	
+	{
+		"version":3,		
+		"comment":"unify object",
+		"add":{
+			"speaker":""
+			},
+    },
+	
+	{
+		"version":4,
+		"comment":"unify options object",
+		"replace":{
+			"description":"Description"
+			},
+    },
+
+]

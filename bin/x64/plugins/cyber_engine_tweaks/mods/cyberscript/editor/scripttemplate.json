@@ -1,0 +1,524 @@
+{
+
+    "character": {
+        "source": "",
+        "path": "",
+        "tag": "",
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "circuit": {
+        "tag": "",
+        "nodes": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "codex": {
+        "tag": "",
+        "title": "",
+        "description": "",
+        "locked": false,
+        "context": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "choice": {
+        "tag": "",
+        "speaker":  "",
+        "desc": "",
+        "context": [],
+        "trigger": {},
+        "requirement": [],
+        "options": [],
+        "header": {
+            "version": 3
+        }
+    },
+    "event": {
+        "tag": "",
+        "name": "",
+        "way": "world",
+        "context": [],
+        "trigger": {},
+        "requirement": [],
+        "action": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "faction": {
+        "tag": "",
+        "district_tag": "district_watson",
+        "name": "",
+        "logo": "logo_netwatch",
+        "rivals": [],
+        "spawnable_npc": [],
+        "attitude_group": [],
+        "spawnable_vehicle": [],
+        "vip": [],
+        "header": {
+            "version": 2
+        }
+    },
+    "fixer": {
+        "tag": "",
+        "district_tag": "district_watson",
+        "name": "",
+        "tweakid": "Character.Judy",
+        "faction": "",
+        "exist": false,
+        "npcexist": false,
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "range": 0,
+        "trigger": {},
+        "requirement": [],
+        "spawn_action": [],
+        "despawn_action": [],
+        "context": [],
+        "header": {
+            "version": 4
+        }
+    },
+    "functions": {
+        "tag": "",
+        "name": "",
+        "action": [],
+        "header": {
+            "version": 1.0
+        }
+    },
+    "help": {
+        "tag": "",
+        "title": "",
+        "section": [],
+        "context": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "housing": {
+
+        "tag": "",
+        "target": "",
+        "trigger": {},
+        "requirement": [],
+        "items": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "housing_template": {
+
+        "tag": "",
+        "name": "",
+        "desc": "",
+        "target": "",
+        "price": 0,
+        "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "items": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "hud": {
+
+        "tag": "",
+        "type": "widget",
+        "container": "",
+        "fontfamily": "base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily",
+        "text": "",
+        "fontstyle": "Medium",
+        "visible": true,
+        "fontsize": 25,
+        "color": {
+            "red": 255,
+            "green": 255,
+            "blue": 255
+        },
+        "margin": {},
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "interact": {
+
+        "tag": "",
+        "name": "",
+        "sorttag": "none",
+        "timer": 0,
+        "display": "event_interact",
+        "type": "interact",
+        "hold": true,
+        "key": "QuickMelee",
+        "icon": "GiveTakeIcon",
+        "style": {
+            "textcolor": {
+                "red": 255,
+                "green": 255,
+                "blue": 255
+
+            },
+            "bgcolor": {
+                "red": 255,
+                "green": 255,
+                "blue": 255
+
+            },
+            "iconcolor": {
+                "red": 255,
+                "green": 255,
+                "blue": 255
+
+            }
+
+        },
+        "trigger": {},
+        "requirement": [],
+        "action": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "interfaces": {
+        "tag": "",
+        "title": "",
+
+        "controls": [],
+        "onload_action": [],
+        "header": {
+            "version": 1.0
+        }
+    },
+    "lang": {
+
+        "tag": "",
+		"languages":{
+			"default":{}
+		},
+        "header": {
+            "version": 2.0
+        }
+    },
+    "mission": {
+
+        "title": "",
+        "content": "",
+        "tag": "",
+        "row": 1,
+        "column": 1,
+        "recommandedlevel": 13,
+        "questtype": 5,
+        "district": 115,
+        "recurrent": false,
+        "context": [],
+		"extra": {},
+        "unlock_action": [],
+        "trigger_condition": {},
+        "trigger_condition_requirement": [],
+        "trigger_action": [],
+        "objectives": [],
+        "end_action": [],
+		"failure_condition": {},
+        "failure_condition_requirement": [],
+        "failure_action": [],
+        "reset_action": [],
+        "header": {
+            "version": 2.0
+        }
+
+    },
+    "node": {
+        "tag": "",
+        "sort": "",
+        "name": "",
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "gameplay_x": 0,
+        "gameplay_y": 0,
+        "gameplay_z": 0,
+        "header": {
+            "version": 2
+        }
+
+    },
+    "npc": {
+
+        "name": "",
+        "tag": "",
+        "tweakDB": "",
+        "appeareance": "",
+        "repeat_routine": true,
+        "auto_despawn": true,
+        "useBetaSpawn": false,
+        "location": {
+            "x": 255,
+            "y": 255,
+            "z": 255,
+            "position_poi_from_position_x": 0,
+            "position_poi_from_position_y": 0,
+            "position_poi_from_position_z": 0,
+            "position_poi_type": 1,
+            "position_tag": "judy01",
+            "position_way": "normal",
+            "position_distance": 5,
+            "position_helper": "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+            "position_house_tag": "playerhouse01",
+            "position_change_helper": "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \n For poi if you write 'current' in position_poi_district you will get the current district, \n if you write 'current in position_poi_subdistrict you will get the current subdistrict. \n also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+            "position_node_usegameplay": false,
+            "position_house_way_helper": "default||enter||exit",
+            "position_house_way": "default",
+            "position_poi_use_location_tag": false,
+            "position_lookatdistance": 0,
+            "position_tag_helper": "judy01||playerhouse01||playerhouse_bed||",
+            "position_way_helper": "normal||behind||forward",
+            "position_range": 50,
+            "position_poi_district": "",
+            "position_poi_subdistrict": "",
+            "position_poi_is_for_car": false,
+            "position_poi_from_position": false,
+            "position_poi_search": "type|subdistrict|district|tag",
+            "position_poi_searchdistance": "near|far|random",
+            "position": "at",
+            "radius": 0,
+            "player_range": 0,
+        },
+        "context": [],
+        "trigger": {},
+        "requirement": [],
+        "routineaction": [],
+        "spawnaction": [],
+        "despawnaction": [],
+        "deathaction": [],
+        "header": {
+            "version": 1.0
+        }
+    },
+    "path": {
+        "tag": "",
+        "desc": "",
+        "startNode": "",
+        "endNode": "",
+        "isFor": 4,
+        "recordRotation": false,
+        "recordRelative": false,
+        "recordRotationOnly": false,
+        "locations": [],
+        "header": {
+            "version": 1.0
+        }
+    },
+    "phone_dialog": {
+
+        "tag": "",
+        "speaker": "Judy",
+        "unlock": false,
+        "conversation": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "place": {
+        "tag": "",
+        "name": "",
+
+        "x": 255,
+        "y": 255,
+        "z": 255,
+
+        "range": 0,
+        "range_z": 0,
+
+        "enter_x": 255,
+        "enter_y": 255,
+        "enter_z": 255,
+        "exit_x": 255,
+        "exit_y": 255,
+        "exit_z": 255,
+
+        "type": 0,
+        "coef": 0,
+        "isbuyable": false,
+		"showMappin": false,
+        "price": 0,
+        "isrentable": false,
+        "rent": 0,
+        "context": [],
+        "trigger": {},
+        "requirement": [],
+        "rooms": [],
+        "action": [],
+        "step": [],
+        "header": {
+            "version": 2
+        }
+
+    },
+    "poi": {
+
+        "tag": "",
+        "desc": "",
+        "isFor": 0,
+        "locations": [],
+        "header": {
+            "version": 1.0
+        }
+    },
+    "radio": {
+        "tag": "",
+        "name": "",
+        "only_in_car": false,
+        "tracks": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "scene": {
+
+        "tag": "",
+        "isbraindance": false,
+        "step": [],
+        "init_action": [],
+        "end_action": [],
+        "reset_action": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "setting": {
+
+        "tag": "",
+        "type": "",
+        "category": "",
+        "categorylibelle": "",
+        "label": "",
+        "description": "",
+        "buttonlabel": "",
+        "textsize": 45,
+
+        "action": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "shard": {
+
+        "tag": "",
+        "title": "",
+        "description": "",
+        "crypted": false,
+        "new": false,
+        "locked": false,
+        "context": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "sound": {
+
+        "tag": "",
+		"subtitle": "",
+        "duration": 0,
+		"language":{
+			"default":""
+		},
+        "header": {
+            "version": 3.0
+        }
+
+    },
+    "texture": {},
+    "webpage": {
+
+        "tag": "",
+        "name": "",
+        "target": "",
+		"tweak":"",
+		"texture":"",
+        "trigger": {},
+        "requirement": [],
+        "header": {
+            "version": 2.0
+        }
+
+    },
+    "email": {},
+    "quickhack": {
+
+        "tag": "",
+        "icon": "",
+        "title": "",
+        "titlealternative": "",
+        "description": "",
+        "inactiveReason": "",
+
+        "icelevelvisible": true,
+        "networkbreached": true,
+        "isinstant": false,
+
+        "actiontype": 5,
+        "cost": 0,
+        "uploadtime": 0,
+        "duration": 0,
+        "iceLevel": 13,
+        "quality": 1,
+        "cooldown": 0,
+
+        "context": [],
+        "trigger": {},
+        "requirement": [],
+        "unlocktrigger": {},
+        "unlockrequirement": [],
+        "action": [],
+        "header": {
+            "version": 1.0
+        }
+
+    },
+    "garage": {
+
+        "tag": "",
+        "name": "",
+        "tweak": "",
+        "type": 1,
+        "context": [],
+        "trigger": {},
+        "requirement": [],
+        "action": [],
+        "header": {
+            "version": 1.0
+        }
+    },
+	"ai": {
+
+        "tag": "",
+        
+        "contexts": [],
+        "header": {
+            "version": 1.0
+        }
+    }
+}

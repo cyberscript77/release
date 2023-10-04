@@ -1,0 +1,40 @@
+[
+
+  
+    
+	{
+		"version":2,
+		"comment":"unify object",
+		"migrate":{
+			"tag" : "Tag",
+			"district_tag" :  "DistrictTag",
+			"name" :  "Name",
+			"logo" :  "Logo",
+			"rivals" :  "Rivals",
+			"spawnable_npc" :  "SpawnableNPC",
+			"attitude_group" :  "AttitudeGroup",
+			"spawnable_vehicle" :  "SpawnableVehicule",
+			"vip" :  "VIP"
+			
+        },
+		"add":{},
+		
+		"remove":{}
+        
+    },
+	
+	{
+		"version":3,
+		"comment":"add keyword",
+		"migrate":{
+			
+        },
+		"add":{
+			"keyword":[]
+			},
+		
+		"remove":{}
+        
+    },
+
+]

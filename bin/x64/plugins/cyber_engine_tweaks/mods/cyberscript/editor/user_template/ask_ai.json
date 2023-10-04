@@ -1,0 +1,87 @@
+{
+  "template": {
+    "context": [],
+    "header": {
+      "version": 3
+    },
+    "trigger": [],
+    "tag": "ask_ai",
+    "options": [ {
+      "context": [],
+      "trigger": [],
+      "style": {
+        "color": []
+      },
+      "icon": "GangWatchIcon",
+      "action": [ {
+        "helperTitle": "AI : Setup AI Context",
+        "value": "You are in cyberpunk 2077 world. I'm acting as V and you as bartender in Lizzie's bar in Kabuki. You know last news about gangs and street rumors. Answser me normally but bored.",
+        "name": "setup_ai_context",
+        "helper": "This action will setup CyberAI context"
+      }, {
+        "helperTitle": "AI : Ask AI",
+        "value": "How are the gang ?",
+        "name": "ask_ai",
+        "helper": "This action will ask CyberAI"
+      }, {
+        "help": "Wait x second",
+        "helperTitle": "Logic : Wait X seconds",
+        "helper": "This action will wait x second before perform the next action",
+        "name": "wait_second",
+        "value": 3
+      }, {
+        "key": "answer",
+        "helperTitle": "AI : Get AI answer in Variable",
+        "helper": "This action will get the CyberAI answer in variable",
+        "name": "get_ai_answer_in_score",
+        "variable": "cyberAI"
+      }, {
+        "context": [ {
+          "action": [],
+          "prop": {
+            "title": {
+              "text": "##answer",
+              "values": {
+                "answer": {
+                  "variable": "cyberAI",
+                  "type": "variable",
+                  "trigger": [],
+                  "index": 0,
+                  "action": [],
+                  "key": "answer",
+                  "outputtype": "text",
+                  "requirement": []
+                }
+              },
+              "type": "text",
+              "alpha": false
+            }
+          },
+          "trigger": {
+            "ask_ai_How are the gang ? (1)_action_new_context_new_trigger_new": {
+              "helperTitle": "Auto",
+              "helper": "This trigger will be triggered without need anything (default)",
+              "name": "auto"
+            }
+          },
+          "requirement": [ [ "ask_ai_How are the gang ? (1)_action_new_context_new_trigger_new" ] ]
+        } ],
+        "target": "player",
+        "name": "subtitle",
+        "type": 1,
+        "duration": 7,
+        "helperTitle": "Dialog : run a subtitle",
+        "speaker": "Mateo",
+        "title": "Hey you're finally awake!",
+        "helper": "This action will fire a subtitle on your bottom portion of the screen, The duration must complete in order for the next action to call. Type value just keep at 1 for now."
+      } ],
+      "description": "How are the gang ?",
+      "requirement": []
+    } ],
+    "speaker": "V",
+    "desc": "",
+    "requirement": []
+  },
+  "type": "choice",
+  "tag": "ask_ai"
+}

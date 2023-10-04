@@ -1,0 +1,34 @@
+{
+  "template": {
+    "context": [],
+    "header": {
+      "version": 1
+    },
+    "trigger": {
+      "mateolook_trigger_new": {
+        "helperTitle": "Player : Look at ",
+        "value": "mateo",
+        "name": "look_at_entity",
+        "helper": "This trigger will be triggered when you look a entity who has the expected tag"
+      },
+      "mateo": {
+        "helperTitle": "Player : Look at ",
+        "value": "mateo",
+        "name": "look_at_entity",
+        "helper": "This trigger will be triggered when you look a entity who has the expected tag"
+      }
+    },
+    "tag": "mateolook",
+    "action": [ {
+      "helperTitle": "Dialog : run a dialog",
+      "helper": "This action will fire a dialog if the trigger requirements are met",
+      "name": "dialog",
+      "dialog": "ask_ai"
+    } ],
+    "requirement": [ [ "mateo", "mateolook_trigger_new" ] ],
+    "name": "",
+    "way": "world"
+  },
+  "type": "event",
+  "tag": "mateolook"
+}

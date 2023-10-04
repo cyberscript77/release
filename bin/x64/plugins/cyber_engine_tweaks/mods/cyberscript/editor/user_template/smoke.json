@@ -1,0 +1,149 @@
+{
+  "template": {
+    "icon": "GiveTakeIcon",
+    "name": "Take a cigaret",
+    "tag": "smoke",
+    "type": "interact",
+    "hold": true,
+    "display": "event_interact",
+    "style": {
+      "iconcolor": {
+        "blue": 255,
+        "green": 255,
+        "red": 255
+      },
+      "bgcolor": {
+        "blue": 255,
+        "green": 255,
+        "red": 255
+      },
+      "textcolor": {
+        "blue": 255,
+        "green": 255,
+        "red": 255
+      }
+    },
+    "key": "QuickMelee",
+    "trigger": {
+      "trigger01": {
+        "name": "check_variable",
+        "helper": "This trigger will be triggered when the value of the key of custom variable is the same that trigger value. Operator can be =, !=, contains, empty, notempty",
+        "operator": "=",
+        "value": false,
+        "variable": "smoke",
+        "helperTitle": "Score : Custom Variable",
+        "key": "state"
+      },
+      "trigger02": {
+        "name": "check_variable",
+        "helper": "This trigger will be triggered when the value of the key of custom variable is the same that trigger value. Operator can be =, !=, contains, empty, notempty",
+        "operator": "empty",
+        "value": false,
+        "variable": "smoke",
+        "helperTitle": "Score : Custom Variable",
+        "key": "state"
+      }
+    },
+    "header": {
+      "version": 1
+    },
+    "timer": 0,
+    "input": 2,
+    "group": "Smoke Everywhere",
+    "sorttag": "smoke",
+    "requirement": [ [ "trigger01" ], [ "trigger02" ] ],
+    "action": [ {
+      "value": true,
+      "helper": "This action will set a value for a key of a Variable ",
+      "name": "set_variable",
+      "variable": "smoke",
+      "helperTitle": "Variable : Set Variable",
+      "key": "state"
+    }, {
+      "name": "equip_item_on_slot",
+      "item": "Items.crowd_cigarette_i_stick",
+      "helperTitle": "Entity : Equip Item on Slot",
+      "slot": "WeaponLeft",
+      "tag": "player",
+      "helper": "This action will equip item on slot for entity"
+    }, {
+      "value": 100,
+      "help": "Wait x ticks",
+      "name": "wait_tick",
+      "helperTitle": "Logic : Wait X ticks",
+      "helper": "This action will wait x ticks. before perform the next action (60 ticks = 1 sec approx)"
+    }, {
+      "yaw": 0,
+      "roll": 0,
+      "unlockcamera": true,
+      "helperTitle": "Anim : Play Anim to Entity",
+      "helper": "This action will apply animation to entity",
+      "name": "play_custom_anim_entity",
+      "anim": "stand_car_lean180__rh_cigarette__01",
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "workspot": "cyberscript_workspot_base",
+      "pitch": 0,
+      "tag": "player",
+      "isinstant": false
+    }, {
+      "name": "wait_tick",
+      "help": "Wait x ticks",
+      "value": 300,
+      "helperTitle": "Logic : Wait X ticks",
+      "helper": "This action will wait x ticks. before perform the next action (60 ticks = 1 sec approx)"
+    }, {
+      "yaw": 0,
+      "roll": 0,
+      "unlockcamera": true,
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "helper": "This action will apply animation to entity",
+      "name": "play_custom_anim_entity",
+      "anim": "stand_car_lean180__rh_cigarette__01__smoke__01",
+      "pitch": 0,
+      "workspot": "cyberscript_workspot_base",
+      "helperTitle": "Anim : Play Anim to Entity",
+      "tag": "player",
+      "isinstant": false
+    }, {
+      "name": "wait_tick",
+      "help": "Wait x ticks",
+      "value": 100,
+      "helperTitle": "Logic : Wait X ticks",
+      "helper": "This action will wait x ticks. before perform the next action (60 ticks = 1 sec approx)"
+    }, {
+      "yaw": 0,
+      "roll": 0,
+      "unlockcamera": true,
+      "helperTitle": "Anim : Play Anim to Entity",
+      "helper": "This action will apply animation to entity",
+      "name": "play_custom_anim_entity",
+      "anim": "stand_car_lean180__rh_cigarette__01__drop_ash__01",
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "workspot": "cyberscript_workspot_base",
+      "pitch": 0,
+      "tag": "player",
+      "isinstant": false
+    }, {
+      "name": "wait_tick",
+      "help": "Wait x ticks",
+      "value": 100,
+      "helperTitle": "Logic : Wait X ticks",
+      "helper": "This action will wait x ticks. before perform the next action (60 ticks = 1 sec approx)"
+    }, {
+      "yaw": 0,
+      "roll": 0,
+      "unlockcamera": true,
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "helper": "This action will apply animation to entity",
+      "name": "play_custom_anim_entity",
+      "anim": "stand_car_lean180__rh_cigarette__01__drop_ash__01",
+      "pitch": 0,
+      "workspot": "cyberscript_workspot_base",
+      "helperTitle": "Anim : Play Anim to Entity",
+      "tag": "player",
+      "isinstant": false
+    } ]
+  },
+  "tag": "smoke",
+  "type": "interact"
+}

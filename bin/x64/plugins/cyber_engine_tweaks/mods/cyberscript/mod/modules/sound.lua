@@ -78,22 +78,23 @@ end
 
 function Stop(sound)
 	
-	local playsound = sound.tag
+	local playsound = sound
 	
-	if sound.language ~= nil then
+	-- if sound.language ~= nil then
 		
-		if sound.language[cyberscript.language] ~= nil then
+		-- if sound.language[cyberscript.language] ~= nil then
 		
-			playsound = sound.language[cyberscript.language]
+			-- playsound = sound.language[cyberscript.language]
 		
-		else
+		-- else
 			
-			if sound.language["default"] ~= nil then
-				playsound = sound.language["default"]
-			end
-		end
+			-- if sound.language["default"] ~= nil then
+				-- playsound = sound.language["default"]
+			-- end
+		-- end
 	
-	end
+	-- end
+	
 	
 	local audioEvent = SoundStopEvent.new()
 	audioEvent.soundName = playsound

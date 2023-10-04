@@ -1,4 +1,4 @@
-
+print("CyberScript: global variable loaded")
 cyberscript.module = 1
 cyberscript.module = cyberscript.module +1
 
@@ -2446,7 +2446,7 @@ function resetVar()
 	currentPlayerNode = nil
 	inEditMode = false
 	
-	---@type inkGameNotificationData
+	---@type ShardReadPopupData
 	notificationData = {}
 	
 	---@type inkGameNotificationToken

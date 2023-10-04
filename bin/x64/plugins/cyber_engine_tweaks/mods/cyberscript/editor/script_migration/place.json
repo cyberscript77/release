@@ -1,0 +1,56 @@
+[
+
+  
+    
+	{
+		"version":2,
+		"comment":"migrate place object",
+		"migrate":{
+			"x" : "posX",
+			"y" :  "posY",
+			"z" :  "posZ",
+			"enter_x" : "EnterX",
+			"enter_y" :  "EnterY",
+			"enter_z" :  "EnterZ",
+			"exit_x" : "ExitX",
+			"exit_y" :  "ExitY",
+			"exit_z" :  "ExitZ",
+			"range_z" :  "Zrange",
+        },
+		"add":{
+			
+			},
+		
+		"remove":{
+			
+			}
+        
+    },
+	{
+		"version":3,
+		"comment":"migrate room object",
+		"replace":{
+			"x" : "posX",
+			"y" :  "posY",
+			"z" :  "posZ",
+			"enter_x" : "EnterX",
+			"enter_y" :  "EnterY",
+			"enter_z" :  "EnterZ",
+			"exit_x" : "ExitX",
+			"exit_y" :  "ExitY",
+			"exit_z" :  "ExitZ",
+			"range_z" :  "Zrange",
+			},
+    },
+	{
+		"version":4,
+		"comment":"add showMappin field",
+		"add":{
+			"showMappin":true
+			},
+    },
+	
+	
+	
+
+]

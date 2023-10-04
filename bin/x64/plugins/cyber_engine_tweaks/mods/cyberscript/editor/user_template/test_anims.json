@@ -1,0 +1,30 @@
+{
+  "type": "functions",
+  "template": {
+    "name": "",
+    "header": {
+      "version": 1
+    },
+    "action": [ {
+      "ent": "base\\test\\entity\\test_workspot_anim.ent",
+      "unlockcamera": true,
+      "anim": "test_donk",
+      "helper": "This action will apply animation to entity",
+      "workspot": "test_workspot_custom_base",
+      "pitch": 0,
+      "helperTitle": "Anim : Play Anim to Entity",
+      "roll": 0,
+      "name": "play_custom_anim_entity",
+      "yaw": 0,
+      "isinstant": true,
+      "tag": "player"
+    }, {
+      "name": "stop_anim_entity",
+      "helper": "This action will stop animation to entity",
+      "helperTitle": "Anim : Stop Anim for Entity",
+      "tag": "player"
+    } ],
+    "tag": "test_anims"
+  },
+  "tag": "test_anims"
+}

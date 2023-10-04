@@ -1120,7 +1120,7 @@ registerHotkey("toogleview", 'Toggle View', function()
 		local tdbid = TweakDBID.new(headItem)
 		local itemID = gameItemID:FromTDBID(tdbid)
 		if(AVisIn == false) then
-			Game.EquipItemOnPlayer(headItem, "TppHead")
+			EquipItemOnPlayer(headItem, "TppHead")
 		end
 		lastView = 2
 		elseif lastView == 2 then -- 3rd Person View near
@@ -1135,7 +1135,7 @@ registerHotkey("toogleview", 'Toggle View', function()
 		local itemID = gameItemID:FromTDBID(tdbid)
 		if(AVisIn == false) then
 			Game.AddToInventory(headItem, 1)
-			Game.EquipItemOnPlayer(headItem, "TppHead")
+			EquipItemOnPlayer(headItem, "TppHead")
 		end
 		lastView = 3
 		elseif lastView == 3 then -- 3rd Person View far
@@ -1149,7 +1149,7 @@ registerHotkey("toogleview", 'Toggle View', function()
 		local tdbid = TweakDBID.new(headItem)
 		local itemID = gameItemID:FromTDBID(tdbid)
 		if(AVisIn == false) then
-			Game.EquipItemOnPlayer(headItem, "TppHead")
+			EquipItemOnPlayer(headItem, "TppHead")
 		end
 		lastView = 4
 		elseif lastView == 4 then -- 3rd Person View very far
@@ -1163,7 +1163,7 @@ registerHotkey("toogleview", 'Toggle View', function()
 		local tdbid = TweakDBID.new(headItem)
 		local itemID = gameItemID:FromTDBID(tdbid)
 		if(AVisIn == false) then
-			Game.EquipItemOnPlayer(headItem, "TppHead")
+			EquipItemOnPlayer(headItem, "TppHead")
 		end
 		lastView = 1
 	end

@@ -1,0 +1,82 @@
+{
+  "template": {
+    "tag": "v_rmj_f",
+    "name": "",
+    "header": {
+      "version": 1
+    },
+    "action": [ {
+      "position_house_tag": "playerhouse01",
+      "position_change_helper": "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \n For poi if you write 'current' in position_poi_district you will get the current district, \n if you write 'current in position_poi_subdistrict you will get the current subdistrict. \n also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+      "position_node_usegameplay": false,
+      "position_lookatdistance": 0,
+      "position_tag_helper": "judy01||playerhouse01||playerhouse_bed||",
+      "position_way_helper": "normal||behind||forward",
+      "position_poi_district": "",
+      "position_poi_subdistrict": "",
+      "position_poi_from_position": false,
+      "position_poi_type": 1,
+      "position_house_way_helper": "default||enter||exit",
+      "position_poi_is_for_car": false,
+      "position": "relative_to_entity",
+      "position_poi_use_location_tag": false,
+      "distance": 0,
+      "group": false,
+      "roll": 0,
+      "pitch": 0,
+      "yaw": 0,
+      "tag": "player",
+      "helperTitle": "Entity : Teleport To",
+      "helper": "This action will teleport an entity with several custom parameter ",
+      "help": "This action will teleport an entity with several custom parameter ",
+      "position_helper": "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+      "name": "teleport",
+      "position_poi_search": "type|subdistrict|district|tag",
+      "position_distance": 0,
+      "position_poi_searchdistance": "near|far|random",
+      "position_range": 50,
+      "z": 0,
+      "position_house_way": "default",
+      "position_tag": "test",
+      "position_way": "forward",
+      "x": -0.10000000149012,
+      "y": -0.80099999904633
+    }, {
+      "isinstant": false,
+      "workspot": "cyberscript_workspot_base",
+      "unlockcamera": true,
+      "roll": 0,
+      "name": "play_custom_anim_entity",
+      "comment": "",
+      "helper": "This action will apply animation to entity",
+      "anim": "stand_wall_lean0__drunk__01__vomit__01",
+      "helperTitle": "Anim : Play Anim to Entity",
+      "pitch": 0,
+      "yaw": 180,
+      "tag": "test",
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent"
+    }, {
+      "isinstant": false,
+      "workspot": "cyberscript_workspot_custom_base",
+      "unlockcamera": false,
+      "roll": 0,
+      "name": "play_custom_anim_entity",
+      "comment": "blw",
+      "helper": "This action will apply animation to entity",
+      "anim": "synced__sex_with_alt__01_anim_sn94",
+      "helperTitle": "Anim : Play Anim to Entity",
+      "pitch": 0,
+      "yaw": 180,
+      "tag": "player",
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent"
+    }, {
+      "helperTitle": "Entity : Set Time Dilatation",
+      "helper": "This action will change time dilatation for NPC",
+      "name": "set_timedilation_for_entity",
+      "tag": "player",
+      "value": 0.36700001358986
+    } ]
+  },
+  "tag": "v_rmj_f",
+  "type": "functions"
+}

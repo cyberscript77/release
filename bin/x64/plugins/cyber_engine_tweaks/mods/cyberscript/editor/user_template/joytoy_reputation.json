@@ -1,0 +1,56 @@
+{
+  "type": "interact",
+  "tag": "joytoy_reputation",
+  "template": {
+    "type": "interact",
+    "key": "QuickMelee",
+    "group": "Jobs Of Night City - Joytoy",
+    "style": {
+      "textcolor": {
+        "blue": 255,
+        "red": 242,
+        "green": 0
+      },
+      "iconcolor": {
+        "blue": 255,
+        "red": 242,
+        "green": 0
+      },
+      "bgcolor": {
+        "blue": 255,
+        "red": 255,
+        "green": 255
+      }
+    },
+    "icon": "ProstituteIcon",
+    "trigger": {
+      "joytoy_setting_trigger_new": {
+        "type": "boolean",
+        "variable": "joytoy_mission",
+        "operator": "=",
+        "name": "check_variable",
+        "context": [],
+        "helper": "This trigger will be triggered when the value of the key of custom variable is the same that trigger value. Operator can be =, !=, contains, empty, notempty",
+        "helperTitle": "Score : Custom Variable",
+        "value": true,
+        "key": "unlocked"
+      }
+    },
+    "name": "Talk",
+    "hold": true,
+    "timer": 0,
+    "tag": "joytoy_reputation",
+    "header": {
+      "version": 1
+    },
+    "sorttag": "none",
+    "requirement": [ [ "joytoy_setting_trigger_new" ] ],
+    "action": [ {
+      "dialog": "joytoy_reputation",
+      "helperTitle": "Dialog : run a dialog",
+      "helper": "This action will fire a dialog if the trigger requirements are met",
+      "name": "dialog"
+    } ],
+    "display": "event_interact"
+  }
+}

@@ -20,7 +20,7 @@ function refreshAV()
 			-- Stop("env")
 			if(AVseat ~= nil) then
 				UnsetSeat("player",false, AVseat)
-				Game.RemoveEffectPlayer("GameplayRestriction.NoScanning")
+				RemoveEffectPlayer("GameplayRestriction.NoScanning")
 				AVseat = nil
 				Cron.After(1, function()
 					
@@ -51,7 +51,7 @@ function refreshAV()
 	
 	
 	if(AVinput.isMoving == false and AVisIn) then
-		Game.ApplyEffectOnPlayer("GameplayRestriction.NoScanning")
+		ApplyEffectOnPlayer("GameplayRestriction.NoScanning")
 		AVspeed = 1
 		AVinput.isMoving = false
 		AVinput.currentDirections.backwards = false
@@ -307,7 +307,7 @@ function fly(directions, angle)
 		local newPos = vehicules:GetWorldPosition()
 		
 		local record = vehicules:GetRecord()
-		Game.ApplyEffectOnPlayer("GameplayRestriction.NoScanning")
+		ApplyEffectOnPlayer("GameplayRestriction.NoScanning")
 		
 		
 		local uiData = record:VehicleUIData()

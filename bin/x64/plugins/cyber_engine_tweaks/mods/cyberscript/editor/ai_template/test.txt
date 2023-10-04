@@ -1,0 +1,119 @@
+We are in cyberpunk 2077 world. V  is asking Mateo, lizzie's bar bartender about latest gangs and street rumors. 
+Mateo make short answer. 
+Provide me potential V questions and potential quest related of the topic i will ask you.
+
+return me all in JSON format based on this template :
+
+```JSON
+
+	{
+		
+		"quest": {
+			"targeted_gang": "xxx",
+			"fixer": "xxx",
+			"title": "xxx",
+			"place": "xxx",
+			"reward": 0,
+			"mappin":[
+				{
+					"district":"xxx",
+					"type":"Street",
+					"tag":"mappin_XXX"
+				}
+			],
+			"npc": [
+				{
+					"name": "V",
+					"type": "player",
+					"id": 0
+				}
+			],
+			"objective": [
+				{
+					"title": "objective1",
+					"description": "objective1",
+					"type": "Fight",
+					"characters": [],
+					"mappin":"mappin_XXX",
+					"dialog": [
+						{
+							"character": "V",
+							"content": "Who came out on top?"
+						}
+					]
+
+				}
+			]
+			
+		}
+	}
+
+```
+
+the generation rules : 
+
+Quest rules : 
+- Generate me 2 quest only. 
+- reward is between 5000 and 10000.
+- npc is an array that refer all quest characters, including their names and types. It can be Boss, fixer or npc.
+
+- Character type can be : 
+* Fixer
+* NPC
+* Boss
+
+- character id is unique identifier , 5 digits to reference the character.
+
+- quest name is always a real english pop song name from 70's,80's or 90's.
+- Quest always MUST have 5 objectives.
+- Mateo speak bored and know V's reputation, he will redirect V to the informant by mentionning informant's name. Answer field is the answer of Mateo. 
+- targeted_gang MUST BE an real gang from cyberpunk 2077 game. it can't be the Moxes.
+- mappin field is a array of all the locations used in quest and objective. district field can't be Night City itself, only district or subdistrict are allowed.
+- mappin type an be : 
+* Street
+* Hideout
+* Bar
+- mappin tag have always "mappin_" as prefix followed by his type in lowercase then by underscore then by 6 digit number. It's a string. Example : "mappin_street_986846"
+
+Objectives rules : 
+- Objective type can be : 
+* Fight
+* Infiltration
+* Retrieve
+* Meet
+* End
+
+- First objective is always Meet Type involving a informant. it does't give a true place name, only a brief mention of the mappin type.
+- Latest objective is always End Type with the fixer, it's the end of the quest and the fixer just thanks V.
+- Before last objective is always Fight Type against the targeted gang boss. He has to be registred in the npc field.
+- Apart latest objective, all others objective doesn't involve fixer.
+- You can't make an objective where fixer help v about information. Fixer is only used in latest objective.
+- objective characters field reference all the characters Ids that are present in the objective , don't include V. it's an array of Ids.
+- the 2rd and the 3rd objectives must be Infiltration or Retrieve type. they can have optionnaly the same mappin tag.
+- Before last objective  have the same mappin tag than the 3rd.
+
+objective mappin field reference one mappin from quest mappin array.
+
+-Targeted gang boss/leader always have a name based on the targeted gang. and his character type is Boss.
+-Objective title is a quick description of the objective.
+-If the objective type is Fight, you MUST fill the objective field "enemy" by generating random amount of enemy between 2 and 8. It's always a number.
+-If the objective type is Infiltration, you MUST fill the objective field "enemy" by generating random amount of enemy between 2 and 8. It's always a number.
+-If the objective type is Retrieve, you MUST fill the objective field "enemy" by generating random amount of enemy between 2 and 8. It's always a number.
+-If the objective type is Meet or End or Fight, you MUST fill the objective field "dialog" by generating a dialog between V and the characters mentionned in the objective description field.
+-If the objective type is Meet or End or Fight, objective field "dialog" cannot be empty.
+-The dialog should happen in place that are related to the district filled in quest district field.
+-Dialog can be between 3 and 20 sentences randomly.
+-Dialog should not involve to go to another place to discuss. The topic of the dialog is the objective description field and can be detailled.
+-If the objective find involve a informant, he know all about the details and will not redirect V to another person. 
+-The informant use a new name related to the district field.
+-If the objective type is not equal to "Meet", leave dialog field empty.
+-Fixer is the fixer related to the rivals of the targeted gang. It must be an existing fixer in Cyberpunk 2077 game.
+-Fixer cannot be Dexter DeShawn because he is dead. It cannot be Mama Welles too.
+-Fixer can't be the informant.
+-Fixer have to be in quest npc field.
+-Informant have to be in quest npc field.
+-Targeted gang boss/leader have to be in quest npc field.
+-Informant cannot be T-Bug and Jackie.
+
+
+Your answer must be ONLY JSON.

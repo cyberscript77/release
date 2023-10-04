@@ -1,0 +1,116 @@
+{
+  "type": "functions",
+  "tag": "v_cunn_f",
+  "template": {
+    "action": [ {
+      "distance": 0,
+      "tag": "player",
+      "yaw": 0,
+      "position_poi_search": "type|subdistrict|district|tag",
+      "position_poi_searchdistance": "near|far|random",
+      "name": "teleport",
+      "x": -0.050000000745058,
+      "y": -0.10000000149012,
+      "group": false,
+      "position_tag": "test",
+      "position_way": "forward",
+      "position_distance": 0,
+      "position_helper": "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+      "position_house_tag": "playerhouse01",
+      "helperTitle": "Entity : Teleport To",
+      "position_change_helper": "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \n For poi if you write 'current' in position_poi_district you will get the current district, \n if you write 'current in position_poi_subdistrict you will get the current subdistrict. \n also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+      "position": "relative_to_entity",
+      "position_node_usegameplay": false,
+      "position_lookatdistance": 0,
+      "position_tag_helper": "judy01||playerhouse01||playerhouse_bed||",
+      "roll": 0,
+      "position_way_helper": "normal||behind||forward",
+      "pitch": 0,
+      "position_poi_district": "",
+      "position_poi_subdistrict": "",
+      "position_poi_from_position": false,
+      "position_poi_type": 1,
+      "position_house_way_helper": "default||enter||exit",
+      "help": "This action will teleport an entity with several custom parameter ",
+      "z": 0.050000000745058,
+      "helper": "This action will teleport an entity with several custom parameter ",
+      "position_poi_is_for_car": false,
+      "position_range": 50,
+      "position_poi_use_location_tag": false,
+      "position_house_way": "default"
+    }, {
+      "comment": "",
+      "roll": 0,
+      "anim": "sex_judy_layout_anim_sn64",
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "workspot": "cyberscript_workspot_custom_base",
+      "yaw": 180,
+      "isinstant": false,
+      "tag": "test",
+      "name": "play_custom_anim_entity",
+      "unlockcamera": true,
+      "pitch": 0,
+      "helperTitle": "Anim : Play Anim to Entity",
+      "helper": "This action will apply animation to entity"
+    }, {
+      "comment": "blw",
+      "roll": 0,
+      "anim": "sex_judy_layout_anim_sn56",
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "workspot": "cyberscript_workspot_custom_base",
+      "yaw": 180,
+      "isinstant": false,
+      "tag": "player",
+      "name": "play_custom_anim_entity",
+      "unlockcamera": false,
+      "pitch": 0,
+      "helperTitle": "Anim : Play Anim to Entity",
+      "helper": "This action will apply animation to entity"
+    }, {
+      "tag": "player",
+      "value": 0.36700001358986,
+      "name": "set_timedilation_for_entity",
+      "helperTitle": "Entity : Set Time Dilatation",
+      "helper": "This action will change time dilatation for NPC"
+    }, {
+      "action": [ {
+        "helper": "This action will change the position of the camera",
+        "x": 0,
+        "y": 0.050000000745058,
+        "name": "change_camera_position",
+        "helperTitle": "UI : Change Camera Position",
+        "z": 0
+      } ],
+      "after": false,
+      "tag": "testcam",
+      "name": "subscribe_actionlist_to_direct_execution",
+      "helperTitle": "Script : Register Action List to Direct Execution",
+      "helper": "This action will subscribe a list of action to direct execution engine"
+    }, {
+      "action": [ {
+        "helper": "This action will change the position of the camera",
+        "x": 0,
+        "y": 0.050000000745058,
+        "name": "change_camera_position",
+        "helperTitle": "UI : Change Camera Position",
+        "z": 0
+      } ],
+      "after": true,
+      "tag": "testcam2",
+      "name": "subscribe_actionlist_to_direct_execution",
+      "helperTitle": "Script : Register Action List to Direct Execution",
+      "helper": "This action will subscribe a list of action to direct execution engine"
+    }, {
+      "tag": "test",
+      "value": "Dead",
+      "name": "play_entity_facial",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    } ],
+    "name": "",
+    "tag": "v_cunn_f",
+    "header": {
+      "version": 1
+    }
+  }
+}

@@ -4,12 +4,15 @@ cyberscript.module = cyberscript.module +1
 ---Main Function---
 seerefresh  = true
 mainrefresh  = true
-
+refreshModVariabletg = true
 mainrefreshstep1 = true
 mainrefreshstep2 = true
 mainrefreshstep3 = true
 mainrefreshstep4 = true
 mainrefreshstep5 = true
+mainrefreshstep6 = true
+mainrefreshstep7 = true
+mainrefreshstep8 = true
 
 function mainThread(active)-- update event when mod is ready and in game (main thread for execution)
 	
@@ -39,7 +42,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 						AmbushEnabled = 1
 						updateUserSetting("AmbushEnabled",AmbushEnabled)
 					end
-				end
+					end
 				
 			end
 			
@@ -76,7 +79,8 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		
 		
 		--refresh global variable
-		refreshModVariable(true)
+		refreshModVariable(refreshModVariabletg)
+		
 		if mainrefreshstep1 then
 		--refresh widget controller
 		refreshUIWidgetController(true)
@@ -274,6 +278,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		
 		
 		end
+		
 		if mainrefreshstep5 then
 		--Timers 
 		if (tick % 6 == 0) then --every 0.5 second
@@ -664,7 +669,9 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 			end
 			
 		end
+		end
 		
+		if mainrefreshstep6 then
 		if (tick % 60 == 0) then --every 1 second
 			if(isEmpty(cyberscript.cache["event"]) == false) then
 				doTriggeredEvent()
@@ -701,12 +708,16 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		
 			
 		end
+		end
 		
+		if mainrefreshstep7 then
 		if (tick % 120 == 0) then --every 2 second
 			playRadio()
 			
 		end
+		end
 		
+		if mainrefreshstep8 then
 		if (tick % 180 == 0) then --every 3 second
 			
 			
@@ -802,7 +813,7 @@ function inGameInit() -- init some function after save loaded
 		
 		
 		
-		Game.InfiniteStamina(InfiniteStamina)
+		InfiniteStamina(InfiniteStamina)
 		
 		if(InfiniteAmmo) then
 				Game.GetInventoryManager().AddEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
@@ -831,7 +842,7 @@ function inGameInit() -- init some function after save loaded
 	
 	despawnAll()
 	local storedentity =  Game.GetDynamicEntitySystem():GetTaggedIDs("CyberScript")
-	--print("storedentity"..dump(storedentity))
+	print("storedentity"..dump(storedentity))
 	for i,entid in ipairs(storedentity) do
 		
 		local tags = Game.GetDynamicEntitySystem():GetTags(entid)
@@ -840,12 +851,12 @@ function inGameInit() -- init some function after save loaded
 		local tagsString = {}
 		
 		for k,v in ipairs(tags) do
-			
+		  	
 		--	print("vs"..Game.NameToString(v))
-			table.insert(tagsString,Game.NameToString(v))
+		  	table.insert(tagsString,Game.NameToString(v))
 		
 		end
-		--print("tagsString"..dump(tagsString))
+		print("tagsString"..dump(tagsString))
 		local cstag = ""
 		
 		if(table_contains(tagsString,"CyberScript.NPC")) then
@@ -925,8 +936,10 @@ function SEERefresh(active)
 	if active == true then
 		executeRealTimeActions(false)
 		executeRealTimeScript(false)
-		CompileCachedThread()
-		ScriptExecutionEngine()
+		if (autoScript == true) then
+			CompileCachedThread()
+			ScriptExecutionEngine()
+		end
 		QuestThreadManager()
 		executeRealTimeActions(true)
 		executeRealTimeScript(true)
@@ -2007,7 +2020,7 @@ function checkFixer()
 	else -- if we move away from fixer so currentfixer is nil
 		
 		
-		Game.ChangeZoneIndicatorPublic()
+		ChangeZoneIndicatorPublic()
 		
 		if(oldfixer ~= nil) then
 			
@@ -2596,7 +2609,6 @@ function getMissionByTrigger()
 			
 			if(HaveTriggerCondition(quest))then
 				
-				--------logme(4,"trigger")
 				
 				--if(possibleQuest[quest] ~= nil) then
 				

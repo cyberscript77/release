@@ -1,0 +1,71 @@
+{
+  "template": {
+    "context": [],
+    "name": "",
+    "requirement": [ [ "smoke_event_trigger_new" ] ],
+    "way": "world",
+    "action": [ {
+      "yaw": 0,
+      "roll": 0,
+      "unlockcamera": true,
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "helper": "This action will apply animation to entity",
+      "name": "play_custom_anim_entity",
+      "anim": "stand_car_lean180__rh_cigarette__01__smoke__01",
+      "pitch": 0,
+      "workspot": "cyberscript_workspot_base",
+      "helperTitle": "Anim : Play Anim to Entity",
+      "tag": "player",
+      "isinstant": true
+    }, {
+      "yaw": 0,
+      "roll": 0,
+      "unlockcamera": false,
+      "helperTitle": "Anim : Play Anim to Entity",
+      "helper": "This action will apply animation to entity",
+      "name": "play_custom_anim_entity",
+      "anim": "stand_car_lean180__rh_cigarette__01__drop_ash__01",
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "workspot": "cyberscript_workspot_base",
+      "pitch": 0,
+      "tag": "player",
+      "isinstant": false
+    }, {
+      "yaw": 0,
+      "roll": 0,
+      "unlockcamera": true,
+      "pitch": 0,
+      "helper": "This action will apply animation to entity",
+      "name": "play_custom_anim_entity",
+      "anim": "stand_car_lean180__rh_cigarette__01",
+      "helperTitle": "Anim : Play Anim to Entity",
+      "workspot": "cyberscript_workspot_base",
+      "ent": "base\\cyberscript\\entity\\workspot_anim.ent",
+      "tag": "player",
+      "isinstant": false
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    } ],
+    "trigger": {
+      "smoke_event_trigger_new": {
+        "value": true,
+        "key": "state",
+        "operator": "=",
+        "name": "check_variable",
+        "variable": "smoke",
+        "helperTitle": "Score : Custom Variable",
+        "helper": "This trigger will be triggered when the value of the key of custom variable is the same that trigger value. Operator can be =, !=, contains, empty, notempty"
+      }
+    },
+    "tag": "smoke_event",
+    "header": {
+      "version": 1
+    }
+  },
+  "tag": "smoke_event",
+  "type": "event"
+}

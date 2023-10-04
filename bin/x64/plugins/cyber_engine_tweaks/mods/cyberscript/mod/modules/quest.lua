@@ -329,8 +329,11 @@ function startQuest(quest)
 	
 	
 	if(QuestManager.GetQuestState(quest.tag).isActive == true) then
-		Game.untrack()
 		
+		
+		--Game.GetJournalManager():TrackEntry(JournalEntry.new())
+		 
+		 
 		currentSave.arrayPlayerData.CurrentQuest = quest.tag
 		
 		phonedFixer = false

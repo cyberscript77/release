@@ -1,0 +1,28 @@
+{
+  "type": "event",
+  "tag": "rita_load_speak_intertact",
+  "template": {
+    "context": [],
+    "action": [ {
+      "tag": "joytoy_setting",
+      "helperTitle": "Interact : Force Load",
+      "helper": "This action will force load and display an interact without check requirements",
+      "name": "load_interact"
+    } ],
+    "tag": "rita_load_speak_intertact",
+    "name": "rita_load_speak_intertact",
+    "way": "world",
+    "header": {
+      "version": 1
+    },
+    "trigger": {
+      "rita_speaak_intertact_trigger_new": {
+        "value": "9001172ULL",
+        "helperTitle": "Player : Look at Entity Hash",
+        "helper": "This trigger will be triggered when you look a entity who has the expected hash",
+        "name": "look_at_hash"
+      }
+    },
+    "requirement": [ [ "rita_speaak_intertact_trigger_new" ] ]
+  }
+}

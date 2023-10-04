@@ -1,0 +1,52 @@
+[
+
+  
+    
+	{
+		"version":2,
+		"comment":"unify object",
+		"migrate":{
+			"tag" : "Tag",
+			"district_tag" :  "DistrictTag"
+			
+        },
+		"add":{},
+		
+		"remove":{
+		
+			}
+        
+    },
+	
+	{
+		"version":3,
+		"comment":"unify object",
+		"migrate":{
+			
+			"name" :  "Name",
+			"tweakid" :  "NPCId"
+        },
+		"add":{},
+		
+		"remove":{}
+        
+    },
+	
+	{
+		"version":4,
+		"comment":"unify object",
+		"migrate":{
+		
+		
+			"faction" :  "Faction",
+			"x" :  "LOC_X",
+			"y" :  "LOC_Y",
+			"z" :  "LOC_Z"
+        },
+		"add":{},
+		
+		"remove":{}
+        
+    }
+
+]

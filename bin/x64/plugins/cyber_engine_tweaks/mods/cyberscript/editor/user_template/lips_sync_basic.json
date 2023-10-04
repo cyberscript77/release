@@ -1,0 +1,444 @@
+{
+  "template": {
+    "name": "lips_sync_basic",
+    "action": [ {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Terrified",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Fear",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Fear",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Fear",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Fear",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Fear",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Fear",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Fear",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Fear",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.6,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Smile",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Surprise",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.4,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    }, {
+      "name": "play_entity_facial",
+      "tag": "this",
+      "value": "Interested",
+      "helperTitle": "Entity : Play facial expression",
+      "helper": "This action will change the facial expression of a custom entity "
+    }, {
+      "name": "wait_second",
+      "help": "Wait x second",
+      "value": 0.3,
+      "helperTitle": "Logic : Wait X seconds",
+      "helper": "This action will wait x second before perform the next action"
+    } ],
+    "tag": "lips_sync_basic",
+    "header": {
+      "version": 1
+    }
+  },
+  "tag": "lips_sync_basic",
+  "type": "functions"
+}
