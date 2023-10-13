@@ -567,6 +567,18 @@ return {
 		["name"] = "play_custom_sound_with_subtitle",
 		["value"] = "mysound1"
 	},
+	
+	["play_custom_sound_with_subtitle_as_chat"] = {
+		["type"] = 1,
+		["helper"] = "This action will fire a NPC Chat based on sound dialog on your bottom portion of the screen, The duration must complete in order for the next action to call. Type value just keep at 1 for now.",
+		["helperTitle"] = "Dialog : run Custom Sound NPC Chat",
+		["speaker"] = "Judy",
+		["target"] = "player",
+		["name"] = "play_custom_sound_with_subtitle_as_chat",
+		["value"] = "mysound1",
+		["type"] = 1,
+		
+	},
 	["unlock_mission"] = {
 		["value"] = "mymissiontag",
 		["name"] = "unlock_mission",
@@ -902,6 +914,14 @@ return {
 		["usetraffic"] = true,
 		["speed"] = 50,
 		["name"] = "vehicle_go_to_current_fasttravel_point",
+		["tag"] = "myvehiculetag",
+	},
+	["vehicle_go_to_current_mappin_point"] = {
+		["helperTitle"] = "Vehicule : Go to Selected Custom Point",
+		["helper"] = "This action will launch the vehicle to the current custom point",
+		["minspeed"] = 10,
+		["maxspeed"] = 15,
+		["name"] = "vehicle_go_to_current_mappin_point",
 		["tag"] = "myvehiculetag",
 	},
 	["delete_mappin"] = {
@@ -1685,7 +1705,7 @@ return {
 		["position_poi_from_position_z"] = 0,
 		["group"] = "",
 		["position_poi_type"] = 1,
-		["appearance"] = "none",
+		["appearance"] = "",
 		["helperTitle"] = "Entity : Spawn NPC",
 		["position"] = "at",
 		["helper"] = "This action will summon a custom npc with several custom parameter ",
@@ -1709,12 +1729,12 @@ return {
 		["position_tag"] = "judy01",
 		["tag"] = "blue01",
 		["x"] = 0,
-		["use_police_prevention_system"] = true,
-		["usecodeware"] =  false,
+		["use_police_prevention_system"] = false,
+		["usecodeware"] =  true,
 		["persiststate"] = false,
 		["persistspawn"] = false,
 		["alwaysspawned"] = false,
-		["spawninview"] = false,
+		["spawninview"] = true,
 	},
 	["current_place_clear_all_template"] = {
 		["helper"] = "This action will clear all item that are from a template in the current place",
@@ -1792,7 +1812,7 @@ return {
  also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
 		["position_node_usegameplay"] = false,
 		["appears_from_behind"] = false,
-		["spawn_system"] = 0,
+		["spawn_system"] = 4,
 		["fakeav"] = false,
 		["wait_for_vehicle"] = false,
 		["source_gang"] = "faction_mox",
@@ -1813,7 +1833,7 @@ return {
 		["position_poi_searchdistance"] = "near|far|random",
 		["group"] = "grouptag",
 		["position_poi_type"] = 1,
-		["appearance"] = "none",
+		["appearance"] = "",
 		["helperTitle"] = "Vehicle : Spawn a Vehicle",
 		["position"] = "at",
 		["helper"] = "This action will summon Vehicle with several custom parameter.\nSpawn system : \n-1 : From Garage\n-2 : ExEntity\n-3 : Prevention\n-4 : Codeware(recommended, need Codeware 1.1.0+)",
@@ -1837,7 +1857,7 @@ return {
 		["persiststate"] = false,
 		["persistspawn"] = false,
 		["alwaysspawned"] = false,
-		["spawninview"] = false
+		["spawninview"] = true
 	},
 	["subscribe_actionlist_to_direct_action"] = {
 		["helper"] = "This action will subscribe a list of action to direct Action Engine",
@@ -2089,10 +2109,18 @@ return {
 		},
 		["helperTitle"] = "UI : Incoming Call",
 		["helper"] = "This action will trigger an incoming call Animation. Call Mode : 1 : Audio, 2: Video",
-		["callmode"] = 1,
 		["name"] = "incoming_call",
 		["caller"] = "Judy",
+		["image"] = "Avatar_Ncpd",
 		["isrejectable"] = true,
+	},
+	["outcoming_call"] = {
+		
+		["helperTitle"] = "UI : Outcoming Call",
+		["helper"] = "This action will trigger an Outcoming call Animation. Call Mode : 1 : Audio, 2: Video",
+		["image"] = "Avatar_Ncpd",
+		["name"] = "outcoming_call",
+		["caller"] = "Judy"
 	},
 	["set_metro_time"] = {
 		["value"] = 50,
@@ -2777,6 +2805,7 @@ return {
 		["yaw"] = 0,
 		["helperTitle"] = "Anim : Play Anim to Entity",
 		["tag"] = "lookatnpc",
+		["angle"] = true,
 		["workspot"] = "cyberscript_workspot_custom_base",
 		["name"] = "play_custom_anim_entity",
 	},
@@ -3111,6 +3140,18 @@ return {
 		["helper"] = "This action will Hide Npc Phone Portrait",
 		["helperTitle"] = "Ui : Hide Phone Avatar ",
 		["name"] = "hide_phone_avatar",
+	},
+	
+	["take_call"] = {
+		["helper"] = "This action will Take Phone call",
+		["helperTitle"] = "Ui : Take Phone call ",
+		["name"] = "take_call",
+	},
+	
+	["refuse_call"] = {
+		["helper"] = "This action will refuse Phone call",
+		["helperTitle"] = "Ui : Refuse Phone call ",
+		["name"] = "refuse_call",
 	},
 	["unload_interact"] = {
 		["tag"] = "myinteracttag",
@@ -3629,5 +3670,22 @@ return {
 		["conversation"] = "testtag",
 		["duration"] = 5,
 		["aitag"] = "myconversation01"
-	}
+	},
+	["custom_notification"] = {
+		["helper"] = "This action will display Custom Notification.  Type : \r\n Undefined = 0,\r\n   Negative = 1,\r\n   Neutral = 2,\r\n   Vehicle = 3,\r\n   Apartment = 4,\r\n   Relic = 5,\r\n   Money = 6,\r\n   Reveal = 7 ",
+		["helperTitle"] = "UI : Display Custom Notification",
+		["name"] = "custom_notification",
+		["value"] = "This is an in-Game Notification",
+		["type"] = 0,
+		["duration"] = 5
+	},
+	["authorization_notification"] = {
+		["helper"] = "This action will make display a Authorization notification . Type :  Unknown = 0,  GotKeycard = 1,  AccessGranted = 2,",
+		["helperTitle"] = "UI : Authorization Notification",
+		["name"] = "authorization_notification",
+			
+		["type"] = 2,
+	},
+	
+	
 }

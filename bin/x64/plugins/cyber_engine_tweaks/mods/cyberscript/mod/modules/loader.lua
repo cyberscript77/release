@@ -172,4 +172,13 @@ function loadModule()
 	--external library
 
 	modLoaded = true
+	
+	if(cyberscript.cache["mission"] ~= nil) then
+	loadQuestsToUI()
+	getInteractGroup()
+	FillCharacterArchive()
+	calculatePOIList()
+	end
+	
+	
 end

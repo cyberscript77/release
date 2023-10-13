@@ -1,6 +1,6 @@
 logme(1,"CyberScript: UI module loaded")
 cyberscript.module = cyberscript.module + 1
-
+print("hgssssssssssss")
 ---Main Function---
 function windowsManager() -- manage and toggle UI windows
 	
@@ -1170,7 +1170,8 @@ function makeNativeSettings()
 		Player_Sprint_Multiplier==nil or
 		Player_Run_Multiplier==nil or
 		Jump_Height==nil or
-	Double_Jump_Height==nil) then
+	Double_Jump_Height==nil or
+	UltraSpeedDodge==nil) then
 	local obj = {}
 	
 	obj.AutoAmbush = tostring(AutoAmbush)
@@ -1186,7 +1187,7 @@ function makeNativeSettings()
 	obj.Player_Run_Multiplier = tostring(Player_Run_Multiplier)
 	obj.Jump_Height = tostring(Jump_Height)
 	obj.Double_Jump_Height = tostring(Double_Jump_Height)
-	
+	obj.UltraSpeedDodge = tostring(UltraSpeedDodge)
 	
 	
 	
@@ -1329,7 +1330,7 @@ function makeNativeSettings()
 		nativeSettings.addSubcategory("/CM/quests",getLang("Quest setting"))
 		
 		nativeSettings.addButton("/CM/quests", getLang("ui_setting_actions_untrackquest"), getLang("ui_setting_actions_untrackquest"),"Untrack", 45, function()
-			Game.untrack()
+			Game.GetJournalManager():TrackEntry(JournalEntry.new())
 			
 		end)
 		
@@ -1551,12 +1552,12 @@ function makeNativeSettings()
 		end
 			
 		end)
-		
-		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Infinite Stamina"),  getLang("Infinite Stamina"), InfiniteStamina, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			InfiniteStamina = state
-			updateUserSetting("InfiniteStamina", InfiniteStamina)
+		-- Parameters: path, label, desc, currentValue, defaultValue, callback, optionalIndex
+		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Infinite Stamina"),  getLang("Infinite Stamina"), InfiniteStaminas, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			InfiniteStaminas = state
+			updateUserSetting("InfiniteStaminas", InfiniteStaminas)
 			
-			Game.InfiniteStamina(InfiniteStamina)
+			InfiniteStamina(InfiniteStaminas)
 		end)
 		
 		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Infinite Ammo"),  getLang("Infinite Ammo"), InfiniteAmmo, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
@@ -1651,6 +1652,28 @@ function makeNativeSettings()
 		end)
 		
 		
+		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_player_dodge"),  getLang("ui_setting_cheat_player_dodge"), UltraSpeedDodge, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			UltraSpeedDodge = state
+			updateUserSetting("UltraSpeedDodge", UltraSpeedDodge)
+			
+			TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_Dodge_inline9.value", 1)
+			TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_DodgeAir_inline9.value", 1)
+			TweakDB:SetFlat("player.locomotion.maxGroundSpeed", 999999.0)
+			TweakDB:SetFlat("player.locomotion.maxAirXYSpeed", 999999.0)
+	
+		end)
+		
+			nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_player_ram"),  getLang("ui_setting_cheat_player_ram"), RamUpgrade, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			RamUpgrade = state
+			updateUserSetting("RamUpgrade", RamUpgrade)
+			
+			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline1.value", 1000)
+		TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline4.value", 25)
+
+		TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline2.floatValues", {1000})
+		TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline5.floatValues", {25})
+	
+		end)
 		
 		
 	end)
@@ -2683,7 +2706,7 @@ function BuyedItemsUI()
 		
 		if UIPopupsManager.IsReady() then
 			
-			local notificationData = inkGameNotificationData.new()
+			local notificationData = ShardReadPopupData.new()
 			notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
 			notificationData.queueName = 'modal_popup'
 			notificationData.isBlocking = true
@@ -2790,7 +2813,7 @@ function BuyedItemsUIMulti()
 		
 		if UIPopupsManager.IsReady() then
 			
-			local notificationData = inkGameNotificationData.new()
+			local notificationData = ShardReadPopupData.new()
 			notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
 			notificationData.queueName = 'modal_popup'
 			notificationData.isBlocking = true
@@ -2811,7 +2834,7 @@ function ActivatedGroup()
 	ui.controls = {}
 	
 	if(#currentInteractGroup > 0 ) then
-		
+	
 		
 		local area = {}
 		area.type = "area"
@@ -3045,16 +3068,25 @@ function ActivatedGroup()
 		
 		if UIPopupsManager.IsReady() then
 			
-			local notificationData = inkGameNotificationData.new()
+			local notificationData = ShardReadPopupData.new()
 			notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
 			notificationData.queueName = 'modal_popup'
-			notificationData.isBlocking = true
-			notificationData.useCursor = true
+			
+			
+			notificationData.requiredGameState = "inkGameState";
+			notificationData.isBlocking = true;
+			notificationData.useCursor = true;
+			notificationData.title = "Cyberscript Manager";
+			notificationData.text = "Choose a group";
+			notificationData.isCrypted = false;
+			
 			UIPopupsManager.ShowPopup(notificationData)
 			else
-			Game.GetPlayer():SetWarningMessage("Open and close Main menu before call an popup.")
+			Game.GetPlayer():SetWarningMessage("Open and close Masqsqsqin menu before call an popup.")
 		end
 	end
+
+		
 end
 
 
@@ -3154,14 +3186,15 @@ function Activatedshard(shard)
 	
 	if UIPopupsManager.IsReady() then
 		
-		local notificationData = inkGameNotificationData.new()
+		local notificationData = ShardReadPopupData.new()
 		notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
 		notificationData.queueName = 'modal_popup'
 		notificationData.isBlocking = true
 		notificationData.useCursor = true
 		UIPopupsManager.ShowPopup(notificationData)
+		
 		else
-		Game.GetPlayer():SetWarningMessage("Open and close Main menu before call an popup.")
+	Game.GetPlayer():SetWarningMessage("Open and close Main menu before call an popup.")
 	end
 	
 end
@@ -3308,7 +3341,7 @@ function PlacedItemsUI()
 		
 		if UIPopupsManager.IsReady() then
 			
-			local notificationData = inkGameNotificationData.new()
+			local notificationData = ShardReadPopupData.new()
 			notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
 			notificationData.queueName = 'modal_popup'
 			notificationData.isBlocking = true
@@ -3461,7 +3494,7 @@ function PlacedItemsUIMulti()
 		
 		if UIPopupsManager.IsReady() then
 			
-			local notificationData = inkGameNotificationData.new()
+			local notificationData = ShardReadPopupData.new()
 			notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
 			notificationData.queueName = 'modal_popup'
 			notificationData.isBlocking = true
@@ -3598,20 +3631,20 @@ end
 ---Radio---
 function playRadio()
 	
-	if(currentRadio ~= nil and currentRadio.radio ~= nil) then
+	if(currentRadio ~= nil and currentRadio.data ~= nil) then
 		
-		if currentRadio.radio.tracks ~= nil and #currentRadio.radio.tracks > 0  then
+		if currentRadio.data.tracks ~= nil and #currentRadio.data.tracks > 0  then
 			
 			local canplay = true
 			
-			if(currentRadio.radio.only_in_car == true) then
+			if(currentRadio.data.only_in_car == true) then
 				canplay = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 				else
 				canplay = true
 				
 			end
 			
-			if(currentRadio.playedmusic == nil or (currentRadio.playedmusic ~= nil and (cyberscript.soundmanager[currentRadio.playedmusic] == nil or cyberscript.soundmanager[currentRadio.playedmusic].isplaying == false))) then
+			if(currentRadio.playedmusic == nil or (currentRadio.playedmusic ~= nil and (cyberscript.soundmanager[currentRadio.playedmusic.name] == nil or cyberscript.soundmanager[currentRadio.playedmusic.name].isplaying == false))) then
 				
 				if(currentRadio.playedmusic ~= nil) then
 					currentRadio.lastplayedmusic = currentRadio.playedmusic
@@ -3624,26 +3657,25 @@ function playRadio()
 				
 			end
 			
-			
-			if(canplay and (currentRadio.isplaying == false))then
+			if(canplay and (currentRadio.playedmusic == nil))then
 				
-				local index = math.random(1,#currentRadio.radio.tracks)
+				local index = math.random(1,#currentRadio.data.tracks)
 				
-				local song = currentRadio.radio.tracks[index]
+				local song = currentRadio.data.tracks[index]
 				
 				if(currentRadio.lastplayedmusic ~= nil) then
 					while(song.name == currentRadio.lastplayedmusic) do
 					
-						index = math.random(1,#currentRadio.radio.tracks)
+						index = math.random(1,#currentRadio.data.tracks)
 				
-						song = currentRadio.radio.tracks[index]
+						song = currentRadio.data.tracks[index]
 					end
 					
 				
 				end
 				
 				currentRadio.isplaying = true
-				currentRadio.playedmusic = song.name
+				currentRadio.playedmusic = song
 				
 				
 				local actionlist = {}
@@ -3655,16 +3687,16 @@ function playRadio()
 				action.isradio = true
 				
 				table.insert(actionlist,action)
-				runActionList(actionlist, "play_radio_radio_"..currentRadio.radio.tag, "interact",false,"nothing",true)
+				runActionList(actionlist, "play_radio_radio_"..currentRadio.data.tag, "interact",false,"nothing",true)
 			else
 		
-				if(currentRadio.radio.only_in_car == true) then
+				if(currentRadio.data.only_in_car == true) then
 					
 					local iscar = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 					
 					if(iscar == false and (currentRadio.playedmusic ~= "" and currentRadio.playedmusic ~= nil)) then
 						
-						Stop(currentRadio.playedmusic)
+						Stop(currentRadio.playedmusic.name)
 						currentRadio.isplaying = false
 						currentRadio.playedmusic = nil
 					end
@@ -3718,7 +3750,7 @@ function playRandomfromRadio()
 					for k,v in pairs(cyberscript.cache["radio"]) do
 						count = count + 1
 						if(count == randentry) then
-							currentRadio = v.radio
+							currentRadio = v.data
 							break
 						end
 					end
@@ -3774,7 +3806,7 @@ function RadioWindows()
 			CPS.styleBegin("TabRounding", 0)
 			for k,v in pairs(cyberscript.cache["radio"]) do
 				
-				local radio = v.radio
+				local radio = v.data
 				
 				if ImGui.BeginTabItem(radio.name) then
 					autoplayRadio = ImGui.Checkbox("AutoPlay", autoplayRadio)

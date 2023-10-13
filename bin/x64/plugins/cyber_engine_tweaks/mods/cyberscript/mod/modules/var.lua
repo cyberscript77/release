@@ -1,4 +1,4 @@
-
+print("CyberScript: global variable loaded")
 cyberscript.module = 1
 cyberscript.module = cyberscript.module +1
 
@@ -318,14 +318,15 @@ function resetVar()
 	numberOfMultiJumps = 100
 	DisableFallDamage = false
 	Immortal = false
-	InfiniteStamina = false
+	InfiniteStaminas = false
 	InfiniteAmmo = false
+	RamUpgrade = false
 	
 	Player_Sprint_Multiplier = 1	--Default is 1 IMPORTANT as of 1.3, movement speed is capped somewhere.
 	Player_Run_Multiplier = 1 --Default 1
 	Jump_Height = 1 --Default 1
 	Double_Jump_Height = 1 --Default 1
-	
+	UltraSpeedDodge = false
 	CurrentStock = nil
 	moveRoll=0
 	movePitch=0
@@ -2446,7 +2447,7 @@ function resetVar()
 	currentPlayerNode = nil
 	inEditMode = false
 	
-	---@type inkGameNotificationData
+	---@type ShardReadPopupData
 	notificationData = {}
 	
 	---@type inkGameNotificationToken

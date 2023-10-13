@@ -99,13 +99,10 @@ function makeListItemData(questDef, questEntry, questState, questtype)
 	itemData.isResolved = questState.isComplete
 	itemData.isTrackedQuest = questState.isTracked
 	
-	local listItemData = VirutalNestedListData.new()
-	listItemData.widgetType = 1
-	listItemData.level = questtype
-	listItemData.collapsable = true
-	listItemData.data = itemData
 	
-	return listItemData
+	
+	
+	return itemData
 end
 
 
@@ -911,7 +908,7 @@ function checkWithFixer(curPos)
 		
 		if(v.data.name ~= "Delamain")then
 			if(checkPosFixer(curPos,v.data.x,v.data.y,v.data.range))then
-				Game.ChangeZoneIndicatorSafe()
+				ChangeZoneIndicatorSafe()
 				return deepcopy(v.data,nil)
 				
 			end
@@ -1263,7 +1260,9 @@ function deleteMappinByTag(tag)
 	local mappin = getMappinByTag(tag)
 	
 	if(mappin ~= nil and mappin.id ~= nil)then
+	pcall(function()
 		Game.GetMappinSystem():UnregisterMappin(mappin.id)
+	end)
 		mappinManager[tag] = nil
 	end
 end	
@@ -1715,7 +1714,8 @@ function setNewFixersPoint()
 				
 				if cyberscript.EntityManager[v.data.tag] == nil then
 					cyberscript.EntityManager[v.data.tag] = {}
-				spawnNPC(v.data.tweakid,"", v.data.tag, v.data.x, v.data.y, v.data.z, 42, false, false, nil, false, nil,0,true,true,true,true,true)
+					if v.data.appearance == nil then v.data.appearance = "" end
+				spawnNPC(v.data.tweakid,v.data.appearance, v.data.tag, v.data.x, v.data.y, v.data.z, 42, false, false, nil, false, nil,0,true,true,true,true,true)
 				logme(1,"Cyberscript : Spawn Fixer :"..v.data.tag)
 				end
 				
@@ -1744,7 +1744,7 @@ function ShowMessage(text)
 end
 
 function ShowWarning(text, duration)
-	Game['PreventionSystem::ShowMessage;GameInstanceStringFloat'](text, duration or 5.0)
+	Game['PreventionSystem::ShowMessage;GameStringFloat'](text, duration or 5.0)
 end
 
 function has_value (tab, val)
@@ -1834,16 +1834,6 @@ function reverseTable(mytable)
 	end
 	
 	return newtable
-end
-
-function getMainStash()
-	
-	
-	local stashId = NewObject('entEntityID')
-	stashId.hash = 16570246047455160070ULL
-	
-	return Game.FindEntityByID(stashId)
-	
 end
 
 function tostringorempty(value)
@@ -2158,4 +2148,118 @@ end
 function getGameLang()
     local l = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
     return l
+end
+
+
+function ChangeZoneIndicatorDanger()
+    local SecurityData = SecurityAreaData.new()
+    SecurityData.securityAreaType = ESecurityAreaType.DANGEROUS
+    local player = Game.GetPlayerSystem():GetLocalPlayerControlledGameObject()
+    local Blackboard = Game.GetBlackboardSystem():GetLocalInstanced(player:GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine)
+    
+    if Blackboard then
+        Blackboard:SetVariant(GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData, ToVariant(SecurityData))
+        Blackboard:SignalVariant(GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData)
+    end
+end
+
+function ChangeZoneIndicatorSafe()
+    local SecurityData = SecurityAreaData.new()
+    SecurityData.securityAreaType = ESecurityAreaType.SAFE
+    local player = Game.GetPlayerSystem():GetLocalPlayerControlledGameObject()
+    local Blackboard = Game.GetBlackboardSystem():GetLocalInstanced(player:GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine)
+    
+    if Blackboard then
+        Blackboard:SetVariant(GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData, ToVariant(SecurityData))
+        Blackboard:SignalVariant(GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData)
+    end
+end
+
+function ChangeZoneIndicatorRestricted()
+    local SecurityData = SecurityAreaData.new()
+    SecurityData.securityAreaType = ESecurityAreaType.RESTRICTED
+    local player = Game.GetPlayerSystem():GetLocalPlayerControlledGameObject()
+    local Blackboard = Game.GetBlackboardSystem():GetLocalInstanced(player:GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine)
+    
+    if Blackboard then
+        Blackboard:SetVariant(GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData, ToVariant(SecurityData))
+        Blackboard:SignalVariant(GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData)
+    end
+end
+
+function ChangeZoneIndicatorPublic()
+    local SecurityData = SecurityAreaData.new()
+    SecurityData.securityAreaType = ESecurityAreaType.DISABLED
+    local player = Game.GetPlayerSystem():GetLocalPlayerControlledGameObject()
+    local Blackboard = Game.GetBlackboardSystem():GetLocalInstanced(player:GetEntityID(), GetAllBlackboardDefs().PlayerStateMachine)
+    
+    if Blackboard then
+        Blackboard:SetVariant(GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData, ToVariant(SecurityData))
+        Blackboard:SignalVariant(GetAllBlackboardDefs().PlayerStateMachine.SecurityZoneData)
+    end
+end
+
+
+
+function InfiniteStamina(enable)
+  local mod = {}
+  local playerID
+  local statPoolSys
+  local toEnable = true
+  
+  if enable ~= "" then
+    toEnable = (enable == "true")
+  end
+
+  playerID = Game.GetPlayerSystem():GetLocalPlayerMainGameObject():GetEntityID()
+  statPoolSys = Game.GetStatPoolsSystem()
+
+  if toEnable then
+    mod.enabled = true
+    mod.rangeBegin = 0.00
+    mod.rangeEnd = 100.00
+    mod.delayOnChange = false
+    mod.valuePerSec = 1000000000.00
+    statPoolSys:RequestSettingModifier(playerID, gamedataStatPoolType.Stamina, gameStatPoolModificationTypes.Regeneration, mod)
+  else
+    statPoolSys:RequestResetingModifier(playerID, gamedataStatPoolType.Stamina, gameStatPoolModificationTypes.Regeneration)
+  end
+end
+
+function EquipItemOnPlayer(item, slot)
+  Game.GetTransactionSystem():AddItemToSlot(Game.GetPlayer(), TweakDBID.new("AttachmentSlots." + slot), ItemID.FromTDBID(TweakDBID.new(item)))
+end
+
+function TeleportPlayerToPosition(xStr, yStr, zStr)
+  local position =  Vector4.new()
+  local rotation= EulerAngles.new()
+  local playerPuppet = Game.GetPlayerSystem():GetLocalPlayerMainGameObject()
+ 
+  position.x = StringToFloat(xStr);
+  position.y = StringToFloat(yStr);
+  position.z = StringToFloat(zStr);
+  Game.GetTeleportationFacility():Teleport(playerPuppet, position, rotation);
+end
+
+
+function getMainStash()
+	
+	
+	local stashId = NewObject('entEntityID')
+	stashId.hash = 16570246047455160070ULL
+	
+	return Game.FindEntityByID(stashId)
+	
+end
+
+function ApplyEffectOnPlayer(value)
+		local player = Game.GetPlayer()
+		local seID = TweakDBID.new(value);
+		StatusEffectHelper.ApplyStatusEffect(player, seID)
+end
+
+function RemoveEffectPlayer(value)
+		local player = Game.GetPlayer()
+		local seID = TweakDBID.new(value);
+		Game.GetStatusEffectSystem():RemoveStatusEffect(player:GetEntityID(), seID)
 end

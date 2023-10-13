@@ -4,12 +4,15 @@ cyberscript.module = cyberscript.module +1
 ---Main Function---
 seerefresh  = true
 mainrefresh  = true
-
+refreshModVariabletg = true
 mainrefreshstep1 = true
 mainrefreshstep2 = true
 mainrefreshstep3 = true
 mainrefreshstep4 = true
 mainrefreshstep5 = true
+mainrefreshstep6 = true
+mainrefreshstep7 = true
+mainrefreshstep8 = true
 
 function mainThread(active)-- update event when mod is ready and in game (main thread for execution)
 	
@@ -39,7 +42,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 						AmbushEnabled = 1
 						updateUserSetting("AmbushEnabled",AmbushEnabled)
 					end
-				end
+					end
 				
 			end
 			
@@ -76,7 +79,8 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		
 		
 		--refresh global variable
-		refreshModVariable(true)
+		refreshModVariable(refreshModVariabletg)
+		
 		if mainrefreshstep1 then
 		--refresh widget controller
 		refreshUIWidgetController(true)
@@ -186,9 +190,11 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 				
 				local isThiscar = (obj.id ~= nil and obj.isAV == true)
 				
-				
-				
-				
+				if obj.id ~= nil then
+						cyberscript.EntityManager["current_car"].id = nil
+								
+						cyberscript.EntityManager["current_car"].id = vehicule:GetEntityID()
+				end
 				if isThiscar then
 					AVisIn = true
 					
@@ -206,13 +212,9 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 					-- end
 					-- end
 					
-					else
-					if(obj.id == nil) then
-						cyberscript.EntityManager["current_car"].id = nil
-						
-						cyberscript.EntityManager["current_car"].id = vehicule:GetEntityID()
+					
 					end
-				end
+				
 			end
 		
 			--AV
@@ -274,6 +276,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		
 		
 		end
+		
 		if mainrefreshstep5 then
 		--Timers 
 		if (tick % 6 == 0) then --every 0.5 second
@@ -595,8 +598,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 						
 					end
 					
-					
-					if displayHUD["main_root_default"] ~= nil then
+					if displayHUD["main_root_default"].name ~= nil and displayHUD["main_root_default"]:IsA('inkWidget') then
 						
 						displayHUD["main_root_default"]:SetVisible(true)
 						
@@ -621,7 +623,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 					
 					if(v.isplaying == true and v.endplaying ~=nil) then
 						
-						if( os.time(os.date("!*t"))+1 >=v.endplaying) then
+						if( os.time(os.date("!*t")) >=v.endplaying+1) then
 							
 							if(v.needrepeat == false) then
 								
@@ -664,7 +666,9 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 			end
 			
 		end
+		end
 		
+		if mainrefreshstep6 then
 		if (tick % 60 == 0) then --every 1 second
 			if(isEmpty(cyberscript.cache["event"]) == false) then
 				doTriggeredEvent()
@@ -701,12 +705,16 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		
 			
 		end
+		end
 		
+		if mainrefreshstep7 then
 		if (tick % 120 == 0) then --every 2 second
 			playRadio()
 			
 		end
+		end
 		
+		if mainrefreshstep8 then
 		if (tick % 180 == 0) then --every 3 second
 			
 			
@@ -802,7 +810,7 @@ function inGameInit() -- init some function after save loaded
 		
 		
 		
-		Game.InfiniteStamina(InfiniteStamina)
+		InfiniteStamina(InfiniteStaminas)
 		
 		if(InfiniteAmmo) then
 				Game.GetInventoryManager().AddEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
@@ -825,13 +833,19 @@ function inGameInit() -- init some function after save loaded
 				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
 				end
 			end
-	
+			
+		
+			
 	
 	draw = true
 	
 	despawnAll()
+	local codewareIsInstalled,message = pcall(function()
+		Game.GetDynamicEntitySystem()
+	end)
+	if(codewareIsInstalled == true) then
 	local storedentity =  Game.GetDynamicEntitySystem():GetTaggedIDs("CyberScript")
-	--print("storedentity"..dump(storedentity))
+	print("storedentity"..dump(storedentity))
 	for i,entid in ipairs(storedentity) do
 		
 		local tags = Game.GetDynamicEntitySystem():GetTags(entid)
@@ -840,12 +854,12 @@ function inGameInit() -- init some function after save loaded
 		local tagsString = {}
 		
 		for k,v in ipairs(tags) do
-			
+		  	
 		--	print("vs"..Game.NameToString(v))
-			table.insert(tagsString,Game.NameToString(v))
+		  	table.insert(tagsString,Game.NameToString(v))
 		
 		end
-		--print("tagsString"..dump(tagsString))
+		print("tagsString"..dump(tagsString))
 		local cstag = ""
 		
 		if(table_contains(tagsString,"CyberScript.NPC")) then
@@ -898,6 +912,11 @@ function inGameInit() -- init some function after save loaded
 	
 	end
 	
+	else
+	
+	print("no codeware founded")
+	
+	end
 	
 	setNewFixersPoint()
 	setCustomLocationPoint() 
@@ -925,8 +944,10 @@ function SEERefresh(active)
 	if active == true then
 		executeRealTimeActions(false)
 		executeRealTimeScript(false)
-		CompileCachedThread()
-		ScriptExecutionEngine()
+		if (autoScript == true) then
+			CompileCachedThread()
+			ScriptExecutionEngine()
+		end
 		QuestThreadManager()
 		executeRealTimeActions(true)
 		executeRealTimeScript(true)
@@ -1285,7 +1306,9 @@ function checkWaitingAction(action,tag,parent,index)
 	end
 	
 	
-	if(action.name == "subtitle" or action.name == "random_subtitle" or action.name == "play_random_custom_sound_with_subtitle" or action.name == "play_custom_sound_with_subtitle" ) then
+	if(action.name == "subtitle" or action.name == "random_subtitle" or 
+		action.name == "play_random_custom_sound_with_subtitle" or
+		action.name == "play_custom_sound_with_subtitle"  ) then
 		
 		if(os.time(os.date("!*t"))+0  >= action.tick) then
 			result = true
@@ -1296,11 +1319,13 @@ function checkWaitingAction(action,tag,parent,index)
 		
 	end
 	
-	if(action.name == "npc_chat" or action.name == "random_npc_chat") then
+	if(action.name == "npc_chat" or action.name == "random_npc_chat" or 
+		action.name == "play_custom_sound_with_subtitle_as_chat") then
 		
 		if(os.time(os.date("!*t"))+0  >= action.tick) then
 			result = true
 			GameController["ChattersGameController"]:Cleanup()
+			
 		end
 		
 		
@@ -2007,7 +2032,7 @@ function checkFixer()
 	else -- if we move away from fixer so currentfixer is nil
 		
 		
-		Game.ChangeZoneIndicatorPublic()
+		ChangeZoneIndicatorPublic()
 		
 		if(oldfixer ~= nil) then
 			
@@ -2596,7 +2621,6 @@ function getMissionByTrigger()
 			
 			if(HaveTriggerCondition(quest))then
 				
-				--------logme(4,"trigger")
 				
 				--if(possibleQuest[quest] ~= nil) then
 				

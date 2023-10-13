@@ -1,18 +1,78 @@
-logme(1,"CyberScript: observer function module loaded")
+logme(10,"CyberScript: observer function module loaded")
 cyberscript.module = cyberscript.module +1
 ----print("hot reload test")
 ---Observer and Overrider---
 
-
+local myucurrentQuestData = nil
 --SetObserver()
 
 --QuestJournalUI
  function GenericNotificationController_SetNotificationData(self, notificationData)
  
- print(GameDump(notificationData))
+ print("toto"..GameDump(notificationData))
  
  end
+ 
+  function SimpleQuestListItemController_OnPress(this,data)
+
+  if(this.data.journalManager == nil) then
+  myucurrentQuestData = this.data.questData.id
+ 
+ 
+  else
+  myucurrentQuestData = nil
+ 
+  end
+ end
+ 
+ function SimpleQuestListItemController_OnDataChanged(this,data)
+print("tracked")
+	local quest = FromVariant(data)
+	if(quest.journalManager == nil) then
+	 local mymission = cyberscript.cache["mission"][quest.questData.id].data
+	 local questType = QuestTypeIconUtils.GetIconState(mymission.questtype);
+	 
+	 print(tostring(QuestManager.IsTrackedQuest(quest.questData.id)))
+	if  QuestManager.IsTrackedQuest(quest.questData.id)  then
+		  this.tracked = true;
+		  this:PlayDistanceMarkerAnimation(this.distanceAnim_toTracked, true);
+		  this:PlayToggleIconAnimation(true, true);
+		  
+	else
+      if QuestManager.IsTrackedQuest(quest.questData.id) == false and this.tracked then
+        this.tracked = false;
+		local marker = false
+		if this.hovered then marker = this.distanceAnim_toHover else marker =  this.distanceAnim_toDefault end
+        this:PlayDistanceMarkerAnimation(marker, true);
+        this:PlayToggleIconAnimation(false, true);
+	end
+	end
+    
+	inkTextRef.SetText(this.title, mymission.title)
+	inkTextRef.SetText(this.description, mymission.content)
+	inkWidgetRef.SetVisible(this.description, true);
+	inkWidgetRef.SetVisible(this.ep1Icon, false)
+    inkImageRef.SetTexturePart(this.typeIcon, QuestTypeIconUtils.GetIcon(mymission.questtype))
+	inkWidgetRef.SetState(this.typeIcon, questType);
+	  
+   
+    inkWidgetRef.SetState(this.questItemBg, questType);
+    inkWidgetRef.SetState(this.hoverIndicator, questType);
+    inkWidgetRef.SetState(this.questItemFrame, questType);
+
+    inkWidgetRef.SetVisible(this.difficultIcon, mymission.recommandedlevel <= -6);
+    inkWidgetRef.SetState(this.title, "Default");
+	inkWidgetRef.SetState(this.description, "Default");
+   
+   inkTextRef.SetText(this.defaultDistance, "55m");
+  inkTextRef.SetText(this.trackedDistance, "55m");
+	end
+
+ 
+ end 
+ 
 function questLogGameController_BuildQuestList(self)
+	logme(1,"test"..GameDump(self.questList))
 	
 	if getUserSetting("enableCustomQuest") == true then
 		Cron.NextTick(function()
@@ -21,29 +81,30 @@ function questLogGameController_BuildQuestList(self)
 			
 			local questToOpen
 			local listData = self.listData
+			print("test"..#listData)
 			
 			
-			
-			local header = QuestListHeaderData.new()
-			header.type = 99
-			header.nameLocKey = CName("Cyberscript")
-			
-			
-			local listItemData = VirutalNestedListData.new()
-			listItemData.widgetType = 0
-			listItemData.level = 99
-			listItemData.collapsable = false
-			listItemData.isHeader = true
-			listItemData.data = header
-			table.insert(listData, listItemData)
+			-- local header = QuestListHeaderData.new()
+			-- header.type = 99
+			-- header.nameLocKey = CName("Cyberscript")
 			
 			
-			for _, questDef in ipairs(QuestManager.GetQuests()) do
+			-- local listItemData = VirutalNestedListData.new()
+			-- listItemData.widgetType = 0
+			-- listItemData.level = 99
+			-- listItemData.collapsable = false
+			-- listItemData.isHeader = true
+			-- listItemData.data = header
+			-- table.insert(listData, listItemData)
+			
+			
+			for k, questDef in pairs(QuestManager.GetQuests()) do
+		
 				local questState = QuestManager.GetQuestState(questDef.id)
 				local questEntry = QuestManager.GetQuestEntry(questDef.id)
-				
-				if(QuestManager.IsQuestActive(questDef.id)) then 
 					
+				if(QuestManager.IsQuestActive(questDef.id)) then 
+					print("hllo")
 					-- if QuestManager.isVisited(questDef.id) then
 						
 						-- local itemData = makeListItemData(questDef, questEntry, questState, questDef.metadata.questType)
@@ -58,7 +119,7 @@ function questLogGameController_BuildQuestList(self)
 						-- else
 						
 						local itemData = makeListItemData(questDef, questEntry, questState,99)
-						itemData.data.playerLevel = self.playerLevel
+						itemData.playerLevel = self.playerLevel
 						
 						table.insert(listData, itemData)
 						
@@ -85,8 +146,8 @@ function questLogGameController_BuildQuestList(self)
 						
 						-- else
 						
-						local itemData = makeListItemData(questDef, questEntry, questState,#self:GetListedCategories()+1)
-						itemData.data.playerLevel = self.playerLevel
+						local itemData = makeListItemData(questDef, questEntry, questState,99)
+						
 						
 						table.insert(listData, itemData)
 						
@@ -97,30 +158,53 @@ function questLogGameController_BuildQuestList(self)
 				end
 			end
 			
-			self.listData = listData
+			
+						local questData = QuestDataWrapper.new()
+						questData.isNew = true
+						
+						questData.title = "Test"
+						questData.description = "Test"
+						questData.questStatus = gameJournalEntryState.Active
+						questData.isTracked = true
+						questData.isChildTracked = false
+						questData.recommendedLevel = 13
+						
+					print("test"..#listData)
+						self.virtualListController:SetData(listData)
 			
 			---@type QuestListVirtualNestedListController
-			local listController = inkWidgetRef.GetController(self.virtualList)
-			if(listController ~= nil) then
+			
 				if(#listData > 0) then
-					listController:SetData(self.listData, true)
+					for k,v in ipairs(listData) do
+						local questData = QuestDataWrapper.new()
+						questData.isNew = true
+						
+						questData.title = "Test"
+						questData.description = "Test"
+						questData.questStatus = gameJournalEntryState.Active
+						questData.isTracked = true
+						questData.isChildTracked = false
+						questData.recommendedLevel = 13
+						
 					
-					if questToOpen then
-						local evt = QuestlListItemClicked.new()
-						evt.questData = questToOpen
-						evt.skipAnimation = true
-						
-						self:QueueEvent(evt)
-						
-						listController.toggledLevels = {}
-						for level = 0, maxNestedLevel do
+						-- self.QuestLists[0]:AddQuest(questData, false)
+						-- if questToOpen then
+							-- local evt = QuestlListItemClicked.new()
+							-- evt.questData = questToOpen
+							-- evt.skipAnimation = true
 							
-								listController:ToggleLevel(level)
+							-- self:QueueEvent(evt)
 							
-						end
+							-- listController.toggledLevels = {}
+							-- for level = 0, maxNestedLevel do
+								
+									-- listController:ToggleLevel(level)
+								
+							-- end
+						-- end
 					end
 				end
-			end
+			
 		
 		end)
 	end	
@@ -145,7 +229,7 @@ function questLogGameController_OnQuestListItemClicked(self,e)
 end
 
 function questLogGameController_OnRequestChangeTrackedObjective(self,e)
-	
+			print("questLogGameController_OnRequestChangeTrackedObjective"..GameDump(self))
 	Cron.NextTick(function()
 		
 		if e.quest then
@@ -194,8 +278,12 @@ function questLogGameController_OnRequestChangeTrackedObjective(self,e)
 		
 		self:QueueEvent(updateEvent)
 		
+		for k,v in ipairs(self.listData) do
+		print("currentmark"..GameDump(v))
+		end
 		for _, nestedData in ipairs(self.listData) do
-			local itemData = nestedData.data
+			local itemData = nestedData
+			
 			if itemData:IsA('QuestListItemData') then
 				itemData.isTrackedQuest = itemData.questData.id == e.quest.id
 			end
@@ -252,16 +340,15 @@ Cron.NextTick(function()
 				if questDef.extra ~= nil then
 					
 							
-							
-							
-							
+							    inkCompoundRef.RemoveAllChildren(self.codexLinksContainer);
+							inkCompoundRef.RemoveAllChildren(self.mapLinksContainer);
 							if questDef.extra.mappin ~= nil then
 								
 								local mappin = getMappinByTag(questDef.extra.mappin)
 								
 								if(mappin ~= nil) then
 									
-									local widget = self:SpawnFromLocal(inkWidgetRef.Get(self.codexLinksContainer), "linkMappin")
+									local widget = self:SpawnFromLocal(inkWidgetRef.Get(self.mapLinksContainer), "linkMappin")
 									local controller =  widget:GetController()
 									
 									
@@ -270,8 +357,8 @@ Cron.NextTick(function()
 									
 									
 									journalQuestMapPinBase =  questDef.extra.mappin
-									
-									controller:Setup(nil, jumpto)
+									print("tiotisd"..GameDump(controller))
+									controller:Setup(nil,nil, jumpto,true)
 									
 									
 								end
@@ -280,14 +367,15 @@ Cron.NextTick(function()
 							
 							if questDef.extra.data ~= nil then
 								for i,data in ipairs(questDef.extra.data) do
-									
+		
 									local entry = Game.GetJournalManager():GetEntryByString(data.value,data.type)
-									
 									if(entry ~= nil) then
 										
 										local widget = self:SpawnFromLocal(inkWidgetRef.Get(self.codexLinksContainer), "linkCodex")
 										local controller =  widget:GetController()
-										controller:Setup(entry)
+										
+										controller:SetupCodexLink(entry)
+										controller.journalEntry = entry
 										
 										
 									end
@@ -336,7 +424,8 @@ Cron.NextTick(function()
 						
 						if objectiveState.isTracked then
 						
-						
+						    inkCompoundRef.RemoveAllChildren(self.codexLinksContainer);
+							inkCompoundRef.RemoveAllChildren(self.mapLinksContainer);
 						local obj = QuestManager.GetObjective(objectiveDef.id)
 						
 						if obj.extra ~= nil then
@@ -361,7 +450,7 @@ Cron.NextTick(function()
 									
 									journalQuestMapPinBase =  obj.extra.mappin
 									
-									controller:Setup(nil, jumpto)
+									controller:Setup(nil,nil, jumpto,true)
 									
 									
 								end
@@ -431,7 +520,8 @@ Cron.NextTick(function()
 						
 						
 						if objectiveState.isTracked then
-						
+						    inkCompoundRef.RemoveAllChildren(self.codexLinksContainer);
+							inkCompoundRef.RemoveAllChildren(self.mapLinksContainer);
 						
 						local obj = QuestManager.GetObjective(objectiveDef.id)
 						
@@ -457,7 +547,7 @@ Cron.NextTick(function()
 									
 									journalQuestMapPinBase =  obj.extra.mappin
 									
-									controller:Setup(nil, jumpto)
+									controller:Setup(nil,nil, jumpto,true)
 									
 									
 								end
@@ -543,11 +633,11 @@ Cron.NextTick(function()
 end
 
 function QuestDetailsPanelController_OnUpdateTrackedObjectiveEvent(self, e)
+print(myucurrentQuestData)
+if(myucurrentQuestData ~= nil) then
 
-if(e.trackedQuest ~= null) then
-Cron.NextTick(function()
-		local questId = e.trackedQuest .id
-		
+		local questId = myucurrentQuestData
+		print("questId"..questId)
 		if QuestManager.IsKnownQuest(questId) then
 		
 				local questDef = QuestManager.GetQuest(questId)
@@ -560,6 +650,8 @@ Cron.NextTick(function()
 					inkTextRef.SetText(self.questTitle, getLang(questDef.title))
 					
 				end
+					inkCompoundRef.RemoveAllChildren(self.codexLinksContainer);
+							inkCompoundRef.RemoveAllChildren(self.mapLinksContainer);
 				
 				if questDef.extra ~= nil then
 					
@@ -573,7 +665,7 @@ Cron.NextTick(function()
 								
 								if(mappin ~= nil) then
 									
-									local widget = self:SpawnFromLocal(inkWidgetRef.Get(self.codexLinksContainer), "linkMappin")
+									local widget = self:SpawnFromLocal(inkWidgetRef.Get(self.mapLinksContainer), "linkMappin")
 									local controller =  widget:GetController()
 									
 									
@@ -582,8 +674,7 @@ Cron.NextTick(function()
 									
 									
 									journalQuestMapPinBase =  questDef.extra.mappin
-									
-									controller:Setup(nil, jumpto)
+									controller:Setup(nil,nil, jumpto,true)
 									
 									
 								end
@@ -641,7 +732,8 @@ Cron.NextTick(function()
 						
 						
 						local obj = QuestManager.GetObjective(objectiveDef.id)
-						
+						inkCompoundRef.RemoveAllChildren(self.codexLinksContainer);
+							inkCompoundRef.RemoveAllChildren(self.mapLinksContainer);
 						if obj.extra ~= nil then
 							
 							
@@ -654,7 +746,7 @@ Cron.NextTick(function()
 								
 								if(mappin ~= nil) then
 									
-									local widget = self:SpawnFromLocal(inkWidgetRef.Get(self.codexLinksContainer), "linkMappin")
+									local widget = self:SpawnFromLocal(inkWidgetRef.Get(self.mapLinksContainer), "linkMappin")
 									local controller =  widget:GetController()
 									
 									
@@ -664,7 +756,7 @@ Cron.NextTick(function()
 									
 									journalQuestMapPinBase =  obj.extra.mappin
 									
-									controller:Setup(nil, jumpto)
+									controller:Setup(nil,nil, jumpto,true)
 									
 									
 								end
@@ -713,27 +805,35 @@ Cron.NextTick(function()
 								
 						end
 						
-						inkTextRef.SetText(objectiveController.objectiveName, objectiveTitle)
-						inkWidgetRef.SetState(objectiveController.trackingMarker, objectiveState.isTracked and 'Tracked' or 'Default')
+					
 					end
 					
-					if objectiveState.isComplete then
-						
-						
-						objectiveController.objectiveName.widget:SetTintColor(gamecolor(0,255,145,1))
-						
-						inkWidgetRef.SetState(objectiveController.trackingMarker, 'Default')
-						objectiveController.trackingMarker.widget:SetTintColor(gamecolor(0,255,145,1))
-					end
+					
 				
 					
 				end
+				
+				local objtracked = QuestManager.GetFirstObjective(questId)
+				print(dump(objtracked))
+				QuestManager.TrackObjective(objtracked.id)
+			
+				
+				
+				else
+				local state = self.journalManager:GetEntryState(e.quest)
+				
+				if state == gameJournalEntryState.Succeeded or state == gameJournalEntryState.Failed then
+					return
+				end
+				
+				self.journalManager:TrackEntry(e.objective)
+				
 				end
 			
 			
 			
 		
-	end)
+
 end	
 
 end
@@ -780,6 +880,7 @@ end
 
 function QuestTrackerGameController_OnMenuUpdate(self, value)
 		GameController["QuestTrackerGameController"] = self
+		print("trrackme")
 		TrackObjective()
 end
 
@@ -790,6 +891,7 @@ end
 function ComputerMainLayoutWidgetController_OnScreenSaverSpawned(thos,widget,userData)
 	if(observerthread  == true or moddisabled == true)    then return end
 	local obj = widget:GetWidgetByIndex(2):GetWidgetByIndex(3):GetWidgetByIndex(1)
+	logme(10,GameDump(obj))
 	if(NetServiceOn == true and currentHouse ~= nil) then
 		
 		obj:SetText(myTag)
@@ -800,7 +902,7 @@ function ComputerMainLayoutWidgetController_OnScreenSaverSpawned(thos,widget,use
 end
 function ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
 	if(observerthread  == true or moddisabled == true)    then return end
-	-- logme(1,GameDump(this.mailsMenu))
+	-- logme(10,GameDump(this.mailsMenu))
 	-- ----print("mark1")
 	-- this.mailsMenu:SetVisible(false)
 	
@@ -991,7 +1093,7 @@ function ComputerMenuWidgetController_InitializeFiles(this,gameController,widget
 	if(observerthread  == true or moddisabled == true)    then return end
 	-- for i,v in ipairs(widgetsData) do
 	
-	-- logme(1,GameDump(v))
+	-- logme(10,GameDump(v))
 	
 	-- end
 	
@@ -1090,7 +1192,7 @@ function PanzerHUDGameController_OnInitialize(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
 	GameController["PanzerHUDGameController"] = thos
 	PanzerHUDGameControllerReady = true
-	logme(1,"PanzerHUDGameController")
+	logme(10,"PanzerHUDGameController")
 	displayHUD["hud_panzer"] = GameController["PanzerHUDGameController"] :GetRootWidget()
 	
 end
@@ -1098,14 +1200,14 @@ end
 
 function PanzerHUDGameController_OnUninitialize(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
-	logme(1,"PanzerHUDGameControllerOnUninitialize")
+	logme(10,"PanzerHUDGameControllerOnUninitialize")
 	
 	
 end
 
 function PanzerHUDGameController_OnVehicleStateChanged(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
-	logme(1,"PanzerHUDGameControllerOnVehicleStateChanged")
+	logme(10,"PanzerHUDGameControllerOnVehicleStateChanged")
 	
 	
 end
@@ -1113,37 +1215,37 @@ end
 
 function PanzerHUDGameController_OnPlayerVehicleStateChange(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
-	logme(1,"PanzerHUDGameControllerOnPlayerVehicleStateChange")
+	logme(10,"PanzerHUDGameControllerOnPlayerVehicleStateChange")
 	
 end
 
 function PanzerHUDGameController_EvaluateUIState(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
-	logme(1,"PanzerHUDGameControllerEvaluateUIState")
+	logme(10,"PanzerHUDGameControllerEvaluateUIState")
 	
 end
 
 function PanzerHUDGameController_OnForwardVehicleQuestEnableUIEvent(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
-	logme(1,"PanzerHUDGameControllerOnForwardVehicleQuestEnableUIEvent")
+	logme(10,"PanzerHUDGameControllerOnForwardVehicleQuestEnableUIEvent")
 	
 end
 
 function PanzerHUDGameController_OnPlayerAttach(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
-	logme(1,"PanzerHUDGameControllerOnPlayerAttach")
+	logme(10,"PanzerHUDGameControllerOnPlayerAttach")
 	
 end
 
 function PanzerHUDGameController_OnPlayerDetach(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
-	logme(1,"PanzerHUDGameControllerOnPlayerDetach")
+	logme(10,"PanzerHUDGameControllerOnPlayerDetach")
 	
 end
 
 function vehicleUIGameController_OnVehiclePanzerBootupUIQuestEvent(thos)
 	if(observerthread == true or moddisabled  == true)     then return end
-	logme(1,"vehicleUIGameControllerOnVehiclePanzerBootupUIQuestEvent")
+	logme(10,"vehicleUIGameControllerOnVehiclePanzerBootupUIQuestEvent")
 	
 end
 
@@ -1163,6 +1265,8 @@ function HudPhoneGameController_OnInitialize(thos)
 	if(observerthread  == true or moddisabled == true)    then return end
 	GameController["HudPhoneGameController"]  = thos
 end
+
+
 
 function FlightController_Activate(thos)
 	if(observerthread  == true or moddisabled == true)    then return end
@@ -1402,7 +1506,7 @@ function NPCPuppet_CompileScannerChunks(thos)
 			currentScannerItem.primaryname = LocKeyToString(thos:GetDisplayName())
 			currentScannerItem.attitude = tonumber(thos:GetAttitudeTowards(Game.GetPlayer()))
 			currentScannerItem.data = tostring(NameToString(characterRecord:Affiliation():EnumName()))
-			currentScannerItem.rarity = tonumber(thos:GetPuppetRarity():Type())
+			currentScannerItem.rarity = tonumber(thos:GetNPCRarity())
 			currentScannerItem.text = ""
 			currentScannerItem.bounty = {}
 			currentScannerItem.bounty.danger = bountyUI.level
@@ -1527,10 +1631,29 @@ function IncomingCallGameController_GetIncomingContact(thos)
 	GameController["IncomingCallGameController"]  = thos
 end
 
-function IncomingCallGameController_OnPhoneCall(thos)
+function IncomingCallGameController_OnPhoneCall(thos,value)
 	if(observerthread  == true or moddisabled == true)    then return end
-	GameController["IncomingCallGameController"]  = thos
+	print("call on me")
 end
+
+
+
+	function  IncomingCallGameController_HandleCall(this)
+	print("IncomingCallGameController_HandleCall")
+	end
+	
+	
+
+	function IncomingCallGameController_UpdateHoloAudioCall(this)
+	print("IncomingCallGameController_UpdateHoloAudioCall")
+	end
+	
+	
+
+	function IncomingCallGameController_SetPhoneFunction(this,newFunction)
+	print("IncomingCallGameController_SetPhoneFunction")
+	print(newFunction)
+	end
 
 function TutorialPopupGameController_OnInitialize(thos)
 	if(observerthread  == true or moddisabled == true)    then return end
@@ -2087,7 +2210,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 		GameController["BaseWorldMapMappinController"]  = self
 		if(self.mappin ~= nil ) then
-			
+		
 			if lastId ~= nil then Game.GetMappinSystem():SetMappinActive(lastId,true) end
 			SelectedMappinMetro = nil
 			SelectedScriptMappin = nil
@@ -2100,7 +2223,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			
 			local obj = {}
-			obj.id = nil
+			obj.id = 0
 			obj.tag = "selected_mappin"
 			obj.position = self.mappin:GetWorldPosition()
 			obj.variant = tostring(mappinType)
@@ -2114,15 +2237,15 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			obj.style.icon = nil
 			
 			
-			
+			print(dump( obj))
 			mappinManager["selected_mappin"] = obj
 			
 			if mappinType == gamedataMappinVariant.CustomPositionVariant then
 			
 				ActivecustomMappin = self.mappin
-				
+				print(GameDump( self.mappin))
 				local obj = {}
-				obj.id = nil
+				obj.id = 0
 				obj.tag = "selected_user_mappin"
 				obj.position = self.mappin:GetWorldPosition()
 				obj.variant = tostring(mappinType)
@@ -2134,8 +2257,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 				obj.style = {}
 				obj.style.color = nil
 				obj.style.icon = nil
-				mappinManager["selected_mappin"].id = nil
-				mappinManager["selected_mappin"].position = nil
+				
 				
 				
 				mappinManager["selected_user_mappin"] = obj
@@ -2150,7 +2272,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 				ActiveFastTravelMappin.position = self.mappin:GetWorldPosition()
 				
 				local obj = {}
-				obj.id = nil
+				obj.id = 0
 				obj.tag = "selected_fasttravel_mappin"
 				obj.position = self.mappin:GetWorldPosition()
 				obj.variant =  "FastTravelVariant"
@@ -2226,10 +2348,11 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		--print(NameToString(thos.currentImagePart))
 		
 	end
-	function BrowserController_OnInitialize(self)
+	function BrowserController_OnInitialize(self,gameController)
 		
 		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["BrowserController"]  = self
+		GameController["BrowserGameController"]  = self
 	end
 	
 	
@@ -2295,7 +2418,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	function WebPage_FillPageFromJournal(self,page)
 		if(observerthread == true or moddisabled  == true)   then return end
-		----print("ttot"..tostring(CurrentAddress))
+	print("ttot"..tostring(page.address))
 		----print("ttot"..tostring(BrowserCustomPlace))
 		defaultPage = page
 		
@@ -2306,6 +2429,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			LinkController = inkWidgetRef.GetController(self.imageList[1])
 			local root = self:GetRootWidget()
+			
 			
 			local page = root:GetWidgetByIndex(0)
 			local linkpanel = page:GetWidgetByIndex(0)
@@ -2318,7 +2442,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			local linkbar02 = panel:GetWidgetByIndex(2)
 			local link01 = linkbar01:GetWidgetByIndex(0)
 			
-			printChild(link01)
+			
 			
 			local link02 = linkbar01:GetWidgetByIndex(1)
 			local link03 = linkbar01:GetWidgetByIndex(2)
@@ -3737,7 +3861,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 								end
 							end
 							panel:RemoveAllChildren()
-							--	logme(1,JSON:encode_pretty(copyinterface))
+							--	logme(10,JSON:encode_pretty(copyinterface))
 							makeCustomInterface(panel,copyinterface)
 						end
 						
@@ -5041,6 +5165,9 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		end
 	end		
 	
+	function PopupsManager_OnShardRead(self,evt)
+		print("Yahoo")
+	end
 	
 	function BrowserController_OnPageSpawned(thos, widget, userData)
 		if(observerthread == true or moddisabled  == true)   then return end
@@ -5335,10 +5462,14 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	
 	
-	function PhoneDialerGameController_PopulateData(thos)
+	function PhoneDialerGameController_PopulateData(thos,contactDataArray)
+	
 		if(observerthread == true or moddisabled  == true)   then return end
-		local contactDataArray = thos.journalManager:GetContactDataArray(false)
-		------printdump(contactDataArray))
+		
+		
+		
+		
+		
 		if(#contactList > 0) then
 			for i = 1, #contactList do
 				local itemData = ContactData.new()
@@ -5347,14 +5478,19 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 				itemData.avatarID = TweakDBID.new(contactList[i].avatarID)
 				itemData.questRelated  =  false
 				itemData.hasMessages   =  true
-				itemData.unreadMessegeCount  = 13
+				itemData.isCallable = true
+				itemData.unreadMessegeCount  = 0
 				itemData.unreadMessages  = {}
 				itemData.playerCanReply   =  false
 				itemData.playerIsLastSender   =  false
 				itemData.lastMesssagePreview  =  "CyberScript"
 				itemData.threadsCount  = 0
-				itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
+				
 				itemData.hash  = 0
+				itemData.type = MessengerContactType.Contact
+				
+				
+				
 				table.insert(contactDataArray,itemData)
 			end
 		end
@@ -5384,9 +5520,187 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		thos.dataSource:Reset(contactDataArray);
 		thos.dataView:DisableSorting();
 		thos.firstInit = true;
+		 thos.indexToSelect = 0 
 		--	----printGameDump(_.dataView))
 	end
 	
+	--for one selected contact
+	function NewHudPhoneGameController_ShowSelectedContactMessages(this,contactData) 
+	print("NewHudPhoneGameController_ShowSelectedContactMessages")
+		GameController["NewHudPhoneGameController"] = this
+	end
+	
+	function NewHudPhoneGameController_GotoSmsMessenger(this,contactData) 
+	print("NewHudPhoneGameController_GotoSmsMessenger")
+		GameController["NewHudPhoneGameController"] = this
+		
+	end
+	
+	function NewHudPhoneGameController_RefreshSmsMessager(this,contactData) 
+	print("NewHudPhoneGameController_RefreshSmsMessager")
+		GameController["NewHudPhoneGameController"] = this
+	local contact  = this.contactListLogicController:GetSelectedContactData()
+	currentPhoneConversation = nil
+		
+				for k,v in pairs(cyberscript.cache["phone_dialog"]) do
+					local phoneConversation = v.data
+					for z=1,#phoneConversation.conversation do
+						local conversation = phoneConversation.conversation[z]
+						if(conversation.tag == contact.id)then
+							currentPhoneConversation = phoneConversation.conversation[z]
+							currentPhoneConversation.currentchoices = {}
+							logme(10,conversation.tag)
+							currentPhoneConversation.loaded = 0
+							onlineReceiver = nil
+							
+						end
+					end
+				end
+				
+	
+	end
+	
+	function NewHudPhoneGameController_FocusSmsMessenger(this) 
+	print("NewHudPhoneGameController_FocusSmsMessenger")
+		GameController["NewHudPhoneGameController"] = this
+	end
+	
+	function NewHudPhoneGameController_OnSmsMessageGotFocus(this,evt)
+	print("NewHudPhoneGameController_OnSmsMessageGotFocus")
+		GameController["NewHudPhoneGameController"] = this
+	-- local contact  = this.contactListLogicController:GetSelectedContactData()
+	-- logme(10,GameDump(contact))
+	-- currentPhoneConversation = nil
+		
+				-- for k,v in pairs(cyberscript.cache["phone_dialog"]) do
+					-- local phoneConversation = v.data
+					-- for z=1,#phoneConversation.conversation do
+						-- local conversation = phoneConversation.conversation[z]
+						-- if(conversation.tag == contact.id)then
+							-- currentPhoneConversation = phoneConversation.conversation[z]
+							-- currentPhoneConversation.currentchoices = {}
+							-- logme(10,conversation.tag)
+							-- currentPhoneConversation.loaded = 0
+							-- onlineReceiver = nil
+							
+						-- end
+					-- end
+				-- end
+				
+		
+	end
+	function NewHudPhoneGameController_ExecuteAction(this,types) 
+	print("NewHudPhoneGameController_ExecuteAction")
+	GameController["NewHudPhoneGameController"] = this
+	end
+	function NewHudPhoneGameController_ToggleShowAllMessages(this,types) 
+		print("NewHudPhoneGameController_ToggleShowAllMessages"..dump(types))
+			GameController["NewHudPhoneGameController"] = this
+		local dots = ContactData.new()
+		local messages = {}
+		this.screenType = types;
+    
+		if( this.screenType == PhoneScreenType.Unread) then
+			messages = MessengerUtils.GetSimpleContactDataArray(this.journalMgr, true, true, this.isShowingAllMessages);
+			dots = this:CreateFakeContactData(#messages)
+			
+			-- local itemData = ContactData.new()
+			-- itemData.id = "cm_test"
+			-- itemData.localizedName  = "Hello NightCity Thread !!!"
+			-- itemData.localizedPreview  = "Hello NightCity 2 !!!"
+			-- itemData.avatarID = TweakDBID.new("PhoneAvatars.Avatar_Unknown")
+			-- itemData.questRelated  =  false
+			-- itemData.hasQuestImportantReply  =  false
+			-- itemData.hasMessages   =  true
+			-- itemData.isCallable = true
+			-- itemData.unreadMessegeCount  = 5
+			-- itemData.unreadMessages  = {}
+			-- itemData.playerCanReply   =  false
+			-- itemData.playerIsLastSender   =  false
+			-- itemData.lastMesssagePreview  =  "CyberScript"
+			-- itemData.threadsCount  = 0
+			-- itemData.conversationHash=0
+			-- itemData.hash  = 0
+			-- itemData.type = MessengerContactType.MultiThread
+			
+			-- table.insert(messages, itemData)
+			
+			for k,v in pairs(cyberscript.cache["phone_dialog"]) do
+				local phoneConversation = v.data
+				
+					
+				if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
+			
+					if phoneConversation.hash == nil then
+						cyberscript.cache["phone_dialog"][k].data.hash = 0 - tonumber("1308"..math.random(1,999))
+						
+						phoneConversation.hash = cyberscript.cache["phone_dialog"][k].data.hash
+					end
+					
+					
+					for z=1,#phoneConversation.conversation do
+						unreadcount = 0
+						local unreadMessages  = {}
+						local playerCanReply  = false
+						local conversation = phoneConversation.conversation[z]
+						if(getScoreKey(conversation.tag,"unlocked") == nil or getScoreKey(conversation.tag,"unlocked") == 1) then
+							if(conversation.message ~= nil and #conversation.message>0) then
+								for y=1,#conversation.message do
+									if(conversation.message[y].readed == false and (getScoreKey(conversation.message[y].tag,"unlocked") == nil or getScoreKey(conversation.message[y].tag,"unlocked") == 1)) then
+										unreadcount = unreadcount + 1
+										table.insert(unreadMessages ,unreadcount)
+										playerCanReply   =  true
+									end
+								end
+							end
+						
+							
+							local itemData = ContactData.new()
+							itemData.id = conversation.tag
+							itemData.localizedName  =  getLang(phoneConversation.speaker)
+							itemData.localizedPreview  =  conversation.name
+							itemData.avatarID = TweakDBID.new("PhoneAvatars.Avatar_Unknown")
+							itemData.questRelated  =  false
+							itemData.hasQuestImportantReply  =  false
+							itemData.hasMessages   =  true
+							itemData.isCallable = false
+							itemData.unreadMessegeCount  = unreadcount
+							itemData.unreadMessages  = unreadMessages
+							itemData.playerCanReply   =  playerCanReply
+							itemData.playerIsLastSender   =  false
+							itemData.lastMesssagePreview  =  conversation.name
+							itemData.threadsCount  = 0
+							cyberscript.cache["phone_dialog"][k].data.conversation[z].hash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
+							cyberscript.cache["phone_dialog"][k].data.conversation[z].conversationHash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
+							itemData.conversationHash=cyberscript.cache["phone_dialog"][k].data.conversation[z].conversationHash
+							itemData.hash  =cyberscript.cache["phone_dialog"][k].data.conversation[z].hash
+							itemData.type = MessengerContactType.MultiThread
+							itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
+							table.insert(messages, itemData)
+						end
+					end
+				end
+			end
+			
+			table.insert(messages, dots)
+			for k,v in ipairs(messages) do 
+			
+				logme(10,GameDump(v))
+			
+			end
+			
+			this.contactListLogicController:UpdateShowAllButton(this.isShowingAllMessages);
+			this.contactListLogicController:SetSortMethod(ContactsSortMethod.ByTime);
+			this.contactListLogicController:PopulateListData(messages, this.indexToSelect, this.messageToOpenHash);
+			this.contactListLogicController:SwtichTabs(PhoneDialerTabs.Unread);
+			this:HideThreads();
+			
+			
+        end
+		
+    
+		
+	end
 	function MessengerGameController_PopulateData(thos) 
 		if(observerthread == true or moddisabled  == true)   then return end
 		GameController["MessengerGameController"] = thos
@@ -5396,98 +5710,11 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			else
 			print("tsetdsgshshnj")
 			local data = MessengerUtils.GetContactDataArray(thos.journalManager,true,true,thos.activeData)
-			-- for i=1,#data do
-			-- spdlog.info(GameDump(data[i].data))
-			-- end
-			-- if(MultiplayerOn and OnlineConversation ~= nil) then
-			-- onlineInstanceMessageProcessing()
-			-- local phoneConversation = OnlineConversation
-			-- logme(1,JSON:encode_pretty(phoneConversation))
-			-- if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
-			-- if phoneConversation.hash == nil then
-			-- OnlineConversation.hash = 0 - tonumber("1308"..math.random(1,999))
 			
-			-- phoneConversation.hash = OnlineConversation.hash
-			-- end
-			-- local itemData = ContactData.new()
-			-- itemData.id = phoneConversation.tag
-			-- itemData.localizedName  = phoneConversation.speaker
-			-- itemData.avatarID = TweakDBID.new("Character.Judy")
-			-- itemData.questRelated  =  false
-			-- local unreadcount = 0
-			-- itemData.unreadMessages  = {}
-			-- if(#phoneConversation.conversation > 0) then
-			-- for z=1,#phoneConversation.conversation do
-			-- if(phoneConversation.conversation[z].message ~= nil and #phoneConversation.conversation[z].message > 0) then
-			-- for y=1,#phoneConversation.conversation[z].message do
-			-- if(phoneConversation.conversation[z].message[y].readed == false and (getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == nil or getScoreKey(phoneConversation.conversation[z].message[y].tag,"unlocked") == 1)) then
-			-- unreadcount = unreadcount + 1
-			-- table.insert(itemData.unreadMessages ,unreadcount)
-			-- itemData.playerCanReply   =  true
-			-- end
-			-- end
-			-- end
-			-- end
-			-- end
-			-- itemData.hasMessages   =  true
-			-- itemData.unreadMessegeCount  = unreadcount
-			-- itemData.playerIsLastSender   =  false
-			-- itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
-			-- itemData.threadsCount  = #phoneConversation.conversation
-			-- itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
-			-- itemData.hash = phoneConversation.hash
-			-- local contactVirtualListData =  VirutalNestedListData.new()
-			-- contactVirtualListData.level =  phoneConversation.hash
-			-- contactVirtualListData.widgetType = 0
-			-- contactVirtualListData.isHeader = true
-			-- contactVirtualListData.data = itemData
-			-- contactVirtualListData.collapsable = true
-			-- contactVirtualListData.forceToTopWithinLevel  = true
-			-- table.insert(data,contactVirtualListData)
-			-- for z=1,#phoneConversation.conversation do
-			-- unreadcount = 0
-			-- itemData.unreadMessages  = {}
-			-- local conversation = phoneConversation.conversation[z]
-			-- if(getScoreKey(conversation.tag,"unlocked") == nil or getScoreKey(conversation.tag,"unlocked") == 1) then
-			-- if(conversation.message ~= nil and #conversation.message > 0) then
-			-- for y=1,#conversation.message do
-			-- if(conversation.message[y].readed == false and (getScoreKey(conversation.message[y].tag,"unlocked") == nil or getScoreKey(conversation.message[y].tag,"unlocked") == 1)) then
-			-- unreadcount = unreadcount + 1
-			-- table.insert(itemData.unreadMessages ,unreadcount)
-			-- itemData.playerCanReply   =  true
-			-- end
-			-- end
-			-- end
-			-- local itemData = ContactData.new()
-			-- itemData.id = conversation.tag
-			-- itemData.localizedName  = conversation.name
-			-- itemData.avatarID = TweakDBID.new("Character.Judy")
-			-- itemData.questRelated  =  false
-			-- itemData.hasMessages   =  true
-			-- itemData.unreadMessegeCount  = unreadcount
-			-- itemData.playerIsLastSender   =  false
-			-- itemData.lastMesssagePreview  =  "Cyberpunk Multiverse"
-			-- OnlineConversation.conversation[z].hash =0 - tonumber(tostring(phoneConversation.hash)..math.random(1,100))
-			-- conversation.hash = OnlineConversation.conversation[z].hash
-			
-			-- itemData.threadsCount  = 0
-			-- itemData.timeStamp = Game.GetTimeSystem():GetGameTime()
-			-- itemData.hash = conversation.hash
-			-- local contactVirtualListData =  VirutalNestedListData.new()
-			-- contactVirtualListData.level = phoneConversation.hash
-			-- contactVirtualListData.widgetType = 1
-			-- contactVirtualListData.isHeader = false
-			-- contactVirtualListData.data = itemData
-			-- contactVirtualListData.collapsable = false
-			-- table.insert(data,contactVirtualListData)
-			-- end
-			-- end
-			-- end
-			-- end
 			for k,v in pairs(cyberscript.cache["phone_dialog"]) do
 				local phoneConversation = v.data
 				
-					print("HERE DONK ! "..phoneConversation.tag)
+					
 				if(getScoreKey(phoneConversation.tag,"unlocked") == nil or getScoreKey(phoneConversation.tag,"unlocked") == 1) then
 			
 					if phoneConversation.hash == nil then
@@ -5590,7 +5817,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 						if(conversation.hash == evt.entryHash)then
 							currentPhoneConversation = phoneConversation.conversation[z]
 							currentPhoneConversation.currentchoices = {}
-							logme(1,GameDump(evt))
+							logme(10,GameDump(evt))
 							currentPhoneConversation.loaded = 0
 							onlineReceiver = nil
 							local test = gameJournalPhoneMessage.new()
@@ -5621,18 +5848,16 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	function MessengerDialogViewController_SetVisited(thos, records) 
 		if(observerthread == true or moddisabled  == true)   then return end
-		
+		print("MessengerDialogViewController_SetVisited"..dump(records))
 		local messages = thos.messages
 		local choices = thos.replyOptions
 		
 		
 		GameController["MessengerDialogViewController"]  = thos
 		if(currentPhoneConversation ~= nil) then
-			logme(1,"cyberscript MessengerDialogViewController.SetVisited")
-			logme(1,currentPhoneConversation.loaded)
-			currentPhoneConversation.loaded = currentPhoneConversation.loaded + 1
-			if(currentPhoneConversation ~= nil and currentPhoneConversation.loaded >= 1) then
-				currentPhoneConversation.loaded = 0
+			
+			if(currentPhoneConversation ~= nil ) then
+				
 				
 				
 				
@@ -5697,55 +5922,66 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 	end
 	
-	function PhoneMessagePopupGameController_SetupData(thos)
+	function PhoneMessagePopupGameController_SetupData(this,wrappedMethod)
 		if(observerthread == true or moddisabled  == true)   then return end
-		logme(2,"PhoneMessagePopupGameController.SetupData")
-		if (currentPhoneDialogPopup ~= nil and MessengerGameController ~= nil) then
+		
+			GameController["PhoneMessagePopupGameController"] = this
 			
-			thos.dialogViewController = MessengerGameController
-			inkTextRef.SetText(thos.title, currentPhoneDialogPopup.id)
-			
-			
-			thos.dialogViewController:ShowThread(currentPhoneDialogPopup)
+		if(currentPhoneConversation ~= nil) then
+		
+			logme(1,"PhoneMessagePopupGameController.SetupData")
+				local test = gameJournalPhoneMessage.new()
+			this.dialogViewController:ShowThread(test)
+			else
+			wrappedMethod()
 		end
 		
 	end
 	
 	function MessengerDialogViewController_ShowThread(self,thread)
 		if(observerthread == true or moddisabled  == true)   then return end
-		
+		logme(1,"MessengerDialogViewController_ShowThread")
+		if(currentPhoneConversation ~= nil) then
 		if(thread == nil) then
 			local message = {}
-			logme(1,"test1")
+			logme(1,currentPhoneConversation)
 			table.insert(message,currentPhoneConversation)
 			self.messages = message
+		end
 		end
 	end
 	
 	function MessengerDialogViewController_ShowDialog(self,contact)
 		if(observerthread == true or moddisabled  == true)   then return end
+		if(currentPhoneConversation ~= nil) then
+		logme(10,"test2")
 		if(contact == nil) then
 			local message = {}
-			logme(1,"test2")
+			logme(10,"test2")
 			table.insert(message,currentPhoneConversation)
 			self.messages = message
 			
 		end
+		end
 	end
 	
-	function MessengerDialogViewController_UpdateData(self,animateLastMessage)
+	function MessengerDialogViewController_UpdateData(self,animateLastMessage,setVisited)
+		logme(1,"MessengerDialogViewController_UpdateData")
 		Cron.NextTick(function()
 			
 		if(observerthread == true or moddisabled  == true)   then return end
-		logme(1,GameDump(self))
+		logme(10,GameDump(self))
+	
+		if(currentPhoneConversation ~= nil) then
 		if(contact == nil) then
 			local message = {}
-			logme(1,"test3")
-			print(dump(currentPhoneConversation))
+			logme(10,"test3")
+			print("sss"..dump(currentPhoneConversation))
 			table.insert(message,currentPhoneConversation)
 			self.messages = message
 			
 			
+		end
 		end
 		end)
 	end
@@ -5754,11 +5990,11 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		if(observerthread == true or moddisabled  == true)   then return end
 			Cron.NextTick(function()
 		local choicepress = false
-		logme(1,"test4")
+		logme(10,"test4")
 		if(currentPhoneConversation ~= nil) then
 			for i = 1, #currentPhoneConversation.currentchoices do
-				logme(1,currentPhoneConversation.currentchoices[i].text)
-				logme(1,self.labelPathRef:GetText())
+				logme(10,currentPhoneConversation.currentchoices[i].text)
+				logme(10,self.labelPathRef:GetText())
 				
 				
 				if(tostring(getLang(currentPhoneConversation.currentchoices[i].text)) == tostring(self.labelPathRef:GetText())) then
@@ -5792,8 +6028,8 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	function MessangerItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
 		if(observerthread == true or moddisabled  == true)   then return end
-	logme(1,"test5")
-		logme(1,"MessangerItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
+		logme(10,"test5")
+		logme(10,"MessangerItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
 		Cron.NextTick(function()
 			local message = entry
 			local txt = ""
@@ -5854,8 +6090,8 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	function MessangerReplyItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
 		if(observerthread == true or moddisabled  == true)   then return end
-			logme(1,"test6")
-		logme(1,"MessangerReplyItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
+			logme(10,"test6")
+		logme(10,"MessangerReplyItemRenderer_OnJournalEntryUpdated"..GameDump(entry))
 		Cron.NextTick(function()
 			local message = entry
 			local txt = ""
@@ -5971,16 +6207,17 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		--logme(2,"obs17")
 	end
 	
-	function PhoneDialerGameController_CallSelectedContact_Observer(thos)
+	function PhoneDialerGameController_CallSelectedContact_Observer(thos,contactData)
+		
+		GameController["NewHudPhoneGameController"] = thos
 		if(observerthread == true or moddisabled  == true)   then return end
 		-- let item: ref<PhoneContactItemVirtualController> = thos.m_listController.GetSelectedItem() as PhoneContactItemVirtualController;
 		-- let contactData: ref<ContactData> = item.GetContactData();
 		-- if IsDefined(contactData) {
 		-- callRequest = new questTriggerCallRequest();
 		-- callRequest.addressee = StringToName(contactData.id);
-		local item = thos.listController:GetSelectedItem()
-		local contactData = item:GetContactData()
-		--		--logme(2,"found "..contactData.id)
+	
+		logme(10,"found "..contactData.id)
 		if(#contactList > 0) then
 			for i = 1, #contactList do
 				----printcontactData.id)
@@ -6110,17 +6347,21 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 	function PhoneSystem_OnTriggerCall(thos, request)
 		if(observerthread == true or moddisabled  == true)   then return end
-		logme(2,"called")
-		logme(2,GameDump(request))
+		logme(1,"called")
+		logme(1,GameDump(request))
 		
 		local contactName = request.addressee
-		logme(2,"IsNameValid "..tostring(IsNameValid(contactName)))
+		logme(1,"IsNameValid "..tostring(IsNameValid(contactName)))
 		if IsNameValid(contactName) == false then
-			logme(2,"stopcall")
-			thos.ToggleContacts(true)
-			thos.TriggerCall(questPhoneCallMode.Undefined, thos.LastCallInformation.isAudioCall, thos.LastCallInformation.contactName, thos.LastCallInformation.isPlayerCalling, questPhoneCallPhase.EndCall, thos.LastCallInformation.isPlayerTriggered, thos.LastCallInformation.isRejectable)
+			logme(1,"stopcall")
+			
+			thos.TriggerCall(questPhoneCallMode.Video, false, "CyberScript", false, questPhoneCallPhase.IncomingCall, false, true)
 		end
 		
+	end
+	
+	function PhoneSystem_TriggerCall(this, callMode, isAudio, contactName, isPlayerCalling, callPhase, isPlayerTriggered, isRejectable, showAvatar, callVisuals) 
+	logme(1,"called2")
 	end
 	
 	function PhoneSystem_OnUsePhone(thos, request)
@@ -6131,7 +6372,8 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 	end
 	
-	function PhoneDialerGameController_Show(_,contactsList)
+	function PhoneDialerGameController_Show(thos)
+		print("testtt")
 		if(observerthread == true or moddisabled  == true)   then return end
 		refreshContact()
 		openPhone = true
@@ -6476,19 +6718,20 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			local dialogoption = currentDialogHub.dial.options[interactionUI.selectedIndex+1]
 			
-			if(dialogoption ~= nil and getLang(dialogoption.description) == self.ActiveTextRef:GetText()) then
+			if(dialogoption ~= nil and 
+			(getLang(dialogoption.description) ==  "["..self.tagWrapper.widget:GetWidgetByIndex(0):GetText().."]" 
+			or getLang(dialogoption.description) ==  self.ActiveTextRef.widget:GetText())) then
 				
 				
-				
-				self.ActiveTextRef:SetTintColor(gamecolor(0, 0, 0,0))
+				self.ActiveTextRef.widget:SetTintColor(gamecolor(0, 0, 0,1))
+						self.tagWrapper.widget:GetWidgetByIndex(0):SetTintColor(gamecolor(0, 0, 0,1))
 				
 				if (dialogoption.requirement ~= nil and checkTriggerRequirement(dialogoption.requirement,dialogoption.trigger) == false) then
-					self.InActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
-					self.ActiveTextRef:SetTintColor(gamecolor(237, 124, 109,1))
-					
+					self.ActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
+					self.tagWrapper.widget:GetWidgetByIndex(0):SetTintColor(gamecolor(237, 124, 109,1))
 					
 					self.SelectedBg:SetTintColor(gamecolor(255, 86, 64,0))
-					else
+				else
 					
 					if not (dialogoption.style == nil or dialogoption.style.color == nil  or dialogoption.style.color.red == nil or dialogoption.style.color.green == nil or dialogoption.style.color.blue == nil) then
 						
@@ -6502,10 +6745,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 					end
 				end
 				
-				
-				
-				
-				
+			
 				
 				
 				
@@ -6514,35 +6754,39 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			local dialogoption_unselect = nil
 			
-			
+		
 			for i,v in ipairs(currentDialogHub.dial.options) do
 				
-				if(getLang(v.description) == self.ActiveTextRef:GetText() and getLang(v.description) ~=  getLang(currentDialogHub.dial.options[interactionUI.selectedIndex+1].description)) then
+				if((getLang(v.description) ==  "["..self.tagWrapper.widget:GetWidgetByIndex(0):GetText().."]" or getLang(v.description) ==  self.ActiveTextRef.widget:GetText()) and getLang(v.description) ~=  getLang(currentDialogHub.dial.options[interactionUI.selectedIndex+1].description)) then
 					
 					dialogoption_unselect = v
 					
 					
-					
 					if (dialogoption_unselect ~= nil and dialogoption_unselect.requirement ~= nil and checkTriggerRequirement(dialogoption_unselect.requirement,dialogoption_unselect.trigger) == false)then
+						
+						
 						pcall(function()
-							self.SelectedBg.widget:SetTintColor(gamecolor(237, 124, 109,1))
-							self.InActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
-							self.ActiveTextRef:SetTintColor(gamecolor(255, 86, 64,0))
+					
+							self.ActiveTextRef.widget:SetTintColor(gamecolor(237, 124, 109,1))
+					self.tagWrapper.widget:GetWidgetByIndex(0):SetTintColor(gamecolor(237, 124, 109,1))
+					
+							
 						end)
 						else
 						
 						if (dialogoption_unselect ~= nil and dialogoption_unselect.style ~= nil and dialogoption_unselect.style.color ~= nil  and dialogoption_unselect.style.color.red ~= nil and dialogoption_unselect.style.color.green ~= nil and dialogoption_unselect.style.color.blue ~= nil) then
 							
 							local fontcolor = dialogoption_unselect.style.color
-							
-							self.InActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
+						
+							self.tagWrapper.widget:GetWidgetByIndex(0):SetTintColor(gamecolorStyle(fontcolor))
 							self.ActiveTextRef.widget:SetTintColor(gamecolorStyle(fontcolor))
 							
 							else
+						
+							self.tagWrapper.widget:GetWidgetByIndex(0):SetTintColor(HDRColor.new({ Red=0.368627, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
 							
-							self.ActiveTextRef:SetTintColor(HDRColor.new({ Red=0.368627, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
-							self.InActiveTextRef:SetTintColor(HDRColor.new({ Red=1, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
 							
+								self.ActiveTextRef.widget:SetTintColor(HDRColor.new({ Red=0.368627, Green=0.964706, Blue=1.000000, Alpha=1.000000 }))
 							
 						end
 						
@@ -6566,7 +6810,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			
 			else
-			
+			print("gameover")
 			return wrappedMethod()
 		end
 	end
@@ -6857,7 +7101,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			else
 			if self.phoneMessageData ~= nil and self.phoneMessageData.journalEntry ~= nil then
-				logme(1,GameDump(self.phoneMessageData))
+				logme(10,GameDump(self.phoneMessageData))
 			end
 		end
 		
@@ -6894,22 +7138,17 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
     -- thos:SetBlackboardIntVariable(scriptInterface, GetAllBlackboardDefs().PlayerStateMachine.Landing, EnumInt(gamePSMLandingState.HardLand))
 	
 	-- end)
-	function PreventionSpawnSystem_SpawnCallback(thos,spawnedObject,wrappedMethod)
+	function PreventionSpawnSystem_SpawnCallback(thos,requestResult,wrappedMethod)
 		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(spawnedObject) end
 		
 		local contain = false
-		if(cachedespawn[tostring(spawnedObject:GetEntityID().hash)] ~= nil) then
+		if(cachedespawn[requestResult.requestID] ~= nil and requestResult.success == true) then
+			print(GameDump(requestResult))
 			
-			
-			
-			
-			cachedespawn[tostring(spawnedObject:GetEntityID().hash)].count = cachedespawn[tostring(spawnedObject:GetEntityID().hash)].count +1 
+			cachedespawn[requestResult.requestID].NPC = requestResult.spawnedObjects
+			cachedespawn[requestResult.requestID].result = true
 			contain = true
-			if(cachedespawn[tostring(spawnedObject:GetEntityID().hash)].count > 1) then
-				spawnedObject:Dispose()
-				
-				
-			end
+			
 		end
 		
 		-- local tweak = TweakDBID.new(k)
@@ -6967,13 +7206,13 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 	end
 	
-	function QuestMappinLinkController_Setup(thos,mappinEntry,jumpTo,wrappedMethod)
+	function QuestMappinLinkController_Setup(thos,mappinEntry,mappinHash,jumpTo,isTracked,wrappedMethod)
 		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(mappinEntry,jumpTo) end
 		if mappinEntry == nil and journalQuestMapPinBase ~= nil then
 			
 			local mappin = getMappinByTag(journalQuestMapPinBase)
 			
-			logme(1,"Setup "..journalQuestMapPinBase)
+			logme(10,"Setup "..journalQuestMapPinBase)
 			
 			
 			inkTextRef.SetText(thos.linkLabel, mappin.title)
@@ -6983,7 +7222,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			else
 			
-			wrappedMethod(mappinEntry,jumpTo)
+			wrappedMethod(mappinEntry,mappinHash,jumpTo,isTracked)
 			
 		end
 		
@@ -7031,7 +7270,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	function CodexPopupGameController_SetupData(thos,wrappedMethod)
 		if(observerthread == true or moddisabled  == true)  then return wrappedMethod() end
 		thos.data = thos:GetRootWidget():GetUserData("CodexPopupData")
-		
+		print(GameDump(thos:GetRootWidget()))
 		if string.match(thos.data.entry.id,"CS_customcodex:") then
 			
 			local splittext = split(thos.data.entry.id,':')
@@ -7065,7 +7304,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	end
 	
 	
-	function CodexEntryViewController_ShowEntry(thos,data,wrappedMethod)
+	function CodexEntryViewController_ShowEntry(thos,data, inputDevice, inputScheme,wrappedMethod)
 		
 		if(observerthread == true or moddisabled  == true)  then return wrappedMethod() end
 		if data.hash == 13081991 then
@@ -7086,7 +7325,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 			else
 			
-			wrappedMethod(data)
+			wrappedMethod(data, inputDevice, inputScheme)
 			
 			
 		end
@@ -7369,7 +7608,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 				
 				local itemtable = VendorsStockManager[entity.tag].items
 				
-				logme(1,"table count"..#itemtable)
+				logme(10,"table count"..#itemtable)
 				
 				
 				local data = {}
@@ -7409,7 +7648,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 				
 				----print("markk2")
 				for k,v in ipairs(data) do
-					logme(1,GameDump(v))
+					logme(10,GameDump(v))
 				end
 				return data
 				
@@ -7656,7 +7895,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 		local vehicleInfoData = QuickhackData.new()
 		vehicleInfoData = FromVariant(value)
-		logme(1,GameDump(vehicleInfoData))
+		logme(10,GameDump(vehicleInfoData))
 		wrappedMethod(value)
 		
 	end
@@ -7963,11 +8202,11 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		
 	end
 	
-	function QuickhacksListGameController_ApplyQuickHack(this,wrappedMethod)
-		------print("step 02")
-		if(observerthread == true or moddisabled  == true)  then return wrappedMethod()  end
-		
-		local value = wrappedMethod()
+	function QuickhacksListGameController_ApplyQuickHack(this,shouldUseUI,wrappedMethod)
+	print("step 02")
+		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(shouldUseUI)  end
+		this.lastMaxCells = 999
+		local value = wrappedMethod(shouldUseUI)
 		if string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
 			
 			local splittext = split(NameToString(this.selectedData.actionOwnerName),':')
@@ -7976,9 +8215,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 				
 				usedCells = this.selectedData.cost
 				maxCells =  this.lastMaxCells
-				-- ------print(usedCells)
-				-- ------print(maxCells)
-				-- ------print(this.lastFillCells)
+				
 				
 				local availablecell = maxCells-usedCells
 				
@@ -8011,6 +8248,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	function QuickhacksListGameController_OnQuickhackStarted(this,value,wrappedMethod)
 		if(observerthread == true or moddisabled  == true)  then return wrappedMethod(value)  end
 		wrappedMethod(value)
+		print(GameDump(this.selectedData))
 		if string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
 			
 			local splittext = split(NameToString(this.selectedData.actionOwnerName),':')
@@ -8320,7 +8558,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 								
 								gangController:SetData(gamedataAffiliation_Record.new())
 								else
-								logme(1,"can't get gang for tag "..gangs[i].tag.." for district "..mydistrict)
+								logme(10,"can't get gang for tag "..gangs[i].tag.." for district "..mydistrict)
 							end
 						end
 					end
@@ -8361,26 +8599,39 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 		actionValue = action:GetValue(action)
 		-- if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
 		
-		-- logme(1,actionName)
-		-- logme(1,actionType)
+		
 		-- end
-		-- logme(1,currentController)
+		-- logme(10,currentController)
+		 -- logme(1,actionName)
+		 -- logme(1,actionType)
 		
+		if actionName == "NotificationOpen" and currentPhoneConversation ~= nil   then 				 
+				Cron.After(0.5,function()
+				logme(1,"dddd")
+				GameController["PhoneMessagePopupGameController"]:UnregisterFromGlobalInputCallback("OnPostOnRelease", GameController["PhoneMessagePopupGameController"], "OnHandleMenuInput");
+				PopupStateUtils.SetBackgroundBlur(GameController["PhoneMessagePopupGameController"], false);
+				GameController["PhoneMessagePopupGameController"].uiSystem:PopGameContext(UIGameContext.ModalPopup);
+				GameController["PhoneMessagePopupGameController"].uiSystem:RestorePreviousVisualState("inkModalPopupState");
+				GameController["PhoneMessagePopupGameController"]:SetTimeDilatation(false);
+				GameController["PhoneMessagePopupGameController"]:RequestUnfocus()
+				GameController["PhoneMessagePopupGameController"]:HandleCommonInputActions("cancel")
+				GameController["PhoneMessagePopupGameController"]:ClosePopup()
+				Cron.After(0.5,function()
+				 GameController["NewHudPhoneGameController"].PhoneSystem:QueueRequest( UsePhoneRequest.new());
+			 uiActionPerformed= DPADActionPerformed.new()
+            uiActionPerformed.successful = true;
+            uiActionPerformed.state = EUIActionState.COMPLETED;
+            GameController["NewHudPhoneGameController"].buttonPressed = false;
+            Game.GetUISystem():QueueEvent(uiActionPerformed);
+				end)
+				end)
 		
-		
-		if actionName == "PhoneInteract" and actionType == "BUTTON_RELEASED" and currentPhoneCall ~= nil   then 
-			local audioEvent = SoundStopEvent.new()
-			audioEvent.soundName = "ui_phone_incoming_call"
-			Game.GetPlayer():QueueEvent(audioEvent)
-			
-			runActionList(currentPhoneCall.answer_action,"phone_call","interact",false,"player")
-			incomingCallGameController:OnInitialize()
-			currentPhoneCall = nil
-			StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
 		end
+		local phoneAction = false 
 		
 		if actionName == "PhoneReject" and actionType == "BUTTON_HOLD_COMPLETE" and currentPhoneCall ~= nil   then 
-			
+			StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+			phoneAction = true 
 			local audioEvent = SoundStopEvent.new()
 			audioEvent.soundName = "ui_phone_incoming_call"
 			Game.GetPlayer():QueueEvent(audioEvent)
@@ -8388,13 +8639,29 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			runActionList(currentPhoneCall.rejected_action,"phone_call","interact",false,"player")
 			incomingCallGameController:OnInitialize()
 			currentPhoneCall = nil
+			
+			phoneAction = false 
+			else
+			if actionName == "PhoneInteract" and phoneAction == false and actionType == "BUTTON_RELEASED" and currentPhoneCall ~= nil   then 
+			logme(1,"dddssssd")
 			StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+			
+				local audioEvent = SoundStopEvent.new()
+				audioEvent.soundName = "ui_phone_incoming_call"
+				Game.GetPlayer():QueueEvent(audioEvent)
+				
+				runActionList(currentPhoneCall.answer_action,"phone_call","interact",false,"player")
+				incomingCallGameController:OnInitialize()
+				currentPhoneCall = nil
+				StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+				
+			end
 		end
 		
 		
 		if actionName == "popup_moveLeft" and actionType == "REPEAT" and currentController == "gamepad"   then 
 			--hideInteract()
-			logme(1,"tosto")
+			logme(10,"tosto")
 		end
 		if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and currentHelp == nil  then 
 			
@@ -8402,7 +8669,7 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 			
 		end
 		
-		if currentHelp ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "activate_secondary" or actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
+		if currentHelp ~= nil and currentHelpIndex ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "activate_secondary" or actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
 			
 			local actionlisth = {}
 			local actionh = {}

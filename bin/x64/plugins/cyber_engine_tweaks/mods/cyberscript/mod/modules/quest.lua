@@ -58,22 +58,22 @@ function QuestThreadManager()
 				
 				
 				
-				if(QuestManager.GetObjectiveState(objectif.tag).isActive == true) then
+				if(QuestManager.GetObjectiveState(objectif.tag).isActive == true and QuestManager.IsTrackingObjective(objectif.tag)) then
 					
 					local result = false
 					result = checkTriggerRequirement(objectif.requirement,objectif.trigger)
 					-- if(objectif.tag == "test_objective_new_4") then
 					-- logme(1,objectif.tag.." active "..tostring(QuestManager.GetObjectiveState(objectif.tag).isActive))
-					
+					logme(10,objectif.tag.." trigger "..tostring(result))
 				
-					-- logme(1,objectif.tag.." trigger "..tostring(dump(objectif.trigger)))
+					--logme(1,objectif.tag.." trigger "..tostring(result))
 					
-					--logme(1,objectif.tag.." result "..tostring(result))
+					
 					-- end
 					
 					if(result == true and workerTable[objectif.tag.."_action"] == nil) then
 					--	logme(1,objectif.tag.." ACtion")
-						
+						--Game.GetPlayer():SetWarningMessage(objectif.tag.." result "..tostring(result))
 						
 						local action ={}
 						action.name = "quest_notification"
@@ -89,14 +89,31 @@ function QuestThreadManager()
 					
 						
 						
+						local playlist = {}
+						
+						table.insert(playlist,action)
+						
+						local action2 ={}
+						action2.name = "win_objective"
+						action2.value = objectif.tag
+						table.insert(playlist,action2)
+						
 						if(objectif.unlock ~= nil and #objectif.unlock > 0) then
 							
 							action.objective = objectif.unlock[1]
 							
 							for i,v in ipairs(objectif.unlock) do
 							if(QuestManager.GetObjectiveState(v).state ~= gameJournalEntryState.Undefined) then
-								QuestManager.MarkObjectiveAsActive(v)
-								QuestManager.TrackObjective(v,true)
+								local action2 ={}
+								action2.name = "unlock_objective"
+								action2.value = v
+								table.insert(playlist,action2)
+								
+								local action2 ={}
+								action2.name = "track_objective"
+								action2.value = v
+								table.insert(playlist,action2)
+								
 							end
 								
 								
@@ -105,59 +122,61 @@ function QuestThreadManager()
 							
 							
 							
-							local newobjective = QuestManager.GetObjective(objectif.unlock[1])
-							if newobjective.extra ~= nil then
+							-- local newobjective = QuestManager.GetObjective(objectif.unlock[1])
+							-- if newobjective.extra ~= nil then
 								
 								
 								
 								
 								
-								if newobjective.extra.mappin ~= nil then
+								-- if newobjective.extra.mappin ~= nil then
 									
-									local mappin = getMappinByTag(newobjective.extra.mappin)
-									
-									
+									-- local mappin = getMappinByTag(newobjective.extra.mappin)
 									
 									
 									
 									
-									if(mappin and mappin.controller ~= nil)then
+									
+									
+									-- if(mappin and mappin.controller ~= nil)then
 										
-										local startHub = StartHubMenuEvent.new()
+										-- local startHub = StartHubMenuEvent.new()
 										
-										local userData = MapMenuUserData.new()
-										userData.moveTo = Vector3.new(mappin.position.x, mappin.position.y, mappin.position.z)					
-										startHub:SetStartMenu("world_map",nil,userData)
-										Game.GetUISystem():QueueEvent(startHub)
+										-- local userData = MapMenuUserData.new()
+										-- userData.moveTo = Vector3.new(mappin.position.x, mappin.position.y, mappin.position.z)					
+										-- startHub:SetStartMenu("world_map",nil,userData)
+										-- Game.GetUISystem():QueueEvent(startHub)
 										
-										Cron.After(0.1, function()
+										-- Cron.After(0.1, function()
 											
-											GameController["WorldMapMenuGameController"]:TrackMappin(mappin.controller)
-											local closeHub = ForceCloseHubMenuEvent.new()
-											Game.GetUISystem():QueueEvent(closeHub)							
+											-- GameController["WorldMapMenuGameController"]:TrackMappin(mappin.controller)
+											-- local closeHub = ForceCloseHubMenuEvent.new()
+											-- Game.GetUISystem():QueueEvent(closeHub)							
 											
-										end)
-									end
+										-- end)
+									-- end
 									
 									
 									
 									
-								end
+								-- end
 								
-							end
+							-- end
 							
 						end
+							
 						
-						local playlist = deepcopy(objectif.action,nil)
 						
-						table.insert(playlist,action)
+						for _,obj in ipairs(objectif.action) do
+						table.insert(playlist,obj)
+						
+						
+						end
+						
+						
 						
 						runActionList(playlist,objectif.tag.."_action","quest",true,"see_engine")
 						
-						
-						QuestManager.MarkObjectiveAsComplete(objectif.tag)
-						
-							
 						
 						
 					end
@@ -198,7 +217,7 @@ function QuestThreadManager()
 			end
 			
 			
-			if(canDoFailAction == true) then
+			if(canDoFailAction == true or canDoFailActionForce == true) then
 				
 				if(workerTable[currentQuest.tag.."_fail"] == nil) then
 					
@@ -231,7 +250,7 @@ function QuestThreadManager()
 					QuestManager.resetQuestfromJson(resettag)
 					setScore(resettag,"Score",-1)
 					
-					
+					canDoFailActionForce = false
 					logme(1,"Quest Fail ACtion")
 					currentQuest = nil
 					--	closeQuest(currentQuest)
@@ -329,8 +348,11 @@ function startQuest(quest)
 	
 	
 	if(QuestManager.GetQuestState(quest.tag).isActive == true) then
-		Game.untrack()
 		
+		
+		--Game.GetJournalManager():TrackEntry(JournalEntry.new())
+		 
+		 
 		currentSave.arrayPlayerData.CurrentQuest = quest.tag
 		
 		phonedFixer = false

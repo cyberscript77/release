@@ -844,4 +844,10 @@ return {
 		["name"] = "ai_answer_is_ready",
 		["aitag"] = "myconversation01"
 	},
+	["entity_is_vehicle"] = {
+		["helper"] = "This trigger will be triggered if entity is vehicle",
+		["helperTitle"] = "Entity : Is Vehicle",
+		["name"] = "entity_is_vehicle",
+		["tag"] = "mytag"
+	},
 }

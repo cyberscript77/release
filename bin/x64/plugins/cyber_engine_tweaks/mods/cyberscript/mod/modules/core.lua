@@ -221,9 +221,9 @@ function SaveLoading()
 	Player_Run_Multiplier = getUserSettingWithDefault("Player_Run_Multiplier",Player_Run_Multiplier)
 	Jump_Height = getUserSettingWithDefault("Jump_Height",Jump_Height)
 	Immortal = getUserSettingWithDefault("Immortal",Immortal)
-	InfiniteStamina = getUserSettingWithDefault("InfiniteStamina",InfiniteStamina)
+	InfiniteStaminas = getUserSettingWithDefault("InfiniteStaminas",InfiniteStaminas)
 	InfiniteAmmo = getUserSettingWithDefault("InfiniteAmmo",InfiniteAmmo)
-	
+	RamUpgrade = getUserSettingWithDefault("RamUpgrade",RamUpgrade)
 	
 
 	debugLog = getUserSettingWithDefault("debugLog",debugLog)
@@ -522,7 +522,7 @@ function initCore() --Setup session, mod/external observer and trigger mod core 
 	
 	
 	logme(2,"CyberScript version "..cyberscript.version..cyberscript.channel)
-	logme(1,"CyberScript Initialisation...")
+	logme(1,"CyberScript Initialissssation...")
 	
 	
 	
@@ -665,6 +665,22 @@ function SetFlatFromSetting()
 	
 	
 	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
+	
+	if(UltraSpeedDodge ~= nil and UltraSpeedDodge == true) then
+				TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_Dodge_inline9.value", 1)
+				TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_DodgeAir_inline9.value", 1)
+				TweakDB:SetFlat("player.locomotion.maxGroundSpeed", 999999.0)
+				TweakDB:SetFlat("player.locomotion.maxAirXYSpeed", 999999.0)
+		end
+		
+		if(RamUpgrade ~= nil and RamUpgrade == true) then
+				
+			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline1.value", 1000)
+			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline4.value", 50)
+
+			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline2.floatValues", {1000})
+			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline5.floatValues", {50})
+		end
 	
 end
 -- ------------------------------------------------------------------
@@ -1120,7 +1136,7 @@ registerHotkey("toogleview", 'Toggle View', function()
 		local tdbid = TweakDBID.new(headItem)
 		local itemID = gameItemID:FromTDBID(tdbid)
 		if(AVisIn == false) then
-			Game.EquipItemOnPlayer(headItem, "TppHead")
+			EquipItemOnPlayer(headItem, "TppHead")
 		end
 		lastView = 2
 		elseif lastView == 2 then -- 3rd Person View near
@@ -1135,7 +1151,7 @@ registerHotkey("toogleview", 'Toggle View', function()
 		local itemID = gameItemID:FromTDBID(tdbid)
 		if(AVisIn == false) then
 			Game.AddToInventory(headItem, 1)
-			Game.EquipItemOnPlayer(headItem, "TppHead")
+			EquipItemOnPlayer(headItem, "TppHead")
 		end
 		lastView = 3
 		elseif lastView == 3 then -- 3rd Person View far
@@ -1149,7 +1165,7 @@ registerHotkey("toogleview", 'Toggle View', function()
 		local tdbid = TweakDBID.new(headItem)
 		local itemID = gameItemID:FromTDBID(tdbid)
 		if(AVisIn == false) then
-			Game.EquipItemOnPlayer(headItem, "TppHead")
+			EquipItemOnPlayer(headItem, "TppHead")
 		end
 		lastView = 4
 		elseif lastView == 4 then -- 3rd Person View very far
@@ -1163,7 +1179,7 @@ registerHotkey("toogleview", 'Toggle View', function()
 		local tdbid = TweakDBID.new(headItem)
 		local itemID = gameItemID:FromTDBID(tdbid)
 		if(AVisIn == false) then
-			Game.EquipItemOnPlayer(headItem, "TppHead")
+			EquipItemOnPlayer(headItem, "TppHead")
 		end
 		lastView = 1
 	end

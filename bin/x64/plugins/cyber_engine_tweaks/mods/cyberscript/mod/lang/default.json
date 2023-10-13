@@ -1087,7 +1087,8 @@
         "ui_setting_cheat_debug_options": "Enable Debug Menu",
         "ui_setting_cheat_debug_log": "Enable CyberScript Log Windows",
         "ui_setting_cheat_disable_fall_damage": "Disable Fall Damage and Animation",
-
+		"ui_setting_cheat_player_dodge":"Ultra speed less deceleration when dodging and dashing",
+		"ui_setting_cheat_player_ram":"1000 Ram Recovery Rate, 50 Max Ram",
         "ui_setting_customsetting": "CyberScript Custom Setting",
 
         "ui_multi_msg_tellto": "Send a Message To ",

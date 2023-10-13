@@ -32,7 +32,7 @@ function PlaySound(sound,isradio,needrepeat)
 	cyberscript.soundmanager[sound.tag].isradio = isradio
 	cyberscript.soundmanager[sound.tag].needrepeat = needrepeat
 	cyberscript.soundmanager[sound.tag].startplaying = os.time(os.date("!*t"))+0
-	cyberscript.soundmanager[sound.tag].endplaying = os.time(os.date("!*t"))+sound.duration
+	cyberscript.soundmanager[sound.tag].endplaying = os.time(os.date("!*t"))+sound.duration+1
 	
 	
 end
@@ -70,7 +70,7 @@ function PlaySoundAtEntity(sound,isradio,needrepeat,tag)
 			cyberscript.soundmanager[sound.tag].isradio = isradio
 			cyberscript.soundmanager[sound.tag].needrepeat = needrepeat
 			cyberscript.soundmanager[sound.tag].startplaying = os.time(os.date("!*t"))+0
-			cyberscript.soundmanager[sound.tag].endplaying = os.time(os.date("!*t"))+sound.duration
+			cyberscript.soundmanager[sound.tag].endplaying = os.time(os.date("!*t"))+sound.duration+1
 		end
 	end
 	
@@ -78,22 +78,23 @@ end
 
 function Stop(sound)
 	
-	local playsound = sound.tag
+	local playsound = sound
 	
-	if sound.language ~= nil then
+	-- if sound.language ~= nil then
 		
-		if sound.language[cyberscript.language] ~= nil then
+		-- if sound.language[cyberscript.language] ~= nil then
 		
-			playsound = sound.language[cyberscript.language]
+			-- playsound = sound.language[cyberscript.language]
 		
-		else
+		-- else
 			
-			if sound.language["default"] ~= nil then
-				playsound = sound.language["default"]
-			end
-		end
+			-- if sound.language["default"] ~= nil then
+				-- playsound = sound.language["default"]
+			-- end
+		-- end
 	
-	end
+	-- end
+	
 	
 	local audioEvent = SoundStopEvent.new()
 	audioEvent.soundName = playsound
