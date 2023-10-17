@@ -9,7 +9,7 @@
 	"tag": "fixer_maxtac",
 	"exist": false,
 	"npcexist": false,
-	"tweakid": "Character.mq030_max_tac",
+	"tweakid": "Character.mq030_max_tac_no_combat",
 	"trigger": {
 		"always_enable": {
 			"name": "auto"

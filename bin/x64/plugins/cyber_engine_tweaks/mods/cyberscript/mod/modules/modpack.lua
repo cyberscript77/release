@@ -374,8 +374,18 @@ function CheckandUpdateDatapack()
 					if (state == false) then
 						
 						DisableDatapack(k)
+						LoadDataPackCache()
 						else
+						
+						local enabled = arrayDatapack[k].enabled
+						loadDatapackObject(k)
+						arrayDatapack[k].enabled = true
+						arrayDatapack[k].state = nil
+						arrayDatapack[k].cachedata={}
+						arrayDatapack[k].cachedata.CacheVersion=cacheVersion
+						arrayDatapack[k].cachedata.modVersion=cyberscript.version
 						EnableDatapack(k)
+						LoadDataPackCacheSingle(k)
 					end
 				end)
 			end
@@ -956,7 +966,7 @@ end
 				end
 			end
 			else 
-			print("NULLL")
+			
 		end
 		
 	
@@ -1673,6 +1683,7 @@ end
 			
 			
 			exportCompiledDatapackFolder(name,name.." datapack : Update Disable state to cache")
+		
 		end
 		
 	end
@@ -1683,6 +1694,9 @@ end
 		
 		
 		exportCompiledDatapackFolder(name,name.." datapack : Update Enable state to cache")
+		
+		
+		
 	end
 	
 	

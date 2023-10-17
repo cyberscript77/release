@@ -4417,6 +4417,24 @@ if vehiculeRegion then
 				
 			end
 			
+			function VehicleBrake(vehiculetag, duration)
+				
+				local vehiculeobj =  getEntityFromManager(vehiculetag)
+				if(vehiculetag =="lookat") then 
+					
+					local entity = objLook
+					vehiculeobj = getEntityFromManagerById(objLook:GetEntityID())
+					
+					
+				end
+				
+				local vehicule = Game.FindEntityByID(vehiculeobj.id)
+				
+				vehicule:ForceBrakesFor(duration)
+				
+				
+			end
+			
 			function VehicleWindows(vehiculetag, action)
 				
 				local vehiculeobj =  getEntityFromManager(vehiculetag)

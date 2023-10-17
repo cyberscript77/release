@@ -1400,7 +1400,7 @@ function makeNativeSettings()
 		
 		
 		
-		nativeSettings.addSwitch("/CM/modsetting", getLang("Auto Refresh Datapack When Pause Menu"), getLang("Auto Refresh Datapack When Pause Menu"), AutoRefreshDatapack, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+		nativeSettings.addSwitch("/CM/modsetting", getLang("Auto Refresh Mods When Pause Menu"), getLang("Auto Refresh Mods When Pause Menu"), AutoRefreshDatapack, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			AutoRefreshDatapack = state
 			updateUserSetting("AutoRefreshDatapack", AutoRefreshDatapack)
 		end)
@@ -1435,7 +1435,7 @@ function makeNativeSettings()
 			
 		end)
 		
-		nativeSettings.addButton("/CM/modsetting", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
+		nativeSettings.addButton("/CM/modsetting", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded Mods, cache and session", "Reset the mod", 45, function()
 			
 			if file_exists("user/sessions/latest.txt") then
 				os.remove("user/sessions/latest.txt")

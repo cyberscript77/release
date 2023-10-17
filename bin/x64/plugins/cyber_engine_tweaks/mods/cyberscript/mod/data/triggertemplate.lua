@@ -402,6 +402,19 @@ return {
 			"npc",
 		},
 	},
+	["if_entities_around_entity"] = {
+		["range"] = 5,
+		["helper"] = "this trigger will check for if there is an entity founded in the entity's view in an determined range and filter. \
+ The filter will check in the name, display name and appearance of the entity or hash \
+ leave filter at [] for take all. ",
+		["helperTitle"] = "Entity : Entities around entity",
+		["name"] = "if_entities_around_entity",
+		["filter"] = {
+			"mox",
+			"npc",
+		},
+		["tag"] = "judy",
+	},
 	["entity_path_is_finish"] = {
 		["helper"] = "This trigger will be triggered when entity path is finished",
 		["tag"] = "Judy",

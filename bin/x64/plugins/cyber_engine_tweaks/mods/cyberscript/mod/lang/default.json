@@ -246,7 +246,7 @@
 
         "Multiplayer": "MultiPlayer",
 
-        "DatapackManager": "Datapack Manager",
+        "modManager": "Mods Manager",
 
         "Editor": "Editor",
 
@@ -304,7 +304,7 @@
 
         "CurrentQuest": "Current Quest",
 
-        "editor_main": "Welcome to CyberScript Editor:\\n\\n\\nHere You can use CyberScript to create Your own content like Quests, Events, Places, Dialog...\\n\\n\\nFirst, some basics: \\n\\n\\nAlmost every Element that You will see, will comply with CyberScript's Script System.\\n\\nA Script contains basic Properties like a Tag (Unique Identifier), a Name.\\n\\nIt will also have a Trigger Element that has several Properties.\\n\\nA Trigger is a Script Object that will, as the name implies, Is trigger to an Event, by the events Tag. \\n\\nBasically, when the Trigger's Condition is fullfilled, CyberScript's Script System Engine (SSE) will know that This event can play.\\n\\nUsually, Triggers have: \\n- A Name\\n- Some Conditional Properties\\n\\n\\n\\n\\nExample: \\n\\n{\\n'name':'3Dposition',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n}\\n\\n\\nIn This Example, the Trigger, '3Dposition', will check that Player's position is in a range of 50 meters from X:500, Y:500, Z:500.\\nIf yes, the Trigger will check SEE Engine, and will return True.\\nIf no, The Trigger wil check the Engine, and will return False.\\n\\n\\n\\nNow, an Element can have several Trigger Conditions. We wrap it into a Property, Labeled 'Requirement'.\\n\\n A 'Requirement' is an Order of how the Triggers need to be fullfilled.\\n\\nFor Example\\n\\nlet's say We have a Quest that has 3 Triggers:\\n\\n'trigger':\\n\\n'trigger01': {\\n'name':'3Dposition',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n},\\n'trigger02':{\\n'name':'in_car',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n},\\n'trigger03':{\\n'name':'time',\\n'min': 1800,\\n'max': 2300\\n}\\n\\n\\ntrigger01 will be fullfilled when the Player is in range of 50 Meters for the position: XYZ: 500,500,500.\\n\\ntrigger02 will be fullfilled when the Play is in a car.\\n\\ntrigger03 will be fullfilled when the game's time is between 18:00 (6pm) and 23:00 (11pm).\\n\\n\\n\\nLet's say we want our Quest to Run when: \\n\\ntrigger01 is fullfilled\\n\\nOR\\n\\ntrigger02 AND trigger03 is fullfilled\\n\\n\\nThese Conditions are what we call a requirement.\\n\\nIn json, it's formated like:\\n\\n'requirement':\\n[\\n ['trigger01'],\\n ['trigger02','trigger03']\\n \\n\\n]\\n\\n\\nYou can see it have 2 'groups': \\none contains trigger01\\nseconds contains trigger02 AND trigger03\\n\\n\\nWe can Translate it by:\\nrun my Quest when Group 1 is fullfilled (trigger01) OR group2 is fullfilled (trigger02 AND trigger03).\\n\\nEach group is a OR\\nEach Element in a Group is a AND\\n\\n\\n\\nNow, last Element that our Object has is an Action List.\\n\\nWhich is, by it's name, a List of Actions that the Script will run, in order, when Requirements are fullfilled.\\n\\nLet's look at an Example: \\n\\n'Actions':\\n[\\n\\n  {\\n'name':'notify',\\n'value':'Hello from CyberScript's Team:) '\\n},\\n{\\n'name':'wait_second',\\n'value':5\\n},\\n{\\n'name':'notify',\\n'value':'Judy is Love, Judy is Life '\\n}\\n\\n]\\n\\nIn This example: \\na notification message will show, with text: Hello from CyberScript's Team:)\\n\\nThen the script will wait 5 seconds\\n\\n A notification message will show, with text: Judy is Love, Judy is Life\\n\\n\\nAs You can see, Actions have a very similar syntax like Triggers. they both have a name, and some parameters that depend on the nature of the Action.\\n\\n\\nNow let's Describe every Element of the Editor:\\n\\n\\n\\nQuest: You can  make a Custom Quest with one, or several Objectives. It can  be chained, or can  be Active in parallels of other Objectives.\\n\\n\\n\\nDialog: You can  make a Custom Dialog with several Choices that will Launch Actions, specified by You, in Your Script.\\n\\n\\n\\nPhoneDialog: You can  make a Custom phone dialog(Text Msg Thread) with several Choices that will Launch Actions. It will show the in-game's 'Messages' Tab.\\n\\n\\n\\nInteract: You can  make a Custom Interact with several Choices that will Launch Actions.\\n\\n\\n\\nEvent: You can make an Event that will Launch in the Game World, with different actions happening Set by You, Example would be A gang Fight.\\n\\n\\n\\nFixer: You can make a fixer who can Trigger some Quests.\\n\\n\\n\\nFaction: You can make a Gang with several Options.\\n\\n\\n\\nRadio: You can make a Custom Radio station that will play Custom Music.\\n\\n\\n\\nLang: You can make Your own lang file to translate Datapack/ mod \\n\\n\\n\\nItems: If You are in a custom Place, You can make an exterior/interior, with Decor\\n\\n\\n\\nTheme: You can change CET color style for the mod's hud.\\n\\n\\n\\nInterface: You can make Your own Interface (a Native Popup that will show buttons and text, Made by You)\\n\\n\\n\\nHelp: You can make a Custom Shard that is Tagged as Help, Useful for typing out details about Your Datapack.\\n\\n\\n\\nPlace: You can define a Location as a Custom Place and setup several Events in it (Basically, Housing, or Own This Place)\\n\\n\\n\\nFunction: a Re-usuable Script/Object that contains a List of Actions, Made by You.\\n\\n\\n\\nNode: a Node is an XYZ Location that has a Tag and several Properties and can be bounded to a Circuit and a Path\\n\\n\\n\\nCircuit: it's an Order of Nodes.\\n\\n\\n\\nPath: it's a path that can be played (for vehicle like metro for example)\\n\\n\\n\\nCustom NPC: You can setup an NPC who will spawn when You reach it's Location, and Range.\\n\\n\\n\\nShard: You can setup a Custom Shard that You can Acces through the Shard Menu\\n\\n\\n\\nDatapack Builder: Here is the final step to make all of those Script/Objects that You created into a Datapack!:)\\n",
+        "editor_main": "Welcome to CyberScript Editor:\\n\\n\\nHere You can use CyberScript to create Your own content like Quests, Events, Places, Dialog...\\n\\n\\nFirst, some basics: \\n\\n\\nAlmost every Element that You will see, will comply with CyberScript's Script System.\\n\\nA Script contains basic Properties like a Tag (Unique Identifier), a Name.\\n\\nIt will also have a Trigger Element that has several Properties.\\n\\nA Trigger is a Script Object that will, as the name implies, Is trigger to an Event, by the events Tag. \\n\\nBasically, when the Trigger's Condition is fullfilled, CyberScript's Script System Engine (SSE) will know that This event can play.\\n\\nUsually, Triggers have: \\n- A Name\\n- Some Conditional Properties\\n\\n\\n\\n\\nExample: \\n\\n{\\n'name':'3Dposition',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n}\\n\\n\\nIn This Example, the Trigger, '3Dposition', will check that Player's position is in a range of 50 meters from X:500, Y:500, Z:500.\\nIf yes, the Trigger will check SEE Engine, and will return True.\\nIf no, The Trigger wil check the Engine, and will return False.\\n\\n\\n\\nNow, an Element can have several Trigger Conditions. We wrap it into a Property, Labeled 'Requirement'.\\n\\n A 'Requirement' is an Order of how the Triggers need to be fullfilled.\\n\\nFor Example\\n\\nlet's say We have a Quest that has 3 Triggers:\\n\\n'trigger':\\n\\n'trigger01': {\\n'name':'3Dposition',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n},\\n'trigger02':{\\n'name':'in_car',\\n'x': 500,\\n'y': 500,\\n'z': 500,\\n'range':50\\n},\\n'trigger03':{\\n'name':'time',\\n'min': 1800,\\n'max': 2300\\n}\\n\\n\\ntrigger01 will be fullfilled when the Player is in range of 50 Meters for the position: XYZ: 500,500,500.\\n\\ntrigger02 will be fullfilled when the Play is in a car.\\n\\ntrigger03 will be fullfilled when the game's time is between 18:00 (6pm) and 23:00 (11pm).\\n\\n\\n\\nLet's say we want our Quest to Run when: \\n\\ntrigger01 is fullfilled\\n\\nOR\\n\\ntrigger02 AND trigger03 is fullfilled\\n\\n\\nThese Conditions are what we call a requirement.\\n\\nIn json, it's formated like:\\n\\n'requirement':\\n[\\n ['trigger01'],\\n ['trigger02','trigger03']\\n \\n\\n]\\n\\n\\nYou can see it have 2 'groups': \\none contains trigger01\\nseconds contains trigger02 AND trigger03\\n\\n\\nWe can Translate it by:\\nrun my Quest when Group 1 is fullfilled (trigger01) OR group2 is fullfilled (trigger02 AND trigger03).\\n\\nEach group is a OR\\nEach Element in a Group is a AND\\n\\n\\n\\nNow, last Element that our Object has is an Action List.\\n\\nWhich is, by it's name, a List of Actions that the Script will run, in order, when Requirements are fullfilled.\\n\\nLet's look at an Example: \\n\\n'Actions':\\n[\\n\\n  {\\n'name':'notify',\\n'value':'Hello from CyberScript's Team:) '\\n},\\n{\\n'name':'wait_second',\\n'value':5\\n},\\n{\\n'name':'notify',\\n'value':'Judy is Love, Judy is Life '\\n}\\n\\n]\\n\\nIn This example: \\na notification message will show, with text: Hello from CyberScript's Team:)\\n\\nThen the script will wait 5 seconds\\n\\n A notification message will show, with text: Judy is Love, Judy is Life\\n\\n\\nAs You can see, Actions have a very similar syntax like Triggers. they both have a name, and some parameters that depend on the nature of the Action.\\n\\n\\nNow let's Describe every Element of the Editor:\\n\\n\\n\\nQuest: You can  make a Custom Quest with one, or several Objectives. It can  be chained, or can  be Active in parallels of other Objectives.\\n\\n\\n\\nDialog: You can  make a Custom Dialog with several Choices that will Launch Actions, specified by You, in Your Script.\\n\\n\\n\\nPhoneDialog: You can  make a Custom phone dialog(Text Msg Thread) with several Choices that will Launch Actions. It will show the in-game's 'Messages' Tab.\\n\\n\\n\\nInteract: You can  make a Custom Interact with several Choices that will Launch Actions.\\n\\n\\n\\nEvent: You can make an Event that will Launch in the Game World, with different actions happening Set by You, Example would be A gang Fight.\\n\\n\\n\\nFixer: You can make a fixer who can Trigger some Quests.\\n\\n\\n\\nFaction: You can make a Gang with several Options.\\n\\n\\n\\nRadio: You can make a Custom Radio station that will play Custom Music.\\n\\n\\n\\nLang: You can make Your own lang file to translate Mods/ mod \\n\\n\\n\\nItems: If You are in a custom Place, You can make an exterior/interior, with Decor\\n\\n\\n\\nTheme: You can change CET color style for the mod's hud.\\n\\n\\n\\nInterface: You can make Your own Interface (a Native Popup that will show buttons and text, Made by You)\\n\\n\\n\\nHelp: You can make a Custom Shard that is Tagged as Help, Useful for typing out details about Your mod.\\n\\n\\n\\nPlace: You can define a Location as a Custom Place and setup several Events in it (Basically, Housing, or Own This Place)\\n\\n\\n\\nFunction: a Re-usuable Script/Object that contains a List of Actions, Made by You.\\n\\n\\n\\nNode: a Node is an XYZ Location that has a Tag and several Properties and can be bounded to a Circuit and a Path\\n\\n\\n\\nCircuit: it's an Order of Nodes.\\n\\n\\n\\nPath: it's a path that can be played (for vehicle like metro for example)\\n\\n\\n\\nCustom NPC: You can setup an NPC who will spawn when You reach it's Location, and Range.\\n\\n\\n\\nShard: You can setup a Custom Shard that You can Acces through the Shard Menu\\n\\n\\n\\nmod Builder: Here is the final step to make all of those Script/Objects that You created into a mod!:)\\n",
 
         "bebought": "can be Bought:",
 
@@ -342,19 +342,19 @@
 
         "AutoAmbushToggle": "Toggle Auto OFF Ambush",
 
-        "compilefound": "CyberScript: Compiled Datapacks Found, Importing...",
+        "compilefound": "CyberScript: Compiled mods Found, Importing...",
 
-        "compileok": "CyberScript: Compiled Datapacks are OK!",
+        "compileok": "CyberScript: Compiled mods are OK!",
 
-        "compileoutdated": "CyberScript: Version of compiled Datapacks is outdated, Generating a New...",
+        "compileoutdated": "CyberScript: Version of compiled mods is outdated, Generating a New...",
 
         "compileuptodate": "CyberScript:Is up to date!",
 
-        "datatpackimporterror": "Error during Import datatpack init: (Datapack:data/compiled_Datapack.lua) ",
+        "datatpackimporterror": "Error during Import datatpack init: (mod:data/compiled_mod.lua) ",
 
-        "compileloaded": "CyberScript: Compiled Datapacks loaded!",
+        "compileloaded": "CyberScript: Compiled mods loaded!",
 
-        "compilecorrupted": "CyberScript: Compiled Datapacks corrupted!, Rebuilding...",
+        "compilecorrupted": "CyberScript: Compiled mods corrupted!, Rebuilding...",
 
         "nonattivesetting": "!!!!!!!! CyberScript: No nativeSettings Mod detected, the mod will Not Work!!!!!!!! ",
 
@@ -528,7 +528,7 @@
 
         "need_requirement": "Need Requirement to unlock Action List",
 
-        "editor_save_for_build": "Save to Build Your Datapack",
+        "editor_save_for_build": "Save to Build Your mod",
 
         "editor_test_in_game": "Test it!",
 
@@ -600,7 +600,7 @@
 
         "editor_Faction_Rivals": "Rivals",
 
-        "editor_Faction_Rivals_msg": "Put Faction Tag Rivals here. Path: quest_mod/json/datapack/default/factions",
+        "editor_Faction_Rivals_msg": "Put Faction Tag Rivals here. Path: quest_mod/json/mod/default/factions",
 
         "editor_Faction_SpawnableNPC": "Spawnable NPCs",
 
@@ -620,11 +620,11 @@
 
         "editor_Radio_tracks": "Tracks",
 
-        "editor_Radio_tracks_msg": "Put tracks here. \n name of the sound file should look like `xxxx.mp3`. You need to put the audio file into \\YourDatapack\\song\\ folders. This path is just Reference.",
+        "editor_Radio_tracks_msg": "Put tracks here. \n name of the sound file should look like `xxxx.mp3`. You need to put the audio file into \\Yourmod\\song\\ folders. This path is just Reference.",
 
         "editor_Radio_warning01": "Warning:",
 
-        "editor_Radio_warning02": "You can't test them until You wrapped it into a Datapack and add Your song file!",
+        "editor_Radio_warning02": "You can't test them until You wrapped it into a mod and add Your song file!",
 
         "editor_Radio_test": "Test (it will only show in radio List but nothing will play)",
 
@@ -634,7 +634,7 @@
 
         "editor_Lang_Key": "Key/Value",
 
-        "editor_Lang_Key_msg": "In any Text Element of framework, you Write the `key` instead of a Text. It will Use the value associated to the `key`. \n You can use it to Translate the whole CyberScript framework for your Datapack.",
+        "editor_Lang_Key_msg": "In any Text Element of framework, you Write the `key` instead of a Text. It will Use the value associated to the `key`. \n You can use it to Translate the whole CyberScript framework for your mod.",
 
         "editor_Housing": "Housing",
 
@@ -642,7 +642,7 @@
 
         "editor_Housing_Export_Current": "Export Current place items",
 
-        "editor_Housing_Save": "Save Housing and items for Datapack",
+        "editor_Housing_Save": "Save Housing and items for mod",
 
         "editor_Housing_Buy": "Buy this Place",
 
@@ -708,7 +708,7 @@
 
         "editor_Place_msg01": "To unlock Item Tab: ",
 
-        "editor_Place_msg02": "You need to have a Datapack with a 'place' script inside it's 'place' folder.",
+        "editor_Place_msg02": "You need to have a mod with a 'place' script inside it's 'place' folder.",
 
         "editor_Place_msg03": "Enabled. As well as be inside the Custom Place. Test your Items and placements before exporting the Items and Housing Furnitures!",
 
@@ -802,7 +802,7 @@
 
         "editor_Shard_new": "Is Shard New?",
 
-        "editor_Build": "Build my Datapack",
+        "editor_Build": "Build my mod",
 
         "editor_Build_Author": "Author",
 
@@ -810,51 +810,51 @@
 
         "editor_Build_Flags": "Flags",
 
-        "editor_Build_Flags_msg": "Put flags here. \n possible flags:\n cm_version:x.x.x \n cm_version_strict:x.x.x \n compile \n beta \n amm \n amm_version:x.x.x \n amm_version_strict:x.x.x \n mod:test \n nfsw \n Datapack:test \n Datapack_version:test:x.x.x \n Datapack_version_strict:test:x.x.x",
+        "editor_Build_Flags_msg": "Put flags here. \n possible flags:\n cm_version:x.x.x \n cm_version_strict:x.x.x \n compile \n beta \n amm \n amm_version:x.x.x \n amm_version_strict:x.x.x \n mod:test \n nfsw \n mod:test \n mod_version:test:x.x.x \n mod_version_strict:test:x.x.x",
 
-        "editor_Build_myDatapackQuest": "Saved Quest: ",
+        "editor_Build_mymodQuest": "Saved Quest: ",
 
-        "editor_Build_myDatapackDialog": "Saved Choices: ",
+        "editor_Build_mymodDialog": "Saved Choices: ",
 
-        "editor_Build_myDatapackEvent": "Saved Event: ",
+        "editor_Build_mymodEvent": "Saved Event: ",
 
-        "editor_Build_myDatapackInteract": "Saved Interact: ",
+        "editor_Build_mymodInteract": "Saved Interact: ",
 
-        "editor_Build_myDatapackFixer": "Saved Fixer: ",
+        "editor_Build_mymodFixer": "Saved Fixer: ",
 
-        "editor_Build_myDatapackFaction": "Saved Faction: ",
+        "editor_Build_mymodFaction": "Saved Faction: ",
 
-        "editor_Build_myDatapackFunction": "Saved Function: ",
+        "editor_Build_mymodFunction": "Saved Function: ",
 
-        "editor_Build_myDatapackNode": "Saved Node: ",
+        "editor_Build_mymodNode": "Saved Node: ",
 
-        "editor_Build_myDatapackPath": "Saved Path: ",
+        "editor_Build_mymodPath": "Saved Path: ",
 
-        "editor_Build_myDatapackCircuit": "Saved Circuit: ",
+        "editor_Build_mymodCircuit": "Saved Circuit: ",
 
-        "editor_Build_myDatapackPlace": "Saved Place: ",
+        "editor_Build_mymodPlace": "Saved Place: ",
 
-        "editor_Build_myDatapackHousing": "Saved Housing: ",
+        "editor_Build_mymodHousing": "Saved Housing: ",
 
-        "editor_Build_myDatapackRadio": "Saved Radio: ",
+        "editor_Build_mymodRadio": "Saved Radio: ",
 
-        "editor_Build_myDatapackLanguage": "Saved Language: ",
+        "editor_Build_mymodLanguage": "Saved Language: ",
 
-        "editor_Build_myDatapackHelp": "Saved Help: ",
+        "editor_Build_mymodHelp": "Saved Help: ",
 
-        "editor_Build_myDatapackInterfaces": "Saved Interfaces: ",
+        "editor_Build_mymodInterfaces": "Saved Interfaces: ",
 
-        "editor_Build_myDatapackCustomNPC": "Saved Custom NPC: ",
+        "editor_Build_mymodCustomNPC": "Saved Custom NPC: ",
 
-        "editor_Build_myDatapackShard": "Saved Shard: ",
+        "editor_Build_mymodShard": "Saved Shard: ",
 
-        "editor_Build_myDatapackPhoneDialog": "Saved Phone Conversation: ",
+        "editor_Build_mymodPhoneDialog": "Saved Phone Conversation: ",
 
-        "editor_Build_myDatapackPOI": "Saved POI: ",
+        "editor_Build_mymodPOI": "Saved POI: ",
 
-        "editor_Build_myDatapackScene": "Saved Scene: ",
+        "editor_Build_mymodScene": "Saved Scene: ",
 
-        "editor_Build_Build": "Build Script Folders to Path quest_mod/json/myDatapack",
+        "editor_Build_Build": "Build Script Folders to Path quest_mod/json/mymod",
 
         "editor_Build_Msg": "You need a Tag before You Build it!",
 
@@ -914,25 +914,25 @@
 
         "framework_modpack_deleted": " Delete ",
 
-        "datapack_datapack_created": "CyberScript: Compiled Datapacks created ",
+        "mod_mod_created": "CyberScript: Compiled mods created ",
 
-        "datapack_error_import": "'Error during Import datatpack: (Datapack:'",
+        "mod_error_import": "'Error during Import datatpack: (mod:'",
 
-        "datapack_recover": "Recover Datapack has to be only with the default folder installed. Delete all others, then 'Rebuild Datapack Cache' in CyberScript Settings!",
+        "mod_recover": "Recover mod has to be only with the default folder installed. Delete all others, then 'Rebuild mod Cache' in CyberScript Settings!",
 
-        "datapack_recover_fail": "Recovery: Error during Import datatpack: (Datapack:default) ",
+        "mod_recover_fail": "Recovery: Error during Import datatpack: (mod:default) ",
 
-        "datapack_wrong_default": "Wrong Default Datapack??? Ask in the #help-and-bugs chat in our Discord. object: ",
+        "mod_wrong_default": "Wrong Default mod??? Ask in the #help-and-bugs chat in our Discord. object: ",
 
-        "datapack_updated_01": "Updated Datapack ",
+        "mod_updated_01": "Updated mod ",
 
-        "datapack_updated_02": " To it's latest Version!",
+        "mod_updated_02": " To it's latest Version!",
 
         "multi_welcome": "Welcome to Cyberpunk Multiverse Server!",
 
         "keystone_connect_btn": "Connect to CyberScript Service",
 
-        "keystone_connect_msg": "Being Connected to the Server doesn't mean Your are Connected to Multi-Player. Connected to the Server grants access to the Datapacks.",
+        "keystone_connect_msg": "Being Connected to the Server doesn't mean Your are Connected to Multi-Player. Connected to the Server grants access to the mods.",
 
         "npc_error_nocamera": "CyberScript: No camera Found",
 
@@ -1064,13 +1064,13 @@
 
         "ui_setting_actions_cleareaffinity_msg": "Clear All Affinity (Gang and NPC), it will put all to 0",
 
-        "ui_setting_actions_auto_refresh": "Auto Refresh Datapack at Pause Menu",
+        "ui_setting_actions_auto_refresh": "Auto Refresh Mods at Pause Menu",
 
-        "ui_setting_actions_refresh": "Refresh Datapack Cache",
+        "ui_setting_actions_refresh": "Refresh Mods Cache",
 
-        "ui_setting_actions_rebuild": "Rebuild Datapack Cache",
+        "ui_setting_actions_rebuild": "Rebuild Mods Cache",
 
-        "ui_setting_actions_rebuild_done": "CyberScript: Datapack Cache rebuild",
+        "ui_setting_actions_rebuild_done": "CyberScript: Mods Cache rebuild",
 
         "ui_menu": "CM menu",
 
@@ -1175,7 +1175,7 @@
 
         "ui_multi_buyed_items": "Place Bought Items (Multi)",
 
-        "ui_datapack_choice": "Choose current Datapack Interaction",
+        "ui_mod_choice": "Choose current mod Interaction",
 
         "ui_manage_placed_item": "Manage Placed Items",
 
@@ -1193,8 +1193,8 @@
 
         "ui_keystone_main_title": "CyberScript",
         "ui_keystone_main_update_available": "New version available, Click here to Update CyberScript !",
-        "ui_keystone_main_datapack": "Datapacks",
-        "ui_keystone_main_downloaded_datapack": "Downloaded Datapacks",
+        "ui_keystone_main_mod": "mods",
+        "ui_keystone_main_downloaded_mod": "Downloaded mods",
         "ui_keystone_main_corpowars": "Corpo Wars Network",
         "ui_keystone_main_stocks": "Stock Market",
         "ui_keystone_main_items": "Item market",
@@ -1236,22 +1236,22 @@
         "ui_keystone_items_msg10": "Add to Cart",
         "ui_keystone_items_msg11": "Remove from Cart",
 
-        "ui_keystone_datapack": "Datapacks",
-        "ui_keystone_datapack_msg01": "Hover over a Datapack for it's Description, click on it to Manage the Datapack",
-        "ui_keystone_datapack_msg02": "Author: ",
-        "ui_keystone_datapack_msg03": "Version: ",
-        "ui_keystone_datapack_msg04": "Downloaded version: ",
-        "ui_keystone_datapack_msg05": "!!! UPDATE IS AVAILABLE !!!",
-        "ui_keystone_datapack_msg06": " (Update Available)",
-        "ui_keystone_datapack_msg07": "Require Mod version: ",
-        "ui_keystone_datapack_msg08": "Flags: ",
-        "ui_keystone_datapack_msg09": "Exclusive to your faction !",
-        "ui_keystone_datapack_msg10": "This datapack is not from CyberScript Server.",
-        "ui_keystone_datapack_msg11": " You would need to Update CyberScript first",
-        "ui_keystone_datapack_msg12": "Back to Datapack",
-        "ui_keystone_mydatapack": "Downloaded Datapacks",
-        "ui_keystone_datapack_detail": "Datapack Details",
-        "ui_keystone_datapack_detail_nope": "",
+        "ui_keystone_mod": "mods",
+        "ui_keystone_mod_msg01": "Hover over a mod for it's Description, click on it to Manage the mod",
+        "ui_keystone_mod_msg02": "Author: ",
+        "ui_keystone_mod_msg03": "Version: ",
+        "ui_keystone_mod_msg04": "Downloaded version: ",
+        "ui_keystone_mod_msg05": "!!! UPDATE IS AVAILABLE !!!",
+        "ui_keystone_mod_msg06": " (Update Available)",
+        "ui_keystone_mod_msg07": "Require Mod version: ",
+        "ui_keystone_mod_msg08": "Flags: ",
+        "ui_keystone_mod_msg09": "Exclusive to your faction !",
+        "ui_keystone_mod_msg10": "This mod is not from CyberScript Server.",
+        "ui_keystone_mod_msg11": " You would need to Update CyberScript first",
+        "ui_keystone_mod_msg12": "Back to mod",
+        "ui_keystone_mymod": "Downloaded mods",
+        "ui_keystone_mod_detail": "mod Details",
+        "ui_keystone_mod_detail_nope": "",
 
         "ui_keystone_instance": "Choose an Instance",
         "ui_keystone_instance_msg01": "Connected Players: ",
@@ -1307,7 +1307,7 @@
 
         "editor_Housing_template_set_center_player_pos": "Set Template Anchor Point from Player Position",
         "editor_Housing_template_export": "Export Template in JSON",
-        "editor_Housing_template_save": "Save Template for Datapack Building",
+        "editor_Housing_template_save": "Save Template for mod Building",
         "editor_Housing_load_template": "Load Template",
         "editor_Housing_apply_template": "Apply Template",
         "editor_Housing_clear_template": "Clear Template",

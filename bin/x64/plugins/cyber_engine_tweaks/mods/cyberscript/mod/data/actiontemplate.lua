@@ -1250,6 +1250,20 @@ return {
 		
 		["name"] = "register_entities_around_you",
 	},
+	["register_entities_around_entity"] = {
+		["helper"] = "This action will register founded entity in the entity's determined range and filter. \
+ The filter will check in the name, display name and appearance of the entity or hash \
+ leave filter at [] for take all. ",
+		["helperTitle"] = "Entity : Register entities around Entity",
+		["range"] = 5,
+		["filter"] = {
+			"mox",
+			"npc",
+		},
+		["group"] = "",
+		["tag"] = "judy",
+		["name"] = "register_entities_around_entity",
+	},
 	["register_entity_by_hash"] = {
 		["helper"] = "This action will register founded entity in the player's determined range and hash. ",
 		["helperTitle"] = "Entity : Register entity around you by hash",
@@ -2383,6 +2397,13 @@ return {
 		["helperTitle"] = "Vehicule : Change Doors State",
 		["value"] = "open",
 		["name"] = "vehicle_change_doors",
+		["tag"] = "myvehiculetag",
+	},
+	["vehicle_force_brake"] = {
+		["helper"] = "This action will force brake on vehicle",
+		["helperTitle"] = "Vehicule : Force Brake",
+		["value"] = 5,
+		["name"] = "vehicle_force_brake",
 		["tag"] = "myvehiculetag",
 	},
 	[" reset_scene"] = {

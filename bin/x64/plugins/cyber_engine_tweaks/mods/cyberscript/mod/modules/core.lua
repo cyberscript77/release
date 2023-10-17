@@ -507,7 +507,7 @@ function initCore() --Setup session, mod/external observer and trigger mod core 
 	if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil  ) then
 		nativeSettings.data["CMDT"].options = {}
 		else
-		nativeSettings.addTab("/CMDT", "CyberScript Datapack Manager") -- Add our mods tab (path, label)
+		nativeSettings.addTab("/CMDT", "CyberScript Mods Manager") -- Add our mods tab (path, label)
 		nativeSettings.data["CMDT"].options = {}
 	end
 	

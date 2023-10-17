@@ -552,7 +552,13 @@ PanzerHUDGameController_OnInitialize(this)
 	ObserveAfter('WorldMapTooltipController', 'SetData', function(self,data,menu)
 		WorldMapTooltipController_SetData(self,data,menu)
 	end)
+	ObserveAfter('MessengerNotification', 'OnInitialize', function(self)
+		PhoneMessagePopupGameController_OnHide(self,evt)
+	end)
 	
+	ObserveAfter('PhoneMessagePopupGameController', 'OnShow', function(self,evt)
+		PhoneMessagePopupGameController_OnShow(self,evt)
+	end)
 	ObserveAfter('WorldMapTooltipContainer', 'SetData', function(self,target,data,menu)
 	
 	WorldMapTooltipContainer_SetData(self,target,data,menu)
