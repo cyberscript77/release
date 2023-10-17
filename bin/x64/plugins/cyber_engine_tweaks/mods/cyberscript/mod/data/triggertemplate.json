@@ -1,225 +1,293 @@
 {
-  "last_killed_entity": {
-    "helperTitle": "Entity : last killed entity",
-    "helper": "This trigger will check the last killed enity exist ",
-    "name": "last_killed_entity"
+  "custom_room": {
+    "value": "customroomtag",
+    "helperTitle": "House : in specific Custom Room",
+    "helper": "This trigger will be triggered when you are in a specific custom room (by tag)",
+    "name": "custom_room"
   },
-  "player_in_poi": {
-    "district": "",
-    "subdistrict": "",
-    "type": 1,
-    "name": "player_in_poi",
-    "range": 5,
-    "helperTitle": "Player : in POI",
-    "helper": "This trigger will be triggered when a player is in custom Point Of Interest",
-    "position_poi_search": "type|subdistrict|district|tag",
-    "position_poi_searchdistance": "near|far|random",
-    "help": "tag is useful if you want select an poi who have tag and an specifc location in this poi, leave it to empty is not needed. Same for district,subdistrict. if you want an specific location, use uselocationtag. If you put current in district or subdisttrict it will take the current district or subdistrict",
-    "iscar": false,
-    "uselocationtag": false,
-    "tag": ""
+  "current_subdistrict": {
+    "help": "Vista_del_rey_Abandoned_Apartment_Building||ArasakaWaterfront_AbandonedWarehouse||LittleChina_Afterlife||Northside_All_Foods||CorpoPlaza_ArasakaTowerAtrium||CorpoPlaza_ArasakaTowerCEOFloor||CorpoPlaza_ArasakaTowerJenkins||CorpoPlaza_ArasakaTowerJungle||CorpoPlaza_ArasakaTowerLobby||CorpoPlaza_ArasakaTowerNest||CorpoPlaza_ArasakaTowerSaburoOffice||CorpoPlaza_ArasakaTowerUnlistedFloors||CorpoPlaza_ArasakaTowerUpperAtrium||Arroyo_Arasaka_Warehouse||ArasakaWaterfront||NorthOaks_Arasaka_Estate||Arroyo||Coastview_BattysHotel||Badlands_BiotechnicaFlats||Coastview_ButcherShop||RanchoCoronado_Caliente||CharterHill||Arroyo_ClairesGarage||Northside_CleanCut||JapanTown_Clouds||Coastview||NorthOaks_Columbarium||CorpoPlaza||Arroyo_CytechFactory||JapanTown_DarkMatter||Vista_del_Rey_Delamain||NorthOaks_Denny_Estate||Downtown||Badlands_DryCreek||SouthBadlands_EdgewoodFarm||Vista_del_rey_ElCoyoteCojo||Glen_Embers||JapanTown_Fingers||JapanTown_FourthWallBdStudio||Glen||Coastview_GrandImperialMall||RanchoCoronado_GunORama||JapanTown_HiromisApartment||Badlands_JacksonPlains||JapanTown||Downtown_Jinguji||Kabuki_JudysApartment||Kabuki||Arroyo_Kendachi||Arroyo_KenmoreCafe||NorthOaks_Kerry_Estate||ArasakaWaterfront_KonpekiPlaza||Vista_del_Rey_LaCatrina||Badlands_LagunaBend||LagunaBend_LakeHut||Badlands_LasPalapas||Arroyo_LasPalapas||LittleChina||Kabuki_LizziesBar||JapanTown_MegabuildingH8||LittleChina_MistysShop||Glen_MusicStore||Glen_NCPDLab||NorthOaks||Northside||Kabuki_NoTellMotel||RanchoCoronado_Piez||SouthBadlands_PoppyFarm||CharterHill_PowerPlant||LittleChina_Q101Cyberspace||Coastview_q110Cyberspace||CorpoPlaza_q201Cyberspace||SouthBadlands_q201SpaceStation||RanchoCoronado||Badlands_RattlesnakeCreek||Badlands_RedPeaks||Arroyo_Red_Dirt||LittleChina_RiotClub||Badlands_RockyRidge||Coastview_RundownApartment||Badlands_SantaClara||Badlands_SierraSonora||Badlands_SoCalBorderCrossing||RanchoCoronado_Softsys||RanchoCoronado_Stylishly||Downtown_TheHammer||Arroyo_TireEmpire||LittleChina_TomsDiner||Northside_Totentaz||SouthBadlands_TrailerPark||LittleChina_VApartment||Badlands_VasquezPass||Coastview_VDBChapel||Coastview_VDBMaglev||LittleChina_VictorsClinic||VistaDelRey||JapanTown_VR_Tutorial||JapanTown_Wakakos_Pachinko_Parlor||Wellsprings||WestWindEstate||Glen_WichedTires||Northside_WNS||Badlands_Yucca||Badlands_YuccaGarage||Badlands_YuccaRadioTowe",
+    "name": "current_subdistrict",
+    "value": "Kabuki",
+    "helperTitle": "Map : Current Sub District",
+    "helper": "This trigger will be triggered when in a specific subdistrict"
   },
-  "last_killed_entity_is_in_specific_gang": {
-    "value": "faction_sixthstreet",
-    "helper": "This trigger will check if Last Killed entity is in an specific gang ",
-    "name": "last_killed_entity_is_in_specific_gang",
-    "helperTitle": "Entity : Last Killed entity is in an specific gang"
-  },
-  "in_car": {
-    "helperTitle": "Player : In car",
-    "helper": "This trigger will be triggered when you are in a car",
-    "name": "in_car"
-  },
-  "is_arrived_to_destination": {
-    "helperTitle": "Entity : Is Arrived to Destination",
-    "helper": "This trigger will be triggered when entity is arrived to their destination",
-    "tag": "delamain",
-    "name": "is_arrived_to_destination",
-    "range": 5
-  },
-  "position": {
-    "helperTitle": "Player : At Position XY",
-    "helper": "This trigger will be triggered when you are at this XY position (in the range)",
-    "y": 0,
-    "x": 0,
-    "name": "position",
-    "range": 0
-  },
-  "npc": {
-    "helperTitle": "NPC : who is talking",
-    "helper": "This trigger will be triggered when you talk with a specific NPC",
-    "value": "Judy",
-    "way": "phone",
-    "way_help": "phone||speak||fixer",
-    "name": "npc",
-    "value_help": "use value (write the Name) for phone or Speak or value (write a tag text) for fixer"
-  },
-  "choice_is_opened": {
-    "helperTitle": "UI : Custom Choice is Open",
-    "helper": "This trigger will be triggered when a custom choice is open",
-    "name": "choice_is_opened"
-  },
-  "entity_is_vehicle": {
-    "helperTitle": "Entity : Is Vehicle",
-    "helper": "This trigger will be triggered if entity is vehicle",
-    "name": "entity_is_vehicle",
-    "tag": "mytag"
-  },
-  "datapack_is_enabled": {
-    "helperTitle": "Datapack : Is Enabled",
-    "tag": "mydatapack",
-    "name": "datapack_is_enabled",
-    "helper": "This action will check if the selected datapack is enabled"
+  "entity_in_car_specific": {
+    "tag": "judy01",
+    "name": "entity_in_car_specific",
+    "value": "delamain",
+    "helperTitle": "Entity : In a specific car",
+    "helper": "This trigger will be triggered when the targeted entity is in a specific car that name contains the name in it's ID"
   },
   "last_killed_entity_is_in_gang": {
     "helperTitle": "Entity : last killed entity is in a gang",
     "helper": "This trigger will check if last killed entity is in a gang",
     "name": "last_killed_entity_is_in_gang"
   },
-  "ai_answer_is_ready": {
-    "helperTitle": "AI : Answer is ready",
-    "helper": "This trigger will be triggered whe CyberAI answer is ready",
-    "name": "ai_answer_is_ready",
-    "aitag": "myconversation01"
-  },
-  "specific_choice_is_opened": {
-    "helperTitle": "UI : Specific Custom Choice is Open",
-    "tag": "choicetag",
-    "name": "specific_choice_is_opened",
-    "helper": "This trigger will be triggered when a specific custom choice is open"
-  },
-  "entity_in_faction": {
-    "helperTitle": "Entity : Is in Faction",
-    "helper": "This trigger will be triggered when entity is in targeted Faction",
-    "faction": "faction_mox",
-    "name": "entity_in_faction",
-    "tag": "judy01"
-  },
-  "device_active_radio_channel_id": {
-    "value": 1,
-    "helper": "This trigger will be triggered when a specific active radio channel index is played",
-    "name": "device_active_radio_channel_id",
-    "helperTitle": "Device : Specific active radio channel index is player"
-  },
-  "compare": {
-    "helperTitle": "Logic : Compare",
-    "helper": "This trigger will be triggered when the trigger that you set has the same statut that you put in (expected)",
-    "trigger": {
-      "name": "killed_entity",
-      "tag": "entitytag"
-    },
-    "name": "compare",
-    "expected": true
-  },
-  "datapack_version": {
-    "helperTitle": "Datapack : Check version",
-    "helper": "This action will check the the selected datapack is outdated from the given version. Output: True if outdated, False if not outdated",
-    "value": "10.0.5",
-    "name": "datapack_version",
-    "tag": "mydatapack"
-  },
-  "device_active_tv_channel_id": {
-    "value": 1,
-    "helper": "This trigger will be triggered when a specific active tv channel index is played",
-    "name": "device_active_tv_channel_id",
-    "helperTitle": "Device : Specific active tv channel index is player"
-  },
   "place_canbe_buyed": {
     "helperTitle": "House : Current One can be buyed",
     "helper": "This trigger will be triggered when you are in a custom place that can be buyed",
     "name": "place_canbe_buyed"
   },
-  "entity_is_alive": {
-    "helperTitle": "Entity : is Alive",
-    "tag": "entitytag",
-    "name": "entity_is_alive",
-    "helper": "This trigger will be triggered when a custom entity is Alive"
+  "item": {
+    "value": "skippy",
+    "helperTitle": "Items : In Inventory",
+    "helper": "This trigger will be triggered when you has a specific item in your inventory",
+    "name": "item"
+  },
+  "entity_in_faction": {
+    "tag": "judy01",
+    "name": "entity_in_faction",
+    "helperTitle": "Entity : Is in Faction",
+    "helper": "This trigger will be triggered when entity is in targeted Faction",
+    "faction": "faction_mox"
+  },
+  "player_lifepath": {
+    "help": "--  Corporate (0)||  Nomad (1)|| StreetKid (2)",
+    "name": "player_lifepath",
+    "value": 0,
+    "helperTitle": "Player : has LifePath",
+    "helper": "This trigger will be triggered when your life path math with the value"
+  },
+  "datapack_version": {
+    "tag": "mydatapack",
+    "name": "datapack_version",
+    "value": "10.0.5",
+    "helperTitle": "Datapack : Check version",
+    "helper": "This action will check the the selected datapack is outdated from the given version. Output: True if outdated, False if not outdated"
+  },
+  "look_at_entity": {
+    "value": "cofee",
+    "helperTitle": "Player : Look at Entity",
+    "helper": "This trigger will be triggered when you look a entity who has the expected tag",
+    "name": "look_at_entity"
+  },
+  "entity_is_in_custom_room_type": {
+    "help": "-- 0 : drink|| 1 : eat|| 2 : do",
+    "tag": "judy",
+    "name": "entity_is_in_custom_room_type",
+    "value": 0,
+    "helperTitle": "Entity : Is in Custom Room Type"
   },
   "have_custom_mappin_placed": {
     "helperTitle": "Map : Custom Mappin Placed",
     "helper": "This trigger will be triggered when a custom active mappin is placed",
     "name": "have_custom_mappin_placed"
   },
-  "killed_entity": {
-    "helperTitle": "Entity : is Killed",
-    "tag": "entitytag",
-    "name": "killed_entity",
-    "helper": "This trigger will be triggered when a custom entity is killed"
+  "look_at_hash": {
+    "value": "9001172ULL",
+    "helperTitle": "Player : Look at Entity Hash",
+    "helper": "This trigger will be triggered when you look a entity who has the expected hash",
+    "name": "look_at_hash"
   },
-  "player_death": {
-    "helperTitle": "Player : is Dead",
-    "helper": "This trigger will be triggered when you are dead",
-    "name": "player_death"
+  "ai_answer_is_ready": {
+    "aitag": "myconversation01",
+    "helperTitle": "AI : Answer is ready",
+    "helper": "This trigger will be triggered whe CyberAI answer is ready",
+    "name": "ai_answer_is_ready"
   },
   "entity_in_state": {
-    "helperTitle": "Entity : Is in State",
-    "tag": "judy01",
     "help": " 0 = Alerted||1 = Any||2= Combat||3 = Dead||4 = Fear||5 = Relaxed||6 = Stealth||7 = Unconscious||8 = Wounded ",
-    "helper": "This trigger will be triggered when entity is in current State ",
-    "name": "entity_in_state",
-    "value": 0
-  },
-  "entity_to_relative_entity_position": {
-    "y": 0,
-    "name": "entity_to_relative_entity_position",
-    "range": 0,
-    "helperTitle": "Entity : At entity's relative position",
-    "helper": "This trigger will be triggered when a custom entity is at another entity's relative position",
-    "z": 0,
-    "target": "judy02",
     "tag": "judy01",
-    "x": 0
+    "name": "entity_in_state",
+    "value": 0,
+    "helperTitle": "Entity : Is in State",
+    "helper": "This trigger will be triggered when entity is in current State "
   },
-  "last_killed_entity_is_registred": {
-    "helperTitle": "Entity : Last Killed Entity is Scripted Entity",
-    "helper": "This action will check that the last killed entity is an scripted Entity",
-    "name": "last_killed_entity_is_registred"
+  "npc_affinity": {
+    "name": "npc_affinity",
+    "value": "Judy",
+    "score": 50,
+    "helper": "This trigger will be triggered when you enough affinity with a specific npc",
+    "helperTitle": "NPC : has enough affinity"
   },
-  "game_language": {
-    "helperTitle": "Game : Language",
-    "helper": "This trigger will be triggered when game language is same than value. Can be : \n de-de,\n en-us,\n fr-fr,\n pl-pl,\n es-es,\n es-mx,\n it-it,\n kr-kr,\n zh-cn,\n zh-tw,\n ru-ru,\n jp-jp,\n ar-ar,\n cz-cz,\n hu-hu,\n tr-tr,\n pt-br",
-    "name": "game_language",
-    "value": "fr-fr"
+  "wanted_level": {
+    "value": 2,
+    "helperTitle": "Player : Wanted Level",
+    "helper": "This trigger will be triggered if the wanted level is higher or equals to",
+    "name": "wanted_level"
+  },
+  "device_active_tv_channel_id": {
+    "value": 1,
+    "helperTitle": "Device : Specific active tv channel index is player",
+    "helper": "This trigger will be triggered when a specific active tv channel index is played",
+    "name": "device_active_tv_channel_id"
   },
   "player_current_gang": {
     "value": "faction_mox",
+    "helperTitle": "Player : Current Gang",
     "helper": "This trigger will be triggered when current Gang tag of the player is same than value",
-    "name": "player_current_gang",
-    "helperTitle": "Player : Current Gang"
+    "name": "player_current_gang"
   },
-  "mission_fact": {
-    "value": "mymissionTag01",
-    "helper": "This trigger will be triggered when you has complete a custom quest of IRP by her tag",
-    "name": "mission_fact",
-    "helperTitle": "Quest : (IRP) is Completed"
+  "player_inbuilding": {
+    "helperTitle": "Player : in Building",
+    "helper": "This trigger will be triggered when player is inside",
+    "name": "player_inbuilding"
   },
-  "entity_hash": {
-    "helperTitle": "Entity : Have hash",
-    "helper": "This trigger will be triggered when entity have the expected hash",
-    "value": "16570246047455160070ULL",
-    "name": "entity_hash",
-    "tag": "judy01"
+  "custom_place_type": {
+    "help": "-- 0 : house|| 1 : bar|| 2 : nightclub|| 3 : restaurant|| 4 : shopping|| 5 : special",
+    "name": "custom_place_type",
+    "value": 0,
+    "helperTitle": "House : in specific Custom Place Type",
+    "helper": "This trigger will be triggered when you are in a custom place who has this type"
   },
   "check_variable": {
+    "name": "check_variable",
+    "variable": "mycustomVariable",
+    "operator": "=",
+    "value": "myvarvalue",
     "helperTitle": "Score : Custom Variable",
     "helper": "This trigger will be triggered when the value of the key of custom variable is the same that trigger value. Operator can be =, !=, contains, empty, notempty",
-    "variable": "mycustomVariable",
-    "value": "myvarvalue",
-    "key": "mycustomVariable",
-    "name": "check_variable",
-    "operator": "="
+    "key": "mycustomVariable"
   },
-  "npc_affinity": {
-    "helperTitle": "NPC : has enough affinity",
-    "score": 50,
-    "value": "Judy",
-    "name": "npc_affinity",
-    "helper": "This trigger will be triggered when you enough affinity with a specific npc"
+  "custom_room_type": {
+    "help": "-- 0 : drink|| 1 : Eat|| 2 : Do",
+    "name": "custom_room_type",
+    "value": 0,
+    "helperTitle": "House : in specific Custom Room Type",
+    "helper": "This trigger will be triggered when you are in a custom room that has this type"
   },
-  "last_killed_entity_is": {
-    "helperTitle": "Entity : Last Killed entity is entity",
-    "helper": "This trigger will check if last killed entity is an cybermod registred entity",
-    "name": "last_killed_entity_is"
+  "entity_inbuilding": {
+    "tag": "judy01",
+    "helperTitle": "Entity : in building",
+    "helper": "This trigger will be triggered when a custom entity is inside",
+    "name": "entity_inbuilding"
+  },
+  "money": {
+    "value": 500,
+    "helperTitle": "Money : has enough",
+    "helper": "This trigger will be triggered when you has enough money",
+    "name": "money"
+  },
+  "specific_choice_is_opened": {
+    "tag": "choicetag",
+    "helperTitle": "UI : Specific Custom Choice is Open",
+    "helper": "This trigger will be triggered when a specific custom choice is open",
+    "name": "specific_choice_is_opened"
+  },
+  "group_script_level": {
+    "scriptlevel": 10,
+    "tag": "group01",
+    "operator": "=",
+    "helperTitle": "Group : Check Script Level",
+    "helper": "This action will check the script level of an group. Return true if all of the entities have the specified conditions. \n Available Operator : < || <= || > || >= || != || = ",
+    "name": "group_script_level"
+  },
+  "have_fasttravel_mappin_placed": {
+    "helperTitle": "Map : Fast Mappin Selected",
+    "helper": "This trigger will be triggered when a Fast active mappin is selected",
+    "name": "have_fasttravel_mappin_placed"
+  },
+  "choice_is_opened": {
+    "helperTitle": "UI : Custom Choice is Open",
+    "helper": "This trigger will be triggered when a custom choice is open",
+    "name": "choice_is_opened"
+  },
+  "entity_is_alive": {
+    "tag": "entitytag",
+    "helperTitle": "Entity : is Alive",
+    "helper": "This trigger will be triggered when a custom entity is Alive",
+    "name": "entity_is_alive"
+  },
+  "entity_is_in_node": {
+    "range": 5,
+    "tag": "Judy",
+    "name": "entity_is_in_node",
+    "helperTitle": "Entity : Is In Node",
+    "helper": "This trigger will be triggered when entity is in node",
+    "atgameplayposition": true
+  },
+  "player_have_combatstate": {
+    "help": "-- Default = 0|| InCombat = 1|| OutOfCombat = 2|| Stealth = 3",
+    "name": "player_have_combatstate",
+    "value": 0,
+    "helperTitle": "Player : in Combat State",
+    "helper": "This trigger will be triggered when you are in a specifc combat state"
+  },
+  "group_is_spawn": {
+    "tag": "grouptag",
+    "helperTitle": "Group : Is spawned",
+    "helper": "This trigger will be triggered when all of custom entities in a group has spawned",
+    "name": "group_is_spawn"
+  },
+  "place_canbe_rented": {
+    "helperTitle": "House : Current One can open a business",
+    "helper": "This trigger will be triggered when you are in a custom place that can be rented",
+    "name": "place_canbe_rented"
+  },
+  "check_gang_relation": {
+    "name": "check_gang_relation",
+    "target": "faction_wraith",
+    "mode": "gang",
+    "operator": "=",
+    "tag": "faction_mox",
+    "helperTitle": "Gang : Set Relation toward gang",
+    "helper": "This action will check relation score between two gang (can be negative).\n If you put 'player' in tag field, it will take player's current Gang.\n Available Operator : < || <= || > || >= || != || = ",
+    "score": 10
+  },
+  "item_amount": {
+    "name": "item_amount",
+    "value": "skippy",
+    "score": 1,
+    "helper": "This trigger will be triggered when you has a specific item and amount in your inventory",
+    "helperTitle": "Items : Amount in Inventory"
+  },
+  "is_in_buyed_place": {
+    "helperTitle": "Player : In buyed custom place",
+    "helper": "This trigger will be triggered when you are in buyed custom place",
+    "name": "is_in_buyed_place"
+  },
+  "check_gang_district_score": {
+    "district": "district_westbrook",
+    "name": "check_gang_district_score",
+    "value": 5,
+    "helperTitle": "Gang : Check District Score",
+    "helper": "This trigger will be triggered when Gang has a District Score higher or equals to the value",
+    "faction": "faction_mox"
+  },
+  "in_car_specific": {
+    "value": "delamain",
+    "helperTitle": "Player : In a specific car",
+    "helper": "This trigger will be triggered when you are in a specific car that name contains the name in it's ID",
+    "name": "in_car_specific"
+  },
+  "player_in_poi": {
+    "type": 1,
+    "help": "tag is useful if you want select an poi who have tag and an specifc location in this poi, leave it to empty is not needed. Same for district,subdistrict. if you want an specific location, use uselocationtag. If you put current in district or subdisttrict it will take the current district or subdistrict",
+    "subdistrict": "",
+    "position_poi_searchdistance": "near|far|random",
+    "iscar": false,
+    "position_poi_search": "type|subdistrict|district|tag",
+    "uselocationtag": false,
+    "tag": "",
+    "name": "player_in_poi",
+    "district": "",
+    "helperTitle": "Player : in POI",
+    "helper": "This trigger will be triggered when a player is in custom Point Of Interest",
+    "range": 5
+  },
+  "player_is_online": {
+    "helperTitle": "Multi : Player is online",
+    "helper": "This trigger will be triggered when player is online",
+    "name": "player_is_online"
+  },
+  "entity_hash": {
+    "tag": "judy01",
+    "name": "entity_hash",
+    "value": "16570246047455160070ULL",
+    "helperTitle": "Entity : Have hash",
+    "helper": "This trigger will be triggered when entity have the expected hash"
+  },
+  "is_in_custom_place": {
+    "helperTitle": "Player : In custom place",
+    "helper": "This trigger will be triggered when you in a custom place",
+    "name": "is_in_custom_place"
+  },
+  "check_mod": {
+    "value": "AppearanceMenuMod",
+    "helperTitle": "Misc : Check Mod",
+    "helper": "This trigger will be triggered when an cet mod folder is loaded ",
+    "name": "check_mod"
   },
   "check_raycasting": {
     "from_y": 0,
@@ -228,34 +296,21 @@
     "to_y": 0,
     "to_z": 0,
     "filters": [ "Dynamic", "Vehicle", "Static", "Water", "Terrain", "PlayerBlocker" ],
+    "points": 10,
     "name": "check_raycasting",
     "helperTitle": "Game : Check Raycasting",
     "helper": "This trigger will check if there is collision betwen 2 points, it will check number of points (points field) in that line. Filter can be Dynamic,Vehicle,Static,Water,Terrain,PlayerBlocker",
-    "points": 10,
     "from_x": 0
   },
-  "player_reputation": {
-    "value": 50,
-    "helper": "This trigger will be triggered when the player reputation is equal or higher to the value",
-    "name": "player_reputation",
-    "helperTitle": "Player : has Reputation"
+  "is_in_rented_place": {
+    "helperTitle": "Player : In custom place who has a opened business",
+    "helper": "This trigger will be triggered when you are in a rented custom place",
+    "name": "is_in_rented_place"
   },
-  "entity_tag_exist": {
-    "helperTitle": "Entity : Tag already registred",
-    "tag": "judy01",
-    "name": "entity_tag_exist",
-    "helper": "This trigger will be triggered when the tag is already registred in manager"
-  },
-  "have_fasttravel_mappin_placed": {
-    "helperTitle": "Map : Fast Mappin Selected",
-    "helper": "This trigger will be triggered when a Fast active mappin is selected",
-    "name": "have_fasttravel_mappin_placed"
-  },
-  "npc_phone_affinity": {
-    "value": 50,
-    "helper": "This trigger will be triggered when you has enough affinity with the npc that you speak at phone",
-    "name": "npc_phone_affinity",
-    "helperTitle": "NPC : the phoned one has enough affinity"
+  "is_recording_mode_active": {
+    "helperTitle": "UI : Recording Mode",
+    "helper": "This trigger will be triggered when recording mode HUD is active",
+    "name": "is_recording_mode_active"
   },
   "have_collision": {
     "from_y": 0,
@@ -269,556 +324,501 @@
     "helper": "This trigger will check if there is collision betwwen 2 points. Filter can be Dynamic,Vehicle,Static,Water,Terrain,PlayerBlocker",
     "from_x": 0
   },
-  "quest_fact": {
-    "helperTitle": "Quest : Game Quest is completed",
-    "helper": "This trigger will be triggered when you has complete a quest of the game (by the fact)",
-    "value": "q00_test",
-    "name": "quest_fact",
-    "help": " gameaffinity.json"
+  "is_in_custom_room": {
+    "helperTitle": "Player : In custom room",
+    "helper": "This trigger will be triggered when you are in a custom room",
+    "name": "is_in_custom_room"
   },
-  "money": {
-    "value": 500,
-    "helper": "This trigger will be triggered when you has enough money",
-    "name": "money",
-    "helperTitle": "Money : has enough"
+  "interact_is_forceloaded": {
+    "tag": "myinteract",
+    "helperTitle": "Interact : Is Force Loaded",
+    "helper": "This trigger will be triggered when an interact is forceloaded",
+    "name": "interact_is_forceloaded"
   },
-  "is_in_buyed_place": {
-    "helperTitle": "Player : In buyed custom place",
-    "helper": "This trigger will be triggered when you are in buyed custom place",
-    "name": "is_in_buyed_place"
+  "datapack_is_enabled": {
+    "tag": "mydatapack",
+    "helperTitle": "Datapack : Is Enabled",
+    "helper": "This action will check if the selected datapack is enabled",
+    "name": "datapack_is_enabled"
   },
-  "place_canbe_rented": {
-    "helperTitle": "House : Current One can open a business",
-    "helper": "This trigger will be triggered when you are in a custom place that can be rented",
-    "name": "place_canbe_rented"
-  },
-  "check_gang_relation": {
-    "helperTitle": "Gang : Set Relation toward gang",
-    "helper": "This action will check relation score between two gang (can be negative).\n If you put 'player' in tag field, it will take player's current Gang.\n Available Operator : < || <= || > || >= || != || = ",
-    "target": "faction_wraith",
-    "mode": "gang",
-    "operator": "=",
-    "tag": "faction_mox",
-    "name": "check_gang_relation",
-    "score": 10
-  },
-  "entity_looked_is_gangfriendly": {
-    "helperTitle": "Entity : Looked Entity is Gang Friendly",
-    "helper": "This trigger will be triggered when the entity that you look at has  positive gang affinity",
-    "name": "entity_looked_is_gangfriendly"
-  },
-  "in_car_specific": {
-    "value": "delamain",
-    "helper": "This trigger will be triggered when you are in a specific car that name contains the name in it's ID",
-    "name": "in_car_specific",
-    "helperTitle": "Player : In a specific car"
-  },
-  "gang_affinity": {
-    "helperTitle": "Gang : Score is higher or equal to",
-    "score": 50,
-    "value": "faction_mox",
-    "name": "gang_affinity",
-    "helper": "This trigger will be triggered when you has enough affinity with a specific gang"
-  },
-  "check_gang_district_score": {
-    "district": "district_westbrook",
-    "helper": "This trigger will be triggered when Gang has a District Score higher or equals to the value",
-    "value": 5,
-    "faction": "faction_mox",
-    "name": "check_gang_district_score",
-    "helperTitle": "Gang : Check District Score"
-  },
-  "custom_place_type": {
-    "helperTitle": "House : in specific Custom Place Type",
-    "helper": "This trigger will be triggered when you are in a custom place who has this type",
-    "value": 0,
-    "name": "custom_place_type",
-    "help": "-- 0 : house|| 1 : bar|| 2 : nightclub|| 3 : restaurant|| 4 : shopping|| 5 : special"
-  },
-  "player_corpo_faction": {
-    "value": "Arasaka",
-    "helper": "This trigger will be triggered when player has the intended corpo faction : None, Arasaka, Militech, KangTao, Nomad",
-    "name": "player_corpo_faction",
-    "helperTitle": "Corpo : Get Player Faction"
-  },
-  "player_lifepath": {
-    "helperTitle": "Player : has LifePath",
-    "helper": "This trigger will be triggered when your life path math with the value",
-    "value": 0,
-    "name": "player_lifepath",
-    "help": "--  Corporate (0)||  Nomad (1)|| StreetKid (2)"
-  },
-  "entity_in_car_specific": {
-    "helperTitle": "Entity : In a specific car",
-    "helper": "This trigger will be triggered when the targeted entity is in a specific car that name contains the name in it's ID",
-    "value": "delamain",
-    "name": "entity_in_car_specific",
-    "tag": "judy01"
-  },
-  "killed_group": {
-    "helperTitle": "Group : is Killed",
-    "tag": "grouptag",
-    "name": "killed_group",
-    "helper": "This trigger will be triggered when all custom entities in a group are killed"
-  },
-  "entity_gender": {
-    "helperTitle": "Entity : Gender",
-    "helper": "This trigger will be triggered when entity has expected gender (male||female)",
-    "value": "male",
-    "name": "entity_gender",
-    "tag": "blue01"
-  },
-  "entity_in_car": {
-    "helperTitle": "Entity : In car",
-    "tag": "judy01",
-    "name": "entity_in_car",
-    "helper": "This trigger will be triggered when the targeted entity is in car"
-  },
-  "item": {
-    "value": "skippy",
-    "helper": "This trigger will be triggered when you has a specific item in your inventory",
-    "name": "item",
-    "helperTitle": "Items : In Inventory"
-  },
-  "entity_inbuilding": {
-    "helperTitle": "Entity : in building",
-    "tag": "judy01",
-    "name": "entity_inbuilding",
-    "helper": "This trigger will be triggered when a custom entity is inside"
-  },
-  "player_gender": {
-    "value": "male",
-    "helper": "This trigger will be triggered when player has expected gender (male||female)",
-    "name": "player_gender",
-    "helperTitle": "Player : Gender"
-  },
-  "custom_place": {
-    "value": "customplacetag01",
-    "helper": "This trigger will be triggered when you are at a specific custom place",
-    "name": "custom_place",
-    "helperTitle": "House : in specific Custom Place"
-  },
-  "custom_room": {
-    "value": "customroomtag",
-    "helper": "This trigger will be triggered when you are in a specific custom room (by tag)",
-    "name": "custom_room",
-    "helperTitle": "House : in specific Custom Room"
-  },
-  "time": {
-    "helperTitle": "UI : Time is between",
-    "helper": "This trigger will be triggered when time in game will be between min and max value (format HHMM)",
-    "min": 800,
-    "max": 1200,
-    "name": "time"
-  },
-  "timer_is_finished": {
-    "helperTitle": "UI : Current Timer is finished",
-    "helper": "This trigger will be triggered when a custom timer is finished",
-    "name": "timer_is_finished"
+  "look_at_object": {
+    "value": "cofee",
+    "helperTitle": "Player : Look at ",
+    "helper": "This trigger will be triggered when you look a entity who has the (value) word in her name",
+    "name": "look_at_object"
   },
   "auto": {
     "helperTitle": "Auto",
     "helper": "This trigger will be triggered without need anything (default)",
     "name": "auto"
   },
-  "last_killed_entity_gang_score": {
-    "helperTitle": "Entity : last killed entity is in a gang with affinity",
-    "operator": "+",
-    "helper": "his trigger will check if last killed entity is in a gang with affinity ",
-    "name": "last_killed_entity_gang_score",
-    "score": 5
-  },
   "stat": {
-    "helperTitle": "Stat : is Higher or equals to",
-    "score": 50,
-    "value": "Health",
     "name": "stat",
-    "helper": "This trigger will be triggered when your stat are equal or higher of the score"
-  },
-  "entity_is_in_custom_place_type": {
-    "helperTitle": "Entity : Is in Custom Place Type",
-    "tag": "judy",
-    "help": "-- 0 : house|| 1 : bar|| 2 : nightclub|| 3 : restaurant|| 4 : shopping|| 5 : special",
-    "name": "entity_is_in_custom_place_type",
-    "value": 0
-  },
-  "item_looked_is_registered_in_current_house": {
-    "helperTitle": "Mod : Object Looked is registred as Housing Placed Item",
-    "helper": "This trigger will be triggered when item looked is registred as housing placed item",
-    "name": "item_looked_is_registered_in_current_house"
-  },
-  "check_value": {
-    "helperTitle": "Score : Check Score",
-    "helper": "This action will check the targeted data. Can be number, boolean or text \n Available Operator : < || <= || > || >= || != || = || contains || empty || notempty",
-    "value": 5,
-    "operator": ">=",
-    "name": "check_value",
-    "target": 5
-  },
-  "statpool": {
-    "helperTitle": "Stat Pool: is Higher or equals to",
-    "score": 50,
     "value": "Health",
-    "perc": false,
-    "name": "statpool",
-    "helper": "This trigger will be triggered when your stat pool are equal or higher of the score"
+    "score": 50,
+    "helper": "This trigger will be triggered when your stat are equal or higher of the score",
+    "helperTitle": "Stat : is Higher or equals to"
+  },
+  "gang_affinity": {
+    "name": "gang_affinity",
+    "value": "faction_mox",
+    "score": 50,
+    "helper": "This trigger will be triggered when you has enough affinity with a specific gang",
+    "helperTitle": "Gang : Score is higher or equal to"
+  },
+  "texture_is_visible": {
+    "tag": "judy01.png",
+    "helperTitle": "UI : Texture is visible",
+    "helper": "This action will test if an texture is currently visible or not",
+    "name": "texture_is_visible"
+  },
+  "compare": {
+    "expected": true,
+    "trigger": {
+      "tag": "entitytag",
+      "name": "killed_entity"
+    },
+    "name": "compare",
+    "helperTitle": "Logic : Compare",
+    "helper": "This trigger will be triggered when the trigger that you set has the same statut that you put in (expected)"
+  },
+  "game_language": {
+    "value": "fr-fr",
+    "helperTitle": "Game : Language",
+    "helper": "This trigger will be triggered when game language is same than value. Can be : \n de-de,\n en-us,\n fr-fr,\n pl-pl,\n es-es,\n es-mx,\n it-it,\n kr-kr,\n zh-cn,\n zh-tw,\n ru-ru,\n jp-jp,\n ar-ar,\n cz-cz,\n hu-hu,\n tr-tr,\n pt-br",
+    "name": "game_language"
+  },
+  "npc_phone_affinity": {
+    "value": 50,
+    "helperTitle": "NPC : the phoned one has enough affinity",
+    "helper": "This trigger will be triggered when you has enough affinity with the npc that you speak at phone",
+    "name": "npc_phone_affinity"
+  },
+  "entity_is_crowd": {
+    "tag": "judy01",
+    "helperTitle": "Entity :Is Crowd",
+    "helper": "This trigger will check if the entity is crowd or not ",
+    "name": "entity_is_crowd"
+  },
+  "player_reputation": {
+    "value": 50,
+    "helperTitle": "Player : has Reputation",
+    "helper": "This trigger will be triggered when the player reputation is equal or higher to the value",
+    "name": "player_reputation"
+  },
+  "entity_to_relative_entity_position": {
+    "range": 0,
+    "target": "judy02",
+    "x": 0,
+    "y": 0,
+    "tag": "judy01",
+    "name": "entity_to_relative_entity_position",
+    "helperTitle": "Entity : At entity's relative position",
+    "helper": "This trigger will be triggered when a custom entity is at another entity's relative position",
+    "z": 0
+  },
+  "entity_is_in_specific_node": {
+    "range": 5,
+    "tag": "Judy",
+    "name": "entity_is_in_specific_node",
+    "atgameplayposition": true,
+    "helperTitle": "Entity : Is In Specific Node",
+    "helper": "This trigger will be triggered when entity is in node",
+    "node": "myNode"
+  },
+  "player_death": {
+    "helperTitle": "Player : is Dead",
+    "helper": "This trigger will be triggered when you are dead",
+    "name": "player_death"
   },
   "entity_looked_is_custom_av": {
     "helperTitle": "Entity : Looked Entity is Registred as Custom AV",
     "helper": "This trigger will be triggered when the entity that you look has been registred as Custom AV",
     "name": "entity_looked_is_custom_av"
   },
-  "group_is_spawn": {
-    "helperTitle": "Group : Is spawned",
-    "tag": "grouptag",
-    "name": "group_is_spawn",
-    "helper": "This trigger will be triggered when all of custom entities in a group has spawned"
-  },
-  "soundmanager_isplaying": {
-    "helperTitle": "Sound : Sound manager is playing ",
-    "helper": "This trigger will be triggered when SoundManager Mod specified channel is currently playing",
-    "channel": "music",
-    "help": "test if the sound manager mod play currently channel",
-    "name": "soundmanager_isplaying"
-  },
-  "3Dposition": {
-    "helperTitle": "Map : Position XYZ",
-    "helper": "This trigger will be triggered when you are at this XYZ position (in the range)",
-    "z": 0,
-    "x": 0,
-    "y": 0,
-    "name": "3Dposition",
-    "range": 0
-  },
-  "entity_at_position": {
-    "helperTitle": "Entity : At position",
-    "helper": "This trigger will be triggered when a custom entity is at position",
-    "z": 0,
-    "x": 0,
-    "tag": "judy01",
-    "y": 0,
-    "name": "entity_at_position",
-    "range": 0
-  },
-  "housing_edit_enable": {
-    "helperTitle": "Mod : Housing Mode",
-    "helper": "This trigger will be triggered when player is in Housing Mode",
-    "name": "housing_edit_enable"
-  },
-  "entity_is_crowd": {
-    "helperTitle": "Entity :Is Crowd",
-    "tag": "judy01",
-    "name": "entity_is_crowd",
-    "helper": "This trigger will check if the entity is crowd or not "
-  },
-  "player_is_online": {
-    "helperTitle": "Multi : Player is online",
-    "helper": "This trigger will be triggered when player is online",
-    "name": "player_is_online"
-  },
-  "current_subdistrict": {
-    "helperTitle": "Map : Current Sub District",
-    "helper": "This trigger will be triggered when in a specific subdistrict",
-    "value": "Kabuki",
-    "name": "current_subdistrict",
-    "help": "Vista_del_rey_Abandoned_Apartment_Building||ArasakaWaterfront_AbandonedWarehouse||LittleChina_Afterlife||Northside_All_Foods||CorpoPlaza_ArasakaTowerAtrium||CorpoPlaza_ArasakaTowerCEOFloor||CorpoPlaza_ArasakaTowerJenkins||CorpoPlaza_ArasakaTowerJungle||CorpoPlaza_ArasakaTowerLobby||CorpoPlaza_ArasakaTowerNest||CorpoPlaza_ArasakaTowerSaburoOffice||CorpoPlaza_ArasakaTowerUnlistedFloors||CorpoPlaza_ArasakaTowerUpperAtrium||Arroyo_Arasaka_Warehouse||ArasakaWaterfront||NorthOaks_Arasaka_Estate||Arroyo||Coastview_BattysHotel||Badlands_BiotechnicaFlats||Coastview_ButcherShop||RanchoCoronado_Caliente||CharterHill||Arroyo_ClairesGarage||Northside_CleanCut||JapanTown_Clouds||Coastview||NorthOaks_Columbarium||CorpoPlaza||Arroyo_CytechFactory||JapanTown_DarkMatter||Vista_del_Rey_Delamain||NorthOaks_Denny_Estate||Downtown||Badlands_DryCreek||SouthBadlands_EdgewoodFarm||Vista_del_rey_ElCoyoteCojo||Glen_Embers||JapanTown_Fingers||JapanTown_FourthWallBdStudio||Glen||Coastview_GrandImperialMall||RanchoCoronado_GunORama||JapanTown_HiromisApartment||Badlands_JacksonPlains||JapanTown||Downtown_Jinguji||Kabuki_JudysApartment||Kabuki||Arroyo_Kendachi||Arroyo_KenmoreCafe||NorthOaks_Kerry_Estate||ArasakaWaterfront_KonpekiPlaza||Vista_del_Rey_LaCatrina||Badlands_LagunaBend||LagunaBend_LakeHut||Badlands_LasPalapas||Arroyo_LasPalapas||LittleChina||Kabuki_LizziesBar||JapanTown_MegabuildingH8||LittleChina_MistysShop||Glen_MusicStore||Glen_NCPDLab||NorthOaks||Northside||Kabuki_NoTellMotel||RanchoCoronado_Piez||SouthBadlands_PoppyFarm||CharterHill_PowerPlant||LittleChina_Q101Cyberspace||Coastview_q110Cyberspace||CorpoPlaza_q201Cyberspace||SouthBadlands_q201SpaceStation||RanchoCoronado||Badlands_RattlesnakeCreek||Badlands_RedPeaks||Arroyo_Red_Dirt||LittleChina_RiotClub||Badlands_RockyRidge||Coastview_RundownApartment||Badlands_SantaClara||Badlands_SierraSonora||Badlands_SoCalBorderCrossing||RanchoCoronado_Softsys||RanchoCoronado_Stylishly||Downtown_TheHammer||Arroyo_TireEmpire||LittleChina_TomsDiner||Northside_Totentaz||SouthBadlands_TrailerPark||LittleChina_VApartment||Badlands_VasquezPass||Coastview_VDBChapel||Coastview_VDBMaglev||LittleChina_VictorsClinic||VistaDelRey||JapanTown_VR_Tutorial||JapanTown_Wakakos_Pachinko_Parlor||Wellsprings||WestWindEstate||Glen_WichedTires||Northside_WNS||Badlands_Yucca||Badlands_YuccaGarage||Badlands_YuccaRadioTowe"
-  },
-  "is_in_rented_place": {
-    "helperTitle": "Player : In custom place who has a opened business",
-    "helper": "This trigger will be triggered when you are in a rented custom place",
-    "name": "is_in_rented_place"
-  },
-  "check_mod": {
-    "value": "AppearanceMenuMod",
-    "helper": "This trigger will be triggered when an cet mod folder is loaded ",
-    "name": "check_mod",
-    "helperTitle": "Misc : Check Mod"
-  },
-  "is_in_custom_place": {
-    "helperTitle": "Player : In custom place",
-    "helper": "This trigger will be triggered when you in a custom place",
-    "name": "is_in_custom_place"
-  },
-  "is_in_custom_room": {
-    "helperTitle": "Player : In custom room",
-    "helper": "This trigger will be triggered when you are in a custom room",
-    "name": "is_in_custom_room"
-  },
-  "is_recording_mode_active": {
-    "helperTitle": "UI : Recording Mode",
-    "helper": "This trigger will be triggered when recording mode HUD is active",
-    "name": "is_recording_mode_active"
-  },
-  "can_use_preventionsystemspawn": {
-    "helperTitle": "Entity : Can use Prevention System",
-    "helper": "This trigger will be triggered when the current amount of spawned entity with prevention system is under 50",
-    "name": "can_use_preventionsystemspawn"
-  },
-  "look_at_object": {
-    "value": "cofee",
-    "helper": "This trigger will be triggered when you look a entity who has the (value) word in her name",
-    "name": "look_at_object",
-    "helperTitle": "Player : Look at "
-  },
-  "interact_is_forceloaded": {
-    "helperTitle": "Interact : Is Force Loaded",
-    "tag": "myinteract",
-    "name": "interact_is_forceloaded",
-    "helper": "This trigger will be triggered when an interact is forceloaded"
-  },
-  "check_scannerdata_for_entity": {
-    "prop": "reward",
-    "helper": "this trigger will check for an existing scanner data for an existing entity, an field. operator is for numerical field, value can be an text or an number depending of the tested field",
-    "helperTitle": "Scanner : Check Custom Scanner Data for Entity",
-    "value": 5,
-    "tag": "judy01",
-    "name": "check_scannerdata_for_entity",
-    "operator": "="
-  },
-  "npc_star_affinity": {
-    "value": 50,
-    "helper": "This trigger will be triggered when you has enough affinity with the npc you has ask to join you ",
-    "name": "npc_star_affinity",
-    "helperTitle": "NPC : the invited one has enough affinity"
-  },
-  "texture_is_visible": {
-    "helperTitle": "UI : Texture is visible",
-    "tag": "judy01.png",
-    "name": "texture_is_visible",
-    "helper": "This action will test if an texture is currently visible or not"
-  },
-  "is_in_menu": {
-    "helperTitle": "UI : In Menu",
-    "helper": "This trigger will be triggered player is in menu",
-    "name": "is_in_menu"
-  },
-  "event_is_triggered": {
-    "helperTitle": "Mod : Event is Triggered",
-    "tag": "myevent",
-    "name": "event_is_triggered",
-    "helper": "This trigger will be triggered when event is called"
-  },
-  "entity_is_in_specific_node": {
-    "helperTitle": "Entity : Is In Specific Node",
-    "helper": "This trigger will be triggered when entity is in node",
-    "range": 5,
-    "node": "myNode",
-    "tag": "Judy",
-    "name": "entity_is_in_specific_node",
-    "atgameplayposition": true
-  },
-  "entity_is_at_mappin_position": {
-    "helperTitle": "Entity : Entity is at mappin position",
-    "helper": "This trigger will be triggered when a entity is at mappin position",
-    "entity": "judy",
-    "tag": "mymappin",
-    "name": "entity_is_at_mappin_position",
-    "range": 5
-  },
-  "entity_is_scanned": {
-    "helperTitle": "Entity :Is Scanned",
-    "tag": "judy01",
-    "name": "entity_is_scanned",
-    "helper": "This trigger will check if the entity is already scanned or not "
-  },
-  "player_is_hit": {
-    "helperTitle": "Player : Player is Hit",
-    "helper": "This trigger will be triggered when player is hit and the hit doesn't miss. (whatever is in godmode or not)",
-    "name": "player_is_hit"
-  },
   "interact_is_inprogress": {
     "helperTitle": "Mod : Action is in progress",
     "helper": "This trigger will be triggered when an action is in progress",
     "name": "interact_is_inprogress"
   },
-  "testFor": {
-    "helperTitle": "Logic : Test For",
-    "helper": "This trigger will be triggered when all of the trigger are triggered by the logic you choose.",
-    "triggers": [ {
-      "name": "killed_entity",
-      "tag": "entitytag"
-    }, {
-      "name": "group_is_spawn",
-      "tag": "grouptag"
-    }, {
-      "name": "entity_is_spawn",
-      "tag": "entitytag"
-    } ],
-    "name": "testFor",
-    "logic": "or||and"
+  "last_killed_entity_is_registred": {
+    "helperTitle": "Entity : Last Killed Entity is Scripted Entity",
+    "helper": "This action will check that the last killed entity is an scripted Entity",
+    "name": "last_killed_entity_is_registred"
+  },
+  "killed_entity": {
+    "tag": "entitytag",
+    "helperTitle": "Entity : is Killed",
+    "helper": "This trigger will be triggered when a custom entity is killed",
+    "name": "killed_entity"
+  },
+  "entity_is_scanned": {
+    "tag": "judy01",
+    "helperTitle": "Entity :Is Scanned",
+    "helper": "This trigger will check if the entity is already scanned or not ",
+    "name": "entity_is_scanned"
+  },
+  "mission_fact": {
+    "value": "mymissionTag01",
+    "helperTitle": "Quest : (IRP) is Completed",
+    "helper": "This trigger will be triggered when you has complete a custom quest of IRP by her tag",
+    "name": "mission_fact"
+  },
+  "vehicle_entity_is_moving": {
+    "tag": "Judy",
+    "helperTitle": "Entity : Vehicle is Moving",
+    "helper": "This trigger will be triggered when vehicle entity path is moving",
+    "name": "vehicle_entity_is_moving"
+  },
+  "entity_script_level": {
+    "scriptlevel": 10,
+    "tag": "judy01",
+    "operator": "=",
+    "helperTitle": "Entity : Check Script Level",
+    "helper": "This action will check the script level of an entity. \n Available Operator : < || <= || > || >= || != || = ",
+    "name": "entity_script_level"
+  },
+  "entity_in_car": {
+    "tag": "judy01",
+    "helperTitle": "Entity : In car",
+    "helper": "This trigger will be triggered when the targeted entity is in car",
+    "name": "entity_in_car"
+  },
+  "last_killed_entity_is": {
+    "helperTitle": "Entity : Last Killed entity is entity",
+    "helper": "This trigger will check if last killed entity is an cybermod registred entity",
+    "name": "last_killed_entity_is"
+  },
+  "area_security_level": {
+    "value": 3,
+    "helperTitle": "UI : Area Security Level",
+    "helper": "This trigger will be triggered when player's area has the expected level(DEFAULT = 0|| SAFE = 1|| RESTRICTED = 2|| DANGEROUS = 3)",
+    "name": "area_security_level"
+  },
+  "device_active_radio_channel_id": {
+    "value": 1,
+    "helperTitle": "Device : Specific active radio channel index is player",
+    "helper": "This trigger will be triggered when a specific active radio channel index is played",
+    "name": "device_active_radio_channel_id"
+  },
+  "entity_tag_exist": {
+    "tag": "judy01",
+    "helperTitle": "Entity : Tag already registred",
+    "helper": "This trigger will be triggered when the tag is already registred in manager",
+    "name": "entity_tag_exist"
+  },
+  "entity_at_position": {
+    "range": 0,
+    "z": 0,
+    "tag": "judy01",
+    "name": "entity_at_position",
+    "x": 0,
+    "helperTitle": "Entity : At position",
+    "helper": "This trigger will be triggered when a custom entity is at position",
+    "y": 0
+  },
+  "time": {
+    "min": 800,
+    "max": 1200,
+    "name": "time",
+    "helperTitle": "UI : Time is between",
+    "helper": "This trigger will be triggered when time in game will be between min and max value (format HHMM)"
+  },
+  "in_car": {
+    "helperTitle": "Player : In car",
+    "helper": "This trigger will be triggered when you are in a car",
+    "name": "in_car"
+  },
+  "quest_fact": {
+    "help": " gameaffinity.json",
+    "name": "quest_fact",
+    "value": "q00_test",
+    "helperTitle": "Quest : Game Quest is completed",
+    "helper": "This trigger will be triggered when you has complete a quest of the game (by the fact)"
   },
   "entity_looked_is_registered_as_companion": {
     "helperTitle": "Entity : Looked Entity is Registred as Companion",
     "helper": "This trigger will be triggered when the entity that you look at has companion attitude towards player",
     "name": "entity_looked_is_registered_as_companion"
   },
-  "entity_is_in_node": {
-    "helperTitle": "Entity : Is In Node",
-    "helper": "This trigger will be triggered when entity is in node",
+  "player_gender": {
+    "value": "male",
+    "helperTitle": "Player : Gender",
+    "helper": "This trigger will be triggered when player has expected gender (male||female)",
+    "name": "player_gender"
+  },
+  "entity_is_at_mappin_position": {
     "range": 5,
-    "tag": "Judy",
-    "name": "entity_is_in_node",
-    "atgameplayposition": true
+    "tag": "mymappin",
+    "name": "entity_is_at_mappin_position",
+    "helperTitle": "Entity : Entity is at mappin position",
+    "helper": "This trigger will be triggered when a entity is at mappin position",
+    "entity": "judy"
   },
-  "look_at_hash": {
-    "value": "9001172ULL",
-    "helper": "This trigger will be triggered when you look a entity who has the expected hash",
-    "name": "look_at_hash",
-    "helperTitle": "Player : Look at Entity Hash"
+  "timer_is_finished": {
+    "helperTitle": "UI : Current Timer is finished",
+    "helper": "This trigger will be triggered when a custom timer is finished",
+    "name": "timer_is_finished"
   },
-  "metro_time_is_finished": {
-    "helperTitle": "UI : Metro Remaning Time is at 0",
-    "helper": "This trigger will be triggered when Metro Remaning Time Screen is at 0",
-    "name": "metro_time_is_finished"
+  "entity_looked_is_gangfriendly": {
+    "helperTitle": "Entity : Looked Entity is Gang Friendly",
+    "helper": "This trigger will be triggered when the entity that you look at has  positive gang affinity",
+    "name": "entity_looked_is_gangfriendly"
   },
-  "entity_is_spawn": {
-    "helperTitle": "Entity : is spawn ",
-    "tag": "entitytag",
-    "name": "entity_is_spawn",
-    "helper": "This trigger will be triggered when a entity is spawned"
+  "entity_is_vehicle": {
+    "tag": "mytag",
+    "helperTitle": "Entity : Is Vehicle",
+    "helper": "This trigger will be triggered if entity is vehicle",
+    "name": "entity_is_vehicle"
   },
-  "entity_at_relative_player_position": {
-    "helperTitle": "Entity : At player's relative position",
-    "helper": "This trigger will be triggered when a custom entity is at player's relative position",
-    "z": 0,
-    "x": 0,
-    "tag": "judy01",
-    "y": 0,
-    "name": "entity_at_relative_player_position",
-    "range": 0
-  },
-  "is_in_specific_menu": {
-    "helperTitle": "UI : In Specific Menu",
-    "helper": "This trigger will be triggered when player is in specific menu (NewGame||BoothMode||ClippedMenu||MainMenu||DeathMenu||E3EndMenu||FastTravel||FinalBoards||FindServers||Hub||NetworkBreach||PauseMenu||Stash||Vendor)",
-    "name": "is_in_specific_menu",
-    "menu": "Hub"
-  },
-  "wanted_level": {
-    "value": 2,
-    "helper": "This trigger will be triggered if the wanted level is higher or equals to",
-    "name": "wanted_level",
-    "helperTitle": "Player : Wanted Level"
-  },
-  "look_at_entity": {
-    "value": "cofee",
-    "helper": "This trigger will be triggered when you look a entity who has the expected tag",
-    "name": "look_at_entity",
-    "helperTitle": "Player : Look at Entity"
-  },
-  "if_entities_around_you": {
-    "helperTitle": "Entity : Entities around you",
-    "helper": "this trigger will check for if there is an entity founded in the player's view in an determined range and filter. \n The filter will check in the name, display name and appearance of the entity or hash \n leave filter at [] for take all. ",
-    "filter": [ "mox", "npc" ],
-    "name": "if_entities_around_you",
-    "range": 5
-  },
-  "gameVolume": {
-    "helperTitle": "Sound : Game volume is at ",
-    "score": 5,
-    "help": "test if the game setting volume (MasterVolume||SfxVolume||DialogueVolume||MusicVolume||CarRadioVolume) is higher or equals to the score",
-    "helper": "This trigger will be triggered when inGame Volume value is equal or higher to (score)",
-    "name": "gameVolume",
-    "value": "SfxVolume"
-  },
-  "area_security_level": {
-    "value": 3,
-    "helper": "This trigger will be triggered when player's area has the expected level(DEFAULT = 0|| SAFE = 1|| RESTRICTED = 2|| DANGEROUS = 3)",
-    "name": "area_security_level",
-    "helperTitle": "UI : Area Security Level"
-  },
-  "custom_room_type": {
-    "helperTitle": "House : in specific Custom Room Type",
-    "helper": "This trigger will be triggered when you are in a custom room that has this type",
-    "value": 0,
-    "name": "custom_room_type",
-    "help": "-- 0 : drink|| 1 : Eat|| 2 : Do"
-  },
-  "entity_script_level": {
-    "helperTitle": "Entity : Check Script Level",
-    "operator": "=",
-    "tag": "judy01",
-    "helper": "This action will check the script level of an entity. \n Available Operator : < || <= || > || >= || != || = ",
-    "name": "entity_script_level",
-    "scriptlevel": 10
-  },
-  "if_entities_around_entity": {
-    "helperTitle": "Entity : Entities around entity",
-    "helper": "this trigger will check for if there is an entity founded in the entity's view in an determined range and filter. \n The filter will check in the name, display name and appearance of the entity or hash \n leave filter at [] for take all. ",
-    "filter": [ "mox", "npc" ],
-    "tag": "judy",
-    "name": "if_entities_around_entity",
-    "range": 5
-  },
-  "player_corpo_faction_rank": {
-    "value": "Salaryman",
-    "helper": "This trigger will be triggered when player has the intended corpo faction : None,Mercs,Salaryman,Leader,Manager,Officier,ExecutiveOfficier,Director,President,Investor,Owner",
-    "name": "player_corpo_faction_rank",
-    "helperTitle": "Corpo : Get Player Faction Rank"
-  },
-  "group_script_level": {
-    "helperTitle": "Group : Check Script Level",
-    "operator": "=",
-    "tag": "group01",
-    "helper": "This action will check the script level of an group. Return true if all of the entities have the specified conditions. \n Available Operator : < || <= || > || >= || != || = ",
-    "name": "group_script_level",
-    "scriptlevel": 10
-  },
-  "entity_path_is_finish": {
-    "helperTitle": "Entity : Path is Finish",
-    "tag": "Judy",
-    "name": "entity_path_is_finish",
-    "helper": "This trigger will be triggered when entity path is finished"
-  },
-  "player_inbuilding": {
-    "helperTitle": "Player : in Building",
-    "helper": "This trigger will be triggered when player is inside",
-    "name": "player_inbuilding"
+  "testFor": {
+    "triggers": [ {
+      "tag": "entitytag",
+      "name": "killed_entity"
+    }, {
+      "tag": "grouptag",
+      "name": "group_is_spawn"
+    }, {
+      "tag": "entitytag",
+      "name": "entity_is_spawn"
+    } ],
+    "name": "testFor",
+    "logic": "or||and",
+    "helper": "This trigger will be triggered when all of the trigger are triggered by the logic you choose.",
+    "helperTitle": "Logic : Test For"
   },
   "entity_looked_is_registered": {
     "helperTitle": "Entity : Looked Entity is Registred as Entity",
     "helper": "This trigger will be triggered when the entity that you look has been registred as entity",
     "name": "entity_looked_is_registered"
   },
-  "vehicle_entity_is_moving": {
-    "helperTitle": "Entity : Vehicle is Moving",
-    "tag": "Judy",
-    "name": "vehicle_entity_is_moving",
-    "helper": "This trigger will be triggered when vehicle entity path is moving"
+  "item_looked_is_registered_in_current_house": {
+    "helperTitle": "Mod : Object Looked is registred as Housing Placed Item",
+    "helper": "This trigger will be triggered when item looked is registred as housing placed item",
+    "name": "item_looked_is_registered_in_current_house"
   },
-  "player_have_combatstate": {
-    "helperTitle": "Player : in Combat State",
-    "helper": "This trigger will be triggered when you are in a specifc combat state",
+  "player_corpo_faction": {
+    "value": "Arasaka",
+    "helperTitle": "Corpo : Get Player Faction",
+    "helper": "This trigger will be triggered when player has the intended corpo faction : None, Arasaka, Militech, KangTao, Nomad",
+    "name": "player_corpo_faction"
+  },
+  "statpool": {
+    "helperTitle": "Stat Pool: is Higher or equals to",
+    "name": "statpool",
+    "value": "Health",
+    "score": 50,
+    "helper": "This trigger will be triggered when your stat pool are equal or higher of the score",
+    "perc": false
+  },
+  "entity_is_spawn": {
+    "tag": "entitytag",
+    "helperTitle": "Entity : is spawn ",
+    "helper": "This trigger will be triggered when a entity is spawned",
+    "name": "entity_is_spawn"
+  },
+  "killed_group": {
+    "tag": "grouptag",
+    "helperTitle": "Group : is Killed",
+    "helper": "This trigger will be triggered when all custom entities in a group are killed",
+    "name": "killed_group"
+  },
+  "is_in_specific_menu": {
+    "menu": "Hub",
+    "helperTitle": "UI : In Specific Menu",
+    "helper": "This trigger will be triggered when player is in specific menu (NewGame||BoothMode||ClippedMenu||MainMenu||DeathMenu||E3EndMenu||FastTravel||FinalBoards||FindServers||Hub||NetworkBreach||PauseMenu||Stash||Vendor)",
+    "name": "is_in_specific_menu"
+  },
+  "housing_edit_enable": {
+    "helperTitle": "Mod : Housing Mode",
+    "helper": "This trigger will be triggered when player is in Housing Mode",
+    "name": "housing_edit_enable"
+  },
+  "gameVolume": {
+    "help": "test if the game setting volume (MasterVolume||SfxVolume||DialogueVolume||MusicVolume||CarRadioVolume) is higher or equals to the score",
+    "name": "gameVolume",
+    "value": "SfxVolume",
+    "score": 5,
+    "helper": "This trigger will be triggered when inGame Volume value is equal or higher to (score)",
+    "helperTitle": "Sound : Game volume is at "
+  },
+  "if_entities_around_you": {
+    "range": 5,
+    "filter": [ "mox", "npc" ],
+    "name": "if_entities_around_you",
+    "helperTitle": "Entity : Entities around you",
+    "helper": "this trigger will check for if there is an entity founded in the player's view in an determined range and filter. \n The filter will check in the name, display name and appearance of the entity or hash \n leave filter at [] for take all. "
+  },
+  "metro_time_is_finished": {
+    "helperTitle": "UI : Metro Remaning Time is at 0",
+    "helper": "This trigger will be triggered when Metro Remaning Time Screen is at 0",
+    "name": "metro_time_is_finished"
+  },
+  "player_is_hit": {
+    "helperTitle": "Player : Player is Hit",
+    "helper": "This trigger will be triggered when player is hit and the hit doesn't miss. (whatever is in godmode or not)",
+    "name": "player_is_hit"
+  },
+  "player_corpo_faction_rank": {
+    "value": "Salaryman",
+    "helperTitle": "Corpo : Get Player Faction Rank",
+    "helper": "This trigger will be triggered when player has the intended corpo faction : None,Mercs,Salaryman,Leader,Manager,Officier,ExecutiveOfficier,Director,President,Investor,Owner",
+    "name": "player_corpo_faction_rank"
+  },
+  "event_is_triggered": {
+    "tag": "myevent",
+    "helperTitle": "Mod : Event is Triggered",
+    "helper": "This trigger will be triggered when event is called",
+    "name": "event_is_triggered"
+  },
+  "if_entities_around_entity": {
+    "range": 5,
+    "filter": [ "mox", "npc" ],
+    "tag": "judy",
+    "name": "if_entities_around_entity",
+    "helperTitle": "Entity : Entities around entity",
+    "helper": "this trigger will check for if there is an entity founded in the entity's view in an determined range and filter. \n The filter will check in the name, display name and appearance of the entity or hash \n leave filter at [] for take all. "
+  },
+  "npc_star_affinity": {
+    "value": 50,
+    "helperTitle": "NPC : the invited one has enough affinity",
+    "helper": "This trigger will be triggered when you has enough affinity with the npc you has ask to join you ",
+    "name": "npc_star_affinity"
+  },
+  "last_killed_entity_gang_score": {
+    "name": "last_killed_entity_gang_score",
+    "helperTitle": "Entity : last killed entity is in a gang with affinity",
+    "score": 5,
+    "helper": "his trigger will check if last killed entity is in a gang with affinity ",
+    "operator": "+"
+  },
+  "entity_path_is_finish": {
+    "tag": "Judy",
+    "helperTitle": "Entity : Path is Finish",
+    "helper": "This trigger will be triggered when entity path is finished",
+    "name": "entity_path_is_finish"
+  },
+  "3Dposition": {
+    "range": 0,
+    "z": 0,
+    "name": "3Dposition",
+    "x": 0,
+    "helperTitle": "Map : Position XYZ",
+    "helper": "This trigger will be triggered when you are at this XYZ position (in the range)",
+    "y": 0
+  },
+  "npc": {
+    "way": "phone",
+    "way_help": "phone||speak||fixer",
+    "value_help": "use value (write the Name) for phone or Speak or value (write a tag text) for fixer",
+    "value": "Judy",
+    "helperTitle": "NPC : who is talking",
+    "helper": "This trigger will be triggered when you talk with a specific NPC",
+    "name": "npc"
+  },
+  "check_value": {
+    "target": 5,
+    "name": "check_value",
+    "value": 5,
+    "helperTitle": "Score : Check Score",
+    "helper": "This action will check the targeted data. Can be number, boolean or text \n Available Operator : < || <= || > || >= || != || = || contains || empty || notempty",
+    "operator": ">="
+  },
+  "custom_place": {
+    "value": "customplacetag01",
+    "helperTitle": "House : in specific Custom Place",
+    "helper": "This trigger will be triggered when you are at a specific custom place",
+    "name": "custom_place"
+  },
+  "is_in_menu": {
+    "helperTitle": "UI : In Menu",
+    "helper": "This trigger will be triggered player is in menu",
+    "name": "is_in_menu"
+  },
+  "current_district": {
+    "help": "Badlands||CityCenter||Heywood||NorthBadlands||Pacifica||SantoDomingo||SouthBadlands||Watson||Westbrook",
+    "name": "current_district",
+    "value": "Watson",
+    "helperTitle": "Map : Current District",
+    "helper": "This trigger will be triggered when you are in a specific district"
+  },
+  "soundmanager_isplaying": {
+    "channel": "music",
+    "name": "soundmanager_isplaying",
+    "helperTitle": "Sound : Sound manager is playing ",
+    "helper": "This trigger will be triggered when SoundManager Mod specified channel is currently playing",
+    "help": "test if the sound manager mod play currently channel"
+  },
+  "position": {
+    "range": 0,
+    "name": "position",
+    "x": 0,
+    "helperTitle": "Player : At Position XY",
+    "helper": "This trigger will be triggered when you are at this XY position (in the range)",
+    "y": 0
+  },
+  "entity_is_in_custom_place_type": {
+    "help": "-- 0 : house|| 1 : bar|| 2 : nightclub|| 3 : restaurant|| 4 : shopping|| 5 : special",
+    "tag": "judy",
+    "name": "entity_is_in_custom_place_type",
     "value": 0,
-    "name": "player_have_combatstate",
-    "help": "-- Default = 0|| InCombat = 1|| OutOfCombat = 2|| Stealth = 3"
+    "helperTitle": "Entity : Is in Custom Place Type"
+  },
+  "last_killed_entity": {
+    "helperTitle": "Entity : last killed entity",
+    "helper": "This trigger will check the last killed enity exist ",
+    "name": "last_killed_entity"
   },
   "check_current_scannerdata": {
     "prop": "reward",
+    "name": "check_current_scannerdata",
+    "value": 5,
+    "helperTitle": "Scanner : Check Active Scanner Data",
+    "helper": "this trigger will check, for an current scanner data when scanner is active, an field. operator is for numerical field, value can be an text or an number depending of the tested field",
+    "operator": "="
+  },
+  "can_use_preventionsystemspawn": {
+    "helperTitle": "Entity : Can use Prevention System",
+    "helper": "This trigger will be triggered when the current amount of spawned entity with prevention system is under 50",
+    "name": "can_use_preventionsystemspawn"
+  },
+  "last_killed_entity_is_in_specific_gang": {
+    "value": "faction_sixthstreet",
+    "helperTitle": "Entity : Last Killed entity is in an specific gang",
+    "helper": "This trigger will check if Last Killed entity is in an specific gang ",
+    "name": "last_killed_entity_is_in_specific_gang"
+  },
+  "check_scannerdata_for_entity": {
+    "name": "check_scannerdata_for_entity",
+    "tag": "judy01",
     "operator": "=",
     "value": 5,
-    "helper": "this trigger will check, for an current scanner data when scanner is active, an field. operator is for numerical field, value can be an text or an number depending of the tested field",
-    "name": "check_current_scannerdata",
-    "helperTitle": "Scanner : Check Active Scanner Data"
+    "helperTitle": "Scanner : Check Custom Scanner Data for Entity",
+    "helper": "this trigger will check for an existing scanner data for an existing entity, an field. operator is for numerical field, value can be an text or an number depending of the tested field",
+    "prop": "reward"
   },
-  "current_district": {
-    "helperTitle": "Map : Current District",
-    "helper": "This trigger will be triggered when you are in a specific district",
-    "value": "Watson",
-    "name": "current_district",
-    "help": "Badlands||CityCenter||Heywood||NorthBadlands||Pacifica||SantoDomingo||SouthBadlands||Watson||Westbrook"
+  "entity_at_relative_player_position": {
+    "range": 0,
+    "z": 0,
+    "tag": "judy01",
+    "name": "entity_at_relative_player_position",
+    "x": 0,
+    "helperTitle": "Entity : At player's relative position",
+    "helper": "This trigger will be triggered when a custom entity is at player's relative position",
+    "y": 0
   },
-  "entity_is_in_custom_room_type": {
-    "helperTitle": "Entity : Is in Custom Room Type",
-    "tag": "judy",
-    "help": "-- 0 : drink|| 1 : eat|| 2 : do",
-    "name": "entity_is_in_custom_room_type",
-    "value": 0
+  "entity_gender": {
+    "tag": "blue01",
+    "name": "entity_gender",
+    "value": "male",
+    "helperTitle": "Entity : Gender",
+    "helper": "This trigger will be triggered when entity has expected gender (male||female)"
   },
-  "item_amount": {
-    "helperTitle": "Items : Amount in Inventory",
-    "score": 1,
-    "value": "skippy",
-    "name": "item_amount",
-    "helper": "This trigger will be triggered when you has a specific item and amount in your inventory"
+  "is_arrived_to_destination": {
+    "range": 5,
+    "tag": "delamain",
+    "name": "is_arrived_to_destination",
+    "helperTitle": "Entity : Is Arrived to Destination",
+    "helper": "This trigger will be triggered when entity is arrived to their destination"
   }
 }
