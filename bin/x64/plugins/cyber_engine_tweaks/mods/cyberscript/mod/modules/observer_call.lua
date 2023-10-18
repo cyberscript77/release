@@ -58,7 +58,11 @@ function SetObserver()
 	
 	end)
 	
+	ObserveAfter('GenericNotificationController', 'SetNotificationData', function(self, notificationData)
+		 GenericNotificationController_SetNotificationData(self, notificationData)
+		
 	
+	end)
 	
 	
 	ObserveAfter('QuestDetailsPanelController', 'OnUpdateTrackedObjectiveEvent', function(self, e)
@@ -66,6 +70,13 @@ function SetObserver()
 		 QuestDetailsPanelController_OnUpdateTrackedObjectiveEvent(self, e)
 	end)
 	--TODO
+	Override('QuestListHeaderController', 'Setup', function(self, titleLocKey,questType,wrappedMethod)
+		
+		
+		 QuestListHeaderController_Setup(self, titleLocKey,questType,wrappedMethod)
+		
+		
+	end)
 	
 	
 	--QuestJournalUI
@@ -79,7 +90,11 @@ function SetObserver()
 		
 	end)
 	
+	Override('QuestTrackerGameController', 'UpdateTrackerData', function(self, wrappedmethod)
 	
+		QuestTrackerGameController_UpdateTrackerData(self, wrappedmethod)
+	
+	end)
 
 	---@param self QuestTrackerGameController
 	ObserveAfter('QuestTrackerGameController', 'OnMenuUpdate', function(self, value)
@@ -114,8 +129,13 @@ function SetObserver()
 	--TODO
 	--perk
 	 ObserveAfter("CodexUtils", "ConvertToCodexData", function(this,journal, currentEntry, currentGroupIndex, stateFilter, newEntries, activeDataSync, useFallbackImages)
-	
+		print(currentEntry.id)
 		-- PerksMainGameController_SetupLayout(this,screenType)
+	end)
+	
+	Override("PerkScreenController", "Setup", function(this,displayData, dataManager , startingIndex,wrappedMethod)
+	
+		PerkScreenController_Setup(this,displayData, dataManager , startingIndex,wrappedMethod)
 	end)
 	
 	ObserveAfter("PerkDisplayController", "Setup", function(this,displayData, dataManager, index)
@@ -250,7 +270,11 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 
 	
+	--TODO
+	-- ObserveAfter("ChatBoxGameController", "OnInitialize", function(this)
 	
+	-- ChatBoxGameController_OnInitialize(this)
+	-- end)
 	ObserveAfter("HudPhoneAvatarController", "OnInitialize", function(this)
 	
 	 HudPhoneAvatarController_OnInitialize(this)
@@ -264,6 +288,15 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	 HudPhoneGameController_OnInitialize(this)
 	end)
+	--TODO
+	-- ObserveAfter("FlightController", "Activate", function(this)
+	-- FlightController_Activate(this)
+	
+	-- end)
+	
+	-- ObserveAfter("FlightController", "Deactivate", function(this)
+	-- FlightController_Deactivate(this)
+	-- end)
 	
 	ObserveAfter("PlayerPuppet", "ReactToHitProcess", function(this,hitEvent)
 	
@@ -773,6 +806,21 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	Observe('VehicleRadioPopupGameController', 'VirtualListReady', function(self)
 		VehicleRadioPopupGameController_VirtualListReady(self)
 	end)
@@ -816,6 +864,14 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	Observe('PlayerPuppet', 'OnDeath', function()
 		PlayerPuppet_OnDeath()
+	end)
+	
+	
+	
+	Override('DialogChoiceLogicController', 'UpdateView', function(self,wrappedMethod)
+		
+		DialogChoiceLogicController_UpdateView(self,wrappedMethod)
+		
 	end)
 	
 	
@@ -880,6 +936,21 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	
+end
+
+
+function SetOverrider()
+	
+	-- Override("DeathLandEvents", "OnEnter", function(this,stateContext, scriptInterface,wrappedMethod)
+	-- logme(10,"tombé1")
+	-- this:PlayHardLandingEffects(stateContext, scriptInterface)
+    -- this:BroadcastLandingStim(stateContext, scriptInterface, gamedataStimType.LandingHard)
+    -- this:OnForcedExit(stateContext, scriptInterface)
+    -- this:SetDetailedState(scriptInterface, gamePSMDetailedLocomotionStates.HardLand);
+    -- this:SetBlackboardIntVariable(scriptInterface, GetAllBlackboardDefs().PlayerStateMachine.Landing, EnumInt(gamePSMLandingState.HardLand))
+	
+	-- end)
+	
 	ObserveAfter("WorldMappinsContainerController", "CreateMappinUIProfile", function(this,mappin, mappinVariant, customData)
 		
 		 MappinBaseController_SetRootVisible(this,mappin, mappinVariant, customData)
@@ -898,29 +969,7 @@ PanzerHUDGameController_OnInitialize(this)
 		SmartWindowInkGameController_InitializeMainLayout(this)
 		
 	 end)
-	
-end
-
-
-function SetOverrider()
-	
-	-- Override("DeathLandEvents", "OnEnter", function(this,stateContext, scriptInterface,wrappedMethod)
-	-- logme(10,"tombé1")
-	-- this:PlayHardLandingEffects(stateContext, scriptInterface)
-    -- this:BroadcastLandingStim(stateContext, scriptInterface, gamedataStimType.LandingHard)
-    -- this:OnForcedExit(stateContext, scriptInterface)
-    -- this:SetDetailedState(scriptInterface, gamePSMDetailedLocomotionStates.HardLand);
-    -- this:SetBlackboardIntVariable(scriptInterface, GetAllBlackboardDefs().PlayerStateMachine.Landing, EnumInt(gamePSMLandingState.HardLand))
-	
-	-- end)
 	--TODO
-	
-	Override('QuestTrackerGameController', 'UpdateTrackerData', function(self, wrappedmethod)
-		
-		QuestTrackerGameController_UpdateTrackerData(self, wrappedmethod)
-	
-	end)
-	
 	Override("PreventionSpawnSystem", "SpawnRequestFinished", function(this,requestResult,wrappedMethod)
 		PreventionSpawnSystem_SpawnCallback(this,requestResult,wrappedMethod)
 	end)
@@ -937,18 +986,6 @@ function SetOverrider()
 	end)
 	
 	
-	Override('QuestListHeaderController', 'Setup', function(self, titleLocKey,questType,wrappedMethod)
-		
-		
-		 QuestListHeaderController_Setup(self, titleLocKey,questType,wrappedMethod)
-		
-		
-	end)
-	
-	Override("PerkScreenController", "Setup", function(this,displayData, dataManager , startingIndex,wrappedMethod)
-	
-		PerkScreenController_Setup(this,displayData, dataManager , startingIndex,wrappedMethod)
-	end)
 	
 	
 	Override("CodexPopupGameController", "SetupData", function(this,wrappedMethod)
@@ -1038,6 +1075,62 @@ function SetOverrider()
 	
 		VehiclesManagerListItemController_OnDataChanged(this,value, wrappedMethod)
 	end)
+	
+	--Vendors
+	
+	-- Override("VendorHubMenuGameController", "OnSetUserData", function(this,userData,wrappedMethod)
+		-- if(objLook ~= nil) then
+			-- local entid = objLook:GetEntityID()
+			-- local entity = getEntityFromManagerById(entid)
+			-- if(entity.id ~= nil) and VendorsStockManager[entity.tag] ~= nil then
+			  -- local vendorData = userData.data
+			  -- this.vendorUserData = VendorUserData.new()
+			  -- this.vendorUserData.vendorData = vendorPanelData
+			  -- this.player = this:GetPlayerControlledObject()
+			  -- this.PDS = GameInstance.GetScriptableSystemsContainer():Get("PlayerDevelopmentSystem")
+			  -- this.VendorDataManager = VendorDataManager.new()
+			  -- logme(1,"sell01")
+			  -- --this.VendorDataManager:Initialize(this:GetPlayerControlledObject(), objLook:GetEntityID())
+			-- this.VendorDataManager.TimeToCompletePurchase = 0
+			-- this.VendorDataManager.VendorObject = objLook
+			-- this.VendorDataManager.VendorID =  getVendorId()
+			-- MarketSystem.OnVendorMenuOpen(this.VendorDataManager.VendorObject)
+			
+			
+			  -- requestStatsEvent = RequestStatsBB.new()
+			    -- logme(1,"sell02")
+			  -- requestStatsEvent:Set(this.player)
+			    -- logme(1,"sell03")
+			  -- this.PDS:QueueRequest(requestStatsEvent)
+			    -- logme(1,"sell04")
+			  -- this:Init()
+			    -- logme(1,"sell05")
+			-- --print("sell01")
+			-- else
+					
+					
+					-- wrappedMethod(userData)
+			-- end
+			-- else
+					
+					
+					-- wrappedMethod(userData)
+		-- end
+	-- end)
+
+	
+	-- Override("RipperdocIdPanel", "SetName", function(this,vendorName,wrappedMethod)
+		-- RipperdocIdPanel_SetName(this,vendorName,wrappedMethod)
+	-- end)
+	
+	-- Override("VendorHubMenuGameController", "SetupTopBar", function(this,wrappedMethod)
+		-- VendorHubMenuGameController_SetupTopBar(this,wrappedMethod)
+	-- end)
+	
+	-- Override("FullscreenVendorGameController", "PopulateVendorInventory", function(this,wrappedMethod)
+		
+		-- FullscreenVendorGameController_PopulateVendorInventory(this,wrappedMethod)
+	-- end)
 	
 	
 	---Scanner
@@ -1130,13 +1223,11 @@ function SetOverrider()
 	
 	
 	
-	Override('DialogChoiceLogicController', 'UpdateView', function(self,wrappedMethod)
-		
-		DialogChoiceLogicController_UpdateView(self,wrappedMethod)
-		
-	end)
+	-- Override('BrowserController', 'TryGetWebsiteData', function(this, address, wrappedMethod)
 	
-	
+		-- BrowserController_TryGetWebsiteData(thos, address, wrappedMethod)
+		
+	-- end)
 	Override('BrowserController', 'LoadWebPage', function(self,address,wrappedMethod)
 	 BrowserController_LoadWebPage(self,address,wrappedMethod)
 	
