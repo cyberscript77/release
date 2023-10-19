@@ -7338,16 +7338,15 @@ function DoubleJumpDecisions_EnterCondition(thos,stateContext,scriptInterface, w
 		local jumpPressedFlag = stateContext:GetConditionBool("JumpPressed");
 		
 		if not jumpPressedFlag and not thos.jumpPressed then
-			return false
+			 return false
 		end
 		
 		
 		if not scriptInterface:HasStatFlag(gamedataStatType.HasDoubleJump) then
 			return false
 		end
-		if scriptInterface:HasStatFlag(gamedataStatType.HasChargeJump) or scriptInterface:HasStatFlag(gamedataStatType.HasAirHover) then
-			return false
-		end
+		
+		
 		
 		if scriptInterface.localBlackboard:GetBool(GetAllBlackboardDefs().PlayerStateMachine.IsPlayerInsideMovingElevator) then
 			return false
