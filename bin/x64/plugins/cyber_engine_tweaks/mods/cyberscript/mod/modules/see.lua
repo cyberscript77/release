@@ -824,7 +824,10 @@ function scriptcheckTrigger(trigger)
 		if vehiculeregion then
 			if(trigger.name == "in_car") then
 				local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
-				result = inVehicule
+				if (inVehicule) then
+					local vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+					result = vehicule ~= nil
+				end
 			end
 			if(trigger.name == "entity_in_car") then
 				local obj = getEntityFromManager(trigger.tag)
@@ -832,9 +835,10 @@ function scriptcheckTrigger(trigger)
 				
 				if(enti ~= nil) then
 					local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(enti)
-					result = inVehicule
-					else
-					result = false
+					if (inVehicule) then
+						local vehicule = Game['GetMountedVehicle;GameObject'](enti)
+						result = vehicule ~= nil
+					end
 				end
 			end
 			if(trigger.name == "vehicle_entity_is_moving") then
@@ -851,10 +855,11 @@ function scriptcheckTrigger(trigger)
 				local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 				if (inVehicule) then
 					local vehicule = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
-					--logme(3,vehicule:GetDisplayName())
+					if(vehicule ~= nil) then
 					local isThiscar = (string.find(string.lower(Game.NameToString(vehicule:GetCurrentAppearanceName())), trigger.value) ~= nil)
 					if isThiscar then
 						result = true
+					end
 					end
 				end
 			end
@@ -864,14 +869,15 @@ function scriptcheckTrigger(trigger)
 				
 				if(enti ~= nil) then
 					local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(enti)
-					if (inVehicule) then
-						local vehicule = Game['GetMountedVehicle;GameObject'](enti)
-						--logme(3,vehicule:GetDisplayName())
+				if (inVehicule) then
+					local vehicule = Game['GetMountedVehicle;GameObject'](enti)
+					if(vehicule ~= nil) then
 						local isThiscar = (string.find(string.lower(vehicule:GetCurrentAppearanceName()), trigger.value) ~= nil)
 						if isThiscar then
 							result = true
 						end
 					end
+				end
 				end
 			end
 			if(trigger.name == "vehicule_is_in_custom_garage") then
