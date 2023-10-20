@@ -155,8 +155,9 @@ function ModInitialisation()
 	
 end
 function SaveLoading()
-	
+	arrayVehicles2 = {}
 	arrayVehicles = initVehicles()
+	
 	unlockVehicles(initVehicles())
 	arrayDistricts = initDistrict()
 	arrayFastTravel = initFastTravel()
@@ -220,12 +221,13 @@ function SaveLoading()
 	Player_Sprint_Multiplier = getUserSettingWithDefault("Player_Sprint_Multiplier",Player_Sprint_Multiplier)
 	Player_Run_Multiplier = getUserSettingWithDefault("Player_Run_Multiplier",Player_Run_Multiplier)
 	Jump_Height = getUserSettingWithDefault("Jump_Height",Jump_Height)
+	Double_Jump_Height = getUserSettingWithDefault("Double_Jump_Height",Double_Jump_Height)
 	Immortal = getUserSettingWithDefault("Immortal",Immortal)
 	InfiniteStaminas = getUserSettingWithDefault("InfiniteStaminas",InfiniteStaminas)
 	InfiniteAmmo = getUserSettingWithDefault("InfiniteAmmo",InfiniteAmmo)
 	RamUpgrade = getUserSettingWithDefault("RamUpgrade",RamUpgrade)
-	
-
+	UltraSpeedDodge = getUserSettingWithDefault("UltraSpeedDodge",UltraSpeedDodge)
+	UnlimitedCarryLimit = getUserSettingWithDefault("UnlimitedCarryLimit",UnlimitedCarryLimit)
 	debugLog = getUserSettingWithDefault("debugLog",debugLog)
 	
 	
@@ -662,6 +664,7 @@ function SetFlatFromSetting()
 	TweakDB:SetFlat("PlayerLocomotion.JumpJumpHeightModifier.value", 1 * Jump_Height)
 	TweakDB:SetFlat("PlayerLocomotion.DoubleJumpJumpHeightModifier.value", 2.6 * Double_Jump_Height)
 	end
+	
 	
 	
 	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)

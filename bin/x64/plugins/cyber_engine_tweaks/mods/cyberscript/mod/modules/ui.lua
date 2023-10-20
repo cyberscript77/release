@@ -1584,7 +1584,23 @@ function makeNativeSettings()
 			
 		end)
 		
-		nativeSettings.addRangeFloat("/CMCHEAT/player", getLang("ui_setting_cheat_player_sprint"),  getLang("ui_setting_cheat_player_sprint"), 1, 10, 0.1, "%.1f", Player_Sprint_Multiplier, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
+		
+		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Unlimited Carry"),  getLang("Unlimited Carry"), UnlimitedCarryLimit, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			UnlimitedCarryLimit = state
+			updateUserSetting("UnlimitedCarryLimit", UnlimitedCarryLimit)
+			
+			if(UnlimitedCarryLimit) then 
+				Game.GetStatsSystem():AddModifier(Game.GetPlayer():GetEntityID(),RPGManager.CreateStatModifier(gamedataStatType.CarryCapacity,gameStatModifierType.Additive,99999999))
+				else
+				Game.GetStatsSystem():AddModifier(Game.GetPlayer():GetEntityID(),RPGManager.CreateStatModifier(gamedataStatType.CarryCapacity,gameStatModifierType.Additive,-99999999))
+			end
+			
+		end)
+		
+		
+		nativeSettings.addSubcategory("/CMCHEAT/reload",getLang("Theses cheats need that you save after enable them then reload"))
+		
+		nativeSettings.addRangeFloat("/CMCHEAT/reload", getLang("ui_setting_cheat_player_sprint"),  getLang("ui_setting_cheat_player_sprint"), 1, 10, 0.1, "%.1f", Player_Sprint_Multiplier, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
 			pcall(function() 
 				Player_Sprint_Multiplier = tonumber(string.format("%.1f", value))
 				updateUserSetting("Player_Sprint_Multiplier", Player_Sprint_Multiplier)
@@ -1601,7 +1617,7 @@ function makeNativeSettings()
 			end)
 		end)
 		
-		nativeSettings.addRangeFloat("/CMCHEAT/player", getLang("ui_setting_cheat_player_run"),  getLang("ui_setting_cheat_player_run"), 1, 10, 0.1, "%.1f", Player_Run_Multiplier, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
+		nativeSettings.addRangeFloat("/CMCHEAT/reload", getLang("ui_setting_cheat_player_run"),  getLang("ui_setting_cheat_player_run"), 1, 10, 0.1, "%.1f", Player_Run_Multiplier, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
 			pcall(function() 
 				Player_Run_Multiplier = tonumber(string.format("%.1f", value))
 				updateUserSetting("Player_Run_Multiplier", Player_Run_Multiplier)
@@ -1618,7 +1634,7 @@ function makeNativeSettings()
 		end)
 		
 		
-		nativeSettings.addRangeFloat("/CMCHEAT/player", getLang("ui_setting_cheat_jump_height"),  getLang("ui_setting_cheat_jump_height"), 1, 10, 0.1, "%.1f", Jump_Height, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
+		nativeSettings.addRangeFloat("/CMCHEAT/reload", getLang("ui_setting_cheat_jump_height"),  getLang("ui_setting_cheat_jump_height"), 1, 10, 0.1, "%.1f", Jump_Height, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
 			pcall(function() 
 				Jump_Height = tonumber(string.format("%.1f", value))
 				updateUserSetting("Jump_Height", Jump_Height)
@@ -1635,7 +1651,7 @@ function makeNativeSettings()
 			end)
 		end)
 		
-		nativeSettings.addRangeFloat("/CMCHEAT/player", getLang("ui_setting_cheat_doublejump_height"),  getLang("ui_setting_cheat_doublejump_height"), 1, 10, 0.1, "%.1f", Double_Jump_Height, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
+		nativeSettings.addRangeFloat("/CMCHEAT/reload", getLang("ui_setting_cheat_doublejump_height"),  getLang("ui_setting_cheat_doublejump_height"), 1, 10, 0.1, "%.1f", Double_Jump_Height, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
 			pcall(function() 
 				Double_Jump_Height = tonumber(string.format("%.1f", value))
 				updateUserSetting("Double_Jump_Height", Double_Jump_Height)
@@ -1652,7 +1668,7 @@ function makeNativeSettings()
 		end)
 		
 		
-		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_player_dodge"),  getLang("ui_setting_cheat_player_dodge"), UltraSpeedDodge, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+		nativeSettings.addSwitch("/CMCHEAT/reload",  getLang("ui_setting_cheat_player_dodge"),  getLang("ui_setting_cheat_player_dodge"), UltraSpeedDodge, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			UltraSpeedDodge = state
 			updateUserSetting("UltraSpeedDodge", UltraSpeedDodge)
 			
@@ -1663,15 +1679,15 @@ function makeNativeSettings()
 	
 		end)
 		
-			nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_player_ram"),  getLang("ui_setting_cheat_player_ram"), RamUpgrade, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+		nativeSettings.addSwitch("/CMCHEAT/reload",  getLang("ui_setting_cheat_player_ram"),  getLang("ui_setting_cheat_player_ram"), RamUpgrade, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			RamUpgrade = state
 			updateUserSetting("RamUpgrade", RamUpgrade)
 			
 			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline1.value", 1000)
-		TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline4.value", 25)
+			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline4.value", 25)
 
-		TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline2.floatValues", {1000})
-		TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline5.floatValues", {25})
+			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline2.floatValues", {1000})
+			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline5.floatValues", {25})
 	
 		end)
 		

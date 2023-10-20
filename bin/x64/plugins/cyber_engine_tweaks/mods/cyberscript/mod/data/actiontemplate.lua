@@ -3707,6 +3707,19 @@ return {
 			
 		["type"] = 2,
 	},
-	
+	["change_weather"] = {
+		["helper"] = "This action will change Weather. The field blendTime controls the smoothness of the weather transition.\nDepending on the area and current weather cycle, it may be necessary to pass a higher priority for the weather to take effect.\nPossible Weather :\n24h_weather_toxic_rain\n24h_weather_cloudy\n24h_weather_cloudy_new\n24h_weather_default\n24h_weather_fog\n24h_weather_fog_new\n24h_weather_heavy_clouds\n24h_weather_heavy_clouds_new\n24h_weather_light_clouds\n24h_weather_pollution\n24h_weather_rain\n24h_weather_rain_3q\n24h_weather_rain_dry\n24h_weather_rain_halojump\n24h_weather_rain_new\n24h_weather_rain_new_02\n24h_weather_rain_q\n24h_weather_rain_v2\n24h_weather_sandstorm\n24h_weather_sunny",
+		["helperTitle"] = "World : Change Weather",
+		["name"] = "change_weather",
+		["value"] = "24h_weather_rain",
+		["blendtime"] = 10,
+		["priority"] = 5
+	},
+	["reset_weather"] = {
+		["helper"] = "This action will reset Weather. To immediately restore the weather for the area without waiting for the next cycle, set value field to true",
+		["helperTitle"] = "World : Reset Weather",
+		["name"] = "reset_weather",
+		["value"] = false
+	},
 	
 }

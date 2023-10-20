@@ -19,7 +19,10 @@ function checkTrigger(trigger)
 		end
 		
 		logme(1,getLang("see_trigger_error") .. result.." Trigger : "..tostring(JSON:encode_pretty(trigger)),true)
-		
+		if(trigger.fail_action ~= nil and #trigger.fail_action > 0) then
+				runActionList(trigger.fail_action, trigger.name.."_failure", "see",false,nil)
+				
+		end
 		--Game.GetPlayer():SetWarningMessage("CyberScript Trigger error, check the log for more detail")
 		return false
 		else
@@ -2500,6 +2503,8 @@ function executeAction(action,tag,parent,index,source,executortag)
    		local animationregion = true
    		local airegion = true
    		
+		local status, retval = pcall(function()
+		
    		if groupregion then
    			if(action.name == "create_group") then
    				local group = {}
@@ -6553,6 +6558,17 @@ function executeAction(action,tag,parent,index,source,executortag)
    				end
    				
    			end
+			
+			if(action.name == "change_weather") then
+				Game.GetWeatherSystem():SetWeather(action.value, action.blendtime, action.priority);
+   			end
+			
+			if(action.name == "reset_weather") then
+				Game.GetWeatherSystem():ResetWeather(action.value);;
+   			end
+			
+			
+			
    		end
    		
    		if relationregion then
@@ -14352,6 +14368,21 @@ function executeAction(action,tag,parent,index,source,executortag)
    			
    		end
    		
+		end)
+		
+		if status == false then
+												
+												
+			logme(1,getLang("scripting_error") .. retval.." Action : "..tostring(JSON:encode_pretty(action)).." tag "..tag.." parent "..parent.." index "..index,true)
+			if(action.fail_action ~= nil and #action.fail_action > 0) then
+				runActionList(action.fail_action, tag.."_failure", source,false,executortag)
+				
+			end
+			
+			
+			
+		end
+		
    		if(action.output == true) then 
    			
    			logme(1,action.name,true)
@@ -14683,7 +14714,7 @@ function GeneratefromContext(context)
 					runActionList(v.action, k, "see", false,"see",false)					
 				end
 				
-				
+				local status, retval = pcall(function()
 				local value = GenerateTextFromContextValues(context, v)
 				
 				if((type(value) == "number" or type(value) == "string" or type(value) == "boolean") and v.type ~= "object" and v.type ~= "list") then
@@ -14692,6 +14723,17 @@ function GeneratefromContext(context)
 					else
 					
 					text = value
+					
+				end
+				end)
+				
+				if status == false then
+												
+					logme(1,getLang("see_context_error") .. result.." Context : "..tostring(JSON:encode_pretty(context)),true)				
+					if(context.fail_action ~= nil and #context.fail_action > 0) then
+						runActionList(context.fail_action, "context_failure", "see",false,nil)
+						
+					end
 					
 				end
 			end

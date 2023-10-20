@@ -1,7 +1,11 @@
 {
 	"tag":"posWidget",
 	"type":"widget",
-	"container":"",
+	"margin": {
+		"top": -30,
+		"left": 150
+	  },
+    "container": "default_minimap_root",
 	"fontfamily":"base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily",
 	"fontstyle":"Medium",
 	"fontsize":22,
@@ -12,10 +16,7 @@
 		
 	},
 	"visible":true,
-	"margin":{
-	"top":125,
-	"left":3400
-	},
+	
 	"text":"Hello There !",
 	"context": [
         {

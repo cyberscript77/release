@@ -327,6 +327,7 @@ function resetVar()
 	Jump_Height = 1 --Default 1
 	Double_Jump_Height = 1 --Default 1
 	UltraSpeedDodge = false
+	UnlimitedCarryLimit = false
 	CurrentStock = nil
 	moveRoll=0
 	movePitch=0

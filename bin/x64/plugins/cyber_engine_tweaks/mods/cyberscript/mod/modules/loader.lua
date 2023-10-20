@@ -2,13 +2,13 @@ logme(1,"CyberScript Core Hot Reload module loaded")
 
 function loadModule()
 	
-	
 	actionorder = {
 		"helperTitle",
 		"helper",
 		"name",
 		"output",
-		"comment"
+		"comment",
+		"fail_action"
 	}
 	
 	triggerorder = {
@@ -16,8 +16,8 @@ function loadModule()
 		"help",
 		"helper",
 		"output",
-		"comment"
-		
+		"comment",
+		"fail_action"
 		
 	}
 	
@@ -58,7 +58,7 @@ function loadModule()
 	
 	
 	cyberscript.actiontemplate       = dofile("mod/data/actiontemplate.lua")
-	actionorder = {}
+	
 	arrayactiontemplate = {}
 	for k,v in pairs(cyberscript.actiontemplate) do 
 		----logme(2,actiontemplate[i].helperTitle)
@@ -101,7 +101,7 @@ function loadModule()
 	sessionFile:write(JSON:encode_pretty(cyberscript.triggertemplate))
 	sessionFile:close()
 	
-	
+
 	
 	triggertemplate = {}
 	

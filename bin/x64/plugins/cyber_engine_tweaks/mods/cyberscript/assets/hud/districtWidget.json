@@ -1,7 +1,11 @@
 {
 	"tag": "districtWidget",
 	"type": "widget",
-	"container": "",
+	"margin": {
+		"top": 455,
+		"left": 0
+	  },
+    "container": "default_minimap_root",
 	"fontfamily": "base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily",
 	"fontstyle": "Medium",
 	"fontsize": 25,
@@ -12,10 +16,7 @@
 
 	},
 	"visible": true,
-	"margin": {
-		"top": 625,
-		"left": 3250
-	},
+	
 	"text": "Unknown District",
 	"context": [{
 

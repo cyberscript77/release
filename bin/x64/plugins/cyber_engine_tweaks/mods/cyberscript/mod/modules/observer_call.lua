@@ -18,6 +18,10 @@ function SetObserver()
 	
 	
 	
+	ObserveAfter('HUDManager', 'InitializeHUD', function(self)
+		HUDManager_InitializeHUD(self)
+	end)
+	
 	ObserveAfter('SimpleQuestListItemController', 'OnDataChanged', function(self,value)
 		SimpleQuestListItemController_OnDataChanged(self,value)
 	end)

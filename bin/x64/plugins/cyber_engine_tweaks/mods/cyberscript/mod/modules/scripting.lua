@@ -85,9 +85,9 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		--refresh widget controller
 		refreshUIWidgetController(true)
 		
-		end
 		
-		if mainrefreshstep2 then
+		
+		
 		--Targeted entity
 		objLook = Game.GetTargetingSystem():GetLookAtObject(Game.GetPlayer(),false,false)
 		if(objLook ~= nil) then
@@ -173,6 +173,9 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 				end
 			end)
 		end
+		end
+		
+		
 		
 		--Vehicle
 		local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
@@ -182,11 +185,6 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 			if(vehicule ~= nil) then
 				local obj = getEntityFromManagerById(vehicule:GetEntityID())
 				inVehiculeTweak = ""
-				for i=1,#arrayVehicles do
-					if(tostring(TweakDBID.new(arrayVehicles[i])) == tostring(vehicule:GetRecordID())) then
-						inVehiculeTweak = arrayVehicles[i]
-					end
-				end
 				
 				local isThiscar = (obj.id ~= nil and obj.isAV == true)
 				
@@ -221,7 +219,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 			refreshAV()
 		
 		else
-			inVehiculeTweak = ""
+		
 			
 			if(cyberscript.EntityManager["current_car"] and cyberscript.EntityManager["current_car"].id ~= nil) then
 				cyberscript.EntityManager["current_car"].id = nil
@@ -229,7 +227,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 			
 		end
 		
-		end
+		
 		
 		
 		
@@ -540,7 +538,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 							
 							displayHUD["factionwidget"]:RemoveAllChildren()
 							
-							
+							displayHUD["factionwidget"]:SetVisible(((not inScanner) and GameController["HUDManager"].state == HUDState.ACTIVATED ))
 						
 							if(currentDistricts2.districtLabels ~= nil and #currentDistricts2.districtLabels > 0) then
 								local gangslist = {}
@@ -612,6 +610,30 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 					else
 					if displayHUD["main_root_default"] ~= nil then
 						
+							for k,v in pairs(cyberscript.cache["hud"]) do
+						if(v.data.requirement == nil or checkTriggerRequirement(v.data.requirement,v.data.trigger))then
+							if(v.data.type == "widget" or v.data.type == "container")then
+								
+								checkContext(v.data)
+								
+							end
+							if(v.data.type == "widget" and displayHUD[k] ~= nil  and displayHUD[k].visible == true) then
+							
+								
+								displayHUD[k]:SetVisible(false)
+								
+							end
+							
+							if(v.data.type == "container" and displayHUD[k] ~= nil) then
+								
+								
+								displayHUD[k]:SetVisible(v.data.visible)
+								
+								
+							end
+						end
+						
+					end
 						displayHUD["main_root_default"]:SetVisible(false)
 					end
 				end
@@ -811,7 +833,9 @@ function inGameInit() -- init some function after save loaded
 		
 		
 		InfiniteStamina(InfiniteStaminas)
-		
+		if(UnlimitedCarryLimit) then 
+			Game.GetStatsSystem():AddModifier(Game.GetPlayer():GetEntityID(),RPGManager.CreateStatModifier(gamedataStatType.CarryCapacity,gameStatModifierType.Additive,99999999))
+		end
 		if(InfiniteAmmo) then
 				Game.GetInventoryManager().AddEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
 				local player = Game.GetPlayer()
@@ -4916,7 +4940,7 @@ end
 
 function refreshModVariable(active)
 	if active == true then
-		inScanner = GameUI.IsScanner()
+		inScanner = GameController["HUDManager"].uiScannerVisible
 		player = Game.GetPlayer()
 		currentTime = getGameTime()
 		curPos = player:GetWorldPosition()

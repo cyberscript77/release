@@ -227,7 +227,7 @@ function RecoverDatapack()
 end
 
 function CheckandUpdateDatapack()
-	
+
 	if(arrayDatapack ~= nil) then 
 	local directories = {}
 	loadAssetsObject()
@@ -251,15 +251,13 @@ function CheckandUpdateDatapack()
 		
 		end
 	end
-	
+		
 	local haveupdate = false 
 	
 	for i=1, #directories do
 		local k = directories[i]
 		
 		
-		
-	
 		
 		local jsondesc = nil
 		
@@ -298,7 +296,11 @@ function CheckandUpdateDatapack()
 			(
 					
 					(
-						(arrayDatapack[k] ~= nil and ((arrayDatapack[k].metadata ~= nil and jsondesc.version ~= arrayDatapack[k].metadata.version) or (table_contains(arrayDatapack[k].metadata.flags,"compile",false) == true and DatapackChecker(arrayDatapack[k].metadata) == true ) or arrayDatapack[k].state == "new"))
+						(arrayDatapack[k] ~= nil and (
+							(arrayDatapack[k].metadata ~= nil and jsondesc.version ~= arrayDatapack[k].metadata.version) 
+							or (arrayDatapack[k].metadata ~= nil and table_contains(arrayDatapack[k].metadata.flags,"compile",false) == true and 
+								DatapackChecker(arrayDatapack[k].metadata) == true ) or 
+								arrayDatapack[k].state == "new"))
 					
 					or
 						arrayDatapack[k] == nil 
@@ -369,7 +371,7 @@ function CheckandUpdateDatapack()
 		local status, retval = pcall(function()
 		if('table' == type(v)) then
 			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil and (table_contains(arrayDatapack[k].metadata.flags,"essential",false) == false)) then
-			
+		
 				nativeSettings.addSwitch("/CMDT", k, arrayDatapack[k].metadata.version, arrayDatapack[k].enabled, arrayDatapack[k].enabled, function(state)
 					if (state == false) then
 						
@@ -403,7 +405,7 @@ function CheckandUpdateDatapack()
 											
 											
 								
-											--logme(1,getLang("Modpack Setting Error") .. retval.." Modpack : "..k.."value : "..tostring(arrayDatapack[k].enabled))
+											logme(1,getLang("Modpack Setting Error") .. retval.." Modpack : "..k.."value : "..tostring(arrayDatapack[k].enabled))
 											--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
 											
 										end
@@ -1834,6 +1836,13 @@ end
 		tableDis = trydecodeJSOn(lines,f,"mod/data/vehicles.json")
 		--logme(1,"District Imported")
 		f:close()
+		
+		for i,v in ipairs(tableDis) do
+			
+			arrayVehicles2[tostring(TweakDBID.new(v))] = v
+		
+		end
+		
 		return tableDis
 	end
 	function initGameSounds()
