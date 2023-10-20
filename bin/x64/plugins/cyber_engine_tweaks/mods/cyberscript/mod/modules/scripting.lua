@@ -4940,7 +4940,7 @@ end
 
 function refreshModVariable(active)
 	if active == true then
-		inScanner = GameController["HUDManager"].uiScannerVisible
+		 if(GameController["HUDManager"] ~= nil) then inScanner = GameController["HUDManager"].uiScannerVisible else inScanner = false end
 		player = Game.GetPlayer()
 		currentTime = getGameTime()
 		curPos = player:GetWorldPosition()

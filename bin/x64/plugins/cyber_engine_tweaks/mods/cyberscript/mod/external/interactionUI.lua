@@ -4,7 +4,8 @@ local ui =  {
     callbacks = {},
     hubShown = false,
     selectedIndex = 0,
-    input = false
+    input = false,
+	injectdialog = nil
 }
 
 ---@param localizedName string
@@ -35,13 +36,17 @@ end
 ---@param choices table
 ---@param activityState gameinteractionsvisEVisualizerActivityState
 ---@return gameinteractionsvisListChoiceHubData
-function ui.createHub(title, choices, activityState) -- Creates and returns a hub
+function ui.createHub(title, choices, activityState, id) -- Creates and returns a hub
     local hub = gameinteractionsvisListChoiceHubData.new()
     hub.title = title or "Title"
     hub.choices = choices or {}
     hub.activityState = activityState or gameinteractionsvisEVisualizerActivityState.Active
     hub.hubPriority = 1
+	if(id == nil) then
     hub.id = 69420 + math.random(99999)
+	else
+	hub.id = id
+	end
 
     return hub
 end
@@ -132,19 +137,119 @@ function ui.init() -- Register needed observers
     Override("InteractionUIBase", "OnDialogsSelectIndex", function(_, idx, wrapped) -- Avoid index getting set by game
         if ui.hubShown then
             if idx ~= ui.selectedIndex then
+			
                 return
             end
         end
         wrapped(idx)
     end)
 
-    Override("InteractionUIBase", "OnDialogsData", function(_, value, wrapped) -- Avoid interaction getting overriden by game
+    Override("InteractionUIBase", "OnDialogsData", function(this, value, wrapped) -- Avoid interaction getting overriden by game
         if ui.hubShown then return end
-        wrapped(value)
+		
+		
+		 local data=  FromVariant(value)
+		if(data.choiceHubs ~= nil and data.choiceHubs[1] ~= nil and ui.injectdialog ~= nil) then
+			 local icon = nil
+			
+			
+			local choicelist = {}
+		
+			for i = 1, #ui.injectdialog.options do
+				
+				local option = ui.injectdialog.options[i]
+				
+				local icon = nil
+				if option.icon ~= nil then 
+					icon = TweakDBInterface.GetChoiceCaptionIconPartRecord("ChoiceCaptionParts."..option.icon)
+				end
+				
+				local choice1 = interactionUI.createChoice(getLang(option.description), icon , gameinteractionsChoiceType.Selected) -- Icon and choiceType are optional
+				table.insert(choicelist,choice1)
+			end
+			
+			
+			local arraychoice = {}
+			local dialogChoiceHubs = DialogChoiceHubs.new()
+			dialogChoiceHubs.choiceHubs = {}
+			
+		
+			
+			
+			
+			local hub = gameinteractionsvisListChoiceHubData.new()
+			hub.title = data.choiceHubs[1].title
+			hub.choices ={}
+			hub.activityState = data.choiceHubs[1].activityState
+			hub.activityState = gameinteractionsvisEVisualizerActivityState.Active
+			hub.hubPriority = 1
+			
+		
+			for k,v in ipairs(data.choiceHubs[1].choices) do
+				local chop = deepcopy(v)
+				
+				table.insert(arraychoice,chop)
+				
+			end
+			local customIndex = {}
+			for k,v in ipairs(choicelist) do
+				local chop = deepcopy(v)
+				
+				table.insert(arraychoice,chop)
+				customIndex[#arraychoice] = {}
+				customIndex[#arraychoice].index = k
+				
+			end
+			
+			hub.choices =arraychoice
+			
+			local arrayhub = {}
+			table.insert(arrayhub,hub)
+			 dialogChoiceHubs.choiceHubs = arrayhub
+			
+			for i = 1, #hub.choices do
+				
+				
+			   interactionUI.callbacks[i] = function()
+						if(customIndex[i]) then
+							local option = ui.injectdialog.options[customIndex[i].index]
+							if(option.requirement == nil or checkTriggerRequirement(option.requirement,option.trigger))then
+								ui.hub.id = 69420 + math.random(99999)
+								ui.selectedIndex = 69420 + math.random(99999)
+								ClickOnDialog(option,ui.injectdialog.speaker,"speak")
+								
+								
+							end
+						end
+						interactionUI.hideHub()
+						ui.injectdialog = nil
+				end
+				
+			end
+			
+			
+			this.AreDialogsOpen = #dialogChoiceHubs.choiceHubs > 0;
+			this.dialogIsScrollable = true
+			this:OnDialogsSelectIndex(0)
+			this:UpdateDialogsData(dialogChoiceHubs);
+			this:OnInteractionsChanged();
+			this:UpdateListBlackboard();
+			this:OnDialogsActivateHub(hub.id)
+			
+			ui.hubShown = true
+			ui.native = true
+			ui.hub = hub
+		else
+		
+		wrapped(value)
+		 end
+      --  wrapped(value)
     end)
 
     Override("dialogWidgetGameController", "OnDialogsActivateHub", function(_, id, wrapped) -- Avoid interaction getting overriden by game
         if ui.hubShown and id ~= ui.hub.id then return end
+		
+		
         wrapped(id)
     end)
 end

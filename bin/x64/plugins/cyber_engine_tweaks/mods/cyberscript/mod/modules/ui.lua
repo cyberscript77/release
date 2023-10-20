@@ -4186,7 +4186,7 @@ function createDialog(dialog)
 	
 	
     -- Setup, set and show hub
-    local hub = interactionUI.createHub(getDialogOwner(dialog.speaker), choicelist) -- Create hub and give it the list of choices
+    local hub = interactionUI.createHub(getDialogOwner(dialog.speaker), choicelist,id) -- Create hub and give it the list of choices
     interactionUI.setupHub(hub) -- Set the hub
     interactionUI.showHub() -- Show the previously set hub
 	currentDialogHub.hub = hub

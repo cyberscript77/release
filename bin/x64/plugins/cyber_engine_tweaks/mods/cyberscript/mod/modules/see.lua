@@ -6621,6 +6621,53 @@ function executeAction(action,tag,parent,index,source,executortag)
    				-- openSpeakDialogWindow = true
    				-- end
    			end
+   			if(action.name == "inject_dialog") then
+   				--logme(3,"is logme(10,source)
+   				local usedial =  SetNextDialog(action.dialog,source,executortag)
+				interactionUI.injectdialog = usedial
+				
+				
+   				-- logme(3,source)
+   				-- logme(3,executortag)
+   				-- logme(3,usedial.desc)
+   				
+   				-- logme(3,source)
+   				-- if(source == "quest") then
+   				-- local dioal = SetNextDialog(action.value,source)
+   				-- if dioal.havequitoption == nil then dioal.havequitoption = true end
+   				-- logme(3,dioal.desc)
+   				-- openQuestDialogWindow = false
+   				-- currentQuestdialog = dioal
+   				-- openQuestDialogWindow = true
+   				-- end
+   				-- if(source == "interact") then
+   				-- local dioal = SetNextDialog(action.value,source)
+   				-- if dioal.havequitoption == nil then dioal.havequitoption = true end
+   				-- logme(3,dioal.desc)
+   				-- openEventDialogWindow = false
+   				-- currentEventDialog = dioal
+   				-- openEventDialogWindow = true
+   				-- end
+   				-- if(source == "phone") then
+   				-- local dioal = SetNextDialog(action.value,source)
+   				-- if dioal.havequitoption == nil then dioal.havequitoption = true end
+   				-- logme(3,dioal.desc)
+   				-- openPhoneDialogWindow = false
+   				-- currentPhoneDialog = dioal
+   				-- openPhoneDialogWindow = true
+   				-- --SetDialogPhoneUI(dioal)
+   				-- ------logme(3,"dialog phone enabled")
+   				-- end
+   				-- if(source == "speak") then
+   				-- local dioal = SetNextDialog(action.value,source)
+   				-- if dioal.havequitoption == nil then dioal.havequitoption = true end
+   				-- logme(3,dioal.desc)
+   				-- openSpeakDialogWindow = false
+   				-- currentSpeakDialog = dioal
+   				-- openSpeakDialogWindow = true
+   				-- end
+   			end
+   			
    			
    			
    			if(action.name == "speak_npc")then
@@ -8947,6 +8994,88 @@ function executeAction(action,tag,parent,index,source,executortag)
    					error("No current Phoned NPC ")
    				end
    			end
+			if(action.name == "clone_entity") then
+				local obj = getEntityFromManager(action.target)
+   				local enti = Game.FindEntityByID(obj.id)
+   				if(enti ~= nil) then
+					
+					local postp = enti:GetWorldPosition()
+					local worldpos = Game.GetPlayer():GetWorldTransform()
+					worldpos:SetPosition(worldpos, postp)	
+					
+					
+					local npcSpec =  DynamicEntitySpec.new()
+					npcSpec.recordID = enti:GetRecordID()
+					npcSpec.appearanceName = Game.NameToString(enti:GetCurrentAppearanceName())
+					npcSpec.position = postp
+					npcSpec.persistState = false
+					npcSpec.persistSpawn = false
+					npcSpec.alwaysSpawned = false
+					npcSpec.spawnInView =  true
+					
+					CName.add("CyberScript")
+					CName.add("CyberScript.NPC")
+					CName.add("CyberScript.NPC."..action.tag)
+					
+					npcSpec.tags = {"CyberScript","CyberScript.NPC","CyberScript.NPC."..action.tag}
+					if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.NPC."..action.tag) == true) then Game.GetDynamicEntitySystem():DeleteTagged("CyberScript.NPC."..action.tag) end
+						
+					if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.NPC."..action.tag) == false) then
+					
+						NPC = Game.GetDynamicEntitySystem():CreateEntity(npcSpec)
+						
+						if(NPC ~= nil) then
+							local entity = {}
+							entity.id = NPC
+							entity.spawntimespan = os.time(os.date("!*t"))+0
+							entity.despawntimespan = os.time(os.date("!*t"))+action.despawntimer
+							entity.tag = action.tag
+							entity.isitem = false
+							entity.tweak =""
+							entity.isprevention = false
+							entity.iscodeware = true
+							entity.persistState =  false
+							entity.persistSpawn =  false
+							entity.alwaysSpawned =  false
+							entity.spawnInView =  true
+							entity.scriptlevel = 0
+							entity.name = entity.tag
+							
+							
+							
+							
+							cyberscript.EntityManager[action.tag]=entity
+							cyberscript.EntityManager["last_spawned"].tag=action.tag
+							
+							if(action.deleteoriginal == true) then
+							
+								Cron.After(0.5, function()
+									
+									enti:Dispose()
+								end)
+							end
+							-- Cron.After(0.5, function()
+							
+							
+							-- if isprevention == true then
+							-- local postp = Vector4.new( x, y, z,1)
+							-- teleportTo(Game.FindEntityByID(NPC), postp, 1,false)
+							-- end
+							
+							
+							
+							
+							-- end)
+						end
+					
+					else
+						
+					
+					end
+				
+					
+				end
+   			end
    			if(action.name == "register_entity_you_look_at") then
    				if(objLook ~= nil) then
    					local entity = getEntityFromManager(action.tag)
@@ -9020,6 +9149,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    				parts = {}
    				local success= false
    				searchQuery = Game["TSQ_ALL;"]() -- Search ALL objects
+   				
    				searchQuery.maxDistance = action.range
    				success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
    				
@@ -9069,8 +9199,6 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   	searchQuery.maxDistance = action.range
    			   	success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
    			   	
-   			   	
-   			   	
    			   	local goodEntity = false
    			   	
    			   	for i, v in ipairs(parts) do
@@ -9079,9 +9207,9 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   		
    			   		
    			   		
-   			   		
-   			   		
-   			   		if #action.filter > 0 then
+   			   		if(action.limit == nil or i <= action.limit ) then
+   			   	
+   			   		if #action.filter > 0  then
    			   			for i,filter in ipairs(action.filter) do
    			   				
    			   				if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
@@ -9100,20 +9228,24 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   						
    			   					end
    			   					print("OK2")
-   			   					entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
+								if(action.prefix == nil) then action.prefix = "entity" end
+								startindex = 0
+								if(action.startindex == nil) then startindex = newent:GetEntityID().hash end
+								if(action.startindex ~= nil) then startindex = action.startindex + i - 1 end
+   			   					entity.tag = action.prefix..tostring(startindex)
    			   					entity.tweak = "None"
    			   					entity.iscompanion = false
    			   					if(canadd) then
 									print("OK3")
-   			   						cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
+   			   						cyberscript.EntityManager[entity.tag]=entity
    			   						if(action.group ~= nil and action.group ~= "") then
    			   							
-   			   							table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
+   			   							table.insert(cyberscript.GroupManager[action.group].entities,entity.tag)
    			   						end
    			   					end
    			   				end
    			   			end
-   			   			else
+					else
    			   			
    			   			local entity = {}
    			   			entity.id = newent:GetEntityID()
@@ -9129,20 +9261,26 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   				end
    			   				
    			   			end
-   			   			
-   			   			entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
+						
+   			   			if(action.prefix == nil) then action.prefix = "entity_" end
+						startindex = 0
+						if(action.startindex == nil) then startindex = newent:GetEntityID().hash end
+						if(action.startindex ~= nil) then startindex = action.startindex + i - 1 end
+   			   			entity.tag = action.prefix..tostring(startindex)
    			   			entity.tweak = "None"
    			   			entity.iscompanion = false
-   			   			if(candd) then
-   			   				cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
+						
+   			   			if(canadd) then
+						
+   			   				cyberscript.EntityManager[entity.tag]=entity
    			   				if(action.group ~= nil and action.group ~= "") then
    			   					
-   			   					table.insert(cyberscript.GroupManager[action.group].entities,"entity_"..tostring(newent:GetEntityID().hash))
+   			   					table.insert(cyberscript.GroupManager[action.group].entities,entity.tag)
    			   				end
    			   			end
    			   		end
    			   		
-   			   		
+   			   		end
    			   		
    			   		
    			   		

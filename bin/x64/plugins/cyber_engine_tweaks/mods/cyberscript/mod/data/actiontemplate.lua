@@ -1247,7 +1247,9 @@ return {
 			"npc",
 		},
 		["group"] = "",
-		
+		["limit"] = 5,
+		["prefix"] = "myentities",
+		["startindex"] = 0,
 		["name"] = "register_entities_around_you",
 	},
 	["register_entities_around_entity"] = {
@@ -3335,6 +3337,12 @@ return {
 		["helperTitle"] = "Dialog : run a dialog",
 		["name"] = "dialog",
 	},
+	["inject_dialog"] = {
+		["helper"] = "This action will fire a dialog if the trigger requirements are met",
+		["dialog"] = "dialogTag",
+		["helperTitle"] = "Dialog : inject a dialog to the next called native dialog",
+		["name"] = "inject_dialog",
+	},
 	["for"] = {
 		["helper"] = "This action will execute a list of actions X times",
 		["helperTitle"] = "Logic : For",
@@ -3721,5 +3729,13 @@ return {
 		["name"] = "reset_weather",
 		["value"] = false
 	},
-	
+	["clone_entity"] = {
+		["helper"] = "This action will clone an entity",
+		["target"] = "targettag",
+		["tag"] = "newjudy",
+		["helperTitle"] = "Entity : clone entity",
+		["name"] = "clone_entity",
+		["despawntimer"] = 300,
+		["deleteoriginal"] = false
+	},
 }
