@@ -34,7 +34,7 @@ function loadexternal()
 	RES_skills =  dofile('mod/external/skills.lua')
 	RES_TweakDB =  dofile('mod/external/tweakdb-ids.lua')
 	RES_TweakDBmeta =  dofile('mod/external/tweakdb-meta.lua')
-	interactionUI = dofile("mod/external/interactionUI")
+	
 	LVector = dofile("mod/external/Vector2")
 	if GetMod('corruptNCPD') then 
 	
@@ -83,6 +83,8 @@ function ModInitialisation()
 	
 	 --not require a verification because it's not mine ^^
 	loadModule()
+	SetObserver()
+	interactionUI_init()
 	if file_exists("editor/editor.lua") then
 	
 		
@@ -333,6 +335,7 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 	CarRadioVolume = Game.GetSettingsSystem():GetVar("/audio/volume", "CarRadioVolume")
 	SetOverrider()
 	SetObserver()
+	interactionUI_init()
 	eventCatcher = sampleStyleManagerGameController.new()
 	local datapackresult,datapackerror  = pcall(function()
 	DatapackLoading()
@@ -702,9 +705,11 @@ registerForEvent("onInit", function()
 	end)
 	
 	loadexternal()
-	interactionUI.init()
+	
 	cyberscript.var = dofile('mod/modules/var.lua')
+	interactionUI = dofile("mod/modules/interactionUI")
 	cyberscript.observercontroller = dofile('mod/modules/observer_call.lua')
+	
 	if GetMod('AppearanceMenuMod') then 
 		AMM =  GetMod("AppearanceMenuMod")
 		if(AMM.API ~= nil) then

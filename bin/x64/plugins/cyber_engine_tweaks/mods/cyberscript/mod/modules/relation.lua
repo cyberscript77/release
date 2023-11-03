@@ -89,8 +89,7 @@ function getActionbyNPCscore(npc,display)
 	end
 	
 local score = getScoreKey(npc.Names,"Score")
-logme(2,"NPC Score : !!!")
-logme(2,score)
+
 	if score ~= nil and score >= 20 then
 		npcAskHelp(npc)
 		
@@ -504,7 +503,7 @@ function npcAskHelp(npc)--0
 			positionVec4.y = positionVec4.y + -5
 			positionVec4.z = positionVec4.z 
 			
-			spawnEntity(dbPnjId.TweakIDs,  "current_star", positionVec4.x, positionVec4.y ,positionVec4.z,2,false)
+			--(dbPnjId.TweakIDs,  "current_star", positionVec4.x, positionVec4.y ,positionVec4.z,2,false)
 			
 			table.insert(cyberscript.GroupManager["companion"].entities,"current_star")
 				

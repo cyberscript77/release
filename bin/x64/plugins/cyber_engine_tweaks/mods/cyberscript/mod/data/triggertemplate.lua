@@ -5,23 +5,14 @@ return {
 		["helperTitle"] = "Group : Is spawned",
 		["name"] = "group_is_spawn",
 	},
-	["custom_place"] = {
-		["value"] = "customplacetag01",
-		["name"] = "custom_place",
-		["helperTitle"] = "House : in specific Custom Place",
-		["helper"] = "This trigger will be triggered when you are at a specific custom place",
-	},
+	
 	["custom_room"] = {
 		["value"] = "customroomtag",
 		["name"] = "custom_room",
 		["helperTitle"] = "House : in specific Custom Room",
 		["helper"] = "This trigger will be triggered when you are in a specific custom room (by tag)",
 	},
-	["is_in_custom_place"] = {
-		["helper"] = "This trigger will be triggered when you in a custom place",
-		["helperTitle"] = "Player : In custom place",
-		["name"] = "is_in_custom_place",
-	},
+	
 	["is_in_rented_place"] = {
 		["helper"] = "This trigger will be triggered when you are in a rented custom place",
 		["helperTitle"] = "Player : In custom place who has a opened business",
@@ -31,6 +22,11 @@ return {
 		["helper"] = "This trigger will be triggered when you are in a custom room",
 		["helperTitle"] = "Player : In custom room",
 		["name"] = "is_in_custom_room",
+	},
+	["scanner_active"] = {
+		["helper"] = "This trigger will be triggered when you are using scanner",
+		["helperTitle"] = "UI : scanner_active",
+		["name"] = "scanner_active",
 	},
 	["look_at_object"] = {
 		["value"] = "cofee",
@@ -69,11 +65,7 @@ return {
 		["helperTitle"] = "Player : Wanted Level",
 		["helper"] = "This trigger will be triggered if the wanted level is higher or equals to",
 	},
-	["player_inbuilding"] = {
-		["helper"] = "This trigger will be triggered when player is inside",
-		["helperTitle"] = "Player : in Building",
-		["name"] = "player_inbuilding",
-	},
+	
 	["custom_room_type"] = {
 		["helper"] = "This trigger will be triggered when you are in a custom room that has this type",
 		["helperTitle"] = "House : in specific Custom Room Type",
@@ -104,21 +96,7 @@ return {
 		["name"] = "item_amount",
 		["helperTitle"] = "Items : Amount in Inventory",
 	},
-	["player_in_poi"] = {
-		["district"] = "",
-		["help"] = "tag is useful if you want select an poi who have tag and an specifc location in this poi, leave it to empty is not needed. Same for district,subdistrict. if you want an specific location, use uselocationtag. If you put current in district or subdisttrict it will take the current district or subdistrict",
-		["subdistrict"] = "",
-		["type"] = 1,
-		["helperTitle"] = "Player : in POI",
-		["helper"] = "This trigger will be triggered when a player is in custom Point Of Interest",
-		["range"] = 5,
-		["name"] = "player_in_poi",
-		["tag"] = "",
-		["uselocationtag"] = false,
-		["position_poi_search"] = "type|subdistrict|district|tag",
-		["position_poi_searchdistance"] = "near|far|random",
-		["iscar"] = false,
-	},
+	
 	["datapack_is_enabled"] = {
 		["helper"] = "This action will check if the selected datapack is enabled",
 		["tag"] = "mydatapack",
@@ -180,20 +158,8 @@ return {
 		["helperTitle"] = "Entity : Looked Entity is Gang Friendly",
 		["name"] = "entity_looked_is_gangfriendly",
 	},
-	["position"] = {
-		["range"] = 0,
-		["helper"] = "This trigger will be triggered when you are at this XY position (in the range)",
-		["helperTitle"] = "Player : At Position XY",
-		["name"] = "position",
-		["x"] = 0,
-		["y"] = 0,
-	},
-	["player_corpo_faction"] = {
-		["value"] = "Arasaka",
-		["name"] = "player_corpo_faction",
-		["helperTitle"] = "Corpo : Get Player Faction",
-		["helper"] = "This trigger will be triggered when player has the intended corpo faction : None, Arasaka, Militech, KangTao, Nomad",
-	},
+	
+	
 	["killed_group"] = {
 		["helper"] = "This trigger will be triggered when all custom entities in a group are killed",
 		["tag"] = "grouptag",
@@ -208,12 +174,7 @@ return {
 		["helperTitle"] = "Sound : Game volume is at ",
 		["helper"] = "This trigger will be triggered when inGame Volume value is equal or higher to (score)",
 	},
-	["player_corpo_faction_rank"] = {
-		["value"] = "Salaryman",
-		["name"] = "player_corpo_faction_rank",
-		["helperTitle"] = "Corpo : Get Player Faction Rank",
-		["helper"] = "This trigger will be triggered when player has the intended corpo faction : None,Mercs,Salaryman,Leader,Manager,Officier,ExecutiveOfficier,Director,President,Investor,Owner",
-	},
+	
 	["last_killed_entity_gang_score"] = {
 		["helper"] = "his trigger will check if last killed entity is in a gang with affinity ",
 		["score"] = 5,
@@ -237,11 +198,7 @@ return {
 		["name"] = "soundmanager_isplaying",
 		["help"] = "test if the sound manager mod play currently channel",
 	},
-	["player_is_online"] = {
-		["helper"] = "This trigger will be triggered when player is online",
-		["helperTitle"] = "Multi : Player is online",
-		["name"] = "player_is_online",
-	},
+	
 	["check_mod"] = {
 		["value"] = "AppearanceMenuMod",
 		["name"] = "check_mod",
@@ -282,16 +239,6 @@ return {
 		["helperTitle"] = "NPC : who is talking",
 		["helper"] = "This trigger will be triggered when you talk with a specific NPC",
 	},
-	["entity_at_relative_player_position"] = {
-		["range"] = 0,
-		["helper"] = "This trigger will be triggered when a custom entity is at player's relative position",
-		["helperTitle"] = "Entity : At player's relative position",
-		["tag"] = "judy01",
-		["y"] = 0,
-		["name"] = "entity_at_relative_player_position",
-		["x"] = 0,
-		["z"] = 0,
-	},
 	["entity_is_in_custom_place_type"] = {
 		["help"] = "-- 0 : house|| 1 : bar|| 2 : nightclub|| 3 : restaurant|| 4 : shopping|| 5 : special",
 		["helperTitle"] = "Entity : Is in Custom Place Type",
@@ -319,10 +266,46 @@ return {
 		["helper"] = "This trigger will be triggered when a custom entity is at position",
 		["helperTitle"] = "Entity : At position",
 		["tag"] = "judy01",
-		["y"] = 0,
 		["name"] = "entity_at_position",
-		["x"] = 0,
+		["position_tag"] = "judy01",
+		["position_way"] = "normal",
+		["position_distance"] = 5,
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_house_tag"] = "playerhouse01",
+		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
+ For poi if you write 'current' in position_poi_district you will get the current district, \
+ if you write 'current in position_poi_subdistrict you will get the current subdistrict. \
+ also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+		["position_node_usegameplay"] = false,
+		["position_lookatdistance"] = 0,
+		["position_tag_helper"] = "judy01||playerhouse01||playerhouse_bed||",
+		["position_way_helper"] = "normal||behind||forward",
+		["position_poi_district"] = "",
+		["position_poi_subdistrict"] = "",
+		["distance"] = 0,
+		["position_poi_from_position"] = false,
+		["group"] = false,
+		["position_poi_type"] = 1,
+		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
+		["position"] = "at",
+		["position_poi_is_for_car"] = false,
+		["position_range"] = 50,
+		["position_poi_use_location_tag"] = false,
+		["position_house_way"] = "default",
+		["position_poi_search"] = "type|subdistrict|district|tag",
+		["position_poi_searchdistance"] = "near|far|random",
 		["z"] = 0,
+		["x"] = 0,
+		["y"] = 0,
+	},
+	["entity_is_at_spawn_position"] = {
+		["range"] = 0,
+		["helper"] = "This trigger will be triggered when a custom entity is at her spawn position",
+		["helperTitle"] = "Entity : At Spawn Position",
+		["tag"] = "judy01",
+		["name"] = "entity_is_at_spawn_position",
+		
 	},
 	["check_current_scannerdata"] = {
 		["prop"] = "reward",
@@ -337,11 +320,7 @@ return {
 		["helperTitle"] = "UI : Current Timer is finished",
 		["name"] = "timer_is_finished",
 	},
-	["can_use_preventionsystemspawn"] = {
-		["helper"] = "This trigger will be triggered when the current amount of spawned entity with prevention system is under 50",
-		["helperTitle"] = "Entity : Can use Prevention System",
-		["name"] = "can_use_preventionsystemspawn",
-	},
+	
 	["check_scannerdata_for_entity"] = {
 		["prop"] = "reward",
 		["helperTitle"] = "Scanner : Check Custom Scanner Data for Entity",
@@ -356,14 +335,7 @@ return {
 		["helperTitle"] = "UI : In Menu",
 		["name"] = "is_in_menu",
 	},
-	["entity_is_at_mappin_position"] = {
-		["range"] = 5,
-		["helper"] = "This trigger will be triggered when a entity is at mappin position",
-		["helperTitle"] = "Entity : Entity is at mappin position",
-		["tag"] = "mymappin",
-		["name"] = "entity_is_at_mappin_position",
-		["entity"] = "judy",
-	},
+	
 	["testFor"] = {
 		["logic"] = "or||and",
 		["helper"] = "This trigger will be triggered when all of the trigger are triggered by the logic you choose.",
@@ -512,14 +484,7 @@ return {
 		["helperTitle"] = "Map : Fast Mappin Selected",
 		["name"] = "have_fasttravel_mappin_placed",
 	},
-	["entity_is_in_node"] = {
-		["range"] = 5,
-		["helper"] = "This trigger will be triggered when entity is in node",
-		["helperTitle"] = "Entity : Is In Node",
-		["atgameplayposition"] = true,
-		["tag"] = "Judy",
-		["name"] = "entity_is_in_node",
-	},
+	
 	["check_gang_relation"] = {
 		["helperTitle"] = "Gang : Set Relation toward gang",
 		["helper"] = "This action will check relation score between two gang (can be negative).\
@@ -532,30 +497,14 @@ return {
 		["operator"] = "=",
 		["name"] = "check_gang_relation",
 	},
-	["3Dposition"] = {
-		["range"] = 0,
-		["helper"] = "This trigger will be triggered when you are at this XYZ position (in the range)",
-		["helperTitle"] = "Map : Position XYZ",
-		["y"] = 0,
-		["name"] = "3Dposition",
-		["x"] = 0,
-		["z"] = 0,
-	},
+	
 	["entity_is_crowd"] = {
 		["helper"] = "This trigger will check if the entity is crowd or not ",
 		["tag"] = "judy01",
 		["helperTitle"] = "Entity :Is Crowd",
 		["name"] = "entity_is_crowd",
 	},
-	["entity_is_in_specific_node"] = {
-		["range"] = 5,
-		["helper"] = "This trigger will be triggered when entity is in node",
-		["helperTitle"] = "Entity : Is In Specific Node",
-		["atgameplayposition"] = true,
-		["tag"] = "Judy",
-		["name"] = "entity_is_in_specific_node",
-		["node"] = "myNode",
-	},
+	
 	["interact_is_inprogress"] = {
 		["helper"] = "This trigger will be triggered when an action is in progress",
 		["helperTitle"] = "Mod : Action is in progress",
@@ -584,21 +533,12 @@ return {
 		["helperTitle"] = "Player : Player is Hit",
 		["name"] = "player_is_hit",
 	},
-	["entity_looked_is_registered_as_companion"] = {
-		["helper"] = "This trigger will be triggered when the entity that you look at has companion attitude towards player",
-		["helperTitle"] = "Entity : Looked Entity is Registred as Companion",
-		["name"] = "entity_looked_is_registered_as_companion",
-	},
 	["metro_time_is_finished"] = {
 		["helper"] = "This trigger will be triggered when Metro Remaning Time Screen is at 0",
 		["helperTitle"] = "UI : Metro Remaning Time is at 0",
 		["name"] = "metro_time_is_finished",
 	},
-	["housing_edit_enable"] = {
-		["helper"] = "This trigger will be triggered when player is in Housing Mode",
-		["helperTitle"] = "Mod : Housing Mode",
-		["name"] = "housing_edit_enable",
-	},
+	
 	["entity_looked_is_custom_av"] = {
 		["helper"] = "This trigger will be triggered when the entity that you look has been registred as Custom AV",
 		["helperTitle"] = "Entity : Looked Entity is Registred as Custom AV",
@@ -612,11 +552,7 @@ return {
 		["perc"] = false,
 		["helperTitle"] = "Stat Pool: is Higher or equals to",
 	},
-	["item_looked_is_registered_in_current_house"] = {
-		["helper"] = "This trigger will be triggered when item looked is registred as housing placed item",
-		["helperTitle"] = "Mod : Object Looked is registred as Housing Placed Item",
-		["name"] = "item_looked_is_registered_in_current_house",
-	},
+	
 	["entity_looked_is_registered"] = {
 		["helper"] = "This trigger will be triggered when the entity that you look has been registred as entity",
 		["helperTitle"] = "Entity : Looked Entity is Registred as Entity",
@@ -710,12 +646,7 @@ return {
 		["name"] = "npc_affinity",
 		["helperTitle"] = "NPC : has enough affinity",
 	},
-	["player_reputation"] = {
-		["value"] = 50,
-		["name"] = "player_reputation",
-		["helperTitle"] = "Player : has Reputation",
-		["helper"] = "This trigger will be triggered when the player reputation is equal or higher to the value",
-	},
+	
 	["npc_phone_affinity"] = {
 		["value"] = 50,
 		["name"] = "npc_phone_affinity",
@@ -810,17 +741,7 @@ return {
 		["value"] = "fr-fr",
 		["name"] = "game_language",
 	},
-	["entity_to_relative_entity_position"] = {
-		["range"] = 0,
-		["helper"] = "This trigger will be triggered when a custom entity is at another entity's relative position",
-		["helperTitle"] = "Entity : At entity's relative position",
-		["tag"] = "judy01",
-		["target"] = "judy02",
-		["y"] = 0,
-		["name"] = "entity_to_relative_entity_position",
-		["x"] = 0,
-		["z"] = 0,
-	},
+	
 	["entity_is_alive"] = {
 		["helper"] = "This trigger will be triggered when a custom entity is Alive",
 		["tag"] = "entitytag",
@@ -833,6 +754,19 @@ return {
 		["helperTitle"] = "UI : Custom Choice is Open",
 		["name"] = "choice_is_opened",
 	},
+	["native_choice_is_opened"] = {
+		["helper"] = "This trigger will be triggered when a Native choice is open",
+		
+		["helperTitle"] = "UI : Native Choice is Open",
+		["name"] = "native_choice_is_opened",
+	},
+	["inject_dialog_pending"] = {
+		["helper"] = "This trigger will be triggered when a Injection choice is pending (not used)",
+		
+		["helperTitle"] = "UI : Injection Choice is pending",
+		["name"] = "inject_dialog_pending",
+	},
+	
 	["specific_choice_is_opened"] = {
 		["helper"] = "This trigger will be triggered when a specific custom choice is open",
 		["tag"] = "choicetag",

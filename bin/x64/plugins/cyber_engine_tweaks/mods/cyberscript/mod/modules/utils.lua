@@ -1699,7 +1699,7 @@ function setNewFixersPoint()
 	
 	
 	for k,v in pairs(cyberscript.cache["fixer"]) do
-		if(mappinManager[cyberscript.cache["fixer"][k].data.tag] == nil and enableLocation == true) then
+		if(mappinManager[cyberscript.cache["fixer"][k].data.tag] == nil and enableLocation == true and v.data.exist == false) then
 			
 			registerMappin(cyberscript.cache["fixer"][k].data.x,cyberscript.cache["fixer"][k].data.y,cyberscript.cache["fixer"][k].data.z,cyberscript.cache["fixer"][k].data.tag,'FixerVariant',true,false,"Fixer",nil,cyberscript.cache["fixer"][k].data.name,cyberscript.cache["fixer"][k].data.name,nil,nil,0)
 	  end

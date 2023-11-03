@@ -16,7 +16,7 @@ observerthread8 = false
 observerthread9 = false
 observerthread10 = false
 
---SetObserver()
+
 --observerthread1
 function HUDManager_InitializeHUD(self)
 	if(observerthread1  == true or moddisabled == true)    then return end
@@ -2156,7 +2156,7 @@ function BaseWorldMapMappinController_SelectMappin(self)
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	GameController["BaseWorldMapMappinController"]  = self
-	if(self.mappin ~= nil ) then
+	if(self.mappin ~= nil and self:IsTracked() == true ) then
 		
 		if lastId ~= nil then Game.GetMappinSystem():SetMappinActive(lastId,true) end
 		SelectedMappinMetro = nil
@@ -2184,9 +2184,12 @@ function BaseWorldMapMappinController_SelectMappin(self)
 		obj.style.icon = nil
 		
 		
-		
+		if(mappinManager["selected_mappin"] == nil or (mappinManager["selected_mappin"]~= nil and mappinManager["selected_mappin"].position ~= self.mappin:GetWorldPosition())) then
 		mappinManager["selected_mappin"] = obj
 		
+		print(dump(mappinManager["selected_mappin"].position))
+		
+		end
 		if mappinType == gamedataMappinVariant.CustomPositionVariant then
 			
 			ActivecustomMappin = self.mappin
@@ -2232,8 +2235,7 @@ function BaseWorldMapMappinController_SelectMappin(self)
 			obj.style.color = nil
 			obj.style.icon = nil
 			
-			mappinManager["selected_mappin"].id = nil
-			mappinManager["selected_mappin"].position = nil
+			
 			
 			mappinManager["selected_fasttravel_mappin"] = obj
 			
@@ -2364,10 +2366,11 @@ end
 
 
 function WebPage_FillPageFromJournal(self,page)
+	print("KOKO")
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	defaultPage = page
-	
+	print("KOKO")
 	
 	if(page.address == "NETdir://ncity.pub") then -- custompage
 		
@@ -2452,7 +2455,7 @@ function WebPage_FillPageFromJournal(self,page)
 			
 			
 			buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
-			linknew:Reparent(linkbar02, linkbar02:GetNumChildren()+1)
+			linknew:Reparent(linkbar01, linkbar01:GetNumChildren()+1)
 		end
 		
 		
@@ -5109,7 +5112,1656 @@ function WebPage_FillPageFromJournal(self,page)
 		end
 		
 	end
-end		
+end	
+
+
+function WebPage_FillPageFromJournalWebExt(self)
+	
+	if(observerthread4 == true or moddisabled  == true)   then return end
+	
+		
+		LinkController = inkWidgetRef.GetController(self.imageList[1])
+		local root = self:GetRootWidget()
+		
+		
+		local page = root:GetWidgetByIndex(0)
+		local linkpanel = page:GetWidgetByIndex(0)
+		local panel =linkpanel:GetWidgetByIndex(0)
+		
+		
+		local network = panel:GetWidgetByIndex(0)
+		local networktext = network:GetWidgetByIndex(4)
+		local linkbar01 = panel:GetWidgetByIndex(1)
+		local linkbar02 = panel:GetWidgetByIndex(2)
+		local link01 = linkbar01:GetWidgetByIndex(0)
+		
+		print(GameDump(linkbar02))
+		
+		local link02 = linkbar01:GetWidgetByIndex(1)
+		local link03 = linkbar01:GetWidgetByIndex(2)
+		local link04 = linkbar01:GetWidgetByIndex(3)
+		local link05 = linkbar01:GetWidgetByIndex(4)
+		local link06 = linkbar02:GetWidgetByIndex(0)
+		local link07 = linkbar02:GetWidgetByIndex(1)
+		local link08 = linkbar02:GetWidgetByIndex(2)
+		local link09 = linkbar02:GetWidgetByIndex(3)
+		local link10 = linkbar02:GetWidgetByIndex(4)
+		
+		
+		
+		if webcount == 0 then webcount = linkbar01:GetNumChildren() end
+		if(webcount == linkbar01:GetNumChildren()) then
+		
+		
+		
+		
+		
+		
+		if(isEmpty(cyberscript.cache["webpage"]) == false) then
+			
+			local linknew = inkVerticalPanelWidget.new()
+			linknew:SetName(StringToName("linknew"))
+			linknew:SetChildMargin(inkMargin.new({ left = 50.0, top = 30.0, right = 50.0, bottom = 30.0 }))
+			
+			linknew:SetFitToContent(true)
+			
+			
+			
+			
+			local imageprop = {}
+			imageprop.tag = "link03_img"
+			imageprop.tweak = "PhotoModeStickers.dcl_04"
+			imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+			imageprop.size = {}
+			imageprop.size.x = 200
+			imageprop.size.y = 200
+			imageprop.fittocontent = false
+			imageprop.scale = {}
+			imageprop.scale.x = 1.3
+			imageprop.scale.y = 1.3
+			
+			local textprop = {}
+			textprop.tag = "link03_text"
+			textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+			textprop.size = {}
+			textprop.size.x = 100
+			textprop.size.y = 32
+			textprop.text = "CyberScript Network"
+			textprop.fontsize = 32
+			textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+			textprop.scale = {}
+			textprop.scale.x = 1.0
+			textprop.scale.y = 1.0
+			
+			local link = linknew
+			local actionlist = {}
+			local action = {}
+			
+			action.name = "refreshBrowser" 
+			action.page = page
+			action.address = "CyberScriptWeb"
+			action.subaddress = "home"
+			table.insert(actionlist,action)
+			
+			
+			
+			buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+			linknew:Reparent(linkbar01, linkbar01:GetNumChildren()+1)
+		end
+		
+		
+		
+		
+		if(CurrentAddress == "CyberScript") then
+			
+			if(BrowserCybserscript == "loading") then
+				
+				linkpanel:RemoveAllChildren()
+				
+				makeCustomInterface(linkpanel,cyberscript.cache["interfaces"]["Keystone_Load"].data)
+				
+				
+				
+				
+				elseif(BrowserCybserscript == "home") then
+				
+				
+				
+				
+				
+				LinkController = inkWidgetRef.GetController(self.textList[1])
+				--header
+				local stickerRecord = TDB.GetPhotoModeStickerRecord("PhotoModeStickers.dcl_03")
+				
+				networktext:GetWidgetByIndex(0):SetAtlasResource(stickerRecord:AtlasName())
+				networktext:GetWidgetByIndex(0):SetTexturePart(stickerRecord:ImagePartName())
+				
+				networktext:GetWidgetByIndex(1):SetText("CyberScript")
+				networktext:GetWidgetByIndex(1):SetTintColor(gamecolor(255,255,255,1))
+				
+				
+				
+				
+				--link redef
+				
+				
+				link01:RemoveAllChildren()
+				
+				
+				
+				
+				local buttonData = {
+					name = StringToName("refresh"),
+					text = "refresh",
+					value = i,
+					tag =  "refresh",
+					action = {}
+				}
+				
+				
+				local action = {}
+				
+				action.name = "refreshBrowser"
+				action.address = "CyberScript"
+				action.subaddress = "loading"
+				table.insert(buttonData.action,action)
+				
+				
+				
+				
+				
+				local widget = UIButton.Create(buttonData.name, buttonData.text,uifont, 200, 100, {top= 0,left= 3050},HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }),HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+				
+				widget:RegisterCallback('OnRelease', function(button, evt)
+					if evt:IsAction('click') then
+						
+						runActionList(buttonData.action, "back", "interact",false,"nothing",false)
+						
+						evt:Handle()
+					end
+				end)
+				widget:Reparent(root, 1)
+				
+				
+				
+				if(CurrentServerModVersion.version ~= "unknown" and CurrentServerModVersion.version ~= "0.16000069") then
+					
+					if(CurrentServerModVersion.version ~= "unknown" and CurrentServerModVersion.version ~= "0.16000069" and checkVersionNumber(cyberscript.version,CurrentServerModVersion.version))then
+						
+						
+						local container = inkCanvas.new()
+						container:SetName(CName.new("need_update_banner"))
+						container:SetFitToContent(false)
+						
+						container:SetSize(Vector2.new({ X = 3150, Y = 200 }))
+						container:SetScale(Vector2.new({ X = 1, Y = 1 }))
+						container:SetInteractive(true)
+						
+						container:SetAnchor(15)
+						container:SetAnchorPoint(Vector2.new({ X = 0, Y = 0 }))
+						container:SetOpacity(1)
+						container:SetRotation(0)
+						container:SetVisible(true)
+						
+						
+						
+						
+						container:Reparent(panel, 0)
+						
+						local rectangletitle = inkRectangleWidget.new()
+						rectangletitle:SetName(CName.new("need_update_rectangle"))
+						rectangletitle:SetFitToContent(false)
+						rectangletitle:SetMargin(inkMargin.new({ top = 100 }))
+						rectangletitle:SetSize(Vector2.new({ X = 3150, Y = 150 }))
+						rectangletitle:SetScale(Vector2.new({ X = 1, Y = 1 }))
+						rectangletitle:SetInteractive(true)
+						rectangletitle:SetTintColor(gamecolorStyle({red=255,blue=0,green=0}))
+						rectangletitle:SetAnchor(0)
+						rectangletitle:SetAnchorPoint(Vector2.new({ X = 0, Y = 0 }))
+						rectangletitle:SetOpacity(1)
+						rectangletitle:SetRotation(0)
+						rectangletitle:SetVisible(true)
+						rectangletitle:Reparent(container, -1)
+						
+						local texttitle = inkText.new()
+						texttitle:SetName(CName.new("need_update_title"))
+						texttitle:SetFitToContent(false)
+						texttitle:SetMargin(inkMargin.new({ top = 75 }))
+						texttitle:SetSize(Vector2.new({ X = 100, Y = 200 }))
+						texttitle:SetScale(Vector2.new({ X = 1, Y = 1 }))
+						texttitle:SetInteractive(true)
+						texttitle:SetText(getLang("ui_keystone_main_update_available"))
+						texttitle:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+						texttitle:SetFontStyle('Medium')
+						texttitle:SetFontSize(50)
+						texttitle:SetHorizontalAlignment(1)
+						texttitle:SetVerticalAlignment(1)
+						texttitle:SetTintColor(gamecolorStyle({red=255,blue=255,green=255}))
+						texttitle:SetAnchor(1)
+						texttitle:SetAnchorPoint(Vector2.new({ X = 0, Y = 0 }))
+						texttitle:SetOpacity(1)
+						texttitle:SetRotation(0)
+						texttitle:SetVisible(true)
+						texttitle:Reparent(container, -1)
+						
+						
+						local textversion = inkText.new()
+						textversion:SetName(CName.new("need_update_title"))
+						textversion:SetFitToContent(false)
+						textversion:SetMargin(inkMargin.new({ top = -100 }))
+						textversion:SetSize(Vector2.new({ X = 100, Y = 200 }))
+						textversion:SetScale(Vector2.new({ X = 1, Y = 1 }))
+						textversion:SetInteractive(true)
+						textversion:SetText("CyberScript : local version :"..cyberscript.version.." Server version :"..CurrentServerModVersion.version)
+						textversion:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
+						textversion:SetFontStyle('Medium')
+						textversion:SetFontSize(30)
+						textversion:SetHorizontalAlignment(1)
+						textversion:SetVerticalAlignment(1)
+						textversion:SetTintColor(gamecolorStyle({red=255,blue=255,green=255}))
+						textversion:SetAnchor(0)
+						textversion:SetAnchorPoint(Vector2.new({ X = 0, Y = 0 }))
+						textversion:SetOpacity(1)
+						textversion:SetRotation(0)
+						textversion:SetVisible(true)
+						textversion:Reparent(panel, 4)
+						
+						EventProxy.RegisterCallback(container, "OnRelease", function(_, evt)
+							
+							
+							if( workerTable["keystone_update_mod"] == nil) then
+								
+								local actionlist = {}
+								
+								local action = {}
+								
+								
+								action.name = "refreshBrowser" 
+								action.page = page
+								action.address = "CyberScript"
+								action.subaddress = "keystone_update"
+								table.insert(actionlist,action)
+								
+								runActionList(actionlist, "keystone_update_mod", "interact",false,"nothing",true)
+							end
+							
+							evt:Handle()
+						end)
+						
+						
+					end
+					
+					
+				end
+				
+				
+				
+				local imageprop = {}
+				imageprop.tag = "link01_img"
+				imageprop.tweak = "PhotoModeStickers.dcl_02"
+				imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				imageprop.size = {}
+				imageprop.size.x = 200
+				imageprop.size.y = 200
+				imageprop.fittocontent = false
+				imageprop.scale = {}
+				imageprop.scale.x = 1.3
+				imageprop.scale.y = 1.3
+				
+				local textprop = {}
+				textprop.tag = "link01_text"
+				textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				textprop.size = {}
+				textprop.size.x = 100
+				textprop.size.y = 32
+				textprop.text = "Datapack"
+				textprop.fontsize = 32
+				textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+				textprop.scale = {}
+				textprop.scale.x = 1.0
+				textprop.scale.y = 1.0
+				
+				local link = link01
+				local actionlist = {}
+				local action = {}
+				
+				action.name = "refreshBrowser" 
+				action.page = page
+				action.address = "CyberScript"
+				action.subaddress = "datapack"
+				table.insert(actionlist,action)
+				
+				
+				
+				buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+				
+				
+				
+				link02:RemoveAllChildren()
+				
+				local imageprop = {}
+				imageprop.tag = "link02_img"
+				imageprop.tweak = "PhotoModeStickers.dcl_05"
+				imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				imageprop.size = {}
+				imageprop.size.x = 200
+				imageprop.size.y = 200
+				imageprop.fittocontent = false
+				imageprop.scale = {}
+				imageprop.scale.x = 1.3
+				imageprop.scale.y = 1.3
+				
+				local textprop = {}
+				textprop.tag = "link02_text"
+				textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				textprop.size = {}
+				textprop.size.x = 100
+				textprop.size.y = 32
+				textprop.text = "My Datapacks"
+				textprop.fontsize = 32
+				textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+				textprop.scale = {}
+				textprop.scale.x = 1.0
+				textprop.scale.y = 1.0
+				
+				
+				local link = link02
+				local actionlist = {}
+				local action = {}
+				
+				action.name = "refreshBrowser" 
+				action.page = page
+				action.address = "CyberScript"
+				action.subaddress = "mydatapack"
+				table.insert(actionlist,action)
+				
+				
+				
+				buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+				
+				link03:RemoveAllChildren()
+				
+				local imageprop = {}
+				imageprop.tag = "link03_img"
+				imageprop.tweak = "PhotoModeStickers.bnd_032"
+				imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				imageprop.size = {}
+				imageprop.size.x = 200
+				imageprop.size.y = 200
+				imageprop.fittocontent = false
+				imageprop.scale = {}
+				imageprop.scale.x = 1.3
+				imageprop.scale.y = 1.3
+				
+				local textprop = {}
+				textprop.tag = "link03_text"
+				textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				textprop.size = {}
+				textprop.size.x = 100
+				textprop.size.y = 32
+				textprop.text = "CorpoNetwork"
+				textprop.fontsize = 32
+				textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+				textprop.scale = {}
+				textprop.scale.x = 1.0
+				textprop.scale.y = 1.0
+				
+				local link = link03
+				local actionlist = {}
+				local action = {}
+				
+				action.name = "refreshBrowser" 
+				action.page = page
+				action.address = "CyberScript"
+				action.subaddress = "keystone_corpo_news"
+				table.insert(actionlist,action)
+				
+				
+				
+				buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+				
+				
+				
+				link04:RemoveAllChildren()
+				
+				local imageprop = {}
+				imageprop.tag = "link04_img"
+				imageprop.tweak = "PhotoModeStickers.dcl_014"
+				imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				imageprop.size = {}
+				imageprop.size.x = 200
+				imageprop.size.y = 200
+				imageprop.fittocontent = false
+				imageprop.scale = {}
+				imageprop.scale.x = 1.3
+				imageprop.scale.y = 1.3
+				
+				local textprop = {}
+				textprop.tag = "link04_text"
+				textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				textprop.size = {}
+				textprop.size.x = 100
+				textprop.size.y = 32
+				textprop.text = "Stock Market"
+				textprop.fontsize = 32
+				textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+				textprop.scale = {}
+				textprop.scale.x = 1.0
+				textprop.scale.y = 1.0
+				
+				
+				local link = link04
+				local actionlist = {}
+				local action = {}
+				action = {}
+				action.name = "refresh_market"
+				table.insert(actionlist,action)
+				action = {}
+				action.name = "wait_for_framework"
+				table.insert(actionlist,action)
+				action = {}
+				action.name = "refreshBrowser" 
+				action.page = page
+				action.address = "CyberScript"
+				action.subaddress = "keystone_stock_market"
+				table.insert(actionlist,action)
+				
+				
+				
+				buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+				
+				
+				
+				link05:RemoveAllChildren()
+				
+				local imageprop = {}
+				imageprop.tag = "link05_img"
+				imageprop.tweak = "PhotoModeStickers.dcl_016"
+				imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				imageprop.size = {}
+				imageprop.size.x = 200
+				imageprop.size.y = 200
+				imageprop.fittocontent = false
+				imageprop.scale = {}
+				imageprop.scale.x = 1.3
+				imageprop.scale.y = 1.3
+				
+				local textprop = {}
+				textprop.tag = "link05_text"
+				textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				textprop.size = {}
+				textprop.size.x = 100
+				textprop.size.y = 32
+				textprop.text = "Items Market"
+				textprop.fontsize = 32
+				textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+				textprop.scale = {}
+				textprop.scale.x = 1.0
+				textprop.scale.y = 1.0
+				
+				local link = link05
+				local actionlist = {}
+				local action = {}
+				
+				action.name = "get_itemlist"
+				table.insert(actionlist,action)
+				
+				
+				action = {}
+				
+				action.name = "wait_for_framework"
+				table.insert(actionlist,action)
+				
+				action = {}
+				
+				action.name = "refreshBrowser" 
+				action.page = page
+				action.address = "CyberScript"
+				action.subaddress = "item_category"
+				table.insert(actionlist,action)
+				
+				buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+				
+				
+				
+				link06:RemoveAllChildren()
+				
+				local imageprop = {}
+				imageprop.tag = "link06_img"
+				imageprop.tweak = "PhotoModeStickers.dcl_012"
+				imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				imageprop.size = {}
+				imageprop.size.x = 200
+				imageprop.size.y = 200
+				imageprop.fittocontent = false
+				imageprop.scale = {}
+				imageprop.scale.x = 1.3
+				imageprop.scale.y = 1.3
+				
+				local textprop = {}
+				textprop.tag = "link06_text"
+				textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				textprop.size = {}
+				textprop.size.x = 100
+				textprop.size.y = 32
+				textprop.text = "My Account"
+				textprop.fontsize = 32
+				textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+				textprop.scale = {}
+				textprop.scale.x = 1.0
+				textprop.scale.y = 1.0
+				
+				local link = link06
+				local actionlist = {}
+				local action = {}
+				
+				action.name = "refreshBrowser" 
+				action.page = page
+				action.address = "CyberScript"
+				action.subaddress = "keystone_account"
+				table.insert(actionlist,action)
+				
+				
+				
+				buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+				
+				
+				
+				link07:RemoveAllChildren()
+				
+				local imageprop = {}
+				imageprop.tag = "link07_img"
+				imageprop.tweak = "PhotoModeStickers.dcl_06"
+				imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				imageprop.size = {}
+				imageprop.size.x = 200
+				imageprop.size.y = 200
+				imageprop.fittocontent = false
+				imageprop.scale = {}
+				imageprop.scale.x = 1.3
+				imageprop.scale.y = 1.3
+				
+				local textprop = {}
+				textprop.tag = "link07_text"
+				textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				textprop.size = {}
+				textprop.size.x = 100
+				textprop.size.y = 32
+				textprop.text = "Changelog"
+				textprop.fontsize = 32
+				textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+				textprop.scale = {}
+				textprop.scale.x = 1.0
+				textprop.scale.y = 1.0
+				
+				local link = link07
+				local actionlist = {}
+				local action = {}
+				
+				action.name = "refreshBrowser" 
+				action.page = page
+				action.address = "CyberScript"
+				action.subaddress = "keystone_changelog"
+				table.insert(actionlist,action)
+				
+				
+				
+				buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+				
+				
+				
+				
+				
+				
+				
+				linkbar02:RemoveChildByIndex(2)
+				linkbar02:RemoveChildByIndex(2)
+				linkbar02:RemoveChildByIndex(2)
+				
+				
+				
+				
+				
+				elseif(BrowserCybserscript == "datapack") then
+				
+				local stickerRecord = TDB.GetPhotoModeStickerRecord("PhotoModeStickers.dcl_03")
+				
+				networktext:GetWidgetByIndex(0):SetAtlasResource(stickerRecord:AtlasName())
+				networktext:GetWidgetByIndex(0):SetTexturePart(stickerRecord:ImagePartName())
+				
+				networktext:GetWidgetByIndex(1):SetText("Datapack")
+				networktext:GetWidgetByIndex(1):SetTintColor(gamecolor(255,255,255,1))
+				
+				
+				
+				
+				--logme(2,"button")
+				
+				--linkbar01:RemoveAllChildren()
+				panel:RemoveChildByIndex(1)
+				panel:RemoveChildByIndex(1)
+				network:SetVisible(false)
+				
+				
+				local buttonData = {
+					name = StringToName("back"),
+					text = "Back",
+					value = i,
+					tag =  "back",
+					action = {}
+				}
+				
+				
+				local action = {}
+				
+				action.name = "refreshBrowser"
+				action.address = "CyberScript"
+				action.subaddress = "home"
+				table.insert(buttonData.action,action)
+				
+				
+				local widget = UIButton.Create(buttonData.name, buttonData.text,uifont, 200, 100, {top= 100,left= 2800},HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }),HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+				widget:RegisterCallback('OnRelease', function(button, evt)
+					if evt:IsAction('click') then
+						
+						runActionList(buttonData.action, "back", "interact",false,"nothing",false)
+						
+						evt:Handle()
+					end
+				end)
+				widget:Reparent(panel, 1)
+				
+				
+				
+				local buttonData = {
+					name = StringToName("refresh"),
+					text = "refresh",
+					value = i,
+					tag =  "refresh",
+					action = {}
+				}
+				
+				
+				local action = {}
+				
+				action.name = "fetch_data"
+				table.insert(buttonData.action,action)
+				
+				
+				action = {}
+				
+				action.name = "wait_for_framework"
+				table.insert(buttonData.action,action)
+				
+				
+				action = {}
+				
+				action.name = "refreshBrowser"
+				action.address = "CyberScript"
+				action.subaddress = "datapack"
+				table.insert(buttonData.action,action)
+				
+				
+				
+				
+				
+				local widget = UIButton.Create(buttonData.name, buttonData.text,uifont, 200, 100, {top= 0,left= 3050},HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }),HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+				
+				widget:RegisterCallback('OnRelease', function(button, evt)
+					if evt:IsAction('click') then
+						
+						runActionList(buttonData.action, "back", "interact",false,"nothing",false)
+						
+						evt:Handle()
+					end
+				end)
+				widget:Reparent(root, 1)
+				
+				local arrayList = {}
+				local obj = {}
+				local templist = {}
+				
+				
+				for k,v in ipairs(arrayDatapack3) do 
+					
+					
+					table.insert(templist,v)
+					
+				end
+				
+				if(#arrayDatapack3 > 0) then
+					for i = 1,#arrayDatapack3 do
+						
+						if(#obj < 4) then
+							table.insert(obj,arrayDatapack3[i])
+							if(arrayDatapack3[i+1] == nil) then
+								table.insert(arrayList,obj)
+							end
+							else
+							table.insert(arrayList,obj)
+							obj = {}
+							table.insert(obj,arrayDatapack3[i])
+							if(arrayDatapack3[i+1] == nil) then
+								table.insert(arrayList,obj)
+							end
+						end
+						
+						
+						
+						
+					end
+				end
+				
+				local scrollComponent = UIScroller.Create("datapack_scroll")
+				local scrollPanel = scrollComponent:GetRootWidget()
+				
+				scrollPanel:SetAnchor(inkEAnchor.TopLeft)
+				scrollPanel:SetMargin(inkMargin.new({ left = 40.0 ,top=60}))
+				scrollPanel:SetSize(Vector2.new({ X = 1900, Y = 1200 }))
+				scrollPanel:Reparent(panel, 2)
+				local scrollContent = scrollComponent:GetContentWidget()
+				Cron.NextTick(function()
+					scrollComponent:UpdateContent(true)
+				end)
+				
+				
+				local vertical = inkVerticalPanelWidget.new()
+				vertical:SetName(StringToName("datapack__vertical"))
+				vertical:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+				vertical:SetChildMargin(inkMargin.new({ top = 8.0, bottom = 8.0 }))
+				vertical:SetFitToContent(true)
+				vertical:Reparent(scrollContent, -1)
+				
+				
+				for i=1,#arrayList do 
+					local horizontalarea2 = inkHorizontalPanelWidget.new()
+					horizontalarea2:SetName(CName.new("datapack_horizontal_"..i))
+					horizontalarea2:SetSize(Vector2.new({ X = 1900, Y = 500 }))
+					horizontalarea2:SetChildMargin(inkMargin.new({left=100, top=30, right=100, bottom=0 }))
+					--	horizontalarea2:SetMargin(inkMargin.new({ top = 50, bottom = 50 }))
+					horizontalarea2:Reparent(vertical)
+					
+					for y=1,#arrayList[i] do
+						local datapack = arrayList[i][y]
+						local verticalarea = inkVerticalPanelWidget.new()
+						verticalarea:SetName(StringToName(datapack.tag.."_vertical"))
+						--buttonList:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+						--buttonList:SetChildMargin(inkMargin.new({ top = 8.0, bottom = 8.0 }))
+						verticalarea:SetFitToContent(false)
+						verticalarea:SetSize(Vector2.new({ X = 500, Y = 500 }))
+						verticalarea:Reparent(horizontalarea2, 1)
+						
+						
+						local imageprop = {}
+						imageprop.tag = datapack.tag.."_img"
+						local random = math.random(1, 11)
+						if(random == 37 or random == 25) then
+							imageprop.tweak =  ('PhotoModeStickers.crc_%d'):format(random)
+							else
+							imageprop.tweak =  ('PhotoModeStickers.crc_0%d'):format(random)
+						end
+						imageprop.margin = inkMargin.new({ left = 100.0, right = 100, bottom = 0, top = 0.0 })
+						imageprop.size = {}
+						imageprop.size.x = 200
+						imageprop.size.y = 200
+						imageprop.fittocontent = false
+						imageprop.scale = {}
+						imageprop.scale.x = 1.3
+						imageprop.scale.y = 1.3
+						
+						local textprop = {}
+						textprop.tag = datapack.tag.."_text"
+						textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 50.0 })
+						textprop.size = {}
+						textprop.size.x = 100
+						textprop.size.y = 32
+						textprop.text = datapack.name
+						if(isDatapackDownloaded(datapack.tag)) then
+							
+							textprop.text = "(Downloaded) "..datapack.name
+							local localversion = CurrentDownloadedVersion(datapack.tag)
+							if(localversion~=datapack.version and checkVersionNumber(localversion,datapack.version) == true) then
+								
+								textprop.text = "(Update) "..datapack.name
+								
+							end
+						end
+						textprop.fontsize = 45
+						
+						textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+						
+						textprop.scale = {}
+						textprop.scale.x = 1.0
+						textprop.scale.y = 1.0
+						
+						
+						
+						local actionlist = {}
+						local action = {}
+						action.name = "set_selected_keystone_datapack" 
+						action.value = datapack.tag
+						table.insert(actionlist,action)
+						action = {}
+						action.name = "refreshBrowser"
+						action.address = "CyberScript"
+						action.subaddress = "datapack_detail"
+						table.insert(actionlist,action)
+						
+						buildWebPageBountonSquare(verticalarea,imageprop,textprop,page,actionlist)
+					end
+				end
+				
+				
+				
+				
+				
+				elseif(BrowserCybserscript == "mydatapack") then
+				
+				local stickerRecord = TDB.GetPhotoModeStickerRecord("PhotoModeStickers.dcl_03")
+				
+				networktext:GetWidgetByIndex(0):SetAtlasResource(stickerRecord:AtlasName())
+				networktext:GetWidgetByIndex(0):SetTexturePart(stickerRecord:ImagePartName())
+				
+				networktext:GetWidgetByIndex(1):SetText("Datapack")
+				networktext:GetWidgetByIndex(1):SetTintColor(gamecolor(255,255,255,1))
+				
+				
+				--linkbar01:RemoveAllChildren()
+				panel:RemoveChildByIndex(1)
+				panel:RemoveChildByIndex(1)
+				network:SetVisible(false)
+				
+				local buttonData = {
+					name = StringToName("back"),
+					text = "Back",
+					value = i,
+					tag =  "back",
+					action = {}
+				}
+				
+				
+				local action = {}
+				
+				action.name = "refreshBrowser"
+				action.address = "CyberScript"
+				action.subaddress = "home"
+				table.insert(buttonData.action,action)
+				
+				
+				local widget = UIButton.Create(buttonData.name, buttonData.text,uifont, 200, 100, {top= 100,left= 2800},HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }),HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+				
+				widget:RegisterCallback('OnRelease', function(button, evt)
+					if evt:IsAction('click') then
+						
+						runActionList(buttonData.action, "back", "interact",false,"nothing",false)
+						
+						evt:Handle()
+					end
+				end)
+				widget:Reparent(panel, 1)
+				
+				
+				local buttonData = {
+					name = StringToName("refresh"),
+					text = "refresh",
+					value = i,
+					tag =  "refresh",
+					action = {}
+				}
+				
+				
+				local action = {}
+				
+				action.name = "fetch_data"
+				table.insert(buttonData.action,action)
+				
+				
+				action = {}
+				
+				action.name = "wait_for_framework"
+				table.insert(buttonData.action,action)
+				
+				
+				action = {}
+				
+				action.name = "refreshBrowser"
+				action.address = "CyberScript"
+				action.subaddress = "datapack"
+				table.insert(buttonData.action,action)
+				
+				
+				
+				
+				
+				local widget = UIButton.Create(buttonData.name, buttonData.text,uifont, 200, 100, {top= 0,left= 3050},HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }),HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+				
+				widget:RegisterCallback('OnRelease', function(button, evt)
+					if evt:IsAction('click') then
+						
+						runActionList(buttonData.action, "back", "interact",false,"nothing",false)
+						
+						evt:Handle()
+					end
+				end)
+				widget:Reparent(root, 1)
+				
+				
+				local arrayList = {}
+				local obj = {}
+				local templist = {}
+				
+				
+				for k,v in pairs(arrayDatapack) do 
+					
+					if(#obj < 4) then
+						table.insert(obj,v.metadata)
+						
+						table.insert(arrayList,obj)
+						
+						else
+						table.insert(arrayList,obj)
+						obj = {}
+						table.insert(obj,v.metadata)
+						
+						table.insert(arrayList,obj)
+						
+					end
+					
+					
+				end
+				
+				
+				
+				local scrollComponent = UIScroller.Create("datapack_scroll")
+				local scrollPanel = scrollComponent:GetRootWidget()
+				
+				scrollPanel:SetAnchor(inkEAnchor.TopLeft)
+				scrollPanel:SetMargin(inkMargin.new({ left = 40.0 ,top=60}))
+				scrollPanel:SetSize(Vector2.new({ X = 1900, Y = 1200 }))
+				scrollPanel:Reparent(panel, -1)
+				local scrollContent = scrollComponent:GetContentWidget()
+				Cron.NextTick(function()
+					scrollComponent:UpdateContent(true)
+				end)
+				
+				
+				local vertical = inkVerticalPanelWidget.new()
+				vertical:SetName(StringToName("datapack__vertical"))
+				vertical:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+				vertical:SetChildMargin(inkMargin.new({ top = 8.0, bottom = 8.0 }))
+				vertical:SetFitToContent(true)
+				vertical:Reparent(scrollContent, -1)
+				
+				
+				for i=1,#arrayList do 
+					local horizontalarea2 = inkHorizontalPanelWidget.new()
+					horizontalarea2:SetName(CName.new("datapack_horizontal_"..i))
+					horizontalarea2:SetSize(Vector2.new({ X = 1900, Y = 500 }))
+					horizontalarea2:SetChildMargin(inkMargin.new({left=100, top=30, right=100, bottom=0 }))
+					--	horizontalarea2:SetMargin(inkMargin.new({ top = 50, bottom = 50 }))
+					horizontalarea2:Reparent(vertical)
+					
+					for y=1,#arrayList[i] do
+						local datapack = arrayList[i][y]
+						local verticalarea = inkVerticalPanelWidget.new()
+						verticalarea:SetName(StringToName(datapack.tag.."_vertical"))
+						--buttonList:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+						--buttonList:SetChildMargin(inkMargin.new({ top = 8.0, bottom = 8.0 }))
+						verticalarea:SetFitToContent(false)
+						verticalarea:SetSize(Vector2.new({ X = 500, Y = 500 }))
+						verticalarea:Reparent(horizontalarea2, 1)
+						
+						
+						local imageprop = {}
+						imageprop.tag = datapack.tag.."_img"
+						local random = math.random(1, 11)
+						if(random == 37 or random == 25) then
+							imageprop.tweak =  ('PhotoModeStickers.crc_%d'):format(random)
+							else
+							imageprop.tweak =  ('PhotoModeStickers.crc_0%d'):format(random)
+						end
+						imageprop.margin = inkMargin.new({ left = 100.0, right = 100, bottom = 0, top = 0.0 })
+						imageprop.size = {}
+						imageprop.size.x = 200
+						imageprop.size.y = 200
+						imageprop.fittocontent = false
+						imageprop.scale = {}
+						imageprop.scale.x = 1.3
+						imageprop.scale.y = 1.3
+						
+						local textprop = {}
+						textprop.tag = datapack.tag.."_text"
+						textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 50.0 })
+						textprop.size = {}
+						textprop.size.x = 100
+						textprop.size.y = 32
+						textprop.text = datapack.name
+						if(isDatapackDownloaded(datapack.tag)) then
+							
+							textprop.text = "(Downloaded) "..datapack.name
+							local localversion = CurrentDownloadedVersion(datapack.tag)
+							if(localversion~=datapack.version and checkVersionNumber(localversion,datapack.version) == true) then
+								
+								textprop.text = "(Update) "..datapack.name
+								
+							end
+						end
+						textprop.fontsize = 45
+						
+						textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+						
+						textprop.scale = {}
+						textprop.scale.x = 1.0
+						textprop.scale.y = 1.0
+						
+						
+						
+						local actionlist = {}
+						local action = {}
+						action.name = "set_selected_keystone_datapack" 
+						action.value = datapack.tag
+						table.insert(actionlist,action)
+						action = {}
+						action.name = "refreshBrowser"
+						action.address = "CyberScript"
+						action.subaddress = "datapack_detail"
+						table.insert(actionlist,action)
+						
+						buildWebPageBountonSquare(verticalarea,imageprop,textprop,page,actionlist)
+					end
+				end
+				
+				
+				
+				
+				
+				elseif(BrowserCybserscript == "datapack_detail" and Keystone_currentSelectedDatapack ~= nil) then
+				
+				local datapack = Keystone_currentSelectedDatapack
+				panel:RemoveAllChildren()
+				
+				makeCustomInterface(panel,cyberscript.cache["interfaces"]["keystone_datapack_detail"].data)
+				
+				
+				elseif(BrowserCybserscript == "item_category") then
+				
+				local stickerRecord = TDB.GetPhotoModeStickerRecord("PhotoModeStickers.dcl_03")
+				
+				networktext:GetWidgetByIndex(0):SetAtlasResource(stickerRecord:AtlasName())
+				networktext:GetWidgetByIndex(0):SetTexturePart(stickerRecord:ImagePartName())
+				
+				networktext:GetWidgetByIndex(1):SetText("Item Category")
+				networktext:GetWidgetByIndex(1):SetTintColor(gamecolor(255,255,255,1))
+				
+				
+				--linkbar01:RemoveAllChildren()
+				panel:RemoveChildByIndex(1)
+				panel:RemoveChildByIndex(1)
+				network:SetVisible(false)
+				
+				local buttonData = {
+					name = StringToName("back"),
+					text = "Back",
+					value = i,
+					tag =  "back",
+					action = {}
+				}
+				
+				
+				local action = {}
+				
+				action.name = "refreshBrowser"
+				action.address = "CyberScript"
+				action.subaddress = "home"
+				table.insert(buttonData.action,action)
+				
+				
+				local widget = UIButton.Create(buttonData.name, buttonData.text,uifont, 200, 100, {top= 100,left= 2800},HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }),HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+				
+				widget:RegisterCallback('OnRelease', function(button, evt)
+					if evt:IsAction('click') then
+						
+						runActionList(buttonData.action, "back", "interact",false,"nothing",false)
+						
+						evt:Handle()
+					end
+				end)
+				widget:Reparent(panel, 1)
+				
+				
+				local buttonData = {
+					name = StringToName("refresh"),
+					text = "refresh",
+					value = i,
+					tag =  "refresh",
+					action = {}
+				}
+				
+				
+				local action = {}
+				
+				action.name = "fetch_data"
+				table.insert(buttonData.action,action)
+				
+				
+				action = {}
+				
+				action.name = "wait_for_framework"
+				table.insert(buttonData.action,action)
+				
+				
+				
+				
+				action = {}
+				
+				action.name = "refreshBrowser"
+				action.address = "CyberScript"
+				action.subaddress = "item_category"
+				table.insert(buttonData.action,action)
+				
+				
+				
+				
+				
+				local widget = UIButton.Create(buttonData.name, buttonData.text,uifont, 200, 100, {top= 0,left= 3050},HDRColor.new({ Red = 0.054902, Green = 0.054902, Blue = 0.090196, Alpha = 1.0 }),HDRColor.new({ Red = 1.1761, Green = 0.3809, Blue = 0.3476, Alpha = 1.0 }))
+				
+				widget:RegisterCallback('OnRelease', function(button, evt)
+					if evt:IsAction('click') then
+						
+						runActionList(buttonData.action, "back", "interact",false,"nothing",false)
+						
+						evt:Handle()
+					end
+				end)
+				widget:Reparent(root, 1)
+				
+				
+				local arrayList = {}
+				local obj = {}
+				local templist = {}
+				
+				
+				if(#possiblecategory > 0) then
+					for i = 1,#possiblecategory do
+						
+						if(#obj < 4) then
+							table.insert(obj,possiblecategory[i])
+							if(possiblecategory[i+1] == nil) then
+								table.insert(arrayList,obj)
+							end
+							else
+							table.insert(arrayList,obj)
+							obj = {}
+							table.insert(obj,possiblecategory[i])
+							if(possiblecategory[i+1] == nil) then
+								table.insert(arrayList,obj)
+							end
+						end
+						
+						
+						
+						
+					end
+				end
+				
+				
+				
+				
+				local scrollComponent = UIScroller.Create("datapack_scroll")
+				local scrollPanel = scrollComponent:GetRootWidget()
+				
+				scrollPanel:SetAnchor(inkEAnchor.TopLeft)
+				scrollPanel:SetMargin(inkMargin.new({ left = 40.0 ,top=60}))
+				scrollPanel:SetSize(Vector2.new({ X = 1900, Y = 1200 }))
+				scrollPanel:Reparent(panel, -1)
+				local scrollContent = scrollComponent:GetContentWidget()
+				Cron.NextTick(function()
+					scrollComponent:UpdateContent(true)
+				end)
+				
+				
+				local vertical = inkVerticalPanelWidget.new()
+				vertical:SetName(StringToName("datapack__vertical"))
+				vertical:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+				vertical:SetChildMargin(inkMargin.new({ top = 8.0, bottom = 8.0 }))
+				vertical:SetFitToContent(true)
+				vertical:Reparent(scrollContent, -1)
+				
+				
+				for i=1,#arrayList do 
+					local horizontalarea2 = inkHorizontalPanelWidget.new()
+					horizontalarea2:SetName(CName.new("datapack_horizontal_"..i))
+					horizontalarea2:SetSize(Vector2.new({ X = 1900, Y = 500 }))
+					horizontalarea2:SetChildMargin(inkMargin.new({left=100, top=30, right=100, bottom=0 }))
+					--	horizontalarea2:SetMargin(inkMargin.new({ top = 50, bottom = 50 }))
+					horizontalarea2:Reparent(vertical)
+					
+					for y=1,#arrayList[i] do
+						local datapack = arrayList[i][y]
+						
+						
+						local verticalarea = inkVerticalPanelWidget.new()
+						verticalarea:SetName(StringToName(datapack.."_vertical"))
+						--buttonList:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+						--buttonList:SetChildMargin(inkMargin.new({ top = 8.0, bottom = 8.0 }))
+						verticalarea:SetFitToContent(false)
+						verticalarea:SetSize(Vector2.new({ X = 500, Y = 500 }))
+						verticalarea:Reparent(horizontalarea2, 1)
+						
+						
+						local imageprop = {}
+						imageprop.tag = datapack.."_img"
+						local random = math.random(1, 11)
+						if(random == 37 or random == 25) then
+							imageprop.tweak =  ('PhotoModeStickers.crc_%d'):format(random)
+							else
+							imageprop.tweak =  ('PhotoModeStickers.crc_0%d'):format(random)
+						end
+						imageprop.margin = inkMargin.new({ left = 100.0, right = 100, bottom = 0, top = 0.0 })
+						imageprop.size = {}
+						imageprop.size.x = 200
+						imageprop.size.y = 200
+						imageprop.fittocontent = false
+						imageprop.scale = {}
+						imageprop.scale.x = 1.3
+						imageprop.scale.y = 1.3
+						
+						local textprop = {}
+						textprop.tag = datapack.."_text"
+						textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 50.0 })
+						textprop.size = {}
+						textprop.size.x = 100
+						textprop.size.y = 32
+						textprop.text = datapack
+						
+						textprop.fontsize = 45
+						
+						textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+						
+						textprop.scale = {}
+						textprop.scale.x = 1.0
+						textprop.scale.y = 1.0
+						
+						
+						
+						local actionlist = {}
+						local action = {}
+						action.name = "set_selected_item_category" 
+						action.value = datapack
+						table.insert(actionlist,action)
+						action = {}
+						action.name = "set_current_item_page" 
+						action.value = 1
+						table.insert(actionlist,action)
+						action = {}
+						action.name = "refreshBrowser"
+						action.address = "CyberScript"
+						action.subaddress = "keystone_item_market"
+						table.insert(actionlist,action)
+						
+						buildWebPageBountonSquare(verticalarea,imageprop,textprop,page,actionlist)
+					end
+				end
+				
+				elseif(BrowserCybserscript == "keystone_item_market") then
+				
+				local interface = cyberscript.cache["interfaces"]["keystone_item_market"].data
+				
+				local copyinterface = deepcopy(interface, nil)
+				
+				table.remove(copyinterface.controls,17)
+				table.remove(copyinterface.controls,17)
+				table.remove(copyinterface.controls,17)
+				
+				table.remove(copyinterface.controls,17)
+				table.remove(copyinterface.controls,17)
+				table.remove(copyinterface.controls,17)
+				
+				table.remove(copyinterface.controls,17)
+				table.remove(copyinterface.controls,17)
+				table.remove(copyinterface.controls,17)
+				table.remove(copyinterface.controls,17)
+				table.remove(copyinterface.controls,17)
+				
+				
+				
+				local arrayList = {}
+				local obj = {}
+				local templist = {}
+				
+				
+				if CurrentItemPage == nil then CurrentItemPage = 1 setScore("Item_Market","CurrentItemPage",CurrentItemPage) end
+				
+				
+				
+				
+				if arrayMarketItem ~= nil  then
+					if CurrentItemPage > #arrayMarketItem[Keystone_currentSelectedItemCategory] then CurrentItemPage = 1 setScore("Item_Market","CurrentItemPage",CurrentItemPage)  end
+					
+					local items = arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage]
+					
+					
+					
+					
+					if(#items > 0) then
+						for i = 1,#items do
+							
+							if(#obj < 5) then
+								table.insert(obj,items[i])
+								if(items[i+1] == nil) then
+									table.insert(arrayList,obj)
+								end
+								else
+								table.insert(arrayList,obj)
+								obj = {}
+								table.insert(obj,items[i])
+								if(items[i+1] == nil) then
+									table.insert(arrayList,obj)
+								end
+							end
+							
+							
+							
+							
+						end
+					end
+					
+					if(#arrayList >0) then
+						for i=1,#arrayList do 
+							local horizontalarea = deepcopy(GetInterfaceChildren(interface,"horizontal_area_01"), nil)
+							horizontalarea.tag = "datapack_horizontal_"..i
+							
+							table.insert(copyinterface.controls,horizontalarea)
+							for y=1,#arrayList[i] do
+								local item = arrayList[i][y]
+								
+								local stock_vertical_item =  deepcopy(GetInterfaceChildren(interface,"stock_vertical_item_01"), nil)
+								stock_vertical_item.parent = horizontalarea.tag
+								stock_vertical_item.tag = "stock_vertical_item_"..i.."_"..y
+								
+								local bckg_01 =  deepcopy(GetInterfaceChildren(interface,"bckg_01"), nil)
+								bckg_01.parent = stock_vertical_item.tag
+								bckg_01.tag = "bckg_"..i.."_"..y
+								
+								local stock_vertical_item_container =  deepcopy(GetInterfaceChildren(interface,"stock_vertical_item_container_01"), nil)
+								stock_vertical_item_container.parent = stock_vertical_item.tag
+								stock_vertical_item_container.tag = "stock_vertical_item_container_"..i.."_"..y
+								
+								local lbl_name =  deepcopy(GetInterfaceChildren(interface,"lbl_name_01"), nil)
+								lbl_name.parent = stock_vertical_item_container.tag
+								lbl_name.tag = "lbl_name_"..i.."_"..y
+								lbl_name.context = nil
+								lbl_name.text = item.Title
+								
+								local lbl_price =  deepcopy(GetInterfaceChildren(interface,"lbl_price_1"), nil)
+								lbl_price.parent = stock_vertical_item_container.tag
+								lbl_price.tag = "lbl_price_"..i.."_"..y
+								lbl_price.context = nil
+								lbl_price.text = "Price : "..item.Price
+								
+								local owned =  deepcopy(GetInterfaceChildren(interface,"owned_01"), nil)
+								owned.parent = stock_vertical_item_container.tag
+								owned.tag = "owned"..i.."_"..y
+								
+								local playerItems = getPlayerItemsbyTag(item.Tag)
+								
+								if playerItems == nil then 
+									
+									setScore("owned_item",item.Tag,0)
+									
+									
+								end
+								
+								owned.context[1].prop.text.values.loadingmsg.type = "score"
+								owned.context[1].prop.text.values.loadingmsg.variable = "owned_item"
+								owned.context[1].prop.text.values.loadingmsg.key = item.Tag
+								owned.context[1].prop.text.values.loadingmsg.tag = nil
+								
+								
+								local incart =  deepcopy(GetInterfaceChildren(interface,"incart_01"), nil)
+								incart.parent = stock_vertical_item_container.tag
+								incart.tag = "incart"..i.."_"..y
+								incart.context[1].prop.text.values.loadingmsg.type = "score"
+								incart.context[1].prop.text.values.loadingmsg.variable = "Item_MarketCart"
+								incart.context[1].prop.text.values.loadingmsg.key = item.Tag
+								incart.context[1].prop.text.values.loadingmsg.tag = nil
+								
+								
+								local horizontal_area_btn =  deepcopy(GetInterfaceChildren(interface,"horizontal_area_btn_01"), nil)
+								horizontal_area_btn.parent = stock_vertical_item_container.tag
+								horizontal_area_btn.tag = "horizontal_area_btn_"..i.."_"..y
+								
+								local btn_buy =  deepcopy(GetInterfaceChildren(interface,"btn_buy_01"), nil)
+								btn_buy.parent = horizontal_area_btn.tag
+								btn_buy.tag = "btn_buy_"..i.."_"..y
+								btn_buy.context[1].trigger.auto.target = item.Price
+								btn_buy.action[1].tag = item.Tag
+								
+								local btn_sell =  deepcopy(GetInterfaceChildren(interface,"btn_sell_01"), nil)
+								btn_sell.parent = horizontal_area_btn.tag
+								btn_sell.tag = "btn_sell_"..i.."_"..y
+								btn_sell.context[2].trigger.auto.context[1].prop.value.values.loadingmsg.key = item.Tag
+								btn_sell.context[3].trigger.auto.context[1].prop.value.values.loadingmsg.key = item.Tag
+								btn_sell.action[1].tag = item.Tag
+								
+								
+								table.insert(copyinterface.controls,stock_vertical_item)
+								table.insert(copyinterface.controls,bckg_01)
+								table.insert(copyinterface.controls,stock_vertical_item_container)
+								table.insert(copyinterface.controls,lbl_name)
+								table.insert(copyinterface.controls,lbl_price)
+								table.insert(copyinterface.controls,owned)
+								table.insert(copyinterface.controls,incart)
+								table.insert(copyinterface.controls,horizontal_area_btn)
+								table.insert(copyinterface.controls,btn_buy)
+								table.insert(copyinterface.controls,btn_sell)
+								
+								
+								
+							end
+						end
+						panel:RemoveAllChildren()
+						--	logme(10,JSON:encode_pretty(copyinterface))
+						makeCustomInterface(panel,copyinterface)
+					end
+					
+					
+				end
+				elseif(BrowserCybserscript ~= "loading" and BrowserCybserscript ~= "home" and BrowserCybserscript ~= "datapack" and BrowserCybserscript ~= "mydatapack" and BrowserCybserscript ~= "datapack_detail" and BrowserCybserscript ~= "stock_market" and BrowserCybserscript ~= "item_category" and BrowserCybserscript ~= "item_market") then
+				
+				------print(BrowserCybserscript)
+				panel:RemoveAllChildren()
+				
+				makeCustomInterface(panel,cyberscript.cache["interfaces"][BrowserCybserscript].data)
+				
+				
+				
+				
+				
+			end
+		end
+		if(CurrentAddress == "CyberScriptWeb") then
+			if(BrowserCybserscript == nil) then BrowserCybserscript = "home" end
+			if(BrowserCybserscript == "home") then
+				
+				local stickerRecord = TDB.GetPhotoModeStickerRecord("PhotoModeStickers.dcl_03")
+				
+				networktext:GetWidgetByIndex(0):SetAtlasResource(stickerRecord:AtlasName())
+				networktext:GetWidgetByIndex(0):SetTexturePart(stickerRecord:ImagePartName())
+				
+				networktext:GetWidgetByIndex(1):SetText("Web")
+				networktext:GetWidgetByIndex(1):SetTintColor(gamecolor(255,255,255,1))
+				
+				
+				
+				
+				--logme(2,"button")
+				
+				--linkbar01:RemoveAllChildren()
+				panel:RemoveChildByIndex(1)
+				panel:RemoveChildByIndex(1)
+				network:SetVisible(false)
+				
+				
+				
+				
+				
+				
+				
+				local arrayList = {}
+				local obj = {}
+				local templist = {}
+				
+				
+				for k,wpage in pairs(cyberscript.cache["webpage"]) do 
+					
+					if(checkTriggerRequirement(wpage.data.requirement,wpage.data.trigger))then
+						table.insert(templist,wpage)
+					end
+				end
+				
+				
+				for i,wpage in ipairs(templist) do 
+					
+					
+					if(#obj < 4) then
+						
+						
+						table.insert(obj,wpage)
+						
+						if(templist[i+1] == nil) then
+							table.insert(arrayList,obj)
+						end
+						
+						
+						else
+						
+						table.insert(arrayList,obj)
+						
+						
+						obj = {}
+						table.insert(obj,wpage)
+						
+						if(templist[i+1] == nil) then
+							table.insert(arrayList,obj)
+						end
+						
+					end
+					
+					
+				end
+				
+				
+				
+				local scrollComponent = UIScroller.Create("webpage_scroll")
+				local scrollPanel = scrollComponent:GetRootWidget()
+				
+				scrollPanel:SetAnchor(inkEAnchor.TopLeft)
+				scrollPanel:SetMargin(inkMargin.new({ left = 40.0 ,top=60}))
+				scrollPanel:SetSize(Vector2.new({ X = 1900, Y = 1200 }))
+				scrollPanel:Reparent(panel, 2)
+				local scrollContent = scrollComponent:GetContentWidget()
+				Cron.NextTick(function()
+					scrollComponent:UpdateContent(true)
+				end)
+				
+				
+				local vertical = inkVerticalPanelWidget.new()
+				vertical:SetName(StringToName("webpage_vertical"))
+				vertical:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+				vertical:SetChildMargin(inkMargin.new({ top = 8.0, bottom = 8.0 }))
+				vertical:SetFitToContent(true)
+				vertical:Reparent(scrollContent, -1)
+				
+				
+				for i=1,#arrayList do 
+					local horizontalarea2 = inkHorizontalPanelWidget.new()
+					horizontalarea2:SetName(CName.new("webpage_horizontal_"..i))
+					horizontalarea2:SetSize(Vector2.new({ X = 1900, Y = 500 }))
+					horizontalarea2:SetChildMargin(inkMargin.new({left=100, top=30, right=100, bottom=0 }))
+					--	horizontalarea2:SetMargin(inkMargin.new({ top = 50, bottom = 50 }))
+					horizontalarea2:Reparent(vertical)
+					
+					for y=1,#arrayList[i] do
+						
+						local webpage = arrayList[i][y].data
+						------print(dump(webpage))
+						local verticalarea = inkVerticalPanelWidget.new()
+						verticalarea:SetName(StringToName(webpage.tag.."_vertical"))
+						--buttonList:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+						--buttonList:SetChildMargin(inkMargin.new({ top = 8.0, bottom = 8.0 }))
+						verticalarea:SetFitToContent(false)
+						verticalarea:SetSize(Vector2.new({ X = 500, Y = 500 }))
+						verticalarea:Reparent(horizontalarea2, 1)
+						local customimage = false
+						
+						local imageprop = {}
+						imageprop.tag = webpage.tag.."_img"
+						
+						if(webpage.tweak ~= nil and webpage.texture ~= nil and webpage.tweak ~= "" and webpage.texture ~= "") then
+							
+							imageprop.tweak = webpage.tweak
+							imageprop.texture = webpage.texture
+							customimage = true
+							else
+							
+							imageprop.tweak = ('PhotoModeStickers.dcl_016')
+						end
+						
+						
+						imageprop.margin = inkMargin.new({ left = 100.0, right = 100, bottom = 0, top = 0.0 })
+						imageprop.size = {}
+						imageprop.size.x = 200
+						imageprop.size.y = 200
+						imageprop.fittocontent = false
+						imageprop.scale = {}
+						imageprop.scale.x = 1.3
+						imageprop.scale.y = 1.3
+						
+						local textprop = {}
+						textprop.tag = webpage.tag.."_text"
+						textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 50.0 })
+						textprop.size = {}
+						textprop.size.x = 100
+						textprop.size.y = 32
+						textprop.text = webpage.name
+						
+						textprop.fontsize = 45
+						
+						textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+						
+						textprop.scale = {}
+						textprop.scale.x = 1.0
+						textprop.scale.y = 1.0
+						
+						
+						
+						local actionlist = {}
+						local action = {}
+						action.name = "refreshBrowser"
+						action.address = "CyberScriptWeb"
+						action.subaddress = webpage.target
+						table.insert(actionlist,action)
+						
+						buildWebPageBountonSquare(verticalarea,imageprop,textprop,page,actionlist,customimage)
+					end
+				end
+				
+				
+				
+				else
+				
+				panel:RemoveAllChildren()
+				
+				makeCustomInterface(panel,cyberscript.cache["interfaces"][BrowserCybserscript].data)
+				
+				
+			end
+		end
+		
+		end
+	
+end	
 
 function PopupsManager_OnShardRead(self,evt)
 	if(observerthread4  == true or moddisabled == true)    then return end
@@ -5121,7 +6773,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	-- if(CurrentAddress == "CyberScript") then
 	-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod");
 	-- end
-	
+	print("BrowserController_OnPageSpawned")
 	-- if(CurrentAddress == "CyberScript" and BrowserCybserscript ~= nil) then
 	-- inkTextRef.SetText(thos.addressText, "NETdir://cyberscript.mod/"..BrowserCybserscript);
 	-- end
@@ -5141,7 +6793,11 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		end
 		
 	end
+
 end
+
+
+
 --endregion Browser
 function WorldMapTooltipController_SetData(self,data,menu)
 	
@@ -6343,15 +7999,13 @@ end
 
 function PhoneSystem_OnTriggerCall(thos, request)
 	if(observerthread4 == true or moddisabled  == true)   then return end
-	logme(10,"called")
-	logme(10,GameDump(request))
 	
 	local contactName = request.addressee
-	logme(10,"IsNameValid "..tostring(IsNameValid(contactName)))
+
 	if IsNameValid(contactName) == false then
-		logme(10,"stopcall")
 		
-		thos.TriggerCall(questPhoneCallMode.Video, false, "CyberScript", false, questPhoneCallPhase.IncomingCall, false, true)
+		
+		thos:TriggerCall(questPhoneCallMode.Video, false, "CyberScript", false, questPhoneCallPhase.IncomingCall, false, true)
 	end
 	
 end
@@ -6967,7 +8621,12 @@ end
 function BrowserController_LoadWebPage(self,address,wrappedMethod)
 	--	CurrentAddress = address
 	if(observerthread5 == true or moddisabled  == true)   then return wrappedMethod(address) end
-	----print("LoadWebPage : "..address)
+	print("LoadWebPage : "..address)
+	
+	if(address == "NETdir://ncity.pub") then
+		webcount = 0
+	end
+	
 	if(address == "CyberScript" or address == "CyberScriptWeb" or  address == "NETdir://ezestates.web/makeovers" or  address == "NETdir://ezestates.web/for_rent") then
 		if(BrowserController == nil) then BrowserController = self end
 		
@@ -8647,7 +10306,7 @@ function listenPlayerInput(action)
 	local phoneAction = false 
 	
 	if actionName == "PhoneReject" and actionType == "BUTTON_HOLD_COMPLETE" and currentPhoneCall ~= nil   then 
-		StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+		StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
 		phoneAction = true 
 		local audioEvent = SoundStopEvent.new()
 		audioEvent.soundName = "ui_phone_incoming_call"
@@ -8661,7 +10320,7 @@ function listenPlayerInput(action)
 		else
 		if actionName == "PhoneInteract" and phoneAction == false and actionType == "BUTTON_RELEASED" and currentPhoneCall ~= nil   then 
 			logme(10,"dddssssd")
-			StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+			StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
 			
 			local audioEvent = SoundStopEvent.new()
 			audioEvent.soundName = "ui_phone_incoming_call"
@@ -8670,7 +10329,7 @@ function listenPlayerInput(action)
 			runActionList(currentPhoneCall.answer_action,"phone_call","interact",false,"player")
 			incomingCallGameController:OnInitialize()
 			currentPhoneCall = nil
-			StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+			StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
 			
 		end
 	end
@@ -8685,12 +10344,13 @@ function listenPlayerInput(action)
 		cycleInteract()
 		
 	end
-	
-	if currentHelp ~= nil and currentHelpIndex ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "activate_secondary" or actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
+		pcall(function()
+	if currentHelp ~= nil and currentHelpIndex ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
 		
 		local actionlisth = {}
 		local actionh = {}
-		if(currentHelpIndex-1 < #currentHelp.section)then
+		if(currentHelp ~= nil and currentHelpIndex-1 < #currentHelp.section)then
+	
 			UIPopupsManager.ClosePopup()
 			currentHelp = nil
 			currentHelpIndex = 1
@@ -8705,9 +10365,10 @@ function listenPlayerInput(action)
 			table.insert(actionlisth,actionh)
 			
 			runActionList(actionlisth,currentHelp.tag,"interact",true,"player")
+		
 		end		
 	end
-	
+		end)
 	if currentHelp ~= nil and (actionName == "close_tutorial" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "activate" or actionName == "close_tutorial") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad") then
 		
 		local actionlisth = {}

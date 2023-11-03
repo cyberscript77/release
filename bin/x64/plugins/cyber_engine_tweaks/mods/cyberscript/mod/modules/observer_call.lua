@@ -541,6 +541,8 @@ PanzerHUDGameController_OnInitialize(this)
 	ObserveAfter('WebPage', 'OnInitialize', function(self)
 	 WebPage_OnInitialize(self)
 	end)
+	
+	
 	ObserveAfter('WebPage', 'FillPageFromJournal', function(self,page)
 	
 	 WebPage_FillPageFromJournal(self,page)
@@ -549,6 +551,11 @@ PanzerHUDGameController_OnInitialize(this)
 	ObserveAfter('BrowserController', 'OnPageSpawned', function(this, widget, userData)
 		
 		 BrowserController_OnPageSpawned(this, widget, userData)
+	end)
+	
+	ObserveAfter('WebPage', 'FillCustomHomePage', function(this, pgNum, journalManager)
+		
+		 WebPage_FillPageFromJournalWebExt(this)
 	end)
 	
 	
@@ -752,15 +759,7 @@ PanzerHUDGameController_OnInitialize(this)
 		
 	end)
 	
-	ObserveAfter('NewHudPhoneGameController','SetScreenType', function(this,type)
-		NewHudPhoneGameController_SetScreenType(this,type)
-		
-	end)
 	
-		ObserveAfter('NewHudPhoneGameController','ShowSelectedContactMessages', function(this)
-		print("ShowSelectedContactMessages")
-		
-	end)
 	
 	ObserveAfter('NewHudPhoneGameController','ShowSelectedContactMessages', function(this,contactData)
 		NewHudPhoneGameController_ShowSelectedContactMessages(this,contactData)
@@ -942,6 +941,33 @@ PanzerHUDGameController_OnInitialize(this)
 	
 end
 
+function interactionUI_init() -- Register needed observers
+    Observe("InteractionUIBase", "OnDialogsData", function(this)
+        interactionUI.baseControler = this
+    end)
+
+    Observe("InteractionUIBase", "OnInitialize", function(this)
+        interactionUI.baseControler = this
+		GameController["InteractionUIBase"] = this
+    end)
+
+    Observe('PlayerPuppet', 'OnAction', function(_, action)
+       interactionUI.OnAction(action)
+    end)
+
+    Override("InteractionUIBase", "OnDialogsSelectIndex", function(_, idx, wrapped) -- Avoid index getting set by game
+       interactionUI.OnDialogsSelectIndex( idx, wrapped)
+    end)
+
+    Override("InteractionUIBase", "OnDialogsData", function(this, value, wrapped) -- Avoid interaction getting overriden by game
+        interactionUI.OnDialogsData(this, value, wrapped)
+      --  wrapped(value)
+    end)
+
+    Override("dialogWidgetGameController", "OnDialogsActivateHub", function(_, id, wrapped) -- Avoid interaction getting overriden by game
+        interactionUI.OnDialogsActivateHub(id, wrapped)
+    end)
+end
 
 function SetOverrider()
 	

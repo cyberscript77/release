@@ -118,7 +118,15 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name == "choice_is_opened") then
 				result = currentDialogHub ~= nil
 			end
+			if(trigger.name == "native_choice_is_opened") then
+				result = nativeDialogOpen ~= nil and nativeDialogOpen == true
+			end
+			if(trigger.name == "inject_dialog_pending") then
+				
+				result = interactionUI.injectdialog ~= nil and #interactionUI.injectdialog ~= 0
+			end
 			if(trigger.name == "specific_choice_is_opened") then
+				--print(currentDialogHub.dial.tag)
 				result = currentDialogHub ~= nil and currentDialogHub.dial.tag == trigger.tag
 			end
 			if(trigger.name == "entity_tag_exist") then
@@ -143,20 +151,8 @@ function scriptcheckTrigger(trigger)
 					local enti = Game.FindEntityByID(obj.id)	
 					if(enti ~= nil) then
 						----logme(3,"entity is active"..tostring(enti:IsAttached()))
-						if (enti:IsCrowd() == true)then
-							----logme(3,"entity is actived"..tostring(enti:IsAttached()))
-							result = true
-						end
+						result = enti:IsCrowd()
 					end
-				end
-			end
-			if(trigger.name == "can_use_preventionsystemspawn") then
-				if Game.GetPreventionSpawnSystem():GetNumberOfSpawnedPreventionUnits() < npcpreventionlimit then
-					result = true
-					else
-					
-					result = false
-					
 				end
 			end
 			if(trigger.name == "look_at_object") then
@@ -173,7 +169,7 @@ function scriptcheckTrigger(trigger)
 			end
 			if(trigger.name == "look_at_entity") then
 				if objLook ~= nil then
-					local obj = getEntityFromManager(trigger.tag)
+					local obj = getEntityFromManager(trigger.value)
 					if(obj.id ~= nil) then
 						local enti = Game.FindEntityByID(obj.id)	
 						if(enti ~= nil) then
@@ -182,7 +178,9 @@ function scriptcheckTrigger(trigger)
 								result = true
 							end
 						end
+						
 					end
+				
 				end
 			end
 			if(trigger.name == "look_at_hash") then
@@ -199,20 +197,17 @@ function scriptcheckTrigger(trigger)
 				local obj = getEntityFromManager(trigger.tag)
 				local enti = Game.FindEntityByID(obj.id)	
 				if(enti ~= nil) then
-					--logme(3,"entity is active"..tostring(enti:IsActive()))
-					if (enti:IsDead() == true or enti:IsActive() == false)then
-						result = true
-					end
+					
+						result = (enti:IsDead() == true or enti:IsActive() == false)
+					
 				end
 			end
 			if(trigger.name == "entity_is_alive") then
 				local obj = getEntityFromManager(trigger.tag)
 				local enti = Game.FindEntityByID(obj.id)	
 				if(enti ~= nil) then
-					--logme(3,"entity is active"..tostring(enti:IsActive()))
-					if (enti:IsDead() == false and enti:IsActive() == true)then
-						result = true
-					end
+				
+						result = enti:IsDead() == false and enti:IsActive() == true
 				end
 			end
 			if(trigger.name == "entity_looked_is_follower") then
@@ -247,73 +242,23 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
-			if(trigger.name == "stock_trend_positive") then
-				
-				if(arrayMarket ~= nil and #arrayMarket > 0) then
-					
-					for k,stock in ipairs(arrayMarket) do
-						
-						if(stock.tag == trigger.tag) then
-							
-							result = stock.trend
-							
-						end
-						
-					end
-					
-				end
-				
-			end
-			if(trigger.name == "entity_looked_is_registered_as_companion") then
-				if objLook ~= nil then
-					tarName = objLook:ToString()
-					appName = Game.NameToString(objLook:GetCurrentAppearanceName())
-					dipName = objLook:GetDisplayName()
-					local entity = getEntityFromManagerById(objLook:GetEntityID())
-					if(entity ~= nil and entity.id ~= nil) then
-						logme(3,"iscompanion ".. tostring(entity.iscompanion))
-						if string.match(entity.tag, "companion_") then
-							result = true
-						end
-					end
-				end
-			end
 			if(trigger.name == "entity_at_position") then
 				local obj = getEntityFromManager(trigger.tag)
 				--logme(3,obj.tag)
 				local enti = Game.FindEntityByID(obj.id)
 				if(enti ~= nil) then
-					local targetPosition = enti:GetWorldPosition()
-					if check3DPos(targetPosition, trigger.x, trigger.y, trigger.z,trigger.range) then
+					if(trigger.position == nil) then trigger.position = "at" end
+					
+					local targetPosition = getPositionFromParameter(trigger)
+					
+					
+					if (targetPosition.x ~= nil and check3DPos(enti:GetWorldPosition(), targetPosition.x, targetPosition.y, targetPosition.z,trigger.range)) then
 						result = true
 						else
 						result = false
 					end
 					else
 					--logme(3,"entity not found : "..trigger.tag)
-				end
-			end
-			if(trigger.name == "entity_at_relative_position") then
-				local obj = getEntityFromManager(trigger.tag)
-				local enti = Game.FindEntityByID(obj.id)	
-				
-				if(enti ~= nil) then
-					local entityposition = enti:GetWorldPosition()
-					if getEntityFromManager(trigger.tag).targetedPostion == nil then
-						getEntityFromManager(trigger.tag).targetedPostion = {}
-						getEntityFromManager(trigger.tag).targetedPostion.x = entityposition.x + trigger.x
-						getEntityFromManager(trigger.tag).targetedPostion.y = entityposition.y + trigger.y
-						getEntityFromManager(trigger.tag).targetedPostion.z = entityposition.z + trigger.z
-					end
-					local targetedPostions = getEntityFromManager(trigger.tag).targetedPostion
-					--logme(3,entityposition.y)
-					--logme(3,targetedPostions.y)
-					if check3DPos(entityposition, targetedPostions.x, targetedPostions.y, targetedPostions.z,trigger.range) then
-						result = true
-						getEntityFromManager(trigger.tag).targetedPostion = nil
-						else
-						result = false
-					end
 				end
 			end
 			if(trigger.name == "entity_in_state") then
@@ -365,52 +310,6 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
-			if(trigger.name == "entity_at_relative_player_position") then
-				local obj = getEntityFromManager(trigger.tag)
-				local enti = Game.FindEntityByID(obj.id)	
-				
-				if(enti ~= nil) then
-					--logme(3,"test")
-					local entityposition = enti:GetWorldPosition()
-					local playerpos = Game.GetPlayer():GetWorldPosition()
-					if getEntityFromManager(trigger.tag).targetedPostion == nil then
-						getEntityFromManager(trigger.tag).targetedPostion = {}
-						getEntityFromManager(trigger.tag).targetedPostion.x = playerpos.x + trigger.x
-						getEntityFromManager(trigger.tag).targetedPostion.y = playerpos.y + trigger.y
-						getEntityFromManager(trigger.tag).targetedPostion.z = playerpos.z + trigger.z
-					end
-					local targetedPostions = getEntityFromManager(trigger.tag).targetedPostion
-					if check3DPos(entityposition, targetedPostions.x, targetedPostions.y, targetedPostions.z,trigger.range) then
-						result = true
-						getEntityFromManager(trigger.tag).targetedPostion = nil
-						else
-						result = false
-					end
-				end
-			end
-			if(trigger.name == "entity_to_relative_entity_position") then
-				local obj = getEntityFromManager(trigger.tag)
-				local enti = Game.FindEntityByID(obj.id)	
-				local obj2 = getEntityFromManager(trigger.target)
-				local target = Game.FindEntityByID(obj2.id)	
-				if(enti ~= nil and target ~= nil) then
-					--logme(3,"test")
-					local entityposition = enti:GetWorldPosition()
-					local playerpos = target:GetWorldPosition()
-					
-					local targetedPostion = {}
-					targetedPostion.x = playerpos.x + trigger.x
-					targetedPostion.y = playerpos.y + trigger.y
-					targetedPostion.z = playerpos.z + trigger.z
-					
-					
-					if check3DPos(entityposition, targetedPostion.x, targetedPostion.y, targetedPostion.z,trigger.range) then
-						result = true
-						
-						
-					end
-				end
-			end
 			if(trigger.name == "entity_inbuilding")then
 				local obj = getEntityFromManager(trigger.tag)
 				local enti = Game.FindEntityByID(obj.id)	
@@ -431,21 +330,6 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 				
-			end
-			if(trigger.name == "entity_is_at_mappin_position") then
-				local mappin = getMappinByTag(trigger.tag)
-				if(mappin ~= nil) then
-					local obj = getEntityFromManager(trigger.entity)
-					local enti = Game.FindEntityByID(obj.id)	
-					if(enti ~= nil) then
-						result = check3DPos(enti:GetWorldPosition(), mappin.position.x, mappin.position.y, mappin.position.z, trigger.range)
-						
-						else
-						result = false
-					end
-					else
-					result = false
-				end
 			end
 			if(trigger.name == "entity_hash") then
 				local obj = getEntityFromManager(trigger.tag)
@@ -500,9 +384,7 @@ function scriptcheckTrigger(trigger)
 				searchQuery.includeSecondaryTargets  = true
 				success, parts = targetingSystem:GetTargetParts(enti, searchQuery)
 				
-				print("ydssses")
-				print(tostring(success))
-				print(tostring(#parts))
+				
 				
 				
 				for _, v in ipairs(parts) do
@@ -516,9 +398,7 @@ function scriptcheckTrigger(trigger)
 						local entName = newent:ToString()
 						local entAppName = Game.NameToString(newent:GetCurrentAppearanceName())
 						local entDispName = newent:GetDisplayName()
-						print(entAppName)
-						print(entDispName)
-						print(entName)
+						
 						if(entName ~= nil and entAppName ~= nil)then
 							for i,filter in ipairs(trigger.filter) do
 								
@@ -732,16 +612,8 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name == "money") then
 				result = checkStackableItemAmount("Items.money",trigger.value)
 			end
-			if(trigger.name == "player_reputation") then
-				local score = getScoreKey("player_reputation","Score")
-				if(score ~= nil and score >= trigger.score) then
-					result = true
-				end
-			end
-			if(trigger.name == "player_inbuilding")then
-				result = Game.IsEntityInInteriorArea(Game.GetPlayer())
-				--logme(3,result)
-			end
+			
+			
 			if(trigger.name == "player_in_poi") then
 				local resultpos = nil
 				
@@ -791,12 +663,6 @@ function scriptcheckTrigger(trigger)
 				if(trigger.output == true) then
 					--print("player_have_combatstate result "..tostring((state)))
 				end
-			end
-			
-			
-			
-			if(trigger.name == "player_in_metro") then
-				result = TakeAIVehicule
 			end
 			if(trigger.name == "wanted_level") then
 				local level = Game.GetBlackboardSystem():Get(Game.GetAllBlackboardDefs().UI_WantedBar):GetInt(Game.GetAllBlackboardDefs().UI_WantedBar.CurrentWantedLevel)
@@ -920,36 +786,8 @@ function scriptcheckTrigger(trigger)
 					result = true
 				end
 			end
-			if(trigger.name == "custom_condition") then
-				local score = getScoreKey(trigger.value,"Score")
-				if(score ~= nil and score == trigger.score) then
-					result = true
-				end
-			end
 			
-			
-			
-			
-			
-			if(trigger.name == "custom_condition_higher_or_equals") then
-				local score = getScoreKey(trigger.value,"Score")
-				if(score ~= nil and score >= trigger.score) then
-					result = true
-				end
-			end
-			if(trigger.name == "custom_condition_is_between") then
-				local score = getScoreKey(trigger.value,"Score")
-				if(trigger.strict == true) then
-					if(score ~= nil and score > trigger.min and score < trigger.max) then
-						result = true
-					end
-					else
-					if(score ~= nil and score >= trigger.min and score <= trigger.max) then
-						result = true
-					end
-				end
-			end
-			if(trigger.name == "custom_variable" or trigger.name == "check_variable" or  trigger.name == "check_score") then
+			if(trigger.name == "check_variable") then
 				local score = getVariableKey(trigger.variable,trigger.key)
 				
 				if(trigger.operator== nil) then
@@ -1217,31 +1055,20 @@ function scriptcheckTrigger(trigger)
 			
 		end
 		if houseregion then
-			if(trigger.name == "custom_place") then
-				if currentHouse ~= nil then
-					if(currentHouse.tag == trigger.value)then
-						result = true
-					end
-				end
-			end
+			
 			if(trigger.name == "is_in_custom_place") then
 				if currentHouse ~= nil then
-					result = true
-				end
-			end
-			if(trigger.name == "is_in_custom_place_entry") then
-				if currentHouse ~= nil then
-					result = check3DPos(Game.GetPlayer():GetWorldPosition(), currentHouse.enter_x, currentHouse.enter_y, currentHouse.enter_z, trigger.range)
-				end
-			end
-			if(trigger.name == "is_in_custom_place_exit") then
-				if currentHouse ~= nil then
-					result = check3DPos(Game.GetPlayer():GetWorldPosition(), currentHouse.exit_x, currentHouse.exit_y, currentHouse.exit_z, trigger.range)
+					if(trigger.value == "current") or (currentHouse.tag == trigger.value)then
+						result = true
+					end
+					
 				end
 			end
 			if(trigger.name == "is_in_custom_room") then
 				if currentRoom ~= nil then
-					result = true
+					if("current" == trigger.value) or (currentRoom.tag == trigger.value)then
+						result = true
+					end
 				end
 			end
 			if(trigger.name == "is_in_buyed_place") then
@@ -1274,13 +1101,6 @@ function scriptcheckTrigger(trigger)
 					end
 				end
 			end
-			if(trigger.name == "custom_room") then
-				if currentRoom ~= nil then
-					if(currentRoom.tag == trigger.value)then
-						result = true
-					end
-				end
-			end
 			if(trigger.name == "custom_place_type") then
 				if currentHouse ~= nil then
 					if(trigger.value == currentHouse.type) then
@@ -1296,18 +1116,6 @@ function scriptcheckTrigger(trigger)
 						if(trigger.value == currentRoom.type[i]) then
 							result = true
 						end
-					end
-				end
-			end
-			if(trigger.name == "item_looked_is_registered_in_current_house") then
-				if objLook ~= nil then
-					tarName = objLook:ToString()
-					appName = Game.NameToString(objLook:GetCurrentAppearanceName())
-					dipName = objLook:GetDisplayName()
-					local entid = objLook:GetEntityID()
-					local entity = getItemEntityFromManager(entid)
-					if(entity ~= nil) then
-						result = true
 					end
 				end
 			end
@@ -1950,64 +1758,6 @@ function scriptcheckTrigger(trigger)
 		end
 		
 		if noderegion then
-			if(trigger.name == "entity_is_in_node") then
-				local founded = false
-				local obj = getEntityFromManager(trigger.tag)
-				local enti = Game.FindEntityByID(obj.id)
-				if(enti ~= nil) then
-					for k,v in pairs(cyberscript.cache["node"]) do
-						local location = v.data
-						local range = 50
-						if(trigger.range ~= nil) then
-							range = trigger.range
-						end
-						if(founded == false)then
-							if(trigger.atgameplayposition) then
-								result = check3DPos(enti:GetWorldPosition(), location.gameplay_x, location.gameplay_y, location.gameplay_z, range)
-								else
-								result = check3DPos(enti:GetWorldPosition(), location.x, location.y, location.z, range)
-							end
-							if result == true and(trigger.sorttag == nil or (trigger.sorttag == location.sort)) then
-								result = true
-								founded = true
-								if(trigger.tag == "player") then
-									currentPlayerNode = location
-								end
-								break
-							end
-						end
-					end
-				end
-				if(result == false) then
-					currentPlayerNode =  nil
-				end
-			end
-			if(trigger.name == "entity_is_in_specific_node") then
-				local founded = false
-				local obj = getEntityFromManager(trigger.tag)
-				local enti = Game.FindEntityByID(obj.id)	
-				local node = getNode(trigger.data)
-				--logme(3,"check for node"..data.tag)
-				if(enti ~= nil) then
-					--logme(3,"check for entity"..trigger.tag)
-					local location = node
-					if(founded == false)then
-						local range = 25
-						if(trigger.range ~= nil) then
-							range = trigger.range
-						end
-						if(trigger.atgameplayposition) then
-							result = check3DPos(enti:GetWorldPosition(), location.gameplay_x, location.gameplay_y, location.gameplay_z, range)
-							else
-							result = check3DPos(enti:GetWorldPosition(), location.x, location.y, location.z, range)
-						end
-						if result == true then
-							result = true
-							founded = true
-						end
-					end
-				end
-			end
 			if(trigger.name == "entity_path_is_finish") then
 				local founded = false
 				local obj = getEntityFromManager(trigger.tag)
@@ -2024,9 +1774,7 @@ function scriptcheckTrigger(trigger)
 				if(enti ~= nil) then
 					local targetPosition = enti:GetWorldPosition()
 					if obj.destination ~= nil then
-						logme(3,obj.destination.x)
-						logme(3,obj.destination.y)
-						logme(3,obj.destination.z)
+					
 						if check3DPos(targetPosition, obj.destination.x, obj.destination.y, obj.destination.z,trigger.range) then
 							result = true
 							else
@@ -2102,36 +1850,7 @@ function scriptcheckTrigger(trigger)
 		end
 		
 		if uiregion then
-			if(trigger.name == "dialog_windows_isopen") then
-				if(trigger.window == "quest")then
-					--logme(3,"opo")
-					if(tostring(openQuestDialogWindow) ==  string.lower(tostring(trigger.value))) then 
-						result = true
-					end
-				end
-				if(trigger.window == "speak")then
-					if(tostring(openSpeakDialogWindow) ==  string.lower(tostring(trigger.value))) then 
-						result = true
-					end
-				end
-				if(trigger.window == "phone")then
-					if(tostring(openPhoneDialogWindow) ==  string.lower(tostring(trigger.value)	)) then 
-						--logme(3,openPhoneDialogWindow)
-						result = true
-					end
-				end
-				if(trigger.window == "event")then
-					if(tostring(openEventDialogWindow) ==  string.lower(tostring(trigger.value))) then 
-						result = true
-					end
-				end
-			end
-			if(trigger.name == "housing_edit_enable") then
-				result =  inEditMode
-			end
-			if(trigger.name == "crew_menu_enable") then
-				result =  inCrewManager
-			end
+			
 			if(trigger.name == "timer_is_finished") then
 				if(currentTimer ~= nil) then
 					
@@ -2150,6 +1869,9 @@ function scriptcheckTrigger(trigger)
 			end
 			if(trigger.name == "is_in_menu") then
 				result = inMenu
+			end
+			if(trigger.name == "scanner_active") then
+				result = (inScanner ~= nil and inScanner == true)
 			end
 			if(trigger.name == "is_in_specific_menu") then
 				if(inMenu and ActiveMenu == trigger.menu)then
@@ -2190,213 +1912,6 @@ function scriptcheckTrigger(trigger)
 						if(entity.isAV == true or entity.tag == "fake_av") then
 							result = true
 						end
-					end
-				end
-			end
-		end
-		
-		if customnpcregion then
-		end
-		
-		if multiregion then
-			if(trigger.name == "entity_looked_is_registered_as_player") then
-				if objLook ~= nil then
-					tarName = objLook:ToString()
-					appName = Game.NameToString(objLook:GetCurrentAppearanceName())
-					dipName = objLook:GetDisplayName()
-					local entity = getEntityFromManagerById(objLook:GetEntityID())
-					if(entity ~= nil and entity.id ~= nil) then
-						if(entity.isMP ~= nil and entity.isMP == true) then
-							result = true
-							else
-							multiName = ""
-						end
-						else
-						multiName = ""
-					end
-					else
-					multiName = ""
-				end
-			end
-			if(trigger.name == "player_corpo_faction") then
-				if currentFaction ~= nil or currentFaction ~= "" then
-					if currentFaction == trigger.value then
-						result =  true
-					end
-				end
-			end
-			if(trigger.name == "player_corpo_faction_rank") then
-				if currentFactionRank ~= nil or currentFactionRank ~= "" then
-					if currentFactionRank == trigger.value then
-						result =  true
-					end
-				end
-			end
-			if(trigger.name == "player_is_online") then
-				result =  MultiplayerOn
-			end
-			if(trigger.name == "player_is_connected") then
-				result =  NetServiceOn
-				
-			end
-			if(trigger.name =="player_multi_canbuild")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil) then
-					result = ActualPlayerMultiData.instance.CanBuild
-				end
-			end 
-			if(trigger.name =="player_multi_isowner")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil) then
-					result = ActualPlayerMultiData.instance.isInstanceOwner
-				end
-			end 
-			if(trigger.name =="player_multi_guild_isowner")then
-				
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.currentGuild ~= nil) then
-					result = ActualPlayerMultiData.currentGuild.isOwner
-				end
-			end 
-			if(trigger.name == "player_multi_in_buildable_place") then
-				if (ActualPlayerMultiData ~= nil and ActualPlayerMultiData.currentPlaces[1] ~= nil) then
-					result = true
-				end
-			end
-			if(trigger.name == "have_selected_item_multi") then
-				if selectedItemMulti ~= nil then
-					result =  true
-				end
-			end
-			if(trigger.name == "have_selected_item_can_be_grabbed_multi") then
-				if selectedItemMulti ~= nil  and selectedItemMulti.entityId ~= nil then
-					pcall(function()
-						result = Game.FindEntityByID(selectedItemMulti.entityId):IsA('gameObject') 
-					end)
-				end
-			end
-			if(trigger.name =="player_server_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.scores[trigger.value]
-					if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="looked_player_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.instance_players[multiName].score[trigger.value]
-					if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="server_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.instance.scores[trigger.value]
-					if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="server_score_to_player_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.instance.scores[trigger.server]
-					local playerscore = ActualPlayerMultiData.scores[trigger.player]
-					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="server_score_to_looked_player_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.instance.scores[trigger.server]
-					local playerscore = ActualPlayerMultiData.instance_players[multiName].score[trigger.value]
-					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="server_score_to_server_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.instance.scores[trigger.server]
-					local playerscore = ActualPlayerMultiData.instance.scores[trigger.score]
-					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="server_score_to_game_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-					local score = ActualPlayerMultiData.instance.scores[trigger.server]
-					local playerscore = getScoreKey(trigger.score,"Score")
-					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="guild_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
-					local score = ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
-					if(checkValue(trigger.operator,score,trigger.score,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="guid_score_to_server_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
-					local playerscore = ActualPlayerMultiData.instance.Scores[trigger.server]
-					local score = ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
-					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="guild_score_to_player_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
-					local score =  ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
-					local playerscore = ActualPlayerMultiData.scores[trigger.player]
-					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="guild_score_to_looked_player_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
-					local score =  ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
-					local playerscore = ActualPlayerMultiData.instance_players[multiName].score[trigger.value]
-					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
-						
-						result = true
-						
-					end
-				end
-			end 
-			if(trigger.name =="guild_score_to_game_score")then
-				if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.guildscores ~= nil) then
-					local score =  ActualPlayerMultiData.guildscores[trigger.guild][trigger.guildscore]
-					local playerscore = getScoreKey(trigger.score,"Score")
-					if(checkValue(trigger.operator,score,playerscore,trigger.min,trigger.max)) then
-						
-						result = true
-						
 					end
 				end
 			end
@@ -2527,18 +2042,6 @@ function executeAction(action,tag,parent,index,source,executortag)
    				end
    				
    			end
-   			if(action.name == "execute_in_tick") then
-   				
-   				if(#action.action > 0) then
-   					for i,act in ipairs(action.action) do
-   						
-   						executeAction(act,tag,parent,index,source,executortag)
-   						
-   					end
-   				end
-   				
-   			end
-   			
    			if(action.name == "set_entity_to_group") then
    				
    				cyberscript.GroupManager[action.tag].entities = action.entities
@@ -2569,121 +2072,20 @@ function executeAction(action,tag,parent,index,source,executortag)
    					end
    				end
    			end
-   			if(action.name == "move_group_at_position") then
-   				local group =getGroupfromManager(action.tag)
-   				for i=1, #group.entities do 
-   					local entityTag = group.entities[i]
-   					local obj = getEntityFromManager(entityTag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						local positionVec4 = {}
-   						positionVec4.x = action.x
-   						positionVec4.y = action.y
-   						positionVec4.z = action.z
-   						positionVec4.w = 1
-   						positionVec4.x =  positionVec4.x + i
-   						MoveTo(enti, positionVec4, 1, action.move)
-   					end
+			
+			if(action.name == "clear_entity_from_group_and_manager") then
+   				
+   				for i,entitygroup in ipairs(cyberscript.GroupManager[action.tag].entities) do 
+   					
+					cyberscript.EntityManager[entitygroup] = nil
+   					
    				end
+				
+			
+   				cyberscript.GroupManager[action.tag].entities = {}
    			end
-   			if(action.name == "move_group_at_relative_position") then
-   				local group =getGroupfromManager(action.tag)
-   				for i=1, #group.entities do 
-   					local entityTag = group.entities[i]
-   					local obj = getEntityFromManager(entityTag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						local positionVec4 = enti:GetWorldPosition()
-   						positionVec4.x = positionVec4.x + action.x
-   						positionVec4.y = positionVec4.y + action.y
-   						positionVec4.z = positionVec4.z + action.z
-   						positionVec4.x =  positionVec4.x + i
-   						MoveTo(enti, positionVec4, 1, action.move)
-   					end
-   				end
-   			end
-   			if(action.name == "move_group_at_entity_relative_position") then
-   				local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   				if(action.entity ~= "player") then 
-   					local obj2 = getEntityFromManager(action.entity)
-   					local enti2 = Game.FindEntityByID(obj2.id)
-   					positionVec4 = enti2:GetWorldPosition()
-   				end
-   				positionVec4.x = positionVec4.x + action.x
-   				positionVec4.y = positionVec4.y + action.y
-   				positionVec4.z = positionVec4.z + action.z	
-   				local group =getGroupfromManager(action.tag)
-   				for i=1, #group.entities do 
-   					local entityTag = group.entities[i]
-   					local obj = getEntityFromManager(entityTag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						positionVec4.x =  positionVec4.x + i
-   						MoveTo(enti, positionVec4, 1, action.move)
-   					end
-   				end
-   			end
-   			if(action.name == "teleport_group_at_position") then
-   				local group =getGroupfromManager(action.tag)
-   				for i=1, #group.entities do 
-   					local entityTag = group.entities[i]
-   					local isplayer = false
-   					if entityTag == "player" then
-   						isplayer = true
-   					end
-   					local obj = getEntityFromManager(entityTag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						--logme(3,"moveit")
-   						teleportTo(enti, Vector4.new( action.x+i, action.y, action.z,1), 1,isplayer)
-   					end
-   				end
-   			end
-   			if(action.name == "teleport_group_at_relative_position") then
-   				local group =getGroupfromManager(action.tag)
-   				for i=1, #group.entities do 
-   					local entityTag = group.entities[i]
-   					local isplayer = false
-   					if entityTag == "player" then
-   						isplayer = true
-   					end
-   					local obj = getEntityFromManager(entityTag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						local positionVec4 = enti:GetWorldPosition()
-   						positionVec4.x = positionVec4.x + action.x
-   						positionVec4.y = positionVec4.y + action.y
-   						positionVec4.z = positionVec4.z + action.z
-   						teleportTo(enti, Vector4.new( positionVec4.x+i, positionVec4.y, positionVec4.z,1), 1,isplayer)
-   					end
-   				end
-   			end
-   			if(action.name == "teleport_group_at_entity_relative_position") then
-   				local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   				if(action.entity ~= "player") then 
-   					local obj2 = getEntityFromManager(action.entity)
-   					local enti2 = Game.FindEntityByID(obj2.id)
-   					positionVec4 = enti2:GetWorldPosition()
-   				end
-   				positionVec4.x = positionVec4.x + action.x
-   				positionVec4.y = positionVec4.y + action.y
-   				positionVec4.z = positionVec4.z + action.z
-   				local group =getGroupfromManager(action.tag)
-   				for i=1, #group.entities do 
-   					local entityTag = group.entities[i]
-   					local isplayer = false
-   					if entityTag == "player" then
-   						isplayer = true
-   					end
-   					local obj = getEntityFromManager(entityTag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						positionVec4.x = positionVec4.x + i
-   						teleportTo(enti, positionVec4, 1,isplayer)
-   					end
-   				end
-   			end
-   			if(action.name == "attitude_group_against_entity") then
+			
+			if(action.name == "attitude_group_against_entity") then
    				local group =getGroupfromManager(action.tag)
    				for i=1, #group.entities do 
    					local entityTag = group.entities[i]
@@ -2746,17 +2148,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    					end
    				end
    			end
-   			if(action.name == "look_at_player_group") then
-   				local group =getGroupfromManager(action.tag)
-   				for i=1, #group.entities do 
-   					local entityTag = group.entities[i]
-   					local obj = getEntityFromManager(entityTag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						lookAtPlayer(enti)
-   					end
-   				end
-   			end
+   			
    			if(action.name == "look_at_entity_group") then
    				local group =getGroupfromManager(action.tag)
    				for i=1, #group.entities do 
@@ -2820,13 +2212,35 @@ function executeAction(action,tag,parent,index,source,executortag)
    				
    			end
    			
+			if(action.name == "apply_effect_to_group") then
+				local group =getGroupfromManager(action.tag)
+   				for i=1, #group.entities do 
+					local entityTag = group.entities[i]
+   					local obj = getEntityFromManager(entityTag)
+   					local enti = Game.FindEntityByID(obj.id)
+   					if(enti ~= nil) then
+						StatusEffectHelper.ApplyStatusEffectForTimeWindow(enti, TweakDBID.new(action.value),obj.id, 0,1000)
+					end
+   				end
+   			end
+   			if(action.name == "remove_effect_to_group") then
+				local group =getGroupfromManager(action.tag)
+   				for i=1, #group.entities do 
+					local entityTag = group.entities[i]
+   					local obj = getEntityFromManager(entityTag)
+   					local enti = Game.FindEntityByID(obj.id)
+   					if(enti ~= nil) then
+						StatusEffectHelper.RemoveStatusEffect(enti, TweakDBID.new(action.value))
+					end
+   				end
+   			end
+   			
+			
    		end
    		
    		if vehiculeregion then
-   			if(action.name == "old_spawn_vehicule") then
-   				spawnVehicle(action.value,action.from_behind,action.as_garage,action.as_av)
-   			end
-   			if(action.name == "spawn_vehicule_v2") then
+   			
+   			if(action.name == "spawn_vehicule_v2" or action.name == "spawn_vehicule") then
    				local chara = ""
    				if(action.amount == nil) then
    					action.amount = 1
@@ -2990,7 +2404,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    							position.x = position.x + (i*0.5)
    							
    						end
-   						spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav,action.despawntimer,action.persiststate,action.persistspawn,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview)
+   						spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav,action.despawntimer,action.persiststate,action.persistspawn,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview,action.dontregister)
    						if(action.group ~= nil and action.group ~= "") then
    							
    							if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
@@ -3152,739 +2566,9 @@ function executeAction(action,tag,parent,index,source,executortag)
    					end
    				end
    			end
-   			if(action.name == "summon_vehicule_from_faction") then
-   				local gang = getFactionByTag(action.faction)
-   				if(action.amount == nil) then
-   					action.amount = 1
-   				end
-   				if(action.amount == 0) then
-   					action.amount = math.random(1,6)
-   				end
-   				for i=1,action.amount do
-   					if(#gang.spawnable_vehicle > 0) then
-   						local tag = action.tag
-   						if(action.amount > 1) then
-   							tag = action.tag.."_"..i
-   						end
-   						local index = math.random(1,#gang.spawnable_vehicle)
-   						chara = gang.spawnable_vehicle[index]
-   						local isAV = false
-   						if(action.isAV ~= nil) then
-   							isAV = action.isAV
-   						end
-   						spawnEntity(chara, tag, action.x, action.y ,action.z,action.spawnlevel,action.ambush,isAV,action.beta)
-   						if(action.group ~= nil and action.group ~= "") then
-   							
-   							table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_from_faction_rival") then
-   				local gang = getFactionByTag(action.faction)
-   				gang = getFactionByTag(gang.rivals[1])
-   				if(action.amount == nil) then
-   					action.amount = 1
-   				end
-   				if(action.amount == 0) then
-   					action.amount = math.random(1,6)
-   				end
-   				for i=1,action.amount do
-   					if(#gang.spawnable_vehicle > 0) then
-   						local tag = action.tag
-   						if(action.amount > 1) then
-   							tag = action.tag.."_"..i
-   						end
-   						local index = math.random(1,#gang.spawnable_vehicle)
-   						chara = gang.spawnable_vehicle[index]
-   						local isAV = false
-   						if(action.isAV ~= nil) then
-   							isAV = action.isAV
-   						end
-   						spawnEntity(chara, tag, action.x, action.y ,action.z,action.spawnlevel,action.ambush,isAV,action.beta)
-   						if(action.group ~= nil and action.group ~= "") then
-   							
-   							table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_from_leader_faction_district") then
-   				local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
-   				if(#gangs > 0) then
-   					local gang = gangs[1]
-   					if(#gang.spawnable_vehicle > 0) then
-   						if(action.amount == nil) then
-   							action.amount = 1
-   						end
-   						if(action.amount == 0) then
-   							action.amount = math.random(1,6)
-   						end
-   						for i=1,action.amount do
-   							local tag = action.tag
-   							if(action.amount > 1) then
-   								tag = action.tag.."_"..i
-   							end
-   							local index = math.random(1,#gang.spawnable_vehicle)
-   							chara = gang.spawnable_vehicle[index]
-   							local isAV = false
-   							if(action.isAV ~= nil) then
-   								isAV = action.isAV
-   							end
-   							spawnEntity(chara, tag, action.x, action.y ,action.z,action.spawnlevel,action.ambush,isAV,action.beta)
-   							if(action.group ~= nil and action.group ~= "") then
-   								
-   								table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   							end
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_from_leader_faction_subdistrict") then
-   				local gangs = {}
-   				for i, test in ipairs(currentDistricts2.districtLabels) do
-   					if i > 1 then
-   						gangs = getGangfromDistrict(test,20)
-   						if(#gangs > 0) then
-   							break
-   						end
-   					end
-   				end
-   				if(#gangs > 0) then
-   					local gang = getFactionByTag(gangs[1].tag)
-   					if(#gang.spawnable_vehicle > 0) then
-   						if(action.amount == nil) then
-   							action.amount = 1
-   						end
-   						if(action.amount == 0) then
-   							action.amount = math.random(1,6)
-   						end
-   						for i=1,action.amount do
-   							local tag = action.tag
-   							if(action.amount > 1) then
-   								tag = action.tag.."_"..i
-   							end
-   							local index = math.random(1,#gang.spawnable_vehicle)
-   							chara = gang.spawnable_vehicle[index]
-   							local isAV = false
-   							if(action.isAV ~= nil) then
-   								isAV = action.isAV
-   							end
-   							spawnEntity(chara, tag, action.x, action.y ,action.z,action.spawnlevel,action.ambush,isAV,action.beta)
-   							if(action.group ~= nil and action.group ~= "") then
-   								
-   								table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   							end
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_from_leader_faction_district_rival") then
-   				local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
-   				if(#gangs > 0) then
-   					local gang = getFactionByTag(gangs[1].tag) 
-   					local rivalindex = math.random(1,#gang.rivals)
-   					gang = getFactionByTag(gang.rivals[rivalindex])
-   					if(#gang.spawnable_vehicle > 0) then
-   						if(action.amount == nil) then
-   							action.amount = 1
-   						end
-   						if(action.amount == 0) then
-   							action.amount = math.random(1,6)
-   						end
-   						for i=1,action.amount do
-   							local tag = action.tag
-   							if(action.amount > 1) then
-   								tag = action.tag.."_"..i
-   							end
-   							local index = math.random(1,#gang.spawnable_vehicle)
-   							chara = gang.spawnable_vehicle[index]
-   							local isAV = false
-   							if(action.isAV ~= nil) then
-   								isAV = action.isAV
-   							end
-   							spawnEntity(chara, tag, action.x, action.y ,action.z,action.spawnlevel,action.ambush,isAV,action.beta)
-   							if(action.group ~= nil and action.group ~= "") then
-   								
-   								table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   							end
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_from_leader_faction_subdistrict_rival") then
-   				local gangs = {}
-   				for i, test in ipairs(currentDistricts2.districtLabels) do
-   					if i > 1 then
-   						gangs = getGangfromDistrict(test,20)
-   						if(#gangs > 0) then
-   							break
-   						end
-   					end
-   				end
-   				if(#gangs > 0) then
-   					local gang = getFactionByTag(gangs[1].tag) 
-   					local rivalindex = math.random(1,#gang.rivals)
-   					gang = getFactionByTag(gang.rivals[rivalindex])
-   					if(#gang.spawnable_vehicle > 0) then
-   						if(action.amount == nil) then
-   							action.amount = 1
-   						end
-   						if(action.amount == 0) then
-   							action.amount = math.random(1,6)
-   						end
-   						for i=1,action.amount do
-   							local tag = action.tag
-   							if(action.amount > 1) then
-   								tag = action.tag.."_"..i
-   							end
-   							local index = math.random(1,#gang.spawnable_vehicle)
-   							chara = gang.spawnable_vehicle[index]
-   							local isAV = false
-   							if(action.isAV ~= nil) then
-   								isAV = action.isAV
-   							end
-   							spawnEntity(chara, tag, action.x, action.y ,action.z,action.spawnlevel,action.ambush,isAV,action.beta)
-   							if(action.group ~= nil and action.group ~= "") then
-   								
-   								table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   							end
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_at_entity_relative_from_faction") then
-   				local gang = getFactionByTag(action.faction)
-   				if(#gang.spawnable_vehicle > 0) then
-   					if(action.amount == nil) then
-   						action.amount = 1
-   					end
-   					if(action.amount == 0) then
-   						action.amount = math.random(1,6)
-   					end
-   					for i=1,action.amount do
-   						local tag = action.tag
-   						if(action.amount > 1) then
-   							tag = action.tag.."_"..i
-   						end
-   						local index = math.random(1,#gang.spawnable_vehicle)
-   						chara = gang.spawnable_vehicle[index]
-   						if(chara == "" or chara == nil) then
-   							chara = "Vehicle.arr_05_objective_truck"
-   						end
-   						local isAV = false
-   						if(action.isAV ~= nil and action.isAV==true) then
-   							logme(3,"AV is "..tostring(action.isAV))
-   							isAV = action.isAV
-   							local group = getGroupfromManager("AV")
-   							if(group.entities == nil) then
-   								group.entities = {}
-   							end
-   							table.insert(group.entities,tag)
-   							logme(3,#group.entities)
-   						end
-   						local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   						local entity = nil
-   						if(action.entity ~= "player") then
-   							local obj = getEntityFromManager(action.entity)
-   							entity = Game.FindEntityByID(obj.id)
-   							positionVec4 = entity:GetWorldPosition()
-   							else
-   							entity = Game.GetPlayer()
-   						end
-   						if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
-   							if(action.position == "behind") then
-   								positionVec4 = getBehindPosition(entity,action.distance)
-   							end
-   							if(action.position == "forward") then
-   								positionVec4 = getForwardPosition(entity,action.distance)
-   							end
-   							else
-   							positionVec4.x = positionVec4.x + action.x
-   							positionVec4.y = positionVec4.y + action.y
-   							positionVec4.z = positionVec4.z + action.z
-   						end
-   						local ambush = false
-   						if(action.ambush ~= nil) then
-   							ambush = action.ambush
-   						end
-   						spawnEntity(chara, tag, positionVec4.x, positionVec4.y ,positionVec4.z,action.spawnlevel,ambush,isAV,action.beta)
-   						if(action.group ~= nil and action.group ~= "") then
-   							
-   							table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_at_entity_relative_from_faction_rival") then
-   				local gang = getFactionByTag(action.faction)
-   				local rivalindex = math.random(1,#gang.rivals)
-   				gang = getFactionByTag(gang.rivals[rivalindex])
-   				if(#gang.spawnable_vehicle > 0) then
-   					if(action.amount == nil) then
-   						action.amount = 1
-   					end
-   					if(action.amount == 0) then
-   						action.amount = math.random(1,6)
-   					end
-   					for i=1,action.amount do
-   						local tag = action.tag
-   						if(action.amount > 1) then
-   							tag = action.tag.."_"..i
-   						end
-   						local index = math.random(1,#gang.spawnable_vehicle)
-   						chara = gang.spawnable_vehicle[index]
-   						local isAV = false
-   						if(action.isAV ~= nil and action.isAV==true) then
-   							logme(3,"AV is "..tostring(action.isAV))
-   							isAV = action.isAV
-   							local group = getGroupfromManager("AV")
-   							if(group.entities == nil) then
-   								group.entities = {}
-   							end
-   							table.insert(group.entities,tag)
-   							logme(3,#group.entities)
-   						end
-   						local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   						local entity = nil
-   						if(action.entity ~= "player") then
-   							local obj = getEntityFromManager(action.entity)
-   							entity = Game.FindEntityByID(obj.id)
-   							positionVec4 = entity:GetWorldPosition()
-   							else
-   							entity = Game.GetPlayer()
-   						end
-   						if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
-   							if(action.position == "behind") then
-   								positionVec4 = getBehindPosition(entity,action.distance)
-   							end
-   							if(action.position == "forward") then
-   								positionVec4 = getForwardPosition(entity,action.distance)
-   							end
-   							else
-   							positionVec4.x = positionVec4.x + action.x
-   							positionVec4.y = positionVec4.y + action.y
-   							positionVec4.z = positionVec4.z + action.z
-   						end
-   						local ambush = false
-   						if(action.ambush ~= nil) then
-   							ambush = action.ambush
-   						end
-   						spawnEntity(chara, tag, positionVec4.x, positionVec4.y ,positionVec4.z,action.spawnlevel,ambush,isAV,action.beta)
-   						if(action.group ~= nil and action.group ~= "") then
-   							
-   							table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_at_entity_relative_from_faction_leader_district") then
-   				local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
-   				if(#gangs > 0) then
-   					local gang = getFactionByTag(gangs[1].tag)
-   					if(#gang.spawnable_vehicle > 0) then
-   						if(action.amount == nil) then
-   							action.amount = 1
-   						end
-   						if(action.amount == 0) then
-   							action.amount = math.random(1,6)
-   						end
-   						for i=1,action.amount do
-   							local tag = action.tag
-   							if(action.amount > 1) then
-   								tag = action.tag.."_"..i
-   							end
-   							local index = math.random(1,#gang.spawnable_vehicle)
-   							chara = gang.spawnable_vehicle[index]
-   							local isAV = false
-   							if(action.isAV ~= nil and action.isAV==true) then
-   								logme(3,"AV is "..tostring(action.isAV))
-   								isAV = action.isAV
-   								local group = getGroupfromManager("AV")
-   								if(group.entities == nil) then
-   									group.entities = {}
-   								end
-   								logme(3,tag)
-   								table.insert(group.entities,tag)
-   								logme(3,#group.entities)
-   							end
-   							local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   							local entity = nil
-   							if(action.entity ~= "player") then
-   								local obj = getEntityFromManager(action.entity)
-   								entity = Game.FindEntityByID(obj.id)
-   								positionVec4 = entity:GetWorldPosition()
-   								else
-   								entity = Game.GetPlayer()
-   							end
-   							if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
-   								if(action.position == "behind") then
-   									positionVec4 = getBehindPosition(entity,action.distance)
-   								end
-   								if(action.position == "forward") then
-   									positionVec4 = getForwardPosition(entity,action.distance)
-   								end
-   								else
-   								positionVec4.x = positionVec4.x + action.x
-   								positionVec4.y = positionVec4.y + action.y
-   								positionVec4.z = positionVec4.z + action.z
-   							end
-   							local ambush = false
-   							if(action.ambush ~= nil) then
-   								ambush = action.ambush
-   							end
-   							spawnEntity(chara, tag, positionVec4.x, positionVec4.y ,positionVec4.z,action.spawnlevel,ambush,isAV,action.beta)
-   							if(action.group ~= nil and action.group ~= "") then
-   								
-   								table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   							end
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_at_entity_relative_from_faction_leader_subdistrict") then
-   				local gangs = {}
-   				for i, test in ipairs(currentDistricts2.districtLabels) do
-   					if i > 1 then
-   						gangs = getGangfromDistrict(test,20)
-   						if(#gangs > 0) then
-   							break
-   						end
-   					end
-   				end
-   				if(#gangs > 0) then
-   					local gang = getFactionByTag(gangs[1].tag)
-   					if(#gang.spawnable_vehicle > 0) then
-   						if(action.amount == nil) then
-   							action.amount = 1
-   						end
-   						if(action.amount == 0) then
-   							action.amount = math.random(1,6)
-   						end
-   						for i=1,action.amount do
-   							local tag = action.tag
-   							if(action.amount > 1) then
-   								tag = action.tag.."_"..i
-   							end
-   							local index = math.random(1,#gang.spawnable_vehicle)
-   							chara = gang.spawnable_vehicle[index]
-   							local isAV = false
-   							if(action.isAV ~= nil and action.isAV==true) then
-   								logme(3,"AV is "..tostring(action.isAV))
-   								isAV = action.isAV
-   								local group = getGroupfromManager("AV")
-   								if(group.entities == nil) then
-   									group.entities = {}
-   								end
-   								logme(3,tag)
-   								table.insert(group.entities,tag)
-   								logme(3,#group.entities)
-   							end
-   							local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   							local entity = nil
-   							if(action.entity ~= "player") then
-   								local obj = getEntityFromManager(action.entity)
-   								entity = Game.FindEntityByID(obj.id)
-   								positionVec4 = entity:GetWorldPosition()
-   								else
-   								entity = Game.GetPlayer()
-   							end
-   							if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
-   								if(action.position == "behind") then
-   									positionVec4 = getBehindPosition(entity,action.distance)
-   								end
-   								if(action.position == "forward") then
-   									positionVec4 = getForwardPosition(entity,action.distance)
-   								end
-   								else
-   								positionVec4.x = positionVec4.x + action.x
-   								positionVec4.y = positionVec4.y + action.y
-   								positionVec4.z = positionVec4.z + action.z
-   							end
-   							local ambush = false
-   							if(action.ambush ~= nil) then
-   								ambush = action.ambush
-   							end
-   							spawnEntity(chara, tag, positionVec4.x, positionVec4.y ,positionVec4.z,action.spawnlevel,ambush,isAV,action.beta)
-   							if(action.group ~= nil and action.group ~= "") then
-   								
-   								table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   							end
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_at_entity_relative_from_faction_leader_district_rival") then
-   				local gangs = getGangfromDistrict(currentDistricts2.Tag,20)
-   				if(#gangs > 0) then
-   					local gang = getFactionByTag(gangs[1].tag)
-   					local rivalindex = math.random(1,#gang.rivals)
-   					gang = getFactionByTag(gang.rivals[rivalindex])
-   					if(#gang.spawnable_vehicle > 0) then
-   						if(action.amount == nil) then
-   							action.amount = 1
-   						end
-   						if(action.amount == 0) then
-   							action.amount = math.random(1,6)
-   						end
-   						for i=1,action.amount do
-   							local tag = action.tag
-   							if(action.amount > 1) then
-   								tag = action.tag.."_"..i
-   							end
-   							local index = math.random(1,#gang.spawnable_vehicle)
-   							chara = gang.spawnable_vehicle[index]
-   							local isAV = false
-   							if(action.isAV ~= nil and action.isAV==true) then
-   								logme(3,"AV is "..tostring(action.isAV))
-   								isAV = action.isAV
-   								local group = getGroupfromManager("AV")
-   								if(group.entities == nil) then
-   									group.entities = {}
-   								end
-   								logme(3,tag)
-   								table.insert(group.entities,tag)
-   								logme(3,#group.entities)
-   							end
-   							local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   							local entity = nil
-   							if(action.entity ~= "player") then
-   								local obj = getEntityFromManager(action.entity)
-   								entity = Game.FindEntityByID(obj.id)
-   								positionVec4 = entity:GetWorldPosition()
-   								else
-   								entity = Game.GetPlayer()
-   							end
-   							if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
-   								if(action.position == "behind") then
-   									positionVec4 = getBehindPosition(entity,action.distance)
-   								end
-   								if(action.position == "forward") then
-   									positionVec4 = getForwardPosition(entity,action.distance)
-   								end
-   								else
-   								positionVec4.x = positionVec4.x + action.x
-   								positionVec4.y = positionVec4.y + action.y
-   								positionVec4.z = positionVec4.z + action.z
-   							end
-   							local ambush = false
-   							if(action.ambush ~= nil) then
-   								ambush = action.ambush
-   							end
-   							spawnEntity(chara, tag, positionVec4.x, positionVec4.y ,positionVec4.z,action.spawnlevel,ambush,isAV,action.beta)
-   							if(action.group ~= nil and action.group ~= "") then
-   								
-   								table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   							end
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "summon_vehicule_at_entity_relative_from_faction_leader_subdistrict_rival") then
-   				local gangs = {}
-   				for i, test in ipairs(currentDistricts2.districtLabels) do
-   					if i > 1 then
-   						gangs = getGangfromDistrict(test,20)
-   						if(#gangs > 0) then
-   							break
-   						end
-   					end
-   				end
-   				if(#gangs > 0) then
-   					local gang = getFactionByTag(gangs[1].tag)
-   					local rivalindex = math.random(1,#gang.rivals)
-   					gang = getFactionByTag(gang.rivals[rivalindex])
-   					if(#gang.spawnable_vehicle > 0) then
-   						if(action.amount == nil) then
-   							action.amount = 1
-   						end
-   						if(action.amount == 0) then
-   							action.amount = math.random(1,6)
-   						end
-   						for i=1,action.amount do
-   							local tag = action.tag
-   							if(action.amount > 1) then
-   								tag = action.tag.."_"..i
-   							end
-   							local index = math.random(1,#gang.spawnable_vehicle)
-   							chara = gang.spawnable_vehicle[index]
-   							local isAV = false
-   							if(action.isAV ~= nil and action.isAV==true) then
-   								logme(3,"AV is "..tostring(action.isAV))
-   								isAV = action.isAV
-   								local group = getGroupfromManager("AV")
-   								if(group.entities == nil) then
-   									group.entities = {}
-   								end
-   								logme(3,tag)
-   								table.insert(group.entities,tag)
-   								logme(3,#group.entities)
-   							end
-   							local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   							local entity = nil
-   							if(action.entity ~= "player") then
-   								local obj = getEntityFromManager(action.entity)
-   								entity = Game.FindEntityByID(obj.id)
-   								positionVec4 = entity:GetWorldPosition()
-   								else
-   								entity = Game.GetPlayer()
-   							end
-   							if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
-   								if(action.position == "behind") then
-   									positionVec4 = getBehindPosition(entity,action.distance)
-   								end
-   								if(action.position == "forward") then
-   									positionVec4 = getForwardPosition(entity,action.distance)
-   								end
-   								else
-   								positionVec4.x = positionVec4.x + action.x
-   								positionVec4.y = positionVec4.y + action.y
-   								positionVec4.z = positionVec4.z + action.z
-   							end
-   							local ambush = false
-   							if(action.ambush ~= nil) then
-   								ambush = action.ambush
-   							end
-   							spawnEntity(chara, tag, positionVec4.x, positionVec4.y ,positionVec4.z,action.spawnlevel,ambush,isAV,action.beta)
-   							if(action.group ~= nil and action.group ~= "") then
-   								
-   								table.insert(cyberscript.GroupManager[action.group].entities,tag)
-   							end
-   						end
-   					end
-   				end
-   			end
-   		end
+		end
    		
    		if scoreregion then
-   			if(action.name == "change_custom_condition") then
-   				setScore(action.value,"Score",action.score)
-   			end
-   			if(action.name == "change_custom_variable") then
-   				setVariable(action.variable,action.key,action.value)
-   			end
-   			if(action.name == "concate_custom_variable") then
-   				local score  = getVariableKey(action.variable,action.key)
-   				score = score .. action.value
-   				setVariable(action.variable,action.key,score)
-   			end
-   			if(action.name == "concate_custom_variable_with_variable") then
-   				local score1  = getVariableKey(action.variable,action.key)
-   				local score2  = getVariableKey(action.targetvariable,action.targetkey)
-   				local score = score1 .. score2
-   				setVariable(action.resultvariable,action.resultkey,score)
-   			end
-   			if(action.name == "concate_custom_variable_with_score") then
-   				local score1  = getVariableKey(action.variable,action.key)
-   				local score2  = getScoreKey(action.score,"Score")
-   				local score = score1 .. score2
-   				setVariable(action.resultvariable,action.resultkey,score)
-   			end
-   			if(action.name == "change_custom_score") then
-   				setScore(action.variable,"Score",action.score)
-   			end
-   			if(action.name == "change_custom_score_key") then
-   				setScore(action.variable,action.key,action.score)
-   			end
-   			if(action.name == "add_to_custom_score") then
-   				local score  = getScoreKey(action.value,"Score")
-   				if score == nil then
-   					score = 0
-   				end
-   				score = score + action.score
-   				setScore(action.value,"Score",score)
-   			end
-   			if(action.name == "random_custom_score") then
-   				local score  = math.random(action.min,action.max)
-   				setScore(action.variable,"Score",score)
-   			end
-   			if(action.name == "operate_custom_score_to_another_one") then
-   				local score  = getScoreKey(action.variable,"Score")
-   				local targetscore  = getScoreKey(action.targetscore,"Score")
-   				local resultscore  = getScoreKey(action.resultscore,"Score")
-   				if(action.operator == "+") then
-   					score = score + targetscore
-   				end
-   				if(action.operator == "-") then
-   					score = score - targetscore
-   				end
-   				if(action.operator == "*") then
-   					score = score * targetscore
-   				end
-   				if(action.operator == "/") then
-   					score = score / targetscore
-   				end
-   				if(action.operator == "positive") then
-   					if(score > 0) then
-   						score = 0 + score
-   						else
-   						score = 0 - score
-   					end
-   				end
-   				if(action.operator == "negative") then
-   					if(score > 0) then
-   						score = 0 - score
-   						else
-   						score = 0 + score
-   					end
-   				end
-   				setScore(action.resultscore,"Score",score)
-   			end
-   			
-   			
-   			
-   			
-   			
-   			
-   			
-   			if(action.name == "set_score") then
-   				setScore(action.score,action.key,action.value)
-   			end
-   			
-   			if(action.name == "operate_score") then
-   				local score  = getScoreKey(action.score,action.key)
-   				if(score == nil) then score = 0 end
-   				
-   				if(action.operator == "+") then
-   					score = score + action.value
-   				end
-   				if(action.operator == "-") then
-   					score = score - action.value
-   				end
-   				if(action.operator == "*") then
-   					score = score * action.value
-   				end
-   				if(action.operator == "/") then
-   					score = score / action.value
-   				end
-   				if(action.operator == "positive") then
-   					if(score > 0) then
-   						score = 0 + score
-   						else
-   						score = 0 - score
-   					end
-   				end
-   				if(action.operator == "negative") then
-   					if(score > 0) then
-   						score = 0 - score
-   						else
-   						score = 0 + score
-   					end
-   				end
-   				if(action.operator == "random") then
-   					score = math.random(action.min,action.max)
-   				end
-   				if(action.operator == "floor") then
-   					score = math.floor(score)
-   				end
-   				if(action.operator == "ceil") then
-   					score = math.ceil(score)
-   				end
-   				
-   				
-   				setScore(action.score,action.key,score)
-   			end
-   			
    			
    			if(action.name == "do_math") then
    				local score  = tonumber(action.value)
@@ -3936,38 +2620,6 @@ function executeAction(action,tag,parent,index,source,executortag)
    				
    			end
    			
-   			if(action.name == "operate_score_from_another_score") then
-   				local score  = getScoreKey(action.score,action.key)
-   				local score2 =  getScoreKey(action.targetscore,action.targetkey)
-   				
-   				if(score == nil) then score = 0 end
-   				if(score2 == nil) then score2 = 0 end
-   				
-   				if(action.operator == "+") then
-   					score = score + score2
-   				end
-   				if(action.operator == "-") then
-   					score = score - score2
-   				end
-   				if(action.operator == "*") then
-   					score = score * score2
-   				end
-   				if(action.operator == "/") then
-   					score = score /score2
-   				end
-   				if(action.operator == "floor") then
-   					score = math.floor(score)
-   				end
-   				if(action.operator == "ceil") then
-   					score = math.ceil(score)
-   				end
-   				
-   				
-   				
-   				setScore(action.score,action.key,score)
-   			end
-   			
-   			
    			if(action.name == "set_variable") then
    				setVariable(action.variable,action.key,action.value)
    			end
@@ -3980,23 +2632,52 @@ function executeAction(action,tag,parent,index,source,executortag)
    			end
    			
    			
-   			if(action.name == "concate_variable_with_variable") then
-   				local var1  = getVariableKey(action.variable,action.key)
-   				local var2  = getVariableKey(action.targetvariable,action.targetkey)
-   				local var = var1 .. var2
-   				setVariable(action.variable,action.key,var)
+   		
+   			if(action.name == "operate_score") then
+   				local score  = getScoreKey(action.score,action.key)
+   				if(score == nil) then score = 0 end
+   				
+   				if(action.operator == "+") then
+   					score = score + action.value
+   				end
+   				if(action.operator == "-") then
+   					score = score - action.value
+   				end
+   				if(action.operator == "*") then
+   					score = score * action.value
+   				end
+   				if(action.operator == "/") then
+   					score = score / action.value
+   				end
+   				if(action.operator == "positive") then
+   					if(score > 0) then
+   						score = 0 + score
+   						else
+   						score = 0 - score
+   					end
+   				end
+   				if(action.operator == "negative") then
+   					if(score > 0) then
+   						score = 0 - score
+   						else
+   						score = 0 + score
+   					end
+   				end
+   				if(action.operator == "random") then
+   					score = math.random(action.min,action.max)
+   				end
+   				if(action.operator == "floor") then
+   					score = math.floor(score)
+   				end
+   				if(action.operator == "ceil") then
+   					score = math.ceil(score)
+   				end
+   				
+   				
+   				setScore(action.score,action.key,score)
    			end
-   			
-   			
-   			if(action.name == "concate_variable_with_score") then
-   				local var1  = getVariableKey(action.variable,action.key)
-   				local score1  = getScoreKey(action.score,action.scorekey)
-   				local var = var1 .. score2
-   				setVariable(action.variable,action.key,var)
-   			end
-   			
-   			
-   			
+			
+			
    			
    			
    			
@@ -4011,232 +2692,13 @@ function executeAction(action,tag,parent,index,source,executortag)
    				
    				setScore(action.value,"Score",action.score)
    			end
-   			if(action.name == "getSalaryFromCurrentRent") then
-   				if currentHouse ~= nil then
-   					if(getHouseStatut(currentHouse.tag) >= 2 and currentHouse.isrentable == true) then
-   						local player = Game.GetPlayer()
-   						local ts = Game.GetTransactionSystem()
-   						local tid = TweakDBID.new("Items.money")
-   						local itemid = ItemID.new(tid)
-   						local amount = 0
-   						local playerreput = 1
-   						local score = getScoreKey("player_reputation","Score")
-   						if(score ~= nil ) then
-   							playerreput = score
-   						end
-   						local housereputcoef = 1
-   						if(currentHouse.coef > 0) then
-   							housereputcoef = currentHouse.coef/10
-   						end
-   						local rand = math.random(1,25)
-   						amount = currentHouse.rent * currentHouse.coef * playerreput * rand
-   						local result = ts:GiveItem(player, itemid, amount)
-   						SalaryIsPossible = false
-   					end
-   				end
-   			end
-   			if(action.name == "buyCurrentHouse") then
-   				if currentHouse ~= nil then
-   					local isbuyable = currentHouse.isbuyable
-   					local statut = getHouseStatut(currentHouse.tag)
-   					local moneyamount = getStackableItemAmount("Items.money")
-   					local price = currentHouse.price
-   					--logme(3,tostring(isbuyable))
-   					--logme(3,tostring(statut))
-   					--logme(3,tostring(moneyamount))
-   					--logme(3,tostring(price))
-   					if(isbuyable == true and (statut == nil or statut < 1) and moneyamount >= price) then
-   						local player = Game.GetPlayer()
-   						local ts = Game.GetTransactionSystem()
-   						local tid = TweakDBID.new("Items.money")
-   						local itemid = ItemID.new(tid)
-   						local amount = currentHouse.price
-   						local result = ts:RemoveItem(player, itemid, amount)
-   						
-   						setScore(currentHouse.tag,"Statut",1)
-   						else
-   						Game.GetPlayer():SetWarningMessage(getLang("see_action_place_price_toohigh"))
-   					end
-   				end
-   			end
-   			if(action.name == "buyHouse") then
-   				local house = cyberscript.cache["place"][action.tag].data
-   				if house ~= nil then
-   					local isbuyable = house.isbuyable
-   					local statut = getHouseStatut(house.tag)
-   					local moneyamount = getStackableItemAmount("Items.money")
-   					local price = house.price
-   					if(isbuyable == true and (statut == nil or statut < 1) and moneyamount >= price) then
-   						local player = Game.GetPlayer()
-   						local ts = Game.GetTransactionSystem()
-   						local tid = TweakDBID.new("Items.money")
-   						local itemid = ItemID.new(tid)
-   						local amount = house.price
-   						local result = ts:RemoveItem(player, itemid, amount)
-   						
-   						setScore(currentHouse.tag,"Statut",1)
-   						else
-   						Game.GetPlayer():SetWarningMessage(getLang("see_action_place_price_toohigh"))
-   					end
-   				end
-   			end
-   			if(action.name == "sellHouse") then
-   				local house = cyberscript.cache["place"][action.tag].data
-   				if house ~= nil then
-   					local isbuyable = house.isbuyable
-   					local statut = getHouseStatut(house.tag)
-   					local moneyamount = getStackableItemAmount("Items.money")
-   					local price = house.price
-   					if(isbuyable == true and (statut == nil or statut < 1) and moneyamount >= price) then
-   						local player = Game.GetPlayer()
-   						local ts = Game.GetTransactionSystem()
-   						local tid = TweakDBID.new("Items.money")
-   						local itemid = ItemID.new(tid)
-   						local amount = house.price
-   						local result = ts:GiveItem(player, itemid, amount)
-   						
-   						setScore(currentHouse.tag,"Statut",0)
-   						else
-   						Game.GetPlayer():SetWarningMessage(getLang("see_action_place_price_toohigh"))
-   					end
-   				end
-   			end
-   			if(action.name == "sellCurrentHouse") then
-   				if currentHouse ~= nil then
-   					if(currentHouse.isbuyable == true and getHouseStatut(currentHouse.tag) ~= nil and getHouseStatut(currentHouse.tag) > 0) then
-   						local player = Game.GetPlayer()
-   						local ts = Game.GetTransactionSystem()
-   						local tid = TweakDBID.new("Items.money")
-   						local itemid = ItemID.new(tid)
-   						local amount =  round(currentHouse.price/2)
-   						--logme(3,"amount : "..amount)
-   						local result = ts:GiveItem(player, itemid, amount)
-   						
-   						setScore(currentHouse.tag,"Statut",0)
-   						else
-   						Game.GetPlayer():SetWarningMessage(getLang("see_action_place_price_toohigh"))
-   					end
-   				end
-   			end
-   			if(action.name == "rentCurrentHouse") then
-   				if currentHouse ~= nil then
-   					if(currentHouse.isbuyable == true and currentHouse.isrentable == true and getHouseStatut(currentHouse.tag) == 1 and getStackableItemAmount("Items.money") >= (currentHouse.price*currentHouse.coef)) then
-   						local player = Game.GetPlayer()
-   						local ts = Game.GetTransactionSystem()
-   						local tid = TweakDBID.new("Items.money")
-   						local itemid = ItemID.new(tid)
-   						local amount = currentHouse.price*currentHouse.coef
-   						local result = ts:RemoveItem(player, itemid, amount)
-   						
-   						setScore(currentHouse.tag,"Statut",2)
-   						else
-   						Game.GetPlayer():SetWarningMessage(getLang("see_action_place_rent_toohigh"))
-   					end
-   				end
-   			end
-   			if(action.name == "trigger_edit_housing_mode") then
-   				inEditMode = action.value
-   			end
+			
+   			
+   			
    			if(action.name == "open_placed_item_ui") then
    				if currentHouse ~= nil then
    					if(getHouseStatut(currentHouse.tag) == 1) then
    						PlacedItemsUI()
-   					end
-   				end
-   			end
-   			if(action.name == "tp_to_currenthouse_enter") then
-   				if currentHouse ~= nil then
-   					local isplayer = false
-   					if action.tag == "player" then
-   						isplayer = true
-   					end
-   					local obj = getEntityFromManager(action.tag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						local angle = 1
-   						if(action.angle ~= nil) then
-   							angle = action.angle
-   						end
-   						if(action.collision ~= nil and action.collision == true) then
-   							local filters = {
-   								'Static', -- Buildings, Concrete Roads, Crates, etc.
-   								'Terrain'
-   							}
-   							local from = enti:GetWorldPosition()
-   							local to = Vector4.new(
-   								action.x ,
-   								action.y ,
-   								action.z,
-   								1
-   							)
-   							local collision = false
-   							for _, filter in ipairs(filters) do
-   								local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
-   								if success then
-   									collision = true
-   									--logme(3,"collision"..filter)
-   								end
-   							end
-   							if(collision == false) then
-   								teleportTo(enti, Vector4.new( currentHouse.enter_x, currentHouse.enter_y, currentHouse.enter_z,1), angle,isplayer)
-   								else
-   								if(action.pathfinding ~= nil and action.pathfinding == true) then
-   									local newpath =  giveGoodPath(from,to,action.axis)
-   									teleportTo(enti, newpath, angle,isplayer)
-   								end
-   							end
-   							else
-   							--logme(3,"angle.yaw = "..angle.yaw)
-   							teleportTo(enti, Vector4.new( currentHouse.enter_x, currentHouse.enter_y, currentHouse.enter_z,1), angle,isplayer)
-   						end
-   					end
-   				end
-   			end
-   			if(action.name == "tp_to_currenthouse_exit") then
-   				if currentHouse ~= nil then
-   					local isplayer = false
-   					if action.tag == "player" then
-   						isplayer = true
-   					end
-   					local obj = getEntityFromManager(action.tag)
-   					local enti = Game.FindEntityByID(obj.id)
-   					if(enti ~= nil) then
-   						local angle = 1
-   						if(action.angle ~= nil) then
-   							angle = action.angle
-   						end
-   						if(action.collision ~= nil and action.collision == true) then
-   							local filters = {
-   								'Static', -- Buildings, Concrete Roads, Crates, etc.
-   								'Terrain'
-   							}
-   							local from = enti:GetWorldPosition()
-   							local to = Vector4.new(
-   								action.x ,
-   								action.y ,
-   								action.z,
-   								1
-   							)
-   							local collision = false
-   							for _, filter in ipairs(filters) do
-   								local success, result = Game.GetSpatialQueriesSystem():SyncRaycastByCollisionGroup(from, to, filter, false, false)
-   								if success then
-   									collision = true
-   									--logme(3,"collision"..filter)
-   								end
-   							end
-   							if(collision == false) then
-   								teleportTo(enti, Vector4.new( currentHouse.exit_x, currentHouse.exit_y, currentHouse.exit_z,1), angle,isplayer)
-   								else
-   								if(action.pathfinding ~= nil and action.pathfinding == true) then
-   									local newpath =  giveGoodPath(from,to,action.axis)
-   									teleportTo(enti, newpath, angle,isplayer)
-   								end
-   							end
-   							else
-   							--logme(3,"angle.yaw = "..angle.yaw)
-   							teleportTo(enti, Vector4.new( currentHouse.exit_x, currentHouse.exit_y, currentHouse.exit_z,1), angle,isplayer)
-   						end
    					end
    				end
    			end
@@ -5066,11 +3528,18 @@ function executeAction(action,tag,parent,index,source,executortag)
    			if(action.name == "set_fact") then
    				Game.SetDebugFact(action.value, action.score)
    			end
-   			if(action.name == "test") then
-   				local entry = Game.GetJournalManager():GetEntryByString(action.value,action.type)
-   				spdlog.error("entry "..GameDump(entry))
-   			end
    			
+   			if(action.name == "execute_in_tick") then
+   				
+   				if(#action.action > 0) then
+   					for i,act in ipairs(action.action) do
+   						
+   						executeAction(act,tag,parent,index,source,executortag)
+   						
+   					end
+   				end
+   				
+   			end
    			if(action.name == "load_interact") then
    				
    				if(#loadInteract < 4 and (table_contains(loadInteract,action.tag,false) == false))then
@@ -5166,33 +3635,6 @@ function executeAction(action,tag,parent,index,source,executortag)
    				local result = ts:GiveItem(player, itemid, amount)
    				------logme(3,"give money")
    			end
-   			if(action.name == "give_money_current_stock") then
-   				if(CurrentStock ~= nil and CurrentStock.price ~= nil and CurrentStock.userQuantity ~= nil and CurrentStock.statut ~= 0 and CurrentStock.userQuantity ~= nil and CurrentStock.userQuantity > 0) then
-   					
-   					local player = Game.GetPlayer()
-   					local ts = Game.GetTransactionSystem()
-   					local tid = TweakDBID.new("Items.money")
-   					local itemid = ItemID.new(tid)
-   					local amount = tonumber(CurrentStock.price )
-   					
-   					local result = ts:GiveItem(player, itemid, amount)
-   					else
-   					logme(10,getLang("nocurrentstock"))
-   				end
-   				------logme(3,"give money")
-   			end
-   			if(action.name == "give_random_money") then
-   				local player = Game.GetPlayer()
-   				local ts = Game.GetTransactionSystem()
-   				local tid = TweakDBID.new("Items.money")
-   				local itemid = ItemID.new(tid)
-   				local amount = math.random(action.min,action.max)
-   				if currentHouse ~= nil and currentHouse.coef ~= nil then
-   					amount = amount * currentHouse.coef	
-   				end
-   				local result = ts:GiveItem(player, itemid, amount)
-   				------logme(3,"give money")
-   			end
    			if(action.name == "remove_money") then
    				local player = Game.GetPlayer()
    				local ts = Game.GetTransactionSystem()
@@ -5209,25 +3651,8 @@ function executeAction(action,tag,parent,index,source,executortag)
    				end
    				local result = ts:RemoveItem(player, itemid, amount)
    				logme(3,result)
-   				--logme(3,"remove money")
    			end
-   			
-   			if(action.name == "remove_money_current_stock") then
-   				if(CurrentStock ~= nil and checkStackableItemAmount("Items.money",CurrentStock.price)) then
-   					local player = Game.GetPlayer()
-   					local ts = Game.GetTransactionSystem()
-   					local tid = TweakDBID.new("Items.money")
-   					local itemid = ItemID.new(tid)
-   					local amount = tonumber(CurrentStock.price )
-   					
-   					local result = ts:RemoveItem(player, itemid, amount)
-   					logme(3,result)
-   					else
-   					logme(10,getLang("nocurrentstock"))
-   				end
-   				--logme(3,"remove money")
-   			end
-   			if(action.name == "remove_random_money") then
+			if(action.name == "remove_random_money") then
    				local player = Game.GetPlayer()
    				local ts = Game.GetTransactionSystem()
    				local tid = TweakDBID.new("Items.money")
@@ -5242,59 +3667,8 @@ function executeAction(action,tag,parent,index,source,executortag)
    				local result = ts:RemoveItem(player, itemid, amount)
    				--logme(3,result)
    				--logme(3,"remove money")
-   			end
-   			if(action.name == "give_money_score") then
-   				local player = Game.GetPlayer()
-   				local ts = Game.GetTransactionSystem()
-   				local tid = TweakDBID.new("Items.money")
-   				local itemid = ItemID.new(tid)
-   				local amount = getScoreKey(action.score,"Score")
-   				if currentHouse ~= nil and currentHouse.coef ~= nil then
-   					amount = amount * currentHouse.coef	
-   				end
-   				spdlog.info('test ' .. amount)
-   				local result = ts:GiveItem(player, itemid, math.floor(amount))
-   				------logme(3,"give money")
-   			end
-   			if(action.name == "remove_money_score") then
-   				local player = Game.GetPlayer()
-   				local ts = Game.GetTransactionSystem()
-   				local tid = TweakDBID.new("Items.money")
-   				local itemid = ItemID.new(tid)
-   				local amount = getScoreKey(action.score,"Score")
-   				if currentHouse ~= nil and currentHouse.coef ~=nil then
-   					amount = amount * currentHouse.coef	
-   				end
-   				if currentStar ~= nil then
-   					amount = amount * 2
-   				end
-   				local result = ts:RemoveItem(player, itemid, amount)
-   				--logme(3,result)
-   				--logme(3,"remove money")
-   			end
-   			if(action.name == "draw_mappin") then
-   				drawMappin(action.x,action.y)
-   			end
-   			if(action.name == "draw_3Dmappin") then
-   				draw3DMappin(action.x,action.y,action.z)
-   			end
-   			if(action.name == "draw_3Dmappin_node") then
-   				local node = getNode(action.tag)
-   				draw3DMappin(node.x,node.y,node.z)
-   			end
-   			if(action.name == "draw_custom_mappin") then
-   				drawCustomMappin(action.x,action.y)
-   			end
-   			if(action.name == "draw_custom_3Dmappin") then
-   				draw3DCustomMappin(action.x,action.y,action.z)
-   			end
-   			if(action.name == "delete_mappin") then
-   				if(mappinPoint ~= nil) then
-   					logme(3,"Unregister mappinPoint")
-   					Game.GetMappinSystem():UnregisterMappin(mappinPoint)
-   				end
-   			end
-   			if(action.name == "clean_custommappin") then
+			end
+			if(action.name == "clean_custommappin") then
    				ActivecustomMappin = nil
    				
    				
@@ -5347,27 +3721,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    					true
    				)
    			end
-   			if(action.name == "simple_message_metro") then
-   				local obj = getEntityFromManager(action.entity)
-   				logme(3,obj.currentNode.tag)
-   				logme(3,obj.nextNode.tag)
-   				local startnode = getNode(obj.currentNode.tag)
-   				local endnode = getNode(obj.nextNode.tag)
-   				local text = lang["boarding"]..startnode.name..lang["to"]..endnode.name
-   				if(obj.circuit.reverse == true) then
-   					text = lang["boarding"]..endnode.name..lang["to"]..startnode.name
-   				end
-   				local message = SimpleScreenMessage.new()
-   				message.message = text
-   				message.isShown = true
-   				local blackboardDefs = Game.GetAllBlackboardDefs()
-   				local blackboardUI = Game.GetBlackboardSystem():Get(blackboardDefs.UI_Notifications)
-   				blackboardUI:SetVariant(
-   					blackboardDefs.UI_Notifications.OnscreenMessage,
-   					ToVariant(message),
-   					true
-   				)
-   			end
+   			
    			if(action.name == "npcd_finish_notification") then
    				local ncpd = NCPDJobDoneEvent.new()
    				ncpd.levelXPAwarded = action.levelXPAwarded
@@ -6624,7 +4978,8 @@ function executeAction(action,tag,parent,index,source,executortag)
    			if(action.name == "inject_dialog") then
    				--logme(3,"is logme(10,source)
    				local usedial =  SetNextDialog(action.dialog,source,executortag)
-				interactionUI.injectdialog = usedial
+				if(interactionUI.injectdialog == nil) then interactionUI.injectdialog = {} end
+				table.insert(interactionUI.injectdialog,usedial)
 				
 				
    				-- logme(3,source)
@@ -6735,36 +5090,10 @@ function executeAction(action,tag,parent,index,source,executortag)
    			end
    			if(action.name == "incoming_call") then
    			
-   				-- if(GameController["IncomingCallGameController"] ~= nil) then
-   				-- local phoneCallInfo= questPhoneCallInformation.new()
-   				-- phoneCallInfo.callMode = action.callmode
-   				-- phoneCallInfo.isAudioCall  = (action.callmode == 1)
-   				-- phoneCallInfo.contactName =  CName(action.caller)
-   				-- phoneCallInfo.isPlayerCalling = false
-   				-- phoneCallInfo.isPlayerTriggered = false
-   				-- phoneCallInfo.callPhase = questPhoneCallPhase.IncomingCall
-   				-- phoneCallInfo.isRejectable = action.isrejectable
-   				-- GameController["IncomingCallGameController"]:GetRootWidget():SetVisible(true)
-   				-- inkTextRef.SetLetterCase(GameController["IncomingCallGameController"].contactNameWidget, textLetterCase.UpperCase)
-   				-- inkTextRef.SetText(GameController["IncomingCallGameController"].contactNameWidget, getLang(action.caller))
-   				-- inkWidgetRef.SetVisible(GameController["IncomingCallGameController"].buttonHint,  action.isrejectable)
-   				-- currentPhoneCall = action
-   				-- GameController["IncomingCallGameController"]:GetRootWidget():SetVisible(true)
-   				-- StatusEffectHelper.ApplyStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
-   				-- --	if IsDefined(GameController["IncomingCallGameController"].animProxy) then
-   				-- --	GameController["IncomingCallGameController"].animProxy:Stop()
-   				-- --	GameController["IncomingCallGameController"].animProxy = nil
-   				-- --	end
-   				-- GameController["IncomingCallGameController"].animProxy = GameController["IncomingCallGameController"]:PlayLibraryAnimation("ring")
-   				-- local audioEvent = SoundPlayEvent.new()
-   				-- audioEvent.soundName = "ui_phone_incoming_call"
-   				-- Game.GetPlayer():QueueEvent(audioEvent)
-   				-- else
-   				-- error("can't find IncomingCallGameController controller, please call an npc for load one or reload an save")
-   				-- end
+   				
    				
    				if(GameController["NewHudPhoneGameController"] ~= nil) then
-   					StatusEffectHelper.ApplyStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+   					StatusEffectHelper.ApplyStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
    					GameController["NewHudPhoneGameController"].incomingCallElement.request = GameController["NewHudPhoneGameController"]:AsyncSpawnFromLocal(inkWidgetRef.Get(GameController["NewHudPhoneGameController"].incomingCallElement.slot), GameController["NewHudPhoneGameController"].incomingCallElement.libraryID, GameController["NewHudPhoneGameController"], "OnIncommingCallSpawned");
    					
    					GameController["NewHudPhoneGameController"]:HandleCall()
@@ -6777,7 +5106,10 @@ function executeAction(action,tag,parent,index,source,executortag)
    						
    						local controller = GameController["NewHudPhoneGameController"].incomingCallElement.widget:GetController()
    						
-   						
+   						GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.HolocallHolder:SetVisible(true);
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.SignalRangeIcon:SetVisible(false);
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.WaveformPlaceholder:SetVisible(false);
+   					
    						
    						controller.contactNameWidget:SetText(action.caller)
    						InkImageUtils.RequestSetImage(controller, controller.avatar, "PhoneAvatars."..action.image)
@@ -6792,36 +5124,9 @@ function executeAction(action,tag,parent,index,source,executortag)
    			
    			if(action.name == "outcoming_call") then
    			
-   				-- if(GameController["IncomingCallGameController"] ~= nil) then
-   				-- local phoneCallInfo= questPhoneCallInformation.new()
-   				-- phoneCallInfo.callMode = action.callmode
-   				-- phoneCallInfo.isAudioCall  = (action.callmode == 1)
-   				-- phoneCallInfo.contactName =  CName(action.caller)
-   				-- phoneCallInfo.isPlayerCalling = false
-   				-- phoneCallInfo.isPlayerTriggered = false
-   				-- phoneCallInfo.callPhase = questPhoneCallPhase.IncomingCall
-   				-- phoneCallInfo.isRejectable = action.isrejectable
-   				-- GameController["IncomingCallGameController"]:GetRootWidget():SetVisible(true)
-   				-- inkTextRef.SetLetterCase(GameController["IncomingCallGameController"].contactNameWidget, textLetterCase.UpperCase)
-   				-- inkTextRef.SetText(GameController["IncomingCallGameController"].contactNameWidget, getLang(action.caller))
-   				-- inkWidgetRef.SetVisible(GameController["IncomingCallGameController"].buttonHint,  action.isrejectable)
-   				-- currentPhoneCall = action
-   				-- GameController["IncomingCallGameController"]:GetRootWidget():SetVisible(true)
-   				-- StatusEffectHelper.ApplyStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
-   				-- --	if IsDefined(GameController["IncomingCallGameController"].animProxy) then
-   				-- --	GameController["IncomingCallGameController"].animProxy:Stop()
-   				-- --	GameController["IncomingCallGameController"].animProxy = nil
-   				-- --	end
-   				-- GameController["IncomingCallGameController"].animProxy = GameController["IncomingCallGameController"]:PlayLibraryAnimation("ring")
-   				-- local audioEvent = SoundPlayEvent.new()
-   				-- audioEvent.soundName = "ui_phone_incoming_call"
-   				-- Game.GetPlayer():QueueEvent(audioEvent)
-   				-- else
-   				-- error("can't find IncomingCallGameController controller, please call an npc for load one or reload an save")
-   				-- end
    				
    				if(GameController["NewHudPhoneGameController"] ~= nil) then
-   					StatusEffectHelper.ApplyStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+   					StatusEffectHelper.ApplyStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
    					
    					GameController["NewHudPhoneGameController"]:HandleCall()
    					local audioEvent = SoundPlayEvent.new()
@@ -6830,10 +5135,13 @@ function executeAction(action,tag,parent,index,source,executortag)
    					
    					GameController["NewHudPhoneGameController"]:SetPhoneFunction(EHudPhoneFunction.Holocall);
    					Cron.After(0.2, function()
-   						
-   						GameController["NewHudPhoneGameController"].holoAudioCallLogicController:Show() 
+   						GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.HolocallHolder:SetVisible(true);
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.SignalRangeIcon:SetVisible(false);
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.WaveformPlaceholder:SetVisible(false);
+   					
+   					GameController["NewHudPhoneGameController"].holoAudioCallLogicController:Show() 
    					GameController["NewHudPhoneGameController"].holoAudioCallLogicController:ShowIncomingContact("cyberscript", "cyberscript")
-   					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.ContactName.widget:SetText(getLang(action.caller))
+   					 GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.ContactName.widget:SetText(getLang(action.caller))
    					InkImageUtils.RequestSetImage(GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController, GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.ContactAvatar, "PhoneAvatars."..action.image)
    					
    					end)
@@ -6868,6 +5176,47 @@ function executeAction(action,tag,parent,index,source,executortag)
    					GameController["NewHudPhoneGameController"].holoAudioCallLogicController:ShowIncomingContact("cyberscript", "cyberscript")
    					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.ContactName.widget:SetText(getLang(action.caller))
    					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController:SetStatusText(getLang(action.desc));
+					
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.HolocallHolder:SetVisible(true);
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.SignalRangeIcon:SetVisible(false);
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.WaveformPlaceholder:SetVisible(false);
+   					InkImageUtils.RequestSetImage(GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController, GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.ContactAvatar, "PhoneAvatars."..action.image)
+   					
+   					
+   				end
+   				
+   				
+   				
+   			end
+			if(action.name == "show_call_avatar") then
+   				if(GameController["NewHudPhoneGameController"] ~= nil ) then
+   					StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
+   					if(GameController["NewHudPhoneGameController"].incomingCallElement.widget ~=nil) then
+   					local controller = GameController["NewHudPhoneGameController"].incomingCallElement.widget:GetController()
+   		
+   					GameController["NewHudPhoneGameController"]:DeactivatePhoneElement(gameuiActivePhoneElement.IncomingCall);
+   					inkCompoundRef.RemoveChild(GameController["NewHudPhoneGameController"].incomingCallElement.slot, GameController["NewHudPhoneGameController"].incomingCallElement.widget);
+   					GameController["NewHudPhoneGameController"].incomingCallElement.widget = nil;
+   					end
+   					local audioEvent = SoundStopEvent.new()
+   					audioEvent.soundName = "ui_phone_incoming_call"
+   					Game.GetPlayer():QueueEvent(audioEvent)
+   					
+   					local audioEvent = SoundStopEvent.new()
+   					audioEvent.soundName = "ui_phone_initiation_call"
+   					Game.GetPlayer():QueueEvent(audioEvent)
+   					local audioEvent = SoundPlayEvent.new()
+   					audioEvent.soundName = "ui_phone_incoming_call_positive"
+   					Game.GetPlayer():QueueEvent(audioEvent)
+   					
+   				
+   					GameController["NewHudPhoneGameController"].holoAudioCallLogicController:Show() 
+   					GameController["NewHudPhoneGameController"].holoAudioCallLogicController:ShowIncomingContact("cyberscript", "cyberscript")
+   					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.ContactName.widget:SetText(getLang(action.caller))
+   					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController:SetStatusText(getLang(action.desc));
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.HolocallHolder:SetVisible(false);
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.SignalRangeIcon:SetVisible(true);
+					GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.WaveformPlaceholder:SetVisible(true);
    					InkImageUtils.RequestSetImage(GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController, GameController["NewHudPhoneGameController"].holoAudioCallLogicController.AvatarController.ContactAvatar, "PhoneAvatars."..action.image)
    					
    					
@@ -6878,7 +5227,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    			end
    			if(action.name == "hide_phone_avatar") then
    				if(GameController["NewHudPhoneGameController"] ~= nil) then
-   					
+   					StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
    					local audioEvent = SoundStopEvent.new()
    					audioEvent.soundName = "ui_phone_incoming_call"
    					Game.GetPlayer():QueueEvent(audioEvent)
@@ -6893,9 +5242,10 @@ function executeAction(action,tag,parent,index,source,executortag)
    						inkCompoundRef.RemoveChild(GameController["NewHudPhoneGameController"].incomingCallElement.slot, GameController["NewHudPhoneGameController"].incomingCallElement.widget);
    						GameController["NewHudPhoneGameController"].incomingCallElement.widget = nil
    					end
-   					GameController["NewHudPhoneGameController"].holoAudioCallLogicController:Show() 
+   					--GameController["NewHudPhoneGameController"].holoAudioCallLogicController:Show() 
    					GameController["NewHudPhoneGameController"].holoAudioCallLogicController:ShowIncomingContact("cyberscript", "cyberscript");
    					GameController["NewHudPhoneGameController"].holoAudioCallLogicController:ShowEndCallContact("cyberscript", "cyberscript")
+					
    				end
    				
    				
@@ -6905,7 +5255,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    			if(action.name == "take_call") then
    				if currentPhoneCall ~= nil   then 
    			
-   				StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+   				StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
    			
    				local audioEvent = SoundStopEvent.new()
    				audioEvent.soundName = "ui_phone_incoming_call"
@@ -6914,7 +5264,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    				runActionList(currentPhoneCall.answer_action,"phone_call","interact",false,"player")
    				incomingCallGameController:OnInitialize()
    				currentPhoneCall = nil
-   				StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+   				StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
    				end
    				
    				
@@ -6923,7 +5273,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    			if(action.name == "refuse_call") then
    				if currentPhoneCall ~= nil   then 
    			
-   				StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.FistFight")
+   				StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
    			phoneAction = true 
    			local audioEvent = SoundStopEvent.new()
    			audioEvent.soundName = "ui_phone_incoming_call"
@@ -7739,9 +6089,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    				end
    				chara = action.npc
    				if(action.atgameplayposition) then
-   					spawnEntity(chara, action.tag, node.gameplay_x, node.gameplay_y ,node.gameplay_z,action.spawnlevel,action.ambush, isAV,action.beta)
-   					else
-   					spawnEntity(chara, action.tag, node.x, node.y ,node.z,action.spawnlevel,action.ambush,isAV,action.beta)
+   					
    				end
    				if(action.group ~= nil and action.group ~= "") then
    					
@@ -7756,7 +6104,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    				end
    				chara = action.npc
    				if(mappin) then
-   					spawnEntity(chara, action.tag, mappin.position.x, mappin.position.y ,mappin.position.z,action.spawnlevel,action.ambush, isAV,action.beta)
+   					
    					if(action.group ~= nil and action.group ~= "") then
    						
    						table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
@@ -7820,9 +6168,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    						isAV = action.isAV
    					end
    					if(action.atgameplayposition) then
-   						spawnEntity(chara, action.tag, node.gameplay_x, node.gameplay_y ,node.gameplay_z,action.spawnlevel,action.ambush,isAV,action.beta)
-   						else
-   						spawnEntity(chara, action.tag, node.x, node.y ,node.z,action.spawnlevel,action.ambush,isAV,action.beta)
+   					
    					end
    					if(action.group ~= nil and action.group ~= "") then
    						
@@ -8303,8 +6649,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    			if(action.name == "play_custom_sound_with_subtitle") then 
    				
    				if(cyberscript.cache["sound"][action.value] ~= nil) then
-   					print(dump(cyberscript.cache["sound"][action.value].data))
-   					print(math.ceil(cyberscript.cache["sound"][action.value].data.duration))
+   					
    					if(GameController["SubtitlesGameController"] ~= nil) then
    						--logme(3,"ye")
    						local linesToShow = {}
@@ -8372,6 +6717,22 @@ function executeAction(action,tag,parent,index,source,executortag)
    							
    							
    							PlaySound(path,isradio,needrepeat)
+							
+							local obj = getEntityFromManager(action.target)
+							if(obj ~= nil) then
+								local enti = Game.FindEntityByID(obj.id)
+								
+								if(enti ~= nil) then
+								
+									local actionb = deepcopy(cyberscript.actiontemplate["fake_lips_sync"])
+									actionb.duration = math.floor(cyberscript.cache["sound"][action.value].data.duration)-1
+									actionb.tag = action.target
+									local actionlist = {}
+									actionlist[1] = actionb
+									runActionList(actionlist, "fake_lips_sync_async_action_"..tostring(math.random(1,987987)), "see",false,nil)
+								
+								end
+							end
    							
    							result = false
    						end
@@ -8661,7 +7022,8 @@ function executeAction(action,tag,parent,index,source,executortag)
    			end
    		
    		end
-   		if entityregion then
+   		
+		if entityregion then
    			if(action.name == "spawn_npc") then
    				local chara = ""
    				if(action.amount == nil) then
@@ -8680,6 +7042,17 @@ function executeAction(action,tag,parent,index,source,executortag)
    					end
    					if(action.source == "npc") then
    						chara = action.source_tag
+   					end
+					if(action.source == "custom_npc") then
+   						local npc =  getCustomNPCbyTag(action.tag)
+						if(npc ~= nil) then
+							chara = npc.tweakDB
+							npc.spawnforced=true
+							
+							
+							npc.isspawn=true
+							npc.init=false
+						end
    					end
    					if(action.source == "current_star") then
    						if(currentStar ~= nil) then
@@ -8755,7 +7128,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    						
    						if(#gangs > 0) then
    							local gang = getFactionByTag(gangs[1].tag)
-   							print(gangs[1].tag)
+   							
    							if(action.source_use_rival == true) then
    								gang = getFactionByTag(gang.rivals[1])
    							end
@@ -8927,7 +7300,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    							position.x = position.x + (i*0.5)
    							
    						end
-   						spawnNPC(chara,action.appearance, tag, position.x, position.y ,position.z,action.spawnlevel,action.use_police_prevention_system,false,action.scriptlevel,action.useEntpath,nil,action.despawntimer,action.usecodeware,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview)
+   						spawnNPC(chara,action.appearance, tag, position.x, position.y ,position.z,action.spawnlevel,action.use_police_prevention_system,false,action.scriptlevel,action.useEntpath,nil,action.despawntimer,action.usecodeware,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview,action.dontregister)
    						if(action.group ~= nil and action.group ~= "") then
    							
    							if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
@@ -8967,22 +7340,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    				TeleportPlayerToPosition(action.x,action.y,action.z)
    			end
    			
-   			if(action.name == "summon_current_star") then
-   				if(currentNPC ~= nil) then
-   					chara = currentNPC.TweakIDs
-   					local isAV = false
-   					if(action.isAV ~= nil) then
-   						isAV = action.isAV
-   					end
-   					spawnEntity(chara, "current_star", action.x, action.y ,action.z,action.spawnlevel,action.ambush,isAV,action.beta)
-   					if(action.group ~= nil and action.group ~= "") then
-   						
-   						table.insert(cyberscript.GroupManager[action.group].entities,"current_star")
-   					end
-   					currentStar = currentNPC
-   					
-   				end
-   			end
+   			
    			if(action.name == "set_current_star") then
    				if(currentNPC ~= nil) then
    					
@@ -9008,10 +7366,11 @@ function executeAction(action,tag,parent,index,source,executortag)
 					npcSpec.recordID = enti:GetRecordID()
 					npcSpec.appearanceName = Game.NameToString(enti:GetCurrentAppearanceName())
 					npcSpec.position = postp
-					npcSpec.persistState = false
-					npcSpec.persistSpawn = false
-					npcSpec.alwaysSpawned = false
-					npcSpec.spawnInView =  true
+					
+					npcSpec.persistState = action.persiststate
+					npcSpec.persistSpawn = action.persistspawn
+					npcSpec.alwaysSpawned = action.alwaysspawned
+					npcSpec.spawnInView =  action.spawninview
 					
 					CName.add("CyberScript")
 					CName.add("CyberScript.NPC")
@@ -9030,6 +7389,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 							entity.spawntimespan = os.time(os.date("!*t"))+0
 							entity.despawntimespan = os.time(os.date("!*t"))+action.despawntimer
 							entity.tag = action.tag
+							entity.spawnlocation = postp
 							entity.isitem = false
 							entity.tweak =""
 							entity.isprevention = false
@@ -9049,7 +7409,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 							
 							if(action.deleteoriginal == true) then
 							
-								Cron.After(0.5, function()
+								Cron.After(0.1, function()
 									
 									enti:Dispose()
 								end)
@@ -9212,22 +7572,21 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   		if #action.filter > 0  then
    			   			for i,filter in ipairs(action.filter) do
    			   				
-   			   				if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
+   			   				if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash) or (filter == "isnpc" and newent:IsA("ScriptedPuppet")))then 
    			   					local entity = {}
    			   					entity.id = newent:GetEntityID()
    			   					
    			   					local canadd = true
-   			   					print("OK1")
+   			   				
    			   					for k,v in pairs(cyberscript.EntityManager) do
    			   						
    			   						if(v.id == entity.id) then
    			   							
-   			   							canadd = false
-										print("NOK1")
+   			   							cyberscript.EntityManager[k] = nil
    			   						end
    			   						
    			   					end
-   			   					print("OK2")
+   			   				
 								if(action.prefix == nil) then action.prefix = "entity" end
 								startindex = 0
 								if(action.startindex == nil) then startindex = newent:GetEntityID().hash end
@@ -9236,7 +7595,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   					entity.tweak = "None"
    			   					entity.iscompanion = false
    			   					if(canadd) then
-									print("OK3")
+								
    			   						cyberscript.EntityManager[entity.tag]=entity
    			   						if(action.group ~= nil and action.group ~= "") then
    			   							
@@ -9256,7 +7615,111 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   				
    			   				if(v.id == entity.id) then
    			   					
-   			   					canadd = false
+   			   					cyberscript.EntityManager[k] = nil
+   			   					
+   			   				end
+   			   				
+   			   			end
+						
+   			   			if(action.prefix == nil) then action.prefix = "entity_" end
+						startindex = 0
+						if(action.startindex == nil) then startindex = newent:GetEntityID().hash end
+						if(action.startindex ~= nil) then startindex = action.startindex + i - 1 end
+   			   			entity.tag = action.prefix..tostring(startindex)
+   			   			entity.tweak = "None"
+   			   			entity.iscompanion = false
+						
+   			   			if(canadd) then
+						
+   			   				cyberscript.EntityManager[entity.tag]=entity
+   			   				if(action.group ~= nil and action.group ~= "") then
+   			   					
+   			   					table.insert(cyberscript.GroupManager[action.group].entities,entity.tag)
+   			   				end
+   			   			end
+   			   		end
+   			   		
+   			   		end
+   			   		
+   			   		
+   			   		
+   			   		
+   			   		
+   			   		
+   			   		
+   			   	end
+   			   	
+   			   	
+   			end	
+			
+			if(action.name == "register_enemy_around_you") then
+   			   	
+   			   	player = Game.GetPlayer()
+   			   	targetingSystem = Game.GetTargetingSystem()
+   			   	parts = {}
+   			   	local success= false
+   			   	searchQuery = Game["TSQ_EnemyNPC;"]() -- Search ALL objects
+   			   	searchQuery.maxDistance = action.range
+   			   	success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
+   			  
+   			   	local goodEntity = false
+   			   	
+   			   	for i, v in ipairs(parts) do
+   			   		local newent = v:GetComponent(v):GetEntity() 
+   			   		
+   			   		
+   			   		
+   			   		
+   			   		if(action.limit == nil or i <= action.limit ) then
+   			   	
+   			   		if #action.filter > 0  then
+   			   			for i,filter in ipairs(action.filter) do
+   			   				
+   			   				if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
+   			   					local entity = {}
+   			   					entity.id = newent:GetEntityID()
+   			   					
+   			   					local canadd = true
+   			   				
+   			   					for k,v in pairs(cyberscript.EntityManager) do
+   			   						
+   			   						if(v.id == entity.id) then
+   			   							
+   			   							cyberscript.EntityManager[k] = nil
+										
+   			   						end
+   			   						
+   			   					end
+   			   				
+								if(action.prefix == nil) then action.prefix = "entity" end
+								startindex = 0
+								if(action.startindex == nil) then startindex = newent:GetEntityID().hash end
+								if(action.startindex ~= nil) then startindex = action.startindex + i - 1 end
+   			   					entity.tag = action.prefix..tostring(startindex)
+   			   					entity.tweak = "None"
+   			   					entity.iscompanion = false
+   			   					if(canadd) then
+								
+   			   						cyberscript.EntityManager[entity.tag]=entity
+   			   						if(action.group ~= nil and action.group ~= "") then
+   			   							
+   			   							table.insert(cyberscript.GroupManager[action.group].entities,entity.tag)
+   			   						end
+   			   					end
+   			   				end
+   			   			end
+					else
+   			   			
+   			   			local entity = {}
+   			   			entity.id = newent:GetEntityID()
+   			   			
+   			   			local canadd = true
+   			   			
+   			   			for k,v in pairs(cyberscript.EntityManager) do
+   			   				
+   			   				if(v.id == entity.id) then
+   			   					
+   			   					cyberscript.EntityManager[k] = nil
    			   					
    			   				end
    			   				
@@ -9326,7 +7789,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   					entity.id = newent:GetEntityID()
    			   					
    			   					local canadd = true
-   			   					print("OK1")
+   			   				
    			   					for k,v in pairs(cyberscript.EntityManager) do
    			   						
    			   						if(v.id == entity.id) then
@@ -9336,12 +7799,12 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   						end
    			   						
    			   					end
-   			   					print("OK2")
+   			   					
    			   					entity.tag = "entity_"..tostring(newent:GetEntityID().hash)
    			   					entity.tweak = "None"
    			   					entity.iscompanion = false
    			   					if(canadd) then
-									print("OK3")
+									
    			   						cyberscript.EntityManager["entity_"..tostring(newent:GetEntityID().hash)]=entity
    			   						if(action.group ~= nil and action.group ~= "") then
    			   							
@@ -9427,34 +7890,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    					lastTargetKilled = nil
    				end
    			end
-   			if(action.name == "register_entity_you_look_at_as_companion") then
-   				if(objLook ~= nil) then
-   					local tag = "companion_"..math.random(0,999)
-   					local entity = getEntityFromManager(tag)
-   					if (entity.id == nil) then
-   						local entity = {}
-   						local appearance = objLook:GetCurrentAppearanceName()
-   						cyberscript.EntityManager[tag]=entity
-   						
-   						table.insert(cyberscript.GroupManager["companion"].entities,tag)
-   						local pos = objLook:GetWorldPosition()
-   						spawnEntity(objLook:GetRecordID(), tag, pos.x, pos.y ,pos.z,99,true,false,false)
-   						objLook:Dispose()
-   						Cron.After(2, function(tag, appearance)
-   							local entity = getEntityFromManager(tag)
-   							if (entity.id ~= nil) then
-   								entity.tweak = "None"
-   								entity.iscompanion = true
-   								local enti = Game.FindEntityByID(entity.id)
-   								AIControl.MakeFriendly(enti, Game.GetPlayer())
-   								setAppearance(enti,appearance)
-   							end
-   						end)
-   						else
-   						Game.GetPlayer():SetWarningMessage("An entity with this tag already exist.")
-   					end
-   				end
-   			end
+   			
    			if(action.name == "register_entity_you_look_at_in_group") then
    				if(objLook ~= nil) then
    					local tag = "entity_"..math.random(0,999)
@@ -9499,20 +7935,9 @@ function executeAction(action,tag,parent,index,source,executortag)
    				end
    				
    			end
-   			-- if(action.name == "resurrect_entity") then
-   			-- local obj = getEntityFromManager(action.tag)
-   			-- local enti = Game.FindEntityByID(obj.id)
-   			-- if(enti ~= nil) then
-   			-- enti.Revive() 
    			
-   			-- end
-   			-- end
    			
-   			if(action.name == "reset_spawncount") then
-   				
-   				spawntablecount = {}
-   				
-   			end
+   		
    			if(action.name == "set_entity_highlight") then
    				local obj = getEntityFromManager(action.tag)
    				local enti = Game.FindEntityByID(obj.id)
@@ -9568,12 +7993,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    				end
    			end
    			if(action.name == "unregister_entity") then
-   				local obj = getEntityFromManager(action.tag)
-   				local enti = Game.FindEntityByID(obj.id)
-   				if enti ~= nil then
-   					
-   					cyberscript.EntityManager[action.tag]=nil
-   				end
+   				cyberscript.EntityManager[action.tag]=nil
    			end
    			
    			if(action.name == "change_stance_entity") then 
@@ -9644,7 +8064,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    							
    						end
    					end
-   					else
+				else
    					local obj = getEntityFromManager(action.tag)
    					local enti = Game.FindEntityByID(obj.id)
    					if(enti ~= nil) then
@@ -9755,77 +8175,6 @@ function executeAction(action,tag,parent,index,source,executortag)
    					end
    				end
    			end
-   			
-   			if(action.name == "move_entity_at_position") then
-   				local obj = getEntityFromManager(action.tag)
-   				local enti = Game.FindEntityByID(obj.id)
-   				if(enti ~= nil) then
-   					local positionVec4 = {}
-   					positionVec4.x = action.x
-   					positionVec4.y = action.y
-   					positionVec4.z = action.z
-   					positionVec4.w = 1
-   					MoveTo(enti, positionVec4, 1, action.move)
-   				end
-   			end
-   			if(action.name == "move_entity_at_relative_position") then
-   				local obj = getEntityFromManager(action.tag)
-   				local enti = Game.FindEntityByID(obj.id)
-   				if(enti ~= nil) then
-   					local positionVec4 = enti:GetWorldPosition()
-   					positionVec4.x = positionVec4.x + action.x
-   					positionVec4.y = positionVec4.y + action.y
-   					positionVec4.z = positionVec4.z + action.z
-   					MoveTo(enti, positionVec4, 1, action.move)
-   				end
-   			end
-   			if(action.name == "move_entity_at_entity_relative") then
-   				local enti = nil
-   				local obj = nil 
-   				if(action.tag =="lookat") then 
-   					enti = objLook
-   					obj = getEntityFromManagerById(objLook:GetEntityID())
-   					else
-   					obj = getEntityFromManager(action.tag)
-   					enti = Game.FindEntityByID(obj.id)
-   				end
-   				if(enti ~= nil) then
-   					local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   					if(action.entity ~= "player") then
-   						local obj2 = getEntityFromManager(action.entity)
-   						local enti2 = Game.FindEntityByID(obj2.id)
-   						positionVec4 = enti2:GetWorldPosition()
-   					end
-   					positionVec4.x = positionVec4.x + action.x
-   					positionVec4.y = positionVec4.y + action.y
-   					positionVec4.z = positionVec4.z + action.z
-   					MoveTo(enti, positionVec4, 1, action.move)
-   				end
-   			end
-   			if(action.name == "move_entity_at_player_lookat") then
-   				local enti = nil
-   				local obj = nil 
-   				if(action.tag =="lookat") then 
-   					enti = objLook
-   					obj = getEntityFromManagerById(objLook:GetEntityID())
-   					else
-   					obj = getEntityFromManager(action.tag)
-   					enti = Game.FindEntityByID(obj.id)
-   				end
-   				if(enti ~= nil) then
-   					local positionVec4 = getForwardPosition(Game.GetPlayer(),action.distance)
-   					local isplayer = false
-   					if action.tag == "player" then
-   						isplayer = true
-   					end
-   					if(enti:IsVehicle() ~= true) then
-   						MoveTo(enti, positionVec4, 1, action.move)
-   						else
-   						teleportTo(enti, positionVec4, 1,isplayer)
-   					end
-   				end
-   			end
-   			
    			
    			
    			if(action.name == "entity_hold_position") then
@@ -9945,8 +8294,6 @@ function executeAction(action,tag,parent,index,source,executortag)
    				end
    			end
    			
-   			
-   			
    			if(action.name == "teleport_entity_to_entity_relative") then
    				local isplayer = false
    				if action.tag == "player" then
@@ -10048,7 +8395,6 @@ function executeAction(action,tag,parent,index,source,executortag)
    				local playerpos = Game.GetPlayer():GetWorldPosition()
    				TeleportPlayerToPosition(playerpos.x+action.x,playerpos.y+action.y,playerpos.z+action.z)
    			end
-   			
    			
    			
    			
@@ -10473,6 +8819,64 @@ function executeAction(action,tag,parent,index,source,executortag)
    				makeFacial(action.tag,reaction)
    				
    			end
+			if(action.name == "fake_lips_sync") then
+   				
+   				local actionlist = {}
+				local possibility = {}
+				local val = 30
+				
+				local actionb = deepcopy(cyberscript.actiontemplate["play_entity_facial"])
+				actionb.value = "Surprise"
+				actionb.tag = action.tag
+				table.insert(actionlist,actionb)
+				
+				local actionb = deepcopy(cyberscript.actiontemplate["wait_tick"])
+				actionb.value = val
+				table.insert(actionlist,actionb)
+				
+				
+				for i=1, (action.duration*3) do
+				
+					if(i%2==0) then
+						possibility = {"Interested"}
+						val = math.random(20,30)
+					else
+						
+						
+							possibility = {"Terrified","Surprise","Fear"}
+							val = math.random(50,70)
+						
+						
+						
+					end
+					local actionb = deepcopy(cyberscript.actiontemplate["play_entity_facial"])
+					actionb.value = possibility[math.random(1,#possibility)]
+					actionb.tag = action.tag
+					table.insert(actionlist,actionb)
+					
+					local actionb = deepcopy(cyberscript.actiontemplate["wait_tick"])
+					actionb.value = val
+					table.insert(actionlist,actionb)
+				
+				end
+				
+				local actionb = deepcopy(cyberscript.actiontemplate["reset_entity_facial"])
+				actionb.tag = action.tag
+				table.insert(actionlist,actionb)
+				
+   				if(action.parallele ~= false)then
+   						
+						
+					
+   						runActionList(actionlist, "fake_lips_sync_async_action_"..tostring(math.random(1,987987)), "see",false,nil)
+						
+					else
+						
+						runSubActionList(actionlist, tag.."_fake_lips_sync_async_action_"..tostring(math.random(1,987987)) ,parent,source,false,exector)
+   						result=false
+				end
+   				
+   			end
    			if(action.name == "reset_entity_facial") then
    				local obj = getEntityFromManager(action.tag)
    				local enti = Game.FindEntityByID(obj.id)
@@ -10596,13 +9000,13 @@ function executeAction(action,tag,parent,index,source,executortag)
    				blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 5, true) -- GameplayTier.Tier5_Cinematic
    				times = Game.GetTimeSystem()
    				times:SetIgnoreTimeDilationOnLocalPlayerZero(false)
-   				Game.SetTimeDilation(0.0000000000001)
+   				Game.GetTimeSystem():SetTimeDilation("cyberscript", 0.0000000000001)
    			end
    			if(action.name == "unfreeze_player") then
    				local blackboardDefs = Game.GetAllBlackboardDefs()
    				local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
    				blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
-   				Game.SetTimeDilation(0)
+   				Game.GetTimeSystem():SetTimeDilation("cyberscript", 0)
    			end
    			if(action.name == "apply_effect") then
    				if(action.tag == "player") then
@@ -10610,8 +9014,8 @@ function executeAction(action,tag,parent,index,source,executortag)
    					else
    					local obj = getEntityFromManager(action.tag)
    					local enti = Game.FindEntityByID(obj.id)
-   					local applyStatusEffect = Game['StatusEffectHelper::ApplyStatusEffectForTimeWindow;GameObjectTweakDBIDEntityIDFloatFloat'] 
-   					applyStatusEffect(enti, TweakDBID.new(action.value),obj.id, 0,1000)
+   					
+   					StatusEffectHelper.ApplyStatusEffectForTimeWindow(enti, TweakDBID.new(action.value),obj.id, 0,1000)
    				end
    			end
    			if(action.name == "remove_effect") then
@@ -10642,7 +9046,8 @@ function executeAction(action,tag,parent,index,source,executortag)
    			end
    			
    			if(action.name == "set_timedilation") then
-   				Game.SetTimeDilation(action.value)
+   				Game.GetTimeSystem():SetTimeDilation("cyberscript", action.value)
+				Game.GetTimeSystem():SetTimeDilation("cyberscript", action.value);
    			end
    			if(action.name == "set_timedilation_for_entity") then
    				
@@ -12101,58 +10506,13 @@ function executeAction(action,tag,parent,index,source,executortag)
    				
    				ActivatedGroup()
    			end
-   			if(action.name == "open_keystone_datapack_main") then
-   				
-   				Keystone_Datapack()
-   			end
-   			
-   			if(action.name == "open_keystone_datapack_mine") then
-   				
-   				Keystone_myDatapack()
-   			end
-   			if(action.name == "open_keystone_main") then
-   				
-   				Keystone_Main()
-   			end
-   			if(action.name == "open_keystone_update_warning") then
-   				Keystone_Warning()
-   			end
-   			if(action.name == "open_keystone_corpowars") then
-   				Keystone_corpoWars()
-   			end
-   			if(action.name == "open_keystone_multiinfo") then
-   				Keystone_MultiInfo()
-   			end
-   			if(action.name == "open_keystone_changelog") then
-   				Keystone_Changelog()
-   			end
-   			if(action.name == "open_keystone_stock") then
-   				
-   				Keystone_stock()
-   			end
-   			if(action.name == "open_keystone_item") then
-   				
-   				Keystone_item()
-   			end
-   			if(action.name == "open_keystone_item_category") then
-   				Keystone_item_category()
-   			end
-   			if(action.name == "open_datapack_detail_ui") then
-   				
-   				Keystone_Datapack_details(action.redirect)
-   			end
    			if(action.name == "open_menu") then
    				local startHub = StartHubMenuEvent.new()
    				startHub:SetStartMenu(action.value)
    				Game.GetUISystem():QueueEvent(startHub)
    			end
    			
-   			if(action.name == "open_menu") then
-   				local startHub = StartHubMenuEvent.new()
-   				startHub:SetStartMenu(action.value)
-   				Game.GetUISystem():QueueEvent(startHub)
-   			end
-   			
+   		
    			if(action.name == "close_menu") then
    				local closeHub = ForceCloseHubMenuEvent.new()
    				Game.GetUISystem():QueueEvent(closeHub)
@@ -12512,75 +10872,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    		end
    		
    		if customnpcregion then 
-   			if(action.name == "npc_custom_summon_custom_npc_at_entity_relative") then
-   				local positionVec4 = Game.GetPlayer():GetWorldPosition()
-   				local entity = nil
-   				if(action.entity ~= "player") then
-   					local obj = getEntityFromManager(action.entity)
-   					entity = Game.FindEntityByID(obj.id)
-   					positionVec4 = entity:GetWorldPosition()
-   					else
-   					entity = Game.GetPlayer()
-   				end
-   				if(action.position ~= nil and (action.position ~= "" or action.position ~= "nothing")) then
-   					if(action.position == "behind") then
-   						positionVec4 = getBehindPosition(entity,action.distance)
-   					end
-   					if(action.position == "forward") then
-   						positionVec4 = getForwardPosition(entity,action.distance)
-   					end
-   					else
-   					positionVec4.x = positionVec4.x + action.x
-   					positionVec4.y = positionVec4.y + action.y
-   					positionVec4.z = positionVec4.z + action.z
-   				end
-   				local npc =  getCustomNPCbyTag(action.tag)
-   				npc.spawnforced=true
-   				npc.dospawnaction=action.dospawnaction
-   				npc.doroutineaction=action.doroutineaction
-   				npc.dodeathaction=action.dodeathaction
-   				npc.dodespawnaction=action.dodespawnaction
-   				if(action.replacelocation == true) then
-   					npc.workinglocation.x = positionVec4.x
-   					npc.workinglocation.y = positionVec4.y
-   					npc.workinglocation.z = positionVec4.z
-   				end
-   				if(npc.useBetaSpawn == true) then
-   					spawnEntity(npc.tweakDB, npc.tag,  positionVec4.x ,  positionVec4.y , positionVec4.z, 90, true, false,true)
-   					else
-   					spawnEntity(npc.tweakDB, npc.tag,  positionVec4.x ,  positionVec4.y , positionVec4.z, 90, true, false,false)
-   				end
-   				npc.isspawn=true
-   				npc.init=false
-   				if(action.group ~= nil and action.group ~= "") then
-   					
-   					table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
-   				end
-   			end
-   			if(action.name == "npc_custom_summon_custom_npc") then
-   				local npc =  getCustomNPCbyTag(action.tag)
-   				npc.spawnforced=true
-   				npc.dospawnaction=action.dospawnaction
-   				npc.doroutineaction=action.doroutineaction
-   				npc.dodeathaction=action.dodeathaction
-   				npc.dodespawnaction=action.dodespawnaction
-   				if(action.replacelocation == true) then
-   					npc.workinglocation.x = action.x
-   					npc.workinglocation.y = action.y
-   					npc.workinglocation.z = action.z
-   				end
-   				if(npc.useBetaSpawn == true) then
-   					spawnEntity(npc.tweakDB, npc.tag,  action.x ,  action.y , action.z, 90, true, false,true)
-   					else
-   					spawnEntity(npc.tweakDB, npc.tag,  action.x ,  action.y , action.z, 90, true, false,false)
-   				end
-   				npc.isspawn=true
-   				npc.init=false
-   				if(action.group ~= nil and action.group ~= "") then
-   					
-   					table.insert(cyberscript.GroupManager[action.group].entities,action.tag)
-   				end
-   			end
+   			
    			if(action.name == "npc_custom_edit_custom_npc") then
    				local npc =  getCustomNPCbyTag(action.tag)
    				npc.spawnforced=true
@@ -12642,783 +10934,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    			end
    		end
    		
-   		if multiregion then
-   			if not player_region then
-   				if(action.name == "send_action_to_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-   					if action.tag == "lookat" and multiName ~= "" then
-   						action.tag = multiName
-   					end
-   					sendActionstoUser(action.tag,action.action)
-   					result = true
-   				end
-   				if(action.name == "help_faction") then
-   					if(MultiplayerOn)then
-   						HelpFaction()
-   						else
-   						Game.GetPlayer():SetWarningMessage(getLang("You need to be online for help your faction"))
-   					end
-   				end
-   				if(action.name == "disconnect") then
-   					if(NetServiceOn and MultiplayerOn) then
-   						disconnectUser()
-   						MultiplayerOn = false
-   						NetServiceOn = false
-   						
-   						
-   						friendIsSpaned = false
-   						lastFriendPos = {}
-   						--Game.GetPreventionSpawnSystem():RequestDespawnPreventionLevel(-13)
-   						
-   						netontracthub.login = true
-   						netontracthub.register = false
-   						netontracthub.main = false
-   						
-   						openNetContract = false
-   						firstload = true
-   						firstloadMission = true
-   						firstloadMarket = true
-   						initfinish = false
-   					end
-   				end
-   				
-   				if(action.name == "connect") then
-   					
-   					connectUser()
-   					
-   				end
-   				if(action.name == "send_message") then
-   					if(NetServiceOn and MultiplayerOn) then
-   						MessageSenderController()
-   					end
-   				end
-   				if(action.name == "toggle_message_popup") then
-   					if(NetServiceOn and MultiplayerOn) then
-   						if onlineMessagePopup then
-   							onlineMessagePopup = false
-   							else
-   							onlineMessagePopup = true
-   						end
-   						else
-   						onlineMessagePopup = false
-   					end
-   				end
-   				if(action.name == "open_avatar_list" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-   					
-   					Multi_AvatarList()
-   				end
-   				if(action.name == "change_avatar" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-   					currentSave.myAvatar = action.value
-   					Cron.After(2,function()	
-   					                       	updatePlayerSkin()
-   					end)
-   				end
-   				if(action.name == "shoot_talk" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then 
-   					onlineShootMessage = true
-   				end
-   				if(action.name == "select_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil ) then
-   					selectedUser = action.value
-   					onlineReceiver = selectedUser.pseudo
-   				end
-   				if(action.name == "unblock_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-   					UnblockFriend()
-   				end
-   				if(action.name == "delete_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-   					DeleteFriend()
-   				end
-   				if(action.name == "block_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-   					BlockFriend()
-   				end
-   				if(action.name == "add_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-   					AddFriend()
-   				end
-   				if(action.name == "tp_to_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil and selectedUser ~= nil and selectedUser.pseudo ~= nil and selectedUser.pseudo ~= "" ) then
-   					Game.GetTeleportationFacility():Teleport(Game.GetPlayer(), Vector4.new( selectedUser.x, selectedUser.y, selectedUser.z,1) ,EulerAngles.new(0,0,0))
-   				end
-   				if(action.name == "select_friend" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil ) then
-   					selectedFriend = action.value
-   					onlineReceiver = selectedUser.name	
-   				end
-   				if(action.name == "open_friend_list" and NetServiceOn and MultiplayerOn) then
-   					local next = next 
-   					if ActualFriendList == nil or next(ActualFriendList) == nil then
-   						Game.GetPlayer():SetWarningMessage("There is no connected friend..")
-   						else
-   						Multi_FriendList()
-   					end
-   				end
-   				if(action.name == "join_instance_friend" and NetServiceOn and MultiplayerOn) then
-   					if(NetServiceOn and MultiplayerOn) then
-   						MessageSenderController()
-   					end
-   				end
-   			end
-   			if not instance_region then
-   				if(action.name == "open_players_list"  and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-   					if #ActualPlayersList > 0 then
-   						
-   						Multi_InstanceUserList()
-   						else
-   						Game.GetPlayer():SetWarningMessage("There is no players around..")
-   					end
-   				end
-   				if(action.name == "open_instance_list" and NetServiceOn) then
-   					
-   					Multi_InstanceList()
-   				end
-   				if(action.name == "select_instance" and NetServiceOn ) then
-   					selectedInstance = action.value
-   				end
-   				if(action.name == "connect_instance" and NetServiceOn ) then
-   					connectMultiplayer(action.value, action.password)
-   				end
-   				if(action.name == "get_instance_list" and NetServiceOn) then
-   					GetInstances()
-   				end
-   				if(action.name == "open_instance_creation" and NetServiceOn) then
-   					onlineInstanceCreation = true
-   				end
-   				if(action.name == "notify_instance" and NetServiceOn and MultiplayerOn and CurrentInstance.Title ~= nil) then
-   					Game.GetPlayer():SetWarningMessage("Welcome to "..CurrentInstance.Title)
-   				end
-   				if(action.name == "close_instance_password_popup" and NetServiceOn) then
-   					onlinePasswordPopup = false
-   				end
-   				if(action.name == "open_instance_password_popup" and NetServiceOn) then
-   					selectedInstancePassword="nothing"
-   					onlinePasswordPopup = true
-   				end
-   				if(action.name == "open_instance_management" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-   					onlineInstanceUpdate = true
-   				end
-   				if(action.name == "open_instance_management_users" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-   					
-   					Multi_InstanceOwnerUserList()
-   				end
-   				if(action.name == "block_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-   					banUserFromInstance()
-   				end
-   				if(action.name == "kick_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-   					kickUserFromInstance()
-   				end
-   				if(action.name == "unban_instance_user" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-   					unBanUserFromInstance()
-   				end
-   			end
-   			if not instance_place_management_region then
-   				if(action.name == "open_instance_management_create_custom_place" ) then
-   					if(ActualPlayerMultiData.currentPlaces ~= nil and #ActualPlayerMultiData.currentPlaces == 0 and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-   						onlineInstancePlaceCreation = true
-   						else
-   						Game.GetPlayer():SetWarningMessage("There is already an custom place here..")
-   					end
-   				end
-   				if(action.name == "delete_custom_place" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.isInstanceOwner == true) then
-   					if(ActualPlayerMultiData.currentPlaces ~= nil and #ActualPlayerMultiData.currentPlaces > 0) then
-   						deleteInstancePlace()
-   					end
-   				end
-   			end
-   			if not instance_place_item_region then
-   				if(action.name == "open_placed_item_ui_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if (ActualPlayerMultiData.currentPlaces[1] ~= nil) then
-   						
-   						PlacedItemsUIMulti()
-   					end
-   				end
-   				if(action.name == "open_buyed_item_ui_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if(ActualPlayerMultiData.currentPlaces[1] ~= nil) then
-   						
-   						BuyedItemsUIMulti()
-   					end
-   				end
-   				if(action.name == "set_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if grabbedTarget ~= nil then
-   						--	tp:Teleport(grabbedTarget, targetPos, targetAngle)
-   						-- if(Game.FindEntityByID(selectedItemMulti.entityId):IsA('gameObject') == false)then
-   						-- grabbedTarget:Destroy()
-   						-- end
-   						updateItemPositionMulti(selectedItemMulti, targetPos, targetAngle,true)
-   						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-   						enabled = false
-   						grabbedTarget = nil
-   						grabbed = false
-   						objPush = false
-   						objPull = false
-   						id = false
-   					end
-   				end
-   				if(action.name == "grab_select_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						enabled = true
-   						id = true
-   						grabbedTarget = Game.FindEntityByID(selectedItemMulti.entityId)
-   						if(grabbedTarget~= nil and grabbedTarget:IsA('gameObject') == false)then
-   							grabbedTarget = nil
-   							grabbed = false
-   							objPush = false
-   							objPull = false
-   							enabled = false
-   							id = false
-   							--Game.GetPlayer():SetWarningMessage(getLang(action.value))
-   							-- local objpos = grabbedTarget:GetWorldPosition()
-   							-- local worldpos = Game.GetPlayer():GetWorldTransform()
-   							-- local qat = grabbedTarget:GetWorldOrientation()
-   							-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-   							-- local transform = Game.GetPlayer():GetWorldTransform()
-   							-- transform:SetPosition(objpos)
-   							-- transform:SetOrientationEuler(angle)
-   							-- grabbedTarget = WorldFunctionalTests.SpawnEntity("base\\items\\interactive\\dining_accessories\\int_dining_accessories_001__bar_asset_h_sponge.ent", transform, '')
-   						end
-   						Cron.After(0.7,function()	
-   						                         	if (grabbedTarget ~= nil) then
-   						                         		targetPos = grabbedTarget:GetWorldPosition()
-   						                         		targetAngle = Vector4.ToRotation(grabbedTarget:GetWorldForward())
-   						                         		objectDist = Vector4.Distance(targetPos, playerPos)
-   						                         		phi = math.atan2(playerAngle.y, playerAngle.x)
-   						                         		targetDeltaPos = Vector4.new(((objectDist * math.cos(phi)) + playerPos.x), ((objectDist * math.sin(phi)) + playerPos.y), (objectDist * math.sin(playerAngle.z) + playerPos.z), targetPos.w)
-   						                         		targetDeltaPos = Delta(targetDeltaPos, targetPos)
-   						                         		logme(3,grabbedTarget, "grabbed.")
-   						                         		grabbed = true
-   						                         		else
-   						                         		error("No target!")
-   						                         	end
-   						end)
-   					end
-   				end
-   				if(action.name == "select_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if(#currentItemMultiSpawned > 0 )then
-   						for i = 1, #currentItemMultiSpawned do 
-   							local mitems = currentItemMultiSpawned[i]
-   							if(mitems.Id == action.value) then
-   								selectedItemMulti = nil
-   								selectedItemMulti = mitems
-   							end
-   						end
-   					end
-   				end
-   				if(action.name == "unselect_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					selectedItemMulti = nil
-   					grabbedTarget = nil
-   					grabbed = false
-   					objPush = false
-   					objPull = false
-   					enabled = false
-   					id = false
-   				end
-   				if(action.name == "move_select_item_to_player_position_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						local objpos = Game.GetPlayer():GetWorldPosition()
-   						local qat = Game.GetPlayer():GetWorldOrientation()
-   						local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-   						updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-   						UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-   						
-   					end
-   				end
-   				if(action.name == "move_selected_item_Z_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						logme(3,"yep01")
-   						local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-   						if(entity ~= nil) then
-   							local objpos = entity:GetWorldPosition()
-   							logme(3,"yep02")
-   							local worldpos = Game.GetPlayer():GetWorldTransform()
-   							objpos.z = objpos.z + action.value
-   							local qat = entity:GetWorldOrientation()
-   							local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-   							updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-   							UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-   							else
-   							logme(3,"Nope")
-   						end
-   					end
-   				end
-   				if(action.name == "move_selected_item_X_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-   						if(entity ~= nil) then
-   							local objpos = entity:GetWorldPosition()
-   							local worldpos = Game.GetPlayer():GetWorldTransform()
-   							objpos.x = objpos.x + action.value
-   							local qat = entity:GetWorldOrientation()
-   							local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-   							updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-   							UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-   						end
-   					end
-   				end
-   				if(action.name == "move_selected_item_Y_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-   						if(entity ~= nil) then
-   							local objpos = entity:GetWorldPosition()
-   							local worldpos = Game.GetPlayer():GetWorldTransform()
-   							objpos.y = objpos.y + action.value
-   							local qat = entity:GetWorldOrientation()
-   							local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-   							updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-   							UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-   						end
-   					end
-   				end
-   				if(action.name == "open_precision_mod_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						selectedItemMultiBackup = selectedItemMulti
-   						openEditItemsMulti = true
-   					end
-   				end
-   				if(action.name == "yaw_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-   						if(entity ~= nil) then
-   							local objpos = entity:GetWorldPosition()
-   							local worldpos = Game.GetPlayer():GetWorldTransform()
-   							local qat = entity:GetWorldOrientation()
-   							local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-   							angle.yaw = angle.yaw + action.value
-   							updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-   							UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-   						end
-   					end
-   				end
-   				if(action.name == "roll_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-   						if(entity ~= nil) then
-   							local objpos = entity:GetWorldPosition()
-   							local worldpos = Game.GetPlayer():GetWorldTransform()
-   							local qat = entity:GetWorldOrientation()
-   							local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-   							angle.roll = angle.roll + action.value
-   							updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-   							UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-   						end
-   					end
-   				end
-   				if(action.name == "pitch_selected_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-   						if(entity ~= nil) then
-   							local objpos = entity:GetWorldPosition()
-   							local worldpos = Game.GetPlayer():GetWorldTransform()
-   							local qat = entity:GetWorldOrientation()
-   							local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-   							angle.pitch = angle.pitch + action.value
-   							updateItemPositionMulti(selectedItemMulti, objpos, angle, true)
-   							UpdateItem(selectedItemMulti.Tag, selectedItemMulti.X, selectedItemMulti.Y, selectedItemMulti.Z, selectedItemMulti.Roll, selectedItemMulti.Pitch ,selectedItemMulti.Yaw )
-   						end
-   					end
-   				end
-   				if(action.name == "selected_item_remove_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if selectedItemMulti ~= nil then
-   						local entity = Game.FindEntityByID(selectedItemMulti.entityId)
-   						if(entity ~= nil) then
-   							Game.FindEntityByID(selectedItemMulti.entityId):GetEntity():Destroy()
-   							logme(3,"toto")
-   							updatePlayerItemsQuantity(selectedItemMulti,1)
-   							
-   							
-   							local index = getItemEntityIndexFromManager(selectedItemMulti.entityId)
-   							
-   							table.remove(currentItemMultiSpawned,index)
-   							DeleteItem(selectedItemMulti.Tag)
-   							
-   							else
-   							logme(3,"nope")
-   						end
-   					end
-   				end
-   				if(action.name == "spawn_buyed_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if action.tag ~= nil then
-   						local pos = Game.GetPlayer():GetWorldPosition()
-   						local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
-   						local spawnedItem = {}
-   						local mitems =  getPlayerItemsbyTag(action.tag)
-   						if(#ActualPlayerMultiData.currentPlaces > 0 and mitems ~= nil and mitems.Quantity > 0 and (string.match(tostring(mitems.Tag), "AMM_Props.") == nil or (string.match(tostring(mitems.Tag), "AMM_Props.") ~= nil and AMM ~= nil)  )    ) then
-   							spawnedItem.Tag = mitems.Tag
-   							spawnedItem.HouseTag = ActualPlayerMultiData.currentPlaces[1].tag
-   							spawnedItem.ItemPath = mitems.Path
-   							spawnedItem.X = pos.x
-   							spawnedItem.Y = pos.y
-   							spawnedItem.Z = pos.z
-   							spawnedItem.Yaw = angles.yaw
-   							spawnedItem.Pitch = angles.pitch
-   							spawnedItem.Roll = angles.roll
-   							spawnedItem.Title = mitems.Title
-   							saveHousing(spawnedItem)
-   							local housing = getHousing(spawnedItem.Tag,spawnedItem.X,spawnedItem.Y,spawnedItem.Z)
-   							spawnedItem.Id = housing.Id
-   							updatePlayerItemsQuantity(mitems,-1)
-   							spawnedItem.entityId = spawnItem(spawnedItem, pos, angles)
-   							local entity = Game.FindEntityByID(spawnedItem.entityId)
-   							local components = checkForValidComponents(entity)
-   							if components then
-   								local visualScale = checkDefaultScale(components)
-   								spawnedItem.defaultScale = {
-   									x = visualScale.x * 100,
-   									y = visualScale.x * 100,
-   									z = visualScale.x * 100,
-   								}
-   								spawnedItem.scale = {
-   									x = visualScale.x * 100,
-   									y = visualScale.y * 100,
-   									z = visualScale.z * 100,
-   								}
-   							end
-   							table.insert(currentItemMultiSpawned,spawnedItem)
-   							SetItem(spawnedItem.Tag,spawnedItem.X,spawnedItem.Y,spawnedItem.Z,spawnedItem.Roll,spawnedItem.Pitch,spawnedItem.Yaw)
-   							selectedItemMulti = spawnedItem
-   						end
-   					end
-   				end
-   				if(action.name == "despawn_placed_item_multi" and  ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.CanBuild == true) then
-   					if action.tag ~= nil then
-   						local pos = Game.GetPlayer():GetWorldPosition()
-   						local angles = GetSingleton('Quaternion'):ToEulerAngles(Game.GetPlayer():GetWorldOrientation())
-   						local spawnedItem = {}
-   						DeleteItem(action.tag)
-   						if(entity ~= nil) then
-   							for i =1, #currentSave.arrayPlayerItems do
-   								local mitem = currentSave.arrayPlayerItems[i]
-   								if(mitem.Tag == entity.Tag) then
-   									local housingitem = getHousing(entity.Tag,entity.X,entity.Y,entity.Z)
-   									despawnItem(entity.entityId)
-   									deleteHousing(housingitem.Id)
-   									updatePlayerItemsQuantity(mitem,1)
-   								end
-   							end
-   							else
-   							logme(3,"nope")
-   						end
-   					end
-   				end
-   			end
-   			if not guild_region then
-   				if(action.name == "open_guild_list" and NetServiceOn and MultiplayerOn) then
-   					if(NetServiceOn and MultiplayerOn) then
-   						
-   						Multi_GuildList()
-   					end
-   				end
-   				if(action.name == "open_guild_pending" and NetServiceOn and MultiplayerOn) then
-   					if(NetServiceOn and MultiplayerOn) then
-   						Multi_GuildPendingList()
-   					end
-   				end
-   				if(action.name == "open_guild_members" and NetServiceOn and MultiplayerOn) then
-   					if(NetServiceOn and MultiplayerOn) then
-   						
-   						Multi_GuildUserList()
-   					end
-   				end
-   				if(action.name == "open_guild_creation" and NetServiceOn and MultiplayerOn) then
-   					if(NetServiceOn and MultiplayerOn) then
-   						onlineGuildCreation = true
-   					end
-   				end
-   				
-   				if(action.name == "open_guild_update" and NetServiceOn and MultiplayerOn) then
-   					if(NetServiceOn and MultiplayerOn) then
-   						onlineGuildUpdate = true
-   					end
-   				end
-   				
-   				if(action.name == "select_guild") then
-   					if(NetServiceOn and MultiplayerOn ) then
-   						selectedGuild = action.parameter
-   					end
-   				end
-   				if(action.name == "select_guild_user") then
-   					if(NetServiceOn and MultiplayerOn ) then
-   						selectedGuildUser = action.parameter
-   					end
-   				end
-   				if(action.name == "join_guild") then
-   					if(NetServiceOn and MultiplayerOn and selectedGuild ~= nil) then
-   						joinGuild(mytag,selectedGuild)
-   					end
-   				end
-   				if(action.name == "leave_guild") then
-   					if(NetServiceOn and MultiplayerOn and mytag ~= "") then
-   						leaveGuild(mytag)
-   					end
-   				end
-   				if(action.name == "accept_to_guild") then
-   					if(NetServiceOn and MultiplayerOn and selectedGuildUser ~= "") then
-   						acceptGuild(selectedGuildUser)
-   					end
-   				end
-   				if(action.name == "refuse_to_guild") then
-   					if(NetServiceOn and MultiplayerOn and selectedGuildUser ~= "") then
-   						refuseGuild(selectedGuildUser)
-   					end
-   				end
-   				if(action.name == "remove_to_guild") then
-   					if(NetServiceOn and MultiplayerOn and multiName ~= "") then
-   						removeGuild(selectedGuildUser)
-   					end
-   				end
-   			end
-   			if not server_player_score_region then
-   				if(action.name == "operate_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-   					if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-   						local score = ActualPlayerMultiData.instance.scores[action.value]
-   						if(score ~= nil) then
-   							score = score + action.score
-   							else
-   							score = 0 + action.score
-   						end
-   						operateInstanceScore(myTag,action.value,score)
-   					end
-   				end
-   				if(action.name == "set_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-   					if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-   						local score = ActualPlayerMultiData.instance.scores[action.value]
-   						if(score ~= nil) then
-   							score = action.score
-   							else
-   							score = action.score
-   						end
-   						setInstanceScore(myTag,action.value,score)
-   					end
-   				end
-   				if(action.name == "delete_server_score" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-   					if(NetServiceOn and MultiplayerOn and ActualPlayerMultiData ~= nil and ActualPlayerMultiData.instance ~= nil and ActualPlayerMultiData.instance.scores ~= nil) then
-   						deleteInstanceScore(myTag,action.value)
-   					end
-   				end
-   				if(action.name == "edit_server_score_user" and NetServiceOn and MultiplayerOn and  ActualPlayerMultiData ~= nil) then
-   					editServerScoreUser(action.score,action.value)
-   					result = true
-   				end
-   			end
-   		end
    		
-   		if framework then
-   			if(action.name == "download_datapack") then
-   				arrayDatapack[action.tag] = {}
-   				arrayDatapack[action.tag].state = "new"
-   				spdlog.error(dump(action))
-   				DownloadModpack(action.value)
-   				
-   			end
-   			if(action.name == "update_datapack") then
-   				arrayDatapack[action.tag] = {}
-   				arrayDatapack[action.tag].state = "new"
-   				UpdateModpack(action.value,action.tag)
-   			end
-   			if(action.name == "delete_datapack") then
-   				DeleteModpack(action.tag)
-   			end
-   			if(action.name == "enable_datapack") then
-   				EnableDatapack(action.tag)
-   			end
-   			if(action.name == "refresh_datapack_cache") then
-   				LoadDataPackCache()
-   			end
-   			if(action.name == "check_datapack_cache") then
-   				CheckandUpdateDatapack()
-   			end
-   			if(action.name == "disable_datapack") then
-   				DisableDatapack(action.tag)
-   			end
-   			if(action.name == "update_mod") then
-   				UpdateMods()
-   			end
-   			if(action.name == "refresh_news") then
-   				GetCorpoNews()
-   			end
-   			if(action.name == "refresh_market") then
-   				GetScores()
-   			end
-   			if(action.name == "select_stock") then
-   				CurrentStock = action.value
-   				logme(3,dump(CurrentStock))
-   			end
-   			if(action.name == "clean_current_stock") then
-   				CurrentStock = nil
-   			end
-   			if(action.name == "buy_score") then
-   				if(arrayMarket ~= nil and #arrayMarket > 0) then
-   					
-   					for k,stock in ipairs(arrayMarket) do
-   						
-   						if(stock.tag == action.tag) then
-   							
-   							BuyScore(stock.tag)
-   							
-   						end
-   						
-   					end
-   					
-   				end
-   				
-   			end
-   			if(action.name == "sell_score") then
-   				
-   				if(arrayMarket ~= nil and #arrayMarket > 0) then
-   					
-   					for k,stock in ipairs(arrayMarket) do
-   						
-   						if(stock.tag == action.tag) then
-   							
-   							SellScore(stock.tag)
-   							
-   						end
-   						
-   					end
-   					
-   				end
-   			end
-   			if(action.name == "refresh_item_market") then
-   				GetItems()
-   			end
-   			
-   			if(action.name == "set_selected_item_category") then
-   				Keystone_currentSelectedItemCategory = action.value
-   				setVariable("Item_Market","CurrentCategory", action.value)
-   				setScore("Item_Market","CurrentCategory_TotalPage",  #arrayMarketItem[Keystone_currentSelectedItemCategory])
-   			end
-   			
-   			
-   			
-   			if(action.name == "buy_cart") then
-   				if(checkStackableItemAmount("Items.money",CartPrice)) then
-   				   	--print("tttest")
-   				   	local itemCartTagList = {}
-   				   	
-   				   	for i = 1,#ItemsCart do
-   				   		local items = ItemsCart[i]
-   				   		table.insert(itemCartTagList,items.Tag)
-   				   		updatePlayerItemsQuantity(items,1)
-   				   		local player = Game.GetPlayer()
-   				   		local ts = Game.GetTransactionSystem()
-   				   		local tid = TweakDBID.new("Items.money")
-   				   		local itemid = ItemID.new(tid)
-   				   		local amount = tonumber(items.Price)
-   				   		local result = ts:RemoveItem(player, itemid, amount)
-   				   	end
-   				   	BuyItemsCart(itemCartTagList)
-   				   	for i,item in ipairs(ItemsCart) do
-   				   		
-   				   		setScore("Item_MarketCart",item.Tag,0)
-   				   		local playerItems = getPlayerItemsbyTag(item.Tag)
-   				   		
-   				   		if playerItems == nil then 
-   				   			
-   				   			setScore("owned_item",item.Tag,0)
-   				   			else
-   				   			setScore("owned_item",item.Tag,playerItems.Quantity)
-   				   			
-   				   		end
-   				   	end
-   				   	ItemsCart = {}
-   				   	setScore("Item_Market","CartPrice",0)
-   				   	setScore("Item_Market","CartAmount",0)
-   				   	CartPrice = 0	
-   				end	
-   			end
-   			if(action.name == "add_to_cart") then
-   				table.insert(ItemsCart,Keystone_currentSelectedItem)
-   				CartPrice = CartPrice + Keystone_currentSelectedItem.Price
-   				setScore("Item_Market","CartPrice",CartPrice)
-   			end
-   			if(action.name == "set_current_item_page") then
-   				
-   				CurrentItemPage = action.value
-   				setScore("Item_Market","CurrentItemPage",CurrentItemPage)
-   			end
-   			if(action.name == "add_to_cart_item") then
-   				--print(action.tag)
-   				for i = 1,#arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage]  do
-   					
-   					if(arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i].Tag == action.tag) then
-   						--print("Motoiiiii")
-   						
-   						
-   						table.insert(ItemsCart,arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i])
-   						CartPrice = CartPrice + arrayMarketItem[Keystone_currentSelectedItemCategory][CurrentItemPage][i].Price
-   						setScore("Item_Market","CartPrice",CartPrice)
-   						setScore("Item_Market","CartAmount",#ItemsCart)
-   						
-   						local num = getScoreKey("Item_MarketCart",action.tag)
-   						
-   						if num == nil then num = 0 end
-   						num = num + 1
-   						setScore("Item_MarketCart",action.tag,num)
-   						break
-   					end
-   					
-   				end
-   				
-   			end
-   			if(action.name == "remove_to_cart") then
-   				local res = removeItemInCart(Keystone_currentSelectedItem.tag)
-   				if(res == true) then
-   					CartPrice = CartPrice - Keystone_currentSelectedItem.Price
-   				end
-   			end
-   			if(action.name == "remove_to_cart_item") then
-   				for i = 1,#ItemsCart  do
-   					
-   					if(ItemsCart[i].Tag==action.tag) then
-   						
-   						
-   						CartPrice = CartPrice - ItemsCart[i].Price
-   						setScore("Item_Market","CartPrice",CartPrice)
-   						
-   						break
-   					end
-   					
-   				end
-   				removeItemInCart(action.tag)
-   				local num = getScoreKey("Item_MarketCart",action.tag)
-   				
-   				if num == nil then num = 0 end
-   				num = num - 1
-   				setScore("Item_MarketCart",action.tag,num)
-   				setScore("Item_Market","CartAmount",#ItemsCart)
-   			end
-   			if(action.name == "select_item_stock") then
-   				CurrentItemStock = action.value
-   			end
-   			if(action.name == "connectUser") then
-   				connectUser()
-   			end
-   			if(action.name == "userversion") then
-   				setUserVersion()
-   			end
-   			if(action.name == "get_datapacklist") then
-   				GetModpackList()
-   			end
-   			if(action.name == "get_branch") then
-   				GetBranch()
-   			end
-   			if(action.name == "get_role") then
-   				GetRole()
-   			end
-   			if(action.name == "fetch_data") then
-   				FetchData()
-   			end
-   			if(action.name == "get_faction") then
-   				GetFaction()
-   			end
-   			if(action.name == "get_possiblebranch") then
-   				GetPossibleBranch()
-   			end
-   			if(action.name == "get_factionrank") then
-   				GetFactionRank()
-   			end
-   			if(action.name == "getitemcat") then
-   				GetItemCat()
-   			end
-   			if(action.name == "get_itemlist") then
-   				GetItems()
-   			end
-   			if(action.name == "get_modversion") then
-   				GetModVersion()
-   			end
-   		end
    		
    		if scene then 
    			if(action.name == "show_braindance_ui") then
@@ -14560,6 +12076,11 @@ function getPositionFromParameter(action)
 			if(entity ~= nil ) then 
 				positionVec4 = entity:GetWorldPosition()
 				
+				if(action.position_spawnlocation ~= nil and action.position_spawnlocation == true) then
+					
+					positionVec4 = obj.spawnlocation
+				
+				end
 				
 				if(action.position_way ~= nil and (action.position_way ~= "" or action.position_way ~= "normal")) then
 					if(action.position_way == "behind") then
@@ -14567,8 +12088,13 @@ function getPositionFromParameter(action)
 					end
 					if(action.position_way == "forward") then
 						positionVec4 = getForwardPosition(entity,action.position_distance)
+						
 					end
 					
+					if(action.position_way == "forward_relative") then
+						positionVec4 = getForwardPosition2(entity,action.position_distance,action)
+						
+					end
 				end
 				
 				
@@ -14665,8 +12191,7 @@ function getPositionFromParameter(action)
 			position.x = currentpoi.x
 			position.y = currentpoi.y
 			position.z = currentpoi.z
-			else
-			error("can't find an poi")
+			
 		end
 	end
 	
@@ -14832,13 +12357,13 @@ function getPositionFromParameter(action)
 	
 	local positiontemp = deepcopy(position,nil)
 	
-	if(positiontemp.x ~= nil and action.position ~= "at") then
+	if(positiontemp.x ~= nil and action.position ~= "at"  and action.position_way ~= "forward_relative") then
 		positiontemp.x = positiontemp.x + action.x
 		positiontemp.y = positiontemp.y + action.y
 		positiontemp.z = positiontemp.z + action.z
 		
 	end
-	
+
 	return positiontemp
 	
 end

@@ -173,7 +173,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 				end
 			end)
 		end
-		end
+		
 		
 		
 		
@@ -228,7 +228,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		end
 		
 		
-		
+		end
 		
 		
 		if mainrefreshstep3 then
@@ -759,10 +759,10 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		
 		
 		
-		if(collectgarbage("count") > 500000) then
+		-- if(collectgarbage("count") > 500000) then
 			
-			collectgarbage("collect")
-		end
+			-- collectgarbage("collect")
+		-- end
 	end
 	
 	
@@ -785,7 +785,7 @@ function inGameInit() -- init some function after save loaded
 	color = CPS.color
 	cyberscript.GroupManager = {}
 	cyberscript.EntityManager = {}
-	--Game.SetTimeDilation(0)
+	--Game.GetTimeSystem():SetTimeDilation("cyberscript", 0)
 	
   doInitEvent()
 
@@ -949,7 +949,7 @@ function inGameInit() -- init some function after save loaded
 	local blackboardDefs = Game.GetAllBlackboardDefs()
 	local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
 	blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
-	--Game.SetTimeDilation(0)
+	--Game.GetTimeSystem():SetTimeDilation("cyberscript", 0)
 	 QuestManager.UntrackObjective()
 	
 	currentObjectiveId = 0
@@ -2906,7 +2906,7 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 		
 		
 		for k,location in pairs(list) do
-			-- ----print(k)
+			--print(k)
 			-- ----print(tostring((tag == nil or tag == "" or k == tag)))
 			-- ----print(tostring((district == nil or district == "" or (district ~= nil and location.district == district))))
 			-- ----print(tostring(subdistrict == nil or subdistrict == "" or (subdistrict ~= nil and location.subdistrict == subdistrict)))
@@ -3137,62 +3137,66 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 		
 		-- end
 	end
+	
 	if(#currentpoilist > 0) then
 		
 		
 		
 		if(distancename == "near") then
-			local currentpoi = nil
-			--currentpoi = currentpoilist[math.random(#currentpoilist)]
+			-- local currentpoi = nil
+			-- --currentpoi = currentpoilist[math.random(#currentpoilist)]
 			
 			
-			local distance = function(start)
-				return math.abs(start.x - frompos.x) + math.abs(start.y - frompos.y)
-			end
+			-- local distance = function(start)
+				-- return math.abs(start.x - frompos.x) + math.abs(start.y - frompos.y)
+			-- end
 			
-			-- Define a comparator that compares locations based on
-			-- distance to final position
-			local comparator = function(a, b)
-				return distance(a) < distance(b)
-			end
+			-- -- Define a comparator that compares locations based on
+			-- -- distance to final position
+			-- local comparator = function(a, b)
+				-- return distance(a) < distance(b)
+			-- end
 			
-			local adj_tiles
-			-- Set adj_tiles to an array of grid positions
+			-- local adj_tiles
+			-- -- Set adj_tiles to an array of grid positions
 			
-			table.sort(currentpoilist, comparator) -- Sort adjacent tiles based on distance
+			-- table.sort(currentpoilist, comparator) -- Sort adjacent tiles based on distance
 			
 			
-			
+			currentpoilist = sortPositionsByDistance(currentpoilist, frompos,100000,range)
 			--	----print(dump(currentpoilist[1]))
-			------print(dump(currentpoilist))
+		--	print(dump(currentpoilist[1]))
 			return currentpoilist[1]
 			
 		end
 		
 		if(distancename == "far") then
-			local currentpoi = nil
-			--currentpoi = currentpoilist[math.random(#currentpoilist)]
+		
+			currentpoilist = sortPositionsByDistance(currentpoilist, frompos,100000,range)
+			-- local currentpoi = nil
+			-- --currentpoi = currentpoilist[math.random(#currentpoilist)]
 			
 			
-			local distance = function(start)
-				return math.abs(start.x - frompos.x) + math.abs(start.y - frompos.y)
-			end
+			-- local distance = function(start)
+				-- return math.abs(start.x - frompos.x) + math.abs(start.y - frompos.y)
+			-- end
 			
-			-- Define a comparator that compares locations based on
-			-- distance to final position
-			local comparator = function(a, b)
-				return distance(a) < distance(b)
-			end
+			-- -- Define a comparator that compares locations based on
+			-- -- distance to final position
+			-- local comparator = function(a, b)
+				-- return distance(a) < distance(b)
+			-- end
 			
-			local adj_tiles
-			-- Set adj_tiles to an array of grid positions
+			-- local adj_tiles
+			-- -- Set adj_tiles to an array of grid positions
 			
-			table.sort(currentpoilist, comparator) -- Sort adjacent tiles based on distance
+			-- table.sort(currentpoilist, comparator) -- Sort adjacent tiles based on distance
 			
 			
 			
-			------print(dump(currentpoilist[#currentpoilist]))
-			------print(dump(currentpoilist))
+			-- ------print(dump(currentpoilist[#currentpoilist]))
+			-- ------print(dump(currentpoilist))
+		
 			return currentpoilist[#currentpoilist]
 			
 		end
@@ -3216,6 +3220,49 @@ function FindPOI(tag,district,subdistrict,iscar,poitype,locationtag,fromposition
 		return nil
 	end
 	
+end
+function calculateDistance(point1, point2)
+     local dx = point1.x - point2.x
+    local dy = point1.y - point2.y
+    local dz = point1.z - point2.z
+	
+    return math.floor(math.sqrt(dx * dx + dy * dy + dz * dz))
+end
+
+-- Function to sort a list of position objects from far to near using bucket sort
+function sortPositionsByDistance(positions, targetPosition, bucketCount,range)
+    -- Create buckets for storing positions
+    local buckets = {}
+    
+
+    -- Calculate and place positions into buckets based on distance
+    for _, position in ipairs(positions) do
+        local distance = calculateDistance(position, targetPosition)
+		-- print("distance : "..distance)
+		-- print("range : "..range)
+		if(distance >= 0 and distance <= range) then
+			local bucketIndex = distance+1
+			
+			if buckets[bucketIndex] == nil then buckets[bucketIndex] = {} end
+		
+			table.insert(buckets[bucketIndex], position)
+		end
+    end
+	
+	table.sort(buckets)
+	
+    -- Concatenate the buckets to get the sorted positions
+    local sortedPositions = {}
+     for i, buk in pairs(buckets) do
+		
+        for _, position in ipairs(buckets[i]) do
+            table.insert(sortedPositions, position)
+			
+        end
+    end
+	
+
+    return sortedPositions
 end
 
 function getNodeIndexFromCircuit(tag,listnodes)

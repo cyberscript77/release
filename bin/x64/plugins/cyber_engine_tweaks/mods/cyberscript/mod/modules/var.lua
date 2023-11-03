@@ -548,7 +548,7 @@ function resetVar()
 	
 	npcsource = { "npc", "current_star", "faction", "current_district_leader", "current_subdistrict_leader", "district_leader", "subdistrict_leader", "random","from_list","district_rival","subdistrict_rival","current_district_rival","current_subdistrict_rival"}
 	npcposition = { "at", "relative_to_entity", "node","player_look_at", "poi", "mappin", "fasttravel", "custom_place","custom_room"}
-	npcpositionway = { "normal", "behind", "forward"}
+	npcpositionway = { "normal", "behind", "forward","forward_relative"}
 	npcpositionhouseway = { "default", "enter", "exit"}
 	
 	poitype={ "All", "Hostile", "Friendly","Special"}

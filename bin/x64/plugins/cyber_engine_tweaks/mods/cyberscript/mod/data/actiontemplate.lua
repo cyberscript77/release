@@ -85,6 +85,7 @@ return {
 		["group"] = false,
 		["position_poi_type"] = 1,
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["position"] = "at",
 		["name"] = "teleport",
 		["helperTitle"] = "Entity : Teleport To",
@@ -180,6 +181,13 @@ return {
 			"blue01",
 			"red01",
 		},
+	},
+	["clear_entity_from_group_and_manager"] = {
+		["helper"] = "This action will remove all entities of a group of entity and from the entity manager (it doesn't despawn it)",
+		["helperTitle"] = "Group : Clear entity from group and Entity Manager",
+		["tag"] = "grouptag",
+		["name"] = "clear_entity_from_group_and_manager",
+		
 	},
 	["reset_group_facial"] = {
 		["helper"] = "This action will reset facial expression of each entity of a group",
@@ -557,6 +565,7 @@ return {
 			"mysound2",
 			"mysound3",
 		},
+		["target"] = "judy",
 	},
 	["play_custom_sound_with_subtitle"] = {
 		["type"] = 1,
@@ -565,7 +574,8 @@ return {
 		["speaker"] = "Judy",
 		["target"] = "player",
 		["name"] = "play_custom_sound_with_subtitle",
-		["value"] = "mysound1"
+		["value"] = "mysound1",
+		["target"] = "judy",
 	},
 	
 	["play_custom_sound_with_subtitle_as_chat"] = {
@@ -724,13 +734,6 @@ return {
 		["helperTitle"] = "Vehicule : Change AV velocity",
 		["helper"] = "This action will wait change velocity of AVs",
 	},
-	["change_custom_condition"] = {
-		["helper"] = "This action will change the value of a custom score",
-		["score"] = 50,
-		["value"] = "customScore",
-		["name"] = "change_custom_condition",
-		["helperTitle"] = "Score :  change the value of a custom score",
-	},
 	["vehicle_change_windows"] = {
 		["helper"] = "This action will change the state of car windows (open||close)",
 		["helperTitle"] = "Vehicule : Change Windows State",
@@ -816,6 +819,7 @@ return {
 		["position_poi_use_location_tag"] = false,
 		["position_poi_type"] = 1,
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["typemap"] = "ExclamationMarkVariant",
 		["wall"] = true,
 		["mapgroup"] = "",
@@ -869,6 +873,7 @@ return {
 		["position_poi_use_location_tag"] = false,
 		["position_poi_type"] = 1,
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["typemap"] = "ExclamationMarkVariant",
 		["mapgroup"] = "",
 		["position"] = "at",
@@ -999,15 +1004,7 @@ return {
 		["tag"] = "mymappintaggroup",
 		["name"] = "set_map_group_tracking_to",
 	},
-	["operate_custom_score_to_another_one"] = {
-		["helper"] = "This action will make a operation to a score with the value of another one and store it into the result score. Operator can be +,-, /, *,positive,negative",
-		["targetscore"] = "customScore2",
-		["resultscore"] = "customScore2",
-		["operator"] = "+",
-		["name"] = "operate_custom_score_to_another_one",
-		["helperTitle"] = "Score : Make operation",
-		["variable"] = "customScore",
-	},
+	
 	["subscribe_actionlist_to_direct_execution"] = {
 		["helper"] = "This action will subscribe a list of action to direct execution engine",
 		["helperTitle"] = "Script : Register Action List to Direct Execution",
@@ -1140,6 +1137,14 @@ return {
 		["caller"] = "NCPD Bounty Departement",
 		["desc"] = "NCPD",
 	},
+	["show_call_avatar"] = {
+		["image"] = "Avatar_Ncpd",
+		["helperTitle"] = "Ui : Show Call Avatar ",
+		["helper"] = "This action will show Npc Phone Portrait",
+		["name"] = "show_call_avatar",
+		["caller"] = "NCPD Bounty Departement",
+		["desc"] = "NCPD",
+	},
 	["set_relation_from_faction_to_attitude"] = {
 		["helper"] = "This action will set relation between a faction and an AttitudeGroup",
 		["helperTitle"] = "Gameplay : Set Attitude Relation Between a Faction and an Attitude",
@@ -1252,6 +1257,22 @@ return {
 		["startindex"] = 0,
 		["name"] = "register_entities_around_you",
 	},
+	["register_enemy_around_you"] = {
+		["helper"] = "This action will register founded enemies in the player's determined range and filter. \
+ The filter will check in the name, display name and appearance of the entity or hash \
+ leave filter at [] for take all. ",
+		["helperTitle"] = "Entity : Register enemies around you",
+		["range"] = 5,
+		["filter"] = {
+			"mox",
+			"npc",
+		},
+		["group"] = "",
+		["limit"] = 5,
+		["prefix"] = "myentities",
+		["startindex"] = 0,
+		["name"] = "register_enemy_around_you",
+	},
 	["register_entities_around_entity"] = {
 		["helper"] = "This action will register founded entity in the entity's determined range and filter. \
  The filter will check in the name, display name and appearance of the entity or hash \
@@ -1341,11 +1362,7 @@ return {
 		["minute"] = 30,
 		["hour"] = 22,
 	},
-	["register_entity_you_look_at_as_companion"] = {
-		["helper"] = "This action will register the looked entity as companion",
-		["helperTitle"] = "Entity : Register a looked entity as companion",
-		["name"] = "register_entity_you_look_at_as_companion",
-	},
+	
 	["add_time"] = {
 		["helper"] = "This action will add X minute to in game time",
 		["helperTitle"] = "Time : Add minutes",
@@ -1485,6 +1502,7 @@ return {
 		["group"] = false,
 		["position_poi_type"] = 1,
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["move"] = "Walk",
 		["moveV2"] = true,
 		["distancetolerance"] = 0,
@@ -1692,7 +1710,7 @@ return {
 		["create_group_if_not_exist"] = false,
 		["source"] = "npc",
 		["source_tag"] = "Character.Judy",
-		["source_helper"] = "npc||current_star||faction||current_district_leader||current_subdistrict_leader||district_leader||subdistrict_leader||random||from_list||district_rival||subdistrict_rival||current_district_rival||current_subdistrict_rival",
+		["source_helper"] = "npc||current_star||faction||current_district_leader||current_subdistrict_leader||district_leader||subdistrict_leader||random||from_list||district_rival||subdistrict_rival||current_district_rival||current_subdistrict_rival||custom_npc",
 		["source_use_rival"] = false,
 		["source_tag_helper"] = "Character.Judy||faction_mox||district_westbrook||NorthOaks",
 		["position_way"] = "normal",
@@ -1736,6 +1754,7 @@ return {
 		["name"] = "spawn_npc",
 		["source_use_vip"] = false,
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["position_house_way"] = "default",
 		["position_distance"] = 5,
 		["position_poi_use_location_tag"] = false,
@@ -1751,6 +1770,7 @@ return {
 		["persistspawn"] = false,
 		["alwaysspawned"] = false,
 		["spawninview"] = true,
+		["dontregister"] = false
 	},
 	["current_place_clear_all_template"] = {
 		["helper"] = "This action will clear all item that are from a template in the current place",
@@ -1811,7 +1831,7 @@ return {
 		["helperTitle"] = "UI : Message",
 		["helper"] = "This action will make display a in game message",
 	},
-	["spawn_vehicule_v2"] = {
+	["spawn_vehicule"] = {
 		["create_group_if_not_exist"] = false,
 		["source"] = "vehicle",
 		["source_tag"] = "Vehicle.cs_savable_archer_hella_police_siren",
@@ -1857,13 +1877,14 @@ return {
 		["wait_for_vehicle_second"] = 7,
 		["isAV"] = false,
 		["amount"] = 1,
-		["name"] = "spawn_vehicule_v2",
+		["name"] = "spawn_vehicule",
 		["z"] = 0,
 		["position_poi_use_location_tag"] = false,
 		["source_list"] = {
 			"Vehicle.cs_savable_archer_hella_police_siren",
 		},
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["position_house_way"] = "default",
 		["position_distance"] = 5,
 		["position_range"] = 50,
@@ -1873,7 +1894,8 @@ return {
 		["persiststate"] = false,
 		["persistspawn"] = false,
 		["alwaysspawned"] = false,
-		["spawninview"] = true
+		["spawninview"] = true,
+		["dontregister"] = false
 	},
 	["subscribe_actionlist_to_direct_action"] = {
 		["helper"] = "This action will subscribe a list of action to direct Action Engine",
@@ -1903,6 +1925,11 @@ return {
 		["name"] = "simple_message_metro",
 		["helperTitle"] = "UI : Metro Message",
 		["entity"] = "myTrain",
+	},
+	["open_door"] = {
+		["helper"] = "This action will Open Looked Door",
+		["name"] = "open_door",
+		["helperTitle"] = "Game : Open Looked Door"
 	},
 	["execute_at_script_level"] = {
 		["scriptlevel"] = 1,
@@ -1960,7 +1987,7 @@ return {
 		["amount"] = 5,
 		["price"] = 1200,
 	},
-	[" play_scene"] = {
+	["play_scene"] = {
 		["helper"] = "This action will play totally the loaded scene",
 		["helperTitle"] = "Scene : Play an scene",
 		["name"] = " play_scene",
@@ -2180,6 +2207,7 @@ return {
 		["position_poi_use_location_tag"] = false,
 		["position_poi_type"] = 1,
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["position"] = "at",
 		["name"] = "move_camera",
 		["helperTitle"] = "UI : Move Camera",
@@ -2236,6 +2264,7 @@ return {
 		["position_poi_use_location_tag"] = false,
 		["position_poi_type"] = 1,
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["position"] = "at",
 		["name"] = "spawn_camera",
 		["helperTitle"] = "UI : Spawn Camera",
@@ -2323,6 +2352,7 @@ return {
 		["position_poi_searchdistance"] = "near|far|random",
 		["position_poi_type"] = 1,
 		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
 		["position"] = "at",
 		["name"] = "spawn_item",
 		["helperTitle"] = "Entity : Spawn Item",
@@ -2347,16 +2377,7 @@ return {
 		["helperTitle"] = "UI : Trigger Metro TV display custom remaning time",
 		["helper"] = "This action will trigger custom remaning time for metro TV display",
 	},
-	["operate_score_from_another_score"] = {
-		["helperTitle"] = "Score : Operate Score from another Score",
-		["targetkey"] = "MyKey2",
-		["targetscore"] = "MyScore2",
-		["helper"] = "This action will operate a value from a score/key combo to a key of a score. Can be number, boolean or text \n Operator can be + | -| * | / | positive | negative | random (who take min and max value) | ceil | floor",
-		["operator"] = "+",
-		["name"] = "operate_score_from_another_score",
-		["key"] = "MyKey",
-		["score"] = "MyScore",
-	},
+	
 	["load_interact"] = {
 		["tag"] = "myinteracttag",
 		["helper"] = "This action will force load and display an interact without check requirements",
@@ -2408,7 +2429,7 @@ return {
 		["name"] = "vehicle_force_brake",
 		["tag"] = "myvehiculetag",
 	},
-	[" reset_scene"] = {
+	["reset_scene"] = {
 		["helper"] = "This action will play totally the loaded scene",
 		["helperTitle"] = "Scene : Play an scene",
 		["name"] = " reset_scene",
@@ -2963,7 +2984,7 @@ return {
 		["helperTitle"] = "Money : Give money",
 		["helper"] = "This action will make give a amount of money",
 	},
-	[" player_toggle_invisible"] = {
+	["player_toggle_invisible"] = {
 		["value"] = true,
 		["name"] = " player_toggle_invisible",
 		["helperTitle"] = "Player : Toggle Invisibility",
@@ -2980,7 +3001,7 @@ return {
 		["helperTitle"] = "Anim : Stop Anim for Entity",
 		["name"] = "stop_anim_entity",
 	},
-	[" player_toggle_v_component_visibility"] = {
+	["player_toggle_v_component_visibility"] = {
 		["value"] = true,
 		["name"] = " player_toggle_v_component_visibility",
 		["helperTitle"] = "Player : Toggle all V's Body Component Invisibility",
@@ -3005,7 +3026,7 @@ return {
 		["name"] = "wait_for_trigger",
 		["help"] = "Wait that trigger condition is valid",
 	},
-	[" load_scene"] = {
+	["load_scene"] = {
 		["helper"] = "This action will load an scene (doesn't means it will play it)",
 		["tag"] = "myscene",
 		["helperTitle"] = "Scene : Load an scene",
@@ -3033,7 +3054,7 @@ return {
 			"myfunction02",
 		},
 	},
-	[" unload_scene"] = {
+	["unload_scene"] = {
 		["helper"] = "This action will unload the current loaded scene",
 		["helperTitle"] = "Scene : Unload an scene",
 		["name"] = " unload_scene",
@@ -3086,12 +3107,12 @@ return {
 		["helperTitle"] = "Game : Set Time Dilatation for Player",
 		["helper"] = "This action will set current time dilatation only for player",
 	},
-	[" init_scene"] = {
+	["init_scene"] = {
 		["helper"] = "This action will play totally the loaded scene",
 		["helperTitle"] = "Scene : Play an scene",
 		["name"] = " init_scene",
 	},
-	[" play_scene_step_index"] = {
+	["play_scene_step_index"] = {
 		["value"] = 1,
 		["name"] = " play_scene_step_index",
 		["helperTitle"] = "Scene : Play an scene step at index",
@@ -3122,7 +3143,7 @@ return {
 		["distance"] = 0,
 		["y"] = -10,
 	},
-	[" play_scene_step_by_tag"] = {
+	["play_scene_step_by_tag"] = {
 		["value"] = "myscenestep",
 		["name"] = " play_scene_step_by_tag",
 		["helperTitle"] = "Scene : Play an scene step at tag",
@@ -3154,7 +3175,7 @@ return {
 		["x"] = -10,
 		["y"] = -10,
 	},
-	[" play_next_scene_step"] = {
+	["play_next_scene_step"] = {
 		["helper"] = "This action will play the next step of the loaded scene",
 		["helperTitle"] = "Scene : Play next scene step",
 		["name"] = " play_next_scene_step",
@@ -3182,7 +3203,7 @@ return {
 		["helperTitle"] = "Interact : Unload",
 		["name"] = "unload_interact",
 	},
-	[" play_previous_scene_step"] = {
+	["play_previous_scene_step"] = {
 		["helper"] = "This action will play the previous step of the loaded scene",
 		["helperTitle"] = "Scene : Play previous scene step",
 		["name"] = " play_previous_scene_step",
@@ -3736,6 +3757,31 @@ return {
 		["helperTitle"] = "Entity : clone entity",
 		["name"] = "clone_entity",
 		["despawntimer"] = 300,
-		["deleteoriginal"] = false
+		["deleteoriginal"] = false,
+		["persiststate"] = false,
+		["persistspawn"] = false,
+		["alwaysspawned"] = false,
+		["spawninview"] = true
+	},
+	["apply_effect_to_group"] = {
+		["helper"] = "This action will apply effect to a group",
+		["helperTitle"] = "Group : apply effect to entity",
+		["value"] = "Burning",
+		["tag"] = "mygrouptag",
+		["name"] = "apply_effect_to_group",
+	},
+	["remove_effect_to_group"] = {
+		["helper"] = "This action will apply effect to a group",
+		["helperTitle"] = "Group : remove effect to entity",
+		["value"] = "Burning",
+		["tag"] = "mygrouptag",
+		["name"] = "remove_effect_to_group",
+	},
+	["fake_lips_sync"] = {
+		["helper"] = "This action will make a lips movement to the entity. Duration in seconds",
+		["helperTitle"] = "Entity : Lips movement",
+		["duration"] = 3,
+		["tag"] = "judy",
+		["name"] = "fake_lips_sync",
 	},
 }
