@@ -2113,8 +2113,6 @@ end
 function WorldMapMenuGameController_OnSetUserData(thos,userData)
 	if(observerthread4  == true or moddisabled == true)    then return end
 	
-	setNewFixersPoint()
-	setCustomLocationPoint() 
 	
 end
 function SettingsMainGameController_RequestClose (_, _, target) -- Check if activated button is the custom mods button

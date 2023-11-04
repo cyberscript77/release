@@ -1143,7 +1143,15 @@ function makeNativeSettings()
 		end)
 		
 		
-		
+		nativeSettings.addSwitch("/CM/hud", getLang("Show Cyberscript Fixer on Map"), getLang("Show Cyberscript Fixer on Map"), enableLocation, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			showcyberscriptfixeronmap = state
+			updateUserSetting("showcyberscriptfixeronmap", state)
+			if(showcyberscriptfixeronmap) then
+				setNewFixersPoint()
+			else
+				 removeFixersPoint() 
+			end
+		end)
 		
 		nativeSettings.addSubcategory("/CM/quests",getLang("Quest setting"))
 		

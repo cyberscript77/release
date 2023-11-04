@@ -7558,7 +7558,7 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   	searchQuery = Game["TSQ_ALL;"]() -- Search ALL objects
    			   	searchQuery.maxDistance = action.range
    			   	success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
-   			   	
+   			   	local startindex = 0
    			   	local goodEntity = false
    			   	
    			   	for i, v in ipairs(parts) do
@@ -7588,10 +7588,10 @@ function executeAction(action,tag,parent,index,source,executortag)
    			   					end
    			   				
 								if(action.prefix == nil) then action.prefix = "entity" end
-								startindex = 0
+								
 								if(action.startindex == nil) then startindex = newent:GetEntityID().hash end
 								if(action.startindex ~= nil) then startindex = action.startindex + i - 1 end
-   			   					entity.tag = action.prefix..tostring(startindex)
+   			   					entity.tag = action.prefix..tostring(action.startindex)
    			   					entity.tweak = "None"
    			   					entity.iscompanion = false
    			   					if(canadd) then

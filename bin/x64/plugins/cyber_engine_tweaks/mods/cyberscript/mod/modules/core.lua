@@ -231,6 +231,7 @@ function SaveLoading()
 	UltraSpeedDodge = getUserSettingWithDefault("UltraSpeedDodge",UltraSpeedDodge)
 	UnlimitedCarryLimit = getUserSettingWithDefault("UnlimitedCarryLimit",UnlimitedCarryLimit)
 	debugLog = getUserSettingWithDefault("debugLog",debugLog)
+	showcyberscriptfixeronmap = getUserSettingWithDefault("showcyberscriptfixeronmap",showcyberscriptfixeronmap)
 	
 	
 	

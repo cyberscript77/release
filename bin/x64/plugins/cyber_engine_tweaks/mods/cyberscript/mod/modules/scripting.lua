@@ -941,8 +941,9 @@ function inGameInit() -- init some function after save loaded
 	print("no codeware founded")
 	
 	end
-	
-	setNewFixersPoint()
+	if(showcyberscriptfixeronmap) then
+		setNewFixersPoint()
+	end
 	setCustomLocationPoint() 
 	
 	--createInteraction(true)

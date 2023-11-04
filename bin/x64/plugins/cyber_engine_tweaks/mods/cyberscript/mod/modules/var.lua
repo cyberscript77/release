@@ -2570,6 +2570,7 @@ function resetVar()
 	openNewSceneStep = false
 	
 	enableLocation = true
+	showcyberscriptfixeronmap = true
 	showFactionAffinityHud = true
 	
 	
