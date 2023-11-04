@@ -10339,7 +10339,11 @@ function listenPlayerInput(action)
 	end
 	if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and currentHelp == nil  then 
 		
+		if(newgroupinteractUI) then
+		cycleInteract2()
+		else
 		cycleInteract()
+		end
 		
 	end
 		pcall(function()

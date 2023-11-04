@@ -232,7 +232,7 @@ function SaveLoading()
 	UnlimitedCarryLimit = getUserSettingWithDefault("UnlimitedCarryLimit",UnlimitedCarryLimit)
 	debugLog = getUserSettingWithDefault("debugLog",debugLog)
 	showcyberscriptfixeronmap = getUserSettingWithDefault("showcyberscriptfixeronmap",showcyberscriptfixeronmap)
-	
+	newgroupinteractUI = getUserSettingWithDefault("newgroupinteractUI",newgroupinteractUI)
 	
 	
 	logrecordlevel = getUserSettingWithDefault("logrecordlevel",logrecordlevel)
@@ -789,7 +789,11 @@ end)
 
 -- -------------------------------HotKey------------------------------
 registerHotkey("cycleCustomInteract", "Cycle Custom Interact", function()
+	if(newgroupinteractUI) then
+	cycleInteract2()
+	else
 	cycleInteract()
+	end
 end
 )
 registerHotkey("push", "push", function()

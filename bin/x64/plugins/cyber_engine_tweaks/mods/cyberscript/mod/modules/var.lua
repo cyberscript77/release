@@ -474,7 +474,7 @@ function resetVar()
 	
 	
 	gameStatModifierType = {"Additive","AdditiveMultiplier","Multiplier"}
-	
+	newgroupinteractUI =true
 	
 	currentLoadedTexture = {}
 	

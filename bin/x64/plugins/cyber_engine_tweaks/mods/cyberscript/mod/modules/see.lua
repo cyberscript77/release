@@ -10506,6 +10506,11 @@ function executeAction(action,tag,parent,index,source,executortag)
    				
    				ActivatedGroup()
    			end
+			
+			if(action.name == "open_datapack_group_ui2") then
+   				
+   				ActivatedGroup2()
+   			end
    			if(action.name == "open_menu") then
    				local startHub = StartHubMenuEvent.new()
    				startHub:SetStartMenu(action.value)

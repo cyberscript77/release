@@ -1143,7 +1143,7 @@ function makeNativeSettings()
 		end)
 		
 		
-		nativeSettings.addSwitch("/CM/hud", getLang("Show Cyberscript Fixer on Map"), getLang("Show Cyberscript Fixer on Map"), enableLocation, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
+		nativeSettings.addSwitch("/CM/hud", getLang("Show Cyberscript Fixer on Map"), getLang("Show Cyberscript Fixer on Map"), showcyberscriptfixeronmap, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			showcyberscriptfixeronmap = state
 			updateUserSetting("showcyberscriptfixeronmap", state)
 			if(showcyberscriptfixeronmap) then
@@ -1151,6 +1151,13 @@ function makeNativeSettings()
 			else
 				 removeFixersPoint() 
 			end
+		end)
+		
+		
+		nativeSettings.addSwitch("/CM/hud", getLang("Mods interacts displayed as dialog"), getLang("Mods interacts displayed as dialog"), newgroupinteractUI, true, function(state) -- path, label, desc, currentValue, defaultValue, callback"), enableLocation, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			newgroupinteractUI = state
+			updateUserSetting("newgroupinteractUI", state)
+			
 		end)
 		
 		nativeSettings.addSubcategory("/CM/quests",getLang("Quest setting"))
@@ -2138,6 +2145,142 @@ function ActivatedGroup()
 end
 
 
+function ActivatedGroup2()
+	local dialog = {}
+	
+	dialog.trigger = {}
+	dialog.requirement = {}
+	dialog.desc = ""
+	dialog.tag = "ActivatedGroup2"
+	dialog.speaker = "Interactions Group Selected : "..currentInteractGroup[currentInteractGroupIndex]
+	dialog.context = {}
+	dialog.options = {}
+	
+	
+	
+	if(#currentInteractGroup > 0 ) then
+	
+		
+		
+		
+		
+		for i = 1, #currentInteractGroup do 
+			
+		
+			local options = {}
+			options.requirement = nil
+			options.trigger = nil
+			options.description = currentInteractGroup[i]
+			options.action = {}
+			
+			local spawn_item = {}
+			spawn_item.name = "set_datapack_group_index" 
+			spawn_item.value = i
+			table.insert(options.action,spawn_item)
+			
+			table.insert(dialog.options,options)
+		end
+		
+		
+		createDialog(dialog)
+		end
+	
+		
+end
+
+function cycleInteract2()
+	getTriggeredActions()
+	currentInteractGroupIndex = currentInteractGroupIndex or 1
+	getTriggeredActionsDisplay()
+	local dialog = {}
+	
+	dialog.trigger = {}
+	dialog.requirement = {}
+	dialog.desc = ""
+	dialog.tag = "cycleInteract2"
+	dialog.speaker = currentInteractGroup[currentInteractGroupIndex]
+	dialog.context = {}
+	dialog.options = {}
+	
+	
+	
+	for key,value in pairs(cyberscript.cache["interact"]) do --actualcode
+		
+		local interact = cyberscript.cache["interact"][key].data
+		checkContext(interact)
+		--testTriggerRequirement(interact2.requirement,interact2.trigger)
+		if(checkTriggerRequirement(interact.requirement,interact.trigger)) and (interact.group == currentInteractGroup[currentInteractGroupIndex] or key == "default_open_datapack_group_ui") then
+			
+			if(interact.type == nil or interact.type == "interact") then
+						
+						local options = {}
+			options.requirement = interact.requirement
+			options.trigger = interact.trigger
+			options.description = interact.name
+			options.action = interact.action
+			if(key == "default_open_datapack_group_ui") then
+				options.action =  {}
+				options.action[1] = interact.action[1]
+				options.action[1].name = "open_datapack_group_ui2"
+			end
+			options.icon = interact.icon
+			options.style = interact.style
+			options.tag = interact.tag
+			
+			
+			
+			
+			table.insert(dialog.options,options)
+						
+						else
+						showInputHint(interact.key, getLang(interact.name), 1, interact.hold, interact.tag)
+					end
+			else
+			if(#currentInputHintList > 0) then
+				
+				for i = 1, #currentInputHintList do
+					
+					if(currentInputHintList[i]~= nil and currentInputHintList[i].tag == interact.tag) then
+						hideCustomHints(interact.tag)
+						
+						currentInputHintList[i] = nil
+					end
+					
+					
+				end
+				
+				
+			end
+		end
+		
+		
+		
+		
+	end
+	
+	
+	
+	if(#dialog.options > 0) then
+	
+			local options = {}
+			options.requirement = nil
+			options.trigger = nil
+			options.description = "Exit"
+			options.action = {}
+			
+				
+			options.action[1] = {}
+			options.action[1].name = "nothing"
+			
+			
+			
+			
+			
+			table.insert(dialog.options,options)
+			createDialog(dialog)
+		end
+	
+end
 function Activatedshard(shard)
 	currentInterface = nil
 	--print(dump(shard))
@@ -2408,17 +2551,7 @@ function cycleInteract()
 	getTriggeredActions()
 	currentInteractGroupIndex = currentInteractGroupIndex or 1
 	inputInAction = false
-	logme(1,"possibleInteractDisplay"..#possibleInteractDisplay)
-	logme(1,"currentInteractGroupIndex"..currentInteractGroupIndex)
-	logme(1,"currentPossibleInteractChunkIndex"..currentPossibleInteractChunkIndex)
-	logme(1,"candisplayInteract"..tostring(candisplayInteract))
-	logme(1,"currentInteractGroup"..currentInteractGroup[currentInteractGroupIndex])
-	-- -- logme(6,actionValue)
 	
-	-- --print(dump(possibleInteractDisplay))
-	
-	-- --print(dump(currentInteractGroup[currentInteractGroupIndex]))
-	--scandisplayInteract = true
 	candisplayInteract = true
 	if currentPossibleInteractChunkIndex == 0 then
 		-- currentPossibleInteractChunkIndex = 1
@@ -3000,7 +3133,7 @@ function createDialog(dialog)
     local hub = interactionUI.createHub(getDialogOwner(dialog.speaker), choicelist,id) -- Create hub and give it the list of choices
    
 	interactionUI.setupHub(hub) -- Set the hub
-	 print(GameDump(interactionUI.baseControler))
+	
     interactionUI.showHub() -- Show the previously set hub
 	currentDialogHub.hub = hub
     -- Setup callbacks
