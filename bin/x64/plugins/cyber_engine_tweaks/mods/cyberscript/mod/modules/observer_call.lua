@@ -26,9 +26,7 @@ function SetObserver()
 		SimpleQuestListItemController_OnDataChanged(self,value)
 	end)
 	
-	ObserveAfter('SimpleQuestListItemController', 'OnUpdateTrackedObjectiveEvent', function(self,e)
-		SimpleQuestListItemController_OnUpdateTrackedObjectiveEvent(self,e)
-	end)
+	
 	
 	ObserveAfter('SimpleQuestListItemController', 'OnPress', function(self,e)
 		SimpleQuestListItemController_OnPress(self,value)

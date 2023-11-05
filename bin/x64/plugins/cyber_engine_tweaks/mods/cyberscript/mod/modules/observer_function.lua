@@ -6802,6 +6802,7 @@ function WorldMapTooltipController_SetData(self,data,menu)
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	local mappinVariant = nil
 	
+	if(data ~= nil) then
 	if( data.mappin ~= nil) then
 		
 		mappinVariant = data.mappin:GetVariant()
@@ -6847,6 +6848,8 @@ function WorldMapTooltipController_SetData(self,data,menu)
 		else
 		if(mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant) then self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetText(fixeroldText) end
 		inkWidgetRef.SetVisible(self.icon, true)
+	end
+	
 	end
 end
 

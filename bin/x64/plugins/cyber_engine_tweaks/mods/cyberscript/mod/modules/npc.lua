@@ -1633,8 +1633,9 @@ if actionRegion then
 	
 	function resetFacial(enti)
 		local StimReaction = enti:GetStimReactionComponent()
-		StimReaction:ResetFacial(0)
-		
+		if StimReaction ~= nil then
+			StimReaction:ResetFacial(0)
+		end
 		
 	end
 	

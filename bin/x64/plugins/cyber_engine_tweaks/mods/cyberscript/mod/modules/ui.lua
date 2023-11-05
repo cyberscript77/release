@@ -2209,9 +2209,10 @@ function cycleInteract2()
 		local interact = cyberscript.cache["interact"][key].data
 		checkContext(interact)
 		--testTriggerRequirement(interact2.requirement,interact2.trigger)
-		if(checkTriggerRequirement(interact.requirement,interact.trigger)) and (interact.group == currentInteractGroup[currentInteractGroupIndex] or key == "default_open_datapack_group_ui") then
+		if(checkTriggerRequirement(interact.requirement,interact.trigger)) and 
+		(interact.group == currentInteractGroup[currentInteractGroupIndex] or key == "default_open_datapack_group_ui") then
 			
-			if(interact.type == nil or interact.type == "interact") then
+			if((interact.type == nil or interact.type == "interact") and (interact.display == nil or interact.display == "event_interact")) then
 						
 						local options = {}
 			options.requirement = interact.requirement
@@ -2233,7 +2234,10 @@ function cycleInteract2()
 			table.insert(dialog.options,options)
 						
 						else
+						if((interact.type == nil or interact.type == "hint")) then
+			
 						showInputHint(interact.key, getLang(interact.name), 1, interact.hold, interact.tag)
+						end
 					end
 			else
 			if(#currentInputHintList > 0) then

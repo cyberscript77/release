@@ -2497,17 +2497,21 @@ function executeAction(action,tag,parent,index,source,executortag)
    				local vehiculeobj =  getEntityFromManager(action.tag)
    				local vehicule = Game.FindEntityByID(vehiculeobj.id)
    				if(vehicule ~= nil) then
-   					local cmd = NewObject("handle:AIVehicleJoinTrafficCommand")
+   					VehicleGoToXYZ(action.tag, 0,0,0 ,10,25)
+   				end
+   			end
+			if(action.name == "vehicle_go_to_position") then
+   				local vehiculeobj =  getTrueEntityFromManager(action.tag)
+   				local vehicule = Game.FindEntityByID(vehiculeobj.id)
+   				if(vehicule ~= nil and ActivecustomMappin ~= nil) then
    					
-   					cmd.needDriver = false
-   					
-   					cmd.useKinematic   = true
-   					cmd = cmd:Copy()
    					
    					
-   					local AINPCCommandEvent = NewObject("handle:AINPCCommandEvent")
-   					AINPCCommandEvent.command = cmd
-   					vehicule:QueueEvent(AINPCCommandEvent)
+   				
+   					local position = getPositionFromParameter(action)
+					vehiculeobj.destination = position
+   					VehicleGoToXYZ(action.tag, position.x,position.y,position.z,action.minspeed,action.maxspeed)
+   					
    				end
    			end
    			if(action.name == "vehicle_set_invincible") then
