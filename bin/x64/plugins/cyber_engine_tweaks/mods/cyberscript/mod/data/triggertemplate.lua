@@ -374,6 +374,17 @@ return {
 			"npc",
 		},
 	},
+	["if_entity_contains_value"] = {
+		["tag"] = "judy01",
+		["helper"] = "this trigger will check for if the entity got a filter. \
+ The filter will check in the name, display name and appearance of the entity or hash",
+		["helperTitle"] = "Entity : Contains value",
+		["name"] = "if_entity_contains_value",
+		["filter"] = {
+			"mox",
+			"npc",
+		},
+	},
 	["if_entities_around_entity"] = {
 		["range"] = 5,
 		["helper"] = "this trigger will check for if there is an entity founded in the entity's view in an determined range and filter. \

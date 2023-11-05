@@ -902,7 +902,9 @@ function buildnativesetting()
 				if setting.type == "toggle" then
 					nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						setVariable(setting.variable.tag,setting.variable.key,value)
-						
+						print(tostring(setting.variable.tag))
+						print(tostring(setting.variable.key))
+						print(tostring(value))
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
 						
 					end)

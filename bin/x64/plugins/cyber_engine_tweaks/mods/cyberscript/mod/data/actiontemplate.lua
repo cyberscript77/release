@@ -480,6 +480,12 @@ return {
 		["helperTitle"] = "House : Toggle House Mode",
 		["helper"] = "This action will trigger housing mode",
 	},
+	["clean_dialog"] = {
+	
+		["name"] = "clean_dialog",
+		["helperTitle"] = "Dialog : Clean displayed dialog",
+		["helper"] = "This action will clean displayed dialog",
+	},
 	["consolelog"] = {
 		["value"] = "This is a CET console log !",
 		["name"] = "consolelog",

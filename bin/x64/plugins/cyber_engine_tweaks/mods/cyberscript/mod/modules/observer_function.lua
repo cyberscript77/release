@@ -2364,11 +2364,11 @@ end
 
 
 function WebPage_FillPageFromJournal(self,page)
-	print("KOKO")
+	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	defaultPage = page
-	print("KOKO")
+	
 	
 	if(page.address == "NETdir://ncity.pub") then -- custompage
 		
@@ -2403,7 +2403,8 @@ function WebPage_FillPageFromJournal(self,page)
 		
 		
 		
-		
+			if webcount == 0 then webcount = linkbar01:GetNumChildren() end
+		if(webcount == linkbar01:GetNumChildren()) then
 		if(isEmpty(cyberscript.cache["webpage"]) == false) then
 			
 			local linknew = inkVerticalPanelWidget.new()
@@ -2456,7 +2457,7 @@ function WebPage_FillPageFromJournal(self,page)
 			linknew:Reparent(linkbar01, linkbar01:GetNumChildren()+1)
 		end
 		
-		
+		end
 		
 		
 		if(CurrentAddress == "CyberScript") then
@@ -5116,7 +5117,7 @@ end
 function WebPage_FillPageFromJournalWebExt(self)
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
-	
+	print("dd")
 		
 		LinkController = inkWidgetRef.GetController(self.imageList[1])
 		local root = self:GetRootWidget()
