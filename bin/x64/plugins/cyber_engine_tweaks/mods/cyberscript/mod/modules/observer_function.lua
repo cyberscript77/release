@@ -8049,11 +8049,7 @@ end
 function PhoneDialerGameController_Show(thos)
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
-	if(thos.currentTab == PhoneDialerTabs.Unread and countphone == 0) then
-	okcountphone = nil
 	countphone = 0
-	print("show")
-	end
 	openPhone = true
 end
 

@@ -2437,7 +2437,8 @@ function executeAction(action,tag,parent,index,source,executortag)
 								position.x = position.x + (i*0.5)
 								
 							end
-							spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav,action.despawntimer,action.persiststate,action.persistspawn,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview,action.dontregister)
+							
+							spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav,action.despawntimer,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview,action.dontregister)
 							if(action.group ~= nil and action.group ~= "") then
 								
 								if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
