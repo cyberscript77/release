@@ -770,7 +770,7 @@ end
 
 function inGameInit() -- init some function after save loaded
 	loadHUD()
-	
+	CheckandUpdateDatapack()
 	LoadDataPackCache()
 	candrwMapPinFixer= false
 	cancheckmission = true
@@ -780,6 +780,20 @@ function inGameInit() -- init some function after save loaded
 	choiceHubData.title = "possibleInteractList" --'Test Interaction Hub'
 	
 	loadUIsetting()
+	
+	
+	local inkSystem = Game.GetInkSystem();
+	local layers = inkSystem:GetLayers();
+
+	for i,layer in ipairs(layers) do
+	  for j,controller in ipairs(layer:GetGameControllers()) do
+		if(GameController[NameToString(controller:GetClassName())] == nil) then
+			GameController[NameToString(controller:GetClassName())] = controller
+		end
+		
+	  end
+	end
+	
 	
 	theme = CPS.theme
 	color = CPS.color

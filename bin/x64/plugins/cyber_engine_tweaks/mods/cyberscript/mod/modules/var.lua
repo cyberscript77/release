@@ -112,6 +112,9 @@ function resetVar()
 	
 	
 	cyberscript.soundmanager={} 
+	
+	
+	
 	editorAnimName = "add__stand__2h_front__01__dynamic"
 	editorAnimRepo = "man_base"
 	editorAnimTag = "lookatnpc"
@@ -547,7 +550,31 @@ function resetVar()
 	possibleFaction = { "Arasaka", "Militech", "KangTao", "Nomad"}
 	
 	npcsource = { "npc", "current_star", "faction", "current_district_leader", "current_subdistrict_leader", "district_leader", "subdistrict_leader", "random","from_list","district_rival","subdistrict_rival","current_district_rival","current_subdistrict_rival"}
-	npcposition = { "at", "relative_to_entity", "node","player_look_at", "poi", "mappin", "fasttravel", "custom_place","custom_room"}
+	npcposition = { 
+		"at", 
+		"relative_to_entity", 
+		"node",
+		"player_look_at", 
+		"poi", 
+		"mappin", 
+		"fasttravel", 
+		"custom_place",
+		"custom_room"
+		}
+		
+	mappinsource = { 
+		"at", 
+		"relative_to_entity", 
+		"node",
+		"player_look_at", 
+		"poi", 
+		"mappin", 
+		"fasttravel", 
+		"custom_place",
+		"custom_room",
+		"on_entity",
+		"on_group"
+	}
 	npcpositionway = { "normal", "behind", "forward","forward_relative"}
 	npcpositionhouseway = { "default", "enter", "exit"}
 	
@@ -715,25 +742,7 @@ function resetVar()
 	defaukltFX = "blackout"
 	Fxobjectlist = {"player","npc","car","all"}
 	
-	mappinsource = { 
-		"at", 
-		"poi_district", 
-		"poi_subdistrict", 
-		"poi_current_district", 
-		"poi_current_subdistrict", 
-		"relative_to_entity",
-		"on_entity",
-		"on_group", 
-		"node",
-		"current_node",
-		"poi", 
-		"mappin", 
-		"fasttravel",
-		"custom_place",
-		"custom_room",
-		"current_custom_mappin",
-		"current_fasttravel"
-	}
+	
 	
 	
 	

@@ -808,4 +808,16 @@ return {
 		["name"] = "entity_is_vehicle",
 		["tag"] = "mytag"
 	},
+	["have_shard"] = {
+		["helper"] = "This trigger will be triggered if player get the shard by Lockey",
+		["helperTitle"] = "Misc : Have Shard",
+		["name"] = "have_shard",
+		["value"] = "LocKey#34457"
+	},
+	["mappin_exist"] = {
+		["helper"] = "This trigger will be triggered if the mappin exist",
+		["helperTitle"] = "Map : Mappin exist",
+		["name"] = "mappin_exist",
+		["tag"] = "mymappin"
+	},
 }

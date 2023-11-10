@@ -396,6 +396,11 @@ PanzerHUDGameController_OnInitialize(this)
 		 IncomingCallGameController_GetIncomingContact(this)
 	end)
 	
+	ObserveAfter('NewHudPhoneGameController', 'OnInitialize', function(this)
+		print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+		GameController["NewHudPhoneGameController"] = this
+	end)
+	
 	ObserveAfter('NewHudPhoneGameController', 'OnIncommingCallSpawned', function(this,value)
 		
 	IncomingCallGameController_OnPhoneCall(this,value)
@@ -676,7 +681,7 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	
 	ObserveAfter('PhoneMessagePopupGameController', 'OnRefresh', function(this)
-		print("OnRefresh")
+		
 		
 	end)
 	
@@ -736,9 +741,9 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	
 	
-	ObserveAfter("PhoneDialerLogicController", "PopulateListData", function(this,contactDataArray)
+	Override("PhoneDialerLogicController", "PopulateListData", function(this,contactDataArray,selectIndex, itemHash,wrappedMethod)
 		
-		PhoneDialerGameController_PopulateData(this,contactDataArray)
+		PhoneDialerGameController_PopulateData(this,contactDataArray,selectIndex, itemHash,wrappedMethod)
 	end)
 	
 	ObserveAfter('NewHudPhoneGameController','CallSelectedContact', function(this,contactData)
@@ -964,6 +969,24 @@ function interactionUI_init() -- Register needed observers
 
     Override("dialogWidgetGameController", "OnDialogsActivateHub", function(_, id, wrapped) -- Avoid interaction getting overriden by game
         interactionUI.OnDialogsActivateHub(id, wrapped)
+    end)
+end
+
+
+function inputManager_init() -- Register needed observers
+     Observe("SettingsSelectorControllerKeyBinding", "ListenForInput", function(this) -- A keybind widget is listening for input, so should we (Since gamepad inputs are not sent to the native OnKeyBindingEvent by default)
+        GameController["SettingsSelectorControllerKeyBinding"] = this
+    end)
+
+    ObserveBefore("PlayerPuppet", "OnGameAttached", function()
+		if(inputManager.inputListener == nil) then inputManager.onInit() end
+        Game.GetCallbackSystem():UnregisterCallback("Input/Key", inputManager.inputListener:Target())
+        Game.GetCallbackSystem():RegisterCallback("Input/Key", inputManager.inputListener:Target(), inputManager.inputListener:Function("OnKeyInput"))
+    end)
+
+    ObserveBefore("PlayerPuppet", "OnDetach", function()
+		if(inputManager.inputListener == nil) then inputManager.onInit() end
+        Game.GetCallbackSystem():UnregisterCallback("Input/Key", inputManager.inputListener:Target())
     end)
 end
 

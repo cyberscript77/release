@@ -22,7 +22,7 @@ function windowsManager() -- manage and toggle UI windows
 		end
 		
 		if file_exists("editor/editor.lua") then
-				editorUIManager["editorWindows"] = overlayOpen
+			editorUIManager["editorWindows"] = overlayOpen
 		end
 		
 		
@@ -156,7 +156,7 @@ function refreshUIWidget()
 					
 					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"text")) or (table_contains(control.data.dynamic,"default"))  then 
 						
-					if(control.split and control.split > 0) then
+						if(control.split and control.split > 0) then
 							
 							local desctab = splitByChunk(control.data.text, control.data.split)
 							local descc = ""
@@ -169,8 +169,8 @@ function refreshUIWidget()
 							if(control.ink:GetText() ~= descc) then
 								control.ink:SetText(descc)
 							end
-						else
-						
+							else
+							
 							if(control.ink:GetText() ~= control.data.text) then
 								control.ink:SetText(control.data.text)
 							end
@@ -248,18 +248,18 @@ function refreshUIWidget()
 					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"color")) or (table_contains(control.data.dynamic,"default") ) then 
 						
 						-- if(control.tag == "popup_border") then
-							
-							-- print(dump(control.data.textcolor))
-							
+						
+						-- print(dump(control.data.textcolor))
+						
 						-- end
-							
-							
+						
+						
 						control.ink:SetTintColor(textcolor)
 					end
 					
 					if(control.data.dynamic == nil) or (table_contains(control.data.dynamic,"visible") )or (table_contains(control.data.dynamic,"default") )  then 
 						
-					
+						
 						control.ink:SetVisible(control.data.visible)
 					end
 					
@@ -372,7 +372,20 @@ function hideCustomHints(tag)
 end
 
 
-
+function createdefaultOption(tag,maxkey)
+	local defaultinput = {}
+	
+	for i=1,maxkey do
+	
+		defaultinput[tag.."_"..i] = "IK_F1"
+		defaultinput[tag.."_hold_"..i] = false
+	
+	end
+	
+	 defaultinput[tag.."_keys"] = 1
+	
+   return defaultinput
+end
 
 
 function buildWebPageBountonSquare(parent,imageprop,textprop,page,action,customimage)
@@ -384,12 +397,12 @@ function buildWebPageBountonSquare(parent,imageprop,textprop,page,action,customi
 		imageprop.scale.x = 1.3
 		imageprop.scale.y = 1
 		
-	else
+		else
 		local stickerRecord = TDB.GetPhotoModeStickerRecord(imageprop.tweak)
 		selectionImage:SetAtlasResource(stickerRecord:AtlasName())
 		selectionImage:SetTexturePart(stickerRecord:ImagePartName())
-
-	
+		
+		
 	end
 	
 	
@@ -622,11 +635,11 @@ function makeCustomInterface(parentroot,interface)
 					widgetcontrol = UIButton.Create(buttonData.name, buttonData.text,fontsize, control.size.width, control.size.height,control.margin,bgcolor,textcolor)
 					
 					widgetcontrol:RegisterCallback('OnRelease', function(button, evt)
-				
-					
-							runActionList(control.action, control.tag, "interact",false,"nothing",false)
-							
-							evt:Handle()
+						
+						
+						runActionList(control.action, control.tag, "interact",false,"nothing",false)
+						
+						evt:Handle()
 						
 					end)
 					widgetcontrol:RegisterCallback('OnEnter', function(_, evt)
@@ -773,7 +786,7 @@ function makeCustomInterface(parentroot,interface)
 				
 				
 				if control.interactive == true then
-				
+					
 					for i,event in ipairs(control.event) do
 						EventProxy.RegisterCallback(widgetcontrol, event.eventname, function(_, evt)
 							
@@ -879,7 +892,39 @@ function openanpage(page)
 	irpmenu[page] = true
 end
 function buildnativesetting()
-	
+		nativeSettings.data["CSKEYBIND"] = nil
+		nativeSettings.addTab("/CSKEYBIND", getLang("CyberScript KeyBinding"))
+		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", getLang("Gameplay"))
+		
+		local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
+		info.keybindLabel = "Key for open group Interact Menu #" -- Label of each key, will be followed by the key number, e.g. "Key 1"
+		info.keybindDescription = "Keybind for open group Interact Menu" -- Description that'll be displayed for all the bindings keys
+		info.supportsHold = true -- Whether to show the hold switches for this bindings keys
+		info.isHoldLabel = "Hold the key ?"
+		info.isHoldDescription = "Key need to be holded for trigger the event"
+		info.id = "cyberscriptOpenGroup" -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
+		info.maxKeys = 3 -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
+		info.maxKeysLabel = "Hotkey Keys Amount" -- Label for the binding's key amount slider
+		info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the Group Menu to be activated" -- Description for the binding's key amount slider
+		info.nativeSettingsPath = "/CSKEYBIND/gameplay" -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
+		info.defaultOptions = createdefaultOption("cyberscriptOpenGroup",3) -- Table containing the default options
+		info.savedOptions = arrayUserInput -- Table containing the current options
+		
+		info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
+			 -- Store changed value
+			arrayUserInput[name] = value
+		end
+		info.callback = function() -- Callback for when the binding has been activated
+			
+			if(newgroupinteractUI) then
+				cycleInteract2()
+			else
+				cycleInteract()
+			end
+		end
+		inputManager.addNativeSettingsBinding(info) 
+		
+	-- Add our mods tab (path, label)
 	if(isEmpty(cyberscript.cache["setting"]) == false) then
 		nativeSettings.data["CMCUSTOM"] = nil
 		nativeSettings.addTab("/CMCUSTOM", getLang("ui_setting_customsetting")) -- Add our mods tab (path, label)
@@ -938,12 +983,46 @@ function buildnativesetting()
 					end)
 				end
 				
-				
+				if setting.type == "input" then
+					local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
+					info.keybindLabel = setting.label -- Label of each key, will be followed by the key number, e.g. "Key 1"
+					info.keybindDescription = setting.description -- Description that'll be displayed for all the bindings keys
+					info.supportsHold = setting.hold -- Whether to show the hold switches for this bindings keys
+					info.isHoldLabel = "Hold the key ?"
+					info.isHoldDescription = "Key need to be holded for trigger the event"
+					info.id = setting.tag -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
+					info.maxKeys = setting.maxkeys -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
+					info.maxKeysLabel = "Max keys that can be bounded for trigger the event" -- Label for the binding's key amount slider
+					info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the hotkey to be activated" -- Description for the binding's key amount slider
+					info.nativeSettingsPath = "/CMCUSTOM/"..setting.category, setting.categorylibelle -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
+					info.defaultOptions = createdefaultOption(setting.tag,setting.maxkeys) -- Table containing the default options
+					info.savedOptions = arrayUserInput -- Table containing the current options
+					
+					info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
+						-- Store changed value
+							arrayUserInput[name] = value
+					end
+					info.callback = function() -- Callback for when the binding has been activated
+						
+						if(cyberscript.cache["event"][setting.targetevent] ~= nil) then
+							local event = cyberscript.cache["event"][setting.targetevent].data
+							checkContext(event)
+							
+							if(event.way == "input" and checkTriggerRequirement(event.requirement,event.trigger) and workerTable[setting.targetevent] == nil)then
+								
+								runActionList(event.action,setting.targetevent,"event",false,"nothing")
+								
+							end
+							
+						end
+					end
+					inputManager.addNativeSettingsBinding(info) 
+					
+				end
 			end
 		end
+		else
 		
-	else
-	
 		nativeSettings.data["CMCUSTOM"] = nil
 	end
 	
@@ -990,7 +1069,7 @@ function makeNativeSettings()
 		Player_Sprint_Multiplier==nil or
 		Player_Run_Multiplier==nil or
 		Jump_Height==nil or
-	Double_Jump_Height==nil or
+		Double_Jump_Height==nil or
 	UltraSpeedDodge==nil) then
 	local obj = {}
 	
@@ -1008,68 +1087,6 @@ function makeNativeSettings()
 	obj.Jump_Height = tostring(Jump_Height)
 	obj.Double_Jump_Height = tostring(Double_Jump_Height)
 	obj.UltraSpeedDodge = tostring(UltraSpeedDodge)
-	
-	
-	
-	-- nativeSettings.addSubcategory("/CM/gameplay", "Ooops there is an mising setting in CyberScript Setting !")
-	-- nativeSettings.addSubcategory("/CM/gameplay01", "Try rebuild the cache and reload the mod/save/game !")
-	-- nativeSettings.addSubcategory("/CM/gameplay02", "Send quest_mod.log to discord Admin on Cyberscript Discord !")
-	
-	
-	
-	
-	
-	-- nativeSettings.addButton("/CM/gameplay02", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded datapack, cache and session", "Reset the mod", 45, function()
-	
-	-- if file_exists("user/sessions/latest.txt") then
-	-- os.remove("user/sessions/latest.txt")
-	-- end
-	
-	
-	-- local reader = dir("sessions")
-	
-	
-	-- for i=1, #reader do 
-	-- if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
-	
-	-- os.remove('user/sessions/'..reader[i].name)
-	
-	
-	
-	
-	-- end
-	-- end
-	
-	-- local reader = dir("datapack")
-	-- for i=1, #reader do 
-	-- if(tostring(reader[i].type) == "directory") then
-	
-	-- os.remove('datapack/'..reader[i].name)
-	
-	
-	
-	
-	-- end
-	-- end
-	
-	-- local reader = dir("user/cache")
-	-- for i=1, #reader do 
-	-- if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
-	
-	-- os.remove('user/cache/'..reader[i].name)
-	
-	
-	
-	
-	-- end
-	-- end
-	
-	
- 	-- ImportDataPack()
-	-- LoadDataPackCache()
-	-- logme(2, getLang("ui_setting_actions_rebuild_done"))
- 	
-	-- end)
 	
 	
 	
@@ -1093,7 +1110,8 @@ function makeNativeSettings()
 			currentController = state == false and "mouse" or "gamepad"
 			updateUserSetting("currentController", state)
 		end)
-			
+		
+		
 		
 		nativeSettings.addSubcategory("/CM/script", "Script Settings")
 		
@@ -1150,8 +1168,8 @@ function makeNativeSettings()
 			updateUserSetting("showcyberscriptfixeronmap", state)
 			if(showcyberscriptfixeronmap) then
 				setNewFixersPoint()
-			else
-				 removeFixersPoint() 
+				else
+				removeFixersPoint() 
 			end
 		end)
 		
@@ -1203,8 +1221,8 @@ function makeNativeSettings()
 			
 			
 			for k,v in pairs(cyberscript.entitieshash) do
-		
-					setScore(v.entity_name, "Score", 0)
+				
+				setScore(v.entity_name, "Score", 0)
 				
 				
 			end
@@ -1221,8 +1239,8 @@ function makeNativeSettings()
 				setScore("Affinity",k, 0)
 			end
 			for k,v in pairs(cyberscript.entitieshash) do
-		
-					setScore(v.entity_name, "Score", 0)
+				
+				setScore(v.entity_name, "Score", 0)
 				
 				
 			end
@@ -1239,7 +1257,7 @@ function makeNativeSettings()
 			AutoRefreshDatapack = state
 			updateUserSetting("AutoRefreshDatapack", AutoRefreshDatapack)
 		end)
-				
+		
 		nativeSettings.addButton("/CM/modsetting", getLang("ui_setting_actions_refresh"), getLang("ui_setting_actions_refresh"), "Refresh", 45, function()
 			CheckandUpdateDatapack()
 			LoadDataPackCache()
@@ -1333,14 +1351,14 @@ function makeNativeSettings()
 			updateUserSetting("InfiniteDoubleJump", InfiniteDoubleJump)
 		end)
 		
-		 nativeSettings.addRangeInt("/CMCHEAT/player", getLang("Jump limit"),  getLang("100 = infinite"), 2, 100, 1, numberOfMultiJumps, 2, function(value)
+		nativeSettings.addRangeInt("/CMCHEAT/player", getLang("Jump limit"),  getLang("100 = infinite"), 2, 100, 1, numberOfMultiJumps, 2, function(value)
 			pcall(function() 
-						numberOfMultiJumps = value
-						updateUserSetting("numberOfMultiJumps", numberOfMultiJumps)
-						
-						
-					end)
-		 end)
+				numberOfMultiJumps = value
+				updateUserSetting("numberOfMultiJumps", numberOfMultiJumps)
+				
+				
+			end)
+		end)
 		
 		
 		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_disable_fall_damage"),  getLang("ui_setting_cheat_disable_fall_damage"), DisableFallDamage, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
@@ -1353,38 +1371,38 @@ function makeNativeSettings()
 			updateUserSetting("Immortal", Immortal)
 			
 			if (Immortal) then
-					
-						Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Invulnerable", CName.new("SecondHeart"))
-						if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
-							local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
-							if veh then
-								Game.GetGodModeSystem():AddGodMode(veh:GetEntityID(), "Invulnerable", CName.new("Default"))
-							end
-						end
-			else
-							local hasSecondHeart = false
-							local ssc = Game.GetScriptableSystemsContainer()
-							local es = ssc:Get(CName.new('EquipmentSystem'))
-							local espd = es:GetPlayerData(Game.GetPlayer())
-							espd['GetItemInEquipSlot2'] = espd['GetItemInEquipSlot;gamedataEquipmentAreaInt32']
-						for i=0,2 do
-							if espd:GetItemInEquipSlot2("CardiovascularSystemCW", i).tdbid.hash == 3619482064 then
-								hasSecondHeart = true
-							end
-						end
-						if hasSecondHeart then
-							Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Immortal", CName.new("SecondHeart"))
-						else
-							Game.GetGodModeSystem():DisableOverride(Game.GetPlayer():GetEntityID(), CName.new("SecondHeart"))
-						end
-						if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
-							local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
-							if veh then
-								Game.GetGodModeSystem():ClearGodMode(veh:GetEntityID(), CName.new("Default"))
-							end
-						end
-						
-		end
+				
+				Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Invulnerable", CName.new("SecondHeart"))
+				if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
+					local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+					if veh then
+						Game.GetGodModeSystem():AddGodMode(veh:GetEntityID(), "Invulnerable", CName.new("Default"))
+					end
+				end
+				else
+				local hasSecondHeart = false
+				local ssc = Game.GetScriptableSystemsContainer()
+				local es = ssc:Get(CName.new('EquipmentSystem'))
+				local espd = es:GetPlayerData(Game.GetPlayer())
+				espd['GetItemInEquipSlot2'] = espd['GetItemInEquipSlot;gamedataEquipmentAreaInt32']
+				for i=0,2 do
+					if espd:GetItemInEquipSlot2("CardiovascularSystemCW", i).tdbid.hash == 3619482064 then
+						hasSecondHeart = true
+					end
+				end
+				if hasSecondHeart then
+					Game.GetGodModeSystem():EnableOverride(Game.GetPlayer():GetEntityID(), "Immortal", CName.new("SecondHeart"))
+					else
+					Game.GetGodModeSystem():DisableOverride(Game.GetPlayer():GetEntityID(), CName.new("SecondHeart"))
+				end
+				if Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer()) then
+					local veh = Game['GetMountedVehicle;GameObject'](Game.GetPlayer())
+					if veh then
+						Game.GetGodModeSystem():ClearGodMode(veh:GetEntityID(), CName.new("Default"))
+					end
+				end
+				
+			end
 			
 		end)
 		-- Parameters: path, label, desc, currentValue, defaultValue, callback, optionalIndex
@@ -1407,7 +1425,7 @@ function makeNativeSettings()
 				-- Reload the weapon in 0 seconds, end the reload
 				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
 				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
-			else
+				else
 				Game.GetInventoryManager().RemoveEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
 				local player = Game.GetPlayer()
 				local activeWeapon = GameObject.GetActiveWeapon(player)
@@ -1511,7 +1529,7 @@ function makeNativeSettings()
 			TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_DodgeAir_inline9.value", 1)
 			TweakDB:SetFlat("player.locomotion.maxGroundSpeed", 999999.0)
 			TweakDB:SetFlat("player.locomotion.maxAirXYSpeed", 999999.0)
-	
+			
 		end)
 		
 		nativeSettings.addSwitch("/CMCHEAT/reload",  getLang("ui_setting_cheat_player_ram"),  getLang("ui_setting_cheat_player_ram"), RamUpgrade, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
@@ -1520,13 +1538,13 @@ function makeNativeSettings()
 			
 			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline1.value", 1000)
 			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline4.value", 25)
-
+			
 			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline2.floatValues", {1000})
 			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline5.floatValues", {25})
-	
+			
 		end)
-		
-		
+		nativeSettings.addTab("/CSKEYBIND", getLang("Cyberscript KeyBinding")) -- Add our mods tab (path, label)
+		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", getLang("Gameplay"))
 	end)
 	
 	if status == false then
@@ -1883,267 +1901,269 @@ function BuyedItemsUI()
 end
 
 function ActivatedGroup()
-	currentInterface = nil
-	
-	local ui = {}
-	ui.title = getLang("Select active Interactions Group")
-	ui.tag = "datapack_current"
-	ui.controls = {}
-	
-	if(#currentInteractGroup > 0 ) then
-	
+	if(newgroupinteractUI == false) then
+		currentInterface = nil
 		
-		local area = {}
-		area.type = "area"
-		area.tag =	"main_area"
-		area.rotation = 0
-		area.anchor = 15
-		area.fittocontent = true
-		area.trigger = {}
-		area.trigger.auto = {}
-		area.trigger.auto.name = "auto"
-		area.requirement = {}
-		local requirement = {}
-		table.insert(requirement,"auto")
-		table.insert(area.requirement,requirement)
-		area.margin = {}
-		area.margin.top = 0
-		area.margin.left = 0
-		area.size = {}
-		area.size.width = 1500
-		area.size.height = 1000
-		area.scale = {}
-		area.scale.width = 1
-		area.scale.height = 1
-		table.insert(ui.controls,area)
+		local ui = {}
+		ui.title = getLang("Select active Interactions Group")
+		ui.tag = "datapack_current"
+		ui.controls = {}
 		
-		local area = {}
-		area.type = "area"
-		area.tag =	"container"
-		area.parent =	"main_area"
-		area.rotation = 0
-		area.anchor = 0
-		area.opacity = 1
-		area.visible = true
-		area.fittocontent = true
-		area.trigger = {}
-		area.trigger.auto = {}
-		area.trigger.auto.name = "auto"
-		area.requirement = {}
-		local requirement = {}
-		table.insert(requirement,"auto")
-		table.insert(area.requirement,requirement)
-		area.margin = {}
-		area.margin.top = 0
-		area.margin.left = 0
-		area.size = {}
-		area.size.width = 1500
-		area.size.height = 1000
-		area.scale = {}
-		area.scale.width = 1
-		area.scale.height = 1
-		table.insert(ui.controls,area)
-		
-		
-		local area = {}
-		area.type = "vertical_area"
-		area.tag =	"main_vertical"
-		area.parent = "container"
-		area.rotation = 0
-		area.anchor = 0
-		area.opacity = 1
-		area.visible = true
-		area.fittocontent = false
-		area.trigger = {}
-		area.trigger.auto = {}
-		area.trigger.auto.name = "auto"
-		area.requirement = {}
-		local requirement = {}
-		table.insert(requirement,"auto")
-		table.insert(area.requirement,requirement)
-		area.margin = {}
-		area.margin.top = 0
-		area.margin.left = 0
-		area.childmargin = {}
-		area.childmargin.top = 0
-		area.childmargin.left = 0
-		area.size = {}
-		area.size.width = 1500
-		area.size.height = 1000
-		area.scale = {}
-		area.scale.width = 1
-		area.scale.height = 1
-		table.insert(ui.controls,area)
-		
-		local label = {}
-		label.type = "label"
-		label.tag ="selected_group_lbl"
-		label.trigger = {}
-		label.trigger.auto = {}
-		label.trigger.auto.name = "auto"
-		label.parent = "main_vertical"
-		label.margin = {}
-		label.style = {}
-		label.anchor = 1
-		label.margin.top = 5
-		label.style.fontsize = 45
-		label.requirement = {}
-		label.textcolor = {}
-		label.textcolor.red = 52
-		label.textcolor.green = 235
-		label.textcolor.blue = 235
-		
-		
-		local requirement = {}
-		table.insert(requirement,"auto")
-		table.insert(label.requirement,requirement)
-		
-		label.text =  "Selected : "..currentInteractGroup[currentInteractGroupIndex]
-		table.insert(ui.controls,label)
-		
-		local area = {}
-		area.type = "area"
-		area.tag =	"scrollercontainer"
-		area.parent =	"main_vertical"
-		area.rotation = 0
-		area.anchor = 0
-		area.opacity = 1
-		area.visible = true
-		area.fittocontent = false
-		area.trigger = {}
-		area.trigger.auto = {}
-		area.trigger.auto.name = "auto"
-		area.requirement = {}
-		local requirement = {}
-		table.insert(requirement,"auto")
-		table.insert(area.requirement,requirement)
-		area.margin = {}
-		area.margin.top = 0
-		area.margin.left = 0
-		area.size = {}
-		area.size.width = 1500
-		area.size.height = 200
-		area.scale = {}
-		area.scale.width = 1
-		area.scale.height = 1
-		table.insert(ui.controls,area)
-		
-		local area = {}
-		area.type = "scrollarea"
-		area.tag =	"datapack_current_scroll"
-		area.trigger = {}
-		area.trigger.auto = {}
-		area.trigger.auto.name = "auto"
-		area.parent = "scrollercontainer"
-		area.requirement = {}
-		area.dynamic = {}
-		local requirement = {}
-		table.insert(requirement,"auto")
-		table.insert(area.requirement,requirement)
-		area.action = {}
-		area.margin = {}
-		
-		area.style = {}
-		area.size = {}
-		area.fittocontent = false
-		area.anchor = 0
-		
-		area.size.width = 1500
-		area.size.height = 600
-		area.scale = {}
-		area.scale.width = 1
-		area.scale.height = 1
-		table.insert(ui.controls,area)
-		
-		
-		local area = {}
-		area.type = "vertical_area"
-		area.tag =	"datapack_current_varea"
-		area.trigger = {}
-		area.trigger.auto = {}
-		area.trigger.auto.name = "auto"
-		area.requirement = {}
-		local requirement = {}
-		table.insert(requirement,"auto")
-		table.insert(area.requirement,requirement)
-		area.action = {}
-		area.margin = {}
-		area.style = {}
-		area.size = {}
-		area.fittocontent = false
-		area.anchor = 0
-		area.parent = "datapack_current_scroll"
-		area.style.fontsize = 30
-		area.size.width = 1500
-		area.size.height = 600
-		area.scale = {}
-		area.scale.width = 1
-		area.scale.height = 1
-		table.insert(ui.controls,area)
-		
-		
-		for i = 1, #currentInteractGroup do 
+		if(#currentInteractGroup > 0 ) then
 			
-		
-			local buttons = {}
-			buttons.type = "button"
-			buttons.title = "Choose "..currentInteractGroup[i]
-			buttons.tag =currentInteractGroup[i].."_button_"..i
-			buttons.trigger = {}
-			buttons.trigger.auto = {}
-			buttons.trigger.auto.name = "auto"
-			buttons.requirement = {}
-			buttons.dynamic = {}
+			
+			local area = {}
+			area.type = "area"
+			area.tag =	"main_area"
+			area.rotation = 0
+			area.anchor = 15
+			area.fittocontent = true
+			area.trigger = {}
+			area.trigger.auto = {}
+			area.trigger.auto.name = "auto"
+			area.requirement = {}
 			local requirement = {}
 			table.insert(requirement,"auto")
-			table.insert(buttons.requirement,requirement)
-			buttons.action = {}
-			buttons.margin = {}
-			buttons.style = {}
-			buttons.parent = "datapack_current_varea"
-			buttons.style.fontsize = 35
-			buttons.size = {}
-			buttons.size.width = 1200
-			buttons.size.height = 100
-			buttons.scale = {}
-			buttons.scale.width = 1
-			buttons.scale.height = 1
-			buttons.anchor = 0
+			table.insert(area.requirement,requirement)
+			area.margin = {}
+			area.margin.top = 0
+			area.margin.left = 0
+			area.size = {}
+			area.size.width = 1500
+			area.size.height = 1000
+			area.scale = {}
+			area.scale.width = 1
+			area.scale.height = 1
+			table.insert(ui.controls,area)
 			
-			local spawn_item = {}
-			spawn_item.name = "set_datapack_group_index" 
-			spawn_item.value = i
-			table.insert(buttons.action,spawn_item)
+			local area = {}
+			area.type = "area"
+			area.tag =	"container"
+			area.parent =	"main_area"
+			area.rotation = 0
+			area.anchor = 0
+			area.opacity = 1
+			area.visible = true
+			area.fittocontent = true
+			area.trigger = {}
+			area.trigger.auto = {}
+			area.trigger.auto.name = "auto"
+			area.requirement = {}
+			local requirement = {}
+			table.insert(requirement,"auto")
+			table.insert(area.requirement,requirement)
+			area.margin = {}
+			area.margin.top = 0
+			area.margin.left = 0
+			area.size = {}
+			area.size.width = 1500
+			area.size.height = 1000
+			area.scale = {}
+			area.scale.width = 1
+			area.scale.height = 1
+			table.insert(ui.controls,area)
 			
-			local close_action = {}
-			close_action.name = "close_interface" 
-			table.insert(buttons.action,close_action)
-		
-			table.insert(ui.controls,buttons)
+			
+			local area = {}
+			area.type = "vertical_area"
+			area.tag =	"main_vertical"
+			area.parent = "container"
+			area.rotation = 0
+			area.anchor = 0
+			area.opacity = 1
+			area.visible = true
+			area.fittocontent = false
+			area.trigger = {}
+			area.trigger.auto = {}
+			area.trigger.auto.name = "auto"
+			area.requirement = {}
+			local requirement = {}
+			table.insert(requirement,"auto")
+			table.insert(area.requirement,requirement)
+			area.margin = {}
+			area.margin.top = 0
+			area.margin.left = 0
+			area.childmargin = {}
+			area.childmargin.top = 0
+			area.childmargin.left = 0
+			area.size = {}
+			area.size.width = 1500
+			area.size.height = 1000
+			area.scale = {}
+			area.scale.width = 1
+			area.scale.height = 1
+			table.insert(ui.controls,area)
+			
+			local label = {}
+			label.type = "label"
+			label.tag ="selected_group_lbl"
+			label.trigger = {}
+			label.trigger.auto = {}
+			label.trigger.auto.name = "auto"
+			label.parent = "main_vertical"
+			label.margin = {}
+			label.style = {}
+			label.anchor = 1
+			label.margin.top = 5
+			label.style.fontsize = 45
+			label.requirement = {}
+			label.textcolor = {}
+			label.textcolor.red = 52
+			label.textcolor.green = 235
+			label.textcolor.blue = 235
+			
+			
+			local requirement = {}
+			table.insert(requirement,"auto")
+			table.insert(label.requirement,requirement)
+			
+			label.text =  "Selected : "..currentInteractGroup[currentInteractGroupIndex]
+			table.insert(ui.controls,label)
+			
+			local area = {}
+			area.type = "area"
+			area.tag =	"scrollercontainer"
+			area.parent =	"main_vertical"
+			area.rotation = 0
+			area.anchor = 0
+			area.opacity = 1
+			area.visible = true
+			area.fittocontent = false
+			area.trigger = {}
+			area.trigger.auto = {}
+			area.trigger.auto.name = "auto"
+			area.requirement = {}
+			local requirement = {}
+			table.insert(requirement,"auto")
+			table.insert(area.requirement,requirement)
+			area.margin = {}
+			area.margin.top = 0
+			area.margin.left = 0
+			area.size = {}
+			area.size.width = 1500
+			area.size.height = 200
+			area.scale = {}
+			area.scale.width = 1
+			area.scale.height = 1
+			table.insert(ui.controls,area)
+			
+			local area = {}
+			area.type = "scrollarea"
+			area.tag =	"datapack_current_scroll"
+			area.trigger = {}
+			area.trigger.auto = {}
+			area.trigger.auto.name = "auto"
+			area.parent = "scrollercontainer"
+			area.requirement = {}
+			area.dynamic = {}
+			local requirement = {}
+			table.insert(requirement,"auto")
+			table.insert(area.requirement,requirement)
+			area.action = {}
+			area.margin = {}
+			
+			area.style = {}
+			area.size = {}
+			area.fittocontent = false
+			area.anchor = 0
+			
+			area.size.width = 1500
+			area.size.height = 600
+			area.scale = {}
+			area.scale.width = 1
+			area.scale.height = 1
+			table.insert(ui.controls,area)
+			
+			
+			local area = {}
+			area.type = "vertical_area"
+			area.tag =	"datapack_current_varea"
+			area.trigger = {}
+			area.trigger.auto = {}
+			area.trigger.auto.name = "auto"
+			area.requirement = {}
+			local requirement = {}
+			table.insert(requirement,"auto")
+			table.insert(area.requirement,requirement)
+			area.action = {}
+			area.margin = {}
+			area.style = {}
+			area.size = {}
+			area.fittocontent = false
+			area.anchor = 0
+			area.parent = "datapack_current_scroll"
+			area.style.fontsize = 30
+			area.size.width = 1500
+			area.size.height = 600
+			area.scale = {}
+			area.scale.width = 1
+			area.scale.height = 1
+			table.insert(ui.controls,area)
+			
+			
+			for i = 1, #currentInteractGroup do 
+				
+				
+				local buttons = {}
+				buttons.type = "button"
+				buttons.title = "Choose "..currentInteractGroup[i]
+				buttons.tag =currentInteractGroup[i].."_button_"..i
+				buttons.trigger = {}
+				buttons.trigger.auto = {}
+				buttons.trigger.auto.name = "auto"
+				buttons.requirement = {}
+				buttons.dynamic = {}
+				local requirement = {}
+				table.insert(requirement,"auto")
+				table.insert(buttons.requirement,requirement)
+				buttons.action = {}
+				buttons.margin = {}
+				buttons.style = {}
+				buttons.parent = "datapack_current_varea"
+				buttons.style.fontsize = 35
+				buttons.size = {}
+				buttons.size.width = 1200
+				buttons.size.height = 100
+				buttons.scale = {}
+				buttons.scale.width = 1
+				buttons.scale.height = 1
+				buttons.anchor = 0
+				
+				local spawn_item = {}
+				spawn_item.name = "set_datapack_group_index" 
+				spawn_item.value = i
+				table.insert(buttons.action,spawn_item)
+				
+				local close_action = {}
+				close_action.name = "close_interface" 
+				table.insert(buttons.action,close_action)
+				
+				table.insert(ui.controls,buttons)
+			end
+			currentInterface = ui
+			
+			if UIPopupsManager.IsReady() then
+				
+				local notificationData = ShardReadPopupData.new()
+				notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
+				notificationData.queueName = 'modal_popup'
+				
+				
+				notificationData.requiredGameState = "inkGameState";
+				notificationData.isBlocking = true;
+				notificationData.useCursor = true;
+				notificationData.title = "Cyberscript Manager";
+				notificationData.text = "Choose a group";
+				notificationData.isCrypted = false;
+				
+				UIPopupsManager.ShowPopup(notificationData)
+				else
+				Game.GetPlayer():SetWarningMessage("Open and close Masqsqsqin menu before call an popup.")
+			end
 		end
-		currentInterface = ui
 		
-		if UIPopupsManager.IsReady() then
-			
-			local notificationData = ShardReadPopupData.new()
-			notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
-			notificationData.queueName = 'modal_popup'
-			
-			
-			notificationData.requiredGameState = "inkGameState";
-			notificationData.isBlocking = true;
-			notificationData.useCursor = true;
-			notificationData.title = "Cyberscript Manager";
-			notificationData.text = "Choose a group";
-			notificationData.isCrypted = false;
-			
-			UIPopupsManager.ShowPopup(notificationData)
-			else
-			Game.GetPlayer():SetWarningMessage("Open and close Masqsqsqin menu before call an popup.")
-		end
 	end
-
-		
+	
 end
 
 
@@ -2161,14 +2181,14 @@ function ActivatedGroup2()
 	
 	
 	if(#currentInteractGroup > 0 ) then
-	
+		
 		
 		
 		
 		
 		for i = 1, #currentInteractGroup do 
 			
-		
+			
 			local options = {}
 			options.requirement = nil
 			options.trigger = nil
@@ -2185,9 +2205,9 @@ function ActivatedGroup2()
 		
 		
 		createDialog(dialog)
-		end
+	end
 	
-		
+	
 end
 
 function cycleInteract2()
@@ -2212,35 +2232,35 @@ function cycleInteract2()
 		checkContext(interact)
 		--testTriggerRequirement(interact2.requirement,interact2.trigger)
 		if(checkTriggerRequirement(interact.requirement,interact.trigger)) and 
-		(interact.group == currentInteractGroup[currentInteractGroupIndex] or key == "default_open_datapack_group_ui") then
+			(interact.group == currentInteractGroup[currentInteractGroupIndex] and key ~= "default_open_datapack_group_ui") then
 			
 			if((interact.type == nil or interact.type == "interact") and (interact.display == nil or interact.display == "event_interact")) then
-						
-						local options = {}
-			options.requirement = interact.requirement
-			options.trigger = interact.trigger
-			options.description = interact.name
-			options.action = interact.action
-			if(key == "default_open_datapack_group_ui") then
-				options.action =  {}
-				options.action[1] = interact.action[1]
-				options.action[1].name = "open_datapack_group_ui2"
+				
+				local options = {}
+				options.requirement = interact.requirement
+				options.trigger = interact.trigger
+				options.description = interact.name
+				options.action = interact.action
+				
+				options.icon = interact.icon
+				options.style = {}
+				if interact.style ~= nil and interact.style.textcolor ~= nil then
+					options.style.color = interact.style.textcolor
+					
+				end
+				options.tag = interact.tag
+				
+				
+				
+				
+				table.insert(dialog.options,options)
+				
+				else
+				if((interact.type == nil or interact.type == "hint")) then
+					
+					showInputHint(interact.key, getLang(interact.name), 1, interact.hold, interact.tag)
+				end
 			end
-			options.icon = interact.icon
-			options.style = interact.style
-			options.tag = interact.tag
-			
-			
-			
-			
-			table.insert(dialog.options,options)
-						
-						else
-						if((interact.type == nil or interact.type == "hint")) then
-			
-						showInputHint(interact.key, getLang(interact.name), 1, interact.hold, interact.tag)
-						end
-					end
 			else
 			if(#currentInputHintList > 0) then
 				
@@ -2264,27 +2284,48 @@ function cycleInteract2()
 		
 	end
 	
+	local interact = cyberscript.cache["interact"]["default_open_datapack_group_ui"].data
+	local options = {}
+	options.requirement = interact.requirement
+	options.trigger = interact.trigger
+	options.description = interact.name
 	
+	options.action =  {}
+	options.action[1] = {}
+	options.action[1].name = "open_datapack_group_ui2"
+	
+	options.icon = interact.icon
+	options.style = {}
+	if interact.style ~= nil and interact.style.textcolor ~= nil then
+		options.style.color = interact.style.textcolor
+		
+	end
+	options.tag = interact.tag
+	
+	
+	
+	
+	table.insert(dialog.options,options)
 	
 	if(#dialog.options > 0) then
-	
-			local options = {}
-			options.requirement = nil
-			options.trigger = nil
-			options.description = "Exit"
-			options.action = {}
-			
-				
-			options.action[1] = {}
-			options.action[1].name = "nothing"
-			
-			
-			
-			
-			
-			table.insert(dialog.options,options)
-			createDialog(dialog)
-		end
+		
+		local options = {}
+		options.requirement = nil
+		options.trigger = nil
+		options.description = "Exit"
+		options.action = {}
+		
+		
+		options.action[1] = {}
+		options.action[1].name = "nothing"
+		
+		
+		
+		
+		
+		table.insert(dialog.options,options)
+		createDialog(dialog)
+	end
 	
 end
 function Activatedshard(shard)
@@ -2351,31 +2392,31 @@ function Activatedshard(shard)
 	table.insert(ui.controls,area)
 	
 	
-		local label = {}
-		label.type = "label"
-		label.tag ="selected_group_lbl"
-		label.trigger = {}
-		label.trigger.auto = {}
-		label.trigger.auto.name = "auto"
-		label.parent = "container"
-		label.margin = {}
-		label.style = {}
-		label.anchor = 0
-		label.margin.top = 5
-		label.style.fontsize = 55
-		label.requirement = {}
-		label.textcolor = {}
-		label.textcolor.red = 0
-		label.textcolor.green = 255
-		label.textcolor.blue = 247
-		
-		
-		local requirement = {}
-		table.insert(requirement,"auto")
-		table.insert(label.requirement,requirement)
-		
-		label.text = shard.description
-		table.insert(ui.controls,label)
+	local label = {}
+	label.type = "label"
+	label.tag ="selected_group_lbl"
+	label.trigger = {}
+	label.trigger.auto = {}
+	label.trigger.auto.name = "auto"
+	label.parent = "container"
+	label.margin = {}
+	label.style = {}
+	label.anchor = 0
+	label.margin.top = 5
+	label.style.fontsize = 55
+	label.requirement = {}
+	label.textcolor = {}
+	label.textcolor.red = 0
+	label.textcolor.green = 255
+	label.textcolor.blue = 247
+	
+	
+	local requirement = {}
+	table.insert(requirement,"auto")
+	table.insert(label.requirement,requirement)
+	
+	label.text = shard.description
+	table.insert(ui.controls,label)
 	
 	
 	
@@ -2391,7 +2432,7 @@ function Activatedshard(shard)
 		UIPopupsManager.ShowPopup(notificationData)
 		
 		else
-	Game.GetPlayer():SetWarningMessage("Open and close Main menu before call an popup.")
+		Game.GetPlayer():SetWarningMessage("Open and close Main menu before call an popup.")
 	end
 	
 end
@@ -2585,21 +2626,21 @@ function cycleInteract()
 	end
 	
 	-- if GameController["interactionWidgetGameController"].currentOptions then
-		-- if GameController["interactionWidgetGameController"].id < 1 then
-			-- if currentDialogHub then
-				-- -- createInteraction(false)
-				-- createDialog(currentDialogHub.dial)
-				-- isdialogactivehub = true
-			-- end
-			-- else
-			-- --createInteraction(true)
-			-- isdialogactivehub = false
-			-- --logme(6,"tyu")
-		-- end
-		-- else
-		-- createInteraction(true)
-		-- isdialogactivehub = false
-		-- --logme(6,"tyuss")
+	-- if GameController["interactionWidgetGameController"].id < 1 then
+	-- if currentDialogHub then
+	-- -- createInteraction(false)
+	-- createDialog(currentDialogHub.dial)
+	-- isdialogactivehub = true
+	-- end
+	-- else
+	-- --createInteraction(true)
+	-- isdialogactivehub = false
+	-- --logme(6,"tyu")
+	-- end
+	-- else
+	-- createInteraction(true)
+	-- isdialogactivehub = false
+	-- --logme(6,"tyuss")
 	-- end
 	
 	
@@ -2652,11 +2693,16 @@ function cycleInteractgroup()
 end
 
 function hideInteract()
+	if(newgroupinteractUI == false) then
 	if candisplayInteract then
 		currentPossibleInteractChunkIndex = 0
 		
 		createInteraction(false)
 		candisplayInteract = false
+	end
+	else
+	
+		interactionUI.hideHub()
 	end
 end
 
@@ -2682,7 +2728,7 @@ function playRadio()
 				
 				if(currentRadio.playedmusic ~= nil) then
 					currentRadio.lastplayedmusic = currentRadio.playedmusic
-				
+					
 				end
 				
 				currentRadio.isplaying = false
@@ -2699,13 +2745,13 @@ function playRadio()
 				
 				if(currentRadio.lastplayedmusic ~= nil) then
 					while(song.name == currentRadio.lastplayedmusic) do
-					
+						
 						index = math.random(1,#currentRadio.data.tracks)
-				
+						
 						song = currentRadio.data.tracks[index]
 					end
 					
-				
+					
 				end
 				
 				currentRadio.isplaying = true
@@ -2722,8 +2768,8 @@ function playRadio()
 				
 				table.insert(actionlist,action)
 				runActionList(actionlist, "play_radio_radio_"..currentRadio.data.tag, "interact",false,"nothing",true)
-			else
-		
+				else
+				
 				if(currentRadio.data.only_in_car == true) then
 					
 					local iscar = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
@@ -2734,7 +2780,7 @@ function playRadio()
 						currentRadio.isplaying = false
 						currentRadio.playedmusic = nil
 					end
-
+					
 				end
 				
 				
@@ -2999,7 +3045,7 @@ function createInteractionChoice(action, title,icon,displaytype)
 	choiceData.inputAction = action
 	
 	if icon ~= nil then
-	
+		
 		local iconrecord = TweakDBInterface.GetChoiceCaptionIconPartRecord("ChoiceCaptionParts."..icon)
         local part = gameinteractionsChoiceCaption.new()
         part:AddPartFromRecord(iconrecord)
@@ -3137,7 +3183,7 @@ function createDialog(dialog)
 	
     -- Setup, set and show hub
     local hub = interactionUI.createHub(getDialogOwner(dialog.speaker), choicelist,id) -- Create hub and give it the list of choices
-   
+	
 	interactionUI.setupHub(hub) -- Set the hub
 	
     interactionUI.showHub() -- Show the previously set hub
@@ -3147,19 +3193,19 @@ function createDialog(dialog)
 	for i = 1, #dialog.options do
 		
 		
-	   interactionUI.callbacks[i] = function()
-				local option = dialog.options[i]
-				if(option.requirement == nil or checkTriggerRequirement(option.requirement,option.trigger))then
-					
-					ClickOnDialog(option,dialog.speaker,"speak")
-					interactionUI.hideHub()
-					
-				end
+		interactionUI.callbacks[i] = function()
+			local option = dialog.options[i]
+			if(option.requirement == nil or checkTriggerRequirement(option.requirement,option.trigger))then
+				
+				ClickOnDialog(option,dialog.speaker,"speak")
+				interactionUI.hideHub()
+				
+			end
 		end
 		
 	end
 	
-  
+	
 	
 	if(playerisstopped == false) then
 		StatusEffectHelper.ApplyStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")

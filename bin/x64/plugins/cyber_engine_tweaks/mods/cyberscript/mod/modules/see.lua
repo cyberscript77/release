@@ -1489,7 +1489,7 @@ function scriptcheckTrigger(trigger)
 				result = SalaryIsPossible
 			end
 			if(trigger.name == "have_custom_mappin_placed") then
-				if(ActivecustomMappin ~= nil) then
+				if(mappinManager["selected_mappin"] ~= nil) then
 					result =  true
 				end
 			end
@@ -1732,7 +1732,20 @@ function scriptcheckTrigger(trigger)
 				end
 			end
 			
+			if(trigger.name== "have_shard") then
+				
+				local activeData = CodexListSyncData.new()
+				local shards = CodexUtils.GetShardsDataArray(GameInstance.GetJournalManager(), activeData)
+				
+				for i,v in pairs(shards) do
+					if(v.data.title == trigger.value) then result = true end
+				end
+			end
 			
+			if(trigger.name== "mappin_exist") then
+				
+				result = mappinManager[trigger.tag] ~= nil
+			end
 			
 		end
 		
@@ -2550,12 +2563,12 @@ function executeAction(action,tag,parent,index,source,executortag)
 				if(action.name == "vehicle_go_to_current_mappin_point") then
 					local vehiculeobj =  getTrueEntityFromManager(action.tag)
 					local vehicule = Game.FindEntityByID(vehiculeobj.id)
-					if(vehicule ~= nil and ActivecustomMappin ~= nil) then
+					if(vehicule ~= nil and mappinManager["selected_mappin"] ~= nil) then
 						
 						
-						vehiculeobj.destination = ActivecustomMappin:GetWorldPosition()
+						vehiculeobj.destination = mappinManager["selected_mappin"].position
 						
-						local mappin = ActivecustomMappin:GetWorldPosition()
+						local mappin = mappinManager["selected_mappin"].position
 						VehicleGoToXYZ(action.tag, mappin.x,mappin.y,mappin.z,action.minspeed,action.maxspeed)
 						
 					end
@@ -3906,13 +3919,15 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						local shard = getShardByTag(action.shard)
 						
-						checkContext(shard)
-						
-						userData.title = GetLocalizedText("UI-Notifications-ShardCollected") .. " " .. getLang(shard.title)
-						userData.text = getLang(shard.description)
-						userData.shardTitle = getLang(shard.title)
-						cyberscript.cache["shard"][shard.tag].data.locked = false
-						userData.isCrypted = shard.crypted
+						if(shard ~= nil) then
+							checkContext(shard)
+							
+							userData.title = GetLocalizedText("UI-Notifications-ShardCollected") .. " " .. getLang(shard.title)
+							userData.text = getLang(shard.description)
+							userData.shardTitle = getLang(shard.title)
+							cyberscript.cache["shard"][shard.tag].data.locked = false
+							userData.isCrypted = shard.crypted
+						end
 					end
 					
 					
@@ -4634,8 +4649,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 					end
 				end
 				if(action.name == "set_mappin") then
-					local position = getPositionFromParameter(action)
+					
 					if(action.position ~= "on_entity" and action.position ~= "on_group")then
+					local position = getPositionFromParameter(action)
 						if(position.x ~= nil)then
 							registerMappin(position.x,position.y,position.z,action.tag,action.typemap,action.wall,action.active,action.mapgroup,nil,action.title,action.desc,action.color,action.icon)
 							else
@@ -4683,8 +4699,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 				
 				
 				if(action.name == "edit_mappin") then
-					local position = getPositionFromParameter(action)
+					
 					if(action.position ~= "on_entity" and action.position ~= "on_group")then
+						local position = getPositionFromParameter(action)
 						if(position.x ~= nil)then
 							editMappin(position.x,position.y,position.z,action.tag,action.typemap,action.active,action.mapgroup,nil,action.title,action.desc,action.color,action.icon)
 							else
@@ -5368,7 +5385,27 @@ function executeAction(action,tag,parent,index,source,executortag)
 						if(candotext == true) then
 							dialogLine.isPersistent  = true
 							dialogLine.duration  = action.duration
+							local restry,msg = pcall(function()
 							GameController["SubtitlesGameController"]:SpawnDialogLine(dialogLine)
+							end)
+							
+							if(restry == false) then
+								local inkSystem = Game.GetInkSystem();
+								local layers = inkSystem:GetLayers();
+
+								for i,layer in ipairs(layers) do
+								  for j,controller in ipairs(layer:GetGameControllers()) do
+									if(GameController[NameToString(controller:GetClassName())] == "SubtitlesGameController") then
+										GameController["SubtitlesGameController"] = controller
+									end
+									
+								  end
+								end
+								
+								GameController["SubtitlesGameController"]:SpawnDialogLine(dialogLine)
+							
+							end
+							
 							local temp = os.time(os.date("!*t"))+0 
 							local nexttemp = temp
 							nexttemp =nexttemp +  action.duration
@@ -7369,7 +7406,19 @@ function executeAction(action,tag,parent,index,source,executortag)
 					--Game.GetTeleportationFacility():Teleport(Game.GetPlayer(), Vector4.new( action.x, action.y, action.z,1) , 1)
 					TeleportPlayerToPosition(action.x,action.y,action.z)
 				end
-				
+				if(action.name == "set_component_hidden") then
+					local obj = getEntityFromManager(action.tag)
+					local enti = Game.FindEntityByID(obj.id)
+					if(enti ~= nil) then
+						local components = enti:GetComponents();
+						for i,component in ipairs(components) do
+							if(NameToString(component:GetName()) == action.value) then
+								component:TemporaryHide(action.hide)
+							end
+						end
+					
+					end
+				end
 				
 				if(action.name == "set_current_star") then
 					if(currentNPC ~= nil) then
@@ -10734,9 +10783,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 					end
 				end
 				if(action.name == "vehicule_autodrive_activate_custom_mappin") then
-					if(ActivecustomMappin ~= nil) then
+					if(mappinManager["selected_mappin"] ~= nil) then
 						
-						local mappin = ActivecustomMappin:GetWorldPosition()
+						local mappin = mappinManager["selected_mappin"].position
 						local actionlist = {}
 						
 						local obj = getEntityFromManager(action.tag)
@@ -12433,7 +12482,7 @@ function GeneratefromContext(context)
 				
 				if status == false then
 					
-					logme(1,getLang("see_context_error") .. result.." Context : "..tostring(JSON:encode_pretty(context)),true)				
+					logme(1,getLang("see_context_error") .. retval.." Context : "..tostring(JSON:encode_pretty(context)),true)				
 					if(context.fail_action ~= nil and #context.fail_action > 0) then
 						runActionList(context.fail_action, "context_failure", "see",false,nil)
 						
@@ -12556,7 +12605,16 @@ function GenerateTextFromContextValues(context, v)
 		
 	end
 	
-	
+	if(v.type == "group") then
+		
+		local group = getGroupfromManager(v.tag)
+		if(group ~= nil) then
+			
+			value = #group.entities
+			
+			
+		end
+	end
 	
 	if(v.type == "faction") then
 		
@@ -13015,6 +13073,32 @@ function GenerateTextFromContextValues(context, v)
 						
 						
 					end
+				end
+				
+				if(v.key == "radio_index") then
+					local ps = enti:GetDevicePS()
+					value = ps.activeStation
+				end
+				
+				if(v.key == "radio_name") then
+					local ps = enti:GetDevicePS()
+						local stations = {
+						[0] = "89.3 - Radio Vexelstrom",
+						[1] = "92.9 - Night FM",
+						[2] = "101.9 - The Dirge",
+						[3] = "103.5 - Radio Pebkac",
+						[4] = "88.9 - Pacific Dreams",
+						[5] = "107.3 - Morro Rock Radio",
+						[6] = "98.7 - Body Heat Radio",
+						[7] = "106.9 - 30 Principales",
+						[8] = "96.1 - Ritual FM",
+						[9] = "95.2 - Samizdat Radio",
+						[10] = "91.9 - Royal Blue Radio",
+						[11] = "89.7 - Growl FM",
+						[12] = "107.5 - Dark Star",
+						[13] = "99.9 - Impulse",
+					}
+					value = stations[ps.activeStation]
 				end
 				else
 				--spdlog.error("Context : No Entity Founded for "..v.tag)

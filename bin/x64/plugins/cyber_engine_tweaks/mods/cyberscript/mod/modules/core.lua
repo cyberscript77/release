@@ -9,7 +9,7 @@ local modLoaded = false
 function loadexternal()
 	
 
-	
+	inputManager = dofile('mod/modules/inputManager.lua')
 	GameUI = dofile('mod/external/GameUI.lua')
 	TargetingHelper = dofile('mod/external/TargetingHelper.lua')
 	AIControl = dofile('mod/external/AIControl.lua')
@@ -71,6 +71,16 @@ function ModInitialisation()
 	currentSave.arrayQuestStatut = {}
 	currentSave.arrayFactionScore = {}
 	arrayUserSetting = {}
+	arrayUserInput = {}
+	arrayUserInput = {
+            ["cyberscriptOpenGroup_1"] = "IK_Pad_DigitLeft", -- Key 1' keycode of the "mkbBinding"
+            ["cyberscriptOpenGroup_2"] = "IK_Pad_DigitLeft",
+			["cyberscriptOpenGroup_3"] = "IK_Pad_DigitLeft",
+            ["cyberscriptOpenGroup_1"] = true, -- Is Key 1 of the "mkbBinding" a hold down key?
+            ["cyberscriptOpenGroup_2"] = false,
+			["cyberscriptOpenGroup_3"] = false,
+            ["cyberscriptOpenGroup_keys"] = 1 -- How many of the keys are currently being used for the binding "mkbBinding"?
+        }
 	currentSave.arrayHouseStatut = {}
 	currentSave.arrayHousing = {}
 	currentSave.arrayPlayerItems = {}
@@ -80,11 +90,12 @@ function ModInitialisation()
 	currentSave.garage = {}
 	currentSave.arrayHUD = {}
 	
-	
 	 --not require a verification because it's not mine ^^
 	loadModule()
 	SetObserver()
+	
 	interactionUI_init()
+	
 	if file_exists("editor/editor.lua") then
 	
 		
@@ -172,7 +183,7 @@ function SaveLoading()
 		if file_exists("user/sessions/latest.txt") then
 			nodata = false
 			GameSession.readLatest()
-			logme(2,"CyberScript Session : data found, recover latest data")
+			logme(1,"CyberScript Session : data found, recover latest data")
 			else
 			nodata = true
 			
@@ -205,6 +216,27 @@ function SaveLoading()
 		
 	end
 	
+	arrayUserInput = {}
+	arrayUserInput = {
+            ["cyberscriptOpenGroup_1"] = "IK_Pad_DigitLeft", -- Key 1' keycode of the "mkbBinding"
+            ["cyberscriptOpenGroup_2"] = "IK_Pad_DigitLeft",
+			["cyberscriptOpenGroup_3"] = "IK_Pad_DigitLeft",
+            ["cyberscriptOpenGroup_1"] = false, -- Is Key 1 of the "mkbBinding" a hold down key?
+            ["cyberscriptOpenGroup_2"] = false,
+			["cyberscriptOpenGroup_3"] = false,
+            ["cyberscriptOpenGroup_keys"] = 1 -- How many of the keys are currently being used for the binding "mkbBinding"?
+        }
+	if file_exists("user/settings/userinput.json") then
+		local f = io.open("user/settings/userinput.json")
+		lines = f:read("*a")
+		if lines ~= "" then
+			local json = json.decode(lines)
+			arrayUserInput = json
+		end
+		f:close()
+		
+	end
+
 	
 	moddisabled = getUserSettingWithDefault("moddisabled",moddisabled)
 	
@@ -336,7 +368,9 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 	CarRadioVolume = Game.GetSettingsSystem():GetVar("/audio/volume", "CarRadioVolume")
 	SetOverrider()
 	SetObserver()
+	
 	interactionUI_init()
+	inputManager.onInit()
 	eventCatcher = sampleStyleManagerGameController.new()
 	local datapackresult,datapackerror  = pcall(function()
 	DatapackLoading()
@@ -364,8 +398,9 @@ end
 				GameIsLoaded = true
 				reloadCET = false
 			end
+			inputManager.onShutdown()
 			initCore()
-			
+			inputManager.onInit()
 		end) 
 		initCore()
 		
@@ -600,7 +635,7 @@ function shutdownManager() -- setup some function at shutdown
 		deleteMappinByTag(k)
 	end
 	logme(10,"mappin deleted")
-	
+	inputManager.onShutdown()
 	despawnAll()
 	resetVar()
 	
@@ -744,7 +779,7 @@ registerForEvent("onUpdate", function(delta)
 			if(moddisabled == false) then
 			
 			
-			
+			inputManager.onUpdate(delta)
 			refresh(delta)
 			interactionUI.update()
 		

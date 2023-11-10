@@ -613,7 +613,7 @@ function QuestDetailsPanelController_OnUpdateTrackedObjectiveEvent(self, e)
 	if(myucurrentQuestData ~= nil) then
 		
 		local questId = myucurrentQuestData
-	
+		
 		if QuestManager.IsKnownQuest(questId) then
 			
 			local questDef = QuestManager.GetQuest(questId)
@@ -847,7 +847,7 @@ end
 
 function QuestTrackerGameController_UpdateTrackerData(self, wrappedmethod)
 	
-		if(observerthread1  == true or moddisabled == true)    then return wrappedMethod() end
+	if(observerthread1  == true or moddisabled == true)    then return wrappedMethod() end
 	GameController["QuestTrackerGameController"] = self
 	if not QuestManager.IsTrackingObjective() then
 		wrappedmethod()
@@ -1089,7 +1089,7 @@ function ComputerDocumentWidgetController_Initialize(this,gameController,widgets
 end
 function ComputerMenuWidgetController_InitializeFilesThumbnails(this,gameController,widgetsData)
 	if(observerthread2  == true or moddisabled == true)    then return end
-
+	
 	
 	
 end
@@ -2122,6 +2122,10 @@ function SettingsMainGameController_RequestClose (_, _, target) -- Check if acti
 	sessionFile:write(JSON:encode_pretty(arrayUserSetting))
 	sessionFile:close()
 	
+	local sessionFile = io.open("user/settings/userinput.json", 'w')
+	sessionFile:write(JSON:encode_pretty(arrayUserInput))
+	sessionFile:close()
+	
 	cyberscript.language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
 	
 	if(AutoRefreshDatapack == true) then
@@ -2183,10 +2187,10 @@ function BaseWorldMapMappinController_SelectMappin(self)
 		
 		
 		if(mappinManager["selected_mappin"] == nil or (mappinManager["selected_mappin"]~= nil and mappinManager["selected_mappin"].position ~= self.mappin:GetWorldPosition())) then
-		mappinManager["selected_mappin"] = obj
-		
-		print(dump(mappinManager["selected_mappin"].position))
-		
+			mappinManager["selected_mappin"] = obj
+			
+			print(dump(mappinManager["selected_mappin"].position))
+			
 		end
 		if mappinType == gamedataMappinVariant.CustomPositionVariant then
 			
@@ -2271,13 +2275,14 @@ function BaseWorldMapMappinController_SelectMappin(self)
 				end
 			end
 			else
+			print("eee")
 			local haveFounded = false
 			
 			for k,v in pairs(mappinManager) do 
 				local mappin = v
 				
 				if(k ~= "selected_mappin" and k ~= "selected_fasttravel_mappin" and mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
-					
+					print("eee")
 					
 					SelectedScriptMappin = mappin
 					break
@@ -2403,60 +2408,60 @@ function WebPage_FillPageFromJournal(self,page)
 		
 		
 		
-			if webcount == 0 then webcount = linkbar01:GetNumChildren() end
+		if webcount == 0 then webcount = linkbar01:GetNumChildren() end
 		if(webcount == linkbar01:GetNumChildren()) then
-		if(isEmpty(cyberscript.cache["webpage"]) == false) then
+			if(isEmpty(cyberscript.cache["webpage"]) == false) then
+				
+				local linknew = inkVerticalPanelWidget.new()
+				linknew:SetName(StringToName("linknew"))
+				linknew:SetChildMargin(inkMargin.new({ left = 50.0, top = 30.0, right = 50.0, bottom = 30.0 }))
+				
+				linknew:SetFitToContent(true)
+				
+				
+				
+				
+				local imageprop = {}
+				imageprop.tag = "link03_img"
+				imageprop.tweak = "PhotoModeStickers.dcl_04"
+				imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				imageprop.size = {}
+				imageprop.size.x = 200
+				imageprop.size.y = 200
+				imageprop.fittocontent = false
+				imageprop.scale = {}
+				imageprop.scale.x = 1.3
+				imageprop.scale.y = 1.3
+				
+				local textprop = {}
+				textprop.tag = "link03_text"
+				textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
+				textprop.size = {}
+				textprop.size.x = 100
+				textprop.size.y = 32
+				textprop.text = "CyberScript Network"
+				textprop.fontsize = 32
+				textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
+				textprop.scale = {}
+				textprop.scale.x = 1.0
+				textprop.scale.y = 1.0
+				
+				local link = linknew
+				local actionlist = {}
+				local action = {}
+				
+				action.name = "refreshBrowser" 
+				action.page = page
+				action.address = "CyberScriptWeb"
+				action.subaddress = "home"
+				table.insert(actionlist,action)
+				
+				
+				
+				buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
+				linknew:Reparent(linkbar01, linkbar01:GetNumChildren()+1)
+			end
 			
-			local linknew = inkVerticalPanelWidget.new()
-			linknew:SetName(StringToName("linknew"))
-			linknew:SetChildMargin(inkMargin.new({ left = 50.0, top = 30.0, right = 50.0, bottom = 30.0 }))
-			
-			linknew:SetFitToContent(true)
-			
-			
-			
-			
-			local imageprop = {}
-			imageprop.tag = "link03_img"
-			imageprop.tweak = "PhotoModeStickers.dcl_04"
-			imageprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
-			imageprop.size = {}
-			imageprop.size.x = 200
-			imageprop.size.y = 200
-			imageprop.fittocontent = false
-			imageprop.scale = {}
-			imageprop.scale.x = 1.3
-			imageprop.scale.y = 1.3
-			
-			local textprop = {}
-			textprop.tag = "link03_text"
-			textprop.margin = inkMargin.new({ left = 0.0, right = 0, bottom = 0, top = 0.0 })
-			textprop.size = {}
-			textprop.size.x = 100
-			textprop.size.y = 32
-			textprop.text = "CyberScript Network"
-			textprop.fontsize = 32
-			textprop.textcolor =HDRColor.new({ Red = 0.321569, Green = 0.866667, Blue = 0.874510, Alpha = 1.0 })
-			textprop.scale = {}
-			textprop.scale.x = 1.0
-			textprop.scale.y = 1.0
-			
-			local link = linknew
-			local actionlist = {}
-			local action = {}
-			
-			action.name = "refreshBrowser" 
-			action.page = page
-			action.address = "CyberScriptWeb"
-			action.subaddress = "home"
-			table.insert(actionlist,action)
-			
-			
-			
-			buildWebPageBountonSquare(link,imageprop,textprop,page,actionlist)
-			linknew:Reparent(linkbar01, linkbar01:GetNumChildren()+1)
-		end
-		
 		end
 		
 		
@@ -5118,38 +5123,38 @@ function WebPage_FillPageFromJournalWebExt(self)
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	print("dd")
-		
-		LinkController = inkWidgetRef.GetController(self.imageList[1])
-		local root = self:GetRootWidget()
-		
-		
-		local page = root:GetWidgetByIndex(0)
-		local linkpanel = page:GetWidgetByIndex(0)
-		local panel =linkpanel:GetWidgetByIndex(0)
-		
-		
-		local network = panel:GetWidgetByIndex(0)
-		local networktext = network:GetWidgetByIndex(4)
-		local linkbar01 = panel:GetWidgetByIndex(1)
-		local linkbar02 = panel:GetWidgetByIndex(2)
-		local link01 = linkbar01:GetWidgetByIndex(0)
-		
-		print(GameDump(linkbar02))
-		
-		local link02 = linkbar01:GetWidgetByIndex(1)
-		local link03 = linkbar01:GetWidgetByIndex(2)
-		local link04 = linkbar01:GetWidgetByIndex(3)
-		local link05 = linkbar01:GetWidgetByIndex(4)
-		local link06 = linkbar02:GetWidgetByIndex(0)
-		local link07 = linkbar02:GetWidgetByIndex(1)
-		local link08 = linkbar02:GetWidgetByIndex(2)
-		local link09 = linkbar02:GetWidgetByIndex(3)
-		local link10 = linkbar02:GetWidgetByIndex(4)
-		
-		
-		
-		if webcount == 0 then webcount = linkbar01:GetNumChildren() end
-		if(webcount == linkbar01:GetNumChildren()) then
+	
+	LinkController = inkWidgetRef.GetController(self.imageList[1])
+	local root = self:GetRootWidget()
+	
+	
+	local page = root:GetWidgetByIndex(0)
+	local linkpanel = page:GetWidgetByIndex(0)
+	local panel =linkpanel:GetWidgetByIndex(0)
+	
+	
+	local network = panel:GetWidgetByIndex(0)
+	local networktext = network:GetWidgetByIndex(4)
+	local linkbar01 = panel:GetWidgetByIndex(1)
+	local linkbar02 = panel:GetWidgetByIndex(2)
+	local link01 = linkbar01:GetWidgetByIndex(0)
+	
+	print(GameDump(linkbar02))
+	
+	local link02 = linkbar01:GetWidgetByIndex(1)
+	local link03 = linkbar01:GetWidgetByIndex(2)
+	local link04 = linkbar01:GetWidgetByIndex(3)
+	local link05 = linkbar01:GetWidgetByIndex(4)
+	local link06 = linkbar02:GetWidgetByIndex(0)
+	local link07 = linkbar02:GetWidgetByIndex(1)
+	local link08 = linkbar02:GetWidgetByIndex(2)
+	local link09 = linkbar02:GetWidgetByIndex(3)
+	local link10 = linkbar02:GetWidgetByIndex(4)
+	
+	
+	
+	if webcount == 0 then webcount = linkbar01:GetNumChildren() end
+	if(webcount == linkbar01:GetNumChildren()) then
 		
 		
 		
@@ -6758,7 +6763,7 @@ function WebPage_FillPageFromJournalWebExt(self)
 			end
 		end
 		
-		end
+	end
 	
 end	
 
@@ -6792,7 +6797,7 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 		end
 		
 	end
-
+	
 end
 
 
@@ -6804,53 +6809,53 @@ function WorldMapTooltipController_SetData(self,data,menu)
 	local mappinVariant = nil
 	
 	if(data ~= nil) then
-	if( data.mappin ~= nil) then
-		
-		mappinVariant = data.mappin:GetVariant()
-		
-	end
-	
-	if mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant and fixeroldText == nil then fixeroldText = self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):GetText() end
-	 
-	
-	if(SelectedScriptMappin ~= nil) then
-		
-		if(mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant and SelectedScriptMappin.tag ~= nil) then
+		if( data.mappin ~= nil) then
 			
-			local fixer = getFixerByTag(SelectedScriptMappin.tag)
-			if(fixer ~= nil) then
-				-- self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetVisible(true)
-				-- self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(1):SetVisible(true)
+			mappinVariant = data.mappin:GetVariant()
+			
+		end
+		
+		if mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant and fixeroldText == nil then fixeroldText = self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):GetText() end
+		
+		
+		if(SelectedScriptMappin ~= nil) then
+			
+			if(mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant and SelectedScriptMappin.tag ~= nil) then
 				
-				-- self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(2):SetVisible(false)
-				-- self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(3):SetVisible(false)
-				
-				self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetText("Cyberscript Fixer")
-				
-				inkTextRef.SetText(self.gigBarCompletedText, "100")
-				inkTextRef.SetText(self.gigBarTotalText, "100")
-				self.gigProgress = 1
-				
-				
-				inkWidgetRef.SetVisible(self.fixerPanel, true)
-				inkImageRef.SetVisible(self.icon, false)
-				
-				self.descText:SetText("")
-				
-                self:PlayAnim("OnTooltipIntro", "OnFixerProgressBarAnim");
+				local fixer = getFixerByTag(SelectedScriptMappin.tag)
+				if(fixer ~= nil) then
+					-- self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetVisible(true)
+					-- self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(1):SetVisible(true)
+					
+					-- self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(2):SetVisible(false)
+					-- self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(3):SetVisible(false)
+					
+					self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetText("Cyberscript Fixer")
+					
+					inkTextRef.SetText(self.gigBarCompletedText, "100")
+					inkTextRef.SetText(self.gigBarTotalText, "100")
+					self.gigProgress = 1
+					
+					
+					inkWidgetRef.SetVisible(self.fixerPanel, true)
+					inkImageRef.SetVisible(self.icon, false)
+					
+					self.descText:SetText("")
+					
+					self:PlayAnim("OnTooltipIntro", "OnFixerProgressBarAnim");
+					else
+					
+				end
 				else
+				inkImageRef.SetVisible(self.icon, true)
+				self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetText(fixeroldText)
 				
 			end
 			else
-			inkImageRef.SetVisible(self.icon, true)
-			self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetText(fixeroldText)
-			
+			if(mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant) then self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetText(fixeroldText) end
+			inkWidgetRef.SetVisible(self.icon, true)
 		end
-		else
-		if(mappinVariant ~= nil and mappinVariant == gamedataMappinVariant.FixerVariant) then self.fixerPanel.widget:GetWidgetByIndex(1):GetWidgetByIndex(0):SetText(fixeroldText) end
-		inkWidgetRef.SetVisible(self.icon, true)
-	end
-	
+		
 	end
 end
 
@@ -6988,6 +6993,7 @@ end
 function SubtitlesGameController_OnInitialize(self) 
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	GameController["SubtitlesGameController"]  = self
+
 end
 
 
@@ -7016,13 +7022,7 @@ end
 
 function SubtitlesGameController_SetupLine(self) 
 	if(observerthread4 == true or moddisabled  == true)   then return end
-	if(currentSubtitlesGameController == nil) then
-		Cron.NextTick(function()
-			
-			GameController["SubtitlesGameController"]  = self
-			logme(2,"Sub Controller Init")
-		end)
-	end
+
 end
 
 function BaseSubtitlesGameController_OnUninitialize(self) 
@@ -7034,10 +7034,10 @@ end
 
 function NPCPuppet_SendAfterDeathOrDefeatEvent(target)
 	if(observerthread4 == true or moddisabled  == true)   then return end
-
+	
 	local obj = getEntityFromManagerById(target:GetEntityID())
 	if(obj.id ~= nil) then
-	
+		
 	end
 	
 	
@@ -7074,15 +7074,24 @@ end
 
 
 
-function PhoneDialerGameController_PopulateData(thos,contactDataArray)
+function PhoneDialerGameController_PopulateData(thos,contactDataArray, selectIndex, itemHash,wrappedMethod)
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
+	if(thos.currentTab == PhoneDialerTabs.Unread) then
+		countphone = countphone + 1
+		
+	end
 	
 	
+	local booold = (countphone >= 4)
 	
-	
-	
-	if(#contactList > 0) then
+	previousTabs = thos.currentTab
+	if(booold and thos.currentTab == PhoneDialerTabs.Unread and previousTabs ~= PhoneDialerTabs.Contacts) then
+		refreshContact()
+		okcountphone = true
+		
+		
+		if(#contactList > 0) then
 		for i = 1, #contactList do
 			local itemData = ContactData.new()
 			itemData.id = contactList[i].id
@@ -7101,10 +7110,21 @@ function PhoneDialerGameController_PopulateData(thos,contactDataArray)
 			itemData.hash  = 0
 			itemData.type = MessengerContactType.Contact
 			
+			local canaddcontact = true
 			
+			for k,v in ipairs(contactDataArray) do
+				if(v.id ==  contactList[i].id) then
+					canaddcontact = false
+				end
+				
+			end
 			
-			table.insert(contactDataArray,itemData)
+			if(canaddcontact)then table.insert(contactDataArray,itemData) end
 		end
+	end
+	
+	
+	
 	end
 	
 	
@@ -7127,12 +7147,14 @@ function PhoneDialerGameController_PopulateData(thos,contactDataArray)
 	end
 	
 	
-	
 	thos.dataView:EnableSorting();
 	thos.dataSource:Reset(contactDataArray);
 	thos.dataView:DisableSorting();
 	thos.firstInit = true;
 	thos.indexToSelect = 0 
+	if(previousTabs ~= thos.currentTab) then
+	previousTabs = thos.currentTab
+	end
 	
 end
 
@@ -7439,7 +7461,7 @@ function MessengerDialogViewController_SetVisited(thos, records)
 				local sms = currentPhoneConversation.message[i]
 				if( getScoreKey(sms.tag,"unlocked") == 1) then
 					if(sms.unlocknext ~= nil and sms.unlocknext ~= "") then
-					--	setScore(sms.unlocknext,"unlocked",1)
+						--	setScore(sms.unlocknext,"unlocked",1)
 					end
 					local test = gameJournalPhoneMessage.new()
 					test.sender = sms.sender
@@ -7502,7 +7524,7 @@ function PhoneMessagePopupGameController_SetupData(this,wrappedMethod)
 	if(currentPhoneConversation ~= nil and currentPhoneConversation ~= "cs_nothing" 
 	and GameController["NewHudPhoneGameController"]:IsPhoneActive() == false) then
 	
-
+	
 	local test = gameJournalPhoneMessage.new()
 	Cron.After(0.1,function()
 		logme(10,"Open phone")
@@ -7581,7 +7603,7 @@ function MessengerDialogViewController_ShowDialog(self,contact)
 		
 		if(contact == nil) then
 			local message = {}
-		
+			
 			table.insert(message,currentPhoneConversation)
 			self.messages = message
 			
@@ -7607,14 +7629,14 @@ function MessengerDialogViewController_UpdateData(self,animateLastMessage,setVis
 		end
 		
 		if waitingforanswer ~= nil then
-		
-		self.typingIndicatorController:SetName(currentPhoneConversation.speaker);
-		 self.typingIndicatorController:SetPlayerTypingStyle(false);
-		 self:PlayDotsAnimation();
-		  for i = 1, #currentPhoneConversation.currentchoices do
-			setScore(currentPhoneConversation.currentchoices[i].tag,"unlocked",2)
-		end
-		 for i=1,#currentPhoneConversation.message do
+			
+			self.typingIndicatorController:SetName(currentPhoneConversation.speaker);
+			self.typingIndicatorController:SetPlayerTypingStyle(false);
+			self:PlayDotsAnimation();
+			for i = 1, #currentPhoneConversation.currentchoices do
+				setScore(currentPhoneConversation.currentchoices[i].tag,"unlocked",2)
+			end
+			for i=1,#currentPhoneConversation.message do
 				local msgexist = false
 				local sms = currentPhoneConversation.message[i]
 				if( getScoreKey(sms.tag,"unlocked") == 1) then
@@ -7638,24 +7660,24 @@ function MessengerDialogViewController_UpdateData(self,animateLastMessage,setVis
 					--	------print#thos.messages)
 				end
 			end
-		
-		 Cron.After(2, function()
-		 
-		
-		if(waitingforanswer.unlocknext ~= nil and waitingforanswer.unlocknext ~= "") then
-			setScore(waitingforanswer.unlocknext,"unlocked",1)
-		end
+			
+			Cron.After(2, function()
+				
+				
+				if(waitingforanswer.unlocknext ~= nil and waitingforanswer.unlocknext ~= "") then
+					setScore(waitingforanswer.unlocknext,"unlocked",1)
+				end
 				if(#waitingforanswer.action > 0) then
 					runActionList(waitingforanswer.action, waitingforanswer.tag, "interact",false,"nothing",waitingforanswer.action_bypassmenu_execution)
 				end
-		 
-
-		 waitingforanswer = nil
-			self.choicesList:SetVisible(true)
-		 self:StopDotsAnimation()
-		GameController["MessengerDialogViewController"]:UpdateData()
+				
+				
+				waitingforanswer = nil
+				self.choicesList:SetVisible(true)
+				self:StopDotsAnimation()
+				GameController["MessengerDialogViewController"]:UpdateData()
 			end)
-		
+			
 		end
 		
 	end)
@@ -7665,12 +7687,12 @@ function MessangerItemRenderer_GetData(self)
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	Cron.NextTick(function()
 		local choicepress = false
-	
+		
 		if(currentPhoneConversation ~= nil) then
 			for i = 1, #currentPhoneConversation.currentchoices do
 				
 				if(tostring(getLang(currentPhoneConversation.currentchoices[i].text)) == tostring(self.labelPathRef:GetText())) then
-						choicepress = true
+					choicepress = true
 					
 					if choicepress == true then
 						
@@ -7818,7 +7840,7 @@ function MessengerDialogViewController_ActivateReply(self,target)
 	local choicepress = false
 	if(currentPhoneConversation ~= nil) then
 		for i = 1, #currentPhoneConversation.currentchoices do
-		
+			
 			
 			
 			
@@ -7827,13 +7849,13 @@ function MessengerDialogViewController_ActivateReply(self,target)
 				choicepress = true
 				
 				if choicepress == true then
-				
 					
 					
-					 
-					 waitingforanswer = currentPhoneConversation.currentchoices[i]
+					
+					
+					waitingforanswer = currentPhoneConversation.currentchoices[i]
 					self.choicesList:SetVisible(false)
-					 setScore(waitingforanswer.unlocknext,"unlocked",1)
+					setScore(waitingforanswer.unlocknext,"unlocked",1)
 					break
 				end
 			end
@@ -8003,7 +8025,7 @@ function PhoneSystem_OnTriggerCall(thos, request)
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	local contactName = request.addressee
-
+	
 	if IsNameValid(contactName) == false then
 		
 		
@@ -8027,13 +8049,19 @@ end
 function PhoneDialerGameController_Show(thos)
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
-	refreshContact()
+	if(thos.currentTab == PhoneDialerTabs.Unread and countphone == 0) then
+	okcountphone = nil
+	countphone = 0
+	print("show")
+	end
 	openPhone = true
 end
 
 function PhoneDialerGameController_Hide()
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	openPhone = false
+	countphone = 0
+	okcountphone = nil
 end
 
 function VehicleRadioPopupGameController_VirtualListReady(self)
@@ -8800,7 +8828,7 @@ function PreventionSpawnSystem_SpawnCallback(thos,requestResult,wrappedMethod)
 	
 	local contain = false
 	if(cachedespawn[requestResult.requestID] ~= nil and requestResult.success == true) then
-	
+		
 		
 		cachedespawn[requestResult.requestID].NPC = requestResult.spawnedObjects
 		cachedespawn[requestResult.requestID].result = true
@@ -9030,7 +9058,7 @@ function DoubleJumpDecisions_EnterCondition(thos,stateContext,scriptInterface, w
 		local jumpPressedFlag = stateContext:GetConditionBool("JumpPressed");
 		
 		if not jumpPressedFlag and not thos.jumpPressed then
-			 return false
+			return false
 		end
 		
 		
@@ -9703,10 +9731,10 @@ function scannerDetailsGameController_RefreshLayout(thos,wrappedMethod)
 		local entity = getEntityFromManagerById(entid)
 		
 		if (entity.id ~= nil) and (getScannerdataFromEntityOrGroupOfEntity(entity) ~= nil) then
-			thos:BreakAniamtions()
+			thos:StopAnimations()
 			
 			if HUDManager.GetActiveMode() ~= ActiveMode.FOCUS then
-				thos:PlayCloseScannerAnimation();
+				thos:PlayOutroAnimation();
 			end
 			
 			if thos.scanningState == gameScanningState.Complete or thos.scanningState == gameScanningState.ShallowComplete or thos.scanningState ==  gameScanningState.Started then
@@ -9770,7 +9798,7 @@ function scannerDetailsGameController_RefreshLayout(thos,wrappedMethod)
 			
 			
 			if thos.scanningState == gameScanningState.Stopped or thos.scanningState ==  gameScanningState.Default then 
-				thos:PlayCloseScannerAnimation()
+				thos:PlayOutroAnimation()
 			end
 			
 			else
@@ -10258,11 +10286,11 @@ function PhoneMessagePopupGameController_OnHide(self,evt)
 		
 		else
 		if(currentPhoneConversation ~= nil) then
-		self.isInteractive = false;
-		self.blockAction = true
-		 local request = UINotificationRemoveEvent.new()
-     
-		GameController["NewHudPhoneGameController"]:RemoveNotification(request);
+			self.isInteractive = false;
+			self.blockAction = true
+			local request = UINotificationRemoveEvent.new()
+			
+			GameController["NewHudPhoneGameController"]:RemoveNotification(request);
 			Cron.After(1,function()
 				
 				
@@ -10344,37 +10372,37 @@ function listenPlayerInput(action)
 	if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and currentHelp == nil  then 
 		
 		if(newgroupinteractUI) then
-		cycleInteract2()
-		else
-		cycleInteract()
+			cycleInteract2()
+			else
+			cycleInteract()
 		end
 		
 	end
-		pcall(function()
-	if currentHelp ~= nil and currentHelpIndex ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
-		
-		local actionlisth = {}
-		local actionh = {}
-		if(currentHelp ~= nil and currentHelpIndex-1 < #currentHelp.section)then
-	
-			UIPopupsManager.ClosePopup()
-			currentHelp = nil
-			currentHelpIndex = 1
-			else
-			actionh.name = "previous_help"
-			table.insert(actionlisth,actionh)
+	pcall(function()
+		if currentHelp ~= nil and currentHelpIndex ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
 			
-			actionh = {}
-			actionh =currentHelp.action
-			actionh.name = "open_help"
-			actionh.tag = currentHelp.tag
-			table.insert(actionlisth,actionh)
-			
-			runActionList(actionlisth,currentHelp.tag,"interact",true,"player")
-		
-		end		
-	end
-		end)
+			local actionlisth = {}
+			local actionh = {}
+			if(currentHelp ~= nil and currentHelpIndex-1 < #currentHelp.section)then
+				
+				UIPopupsManager.ClosePopup()
+				currentHelp = nil
+				currentHelpIndex = 1
+				else
+				actionh.name = "previous_help"
+				table.insert(actionlisth,actionh)
+				
+				actionh = {}
+				actionh =currentHelp.action
+				actionh.name = "open_help"
+				actionh.tag = currentHelp.tag
+				table.insert(actionlisth,actionh)
+				
+				runActionList(actionlisth,currentHelp.tag,"interact",true,"player")
+				
+			end		
+		end
+	end)
 	if currentHelp ~= nil and (actionName == "close_tutorial" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "activate" or actionName == "close_tutorial") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad") then
 		
 		local actionlisth = {}

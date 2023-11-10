@@ -609,7 +609,7 @@ function despawnEntity(tag)
 		obj.tweak = "None"
 		obj.lock = true
 		else
-		cyberscript.EntityManager[tag]=nil
+		if(cyberscript.EntityManager[tag]~=nil) then cyberscript.EntityManager[tag]=nil end
 	end
 	
 	--enti:Dispose()	

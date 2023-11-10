@@ -317,8 +317,8 @@ function getNPCCallableByAffinity()
 	for k,v in pairs(cyberscript.cache["interact"]) do 
 							
 	
-			if(v.data.display == "phone_service")then
-			
+			if(v.data.display == "phone_service" and checkTriggerRequirement(v.data.requirement,v.data.trigger))then
+			print(v.data.name)
 				local contactdata = {}
 				contactdata.name =  getLang(v.data.name)
 				contactdata.id =  v.data.tag

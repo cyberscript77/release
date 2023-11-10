@@ -3784,11 +3784,12 @@ return {
 		["name"] = "remove_effect_to_group",
 	},
 	["fake_lips_sync"] = {
-		["helper"] = "This action will make a lips movement to the entity. Duration in seconds",
+		["helper"] = "This action will make a lips movement to the entity. Duration in seconds.\nParallele means it can be executed in parallele of the script or not. By default yes",
 		["helperTitle"] = "Entity : Lips movement",
 		["duration"] = 3,
 		["tag"] = "judy",
 		["name"] = "fake_lips_sync",
+		["parallele"] = true
 	},
 	
 	["vehicle_go_to_position"] = {
@@ -3831,5 +3832,14 @@ return {
 		["z"] = 0,
 		["x"] = 0,
 		["y"] = 0,
+	},
+	
+	["set_component_hidden"] = {
+		["helper"] = "This action will hide/show a entity's component.",
+		["helperTitle"] = "Entity : Hide component",
+		["value"] = "door_a_hidable",
+		["tag"] = "judy",
+		["name"] = "set_component_hidden",
+		["hide"] = true
 	},
 }

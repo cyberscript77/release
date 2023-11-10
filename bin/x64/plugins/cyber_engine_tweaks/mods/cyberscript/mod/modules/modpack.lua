@@ -414,7 +414,7 @@ function CheckandUpdateDatapack()
 		end
 	end
 	
-	buildnativesetting()
+	
 	
 	
 	end
@@ -977,7 +977,7 @@ end
 	loadQuestsToUI()
 	getInteractGroup()
 	FillCharacterArchive()
-	
+	buildnativesetting()
 	
 	calculatePOIList()
 

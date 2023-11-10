@@ -149,6 +149,8 @@ function loadModule()
 	cyberscript.saves = dofile('mod/modules/saves.lua')
 	cyberscript.AV = dofile('mod/modules/av.lua')
 	
+	
+
 	QuestManager = dofile('mod/modules/quest_manager.lua')
 	
 	if file_exists("mod/modules/editor.lua") then
@@ -170,14 +172,15 @@ function loadModule()
 	cyberscript.loader = dofile('mod/modules/loader')
 
 	--external library
-
+	--inputManager.onShutdown()
 	modLoaded = true
-	
+	--
 	if(cyberscript.cache["mission"] ~= nil) then
 	loadQuestsToUI()
 	getInteractGroup()
 	FillCharacterArchive()
 	calculatePOIList()
+	buildnativesetting()
 	end
 	
 	
