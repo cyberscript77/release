@@ -2738,12 +2738,15 @@ if vehiculeRegion then
 						
 						npcSpec.tags = {"CyberScript","CyberScript.Vehicle","CyberScript.Vehicle."..tag}
 						if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.Vehicle."..tag) == true) then Game.GetDynamicEntitySystem():DeleteTagged("CyberScript.Vehicle."..tag) end
-					
+						print(chara)
+						print(appearance)
 						if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.Vehicle."..tag) == false) then
+						print("dsdddd")
 							NPC = Game.GetDynamicEntitySystem():CreateEntity(npcSpec)
 							if dontregister == nil then dontregister = false end
 							if(NPC ~= nil and dontregister == false) then
 								local entity = {}
+								print("test")
 								entity.id = NPC
 								entity.spawntimespan = os.time(os.date("!*t"))+0
 								entity.despawntimespan = os.time(os.date("!*t"))+despawntimer

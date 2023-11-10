@@ -1734,12 +1734,20 @@ function scriptcheckTrigger(trigger)
 			
 			if(trigger.name== "have_shard") then
 				
-				local activeData = CodexListSyncData.new()
-				local shards = CodexUtils.GetShardsDataArray(GameInstance.GetJournalManager(), activeData)
 				
-				for i,v in pairs(shards) do
-					if(v.data.title == trigger.value) then result = true end
+				if(gameshardscompiled == nil) then 
+					
+					local activeData = CodexListSyncData.new()
+					local gameshards = CodexUtils.GetShardsDataArray(GameInstance.GetJournalManager(), activeData)
+					if gameshardscompiled == nil then gameshardscompiled = {} end
+					for i,v in pairs(gameshards) do
+						if gameshardscompiled[v.data.title] == nil then gameshardscompiled[v.data.title] = true end
+						
+						
+					end		
 				end
+				
+				result = gameshardscompiled[trigger.value] ~= nil
 			end
 			
 			if(trigger.name== "mappin_exist") then
@@ -3566,7 +3574,16 @@ function executeAction(action,tag,parent,index,source,executortag)
 				if(action.name == "set_fact") then
 					Game.SetDebugFact(action.value, action.score)
 				end
-				
+				if(action.name == "refresh_shard_cache") then
+					local activeData = CodexListSyncData.new()
+					local gameshards = CodexUtils.GetShardsDataArray(GameInstance.GetJournalManager(), activeData)
+					if gameshardscompiled == nil then gameshardscompiled = {} end
+					for i,v in pairs(gameshards) do
+						if gameshardscompiled[v.data.title] == nil then gameshardscompiled[v.data.title] = true end
+						
+						
+					end		
+				end
 				if(action.name == "execute_in_tick") then
 					
 					if(#action.action > 0) then

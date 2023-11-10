@@ -54,6 +54,19 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 				pcall(function() GameController["SubtitlesGameController"]:Cleanup() end)
 			end
 			
+			if(open1menu == nil) then
+				
+				local activeData = CodexListSyncData.new()
+				local gameshards = CodexUtils.GetShardsDataArray(GameInstance.GetJournalManager(), activeData)
+				if gameshardscompiled == nil then gameshardscompiled = {} end
+				for i,v in pairs(gameshards) do
+					if gameshardscompiled[v.data.title] == nil then gameshardscompiled[v.data.title] = true end
+					
+					
+				end		
+				
+				open1menu = true
+			end
 			
 			if(ActiveMenu == "PauseMenu" ) then
 				if(ExecPauseMenu == false and getUserSetting("AutoRefreshDatapack") == true) then
@@ -71,6 +84,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 				end
 			end
 			else
+			open1menu = nil
 			if(ExecPauseMenu == true) then
 				ExecPauseMenu =  false
 			end
@@ -754,6 +768,20 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 			end
 		end
 		
+		
+		if (tick % 1800 == 0) then --every 30 second
+			
+			
+					local activeData = CodexListSyncData.new()
+					local gameshards = CodexUtils.GetShardsDataArray(GameInstance.GetJournalManager(), activeData)
+					if gameshardscompiled == nil then gameshardscompiled = {} end
+					for i,v in pairs(gameshards) do
+						if gameshardscompiled[v.data.title] == nil then gameshardscompiled[v.data.title] = true end
+						
+						
+					end	
+		end
+		
 		end
 		
 		
@@ -969,7 +997,14 @@ function inGameInit() -- init some function after save loaded
 	
 	currentObjectiveId = 0
 	inkCompoundRef.RemoveAllChildren(GameController["QuestTrackerGameController"].ObjectiveContainer)
-	
+	local activeData = CodexListSyncData.new()
+					local gameshards = CodexUtils.GetShardsDataArray(GameInstance.GetJournalManager(), activeData)
+					gameshardscompiled = {}
+					for i,v in pairs(gameshards) do
+						if gameshardscompiled[v.data.title] == nil then gameshardscompiled[v.data.title] = true end
+						
+						
+					end	
 	
 pcall(function()
 	Game.GetSettingsSystem():GetVar("/gameplay/performance", "CrowdDensity"):SetValue("High")

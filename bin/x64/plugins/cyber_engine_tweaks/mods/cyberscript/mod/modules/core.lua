@@ -822,413 +822,413 @@ registerForEvent("onTweak", function()
 end)
 
 
--- -------------------------------HotKey------------------------------
-registerHotkey("cycleCustomInteract", "Cycle Custom Interact", function()
-	if(newgroupinteractUI) then
-	cycleInteract2()
-	else
-	cycleInteract()
-	end
-end
-)
-registerHotkey("push", "push", function()
-	objectDist = objectDist + 0.5
-	logme(10,objectDist)
-end
-)
-registerHotkey("pull", "pull", function()
-	objectDist = objectDist - 0.5
-	logme(10,objectDist)
-end
-)
-registerHotkey("selectcurrentInteractGroup1", "Select 1 Interact Group", function()
-	currentInteractGroupIndex = 1
-	cycleInteractgroup()
-end
-)
-registerHotkey("selectcurrentInteractGroup2", "Select 2 Interact Group", function()
-	currentInteractGroupIndex = 2
-	cycleInteractgroup()
-end
-)
-registerHotkey("selectcurrentInteractGroup3", "Select 3 Interact Group", function()
-	currentInteractGroupIndex = 3
-	cycleInteractgroup()
-end
-)
-registerHotkey("selectcurrentInteractGroup4", "Select 4 Interact Group", function()
-	currentInteractGroupIndex = 4
-	cycleInteractgroup()
-end
-)
-registerHotkey("selectcurrentInteractGroup5", "Select 5 Interact Group", function()
-	currentInteractGroupIndex = 5
-	cycleInteractgroup()
-end
-)
-registerHotkey("openRadioPopup", "Open radio popup", function()
-	openRadio()
-end
-)
-registerHotkey("housingXp", "Housing : X+", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true				
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				objpos.x = objpos.x + 0.05
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingXm", "Housing : X-", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true							
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				objpos.x = objpos.x - 0.05
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingYp", "Housing : Y+", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				objpos.y = objpos.y + 0.05
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingYm", "Housing : Y-", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				objpos.y = objpos.y - 0.05
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingZp", "Housing : Z+", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				objpos.z = objpos.z + 0.05
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingZm", "Housing : Z-", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				objpos.z = objpos.z - 0.05
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingRollp", "Housing : Roll+", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				angle.roll = angle.roll + 5
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingRollm", "Housing : Roll-", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				angle.roll = angle.roll - 5
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingPitchp", "Housing : Pitch+", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				angle.pitch = angle.pitch +5
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingPitchm", "Housing : Pitch-", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				angle.pitch = angle.pitch -5
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingYawp", "Housing : Yaw+", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = entity:GetWorldPosition()
-				local worldpos = Game.GetPlayer():GetWorldTransform()
-				local qat = entity:GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				angle.yaw = angle.yaw + 5
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingYawm", "Housing : Yaw-", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				if(entity ~= nil) then
-					local objpos = entity:GetWorldPosition()
-					local worldpos = Game.GetPlayer():GetWorldTransform()
-					local qat = entity:GetWorldOrientation()
-					local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-					angle.yaw = angle.yaw - 5 
-					updateItemPosition(selectedItem, objpos, angle, true)
-					cetkeyused = false
-				end
-			end
-		end
-	end
-end)
-registerHotkey("housingMovetoPlayer", "Housing : Move To Player", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				local objpos = Game.GetPlayer():GetWorldPosition()
-				local qat = Game.GetPlayer():GetWorldOrientation()
-				local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				updateItemPosition(selectedItem, objpos, angle, true)
-				cetkeyused = false
-			end
-		end
-	end
-end)
-registerHotkey("housingRemove", "Housing : Remove", function()
-	if(cetkeyused == false)then
-		if(selectedItem ~= nil) then
-			local entity = Game.FindEntityByID(selectedItem.entityId)
-			if(entity ~= nil) then		
-				cetkeyused = true			
-				for i =1, #currentSave.arrayPlayerItems do
-					local mitem = currentSave.arrayPlayerItems[i]
-					if(mitem.Tag == selectedItem.Tag) then
-						Game.FindEntityByID(selectedItem.entityId):GetEntity():Destroy()
-						logme(10,"toto")
-						updatePlayerItemsQuantity(mitem,1)
-						deleteHousing(selectedItem.Id)
-						local index = getItemEntityIndexFromManager(selectedItem.entityId)
-						--despawnItem(selectedItem.Id)
-						table.remove(currentItemSpawned,index)
-						Cron.After(1, function()
-							selectedItem = nil
-						end)
-					end
-				end
-				cetkeyused = false
-				else
-				logme(10,"nope")
-			end
-		end				
-	end
-end)
-registerHotkey("housingcycleplaced", "Housing : Cycle Through placed items", function()
-	selectedItem = nil
-	if(selectedItem == nil) then
-		selectedItem = currentItemSpawned[currentselectedItemIndex]
-		Game.GetPlayer():SetWarningMessage("Current Selected Item : "..currentItemSpawned[currentselectedItemIndex].Title)
-		currentselectedItemIndex = currentselectedItemIndex+1
-		if(currentselectedItemIndex > #currentItemSpawned) then
-			currentselectedItemIndex = 1
-		end
-	end
-end)
-registerHotkey("hideCustomInteract", "Hide Custom Interact", function()
-	hideInteract()
-end
-)
-registerHotkey("saveLocationInput", "Save location to file in json/report", function()
-	savelocation = {}
-	savelocation.locations = {}
-	savelocation.desc = "location_"..math.random(0,59656518543133)
-	savelocation.isFor = ""
-	savelocation.tag = desc
-	local location = {}
-	local inVehicule = false
-	inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
-	location.x = curPos.x
-	location.y = curPos.y
-	location.z = curPos.z
-	local qat = Game.GetPlayer():GetWorldOrientation()
-	local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-	location.pitch = angle.pitch
-	location.roll = angle.roll
-	location.yaw = angle.yaw
-	location.inVehicule = inVehicule
-	location.Tag = currentDistricts2.Tag
-	if currentDistricts2 ~= nil and #currentDistricts2.districtLabels >0 then
-		for i, currentDistricts2 in ipairs(currentDistricts2.districtLabels) do
-			if i == 1 then
-				location.district = currentDistricts2
-				else
-				location.subdistrict = currentDistricts2
-			end
-		end
-	end
-	table.insert(savelocation.locations,location)
-	local file = io.open("json/report/"..savelocation.desc..".json", "w")
-	local stringg = JSON:encode_pretty(savelocation)
-	logme(10,stringg)
-	file:write(stringg)
-	file:close()
-end
-)
+-- -- -------------------------------HotKey------------------------------
+-- registerHotkey("cycleCustomInteract", "Cycle Custom Interact", function()
+	-- if(newgroupinteractUI) then
+	-- cycleInteract2()
+	-- else
+	-- cycleInteract()
+	-- end
+-- end
+-- )
+-- registerHotkey("push", "push", function()
+	-- objectDist = objectDist + 0.5
+	-- logme(10,objectDist)
+-- end
+-- )
+-- registerHotkey("pull", "pull", function()
+	-- objectDist = objectDist - 0.5
+	-- logme(10,objectDist)
+-- end
+-- )
+-- registerHotkey("selectcurrentInteractGroup1", "Select 1 Interact Group", function()
+	-- currentInteractGroupIndex = 1
+	-- cycleInteractgroup()
+-- end
+-- )
+-- registerHotkey("selectcurrentInteractGroup2", "Select 2 Interact Group", function()
+	-- currentInteractGroupIndex = 2
+	-- cycleInteractgroup()
+-- end
+-- )
+-- registerHotkey("selectcurrentInteractGroup3", "Select 3 Interact Group", function()
+	-- currentInteractGroupIndex = 3
+	-- cycleInteractgroup()
+-- end
+-- )
+-- registerHotkey("selectcurrentInteractGroup4", "Select 4 Interact Group", function()
+	-- currentInteractGroupIndex = 4
+	-- cycleInteractgroup()
+-- end
+-- )
+-- registerHotkey("selectcurrentInteractGroup5", "Select 5 Interact Group", function()
+	-- currentInteractGroupIndex = 5
+	-- cycleInteractgroup()
+-- end
+-- )
+-- registerHotkey("openRadioPopup", "Open radio popup", function()
+	-- openRadio()
+-- end
+-- )
+-- registerHotkey("housingXp", "Housing : X+", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true				
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- objpos.x = objpos.x + 0.05
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingXm", "Housing : X-", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true							
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- objpos.x = objpos.x - 0.05
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingYp", "Housing : Y+", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- objpos.y = objpos.y + 0.05
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingYm", "Housing : Y-", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- objpos.y = objpos.y - 0.05
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingZp", "Housing : Z+", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- objpos.z = objpos.z + 0.05
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingZm", "Housing : Z-", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- objpos.z = objpos.z - 0.05
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingRollp", "Housing : Roll+", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- angle.roll = angle.roll + 5
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingRollm", "Housing : Roll-", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- angle.roll = angle.roll - 5
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingPitchp", "Housing : Pitch+", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- angle.pitch = angle.pitch +5
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingPitchm", "Housing : Pitch-", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- angle.pitch = angle.pitch -5
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingYawp", "Housing : Yaw+", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = entity:GetWorldPosition()
+				-- local worldpos = Game.GetPlayer():GetWorldTransform()
+				-- local qat = entity:GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- angle.yaw = angle.yaw + 5
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingYawm", "Housing : Yaw-", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- if(entity ~= nil) then
+					-- local objpos = entity:GetWorldPosition()
+					-- local worldpos = Game.GetPlayer():GetWorldTransform()
+					-- local qat = entity:GetWorldOrientation()
+					-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+					-- angle.yaw = angle.yaw - 5 
+					-- updateItemPosition(selectedItem, objpos, angle, true)
+					-- cetkeyused = false
+				-- end
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingMovetoPlayer", "Housing : Move To Player", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- local objpos = Game.GetPlayer():GetWorldPosition()
+				-- local qat = Game.GetPlayer():GetWorldOrientation()
+				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+				-- updateItemPosition(selectedItem, objpos, angle, true)
+				-- cetkeyused = false
+			-- end
+		-- end
+	-- end
+-- end)
+-- registerHotkey("housingRemove", "Housing : Remove", function()
+	-- if(cetkeyused == false)then
+		-- if(selectedItem ~= nil) then
+			-- local entity = Game.FindEntityByID(selectedItem.entityId)
+			-- if(entity ~= nil) then		
+				-- cetkeyused = true			
+				-- for i =1, #currentSave.arrayPlayerItems do
+					-- local mitem = currentSave.arrayPlayerItems[i]
+					-- if(mitem.Tag == selectedItem.Tag) then
+						-- Game.FindEntityByID(selectedItem.entityId):GetEntity():Destroy()
+						-- logme(10,"toto")
+						-- updatePlayerItemsQuantity(mitem,1)
+						-- deleteHousing(selectedItem.Id)
+						-- local index = getItemEntityIndexFromManager(selectedItem.entityId)
+						-- --despawnItem(selectedItem.Id)
+						-- table.remove(currentItemSpawned,index)
+						-- Cron.After(1, function()
+							-- selectedItem = nil
+						-- end)
+					-- end
+				-- end
+				-- cetkeyused = false
+				-- else
+				-- logme(10,"nope")
+			-- end
+		-- end				
+	-- end
+-- end)
+-- registerHotkey("housingcycleplaced", "Housing : Cycle Through placed items", function()
+	-- selectedItem = nil
+	-- if(selectedItem == nil) then
+		-- selectedItem = currentItemSpawned[currentselectedItemIndex]
+		-- Game.GetPlayer():SetWarningMessage("Current Selected Item : "..currentItemSpawned[currentselectedItemIndex].Title)
+		-- currentselectedItemIndex = currentselectedItemIndex+1
+		-- if(currentselectedItemIndex > #currentItemSpawned) then
+			-- currentselectedItemIndex = 1
+		-- end
+	-- end
+-- end)
+-- registerHotkey("hideCustomInteract", "Hide Custom Interact", function()
+	-- hideInteract()
+-- end
+-- )
+-- registerHotkey("saveLocationInput", "Save location to file in json/report", function()
+	-- savelocation = {}
+	-- savelocation.locations = {}
+	-- savelocation.desc = "location_"..math.random(0,59656518543133)
+	-- savelocation.isFor = ""
+	-- savelocation.tag = desc
+	-- local location = {}
+	-- local inVehicule = false
+	-- inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
+	-- location.x = curPos.x
+	-- location.y = curPos.y
+	-- location.z = curPos.z
+	-- local qat = Game.GetPlayer():GetWorldOrientation()
+	-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+	-- location.pitch = angle.pitch
+	-- location.roll = angle.roll
+	-- location.yaw = angle.yaw
+	-- location.inVehicule = inVehicule
+	-- location.Tag = currentDistricts2.Tag
+	-- if currentDistricts2 ~= nil and #currentDistricts2.districtLabels >0 then
+		-- for i, currentDistricts2 in ipairs(currentDistricts2.districtLabels) do
+			-- if i == 1 then
+				-- location.district = currentDistricts2
+				-- else
+				-- location.subdistrict = currentDistricts2
+			-- end
+		-- end
+	-- end
+	-- table.insert(savelocation.locations,location)
+	-- local file = io.open("json/report/"..savelocation.desc..".json", "w")
+	-- local stringg = JSON:encode_pretty(savelocation)
+	-- logme(10,stringg)
+	-- file:write(stringg)
+	-- file:close()
+-- end
+-- )
 
 
-registerHotkey("toogleview", 'Toggle View', function()
-	if lastView == nil or lastView == 1 then--Normal View
-		local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-		fppComp:SetLocalPosition(Vector4:new(0.0, 0.0, 0.0, 1.0))
-		local isFemale = GetPlayerGender()
-		if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
-		local headItem = string.format("Items.CharacterCustomization%sHead", gender)
-		local ts = Game.GetTransactionSystem()
-		local gameItemID = GetSingleton('gameItemID')
-		local tdbid = TweakDBID.new(headItem)
-		local itemID = gameItemID:FromTDBID(tdbid)
-		if(AVisIn == false) then
-			EquipItemOnPlayer(headItem, "TppHead")
-		end
-		lastView = 2
-		elseif lastView == 2 then -- 3rd Person View near
-		local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-		fppComp:SetLocalPosition(Vector4:new(0.0, -3.0, 0, 1.0))
-		local isFemale = GetPlayerGender()
-		if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
-		local headItem = string.format("Items.CharacterCustomization%sHead", gender)
-		local ts = Game.GetTransactionSystem()
-		local gameItemID = GetSingleton('gameItemID')
-		local tdbid = TweakDBID.new(headItem)
-		local itemID = gameItemID:FromTDBID(tdbid)
-		if(AVisIn == false) then
-			Game.AddToInventory(headItem, 1)
-			EquipItemOnPlayer(headItem, "TppHead")
-		end
-		lastView = 3
-		elseif lastView == 3 then -- 3rd Person View far
-		local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-		fppComp:SetLocalPosition(Vector4:new(0.0, -12.0, 1.5, 1.0))
-		local isFemale = GetPlayerGender()
-		if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
-		local headItem = string.format("Items.CharacterCustomization%sHead", gender)
-		local ts = Game.GetTransactionSystem()
-		local gameItemID = GetSingleton('gameItemID')
-		local tdbid = TweakDBID.new(headItem)
-		local itemID = gameItemID:FromTDBID(tdbid)
-		if(AVisIn == false) then
-			EquipItemOnPlayer(headItem, "TppHead")
-		end
-		lastView = 4
-		elseif lastView == 4 then -- 3rd Person View very far
-		local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-		fppComp:SetLocalPosition(Vector4:new(0.0, -22.0, 5.5, 1.0))
-		local isFemale = GetPlayerGender()
-		if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
-		local headItem = string.format("Items.CharacterCustomization%sHead", gender)
-		local ts = Game.GetTransactionSystem()
-		local gameItemID = GetSingleton('gameItemID')
-		local tdbid = TweakDBID.new(headItem)
-		local itemID = gameItemID:FromTDBID(tdbid)
-		if(AVisIn == false) then
-			EquipItemOnPlayer(headItem, "TppHead")
-		end
-		lastView = 1
-	end
-end)
+-- registerHotkey("toogleview", 'Toggle View', function()
+	-- if lastView == nil or lastView == 1 then--Normal View
+		-- local fppComp = Game.GetPlayer():GetFPPCameraComponent()
+		-- fppComp:SetLocalPosition(Vector4:new(0.0, 0.0, 0.0, 1.0))
+		-- local isFemale = GetPlayerGender()
+		-- if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
+		-- local headItem = string.format("Items.CharacterCustomization%sHead", gender)
+		-- local ts = Game.GetTransactionSystem()
+		-- local gameItemID = GetSingleton('gameItemID')
+		-- local tdbid = TweakDBID.new(headItem)
+		-- local itemID = gameItemID:FromTDBID(tdbid)
+		-- if(AVisIn == false) then
+			-- EquipItemOnPlayer(headItem, "TppHead")
+		-- end
+		-- lastView = 2
+		-- elseif lastView == 2 then -- 3rd Person View near
+		-- local fppComp = Game.GetPlayer():GetFPPCameraComponent()
+		-- fppComp:SetLocalPosition(Vector4:new(0.0, -3.0, 0, 1.0))
+		-- local isFemale = GetPlayerGender()
+		-- if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
+		-- local headItem = string.format("Items.CharacterCustomization%sHead", gender)
+		-- local ts = Game.GetTransactionSystem()
+		-- local gameItemID = GetSingleton('gameItemID')
+		-- local tdbid = TweakDBID.new(headItem)
+		-- local itemID = gameItemID:FromTDBID(tdbid)
+		-- if(AVisIn == false) then
+			-- Game.AddToInventory(headItem, 1)
+			-- EquipItemOnPlayer(headItem, "TppHead")
+		-- end
+		-- lastView = 3
+		-- elseif lastView == 3 then -- 3rd Person View far
+		-- local fppComp = Game.GetPlayer():GetFPPCameraComponent()
+		-- fppComp:SetLocalPosition(Vector4:new(0.0, -12.0, 1.5, 1.0))
+		-- local isFemale = GetPlayerGender()
+		-- if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
+		-- local headItem = string.format("Items.CharacterCustomization%sHead", gender)
+		-- local ts = Game.GetTransactionSystem()
+		-- local gameItemID = GetSingleton('gameItemID')
+		-- local tdbid = TweakDBID.new(headItem)
+		-- local itemID = gameItemID:FromTDBID(tdbid)
+		-- if(AVisIn == false) then
+			-- EquipItemOnPlayer(headItem, "TppHead")
+		-- end
+		-- lastView = 4
+		-- elseif lastView == 4 then -- 3rd Person View very far
+		-- local fppComp = Game.GetPlayer():GetFPPCameraComponent()
+		-- fppComp:SetLocalPosition(Vector4:new(0.0, -22.0, 5.5, 1.0))
+		-- local isFemale = GetPlayerGender()
+		-- if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
+		-- local headItem = string.format("Items.CharacterCustomization%sHead", gender)
+		-- local ts = Game.GetTransactionSystem()
+		-- local gameItemID = GetSingleton('gameItemID')
+		-- local tdbid = TweakDBID.new(headItem)
+		-- local itemID = gameItemID:FromTDBID(tdbid)
+		-- if(AVisIn == false) then
+			-- EquipItemOnPlayer(headItem, "TppHead")
+		-- end
+		-- lastView = 1
+	-- end
+-- end)

@@ -3842,4 +3842,12 @@ return {
 		["name"] = "set_component_hidden",
 		["hide"] = true
 	},
+	
+	["refresh_shard_cache"] = {
+		["helper"] = "This action will refresh shard cache",
+		["helperTitle"] = "Misc : Refresh shard cache",
+		
+		["name"] = "refresh_shard_cache",
+		
+	},
 }

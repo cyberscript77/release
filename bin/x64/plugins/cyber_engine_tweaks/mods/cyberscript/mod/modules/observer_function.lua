@@ -2127,7 +2127,14 @@ function SettingsMainGameController_RequestClose (_, _, target) -- Check if acti
 	sessionFile:close()
 	
 	cyberscript.language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
-	
+	local activeData = CodexListSyncData.new()
+	local gameshards = CodexUtils.GetShardsDataArray(GameInstance.GetJournalManager(), activeData)
+	if gameshardscompiled == nil then gameshardscompiled = {} end
+	for i,v in pairs(gameshards) do
+		if gameshardscompiled[v.data.title] == nil then gameshardscompiled[v.data.title] = true end
+		
+		
+	end		
 	if(AutoRefreshDatapack == true) then
 		LoadDataPackCache()
 	end
@@ -2275,14 +2282,14 @@ function BaseWorldMapMappinController_SelectMappin(self)
 				end
 			end
 			else
-			print("eee")
+			
 			local haveFounded = false
 			
 			for k,v in pairs(mappinManager) do 
 				local mappin = v
 				
 				if(k ~= "selected_mappin" and k ~= "selected_fasttravel_mappin" and mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
-					print("eee")
+					
 					
 					SelectedScriptMappin = mappin
 					break
@@ -2290,6 +2297,28 @@ function BaseWorldMapMappinController_SelectMappin(self)
 			end
 		end
 		end
+	
+		else
+		
+		
+		if(self.mappin ~= nil) then
+			local wordpos = self.mappin:GetWorldPosition()
+		
+		
+			
+			for k,v in pairs(mappinManager) do 
+				local mappin = v
+				
+				if(k ~= "selected_mappin" and k ~= "selected_fasttravel_mappin" and mappin.position ~= nil and math.floor(mappin.position.x) == math.floor(wordpos.x) and math.floor(mappin.position.y) == math.floor(wordpos.y) and math.floor(mappin.position.z) == math.floor(wordpos.z)) then
+					print(k)
+					
+					SelectedScriptMappin = mappin
+					break
+				end
+			end
+		
+		end
+	
 	end
 end
 
@@ -6901,6 +6930,7 @@ function WorldMapTooltipContainer_SetData(self,target,data,menu)
 			elseif(SelectedScriptMappin ~= nil) then
 			
 			inkTextRef.SetText(self.defaultTooltipController.titleText, getLang(SelectedScriptMappin.title))
+			inkTextRef.SetText(self.defaultTooltipController.descText, SelectedScriptMappin.desc)
 			if(ActivecustomMappin ~= nil) then
 				if(displayXYZ ~= nil and displayXYZ == 1) then
 					local position = ActivecustomMappin:GetWorldPosition()
@@ -7077,11 +7107,12 @@ end
 function PhoneDialerGameController_PopulateData(thos,contactDataArray, selectIndex, itemHash,wrappedMethod)
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
+	if countphone == nil then countphone = 0 end
 	if(thos.currentTab == PhoneDialerTabs.Unread) then
 		countphone = countphone + 1
 		
 	end
-	
+	print(countphone)
 	
 	local booold = (countphone >= 4)
 	
@@ -8049,7 +8080,7 @@ end
 function PhoneDialerGameController_Show(thos)
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
-	countphone = 0
+		
 	openPhone = true
 end
 
@@ -10361,19 +10392,8 @@ function listenPlayerInput(action)
 	end
 	
 	
-	if actionName == "popup_moveLeft" and actionType == "REPEAT" and currentController == "gamepad"   then 
-		--hideInteract()
-		logme(10,"tosto")
-	end
-	if actionName == "dpad_left" and actionType == "BUTTON_PRESSED"  and currentController == "gamepad" and currentHelp == nil  then 
-		
-		if(newgroupinteractUI) then
-			cycleInteract2()
-			else
-			cycleInteract()
-		end
-		
-	end
+	
+	
 	pcall(function()
 		if currentHelp ~= nil and currentHelpIndex ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
 			
