@@ -574,7 +574,8 @@ function resetVar()
 		"custom_place",
 		"custom_room",
 		"on_entity",
-		"on_group"
+		"on_group",
+		"manager"
 	}
 	npcpositionway = { "normal", "behind", "forward","forward_relative"}
 	npcpositionhouseway = { "default", "enter", "exit"}

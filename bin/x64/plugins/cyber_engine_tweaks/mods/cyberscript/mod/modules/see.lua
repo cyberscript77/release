@@ -10408,6 +10408,13 @@ function executeAction(action,tag,parent,index,source,executortag)
 					
 				end
 				
+				if(action.name == "delete_position") then
+				
+					
+					cyberscript.PositionManager[action.tag] = nil
+					
+				end
+				
 			end
 			
 			if uiregion then

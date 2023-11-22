@@ -3836,7 +3836,13 @@ return {
 		["tag"] = "mytag",
 		["name"] = "register_garage_spawn_position",
 	},
-	
+	["delete_position"] = {
+		["helper"] = "This action will delete position in manager",
+		["helperTitle"] = "Logic : delete position from manager",
+		
+		["tag"] = "mytag",
+		["name"] = "delete_position",
+	},
 	["register_position"] = {
 		["helper"] = "This action will register position in manager",
 		["helperTitle"] = "Logic : Register position",
