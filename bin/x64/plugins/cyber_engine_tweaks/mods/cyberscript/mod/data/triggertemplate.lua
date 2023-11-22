@@ -28,11 +28,43 @@ return {
 		["helperTitle"] = "UI : scanner_active",
 		["name"] = "scanner_active",
 	},
+	["tracked_game_quest"] = {
+		["helper"] = "This trigger will be triggered when tracked game quest match with trigger value",
+		["helperTitle"] = "Game : Tracked Game Quest",
+		["name"] = "tracked_game_quest",
+		["value"] = "sq012"
+	},
+	["tracked_game_objective"] = {
+		["helper"] = "This trigger will be triggered when tracked game Objective match with trigger value",
+		["helperTitle"] = "Game : Tracked Game Objective",
+		["name"] = "tracked_game_objective",
+		["value"] = "sq012"
+	},
+	["tracked_game_phase"] = {
+		["helper"] = "This trigger will be triggered when tracked game phase match with trigger value",
+		["helperTitle"] = "Game : Tracked Game Phase",
+		["name"] = "tracked_game_phase",
+		["value"] = "sq012"
+	},
+	["entity_is_a"] = {
+		["helper"] = "This trigger will be triggered when entity is a same type than trigger value",
+		["helperTitle"] = "Entity : Is a Object",
+		["name"] = "entity_is_a",
+		["value"] = "NPCPuppet",
+		["tag"] = "myjudy"
+	},
 	["look_at_object"] = {
 		["value"] = "cofee",
 		["name"] = "look_at_object",
 		["helperTitle"] = "Player : Look at ",
 		["helper"] = "This trigger will be triggered when you look a entity who has the (value) word in her name",
+	},
+	["scanned_entity"] = {
+		["value"] = "mytag",
+		["name"] = "scanned_entity",
+		["helperTitle"] = "Entity : Scanned Entity",
+		["npc_only"] = true,
+		["helper"] = "This trigger will be triggered when you scan a entity who has the same tag than one you want",
 	},
 	["texture_is_visible"] = {
 		["helper"] = "This action will test if an texture is currently visible or not",
@@ -270,7 +302,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \

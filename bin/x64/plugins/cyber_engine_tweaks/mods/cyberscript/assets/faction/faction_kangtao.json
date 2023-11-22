@@ -24,9 +24,13 @@
 		"Character.gle_kangtao_ranger1_ranged2_dian_ma",
 		"Character.kangtao_android_android2_dian_ma",
 		"Character.kangtao_drone_bombus_medium",
+		"Character.kangtao_drone_griffin_easy",
 		"Character.kangtao_drone_griffin_medium",
+		"Character.kangtao_drone_octant_medium",
+		"Character.kangtao_drone_wyvern_hard",
+		"Character.kangtao_drone_wyvern_medium",
 		"Character.kangtao_officer_grenadier3_mah_elite",
-	    "Character.kangtao_ranger1_ranged2_dian_ma"
+		"Character.kangtao_ranger1_ranged2_dian_ma"
 	],
 	"spawnable_vehicle": [
 		"Vehicle.cs_savable_villefort_columbus_kangtao",

@@ -1504,6 +1504,7 @@ end
 									cyberscript.cache["sound"][value[i].tag] = {}
 									cyberscript.cache["sound"][value[i].tag].data = value[i]
 									cyberscript.cache["sound"][value[i].tag].file = path
+									cyberscript.cache["sound"][value[i].tag].datapack = datapackname
 									cyberscript.cache["sound"][value[i].tag].scripttype = objtype
 									
 								end

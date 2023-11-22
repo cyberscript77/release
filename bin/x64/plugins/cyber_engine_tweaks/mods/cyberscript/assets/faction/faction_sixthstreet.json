@@ -1,19 +1,8 @@
 {
+    "header": {
+        "version": 2
+    },
     "name": "6thStreet",
-    "logo": "logo_6thstreet",
-    "tag": "faction_sixthstreet",
-   "attitude_group": [
-   "q103_6th_street", 
-   "de_wbr_hil_06_6th_street",
-   "de_std_rcr_06_6th_street",
-  "sq012_6th_street"
-   ],
-    "rivals": [
-        "faction_valentinos"
-    ],
-	"keyword": [
-		"6th_street"
-	],
     "spawnable_npc": [
         "Character.mq008_6th_street_civ_judge_ma",
         "Character.mq008_6th_street_civ_judge_wa",
@@ -23,7 +12,41 @@
         "Character.sts_wbr_hil_06_6th_street_marksman_ma",
         "Character.sts_hey_gle_06_6th_street_officer",
         "Character.sts_hey_gle_06_6th_street_smg_ma",
-        "Character.sts_hey_gle_06_6th_street_smg_wa"
+        "Character.sts_hey_gle_06_6th_street_smg_wa",
+        "Character.arr_sixthstreet_android_android2_saratoga_ma",
+        "Character.arr_sixthstreet_hooligan_melee1_ironpipe_ma",
+        "Character.arr_sixthstreet_hooligan_melee1_ironpipe_wa",
+        "Character.arr_sixthstreet_hooligan_ranged1_nova_ma",
+        "Character.arr_sixthstreet_hooligan_ranged1_nova_wa",
+        "Character.arr_sixthstreet_hooligan_ranged1_saratoga_ma",
+        "Character.arr_sixthstreet_hooligan_ranged1_saratoga_wa",
+        "Character.arr_sixthstreet_menace1_fmelee2_baton_wa_rare",
+        "Character.arr_sixthstreet_patrol2_melee2_baton_wa",
+        "Character.arr_sixthstreet_patrol2_ranged2_ajax_wa",
+        "Character.arr_sixthstreet_prepers3_grenadier2_nova_ma_rare",
+        "Character.arr_sixthstreet_sniper2_sniper2_grad_ma_rare",
+        "Character.arr_sixthstreet_sniper2_sniper2_sor22_ma_rare",
+        "Character.arr_sixthstreet_veteran3_ranged2_ajax_ma",
+        "Character.gle_sixthstreet_menace1_fmelee2_baton_wa_rare",
+        "Character.gle_sixthstreet_sniper2_sniper2_grad_ma_rare",
+        "Character.gle_sixthstreet_veteran3_ranged2_ajax_ma",
+        "Character.rcr_sixthstreet_hooligan_melee1_ironpipe_ma",
+        "Character.rcr_sixthstreet_hooligan_ranged1_nova_ma",
+        "Character.rcr_sixthstreet_hooligan_ranged1_nova_wa",
+        "Character.rcr_sixthstreet_hooligan_ranged1_saratoga_ma",
+        "Character.rcr_sixthstreet_hooligan_ranged1_saratoga_wa",
+        "Character.rcr_sixthstreet_menace1_fmelee2_baton_wa_rare",
+        "Character.rcr_sixthstreet_officer_officer_overture_ma",
+        "Character.rcr_sixthstreet_patrol2_melee2_baton_wa",
+        "Character.rcr_sixthstreet_patrol2_ranged2_ajax_wa",
+        "Character.rcr_sixthstreet_prepers3_grenadier2_nova_ma_rare",
+        "Character.rcr_sixthstreet_sniper2_sniper2_grad_ma_rare",
+        "Character.rcr_sixthstreet_veteran3_ranged2_ajax_ma",
+        "Character.rey_sixthstreet_hooligan_ranged1_nova_ma",
+        "Character.rey_sixthstreet_hooligan_ranged1_nova_wa",
+        "Character.rey_sixthstreet_hooligan_ranged1_saratoga_ma",
+        "Character.rey_sixthstreet_hooligan_ranged1_saratoga_wa",
+        "Character.rey_sixthstreet_patrol2_ranged2_ajax_wa"
     ],
     "spawnable_vehicle": [
         "Vehicle.v_standard2_chevalier_thrax_sixth_street",
@@ -31,16 +54,35 @@
         "Vehicle.v_standard25_villefort_columbus_sixth_street",
         "Vehicle.cs_savable_archer_hella_sixth_street"
     ],
+    "attitude_group": [
+        "q103_6th_street",
+        "de_wbr_hil_06_6th_street",
+        "de_std_rcr_06_6th_street",
+        "sq012_6th_street"
+    ],
+    "logo": "logo_6thstreet",
     "district_tag": "district_santodomingo",
-    "vip": [{
-            "name": "Buck Arnold",
-            "score": 0
-        }, {
-			 "name": "Darius Miles",
-            "score": 20
-        }, {
-            "name": "Olga Elisabeth Longmead",
-            "score": 30
+    "vip": [
+        {
+            "score": 0,
+            "name": "Buck Arnold"
+        },
+        {
+            "score": 20,
+            "name": "Darius Miles"
+        },
+        {
+            "score": 30,
+            "name": "Olga Elisabeth Longmead"
         }
+    ],
+    "tag": "faction_sixthstreet",
+    "rivals": [
+        "faction_valentinos"
+    ],
+    "keyword": [
+        "6th_street",
+        "6thstreet",
+        "sixthstreet"
     ]
 }

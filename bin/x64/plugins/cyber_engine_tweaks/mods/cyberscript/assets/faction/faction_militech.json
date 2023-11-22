@@ -1,34 +1,78 @@
 {
-	"name": "Militech",
-	"logo": "logo_militech",
-	"tag": "faction_militech",
-	 "attitude_group": [
-	 "militech",
-	"militech_ow"
-	 ],
-	"rivals": [
-		"faction_maelstrom",
-		"faction_tygerclaws",
-		"faction_arasaka",
-		"faction_kangtao",
-		"faction_afterlife"
-	],
-	"keyword": [
-		"militech"
-	],
-	"spawnable_npc": [
-		"Character.bls_se_militech_ranger1_ranged1_saratoga_ma",
-		"Character.bls_se_militech_tech_franged2_omaha_ma_rare",
-		"Character.cpz_militech_strong_elite_short_range_m_hard",
-		"Character.gle_militech_enforcer3_gunner3_HMG_mb_elite",
-		"Character.prevention_militech_smg_ma",
-		"Character.hil_militech_recon_sniper2_achilles_ma_rare",
-		"Character.ina_04_militech_android_android2_ajax_ma"
-	],
-	"spawnable_vehicle": ["Vehicle.q114_militech_response_car"],
-	"district_tag": "district_badland",
-	"vip": [{
-		"name": "Meredith Stout",
-		"score":0
-	}]
+    "name": "Militech",
+    "logo": "logo_militech",
+    "tag": "faction_militech",
+    "attitude_group": [
+        "militech",
+        "militech_ow"
+    ],
+    "rivals": [
+        "faction_maelstrom",
+        "faction_tygerclaws",
+        "faction_arasaka",
+        "faction_kangtao",
+        "faction_afterlife"
+    ],
+    "keyword": [
+        "militech"
+    ],
+    "spawnable_npc": [
+        "Character.bls_se_militech_ranger1_ranged1_saratoga_ma",
+        "Character.bls_se_militech_tech_franged2_omaha_ma_rare",
+        "Character.cpz_militech_strong_elite_short_range_m_hard",
+        "Character.gle_militech_enforcer3_gunner3_HMG_mb_elite",
+        "Character.prevention_militech_smg_ma",
+        "Character.hil_militech_recon_sniper2_achilles_ma_rare",
+        "Character.ina_04_militech_android_android2_ajax_ma",
+        "Character.q114_militech_alfa_beta_smg",
+        "Character.q114_militech_broadcast",
+        "Character.q114_militech_delta_gamma_HMG",
+        "Character.q114_militech_drop_mech",
+        "Character.q114_militech_guard_officer",
+        "Character.q114_militech_large_drone",
+        "Character.q114_militech_medium_drone",
+        "Character.q114_militech_minotaur",
+        "Character.q114_militech_response_exo",
+        "Character.q114_militech_response_officer",
+        "Character.q114_militech_response_sniper",
+        "Character.wat_roadblock_militech_minotaur",
+        "Character.wat_roadblock_militech_ranger1_ranged1_saratoga_ma",
+        "Character.wat_roadblock_militech_ranger2_ranged2_ajax_ma",
+        "Character.wat_roadblock_militech_recon_sniper2_achilles_ma_rare",
+        "Character.militech_android_android2_ajax_ma",
+        "Character.militech_android_android2_crusher_ma",
+        "Character.militech_drone_bombus_easy",
+        "Character.militech_drone_bombus_hard",
+        "Character.militech_drone_bombus_medium",
+        "Character.militech_drone_griffin_easy",
+        "Character.militech_drone_griffin_hard",
+        "Character.militech_drone_griffin_medium",
+        "Character.militech_drone_octant_easy",
+        "Character.militech_drone_octant_hard",
+        "Character.militech_drone_octant_medium",
+        "Character.militech_drone_wyvern_easy",
+        "Character.militech_drone_wyvern_hard",
+        "Character.militech_drone_wyvern_medium",
+        "Character.militech_enforcer3_gunner3_HMG_mb_elite",
+        "Character.militech_minotaur",
+        "Character.militech_officer_officer_omaha_ma",
+        "Character.militech_ranger1_ranged1_lexington_ma",
+        "Character.militech_ranger1_ranged1_saratoga_ma",
+        "Character.militech_ranger2_ranged2_ajax_ma",
+        "Character.militech_ranger2_ranged2_omaha_ma",
+        "Character.militech_recon_sniper2_achilles_ma_rare",
+        "Character.militech_strongarms_hmelee3_fists_mb_elite",
+        "Character.militech_tech_franged2_omaha_ma_rare",
+        "Character.militech_tech_grenadier2_omaha_ma_rare"
+    ],
+    "spawnable_vehicle": [
+        "Vehicle.q114_militech_response_car"
+    ],
+    "district_tag": "district_badland",
+    "vip": [
+        {
+            "name": "Meredith Stout",
+            "score": 0
+        }
+    ]
 }

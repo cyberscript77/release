@@ -194,8 +194,10 @@
 	"list": {
 		"items": []
 
-	}
-
+	},
+	"group": {
+		"tag": "mygrouptag"
+	},
 
 
 }

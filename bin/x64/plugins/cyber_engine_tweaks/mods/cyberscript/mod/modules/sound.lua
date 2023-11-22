@@ -2,8 +2,8 @@ logme(10,"CyberMod: sound module loaded")
 cyberscript.module = cyberscript.module +1
 
 
-function PlaySound(sound,isradio,needrepeat)
-	
+function PlaySound(sound,isradio,needrepeat,entity)
+	if(entity == nil) then entity = Game.GetPlayer() end
 	local playsound = sound.tag
 	
 	if sound.language ~= nil then
@@ -23,7 +23,7 @@ function PlaySound(sound,isradio,needrepeat)
 	
 	local audioEvent = SoundPlayEvent.new()
 	audioEvent.soundName = playsound
-	Game.GetPlayer():QueueEvent(audioEvent)
+	entity:QueueEvent(audioEvent)
 	local times = os.date()
 	
 	cyberscript.soundmanager[sound.tag] = {}

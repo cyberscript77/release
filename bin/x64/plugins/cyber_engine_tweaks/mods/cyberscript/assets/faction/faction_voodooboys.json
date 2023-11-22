@@ -18,10 +18,22 @@
 		"faction_scavengers"
 	],
 	"spawnable_npc": [
+		"Character.cvi_voodooboys_grunt1_ranged2_saratoga_ma",
 		"Character.cvi_voodooboys_grunt1_ranged2_saratoga_wa",
+		"Character.cvi_voodooboys_grunt1_ranged2_sidewinder_wa",
+		"Character.cvi_voodooboys_grunt_medium_range_m_medium",
 		"Character.cvi_voodooboys_netrunner2_netrunner2_lexington_ma_rare",
+		"Character.cvi_voodooboys_netrunner2_netrunner2_lexington_wa_rare",
 		"Character.q110_esc_voodooboys_grunt1_ranged2_saratoga_ma",
-		"Character.q110_esc_voodooboys_grunt1_ranged2_sidewinder_wa"
+		"Character.q110_esc_voodooboys_grunt1_ranged2_sidewinder_wa",
+		"Character.voodooboys_netrunner2_netrunner2_lexington_wa_rare",
+		"Character.voodooboys_netrunner3_netrunner3_quasar_wa_elite",
+		"Character.wwd_voodooboys_grunt1_ranged2_saratoga_ma",
+		"Character.wwd_voodooboys_grunt1_ranged2_saratoga_wa",
+		"Character.wwd_voodooboys_grunt1_ranged2_sidewinder_ma",
+		"Character.wwd_voodooboys_netrunner2_netrunner2_lexington_ma_rare",
+		"Character.wwd_voodooboys_netrunner2_netrunner2_lexington_wa_rare",
+		"Character.wwd_voodooboys_netrunner3_netrunner3_quasar_wa_elite"
 	],
 	"spawnable_vehicle": [
 		"Vehicle.v_standard2_thorton_galena_voodoo_boys",

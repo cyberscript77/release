@@ -1,87 +1,121 @@
 {
-	"name": "Arasaka",
-	"logo": "logo_arasaka",
-	"tag": "faction_arasaka",
-	 "attitude_group": [
-	  "arasaka_ow",
-	  "arasaka"
-	 ],
-	"rivals": [
-		"faction_maelstrom",
-		"faction_kangtao",
-		"faction_militech",
-		"faction_afterlife"
-	],
-	"keyword": [
-		"arasaka","smasher"
-	],
-	"spawnable_npc": [
-		"Character.arasaka_bodyguard_ranged3_masamune_mb_rare",
-		"Character.arasaka_cyborg_franged3_shingen_ma_elite",
-		"Character.arasaka_agent_fmelee2rare_katana_wa_rare",
-		"Character.arasaka_android_android2_shingen_ma",
-		"Character.arasaka_android_android2_masamune_ma",
-		"Character.arasaka_cyborg_grenadier3_yukimura_ma_elite",
-		"Character.arasaka_guard2020_melee1_baton_ma",
-		"Character.arasaka_sniper_sniper3_ashura_ma_elite",
-		"Character.arasaka_sniper_sniper3_nekomata_ma_elite",
-		"Character.arasaka_sumo_hmelee2_fists_mb_rare",
-		"Character.arasaka_tank2_gunner2_defender_mb_rare",
-		"Character.arasaka_soldier1_ranged3_masamune_mah_rare",
-		"Character.arr_arasaka_netrunner_netrunner2_yukimura_wa_rare",
-		"Character.arasaka_2020guard_ranged1_2020nue_ma",
-		"Character.waterfront_arasaka_android_android2_masamune_ma",
-		"Character.q115_lobby_arasaka_heavy_gunner_elite",
-		"Character.q115_lobby_arasaka_ninja_mantis_elite",
-		"Character.q115_nest_arasaka_deployment_squad",
-		"Character.q115_arasaka_jungle_hmg",
-		"Character.q115_arasaka_jungle_commander_bodyguard",
-		"Character.q115_arasaka_security_squad_two_reinf",
-		"Character.q115_arasaka_jungle_fists_massive",
-		"Character.arasaka_ninja_fmelee3_mantis_wa_elite",
-		"Character.q116_boss_smasher",
-		"Character.q113_smasher_arasaka_mantis_officer",
-		"Character.q113_smasher_arasaka_sniper"
-	],
-	"spawnable_vehicle": [
-		"Vehicle.q108_arasaka_car",
-		"Vehicle.cs_savable_villefort_columbus_arasaka",
-		"Vehicle.v_standard2_villefort_cortes_arasaka",
-		"Vehicle.v_sportbike1_yaiba_kusanagi"
-		
-	],
-	"district_tag": "district_downtown",
-	"vip": [{
-			"name": "Arthur Jenkins",
-			"score": 5
-		},
-		{
-			"name": "Carter Smith",
-			"score": 5
-		},
-		{	
-			"name": "Female Netrunner",
-			"score": 15
-		},
-		{
-			"name": "Asa Risu (Technician)",
-			"score": 20
-		},
-		{
-			"name": "Kaoru",
-			"score": 20
-		}, {
-			"name": "Oda",
-			"score": 30
-		}, {
-			"name": "Prof. Sachiko Kusama",
-			"score": 30
-		}, {
-			"name": "Susan Abernathy",
-			"score": 40
-		}, {
-			"name": "Yorinobu",
-			"score": 90
-		}
-	]
+    "name": "Arasaka",
+    "logo": "logo_arasaka",
+    "tag": "faction_arasaka",
+    "attitude_group": [
+        "arasaka_ow",
+        "arasaka"
+    ],
+    "rivals": [
+        "faction_maelstrom",
+        "faction_kangtao",
+        "faction_militech",
+        "faction_afterlife"
+    ],
+    "keyword": [
+        "arasaka",
+        "smasher"
+    ],
+    "spawnable_npc": [
+        "Character.arasaka_bodyguard_ranged3_masamune_mb_rare",
+        "Character.arasaka_cyborg_franged3_shingen_ma_elite",
+        "Character.arasaka_agent_fmelee2rare_katana_wa_rare",
+        "Character.arasaka_android_android2_shingen_ma",
+        "Character.q113_estate_arasaka_mech",
+        "Character.arasaka_android_android2_masamune_ma",
+        "Character.arasaka_cyborg_grenadier3_yukimura_ma_elite",
+        "Character.arasaka_guard2020_melee1_baton_ma",
+        "Character.arasaka_sniper_sniper3_ashura_ma_elite",
+        "Character.arasaka_sniper_sniper3_nekomata_ma_elite",
+        "Character.arasaka_sumo_hmelee2_fists_mb_rare",
+        "Character.arasaka_tank2_gunner2_defender_mb_rare",
+        "Character.arasaka_soldier1_ranged3_masamune_mah_rare",
+        "Character.arr_arasaka_android_android2_masamune_ma",
+        "Character.arr_arasaka_android_android2_shingen_ma",
+        "Character.arr_arasaka_bodyguard_ranged3_masamune_mb_rare",
+        "Character.arr_arasaka_netrunner_netrunner2_yukimura_wa_rare",
+        "Character.arr_arasaka_ranger1_ranged2_masamune_ma",
+        "Character.arr_arasaka_ranger1_ranged2_shingen_ma",
+        "Character.arr_arasaka_ranger1_ranged2_shingen_wa",
+        "Character.arr_arasaka_security1_ranged1_shingen_ma",
+        "Character.arasaka_2020guard_ranged1_2020nue_ma",
+        "Character.waterfront_arasaka_android_android2_masamune_ma",
+        "Character.q115_lobby_arasaka_heavy_gunner_elite",
+        "Character.q115_lobby_arasaka_ninja_mantis_elite",
+        "Character.q115_nest_arasaka_deployment_squad",
+        "Character.q115_arasaka_jungle_hmg",
+        "Character.q115_arasaka_jungle_commander_bodyguard",
+        "Character.q115_arasaka_security_squad_two_reinf",
+        "Character.q115_arasaka_jungle_fists_massive",
+        "Character.arasaka_ninja_fmelee3_mantis_wa_elite",
+        "Character.q116_boss_smasher",
+        "Character.q113_smasher_arasaka_mantis_officer",
+        "Character.q113_smasher_arasaka_sniper",
+        "Character.hil_arasaka_guard2_ranged1_yukimura_wa",
+        "Character.hil_arasaka_ninja_fmelee3_katana_wa_elite",
+        "Character.hil_arasaka_ranger1_ranged2_masamune_ma",
+        "Character.hil_arasaka_ranger1_ranged2_shingen_ma",
+        "Character.hil_arasaka_ranger1_ranged2_shingen_wa",
+        "Character.hil_arasaka_security1_ranged1_kenshin_ma",
+        "Character.hil_arasaka_sniper_sniper3_ashura_ma_elite",
+        "Character.dtn_arasaka_android_android2_masamune_ma",
+        "Character.dtn_arasaka_guard2_melee1_baton_ma",
+        "Character.dtn_arasaka_guard2_melee1_baton_wa",
+        "Character.dtn_arasaka_guard2_ranged1_kenshin_ma",
+        "Character.dtn_arasaka_guard2_ranged1_shingen_ma",
+        "Character.dtn_arasaka_netrunner_netrunner2_yukimura_wa_rare",
+        "Character.cpz_arasaka_android_android2_masamune_ma",
+        "Character.cpz_arasaka_bodyguard_ranged3_kenshin_mb_rare",
+        "Character.cpz_arasaka_bodyguard_ranged3_masamune_mb_rare",
+        "Character.cpz_arasaka_cyborg_grenadier3_yukimura_ma_elite",
+        "Character.cpz_arasaka_guard2_ranged1_kenshin_ma",
+        "Character.cpz_arasaka_guard2_ranged1_shingen_ma",
+        "Character.cpz_arasaka_guard2_ranged1_yukimura_ma",
+        "Character.cpz_arasaka_strong_elite_melee_m_hard"
+    ],
+    "spawnable_vehicle": [
+        "Vehicle.q108_arasaka_car",
+        "Vehicle.cs_savable_villefort_columbus_arasaka",
+        "Vehicle.v_standard2_villefort_cortes_arasaka",
+        "Vehicle.v_sportbike1_yaiba_kusanagi"
+    ],
+    "district_tag": "district_downtown",
+    "vip": [
+        {
+            "name": "Arthur Jenkins",
+            "score": 5
+        },
+        {
+            "name": "Carter Smith",
+            "score": 5
+        },
+        {
+            "name": "Female Netrunner",
+            "score": 15
+        },
+        {
+            "name": "Asa Risu (Technician)",
+            "score": 20
+        },
+        {
+            "name": "Kaoru",
+            "score": 20
+        },
+        {
+            "name": "Oda",
+            "score": 30
+        },
+        {
+            "name": "Prof. Sachiko Kusama",
+            "score": 30
+        },
+        {
+            "name": "Susan Abernathy",
+            "score": 40
+        },
+        {
+            "name": "Yorinobu",
+            "score": 90
+        }
+    ]
 }

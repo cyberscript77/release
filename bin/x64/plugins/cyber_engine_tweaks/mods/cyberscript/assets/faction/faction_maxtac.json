@@ -19,12 +19,12 @@
 		"max_tac","maxtac"
 	],
 	"spawnable_npc":[
-	"Character.mq030_max_tac",
-	"Character.q001_maxtac_fem",
-	"Character.q001_maxtac_mb",
-	"Character.mq030_max_tac",
-	"Character.q001_maxtac_fem",
-	"Character.q001_maxtac_mb"
+	"Character.maxtac_gunner_mb_elite",
+	"Character.maxtac_melee_ma_elite",
+	"Character.maxtac_rifle_ma_elite",
+	"Character.maxtac_rifle_wa_elite",
+	"Character.maxtac_shotgun_ma_elite",
+	"Character.maxtac_sniper_wa_elite"
 	],
 	"spawnable_vehicle":[
 		"Vehicle.q001_barricade_police_cars",

@@ -1747,7 +1747,7 @@ function runSubActionList(actionlist, tag, parent, source, isquest,executortag,b
 		
 		if(workerTable[tag] == nil) then
 			local copy = deepcopy(actionlist, copies)
-			
+		print(tag)
 			-- for k,v in pairs(copy) then
 			-- copy[k]["active"] = true
 			-- end
@@ -5214,7 +5214,22 @@ end
 
 
 
+prevRandom = nil
 
+-- Function to generate a new random number that is different from the previous one
+function random2(mind,maxd)
+    local newRandom
+	
+    repeat
+		newRandom = 0
+        newRandom = math.random(mind,maxd)  -- Adjust the range as needed
+    until newRandom ~= prevRandom
+
+    -- Update the previous random number
+    prevRandom = newRandom
+	
+    return newRandom
+end
 
 
 

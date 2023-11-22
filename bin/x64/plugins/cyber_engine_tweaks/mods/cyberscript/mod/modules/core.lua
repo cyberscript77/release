@@ -580,6 +580,7 @@ function initCore() --Setup session, mod/external observer and trigger mod core 
 	cyberscript.NPCManager = {}
 	cyberscript.EntityManager = {}
 	cyberscript.GroupManager = {}
+	cyberscript.PositionManager = {}
 	
 	testVehicule = {}
 	currentdialogQuestList = {}

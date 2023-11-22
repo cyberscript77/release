@@ -13,8 +13,10 @@
 	],
 	"spawnable_npc": [
 		"Character.wwd_adelcaldos_grunt1_ranged1_pulsar_ma",
-		"Character.adelcaldos_grunt1_ranged1_nova_wa",
-		"Character.aldecaldos_grunt2_melee2__ma",
+		"Character.adelcaldos_grunt1_ranged1_pulsar_ma",
+		"Character.adelcaldos_grunt1_ranged1_pulsar_wa",
+		"Character.adelcaldos_grunt2_ranged2_copperhead_ma",
+		"Character.adelcaldos_grunt2_ranged2_sidewinder_ma",
 		"Character.wwd_adelcaldos_grunt2_ranged2_copperhead_ma",
 		"Character.wwd_adelcaldos_grunt2_ranged2_sidewinder_ma"
 	],

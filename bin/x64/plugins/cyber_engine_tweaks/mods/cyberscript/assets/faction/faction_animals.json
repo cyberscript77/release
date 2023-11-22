@@ -24,7 +24,20 @@
 		"Character.q110_animals_mall_entrance_zone_melee2h",
 		"Character.q110_mall_animals_grunt1_ranged1_pulsar_mb",
 		"Character.q110_animals_mall_west_wing_zone_fists",
-		"Character.q110_animals_mall_workout_zone"
+		"Character.q110_animals_mall_workout_zone",
+		"Character.wwd_animals_grunt2_hmelee2_fists_wba_rare",
+		"Character.wwd_animals_grunt2_melee2_machete_mb",
+		"Character.wwd_animals_grunt2_ranged2_overture_mb",
+		"Character.wwd_animals_grunt2_ranged2_pulsar_mb",
+		"Character.spr_animals_bouncer1_ranged1_kenshin_mb",
+		"Character.spr_animals_bouncer1_ranged1_omaha_mb",
+		"Character.spr_animals_bouncer2_ranged2_burya_mb",
+		"Character.spr_animals_elite3_hmelee3_fists_mba_elite",
+		"Character.spr_animals_grunt1_ranged1_pulsar_mb",
+		"Character.spr_animals_grunt2_ranged2_pulsar_mb",
+		"Character.spr_animals_grunt3_gunner2_defender_mb_rare",
+		"Character.jpn_animals_bouncer2_ranged2_burya_mb",
+		"Character.jpn_animals_bouncer2_ranged2_omaha_mb"
 	],
 	"spawnable_vehicle": [
 		"Vehicle.v_standard2_chevalier_thrax_quest",

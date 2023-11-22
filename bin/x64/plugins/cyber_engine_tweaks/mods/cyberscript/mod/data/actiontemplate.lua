@@ -22,6 +22,13 @@ return {
 		["helperTitle"] = "Nothing",
 		["name"] = "nothing",
 	},
+	["change_entity_tag"] = {
+		["helper"] = "this action will change an tentity's tag by another one",
+		["helperTitle"] = "Entity : Change Tag",
+		["name"] = "change_entity_tag",
+		["tag"] = "mynewtag",
+		["target"] = "judy01",
+	},
 	["change_hack_animation_percent"] = {
 		["value"] = 50,
 		["text"] =  "Donk hacking you !",
@@ -67,7 +74,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -802,7 +809,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -856,7 +863,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -1490,7 +1497,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -1537,15 +1544,7 @@ return {
 		["tag"] = "myentity",
 		["node"] = "mynode",
 	},
-	["follow_entity_to_entity"] = {
-		["move"] = "Walk",
-		["helper"] = "This action will rotate an entity to another one",
-		["helperTitle"] = "Entity : Rotate to entity",
-		["stealth"] = false,
-		["name"] = "follow_entity_to_entity",
-		["tag"] = "guy01",
-		["entity"] = "judy01||player",
-	},
+	
 	["move_looked_item_to_player_position"] = {
 		["helper"] = "This action will move the housing item to player",
 		["helperTitle"] = "Housing : move looked item to player",
@@ -1721,7 +1720,7 @@ return {
 		["source_tag_helper"] = "Character.Judy||faction_mox||district_westbrook||NorthOaks",
 		["position_way"] = "normal",
 		["spawnlevel"] = 36,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -1846,7 +1845,7 @@ return {
 		["source_tag_helper"] = "Vehicle.cs_savable_archer_hella_police_siren||faction_mox||district_westbrook||NorthOaks",
 		["position_way"] = "normal",
 		["spawnlevel"] = 36,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -1901,7 +1900,10 @@ return {
 		["persistspawn"] = false,
 		["alwaysspawned"] = false,
 		["spawninview"] = true,
-		["dontregister"] = false
+		["dontregister"] = false,
+		["yaw"] = 0,
+		["pitch"] = 0,
+		["roll"] = 0
 	},
 	["subscribe_actionlist_to_direct_action"] = {
 		["helper"] = "This action will subscribe a list of action to direct Action Engine",
@@ -2190,7 +2192,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -2246,7 +2248,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -2334,7 +2336,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -2433,6 +2435,13 @@ return {
 		["helperTitle"] = "Vehicule : Force Brake",
 		["value"] = 5,
 		["name"] = "vehicle_force_brake",
+		["tag"] = "myvehiculetag",
+	},
+	["vehicle_force_brake_until_stop"] = {
+		["helper"] = "This action will force brake on vehicle until stop",
+		["helperTitle"] = "Vehicule : Force Brake Until Stop",
+		["value"] = 5,
+		["name"] = "vehicle_force_brake_until_stop",
 		["tag"] = "myvehiculetag",
 	},
 	["reset_scene"] = {
@@ -3500,9 +3509,45 @@ return {
 		["helperTitle"] = "Entity : Rotate to entity to position",
 		["name"] = "rotate_entity_to_position",
 		["tag"] = "guy01",
-		["x"] = 5,
-		["y"] = 5,
-		["z"] = 5
+		["position_tag"] = "judy01",
+		["position_way"] = "normal",
+		["position_distance"] = 5,
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
+		["position_house_tag"] = "playerhouse01",
+		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
+ For poi if you write 'current' in position_poi_district you will get the current district, \
+ if you write 'current in position_poi_subdistrict you will get the current subdistrict. \
+ also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+		["position_node_usegameplay"] = false,
+		["tag"] = "blue01",
+		["position_lookatdistance"] = 0,
+		["position_tag_helper"] = "judy01||playerhouse01||playerhouse_bed||",
+		["position_way_helper"] = "normal||behind||forward",
+		["position_poi_district"] = "",
+		["position_poi_subdistrict"] = "",
+		["distance"] = 0,
+		["position_poi_from_position"] = false,
+		
+		["position_poi_type"] = 1,
+		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
+		["minspeed"] = 10,
+		["maxspeed"] = 15,
+		["position"] = "at",
+		["name"] = "rotate_entity_to_position",
+		
+		["position_poi_is_for_car"] = false,
+		["position_range"] = 50,
+		["position_poi_use_location_tag"] = false,
+		["position_house_way"] = "default",
+		["position_poi_search"] = "type|subdistrict|district|tag",
+		["position_poi_searchdistance"] = "near|far|random",
+		["z"] = 0,
+		["x"] = 0,
+		["y"] = 0,
+		["yaw"] = 0,
+		["pitch"] = 0,
+		["roll"] = 0
 	},
 	["set_player_perk"] = {
 		["helper"] = "This action will set Player Perk",
@@ -3769,6 +3814,79 @@ return {
 		["alwaysspawned"] = false,
 		["spawninview"] = true
 	},
+	["replace_entity"] = {
+		["helper"] = "This action will clone an entity",
+		["target"] = "targettag",
+		["source_tag"] = "Character.Judy",
+		["appearance"] = "",
+		["tag"] = "newjudy",
+		["helperTitle"] = "Entity : Replace entity",
+		["name"] = "replace_entity",
+		["despawntimer"] = 300,
+		["deleteoriginal"] = false,
+		["persiststate"] = false,
+		["persistspawn"] = false,
+		["alwaysspawned"] = false,
+		["spawninview"] = true
+	},
+	["register_garage_spawn_position"] = {
+		["helper"] = "This action will register the current garage spawn position in manager",
+		["helperTitle"] = "Logic : Register garage spawn position",
+		
+		["tag"] = "mytag",
+		["name"] = "register_garage_spawn_position",
+	},
+	
+	["register_position"] = {
+		["helper"] = "This action will register position in manager",
+		["helperTitle"] = "Logic : Register position",
+		
+		["tag"] = "mytag",
+		["name"] = "register_position",
+		["position_way"] = "normal",
+		
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
+		["position_house_tag"] = "playerhouse01",
+		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
+ For poi if you write 'current' in position_poi_district you will get the current district, \
+ if you write 'current in position_poi_subdistrict you will get the current subdistrict. \
+ also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+		["position_node_usegameplay"] = false,
+		
+		["position_range"] = 50,
+		["position_lookatdistance"] = 0,
+		["position_tag_helper"] = "judy01||playerhouse01||playerhouse_bed||",
+		
+		["position_way_helper"] = "normal||behind||forward",
+		["position_poi_district"] = "",
+		["position_poi_subdistrict"] = "",
+		["position_poi_search"] = "type|subdistrict|district|tag",
+		["position_poi_searchdistance"] = "near|far|random",
+		["position_poi_is_for_car"] = false,
+		["position_poi_from_position"] = false,
+		["position_poi_from_position_x"] = 0,
+		["position_poi_from_position_y"] = 0,
+		["position_poi_from_position_z"] = 0,
+		
+		["position_poi_type"] = 1,
+		
+		["position"] = "at",
+		["x"] = 0,
+		["z"] = 0,
+		["y"] = 0,
+		
+		
+		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
+		["position_house_way"] = "default",
+		["position_distance"] = 5,
+		["position_poi_use_location_tag"] = false,
+		
+		["position_tag"] = "judy01",
+		
+		
+		
+	},
 	["apply_effect_to_group"] = {
 		["helper"] = "This action will apply effect to a group",
 		["helperTitle"] = "Group : apply effect to entity",
@@ -3797,7 +3915,7 @@ return {
 		["position_tag"] = "judy01",
 		["position_way"] = "normal",
 		["position_distance"] = 5,
-		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room",
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
 		["position_house_tag"] = "playerhouse01",
 		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
  For poi if you write 'current' in position_poi_district you will get the current district, \
@@ -3832,6 +3950,7 @@ return {
 		["z"] = 0,
 		["x"] = 0,
 		["y"] = 0,
+		
 	},
 	
 	["set_component_hidden"] = {

@@ -300,8 +300,8 @@ function QuestDetailsPanelController_Setup(self, questData)
 	Cron.NextTick(function()
 		local questId = questData.id
 		
-		if QuestManager.IsKnownQuest(questId) then
-			
+		if QuestManager.IsKnownQuest(questId) and questsetup ~= true then
+			questsetup = true
 			local questDef = QuestManager.GetQuest(questId)
 			
 			if( cyberscript.cache["mission"][questId].data.recurrent ~= nil and cyberscript.cache["mission"][questId].data.recurrent == true) then
@@ -601,6 +601,8 @@ function QuestDetailsPanelController_Setup(self, questData)
 				
 				
 			end
+			else
+			questsetup = false
 			
 		end
 	end)
@@ -1496,53 +1498,54 @@ function NPCPuppet_CompileScannerChunks(thos)
 		
 	end
 	
+
+end
+
+function NPCPuppet_CompileScannerChunksBefore(thos)
+	if(observerthread3  == true or moddisabled == true)    then return end
+	local vehicleSummonDef = Game.GetAllBlackboardDefs().UI_ScannerModules
+	local scannerBlackboard = Game.GetBlackboardSystem():Get(vehicleSummonDef)
+	
+	print(Game.NameToString(thos:GetCurrentAppearanceName()))
+	local characterRecord  = TweakDBInterface.GetCharacterRecord(thos:GetRecordID())
+	local scannerPreset = characterRecord:ScannerModulePreset()
+	
+	scannedEntity = thos
+		local obj = getEntityFromManagerById(thos:GetEntityID())
+						
+		
+			if(cyberscript.EntityManager["last_scanned"] == nil) then
+			local entity = {}
+			entity.id = nil
+			entity.tag = "last_scanned"
+			entity.tweak = "None"
+			entity.lock = true
+			cyberscript.EntityManager[entity.tag] = entity
+			
+			end
+			cyberscript.EntityManager["last_scanned"].id = nil
+			cyberscript.EntityManager["last_scanned"].tweak = "None"
+			
+			
+		
+			pcall(function ()
+				if(thos:GetRecordID() ~= nil and thos:GetRecordID().hash ~= nil and cyberscript.entitieshash[tostring(thos:GetRecordID().hash)] ~= nil) then
+					
+					
+					cyberscript.EntityManager["last_scanned"].tweak =  cyberscript.entitieshash[tostring(thos:GetRecordID().hash)].entity_tweak
+					
+				end
+			end)
+			
+			--	cyberscript.EntityManager["lookatnpc"].id = nil
+			cyberscript.EntityManager["last_scanned"].id = thos:GetEntityID()
+			
+		
+		
+		
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 end
 
 function VehiclesManagerListItemController_OnDataChanged(thos,value)
@@ -7112,7 +7115,7 @@ function PhoneDialerGameController_PopulateData(thos,contactDataArray, selectInd
 		countphone = countphone + 1
 		
 	end
-	print(countphone)
+	
 	
 	local booold = (countphone >= 4)
 	
@@ -7215,7 +7218,7 @@ function NewHudPhoneGameController_RefreshSmsMessager(this,contactData)
 				currentPhoneConversation = phoneConversation.conversation[z]
 				currentPhoneConversation.currentchoices = {}
 				currentPhoneConversation.speaker = phoneConversation.speaker
-				logme(10,conversation.tag)
+				logme(1,conversation.tag)
 				currentPhoneConversation.loaded = 0
 				onlineReceiver = nil
 				
@@ -7554,16 +7557,16 @@ function PhoneMessagePopupGameController_SetupData(this,wrappedMethod)
 	GameController["PhoneMessagePopupGameController"] = this
 	if(currentPhoneConversation ~= nil and currentPhoneConversation ~= "cs_nothing" 
 	and GameController["NewHudPhoneGameController"]:IsPhoneActive() == false) then
-	
+	print("toto")
 	
 	local test = gameJournalPhoneMessage.new()
 	Cron.After(0.1,function()
-		logme(10,"Open phone")
+		logme(1,"Open phone")
 		GameController["PhoneMessagePopupGameController"]:UnregisterFromGlobalInputCallback("OnPostOnRelease", GameController["PhoneMessagePopupGameController"], "OnHandleMenuInput");
-		PopupStateUtils.SetBackgroundBlur(GameController["PhoneMessagePopupGameController"], false);
+		PopupStateUtils.SetBackgroundBlur(GameController["PhoneMessagePopupGameController"], true);
 		GameController["PhoneMessagePopupGameController"].uiSystem:PopGameContext(UIGameContext.ModalPopup);
 		GameController["PhoneMessagePopupGameController"].uiSystem:RestorePreviousVisualState("inkModalPopupState");
-		GameController["PhoneMessagePopupGameController"]:SetTimeDilatation(false);
+		GameController["PhoneMessagePopupGameController"]:SetTimeDilatation(true);
 		GameController["PhoneMessagePopupGameController"]:RequestUnfocus()
 		GameController["PhoneMessagePopupGameController"]:HandleCommonInputActions("cancel")
 		GameController["PhoneMessagePopupGameController"]:ClosePopup()
@@ -7584,7 +7587,7 @@ function PhoneMessagePopupGameController_SetupData(this,wrappedMethod)
 	else
 	
 	if(currentPhoneConversation ~= nil and currentPhoneConversation == "cs_nothing") then
-		logme(10,"not open phone")
+		logme(1,"not open phone")
 		Cron.After(0.5,function()
 			
 			GameController["PhoneMessagePopupGameController"]:UnregisterFromGlobalInputCallback("OnPostOnRelease", GameController["PhoneMessagePopupGameController"], "OnHandleMenuInput");
@@ -7601,12 +7604,12 @@ function PhoneMessagePopupGameController_SetupData(this,wrappedMethod)
 		else
 		if(currentPhoneConversation ~= nil and currentPhoneConversation ~= "cs_nothing" and GameController["NewHudPhoneGameController"]:IsPhoneActive() == true
 		)then
-		logme(10,"load conv")
+		logme(1,"load conv")
 		
 		local test = gameJournalPhoneMessage.new()
 		this.dialogViewController:ShowThread(test)
 		else
-		logme(10,"wrappedMethod")
+		logme(1,"wrappedMethod")
 		wrappedMethod()
 		end
 		
@@ -8129,94 +8132,34 @@ function VehicleSummonWidgetGameController_OnVehicleSummonStateChanged(state,val
 	local vehi = Game.FindEntityByID(vehicleEntId)
 	--local vehicleRecordID = vehicleSummonBB:GetRecordID()
 	
-	if(calledfromgarage == true) then
-		for i=1,#currentSave.garage do
-			----printtostring(mygarage[i].asAV))
+	
+		local entity = {}
+		entity.id = vehicleEntId
+		entity.tag = "called_garage"
+		entity.tweak = "None"
+		entity.lock = true
+		cyberscript.EntityManager[entity.tag] = entity
+		
+	
+	for k,v in pairs(cyberscript.PositionManager) do
+		
+		if(v.pending == true) then
+			local pos = vehi:GetWorldPosition()
+			v.x = pos.x
+			v.y = pos.y
+			v.z = pos.z
+			v.pending = false
 			
-			if(TweakDBID.new(currentSave.garage[i].path).hash == vehi:GetRecordID().hash and currentSave.garage[i].asAV == true) then
-				--logme(2,"garage")
-				local obj = getEntityFromManager(currentSave.garage[i].tag)
-				--	 despawnEntity(currentSave.garage[i].tag)
-				-- obj = getEntityFromManager(currentSave.garage[i].tag)
-				if(obj.id == nil) then
-					--logme(2,"spaaaaaaaace")
-					local entity = {}
-					entity.id = vehicleEntId
-					entity.tag = currentSave.garage[i].tag
-					entity.tweak = currentSave.garage[i].path
-					entity.takenSeat = {}
-					entity.isAV = currentSave.garage[i].asAV
-					local veh = Game.FindEntityByID(vehicleEntId)
-					entity.availableSeat = GetSeats(veh)
-					--entity.availableSeat = {}
-					entity.driver = {}
-					cyberscript.EntityManager[entity.tag] = entity
-					
-					
-					if(entity.isAV == true) then
-						local group =getGroupfromManager("AV")
-						if(group.entities == nil) then
-							group.entities = {}
-						end
-						logme(2,"addedAV"..entity.tag)
-						table.insert(group.entities,entity.tag)
-						
-						if(currentSave.garage[i].fakeAV ~= nil and currentSave.garage[i].fakeAV == true) then
-							
-							local parentpos = vehi:GetWorldPosition()
-							spawnVehicleV2("Vehicle.v_sportbike1_yaiba_kusanagi","","fake_av", parentpos.x, parentpos.y ,parentpos.z,99,3,true,false,false,false, 0)
-							table.insert(group.entities,"fake_av")
-						end
-						
-						
-						local script = {}
-						local action = {}
-						
-						if(currentSave.garage[i].fakeAV ~= nil and currentSave.garage[i].fakeAV == true) then
-							action = {}
-							action.name = "wait_second"
-							action.value = 3
-							table.insert(script,action)
-							
-							action = {}
-							action.name = "entity_set_seat"
-							action.tag = "player"
-							action.vehicle = "fake_av"
-							action.seat = "seat_front_left"
-							table.insert(script,action)
-							
-							action = {}
-							action.name = "change_custom_condition"
-							action.value = "av_cockpit"
-							action.score = 0
-							
-							action = {}
-							action.name = "change_camera_position"
-							action.x = 0
-							action.y = -15
-							action.z = 2
-							
-							
-							table.insert(script,action)
-							
-							else
-							action = {}
-							action.name = "vehicle_change_doors"
-							action.value = "open"
-							action.tag = entity.tag
-							table.insert(script,action)
-							
-						end
-						
-						
-						runActionList(script, entity.tag, "interact",false,"engine",false)
-					end
-					else
-					obj.id = vehicleEntId
-				end
-			end
+			local qat = vehi:GetWorldOrientation()
+			local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
+			v.yaw = angle.yaw
+			v.pitch = angle.pitch
+			v.roll = angle.roll
+			v.fromgarage = true
 		end
+	
 	end
+	
 end
 
 function PopupsManager_OnPlayerAttach(self)
@@ -9845,7 +9788,7 @@ end
 
 function QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
 	if(observerthread5 == true or moddisabled  == true)  then return wrappedMethod(data)  end
-	----print("step 00")
+	print("step 00")
 	wrappedMethod(data)
 	
 	for k,v in pairs(cyberscript.cache["quickhack"]) do
@@ -10306,13 +10249,15 @@ function PhoneMessagePopupGameController_OnShow(self,evt)
 end
 function PhoneMessagePopupGameController_OnHide(self,evt)
 	if(observerthread6  == true or moddisabled == true)    then return end
+	if phonecounter == nil then phonecounter = 0 end
 	if(currentPhoneConversation ~= nil and currentPhoneConversation == "cs_nothing") then
 		self.isInteractive = false;
 		self.blockAction = true
 		currentPhoneConversation = nil
 		
 		else
-		if(currentPhoneConversation ~= nil) then
+		if(phonecounter == 0) then
+				phonecounter = phonecounter + 1
 			self.isInteractive = false;
 			self.blockAction = true
 			local request = UINotificationRemoveEvent.new()
@@ -10322,10 +10267,10 @@ function PhoneMessagePopupGameController_OnHide(self,evt)
 				
 				
 				GameController["PhoneMessagePopupGameController"]:UnregisterFromGlobalInputCallback("OnPostOnRelease", GameController["PhoneMessagePopupGameController"], "OnHandleMenuInput");
-				PopupStateUtils.SetBackgroundBlur(GameController["PhoneMessagePopupGameController"], false);
+				PopupStateUtils.SetBackgroundBlur(GameController["PhoneMessagePopupGameController"], true);
 				GameController["PhoneMessagePopupGameController"].uiSystem:PopGameContext(UIGameContext.ModalPopup);
 				GameController["PhoneMessagePopupGameController"].uiSystem:RestorePreviousVisualState("inkModalPopupState");
-				GameController["PhoneMessagePopupGameController"]:SetTimeDilatation(false);
+				GameController["PhoneMessagePopupGameController"]:SetTimeDilatation(true);
 				GameController["PhoneMessagePopupGameController"]:RequestUnfocus()
 				GameController["PhoneMessagePopupGameController"]:HandleCommonInputActions("cancel")
 				GameController["PhoneMessagePopupGameController"]:ClosePopup()
@@ -10339,6 +10284,7 @@ function PhoneMessagePopupGameController_OnHide(self,evt)
 					Game.GetUISystem():QueueEvent(uiActionPerformed);
 					PopupStateUtils.SetBackgroundBlur(self, false);
 					currentPhoneConversation = nil
+					
 				end)
 			end)
 		end

@@ -358,7 +358,15 @@ PanzerHUDGameController_OnInitialize(this)
 		
 		
 	end)
-	
+	ObserveBefore("GameObject", "OnScanningLookedAt", function(this)
+		
+		NPCPuppet_CompileScannerChunksBefore(this)
+		
+		
+		
+		
+		
+	end)
 	
 	
 	

@@ -559,7 +559,8 @@ function resetVar()
 		"mappin", 
 		"fasttravel", 
 		"custom_place",
-		"custom_room"
+		"custom_room",
+		"manager"
 		}
 		
 	mappinsource = { 

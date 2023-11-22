@@ -341,12 +341,16 @@ if spawnRegion then
 				
 				npcSpec.tags = {"CyberScript","CyberScript.NPC","CyberScript.NPC."..tag}
 				if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.NPC."..tag) == true) then Game.GetDynamicEntitySystem():DeleteTagged("CyberScript.NPC."..tag) end
-					
+				
 				if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.NPC."..tag) == false) then
 				
 					NPC = Game.GetDynamicEntitySystem():CreateEntity(npcSpec)
+						
 					if dontregister == nil then dontregister = false end
+				
 					if(NPC ~= nil and dontregister == false) then
+						print(NPC)
+				print(dontregister)
 						local entity = {}
 						entity.id = NPC
 						entity.spawntimespan = os.time(os.date("!*t"))+0
@@ -717,6 +721,13 @@ function despawnAll()
 		
 		local entity = {}
 		entity.id = nil
+		entity.tag = "last_scanned"
+		entity.tweak = "None"
+		entity.lock = true
+		cyberscript.EntityManager[entity.tag] = entity
+		
+		local entity = {}
+		entity.id = nil
 		entity.tag = "lookatentity"
 		entity.tweak = "None"
 		entity.lock = true
@@ -1077,9 +1088,13 @@ if actionRegion then
 		local angle = GetSingleton('Vector4'):ToRotation(dirVector)
 		
 		pitch = angle.pitch
+		
 		yaw = angle.yaw 
 		
-		freezeCamera =  true
+		Game.GetPlayer():GetFPPCameraComponent().pitchMin = pitch - 0.01 -- Use pitchMin/Max to set pitch, needs to have a small difference between Min and Max
+		Game.GetPlayer():GetFPPCameraComponent().pitchMax = pitch
+		Game.GetTeleportationFacility():Teleport(Game.GetPlayer(), Game.GetPlayer():GetWorldPosition() , EulerAngles.new(0,0,-yaw)) 
+		
 		
 	end
 	
@@ -1397,7 +1412,8 @@ if actionRegion then
 	
 	
 	function InterruptBehavior(objlook)
-		teleportTo(objlook, objlook:GetWorldPosition(), 1,false,nil)
+			
+			teleportTo(objlook, objlook:GetWorldPosition(), 1,false,nil)
 	end
 	
 	function IsMoving(tag)
@@ -1752,7 +1768,11 @@ if actionRegion then
 			moveCmd.desiredDistanceFromTarget = targetDistance
 			moveCmd.finishWhenDestinationReached = true
 			moveCmd.rotateEntityTowardsFacingTarget = false
-			moveCmd.ignoreNavigation = false
+			
+			
+			moveCmd.ignoreNavigation = true
+			moveCmd.useStart = true
+			moveCmd.useStop = false
 			executeCmd(targetPuppet, moveCmd)
 			
 			else
@@ -1797,8 +1817,9 @@ if actionRegion then
 			rot.yaw = rotation.yaw
 			
 			else
+			local rot =  GetSingleton('Quaternion'):ToEulerAngles(objlook:GetWorldOrientation())
+							
 			
-			rot = EulerAngles.new(0,0,0)
 			
 		end
 		
@@ -2696,16 +2717,24 @@ if vehiculeRegion then
 	--2 beta
 	--3 prevention
 	
-	function spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second,fakeav,despawntimer,persistState,persistSpawn,AlwaysSpawned,SpawnInView,dontregister)
-		spawn_system = 4 
+	function spawnVehicleV2(chara, appearance, tag, x, y ,z, spawnlevel, spawn_system ,isAV,from_behind,isMP,wait_for_vehicule, scriptlevel, wait_for_vehicle_second,fakeav,despawntimer,persistState,persistSpawn,AlwaysSpawned,SpawnInView,dontregister,rotation)
+		if (spawn_system ~= 4 and spawn_system ~= 1) then spawn_system = 4 end
 		if (('string' == type(chara)) and (string.match(tostring(chara), "AMM_Vehicle.") == nil or (string.match(tostring(chara), "AMM_Vehicle.") ~= nil and AMM ~= nil)  )  )then
+			
+			
+			print(spawn_system)
 			
 			isprevention = isprevention or false
 			
 			isAV = isAV or false
 			local firstspawn = false
 			local NPC = nil 
-			if despawntimer == nil then despawntimer = 0 end
+			
+		
+			
+			
+			
+						if despawntimer == nil then despawntimer = 0 end
 			
 			
 				
@@ -2727,6 +2756,7 @@ if vehiculeRegion then
 						npcSpec.recordID = chara
 						npcSpec.appearanceName = appearance
 						npcSpec.position = postp
+						npcSpec.orientation = EulerAngles.new(rotation.roll,rotation.pitch,rotation.yaw)
 						npcSpec.persistState = persistState or false
 						npcSpec.persistSpawn = persistSpawn or false
 						npcSpec.alwaysSpawned = AlwaysSpawned or false
@@ -2826,10 +2856,11 @@ if vehiculeRegion then
 					
 					
 			
-			end
 			
+		end
 			
 	end
+	
 			
 			function unlockVehicles(vehicles)
 				local unlockableVehicles = TweakDB:GetFlat(TweakDBID.new('Vehicle.vehicle_list.list'))
@@ -3471,7 +3502,7 @@ if vehiculeRegion then
 				
 			end
 			
-			function VehicleGoToXYZ(vehiculetag, x, y, z,minspeed,maxspeed)
+			function VehicleGoToXYZ(vehiculetag, x, y, z,minspeed,maxspeed, cleartraffic)
 				
 				
 				
@@ -3607,7 +3638,7 @@ if vehiculeRegion then
 				
 			end
 			
-			function VehicleBrake(vehiculetag, duration)
+			function VehicleBrake(vehiculetag, duration,untilstop)
 				
 				local vehiculeobj =  getEntityFromManager(vehiculetag)
 				if(vehiculetag =="lookat") then 
@@ -3619,9 +3650,11 @@ if vehiculeRegion then
 				end
 				
 				local vehicule = Game.FindEntityByID(vehiculeobj.id)
-				
+				if(untilstop) then
+				vehicule:ForceBrakesUntilStoppedOrFor(duration)
+				else
 				vehicule:ForceBrakesFor(duration)
-				
+				end
 				
 			end
 			
