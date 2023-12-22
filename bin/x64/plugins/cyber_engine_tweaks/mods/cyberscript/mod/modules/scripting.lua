@@ -19,35 +19,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 	if active then
 	
 		
-		--AutoAmbush (disable ambush event when MainQuest or SideQuest is active)
-		if (AutoAmbush == 1) then 
-			-- MainQuest = 0,
-			-- SideQuest = 1,
-			-- MinorQuest = 2,
-			-- StreetStory = 3,
-			-- Contract = 4,
-			-- VehicleQuest = 5
-			local objective = Game.GetJournalManager():GetTrackedEntry()
-			if objective ~= nil then
-				local phase = Game.GetJournalManager():GetParentEntry(objective)
-				local quest = Game.GetJournalManager():GetParentEntry(phase)
-				
-				if(string.match(tostring(quest:GetType()), "MainQuest") or string.match(tostring(quest:GetType()), "SideQuest"))then
-					if(AmbushEnabled ~= 0)then
-						AmbushEnabled = 0
-						updateUserSetting("AmbushEnabled",AmbushEnabled)
-					end
-					else
-					if(AmbushEnabled ~= 1)then
-						AmbushEnabled = 1
-						updateUserSetting("AmbushEnabled",AmbushEnabled)
-					end
-					end
-				
-			end
 			
-		end
-				
 		--Pause Menu and Ambush timer
 		if(inMenu) then
 			if(GameController["SubtitlesGameController"] ~= nil) then
@@ -92,10 +64,40 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		end
 		
 		
-		--refresh global variable
-		refreshModVariable(refreshModVariabletg)
+		
 		
 		if mainrefreshstep1 then
+			--AutoAmbush (disable ambush event when MainQuest or SideQuest is active)
+		if (AutoAmbush == 1) then 
+			-- MainQuest = 0,
+			-- SideQuest = 1,
+			-- MinorQuest = 2,
+			-- StreetStory = 3,
+			-- Contract = 4,
+			-- VehicleQuest = 5
+			local objective = Game.GetJournalManager():GetTrackedEntry()
+			if objective ~= nil then
+				local phase = Game.GetJournalManager():GetParentEntry(objective)
+				local quest = Game.GetJournalManager():GetParentEntry(phase)
+				
+				if(string.match(tostring(quest:GetType()), "MainQuest") or string.match(tostring(quest:GetType()), "SideQuest"))then
+					if(AmbushEnabled ~= 0)then
+						AmbushEnabled = 0
+						updateUserSetting("AmbushEnabled",AmbushEnabled)
+					end
+					else
+					if(AmbushEnabled ~= 1)then
+						AmbushEnabled = 1
+						updateUserSetting("AmbushEnabled",AmbushEnabled)
+					end
+					end
+				
+			end
+			
+		end
+		
+		--refresh global variable
+		refreshModVariable(refreshModVariabletg)
 		--refresh widget controller
 		refreshUIWidgetController(true)
 		
@@ -202,11 +204,12 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 				
 				local isThiscar = (obj.id ~= nil and obj.isAV == true)
 				
-				if obj.id ~= nil then
-						cyberscript.EntityManager["current_car"].id = nil
-								
+						
+						cyberscript.EntityManager["current_car"] = deepcopy(obj)
+								cyberscript.EntityManager["current_car"].tag = "current_car"
 						cyberscript.EntityManager["current_car"].id = vehicule:GetEntityID()
-				end
+						
+				
 				if isThiscar then
 					AVisIn = true
 					

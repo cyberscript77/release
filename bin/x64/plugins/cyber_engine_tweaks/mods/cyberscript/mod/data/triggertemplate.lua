@@ -13,10 +13,24 @@ return {
 		["helper"] = "This trigger will be triggered when you are in a specific custom room (by tag)",
 	},
 	
+	["player_is_in_av"] = {
+		["helper"] = "This trigger will be triggered when you are in an AV typed vehicle",
+		["helperTitle"] = "Player : In AV",
+		["name"] = "player_is_in_av",
+	},
+	
 	["is_in_rented_place"] = {
 		["helper"] = "This trigger will be triggered when you are in a rented custom place",
 		["helperTitle"] = "Player : In custom place who has a opened business",
 		["name"] = "is_in_rented_place",
+	},
+	["os_date"] = {
+		["helper"] = "This trigger will be triggered when you are in a rented custom place",
+		["helperTitle"] = "OS : Date",
+		["name"] = "os_date",
+		["day"] = 24,
+		["month"] = 12,
+		["year"] = 2077
 	},
 	["is_in_custom_room"] = {
 		["helper"] = "This trigger will be triggered when you are in a custom room",

@@ -69,7 +69,9 @@ if spawnRegion then
 							entity.despawntimespan = os.time(os.date("!*t"))+300
 							cyberscript.EntityManager[tag]=entity
 							
-							cyberscript.EntityManager[tag]=entity
+							cyberscript.EntityManager[entitytag].animation = anim_cname
+							
+							cyberscript.EntityManager[entitytag].workspot_name = workspot
 							
 						end
 						
@@ -88,8 +90,49 @@ if spawnRegion then
 		end
 	end
 	
-	function spawnCustomAnimationWorkspot(entitytag,entname,anim_cname,workspot,isinstant,unlockcamera,angle)
+	function enterInWorkspot(entitytag,workspottag,workspot,unlockcamera)
+		local obj = getEntityFromManager(entitytag)
+		local enti = Game.FindEntityByID(obj.id)
+		local objwk = getEntityFromManager(workspottag)
+		local entiwk = Game.FindEntityByID(objwk.id)	
 		
+		if(enti ~= nil and entiwk ~= nil) then
+		
+			Game.GetWorkspotSystem():PlayInDeviceSimple(entiwk, enti, unlockcamera, workspot, nil, nil, 0, 1, nil)
+			Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, "stand__hold_johnnys_arm__01", true)
+		end
+	
+	end
+	
+	function playAnimInWorkspot(entitytag,anim_cname,isinstant)
+		local obj = getEntityFromManager(entitytag)
+		local enti = Game.FindEntityByID(obj.id)
+		
+		
+		if(enti ~= nil) then
+			print(tostring(isinstant))
+			Game.GetWorkspotSystem():SendJumpToAnimEnt(enti, anim_cname, isinstant)
+		
+		end
+	
+	end
+	
+	function stopWorkSpotAnims(entitytag)
+		local obj = getEntityFromManager(entitytag)
+		local enti = Game.FindEntityByID(obj.id)
+		local objwk = getEntityFromManager(workspottag)
+		local entiwk = Game.FindEntityByID(objwk.id)	
+		
+		if(enti ~= nil and entiwk ~= nil) then
+			Game.GetWorkspotSystem():StopInDevice(enti)
+		
+		end
+	
+	end
+	
+	function spawnCustomAnimationWorkspot(entitytag,entname,anim_cname,workspot,isinstant,unlockcamera,angle)
+		print(anim_cname)
+		print(workspot)
 		local obj = getEntityFromManager(entitytag)
 		local enti = Game.FindEntityByID(obj.id)
 		
@@ -109,11 +152,14 @@ if spawnRegion then
 			   	spawnTransform:SetOrientationEuler(EulerAngles.new(angle.roll, angle.pitch, angle.yaw))
 			end	
 			
-			
+			cyberscript.EntityManager[entitytag].animation = anim_cname
+				cyberscript.EntityManager[entitytag].workspot_ent = entname
+				cyberscript.EntityManager[entitytag].workspot_name = workspot
 			if obj.workspot ~= nil and cyberscript.EntityManager[obj.workspot] ~= nil then
 				
 				local objwk = getEntityFromManager(obj.workspot)
 				local entiwk = Game.FindEntityByID(objwk.id)
+				
 				if(angle ~= nil) then
 				   	Game.GetTeleportationFacility():Teleport(entiwk, enti:GetWorldPosition(), EulerAngles.new(angle.roll, angle.pitch, angle.yaw))
 				end		
@@ -240,7 +286,8 @@ if spawnRegion then
 		local obj = getEntityFromManager(entitytag)
 		local enti = Game.FindEntityByID(obj.id)
 		
-		
+		cyberscript.EntityManager[entitytag].animation = anim_cname
+							
 		
 		if(enti ~= nil ) then
 			
@@ -254,7 +301,9 @@ if spawnRegion then
 		
 		local obj = getEntityFromManager(entitytag)
 		local enti = Game.FindEntityByID(obj.id)
-		
+		cyberscript.EntityManager[entitytag].animation = nil
+							
+		cyberscript.EntityManager[entitytag].workspot_name = workspot
 		local objwk = getEntityFromManager(workspotEnttag)
 		local entiwk = Game.FindEntityByID(objwk.id)
 		
@@ -272,7 +321,9 @@ if spawnRegion then
 		local obj = getEntityFromManager(entitytag)
 		local enti = Game.FindEntityByID(obj.id)
 		
-		
+		cyberscript.EntityManager[entitytag].animation = nil
+		cyberscript.EntityManager[entitytag].workspot_ent = nil
+		cyberscript.EntityManager[entitytag].workspot_name = nil
 		if(enti ~= nil) then
 			
 			
@@ -1475,6 +1526,23 @@ if actionRegion then
 		
 	end
 	
+	function RotateToXYZ(objlook, x,y,z)
+		local positionSpec = ToPositionSpec(Vector4.new(x, y, z,1))
+		
+		local rotateCmd = NewObject('handle:AIRotateToCommand')
+		rotateCmd.target = positionSpec
+		rotateCmd.angleTolerance = 10.0 -- If zero then command will never finish
+		rotateCmd.angleOffset = 0.0
+		rotateCmd.speed = 1.0
+		
+		objlook:GetAIControllerComponent():SendCommand(rotateCmd)
+		
+		
+		
+		
+		
+	end
+	
 	function RotateEntityTo(objlook, pitch, yaw, roll)
 		local objpos = objlook:GetWorldPosition()
 		
@@ -1800,14 +1868,14 @@ if actionRegion then
 	
 	function teleportTo(objlook, position, rotation, isplayer,obj)
 		--logme(2,rotation)
-		if rotation == nil then
+		if rotation.yaw == nil then
 			
-			rotation = 1
+			rotation =  GetSingleton('Quaternion'):ToEulerAngles(enti:GetWorldOrientation())
 			
 		end
 		
 		local rot = rotation
-		--logme(2,rot)
+		print("rotation"..dump(rotation))
 		if(rotation ~= 1) then
 			
 			rot = EulerAngles.new(0,0,0)
@@ -1885,10 +1953,14 @@ if actionRegion then
 			end)
 			
 			if(item == nil) then
+				
+			if rotation == 1 then
+				rot =  GetSingleton('Quaternion'):ToEulerAngles(objlook:GetWorldOrientation())
+				end
 				rot.roll = 0
 				rot.pitch = 0
 				
-				Game.GetTeleportationFacility():Teleport(objlook, Vector4.new(position.x, position.y, position.z,1) , rot)
+					Game.GetTeleportationFacility():Teleport(objlook, Vector4.new(position.x, position.y, position.z,1) , rot)
 			end
 			else
 			
@@ -2749,7 +2821,8 @@ if vehiculeRegion then
 							local rostp =  EulerAngles.new(rotation.roll,rotation.pitch,rotation.yaw)
 							
 							worldpos:SetOrientationEuler(worldpos, rostp)	
-							
+							else
+							rotation = EulerAngles.new(0,0,0)
 						end
 						
 						local npcSpec =  DynamicEntitySpec.new()
@@ -3211,11 +3284,11 @@ if vehiculeRegion then
 				end
 			end
 			
-			function UnsetSeat(entitytag,wait, seat)
+			function UnsetSeat(entitytag, vehiculetag, wait, seat)
 				
 				
 				
-				
+				print("Test11")
 				local entityobj = nil
 				local entity = nil
 				
@@ -3231,10 +3304,10 @@ if vehiculeRegion then
 					
 				end
 				
-				local vehiculeobj =  getEntityFromManagerById(entityobj.vehicleid)
-				local vehicule = Game.FindEntityByID(entityobj.vehicleid)
+				local vehiculeobj =  getEntityFromManager(vehiculetag)
+				local vehicule = Game.FindEntityByID(vehiculeobj.id)
 				
-				if(vehicule ~= nil and entity ~= nil and vehicule:IsVehicle() == true) then
+				if(vehicule ~= nil and entity ~= nil) then
 					
 					
 					
@@ -3243,7 +3316,7 @@ if vehiculeRegion then
 					if(seat ~= nil) then
 						
 						if(entitytag == "player") then
-							
+							print("Test11")
 							local player = Game.GetPlayer()
 							
 							local data = NewObject('handle:gameMountEventData')

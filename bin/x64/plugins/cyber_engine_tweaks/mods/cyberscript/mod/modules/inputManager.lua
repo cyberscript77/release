@@ -50,15 +50,26 @@ function input.onUpdate(deltaTime)
     for _, binding in pairs(input.bindings) do
         local allPressed = true
         for _, keyInfo in pairs(binding.keys) do
-            if not input.activeKeys[keyInfo[1]] or (input.activeKeys[keyInfo[1]] and keyInfo[2] and not (input.activeKeys[keyInfo[1]] > holdTime)) then
+            if not input.activeKeys[keyInfo[1]] or (input.activeKeys[keyInfo[1]] and keyInfo[2] and (input.activeKeys[keyInfo[1]] > holdTime)) then
                 allPressed = false
                 break
             end
         end
 
         if allPressed then
-            for _, key in pairs(binding.keys) do
-                input.activeKeys[key[1]] = nil
+            -- for _, key in pairs(binding.keys) do
+				-- --print(key)
+				-- --print(input.activeKeys[key[1]])
+               
+            -- end
+			
+			 for _, key in pairs(binding.keys) do
+					--print(dump(key))
+				if not key[3] then
+					input.activeKeys[key[1]] = nil
+					--print("nil")
+				end
+                
             end
             binding.callback()
         end
@@ -87,7 +98,7 @@ end
 ---@param callback function
 ---@param saveCallback function
 ---@return table
-function input.createBindingInfo(nativeSettingsPath, keybindLabel, isHoldLabel, keybindDescription, isHoldDescription, id, maxKeys, maxKeysLabel, maxKeysDescription, supportsHold, defaultOptions, savedOptions, callback, saveCallback)
+function input.createBindingInfo(nativeSettingsPath, keybindLabel, isHoldLabel, keybindDescription, isHoldDescription, id, maxKeys, maxKeysLabel, maxKeysDescription, supportsHold,forceHold, defaultOptions, savedOptions, callback, saveCallback)
     local info = {
         nativeSettingsPath = nativeSettingsPath or "",
         keybindLabel = keybindLabel or "",
@@ -99,6 +110,7 @@ function input.createBindingInfo(nativeSettingsPath, keybindLabel, isHoldLabel, 
         maxKeysLabel = maxKeysLabel or "",
         maxKeysDescription = maxKeysDescription or "",
         supportsHold = supportsHold or false,
+		forceHold = forceHold or false,
         defaultOptions = defaultOptions or {},
         savedOptions = savedOptions or {},
         callback = callback,
@@ -111,14 +123,17 @@ end
 local function addKeybind(info, index, nativeSettings) -- Add single keybind widget
     local numberText = info.maxKeys ~= 1 and " " .. index or ""
     local holdID = info.id .. "_hold_" .. index
+	local forceholdID = info.id .. "_forcehold_" .. index
     local numID = info.id .. "_" .. index
 
     if not info.savedOptions[numID] then info.savedOptions[numID] = info.defaultOptions[numID] end
     if not info.savedOptions[holdID] then info.savedOptions[holdID] = info.defaultOptions[holdID] end
+	if not info.savedOptions[forceholdID] then info.savedOptions[forceholdID] = false end
 
     input.bindings[info.id]["keys"][index] = {
         [1] = info.savedOptions[numID], -- Key code
-        [2] = info.savedOptions[holdID] -- Is hold
+        [2] = info.savedOptions[holdID], -- Is hold
+		[3] = info.savedOptions[forceholdID] -- Is forceHold
     }
 
     if info.supportsHold then
@@ -126,9 +141,14 @@ local function addKeybind(info, index, nativeSettings) -- Add single keybind wid
             input.nuiTables[numID].isHold = state -- Update isHold value for nui
             nativeSettings.setOption(input.nuiTables[numID], input.nuiTables[numID].value) -- Force update to see change visually
             input.bindings[info.id]["keys"][index][2] = state
+			if info.forceHold then
+				input.bindings[info.id]["keys"][index][3] = true
+			end
             info.saveCallback(holdID, state)
         end)
     end
+	
+	
 
     input.nuiTables[numID] = nativeSettings.addKeyBinding(info.nativeSettingsPath, info.keybindLabel .. numberText, info.keybindDescription, info.savedOptions[numID], info.defaultOptions[numID], info.savedOptions[holdID], function(key)
         input.bindings[info.id]["keys"][index][1] = key
@@ -158,6 +178,7 @@ function input.addNativeSettingsBinding(info) -- Add combined hotkey widget from
                     if input.nuiTables[info.id .. "_hold_" .. i] then
                         nativeSettings.removeOption(input.nuiTables[info.id .. "_hold_" .. i])
                         input.nuiTables[info.id .. "_hold_" .. i] = nil
+						input.nuiTables[info.id .. "_forcehold_" .. i] = nil
                     end
                 end
             end

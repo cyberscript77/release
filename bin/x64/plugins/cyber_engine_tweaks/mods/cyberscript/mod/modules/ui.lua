@@ -137,7 +137,7 @@ function refreshUIWidget()
 				
 				if(control.data.output == true) then
 					
-					--print(dump(control.data))
+					----print(dump(control.data))
 					logme(1,dump(control.data))
 					
 				end
@@ -249,7 +249,7 @@ function refreshUIWidget()
 						
 						-- if(control.tag == "popup_border") then
 						
-						-- print(dump(control.data.textcolor))
+						-- --print(dump(control.data.textcolor))
 						
 						-- end
 						
@@ -899,7 +899,7 @@ function buildnativesetting()
 		local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
 		info.keybindLabel = "Key for open group Interact Menu #" -- Label of each key, will be followed by the key number, e.g. "Key 1"
 		info.keybindDescription = "Keybind for open group Interact Menu" -- Description that'll be displayed for all the bindings keys
-		info.supportsHold = true -- Whether to show the hold switches for this bindings keys
+		info.supportsHold = false -- Whether to show the hold switches for this bindings keys
 		info.isHoldLabel = "Hold the key ?"
 		info.isHoldDescription = "Key need to be holded for trigger the event"
 		info.id = "cyberscriptOpenGroup" -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
@@ -909,7 +909,7 @@ function buildnativesetting()
 		info.nativeSettingsPath = "/CSKEYBIND/gameplay" -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
 		info.defaultOptions = createdefaultOption("cyberscriptOpenGroup",3) -- Table containing the default options
 		info.savedOptions = arrayUserInput -- Table containing the current options
-		
+		info.forceHold = false
 		info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
 			 -- Store changed value
 			arrayUserInput[name] = value
@@ -947,9 +947,9 @@ function buildnativesetting()
 				if setting.type == "toggle" then
 					nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						setVariable(setting.variable.tag,setting.variable.key,value)
-						print(tostring(setting.variable.tag))
-						print(tostring(setting.variable.key))
-						print(tostring(value))
+						--print(tostring(setting.variable.tag))
+						--print(tostring(setting.variable.key))
+						--print(tostring(value))
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
 						
 					end)
@@ -997,7 +997,7 @@ function buildnativesetting()
 					info.nativeSettingsPath = "/CMCUSTOM/"..setting.category, setting.categorylibelle -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
 					info.defaultOptions = createdefaultOption(setting.tag,setting.maxkeys) -- Table containing the default options
 					info.savedOptions = arrayUserInput -- Table containing the current options
-					
+					info.forceHold = setting.forcehold
 					info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
 						-- Store changed value
 							arrayUserInput[name] = value
@@ -2324,13 +2324,14 @@ function cycleInteract2()
 		
 		
 		table.insert(dialog.options,options)
+		--print("mark2")
 		createDialog(dialog)
 	end
 	
 end
 function Activatedshard(shard)
 	currentInterface = nil
-	--print(dump(shard))
+	----print(dump(shard))
 	local ui = {}
 	ui.title = shard.title
 	ui.tag = "ui_custom_shard"
@@ -3152,8 +3153,8 @@ end
 
 ---Native Dialog---
 function createDialog(dialog)
-	-- isdialogactivehub = true
-	-- candisplayInteract = false
+	isdialogactivehub = true
+	candisplayInteract = false
 	--createInteraction(false)
 	
 	
@@ -3192,13 +3193,14 @@ function createDialog(dialog)
 	
 	for i = 1, #dialog.options do
 		
-		
+		--print(i)
 		interactionUI.callbacks[i] = function()
 			local option = dialog.options[i]
 			if(option.requirement == nil or checkTriggerRequirement(option.requirement,option.trigger))then
 				
 				ClickOnDialog(option,dialog.speaker,"speak")
-				interactionUI.hideHub()
+				
+					interactionUI.hideHub()
 				
 			end
 		end

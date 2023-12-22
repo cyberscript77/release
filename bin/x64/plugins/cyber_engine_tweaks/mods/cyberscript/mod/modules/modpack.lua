@@ -1710,6 +1710,19 @@ end
 		
 		TweakDB:CloneRecord(ent.data.name, ent.data.source)
 		TweakDB:SetFlat(ent.data.name..".entityTemplatePath", ent.data.path)
+		if(ent.data.model ~= nil) then
+				TweakDB:SetFlats(ent.data.name,{
+				voiceTag = TweakDB:GetFlat(ent.data.model..".voiceTag"),
+				displayName = TweakDB:GetFlat(ent.data.model..".displayName"),
+				alternativeDisplayName = TweakDB:GetFlat(ent.data.model..".alternativeDisplayName"),
+				alternativeFullDisplayName = TweakDB:GetFlat(ent.data.model..".alternativeFullDisplayName"),
+				fullDisplayName = TweakDB:GetFlat(ent.data.model..".fullDisplayName"),
+				affiliation =  TweakDB:GetFlat(ent.data.model..".affiliation"),
+				statPools =  TweakDB:GetFlat(ent.data.model..".statPools"),
+			})
+		end
+		
+		
 		print("Making Character "..ent.data.name)
 		print("Falt Character "..GameDump(TweakDB:GetFlat(ent.data.name..".entityTemplatePath")))
 		local parent = {}

@@ -574,13 +574,17 @@ PanzerHUDGameController_OnInitialize(this)
 	ObserveAfter('WorldMapTooltipController', 'SetData', function(self,data,menu)
 		WorldMapTooltipController_SetData(self,data,menu)
 	end)
-	ObserveAfter('MessengerNotification', 'OnInitialize', function(self)
-		PhoneMessagePopupGameController_OnHide(self,evt)
-	end)
+	-- ObserveAfter('MessengerNotification', 'OnInitialize', function(self)
+		-- PhoneMessagePopupGameController_OnHide(self,evt)
+	-- end)
 	
-	ObserveAfter('PhoneMessagePopupGameController', 'OnShow', function(self,evt)
-		PhoneMessagePopupGameController_OnShow(self,evt)
-	end)
+	-- ObserveAfter('MessengerNotification', 'OnNotificationPaused', function(self)
+		-- MessengerNotification_OnAction(self)
+	-- end)
+	
+	-- ObserveAfter('PhoneMessagePopupGameController', 'OnShow', function(self,evt)
+		-- PhoneMessagePopupGameController_OnShow(self,evt)
+	-- end)
 	ObserveAfter('WorldMapTooltipContainer', 'SetData', function(self,target,data,menu)
 	
 	WorldMapTooltipContainer_SetData(self,target,data,menu)
@@ -1239,6 +1243,12 @@ function SetOverrider()
 	Override('QuickhacksListGameController', 'PopulateData', function(this,data,wrappedMethod)
 		QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
 	end)
+	
+	
+	Override('QuickhacksListGameController', 'ResetQuickhackSelection', function(this,wrappedMethod)
+		QuickhacksListGameController_ResetQuickhackSelection(this,wrappedMethod)
+	end)
+	
 	
 	
 	Override('QuickhacksListGameController', 'OnAction', function(this,action,consumer,wrappedMethod)

@@ -131,7 +131,7 @@ return {
  "101_talked_about_smb",
  "202_carol_choicesection_glance",
  "202_Judy_choicesection_glance",
- 613833, "7th_hell_dancefloor_on",
+ "7th_hell_dancefloor_on",
  "aaron_mccarlson_default_on",
  "ad_holo_channel_number",
  "after_de_hey_spr_01",

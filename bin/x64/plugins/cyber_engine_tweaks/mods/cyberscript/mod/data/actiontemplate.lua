@@ -17,6 +17,18 @@ return {
 		["helperTitle"] = "Group : Clean circuit",
 		["name"] = "clean_group_circuit",
 	},
+	["pause_entity_anim"] = {
+		["helper"] = "This action will pause the animation of an entity",
+		["tag"] = "metroVeh",
+		["helperTitle"] = "Entity : Pause Animation",
+		["name"] = "pause_entity_anim",
+	},
+	["resume_entity_anim"] = {
+		["helper"] = "This action resume the animation of an entity",
+		["tag"] = "metroVeh",
+		["helperTitle"] = "Entity : Resume Animation",
+		["name"] = "resume_entity_anim",
+	},
 	["nothing"] = {
 		["helper"] = "Nothing",
 		["helperTitle"] = "Nothing",
@@ -2078,6 +2090,7 @@ return {
 		["tag"] = "autobatty",
 		["z"] = 20,
 		["speed"] = 0.5,
+		["zfly"] = 150,
 		["isAV"] = true,
 		["name"] = "vehicule_autodrive_activate",
 		["pathfinding"] = false,
@@ -2569,6 +2582,14 @@ return {
 		["helperTitle"] = "UI : Play FX",
 		["value"] = "blackout",
 		["name"] = "start_effect",
+		["tag"] = "lookat",
+	},
+	
+	["start_effect_test"] = {
+		["helper"] = "This action will play an FX animation to the target",
+		["helperTitle"] = "UI : Play FX TEST",
+		["value"] = "blackout",
+		["name"] = "start_effect_test",
 		["tag"] = "lookat",
 	},
 	["vehicle_follow_entity"] = {
@@ -3549,6 +3570,51 @@ return {
 		["pitch"] = 0,
 		["roll"] = 0
 	},
+	["rotate_entity_npc_to_position"] = {
+		["helper"] = "This action will rotate a custom NPC entity to xyz position",
+		["helperTitle"] = "Entity : Rotate to NPC entity to position",
+		["name"] = "rotate_entity_npc_to_position",
+		["tag"] = "guy01",
+		["position_tag"] = "judy01",
+		["position_way"] = "normal",
+		["position_distance"] = 5,
+		["position_helper"] = "at||relative_to_entity||node||player_look_at||poi||mappin||fasttravel||custom_place||custom_room||manager",
+		["position_house_tag"] = "playerhouse01",
+		["position_change_helper"] = "Write 'current' in position_tag for get current node,mappin, fasttravel, custom_place or custom_room. \
+ For poi if you write 'current' in position_poi_district you will get the current district, \
+ if you write 'current in position_poi_subdistrict you will get the current subdistrict. \
+ also if you write 'random' in position_poi_subdistrict or position_poi_district, you will get an 'random' value",
+		["position_node_usegameplay"] = false,
+		["tag"] = "blue01",
+		["position_lookatdistance"] = 0,
+		["position_tag_helper"] = "judy01||playerhouse01||playerhouse_bed||",
+		["position_way_helper"] = "normal||behind||forward",
+		["position_poi_district"] = "",
+		["position_poi_subdistrict"] = "",
+		["distance"] = 0,
+		["position_poi_from_position"] = false,
+		
+		["position_poi_type"] = 1,
+		["position_house_way_helper"] = "default||enter||exit",
+		["position_spawnlocation"] = false,
+		["minspeed"] = 10,
+		["maxspeed"] = 15,
+		["position"] = "at",
+		
+		
+		["position_poi_is_for_car"] = false,
+		["position_range"] = 50,
+		["position_poi_use_location_tag"] = false,
+		["position_house_way"] = "default",
+		["position_poi_search"] = "type|subdistrict|district|tag",
+		["position_poi_searchdistance"] = "near|far|random",
+		["z"] = 0,
+		["x"] = 0,
+		["y"] = 0,
+		["yaw"] = 0,
+		["pitch"] = 0,
+		["roll"] = 0
+	},
 	["set_player_perk"] = {
 		["helper"] = "This action will set Player Perk",
 		["score"] = 5,
@@ -3974,5 +4040,31 @@ return {
 		
 		["name"] = "refresh_shard_cache",
 		
+	},
+	
+	["enter_in_workspot"] = {
+		["helper"] = "This action will bound the entity to the workspot",
+		["tag"] = "metroVeh",
+		["workspottag"] = "myworkspotentity",
+		["workspot"] =  "cyberscript_workspot_custom_base",
+		["unlockcamera"] = true,
+		["helperTitle"] = "Entity : Enter in workspot",
+		["name"] = "enter_in_workspot",
+	},
+	
+	["play_in_workspot"] = {
+		["helper"] = "This action play the animation of an entity in the workspot",
+		["tag"] = "metroVeh",
+		["anim"] = "idle_stand",
+		["isinstant"] = true,
+		["helperTitle"] = "Entity : Play in Workspot",
+		["name"] = "play_in_workspot",
+	},
+	
+	["stop_in_workspot"] = {
+		["helper"] = "This action stop the animation of an entity in the workspot",
+		["tag"] = "metroVeh",
+		["helperTitle"] = "Entity : Stop in Workspot",
+		["name"] = "stop_in_workspot",
 	},
 }

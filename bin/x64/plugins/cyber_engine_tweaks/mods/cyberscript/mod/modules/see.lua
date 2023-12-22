@@ -126,7 +126,7 @@ function scriptcheckTrigger(trigger)
 				result = interactionUI.injectdialog ~= nil and #interactionUI.injectdialog ~= 0
 			end
 			if(trigger.name == "specific_choice_is_opened") then
-				--print(currentDialogHub.dial.tag)
+				----print(currentDialogHub.dial.tag)
 				result = currentDialogHub ~= nil and currentDialogHub.dial.tag == trigger.tag
 			end
 			if(trigger.name == "entity_tag_exist") then
@@ -336,7 +336,7 @@ function scriptcheckTrigger(trigger)
 					end)
 					if testres == false then
 						triggerlevelstate= gamedataNPCHighLevelState.Invalid
-						----print(triggerlevelstate)
+						------print(triggerlevelstate)
 					end
 					
 					if(levelstate == triggerlevelstate) then
@@ -507,9 +507,9 @@ function scriptcheckTrigger(trigger)
 						local entAppName = Game.NameToString(newent:GetCurrentAppearanceName())
 						local entDispName = newent:GetDisplayName()
 						if(trigger.output) then
-							print(entName)
-							print(entAppName)
-							print(entDispName)
+							--print(entName)
+							--print(entAppName)
+							--print(entDispName)
 						end
 						if(entName ~= nil and entAppName ~= nil)then
 							for i,filter in ipairs(trigger.filter) do
@@ -708,7 +708,7 @@ function scriptcheckTrigger(trigger)
 				local playerDevSystem = scriptableSystemsContainer:Get(CName.new('PlayerDevelopmentSystem'))
 				local path = playerDevSystem:GetLifePath(player)
 				if(trigger.output == true) then
-					--print("player_lifepath result "..tostring((path)))
+					----print("player_lifepath result "..tostring((path)))
 				end
 				result = (trigger.value == EnumInt(path))
 				
@@ -719,7 +719,7 @@ function scriptcheckTrigger(trigger)
 				local state = player:GetCurrentCombatState()
 				result = (trigger.value == EnumInt(state))
 				if(trigger.output == true) then
-					--print("player_have_combatstate result "..tostring((state)))
+					----print("player_have_combatstate result "..tostring((state)))
 				end
 			end
 			if(trigger.name == "wanted_level") then
@@ -796,7 +796,7 @@ function scriptcheckTrigger(trigger)
 					if (inVehicule) then
 						local vehicule = Game['GetMountedVehicle;GameObject'](enti)
 						if(vehicule ~= nil) then
-							local isThiscar = (string.find(string.lower(vehicule:GetCurrentAppearanceName()), trigger.value) ~= nil)
+							local isThiscar = (string.find(string.lower(Game.NameToString(vehicule:GetCurrentAppearanceName())), trigger.value) ~= nil)
 							if isThiscar then
 								result = true
 							end
@@ -1995,11 +1995,17 @@ function scriptcheckTrigger(trigger)
 			if(trigger.name == "player_is_in_av") then
 				local inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
 				if (inVehicule) then
+				--print("ok1")
 					local vehicule = Game.GetMountedVehicle(Game.GetPlayer())
+					
 					if(vehicule ~=nil) then
+					
 						local entid = vehicule:GetEntityID()
 						local entity = getEntityFromManagerById(entid)
+						
 						if(entity ~= nil and entity.isAV ~= nil) then
+						
+						--print(tostring(entity.isAV))
 							result = entity.isAV or JackFlight
 						end
 					end
@@ -2072,9 +2078,9 @@ function scriptcheckTrigger(trigger)
 		
 		if(trigger.output == true) then 
 			
-			--print(trigger.name)
-			--print(dump(trigger))
-			--print(tostring(result))
+			----print(trigger.name)
+			----print(dump(trigger))
+			----print(tostring(result))
 			spdlog.error(dump(action))
 		end
 		
@@ -2565,7 +2571,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					SetVehiculeToGarage(action.tweakid,action.enabled,action.asAV,action.tag,action.fakeAV)
 				end
 				if(action.name == "entity_unset_seat") then
-					UnsetSeat(action.tag, action.waitforsit,action.seat)
+					UnsetSeat(action.tag, action.vehicle, action.waitforsit, action.seat)
 				end
 				if(action.name == "vehicle_follow_entity") then
 					
@@ -4323,7 +4329,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 								local conversation = phoneConversation.conversation[z]
 								if(conversation.tag == action.conversation)then
 									gotsomething = true
-								
+									
 									currentPhoneConversation = phoneConversation.conversation[z]
 									currentPhoneConversation.currentchoices = {}
 									currentPhoneConversation.loaded = 0
@@ -4345,7 +4351,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					notificationData.time = action.duration
 					notificationData.widgetLibraryItemName = CName('notification_message')
 					notificationData.notificationData = userData
-					GameController["JournalNotificationQueue"]:AddNewNotificationData(notificationData)
+					GameController["NewHudPhoneGameController"]:AddNewNotificationData(notificationData)
 				end
 				
 				if(action.name == "phone_news_notification") then
@@ -4975,7 +4981,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 								-- if (RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Part and RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Weapon) then
 								
 								-- else
-								-- --print(RPGManager.GetItemCategory(itemid))
+								-- ----print(RPGManager.GetItemCategory(itemid))
 								-- Game.GetLootManager():SpawnItemDrop(enti,itemid,Vector4.new(action.x,action.y,action.z+1,1))
 								-- end
 								
@@ -5005,9 +5011,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 							
 							if (RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Part or RPGManager.GetItemCategory(itemid) ~= gamedataItemCategory.Weapon   ) then
 								table.insert(instructions, DropInstruction.Create(itemid, 1))
-								--print("test"..action.x)
-								--print("test"..action.y)
-								--print("test"..action.z)
+								----print("test"..action.x)
+								----print("test"..action.y)
+								----print("test"..action.z)
 								Game.GetLootManager():SpawnItemDropOfManyItems(Game.GetPlayerSystem():GetLocalPlayerControlledGameObject(), instructions, "playerDropBag",Vector4.new(action.x,action.y,action.z,1))
 								else
 								Game.GetLootManager():SpawnItemDrop(enti,itemid,Vector4.new(action.x,action.y,action.z+1,1))
@@ -5117,7 +5123,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 				if(action.name == "clean_dialog") then
 					interactionUI.hideHub()
 					currentDialogHub = nil
-					print(dump((currentDialogHub)))
+					--print(dump((currentDialogHub)))
 				end
 				
 				if(action.name == "inject_dialog") then
@@ -8119,7 +8125,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 											if(v.id == entity.id) then
 												
 												canadd = false
-												print("NOK1")
+												--print("NOK1")
 											end
 											
 										end
@@ -8440,7 +8446,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 									
 									
 									else
-									error("bad character or position. character tweak : "..chara.." position : "..dump(position))
+									error("bad character or position. character tweak : "..action.tag.." position : "..dump(position))
 								end
 								
 								
@@ -8473,7 +8479,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 								
 								
 								else
-								error("bad character or position. character tweak : "..chara.." position : "..dump(position))
+								error("bad character or position. character tweak : "..action.tag.." position : "..dump(position))
 							end
 							
 							
@@ -8553,6 +8559,21 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						
 						entityLookAtDirection(action.tag,position.x, position.y, position.z)
+					end
+				end
+				
+				if(action.name == "rotate_entity_npc_to_position") then
+					action.output = true
+					local position = getPositionFromParameter(action)
+					
+					if(position.x ~= nil) then
+						
+						local obj = getEntityFromManager(action.tag)
+						local enti = Game.FindEntityByID(obj.id)
+						if(enti ~= nil) then
+							
+							RotateToXYZ(enti, position.x,position.y,position.z)
+						end
 					end
 				end
 				
@@ -9153,7 +9174,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						if(i%2==0) then
 							possibility = {"Interested"}
-							val = math.random(20,30)
+							val = math.random(50,70)
 							else
 							
 							
@@ -9220,7 +9241,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					local obj = getEntityFromManager(action.tag)
 					local enti = Game.FindEntityByID(obj.id)
 					if(enti ~= nil) then
-						print("tt")
+						--print("tt")
 						local post = enti:GetWorldPosition()
 						playerLookAtDirection(post.x, post.y, post.z)
 						
@@ -9660,7 +9681,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					ScannerInfoManager[action.tag].faction = action.faction
 					ScannerInfoManager[action.tag].networkstate = ""
 					ScannerInfoManager[action.tag].text = getLang("cyberscript_scanner_"..action.text)
-					--	--print(action.text)
+					--	----print(action.text)
 					ScannerInfoManager[action.tag].attitude = action.attitude
 					
 					if(action.bounty ~= nil) then
@@ -9850,7 +9871,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					end
 					
 					
-					spawnAnimationWorkspot(action.tag,action.anim,"cyberscript_workspot_base",action.isinstant,action.unlockcamera,angle)
+					spawnCustomAnimationWorkspot(action.tag,[[base\cyberscript\entity\workspot_anim.ent]],action.anim,"cyberscript_workspot_base",action.isinstant,action.unlockcamera,angle)
 				end
 				
 				if action.name == "play_custom_anim_entity" then
@@ -9870,7 +9891,47 @@ function executeAction(action,tag,parent,index,source,executortag)
 					spawnCustomAnimationWorkspot(action.tag,action.ent,action.anim,action.workspot,action.isinstant,action.unlockcamera,angle)
 				end
 				
+				if action.name == "pause_entity_anim" then
+					
+					local obj = getEntityFromManager(action.tag)
+					local enti = Game.FindEntityByID(obj.id)
+					if(enti ~= nil and obj.animation ~= nil) then
+							
+							TimeDilationHelper.SetIndividualTimeDilation(enti, "see_engine", 0.0000000000001, 99999, "", "");
+							
+							
+					
+					end
+				end
 				
+				if action.name == "resume_entity_anim" then
+					
+					local obj = getEntityFromManager(action.tag)
+					local enti = Game.FindEntityByID(obj.id)
+					if(enti ~= nil and obj.animation ~= nil and obj.workspot_name ~= nil) then
+						
+							
+								TimeDilationHelper.SetIndividualTimeDilation(enti, "see_engine", 1, 1, "", "");
+								
+							
+							local angle = nil
+							local anims = obj.animation
+							local workspot_name = obj.workspot_name
+							local workspot_ent = obj.workspot_ent
+							if((action.angle == true or action.angle == nil) and action.yaw ~= nil and action.roll ~= nil and action.pitch ~= nil ) then
+								
+								angle = {}
+								angle.yaw = action.yaw
+								angle.pitch = action.pitch
+								angle.roll = action.roll
+								
+								
+							end
+							
+							spawnCustomAnimationWorkspot(action.tag,workspot_ent,anims,workspot_name,true,true,angle)
+							
+					end
+				end
 				
 				if action.name == "change_anim_entity" then
 					
@@ -9892,6 +9953,26 @@ function executeAction(action,tag,parent,index,source,executortag)
 					
 					
 					stopWorkSpotAnims(action.tag)
+				end
+				
+				
+				if action.name == "enter_in_workspot" then
+					
+					
+					enterInWorkspot(action.tag,action.workspottag,action.workspot,action.unlockcamera)
+					
+				end
+				
+				if action.name == "play_in_workspot" then
+					
+					playAnimInWorkspot(action.tag,action.anim,action.isinstant)
+					
+				end
+				
+				if action.name == "stop_in_workspot" then
+					
+					stopWorkSpotAnims(action.tag)
+					
 				end
 			end
 			
@@ -10385,7 +10466,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						end
 		
 						GameController["VehicleSummonWidgetGameController"].rootWidget:SetVisible(false)
-						--print(dump(cyberscript.PositionManager[action.tag]))
+						----print(dump(cyberscript.PositionManager[action.tag]))
 
 					end)
 					
@@ -10515,9 +10596,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 						makeCustomInterface(cyberscript.EntityManager[action.entity].widget,cyberscript.cache["interfaces"][action.tag].data)
 						
 						else
-						--print("no apply")
-						-- --print(tostring(GameDump(displayHUD[action.parent])))
-						-- --print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
+						----print("no apply")
+						-- ----print(tostring(GameDump(displayHUD[action.parent])))
+						-- ----print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
 						
 					end
 				end
@@ -10529,9 +10610,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 						cyberscript.EntityManager[action.tag].interface = nil
 						cyberscript.EntityManager[action.tag].widget :RemoveAllChildren()
 						else
-						--print("no apply")
-						-- --print(tostring(GameDump(displayHUD[action.parent])))
-						-- --print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
+						----print("no apply")
+						-- ----print(tostring(GameDump(displayHUD[action.parent])))
+						-- ----print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
 						
 					end
 				end
@@ -10543,9 +10624,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 						makeCustomInterface(displayHUD[action.parent],cyberscript.cache["interfaces"][action.tag].data)
 						
 						else
-						--print("no apply")
-						-- --print(tostring(GameDump(displayHUD[action.parent])))
-						-- --print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
+						----print("no apply")
+						-- ----print(tostring(GameDump(displayHUD[action.parent])))
+						-- ----print(tostring(dump(cyberscript.cache["interfaces"][action.tag])))
 						
 					end
 				end
@@ -10563,7 +10644,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					end
 				end
 				
-				if(action.name == "start_effect") then
+				if(action.name == "start_effect" or action.name == "start_effect_test") then
 					local obj = getEntityFromManager(action.tag)
 					local enti = Game.FindEntityByID(obj.id)
 					if(enti ~= nil) then
@@ -10802,7 +10883,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						if v.tag == action.value then
 							
 							Keystone_currentSelectedDatapack = v
-							--print("select datapack")
+							----print("select datapack")
 						end
 						
 					end
@@ -11787,7 +11868,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 							{"User", action.value}
 						});
 						else
-						print("ai not found")
+						--print("ai not found")
 					end
 					
 				end
@@ -11800,7 +11881,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 							getAIContextOrDefault(action.aitag)
 						});
 						else
-						print("ai not found")
+						--print("ai not found")
 					end
 					
 				end
@@ -11817,10 +11898,10 @@ function executeAction(action,tag,parent,index,source,executortag)
 						table.insert(item,con.value)
 						table.insert(contextAI,item)
 					end
-					print(dump(contextAI))
+					--print(dump(contextAI))
 					ScheduleChatCompletionRequest(action.aitag,contextAI);
 					else
-					print("ai not found")
+					--print("ai not found")
 					end
 					
 				end
@@ -11844,11 +11925,11 @@ function executeAction(action,tag,parent,index,source,executortag)
 					table.insert(item,action.value)
 					table.insert(contextAI,item)
 					
-					print(dump(contextAI))
+					--print(dump(contextAI))
 					
 					ScheduleChatCompletionRequest(action.aitag,contextAI);
 					else
-					print("ai not found")
+					--print("ai not found")
 					end
 					
 				end
@@ -11875,11 +11956,11 @@ function executeAction(action,tag,parent,index,source,executortag)
 						table.insert(contextAI,item)
 					end
 					
-					print(dump(contextAI))
+					--print(dump(contextAI))
 					
 					ScheduleChatCompletionRequest(action.aitag,contextAI);
 					else
-					print("ai not found")
+					--print("ai not found")
 					end
 					
 				end
@@ -11889,7 +11970,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					if(ScheduleChatCompletionRequest ~= null) then
 						setVariable(action.variable,action.key,AIhandler[action.aitag].answer)
 						else
-						print("ai not found")
+						--print("ai not found")
 					end
 					
 				end
@@ -11911,7 +11992,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					
 					usedial.options = {}
 					
-					print(getAIAnswerOrDefault(action.aitag))
+					--print(getAIAnswerOrDefault(action.aitag))
 					local item = json.decode(getAIAnswerOrDefault(action.aitag))
 					
 					
@@ -12159,7 +12240,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						else
 						
-						print("Noep")
+						--print("Noep")
 					end
 					
 					
@@ -12267,14 +12348,14 @@ function executeAction(action,tag,parent,index,source,executortag)
 				end
 				
 				if(action.name == "set_generated_dialog") then
-					print(dump(action.item))
+					--print(dump(action.item))
 					createDialog(action.item)	
 					
 				end
 				if(action.name == "ai_phone_notification") then
 					local itemjson = json.decode(getAIAnswerOrDefault(action.aitag))
 					
-					print("mar1"..itemjson.answer)
+					--print("mar1"..itemjson.answer)
 					
 					if(itemjson.questions ~= nil) then
 						local test = getLang(action.speaker)
@@ -12282,7 +12363,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						openAction.eventDispatcher = GameController["JournalNotificationQueue"]
 						local userData = PhoneMessageNotificationViewData.new()
 						userData.title = test
-						print("mar2"..itemjson.answer)
+						--print("mar2"..itemjson.answer)
 						userData.SMSText = itemjson.answer
 						userData.action = openAction
 						userData.animation = CName('notification_phone_MSG')
@@ -12375,7 +12456,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						currentPhoneConversation.speaker = action.speaker
 						
 						
-						print(dump(currentPhoneConversation))
+						--print(dump(currentPhoneConversation))
 						
 						
 						local notificationData = gameuiGenericNotificationData.new()
@@ -13177,7 +13258,7 @@ function GenerateTextFromContextValues(context, v)
 	end
 	
 	if(v.type == "entity") then
-		--	--print(v.tag)
+		--	----print(v.tag)
 		local obj = getEntityFromManager(v.tag)
 		if(obj.id ~= nil) then
 			local enti = Game.FindEntityByID(obj.id)	
@@ -13192,7 +13273,7 @@ function GenerateTextFromContextValues(context, v)
 					obj.y = pos.y
 					obj.z = pos.z
 					
-					--	--print(dump(obj))
+					--	----print(dump(obj))
 					
 					value = obj[v.prop]
 					
@@ -13234,12 +13315,12 @@ function GenerateTextFromContextValues(context, v)
 					
 					
 					local components =  enti:FindComponentByName("Item_Attachment_Slot")
-					----print("compo"..GameDump(components))
+					------print("compo"..GameDump(components))
 					if(components~= nil) then
 						local _,head =  components:GetSlotTransform("Head")
-						--	--print("head"..GameDump(head))
+						--	----print("head"..GameDump(head))
 						if(head ~= nil) then
-							--	--print("yyyy")
+							--	----print("yyyy")
 							local pos =  head:GetWorldPosition():ToVector4()
 							local pos2 = head:GetForward()
 							local pos3 =  head:GetInverse():GetWorldPosition():ToVector4()
@@ -13249,7 +13330,7 @@ function GenerateTextFromContextValues(context, v)
 							obj.y = pos.y-(pos2.y*0.25)
 							obj.z = pos.z
 							
-							--	--print(dump(obj))
+							--	----print(dump(obj))
 							value = obj[v.prop]
 						end
 						
@@ -13300,7 +13381,7 @@ function GenerateTextFromContextValues(context, v)
 							obj.yaw = angle.yaw
 							obj.pitch = angle.pitch
 							obj.roll = angle.roll
-							----print(dump(obj))
+							------print(dump(obj))
 							value = obj[v.prop]
 						end
 						
@@ -13588,7 +13669,7 @@ function GenerateTextFromContextValues(context, v)
 	end
 	
 	if(v.type == "current_poi" and currentPOI ~= nil) then
-		----print(dump(currentPOI))
+		------print(dump(currentPOI))
 		
 		value = currentPOI[v.prop]
 	end
