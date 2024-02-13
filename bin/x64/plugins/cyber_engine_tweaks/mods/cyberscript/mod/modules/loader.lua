@@ -91,16 +91,16 @@ function loadModule()
 	table.sort(arrayactiontemplate)
 	
 	local sessionFile = io.open('mod/data/actiontemplate.json', 'w')
-
-	sessionFile:write(JSON:encode_pretty(cyberscript.actiontemplate))
-	sessionFile:close()
-
+	if(sessionFile ~= nil) then
+		sessionFile:write(JSON:encode_pretty(cyberscript.actiontemplate))
+		sessionFile:close()
+	end
 
 	local sessionFile = io.open('mod/data/triggertemplate.json', 'w')
-
-	sessionFile:write(JSON:encode_pretty(cyberscript.triggertemplate))
-	sessionFile:close()
-	
+	if(sessionFile ~= nil) then
+		sessionFile:write(JSON:encode_pretty(cyberscript.triggertemplate))
+		sessionFile:close()
+	end
 
 	
 	triggertemplate = {}
@@ -148,7 +148,6 @@ function loadModule()
 	cyberscript.housing = dofile('mod/modules/housing.lua')
 	cyberscript.saves = dofile('mod/modules/saves.lua')
 	cyberscript.AV = dofile('mod/modules/av.lua')
-	
 	
 
 	QuestManager = dofile('mod/modules/quest_manager.lua')

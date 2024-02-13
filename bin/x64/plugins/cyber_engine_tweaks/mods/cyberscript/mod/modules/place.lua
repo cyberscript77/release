@@ -46,10 +46,10 @@ function loadCustomPlace()
 				
 				else
 				
-				if ItemOfHouseSpawned == true then
-					despawnItemFromHouse()
-					ItemOfHouseSpawned = false
-				end
+				-- if ItemOfHouseSpawned == true then
+					-- despawnItemFromHouse()
+					-- ItemOfHouseSpawned = false
+				-- end
 				
 				isInHouse = false
 				currentHouse = nil
@@ -65,14 +65,14 @@ function loadCustomPlace()
 		
 		if(checkTriggerRequirement(currentHouse.requirement,currentHouse.trigger) and check3DPos(curPos,currentHouse.x,currentHouse.y, currentHouse.z,currentHouse.range, currentHouse.range_z) ) then
 			
-			if ItemOfHouseSpawned == false  then
+			-- if ItemOfHouseSpawned == false  then
 			
 				
-				spawnItemFromHouseTag(currentHouse.tag)
+				-- spawnItemFromHouseTag(currentHouse.tag)
 				
 				
-				ItemOfHouseSpawned = true
-			end
+				-- ItemOfHouseSpawned = true
+			-- end
 			
 			
 			if(currentHouse.action ~= nil and #currentHouse.action >0) then
@@ -124,10 +124,10 @@ function loadCustomPlace()
 			
 		else
 			
-			if ItemOfHouseSpawned == true then
-				despawnItemFromHouse()
-				ItemOfHouseSpawned = false
-			end
+			-- if ItemOfHouseSpawned == true then
+				-- despawnItemFromHouse()
+				-- ItemOfHouseSpawned = false
+			-- end
 			
 			isInHouse = false
 			currentHouse = nil

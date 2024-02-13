@@ -1336,14 +1336,14 @@ function NPCPuppet_CompileScannerChunks(thos)
 	
 	
 	local characterRecord  = TweakDBInterface.GetCharacterRecord(thos:GetRecordID())
-	local scannerPreset = characterRecord:ScannerModulePreset()
 	
 	
 	
 	
-	if (characterRecord ~= nil and scannerBlackboard ~= nil and scannerPreset ~= nil )then
+	
+	if (characterRecord ~= nil and scannerBlackboard ~= nil )then
 		
-		
+		local scannerPreset = characterRecord:ScannerModulePreset()
 		
 		---get information
 		local thosEntity = thos:GetRecordID()
@@ -1508,8 +1508,6 @@ function NPCPuppet_CompileScannerChunksBefore(thos)
 	local scannerBlackboard = Game.GetBlackboardSystem():Get(vehicleSummonDef)
 	
 	--print(Game.NameToString(thos:GetCurrentAppearanceName()))
-	local characterRecord  = TweakDBInterface.GetCharacterRecord(thos:GetRecordID())
-	local scannerPreset = characterRecord:ScannerModulePreset()
 	
 	scannedEntity = thos
 		local obj = getEntityFromManagerById(thos:GetEntityID())
@@ -10313,11 +10311,12 @@ function listenPlayerInput(action)
 	
 	
 	-- end
-	-- logme(10,currentController)
-	--logme(10,actionName)
-	--logme(10,"currentPhoneConversation"..dump(currentPhoneConversation))
-	-- logme(10,actionType)
 	
+	-- if (string.find(tostring(actionName), "AXIS") == nil) then
+	-- logme(1,actionName)
+	-- --logme(10,"currentPhoneConversation"..dump(currentPhoneConversation))
+	-- logme(1,actionType)
+	-- end
 	
 	local phoneAction = false 
 	
@@ -10402,6 +10401,10 @@ function listenPlayerInput(action)
 		end)
 	end
 	
+	if ((string.find(tostring(actionName), "down_button") and currentDialogHub == nil and actionType == "BUTTON_RELEASED" and currentController == "gamepad")) then
+		
+		cycleInteract2()
+	end
 	
 	if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
 		

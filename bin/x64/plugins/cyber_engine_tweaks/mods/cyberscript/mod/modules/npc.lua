@@ -378,7 +378,11 @@ if spawnRegion then
 				end
 				
 				local npcSpec =  DynamicEntitySpec.new()
-				npcSpec.recordID = chara
+				if(string.match(chara, ".ent"))then
+					npcSpec.templatePath = chara
+				else
+					npcSpec.recordID = chara
+				end
 				npcSpec.appearanceName = appearance or ""
 				npcSpec.position = postp
 				npcSpec.persistState = persistState or false
@@ -400,6 +404,7 @@ if spawnRegion then
 					if dontregister == nil then dontregister = false end
 				
 					if(NPC ~= nil and dontregister == false) then
+						print(chara)
 						print(NPC)
 				print(dontregister)
 						local entity = {}
@@ -879,12 +884,21 @@ if actionRegion then
 		return vec4
 	end
 	
-	function getForwardPosition2(entity,distance,offset)
-     
-		local vec4 = Vector4.new(
+	function getForwardPosition2(entity,distance,offset,isworld)
+	
+		local vec4 = Vector4.new()
+		if(isworld) then
+			vec4 = Vector4.new(
+			entity:GetForward().x * offset.y + entity:GetRight().x * offset.x + entity:GetWorldPosition():ToVector4().x,
+			entity:GetForward().y * offset.y + entity:GetRight().y * offset.x + entity:GetWorldPosition():ToVector4().y,
+			entity:GetWorldPosition():ToVector4().z, 0)
+		else
+			vec4 = Vector4.new(
 			entity:GetWorldForward().x * offset.y + entity:GetWorldRight().x * offset.x + entity:GetWorldPosition().x,
 			entity:GetWorldForward().y * offset.y + entity:GetWorldRight().y * offset.x + entity:GetWorldPosition().y,
 			entity:GetWorldPosition().z, 0)
+		end
+			
         return vec4
     end
 	
@@ -1875,7 +1889,7 @@ if actionRegion then
 		end
 		
 		local rot = rotation
-		print("rotation"..dump(rotation))
+		
 		if(rotation ~= 1) then
 			
 			rot = EulerAngles.new(0,0,0)
@@ -3597,7 +3611,7 @@ if vehiculeRegion then
 				
 				cmd.maxSpeed = maxspeed or 15;
 				cmd.minSpeed = minspeed or 10;
-				cmd.clearTrafficOnPath = false;
+				cmd.clearTrafficOnPath = true;
 				cmd.minimumDistanceToTarget = 0;
 				cmd.targetPosition = Vector4.Vector4To3(Vector4.new( x, y, z,1));
 				cmd.driveDownTheRoadIndefinitely = false

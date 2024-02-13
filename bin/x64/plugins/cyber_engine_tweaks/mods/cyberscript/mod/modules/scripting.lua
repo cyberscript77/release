@@ -297,36 +297,46 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		if (tick % 6 == 0) then --every 0.5 second
 			if itemsdirectmod ~= nil and itemsdirectmod.state == true then
 				
-				playerPos, playerAngle = targetS:GetCrosshairData(Game.GetPlayer())
-				playerFootPos = Game.GetPlayer():GetWorldPosition()
-				playerPos.z = playerPos.z+0.5
-				playerDeltaWorldPos = Delta(playerPos, playerFootPos)
-				playerDeltaWorldPos.w = 1
-				if (playerOldPos == nil) then
-					playerOldPos = playerPos
-				end
-				playerDeltaPos = Delta(playerOldPos, playerPos)
-				phi = math.atan2(playerAngle.y, playerAngle.x)
-				-- if (objPush == true) then
-				-- objectDist = objectDist + 0.5
-				-- objPush = false
+				-- playerPos, playerAngle = targetS:GetCrosshairData(Game.GetPlayer())
+				-- playerFootPos = Game.GetPlayer():GetWorldPosition()
+				-- playerPos.z = playerPos.z+0.5
+				-- playerDeltaWorldPos = Delta(playerPos, playerFootPos)
+				-- playerDeltaWorldPos.w = 1
+				-- if (playerOldPos == nil) then
+					-- playerOldPos = playerPos
 				-- end
-				-- if (objPull == true) then
-				-- objectDist = objectDist - 0.5
-				-- objPull = false
-				-- end
-				poss = Vector4.new(((objectDist * math.cos(phi)) + playerPos.x), ((objectDist * math.sin(phi)) + playerPos.y), (objectDist * math.sin(playerAngle.z) + playerPos.z),1)
-				poss = Vector4Add(targetDeltaPos, poss)
+				-- playerDeltaPos = Delta(playerOldPos, playerPos)
+				-- phi = math.atan2(playerAngle.y, playerAngle.x)
+				-- -- if (objPush == true) then
+				-- -- objectDist = objectDist + 0.5
+				-- -- objPush = false
+				-- -- end
+				-- -- if (objPull == true) then
+				-- -- objectDist = objectDist - 0.5
+				-- -- objPull = false
+				-- -- end
+				-- poss = Vector4.new(((objectDist * math.cos(phi)) + playerPos.x), ((objectDist * math.sin(phi)) + playerPos.y), (objectDist * math.sin(playerAngle.z) + playerPos.z),1)
+				-- --poss = Vector4Add(targetDeltaPos, poss)
+				local offset = {}
+				local testts, playerAngle = targetS:GetCrosshairData(Game.GetPlayer())
+				offset.x = -0.5
+				offset.y = 2
+				offset.z = 1
+				local offsetpos = getForwardPosition2(Game.GetPlayer(),3,offset)
+				print("offsetpos"..dump(offsetpos))
+				local poss = offsetpos
+				poss.z = poss.z + offset.z +  playerAngle.z
+				print(dump(poss))
 				-- poss.x = poss.x + playerDeltaPos.x
 				-- poss.y = poss.y + playerDeltaPos.y
 				-- poss.z = poss.z + playerDeltaPos.z
 				
-				
-				local angless = Game.GetCameraSystem():GetActiveCameraForward():ToRotation()
+				-- print(dump(poss))
+				local angless = Game.GetPlayer():GetWorldOrientation():ToEulerAngles()
 				--local angless = EulerAngles.new(itemsdirectmod.target.Roll, itemsdirectmod.target.Pitch,  itemsdirectmod.target.Yaw)
 				
 				
-				if(itemsdirectmod.target.X ~= poss.x and itemsdirectmod.target.Y ~= poss.y and itemsdirectmod.target.Z ~= poss.z) then
+				if(itemsdirectmod.target.X ~= poss.x and itemsdirectmod.target.Y ~= poss.y ) then
 					
 					updateItemPosition(itemsdirectmod.target, poss, angless, true)
 					

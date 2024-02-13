@@ -56,7 +56,12 @@
 	"entity": {
 		"key": "tag",
 		"prop": "tag",
+		"slot": "slottag",
 		"distance": 0,
+		"offset_x": 0,
+		"offset_y": 0,
+		"offset_z": 0,
+		"relative": false,
 		"tag": "tag"
 	},
 	"mappin": {
@@ -197,7 +202,7 @@
 	},
 	"group": {
 		"tag": "mygrouptag"
-	},
+	}
 
 
 }

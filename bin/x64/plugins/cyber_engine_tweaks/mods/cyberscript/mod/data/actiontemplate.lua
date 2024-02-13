@@ -1084,6 +1084,20 @@ return {
 		["name"] = "play_game_sound",
 		["help"] = "Play an Game's Sound",
 	},
+	["play_game_sound_test"] = {
+		["helper"] = "This action will Play an Game's Sound",
+		["helperTitle"] = "Sound : Play Game Sound (direct input)",
+		["value"] = "test",
+		["name"] = "play_game_sound_test",
+		["help"] = "Play an Game's Sound",
+	},
+	["stop_game_sound_test"] = {
+		["helper"] = "This action will Play an Game's Sound",
+		["helperTitle"] = "Sound : Stop Game Sound (direct input)",
+		["value"] = "test",
+		["name"] = "stop_game_sound_test",
+		["help"] = "Stop an Game's Sound",
+	},
 	["bound_entity_to_entity"] = {
 		["roll"] = 0,
 		["pitch"] = 0,
@@ -2866,12 +2880,12 @@ return {
 		["title"] = "Judy Alvarez",
 	},
 	["play_anim_entity"] = {
-		["helper"] = "This action will unsubscribe registred item from direct Action Engine",
+		["helper"] = "This action will play animation to entity",
 		["tag"] = "myshardtag",
 		["roll"] = 0,
 		["pitch"] = 0,
 		["yaw"] = 0,
-		["helperTitle"] = "Script : Unregister from Direct Action Engine",
+		["helperTitle"] = "Entity : Play Animation",
 		["name"] = "play_anim_entity",
 	},
 	["play_custom_anim_entity"] = {

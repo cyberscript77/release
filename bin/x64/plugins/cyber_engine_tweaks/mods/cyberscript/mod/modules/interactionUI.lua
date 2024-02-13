@@ -15,7 +15,7 @@ local ui =  {
 function ui.createChoice(localizedName, icon, choiceType) -- Creates and returns a choice
     local choice = gameinteractionsvisListChoiceData.new()
     choice.localizedName = localizedName or "Choice"
-    choice.inputActionName = "None"
+    choice.inputActionName = CName("None")
 
     if icon then
         local part = gameinteractionsChoiceCaption.new()
@@ -101,7 +101,7 @@ end
 function ui.update() -- Run ever frame to avoid unwanted changes
     if ui.hubShown then
 		pcall(function()
-        Game.GetBlackboardSystem():Get(GetAllBlackboardDefs().UIInteractions):SetInt(GetAllBlackboardDefs().UIInteractions.SelectedIndex, ui.selectedIndex)
+        Game.GetBlackboardSystem():Get(GetAllBlackboardDefs().UIInteractions):SetInt(GetAllBlackboardDefs().UIInteractions.SelectedIndex, ui.selectedIndex, true)
 		end)
 	end
     ui.input = false -- Avoid double input

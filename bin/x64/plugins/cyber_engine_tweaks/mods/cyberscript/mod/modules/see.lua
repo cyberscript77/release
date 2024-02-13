@@ -6788,12 +6788,12 @@ function executeAction(action,tag,parent,index,source,executortag)
 			end
 			
 			if soundregion then
-				if(action.name == "play_game_sound") then
+				if(action.name == "play_game_sound" or action.name == "play_game_sound_test") then
 					local audioEvent = SoundPlayEvent.new()
 					audioEvent.soundName = action.value
 					Game.GetPlayer():QueueEvent(audioEvent)
 				end
-				if(action.name == "stop_game_sound") then
+				if(action.name == "stop_game_sound" or action.name == "stop_game_sound_test") then
 					local audioEvent = SoundStopEvent.new()
 					audioEvent.soundName = action.value
 					Game.GetPlayer():QueueEvent(audioEvent)
@@ -13340,6 +13340,51 @@ function GenerateTextFromContextValues(context, v)
 					
 				end
 				
+				if(v.key == "slot_position") then
+					
+					local compo = "Item_Attachment_Slot"
+					if (v.tag == "player") then
+						compo = "ItemAttachmentSlots"
+					end
+					
+					local components =  enti:FindComponentByName(compo)
+					------print("compo"..GameDump(components))
+					if(components~= nil) then
+						local _,head =  components:GetSlotTransform(v.slot)
+						--	----print("head"..GameDump(head))
+						if(head ~= nil) then
+							--	----print("yyyy")
+							local pos = {}
+							local action = {}
+							action.x = v.offset_x or 0
+							action.y = v.offset_y or 0
+							action.z = v.offset_z or 0
+							if(v.relative) then
+							
+								pos = getForwardPosition2(head,0,action,true)
+							
+							else
+							
+								pos = head:GetWorldPosition():ToVector4()
+							
+							end
+
+							local obj = {}
+							
+							obj.x = pos.x
+							obj.y = pos.y
+							obj.z = pos.z
+							
+							--	----print(dump(obj))
+							value = obj[v.prop]
+						end
+						
+					end
+					
+					
+					
+				end
+				
 				if(v.key == "look_at") then
 					if v.distance == nil then v.distance =0 end
 					local playerPos, playerAngle = targetS:GetCrosshairData(Game.GetPlayer())
@@ -13389,18 +13434,52 @@ function GenerateTextFromContextValues(context, v)
 					
 				end
 				
+				if(v.key == "slot_orientation") then
+					
+					local compo = "Item_Attachment_Slot"
+					if (v.tag == "player") then
+						compo = "ItemAttachmentSlots"
+					end
+					
+					local components =  enti:FindComponentByName(compo)
+					------print("compo"..GameDump(components))
+					if(components~= nil) then
+						local _,head =  components:GetSlotTransform(v.slot)
+						--	----print("head"..GameDump(head))
+						if(head ~= nil) then
+							--	----print("yyyy")
+							local angle = head:GetOrientation():ToEulerAngles()
+							local obj = {}
+							
+							obj.yaw = angle.yaw
+							obj.pitch = angle.pitch
+							obj.roll = angle.roll
+							------print(dump(obj))
+							value = obj[v.prop]
+						end
+						
+					end
+					
+					
+					
+				end
+				
 				if(v.key == "forward") then
-					local pos = enti:GetWorldPosition()
-					local pos2 = enti:GetWorldForward()
+					local action = {}
+					action.x = v.offset_x or 0
+					action.y = v.offset_y or 0
+					action.z = v.offset_z or 0
+
+					local pos = getForwardPosition2(enti,0,action)
+					
 					local obj = {}
 					
-					if v.coef == nil then v.coef = 1 end
 					
 					-- if testcoef == nil then testcoef = 1 end
 					-- v.coef = testcoef
-					obj.x = pos.x+(pos2.x*v.coef)
-					obj.y = pos.y+(pos2.y*v.coef)
-					obj.z = pos.z+(pos2.z*v.coef)
+					obj.x = pos.x
+					obj.y = pos.y
+					obj.z = pos.z
 					value = obj[v.prop]
 					
 				end
