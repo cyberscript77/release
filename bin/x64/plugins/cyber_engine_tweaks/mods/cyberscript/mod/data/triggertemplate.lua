@@ -381,7 +381,11 @@ return {
 		["helperTitle"] = "UI : In Menu",
 		["name"] = "is_in_menu",
 	},
-	
+	["is_phone_opened"] = {
+		["helper"] = "This trigger will be triggered player is in phone menu",
+		["helperTitle"] = "UI : Is Phone Menu Opened",
+		["name"] = "is_phone_opened",
+	},
 	["testFor"] = {
 		["logic"] = "or||and",
 		["helper"] = "This trigger will be triggered when all of the trigger are triggered by the logic you choose.",
@@ -579,11 +583,11 @@ return {
 		["helperTitle"] = "NPC : the invited one has enough affinity",
 		["helper"] = "This trigger will be triggered when you has enough affinity with the npc you has ask to join you ",
 	},
-	["event_is_triggered"] = {
+	["event_exist"] = {
 		["helper"] = "This trigger will be triggered when event is called",
 		["tag"] = "myevent",
 		["helperTitle"] = "Mod : Event is Triggered",
-		["name"] = "event_is_triggered",
+		["name"] = "event_exist",
 	},
 	["player_is_hit"] = {
 		["helper"] = "This trigger will be triggered when player is hit and the hit doesn't miss. (whatever is in godmode or not)",

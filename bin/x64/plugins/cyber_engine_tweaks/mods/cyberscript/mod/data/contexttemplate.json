@@ -130,6 +130,10 @@
 		"tag": "tag",
 		"prop": "tag"
 	},
+	"props": {
+		
+		"prop": "tag"
+	},
 	"npc": {
 		"tag": "tag",
 		"prop": "tag"
@@ -188,6 +192,9 @@
 	},
 	"object": {
 		"value": "use json to replace me"
+	},
+	"executortag": {
+		
 	},
 	"trigger": {
 		"name": "auto"

@@ -912,6 +912,8 @@ function buildnativesetting()
 		info.forceHold = false
 		info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
 			 -- Store changed value
+			 print("Changed KEYBIND of", name)
+			 print("Changed KEYBIND to", value)
 			arrayUserInput[name] = value
 		end
 		info.callback = function() -- Callback for when the binding has been activated
@@ -956,12 +958,14 @@ function buildnativesetting()
 				end
 				
 				if setting.type == "sliderInt" then
+				
 					nativeSettings.addRangeInt("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						
 						setScore(setting.target.tag,setting.target.key,value)
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
 						
 					end)
+					
 				end
 				
 				
@@ -1003,10 +1007,12 @@ function buildnativesetting()
 							arrayUserInput[name] = value
 					end
 					info.callback = function() -- Callback for when the binding has been activated
-						
+						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
+						workerTable[setting.targetevent] = nil
 						if(cyberscript.cache["event"][setting.targetevent] ~= nil) then
 							local event = cyberscript.cache["event"][setting.targetevent].data
 							checkContext(event)
+							
 							
 							if(event.way == "input" and checkTriggerRequirement(event.requirement,event.trigger) and workerTable[setting.targetevent] == nil)then
 								
@@ -1064,13 +1070,12 @@ function makeNativeSettings()
 		enableLocation== nil or
 		showFactionAffinityHud== nil or
 		displayXYZset== nil or
-		InfiniteDoubleJump==nil or
-		DisableFallDamage==nil or
+		
 		Player_Sprint_Multiplier==nil or
 		Player_Run_Multiplier==nil or
 		Jump_Height==nil or
-		Double_Jump_Height==nil or
-	UltraSpeedDodge==nil) then
+		Double_Jump_Height==nil
+	) then
 	local obj = {}
 	
 	obj.AutoAmbush = tostring(AutoAmbush)
@@ -1079,14 +1084,12 @@ function makeNativeSettings()
 	obj.enableLocation = tostring(enableLocation)
 	obj.showFactionAffinityHud = tostring(showFactionAffinityHud)
 	obj.displayXYZset = tostring(displayXYZset)
-	obj.InfiniteDoubleJump = tostring(InfiniteDoubleJump)
 	
-	obj.DisableFallDamage = tostring(DisableFallDamage)
 	obj.Player_Sprint_Multiplier = tostring(Player_Sprint_Multiplier)
 	obj.Player_Run_Multiplier = tostring(Player_Run_Multiplier)
 	obj.Jump_Height = tostring(Jump_Height)
 	obj.Double_Jump_Height = tostring(Double_Jump_Height)
-	obj.UltraSpeedDodge = tostring(UltraSpeedDodge)
+	
 	
 	
 	
@@ -1346,25 +1349,10 @@ function makeNativeSettings()
 		
 		nativeSettings.addSubcategory("/CMCHEAT/player", getLang("ui_setting_cheat")) -- Optional: Add a subcategory (path, label), you can add as many as you want
 		
-		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_infinite_doublejump"),  getLang("ui_setting_cheat_infinite_doublejump"), InfiniteDoubleJump, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			InfiniteDoubleJump = state
-			updateUserSetting("InfiniteDoubleJump", InfiniteDoubleJump)
-		end)
-		
-		nativeSettings.addRangeInt("/CMCHEAT/player", getLang("Jump limit"),  getLang("100 = infinite"), 2, 100, 1, numberOfMultiJumps, 2, function(value)
-			pcall(function() 
-				numberOfMultiJumps = value
-				updateUserSetting("numberOfMultiJumps", numberOfMultiJumps)
-				
-				
-			end)
-		end)
 		
 		
-		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("ui_setting_cheat_disable_fall_damage"),  getLang("ui_setting_cheat_disable_fall_damage"), DisableFallDamage, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			DisableFallDamage = state
-			updateUserSetting("DisableFallDamage", DisableFallDamage)
-		end)
+		
+	
 		
 		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Immortal"),  getLang("Immortal"), Immortal, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			Immortal = state
@@ -1413,42 +1401,12 @@ function makeNativeSettings()
 			InfiniteStamina(InfiniteStaminas)
 		end)
 		
-		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Infinite Ammo"),  getLang("Infinite Ammo"), InfiniteAmmo, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			InfiniteAmmo = state
-			updateUserSetting("InfiniteAmmo", InfiniteAmmo)
-			
-			if(InfiniteAmmo) then
-				Game.GetInventoryManager().AddEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
-				local player = Game.GetPlayer()
-				local activeWeapon = GameObject.GetActiveWeapon(player)
-				-- The gist behind this is:
-				-- Reload the weapon in 0 seconds, end the reload
-				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
-				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
-				else
-				Game.GetInventoryManager().RemoveEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
-				local player = Game.GetPlayer()
-				local activeWeapon = GameObject.GetActiveWeapon(player)
-				-- The gist behind this is:
-				-- Reload the weapon in 0 seconds, end the reload
-				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
-				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
-			end
-			
-		end)
 		
 		
-		nativeSettings.addSwitch("/CMCHEAT/player",  getLang("Unlimited Carry"),  getLang("Unlimited Carry"), UnlimitedCarryLimit, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			UnlimitedCarryLimit = state
-			updateUserSetting("UnlimitedCarryLimit", UnlimitedCarryLimit)
-			
-			if(UnlimitedCarryLimit) then 
-				Game.GetStatsSystem():AddModifier(Game.GetPlayer():GetEntityID(),RPGManager.CreateStatModifier(gamedataStatType.CarryCapacity,gameStatModifierType.Additive,99999999))
-				else
-				Game.GetStatsSystem():AddModifier(Game.GetPlayer():GetEntityID(),RPGManager.CreateStatModifier(gamedataStatType.CarryCapacity,gameStatModifierType.Additive,-99999999))
-			end
-			
-		end)
+		
+
+		
+
 		
 		
 		nativeSettings.addSubcategory("/CMCHEAT/reload",getLang("Theses cheats need that you save after enable them then reload"))
@@ -1521,16 +1479,7 @@ function makeNativeSettings()
 		end)
 		
 		
-		nativeSettings.addSwitch("/CMCHEAT/reload",  getLang("ui_setting_cheat_player_dodge"),  getLang("ui_setting_cheat_player_dodge"), UltraSpeedDodge, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			UltraSpeedDodge = state
-			updateUserSetting("UltraSpeedDodge", UltraSpeedDodge)
-			
-			TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_Dodge_inline9.value", 1)
-			TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_DodgeAir_inline9.value", 1)
-			TweakDB:SetFlat("player.locomotion.maxGroundSpeed", 999999.0)
-			TweakDB:SetFlat("player.locomotion.maxAirXYSpeed", 999999.0)
-			
-		end)
+	
 		
 		nativeSettings.addSwitch("/CMCHEAT/reload",  getLang("ui_setting_cheat_player_ram"),  getLang("ui_setting_cheat_player_ram"), RamUpgrade, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			RamUpgrade = state
@@ -1543,6 +1492,28 @@ function makeNativeSettings()
 			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline5.floatValues", {25})
 			
 		end)
+
+		nativeSettings.addSwitch("/CMCHEAT/reload",  getLang("Overpowered Optical Camo"),  getLang("ui_setting_cheat_player_ram"), RamUpgrade, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			OpticalCamo = state
+			updateUserSetting("OpticalCamo", OpticalCamo)
+			
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoPlayerBuffLegendary_inline1.value", 9999)
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoPlayerBuffEpic_inline1.value", 9999)
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoPlayerBuffRare_inline1.value", 9999)
+		  
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoLegendaryCooldown_inline1.value", 1)
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoCooldown_inline1.value",1)
+		  
+			TweakDB:SetFlat("Items.OpticalCamoLegendary_inline2.intValues", 1)
+			TweakDB:SetFlat("Items.OpticalCamoEpic_inline2.intValues", 9999)
+			TweakDB:SetFlat("Items.OpticalCamoRare_inline2.intValues", 9999)
+			
+		end)
+
+
+		
+
+
 		nativeSettings.addTab("/CSKEYBIND", getLang("Cyberscript KeyBinding")) -- Add our mods tab (path, label)
 		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", getLang("Gameplay"))
 	end)
@@ -1711,29 +1682,29 @@ function ImageFrame()
 			
 			ImGui.SetWindowPos(  v.position.x * screenRatioX, v.position.y * screenRatioY)
 			
-			
+			print(v.texture)
 			ImGui.Image(v.texture)
 			
 			
-			ImGui.End()
-			ImGui.SetWindowFontScale(1)
-			CPS.colorEnd(1)
-			CPS.colorEnd(1)
-			CPS.colorEnd(1)
-			
-			CPS.colorEnd(1)
-			CPS.colorEnd(1)
-			CPS.colorEnd(1)
-			
-			CPS.colorEnd(1)
-			CPS.colorEnd(1)
-			CPS.colorEnd(1)
-			
-			CPS.colorEnd(1)
-			CPS.colorEnd(1)
-			CPS.colorEnd(1)
-		end
 		
+		end
+		ImGui.End()
+		ImGui.SetWindowFontScale(1)
+		CPS.colorEnd(1)
+		CPS.colorEnd(1)
+		CPS.colorEnd(1)
+		
+		CPS.colorEnd(1)
+		CPS.colorEnd(1)
+		CPS.colorEnd(1)
+		
+		CPS.colorEnd(1)
+		CPS.colorEnd(1)
+		CPS.colorEnd(1)
+		
+		CPS.colorEnd(1)
+		CPS.colorEnd(1)
+		CPS.colorEnd(1)
 		
 	end
 	

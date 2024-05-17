@@ -249,24 +249,23 @@ function SaveLoading()
 	ScrollSpeed = getUserSettingWithDefault("ScrollSpeed",ScrollSpeed)
 	enableCustomQuest =  getUserSettingWithDefault("enableCustomQuest",enableCustomQuest)
 	AutoRefreshDatapack = getUserSettingWithDefault("AutoRefreshDatapack",AutoRefreshDatapack)
-	InfiniteDoubleJump =  getUserSettingWithDefault("InfiniteDoubleJump",InfiniteDoubleJump)
-	numberOfMultiJumps =  getUserSettingWithDefault("numberOfMultiJumps",numberOfMultiJumps)
-	DisableFallDamage =  getUserSettingWithDefault("DisableFallDamage",DisableFallDamage)
+	
 	Player_Sprint_Multiplier = getUserSettingWithDefault("Player_Sprint_Multiplier",Player_Sprint_Multiplier)
 	Player_Run_Multiplier = getUserSettingWithDefault("Player_Run_Multiplier",Player_Run_Multiplier)
 	Jump_Height = getUserSettingWithDefault("Jump_Height",Jump_Height)
 	Double_Jump_Height = getUserSettingWithDefault("Double_Jump_Height",Double_Jump_Height)
 	Immortal = getUserSettingWithDefault("Immortal",Immortal)
 	InfiniteStaminas = getUserSettingWithDefault("InfiniteStaminas",InfiniteStaminas)
-	InfiniteAmmo = getUserSettingWithDefault("InfiniteAmmo",InfiniteAmmo)
+
 	RamUpgrade = getUserSettingWithDefault("RamUpgrade",RamUpgrade)
-	UltraSpeedDodge = getUserSettingWithDefault("UltraSpeedDodge",UltraSpeedDodge)
-	UnlimitedCarryLimit = getUserSettingWithDefault("UnlimitedCarryLimit",UnlimitedCarryLimit)
+
+	OpticalCamo = getUserSettingWithDefault("OpticalCamo",false)
+	
+	
 	debugLog = getUserSettingWithDefault("debugLog",debugLog)
 	showcyberscriptfixeronmap = getUserSettingWithDefault("showcyberscriptfixeronmap",showcyberscriptfixeronmap)
 	newgroupinteractUI = getUserSettingWithDefault("newgroupinteractUI",newgroupinteractUI)
-	
-	
+
 	logrecordlevel = getUserSettingWithDefault("logrecordlevel",logrecordlevel)
 
 	
@@ -342,13 +341,23 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 			if(ActiveSubMenu ~= "Shards") then
 			firstexecutionshard = nil
 			end
+		else
+			if( GameController["NewHudPhoneGameController"]:IsPhoneActive() == true) then
+				inMenu = true
+				ActiveMenu = "Phone"
+				ActiveSubMenu = "Phone"
+				if(ActiveSubMenu ~= "Shards") then
+					firstexecutionshard = nil
+				end
 			else
-			inMenu = false
-			ActiveMenu = nil
-			ActiveSubMenu = nil
-			firstexecutionshard = nil
-			AffinityPopupisShow = false
+					inMenu = false
+					ActiveMenu = nil
+					ActiveSubMenu = nil
+					firstexecutionshard = nil
+					AffinityPopupisShow = false
+			end
 		end
+		
 	end)
 	MasterVolume = Game.GetSettingsSystem():GetVar("/audio/volume", "MasterVolume")
 	UIPopupsManager.Inititalize()
@@ -703,18 +712,14 @@ function SetFlatFromSetting()
 	TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_Stand_inline1.value", 3.5 * Player_Run_Multiplier)
 	TweakDB:SetFlat("PlayerLocomotion.JumpJumpHeightModifier.value", 1 * Jump_Height)
 	TweakDB:SetFlat("PlayerLocomotion.DoubleJumpJumpHeightModifier.value", 2.6 * Double_Jump_Height)
+	
 	end
 	
 	
 	
 	TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	
-	if(UltraSpeedDodge ~= nil and UltraSpeedDodge == true) then
-				TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_Dodge_inline9.value", 1)
-				TweakDB:SetFlat("PlayerLocomotion.player_locomotion_data_DodgeAir_inline9.value", 1)
-				TweakDB:SetFlat("player.locomotion.maxGroundSpeed", 999999.0)
-				TweakDB:SetFlat("player.locomotion.maxAirXYSpeed", 999999.0)
-		end
+	
 		
 		if(RamUpgrade ~= nil and RamUpgrade == true) then
 				
@@ -724,7 +729,24 @@ function SetFlatFromSetting()
 			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline2.floatValues", {1000})
 			TweakDB:SetFlat("Items.AdvancedRamUpgradeLegendaryPlusPlus_inline5.floatValues", {50})
 		end
+
+
+		if(OpticalCamo ~= nil and OpticalCamo == true) then
+				
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoPlayerBuffLegendary_inline1.value", 30)
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoPlayerBuffEpic_inline1.value", 30)
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoPlayerBuffRare_inline1.value", 30)
+		  
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoLegendaryCooldown_inline1.value", 1)
+			TweakDB:SetFlat("BaseStatusEffect.OpticalCamoCooldown_inline1.value",1)
+		  
+			TweakDB:SetFlat("Items.OpticalCamoLegendary_inline2.intValues", 1)
+			TweakDB:SetFlat("Items.OpticalCamoEpic_inline2.intValues", 30)
+			TweakDB:SetFlat("Items.OpticalCamoRare_inline2.intValues", 30)
+		end
 	
+
+
 end
 -- ------------------------------------------------------------------
 -- -------------------------------Event-------------------------------

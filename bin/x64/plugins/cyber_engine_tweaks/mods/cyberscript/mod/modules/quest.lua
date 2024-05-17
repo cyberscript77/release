@@ -39,7 +39,7 @@ function QuestThreadManager()
 		
 		if(currentQuest.alreadyStart == true and currentQuest.lastIndex ~= nil) then
 			
-			runActionList(currentQuest.objectives[currentQuest.lastIndex].resume_action,currentQuest.objectives[currentQuest.lastIndex].tag.."_resume","quest",true,"see_engine")
+			runActionList(currentQuest.objectives[currentQuest.lastIndex].resume_action,currentQuest.objectives[currentQuest.lastIndex].tag.."_resume","quest",false,"see_engine")
 			
 		end
 		
@@ -74,8 +74,46 @@ function QuestThreadManager()
 					if(result == true and workerTable[objectif.tag.."_action"] == nil) then
 					--	logme(1,objectif.tag.." ACtion")
 						--Game.GetPlayer():SetWarningMessage(objectif.tag.." result "..tostring(result))
+						local playlist = {}
 						
-						local action ={}
+						
+						
+						
+						for _,obj in ipairs(objectif.action) do
+							table.insert(playlist,obj)
+							
+							
+							end
+							if(objectif.unlock ~= nil and #objectif.unlock > 0) then
+							
+							--	action.objective = objectif.unlock[1]
+								
+								for i,v in ipairs(objectif.unlock) do
+								if(QuestManager.GetObjectiveState(v).state ~= gameJournalEntryState.Undefined) then
+									local action2 ={}
+									action2.name = "unlock_objective"
+									action2.value = v
+									table.insert(playlist,action2)
+									
+								
+									
+								end
+									
+									
+									
+								end
+								
+								
+							
+								
+							end
+						
+							local action2 ={}
+							action2.name = "win_objective"
+							action2.value = objectif.tag
+							table.insert(playlist,action2)
+
+							local action ={}
 						action.name = "quest_notification"
 						action.title =  currentQuest.title
 						action.desc = currentQuest.title
@@ -86,28 +124,15 @@ function QuestThreadManager()
 						end
 						action.duration = 4
 						action.type = "update"
-					
-						
-						
-						local playlist = {}
-						
 						table.insert(playlist,action)
-						
-						local action2 ={}
-						action2.name = "win_objective"
-						action2.value = objectif.tag
-						table.insert(playlist,action2)
 						
 						if(objectif.unlock ~= nil and #objectif.unlock > 0) then
 							
-							action.objective = objectif.unlock[1]
+						--	action.objective = objectif.unlock[1]
 							
 							for i,v in ipairs(objectif.unlock) do
 							if(QuestManager.GetObjectiveState(v).state ~= gameJournalEntryState.Undefined) then
-								local action2 ={}
-								action2.name = "unlock_objective"
-								action2.value = v
-								table.insert(playlist,action2)
+								
 								
 								local action2 ={}
 								action2.name = "track_objective"
@@ -121,61 +146,19 @@ function QuestThreadManager()
 							end
 							
 							
-							
-							-- local newobjective = QuestManager.GetObjective(objectif.unlock[1])
-							-- if newobjective.extra ~= nil then
-								
-								
-								
-								
-								
-								-- if newobjective.extra.mappin ~= nil then
-									
-									-- local mappin = getMappinByTag(newobjective.extra.mappin)
-									
-									
-									
-									
-									
-									
-									-- if(mappin and mappin.controller ~= nil)then
-										
-										-- local startHub = StartHubMenuEvent.new()
-										
-										-- local userData = MapMenuUserData.new()
-										-- userData.moveTo = Vector3.new(mappin.position.x, mappin.position.y, mappin.position.z)					
-										-- startHub:SetStartMenu("world_map",nil,userData)
-										-- Game.GetUISystem():QueueEvent(startHub)
-										
-										-- Cron.After(0.1, function()
-											
-											-- GameController["WorldMapMenuGameController"]:TrackMappin(mappin.controller)
-											-- local closeHub = ForceCloseHubMenuEvent.new()
-											-- Game.GetUISystem():QueueEvent(closeHub)							
-											
-										-- end)
-									-- end
-									
-									
-									
-									
-								-- end
-								
-							-- end
+						
 							
 						end
+
+						
 							
 						
 						
-						for _,obj in ipairs(objectif.action) do
-						table.insert(playlist,obj)
-						
-						
-						end
 						
 						
 						
-						runActionList(playlist,objectif.tag.."_action","quest",true,"see_engine")
+						
+						runActionList(playlist,objectif.tag.."_action","quest",false,"see_engine")
 						
 						
 						
@@ -261,16 +244,7 @@ function QuestThreadManager()
 			end
 			
 			
-			if(canDoResetAction) then
-				
-				if(DoedResetAction == false) then
-					resetQuest()
-					logme(2,"Quest Reset")
-				end
-				
-				
-				
-			end
+			
 			
 			
 			if(canDoEndAction) then
@@ -469,13 +443,15 @@ function restoreQuestProgression(CurrentQuestStatut)
 end
 
 function untrackQuest()
-	if currentQuest ~= nil then
-		resetQuest()
-	end
+	logme(1,"debugquest untrackQuest")
+	QuestManager.UntrackObjective()
+	resetQuest()
+	currentQuest = nil
+	
 end
 
 function resetQuest()
-	
+	logme(1,"debugquest resetQuest")
 	workerTable[currentQuest.tag.."_start"] = nil
 	workerTableKey[currentQuest.tag.."_start"] = nil
 	
@@ -492,8 +468,25 @@ function resetQuest()
 	workerTableKey[currentQuest.tag.."_reset"] = nil
 	
 	
-	if(currentQuest.reset_action ~= nil) then
+	if(currentQuest.reset_action ~= nil and #currentQuest.reset_action > 0) then
+		local userData = QuestUpdateNotificationViewData.new()
+		userData.text = getLang(currentQuest.title)
+
+		local questAction = TrackQuestNotificationAction.new()
+		questAction.eventDispatcher = GameController["JournalNotificationQueue"]
 		
+		userData.title = "Quest have been resetted"
+		userData.canBeMerged = false;
+		userData.action = questAction
+		userData.soundEvent = CName("QuestNewPopup")
+		userData.soundAction = CName("OnOpen")
+		userData.animation = CName("notification_new_quest_added")
+		
+		local notificationData = gameuiGenericNotificationData.new()
+		notificationData.time = 3
+		notificationData.widgetLibraryItemName = CName('notification_new_quest_added')
+		notificationData.notificationData = userData
+		GameController["JournalNotificationQueue"]:AddNewNotificationData(notificationData)
 		runActionList(currentQuest.reset_action,currentQuest.tag.."_reset","quest",false,"see_engine")
 		
 		
@@ -504,6 +497,9 @@ function resetQuest()
 	QuestManager.MarkQuestAsUnVisited(currentQuest.tag)
 	setScore(currentQuest.tag,"Score",0)
 	
+						
+						
+					
 	
 	QuestManager.resetQuestfromJson(currentQuest.tag)
 	
@@ -531,6 +527,7 @@ function resetQuest()
 	DoedStartAction = false
 	DoedEndAction = false
 	DoedFailAction = false
+	
 	TrackObjective()
 	logme(2,"Interrupt quest")
 	
@@ -566,7 +563,7 @@ function closeQuest(quest)
 	end
 	
 	currentObjectiveId = 0
-	inkCompoundRef.RemoveAllChildren(GameController["QuestTrackerGameController"].ObjectiveContainer) 
+	-- inkCompoundRef.RemoveAllChildren(GameController["QuestTrackerGameController"].ObjectiveContainer) 
 	currentQuest = nil
 	currentQuestStarted = false
 	currentQuestFinished = false
@@ -633,7 +630,7 @@ end
 function doStartAction(quest)
 	
 	
-	runActionList(quest.start_action,quest.tag.."_start","quest",true,"see_engine")
+	runActionList(quest.start_action,quest.tag.."_start","quest",false,"see_engine")
 	
 	setScore(currentQuest.tag,"Score",2)
 end
@@ -677,6 +674,7 @@ function TrackObjective()
 		local trackedObjectiveId = QuestManager.GetTrackedObjectiveId()
 		
 		GameController["QuestTrackerGameController"].root:SetVisible(true)
+		GameController["QuestTrackerGameController"].questTrackerContainer:SetVisible(true)
 		
 		inkTextRef.SetText(GameController["QuestTrackerGameController"].QuestTitle, trackedQuestDef.title)
 		inkCompoundRef.RemoveAllChildren(GameController["QuestTrackerGameController"].ObjectiveContainer)
@@ -721,17 +719,21 @@ function TrackObjective()
 				---@type QuestTrackerObjectiveLogicController
 				local objectiveController = objectiveWidget:GetController()
 				objectiveController:SetData(objectiveDef.title, objectiveDef.id == trackedObjectiveId, objectiveDef.isOptional, 0, 0, objectiveEntry, isquest )
-				
+				objectiveController:SetObjectiveState("tracked_quest");
 			end
 			
 			local quest = getQuestByTag(trackedQuestId)
+			if(currentQuest ~= nil and currentQuest.tag ~= quest.tag ) then
+				logme(1,"debugquest TrackObjective")
+				untrackQuest()
+			end
 			
 			
-			
+			print(getScoreKey(quest.tag,"Score"))
 			
 			if(quest ~= nil and (getScoreKey(quest.tag,"Score") == nil or getScoreKey(quest.tag,"Score") <= 3) and currentQuest == nil ) then
 				
-				--untrackQuest()
+			
 				
 				startQuest(quest)
 				
@@ -741,15 +743,17 @@ function TrackObjective()
 		
 		currentObjectiveId = trackedObjectiveId
 		
+		print("TrackObjective")
+		printbool(QuestManager.IsTrackingObjective())
+		print(currentObjectiveId)
 		
+	elseif currentObjectiveId ~= 0  then
 		
-		elseif currentObjectiveId ~= 0 then
+			QuestManager.UntrackObjective()
+			
 		
-		GameController["QuestTrackerGameController"].root:SetVisible(false)
-		inkCompoundRef.RemoveAllChildren(GameController["QuestTrackerGameController"].ObjectiveContainer)
-		currentObjectiveId = 0
-		
-		else
+			
+	else
 		GameController["QuestTrackerGameController"]:UpdateTrackerData()
 		
 	end

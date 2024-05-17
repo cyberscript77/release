@@ -223,7 +223,7 @@ end
 local function resetJournalManager()
 	local journal = JournalEntry.new()
 	JournalEntry.id = "test"
-	--Game.GetJournalManager():TrackEntry(journal)
+
 end
 
 local function signalQuestTracker()
@@ -894,7 +894,7 @@ end
 function QuestManager.UntrackObjective()
 	trackedQuestId = 0
 	trackedObjectiveId = 0
-
+	currentObjectiveId = 0
 	signalQuestTracker()
 end
 

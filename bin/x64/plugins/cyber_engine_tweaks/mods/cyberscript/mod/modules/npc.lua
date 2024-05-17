@@ -369,11 +369,9 @@ if spawnRegion then
 				local postp = Vector4.new( x, y, z,1)
 				
 				worldpos:SetPosition(worldpos, postp)	
-				if(rotation ~= nil) then
+				if(rotation == nil) then
 					
-					local rostp =  EulerAngles.new(rotation.roll,rotation.pitch,rotation.yaw)
-					
-					worldpos:SetOrientationEuler(worldpos, rostp)	
+					rotation =  EulerAngles.new(0,0,0)
 					
 				end
 				
@@ -385,6 +383,7 @@ if spawnRegion then
 				end
 				npcSpec.appearanceName = appearance or ""
 				npcSpec.position = postp
+				npcSpec.orientation = rotation
 				npcSpec.persistState = persistState or false
 				npcSpec.persistSpawn = persistSpawn or false
 				npcSpec.alwaysSpawned = AlwaysSpawned or false
@@ -605,12 +604,6 @@ if spawnRegion then
 	
 	
 	
-	function spawnEntity(chara, tag, x, y ,z, spawnlevel, isprevention, isAV,beta)
-		spawnNPC(chara,"", tag, x, y ,z, spawnlevel, isprevention, false, nil, false, nil,300,true)
-		
-	end
-
-
 
 
 
@@ -683,22 +676,6 @@ function despawnEntity(tag)
 end
 
 
-function Despawn(entity)
-	if entity:IsVehicle() == false then
-		--not needed
-		else
-		
-		local vehicule = entity:GetVehiclePS()
-		vehicule:SetHasExploded(true)
-		
-	end
-	
-	
-	local enti = Game.FindEntityByID(entity)
-	cyberscript.EntityManager[k] = nil
-	entity:Dispose()
-	
-end
 
 
 
@@ -1971,9 +1948,10 @@ if actionRegion then
 			if rotation == 1 then
 				rot =  GetSingleton('Quaternion'):ToEulerAngles(objlook:GetWorldOrientation())
 				end
-				rot.roll = 0
-				rot.pitch = 0
 				
+				print(dump(position))
+				print(dump(rot))
+				print(GameDump(objlook))	
 					Game.GetTeleportationFacility():Teleport(objlook, Vector4.new(position.x, position.y, position.z,1) , rot)
 			end
 			else
@@ -1993,297 +1971,67 @@ if actionRegion then
 end
 
 if attitudeRegion then 
-	
-	function IsFollower(enti)
-		local currentRole = enti:GetAIControllerComponent():GetAIRole()
+	function checkAttitudeCounter(obj)
 		
-		return currentRole and currentRole:IsA('AIFollowerRole')
-	end
-	
-	
-	function SetFollower()
-		
-		if(objLook ~= nil) then
-			local FriendlyFollower = objLook
+		local enti = Game.FindEntityByID(obj.id)
+		if(enti ~= nil) then
 			
-			local player = Game.GetPlayer()
-			
-			local entity = {}
-			entity.id = FriendlyFollower:GetEntityID()
-			entity.tag = "Crew_"..tostring(math.random(1,99999))
-			
-			cyberscript.EntityManager[entity.tag] = entity
-			
-			
-			
-			
-			
-			
-			
-			table.insert(cyberscript.GroupManager["Crew"].entities,entity.tag)
-			
-			local NPC = FriendlyFollower:GetAIControllerComponent()
-			local targetTeam = FriendlyFollower:GetAttitudeAgent()
-			
-			local SetState = NewObject('handle:AIFollowerRole')
-			SetState:SetFollowTarget(Game.GetPlayerSystem():GetLocalPlayerControlledGameObject())
-			SetState:OnRoleSet(FriendlyFollower)
-			SetState.followerRef = Game.CreateEntityReference("#player", {})
-			targetTeam:SetAttitudeGroup(CName.new("player"))
-			
-			senseComponent.RequestMainPresetChange(FriendlyFollower, "Follower")
-			senseComponent.ShouldIgnoreIfPlayerCompanion(FriendlyFollower, Game.GetPlayer())
-			NPCPuppet.ChangeStanceState(FriendlyFollower, "Stand")
-			
-			NPC:SetAIRole(SetState)
-			FriendlyFollower.movePolicies:Toggle(true)
-			
-			ToggleImmortal(FriendlyFollower, false)
-			
-		end
-		
-		
-		
-	end
-	
-	
-	function UnsetFollowerDebug()
-		
-		
-		
-		local FriendlyFollower = objLook
-		
-		local player = Game.GetPlayer()
-		
-		local npcType = FriendlyFollower:IsCrowd()
-		
-		local entity =  getEntityFromManagerById(FriendlyFollower:GetEntityID())
-		
-		if entity ~= nil then
-			
-			
-			for i=1, #cyberscript.GroupManager["Crew"].entities do 
-				local entityTag = cyberscript.GroupManager["Crew"].entities[i]
-				
-				if(entityTag == entity.tag) then
-					table.remove(cyberscript.GroupManager["Crew"].entities,i)
+				if(enti:IsCrowd() and obj.attitudechanged == true) then
+					local postp = enti:GetWorldPosition()
+					local worldpos = Game.GetPlayer():GetWorldTransform()
+					
+					worldpos:SetOrientation(worldpos, enti:GetWorldOrientation())	
+					
+					
+					local npcSpec =  DynamicEntitySpec.new()
+					npcSpec.recordID = enti:GetRecordID()
+					npcSpec.appearanceName = Game.NameToString(enti:GetCurrentAppearanceName())
+					npcSpec.position = postp
+					npcSpec.orientation = enti:GetWorldOrientation()
+					npcSpec.persistState = obj.persiststate
+					npcSpec.persistSpawn = obj.persistspawn
+					npcSpec.alwaysSpawned = obj.alwaysspawned
+					npcSpec.spawnInView =  true
+					
+					CName.add("CyberScript")
+					CName.add("CyberScript.NPC")
+					CName.add("CyberScript.NPC."..obj.tag)
+					
+					npcSpec.tags = {"CyberScript","CyberScript.NPC","CyberScript.NPC."..obj.tag}
+					if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.NPC."..obj.tag) == true) then Game.GetDynamicEntitySystem():DeleteTagged("CyberScript.NPC."..obj.tag) end
+					
+					if(Game.GetDynamicEntitySystem():IsPopulated("CyberScript.NPC."..obj.tag) == false) then
+						
+					NPC = Game.GetDynamicEntitySystem():CreateEntity(npcSpec)
+					
+					obj.id = NPC
+					enti:Dispose()
+					
+
+
+
+
 				end
+			
+
 				
-			end
-		end
-		if npcType == false then
-			logme(2,"is not crowd")
-			local NPC = FriendlyFollower:GetAIControllerComponent()
-			local targetTeam = FriendlyFollower:GetAttitudeAgent()
+				
+				
 			
-			local SetState = NewObject('handle:AINoRole')
-			
-			targetTeam:SetAttitudeGroup(CName.new("player"))
-			targetTeam:SetAttitudeTowards(player:GetAttitudeAgent(), 'AIA_Friendly ')
-			
-			
-			
-			
-			local sensePreset = FriendlyFollower:GetRecord():SensePreset():GetID()
+
 	
-			senseComponent.RequestPresetChange(FriendlyFollower, sensePreset, true)
-			senseComponent.ShouldIgnoreIfPlayerCompanion(FriendlyFollower, Game.GetPlayer())
-			NPCPuppet.ChangeStanceState(FriendlyFollower, "Stand")
-			
-			NPC:SetAIRole(SetState)
-			FriendlyFollower.movePolicies:Toggle(true)
-			logme(2,"become friend")
-			ToggleImmortal(FriendlyFollower, false)
-			
-			else
-			logme(2,"is crowd, destroy")
-			
-			FriendlyFollower:Dispose()
-			
-			
 		end
 		
-		
-		
-		
-		
-		
-		
+
 	end
-	
-	
-	
+	end
+
 	function setAttitudeAgainstAttitude(atttitude,targetattitude,relation)
 		
 		Game.GetAttitudeSystem():SetAttitudeRelation(CName.new(atttitude), CName.new(targetattitude), relation)
 		
 		
 	end
-	
-	
-	function setAggressiveKillMission()
-		----logme(2,"setAggressiveKillMission")
-		
-		if #cyberscript.EnemyManager > 0 then
-			for i = 1, #cyberscript.EnemyManager do		
-				-- Quickly
-				
-				
-				local handle = Game.FindEntityByID(cyberscript.EnemyManager[i])
-				if(handle ~= nil) then
-					local AIC = handle:GetAIControllerComponent()
-					local targetAttAgent = handle:GetAttitudeAgent()
-					local reactionComp = handle.reactionComponent
-					
-					local aiRole = NewObject('handle:AIRole')
-					aiRole:OnRoleSet(handle)
-					
-					
-					senseComponent.RequestMainPresetChange(handle, "Combat")
-					
-					NPCPuppet.ChangeStanceState(handle, "Stand")
-					
-					AIC:SetAIRole(aiRole)
-					handle.movePolicies:Toggle(true)
-					
-					targetAttAgent:SetAttitudeGroup(CName.new("hostile"))
-					reactionComp:SetReactionPreset(GetSingleton("gamedataTweakDBInterface"):GetReactionPresetRecord(TweakDBID.new("ReactionPresets.Ganger_Aggressive")))
-					--		reactionComp:TriggerCombat(Game.GetPlayer())
-					logme(2,"aggressive ok")
-					-- >_< Remove invulnerability from "GodModed" enemies
-					local get_godmode = Game.GetGodModeSystem()
-					get_godmode:ClearGodMode(cyberscript.EnemyManager[i], CName.new("Default"))	
-				end
-			end
-		end
-		
-	end
-	
-	function setPassiveMission()
-		----logme(2,"setAggressiveKillMission")
-		
-		if #cyberscript.NPCManager > 0 then
-			for i = 1, #cyberscript.NPCManager do		
-				-- Quickly
-				
-				
-				local handle = Game.FindEntityByID(cyberscript.NPCManager[i])
-				
-				if(handle ~= nil) then
-					
-					if handle:IsVehicle() ~= true then
-						local AIC = handle:GetAIControllerComponent()
-						local targetAttAgent = handle:GetAttitudeAgent()
-						local reactionComp = handle.reactionComponent
-						
-						local aiRole = NewObject('handle:AIRole')
-						aiRole:OnRoleSet(handle)
-						
-						senseComponent.RequestMainPresetChange(handle, "Relaxed")
-						NPCPuppet.ChangeStanceState(handle, "Stand")
-						AIC:SetAIRole(aiRole)
-						handle.movePolicies:Toggle(true)
-						
-						
-						
-						local get_godmode = Game.GetGodModeSystem()
-						get_godmode:ClearGodMode(cyberscript.EnemyManager[i], CName.new("Default"))	
-					end
-				end
-				
-			end
-		end
-		
-	end
-	
-	
-	function setFollowerEscortMission()
-		
-		if #cyberscript.FriendManager > 0 then
-			for i = 1, #cyberscript.FriendManager do		
-				
-				local objLook = Game.FindEntityByID(cyberscript.FriendManager[i])
-				if(objLook ~= nil) then
-					local AIC = objLook:GetAIControllerComponent()
-					local targetAttAgent = objLook:GetAttitudeAgent()
-					local currTime = objLook.isPlayerCompanionCachedTimeStamp + 11
-					
-					
-					-- if objLook.isPlayerCompanionCached == false then
-					local roleComp = NewObject('handle:AIFollowerRole')
-					
-					roleComp:SetFollowTarget(Game.GetPlayerSystem():GetLocalPlayerControlledGameObject())
-					roleComp:OnRoleSet(objLook)
-					roleComp.followerRef = Game.CreateEntityReference("#player", {})
-					targetAttAgent:SetAttitudeGroup(CName.new("player"))
-	
-	
-					senseComponent.RequestMainPresetChange(objLook, "Follower")
-					senseComponent.ShouldIgnoreIfPlayerCompanion(objLook, Game.GetPlayer())
-					NPCPuppet.ChangeStanceState(objLook, "Stand")
-					objLook.isPlayerCompanionCached = true
-					objLook.isPlayerCompanionCachedTimeStamp = currTime
-					
-					if not string.match(targName, "Johnny") and not string.match(targName, "Nibbles") then
-						AIC:SetAIRole(roleComp)
-						objLook.movePolicies:Toggle(true)
-					end
-				end 
-				
-				
-				
-				-- elseif objLook.isPlayerCompanionCached == true then
-				
-				-- local npcType = objLook:IsCrowd()
-				-- if npcType == false then
-				-- local noRole = NewObject('handle:AINoRole')
-				-- noRole:OnRoleSet(objLook)
-				
-				-- objLook.isPlayerCompanionCached = false
-				-- objLook.isPlayerCompanionCachedTimeStamp = 0
-				
-				-- Game['NPCPuppet::ChangeStanceState;GameObjectgamedataNPCStanceState'](objLook, "Combat")
-				-- AIC:GetCurrentRole():OnRoleCleared(objLook)
-				-- AIC:SetAIRole(noRole)
-				-- objLook	.movePolicies:Toggle(true)
-				-- targetAttAgent:SetAttitudeGroup(targetAttAgent.baseAttitudeGroup)
-				-- end
-				
-				
-				
-				
-			end
-		end
-		
-	end
-	
-	
-	function setAggressiveAgainstPlayer(tag, target)
-		local enti = nil
-		local obj = nil 
-		if(tag =="lookat" and objLook ~= nil) then 
-			
-			enti = objLook
-			obj = getEntityFromManagerById(objLook:GetEntityID())
-			
-			else
-			
-			
-			obj = getEntityFromManager(tag)
-			enti = Game.FindEntityByID(obj.id)
-			
-			
-		end
-		
-		if enti ~= nil and enti:IsVehicle() ~= true then
-			enti:GetAttitudeAgent():SetAttitudeTowards(Game.GetPlayer():GetAttitudeAgent(), EAIAttitude.AIA_Hostile)
-			
-			
-			ToggleImmortal(enti, false)
-		end
-	end
-	
-	
 	
 	function setAggressiveAgainst(tag, target)
 		
@@ -2298,6 +2046,7 @@ if attitudeRegion then
 			
 			
 			obj = getEntityFromManager(tag)
+			
 			enti = Game.FindEntityByID(obj.id)
 			
 			
@@ -2356,14 +2105,12 @@ if attitudeRegion then
 				targetAttAgent:SetAttitudeTowardsAgentGroup(targetAttAgent, targetAttAgent, Enum.new("EAIAttitude", "AIA_Friendly"))
 				targetAttAgent:SetAttitudeTowards(targets:GetAttitudeAgent(), Enum.new("EAIAttitude", "AIA_Hostile"))
 				--		reactionComp:TriggerCombat(targets)
-				
+				cyberscript.EntityManager[tag].attitudechanged = true
 				ToggleImmortal(enti, false)
 				
 			end
 		end
 	end
-	
-	
 	
 	function setFollower(tag)
 		TweakDB:SetFlatNoUpdate(TweakDBID.new('FollowerActions.FollowCloseMovePolicy.distance'), 1)
@@ -2391,6 +2138,7 @@ if attitudeRegion then
 			
 			
 			obj = getEntityFromManager(tag)
+			
 			entity = Game.FindEntityByID(obj.id)
 			
 			
@@ -2411,7 +2159,7 @@ if attitudeRegion then
 			senseComponent.RequestMainPresetChange(entity, "Follower")
 			senseComponent.ShouldIgnoreIfPlayerCompanion(entity, Game.GetPlayer())
 			NPCPuppet.ChangeStanceState(entity, "Relaxed")
-			
+			cyberscript.EntityManager[tag].attitudechanged = true
 			
 			entity.isPlayerCompanionCached = true
 			entity.isPlayerCompanionCachedTimeStamp = currTime
@@ -2427,47 +2175,7 @@ if attitudeRegion then
 		end 
 		
 	end
-	
-	function setPassiveAgainstPlayer(tag, target)
-		local enti = nil
-		local obj = nil 
 		
-		if(tag =="lookat" and objLook ~= nil) then 
-			
-			enti = objLook
-			obj = getEntityFromManagerById(objLook:GetEntityID())
-			
-			else
-			
-			
-			obj = getEntityFromManager(tag)
-			enti = Game.FindEntityByID(obj.id)
-			
-			
-		end
-		
-		if enti ~= nil and enti:IsVehicle() == false and targets ~= nil then
-			local AIC = enti:GetAIControllerComponent()
-			local targetAttAgent = enti:GetAttitudeAgent()
-			local reactionComp = enti.reactionComponent
-			
-			local aiRole = NewObject('handle:AIRole')
-			aiRole:OnRoleSet(enti)
-			
-			enti:GetAIControllerComponent():OnAttach()	
-			Game['NPCPuppet::ChangeStanceState;GameObjectgamedataNPCStanceState'](enti, "Relaxed")
-			AIC:SetAIRole(aiRole)
-			enti.movePolicies:Toggle(true)
-			
-			targetAttAgent:SetAttitudeTowards(target:GetAttitudeAgent(), Enum.new("EAIAttitude", "AIA_Neutral"))
-			
-			
-			
-			
-			ToggleImmortal(enti, false)
-		end
-	end
-	
 	function setPassiveAgainst(tag, target)
 		
 		
@@ -2482,6 +2190,7 @@ if attitudeRegion then
 			
 			
 			obj = getEntityFromManager(tag)
+			
 			enti = Game.FindEntityByID(obj.id)
 			
 			
@@ -2519,8 +2228,7 @@ if attitudeRegion then
 			
 			targetAttAgent:SetAttitudeTowards(targets:GetAttitudeAgent(), Enum.new("EAIAttitude", "AIA_Neutral"))
 			
-			
-			
+			cyberscript.EntityManager[tag].attitudechanged = true
 			
 			ToggleImmortal(enti, false)
 		end
@@ -2540,6 +2248,7 @@ if attitudeRegion then
 			
 			
 			obj = getEntityFromManager(tag)
+			
 			enti = Game.FindEntityByID(obj.id)
 			
 			
@@ -2565,25 +2274,70 @@ if attitudeRegion then
 		if enti ~= nil and enti:IsVehicle() == false and targets ~= nil then
 			local AIC = enti:GetAIControllerComponent()
 			local targetAttAgent = enti:GetAttitudeAgent()
-			local reactionComp = enti.reactionComponent
+			-- local reactionComp = enti.reactionComponent
 			
-			local aiRole = NewObject('handle:AIRole')
-			aiRole:OnRoleSet(enti)
+			-- local aiRole = NewObject('handle:AIRole')
+			-- aiRole:OnRoleSet(enti)
 			
-			enti:GetAIControllerComponent():OnAttach()	
-			Game['NPCPuppet::ChangeStanceState;GameObjectgamedataNPCStanceState'](enti, "Relaxed")
-			AIC:SetAIRole(aiRole)
-			enti.movePolicies:Toggle(true)
+			-- enti:GetAIControllerComponent():OnAttach()	
+			-- Game['NPCPuppet::ChangeStanceState;GameObjectgamedataNPCStanceState'](enti, "Relaxed")
+			-- AIC:SetAIRole(aiRole)
+			-- enti.movePolicies:Toggle(true)
 			
 			targetAttAgent:SetAttitudeTowards(targets:GetAttitudeAgent(), Enum.new("EAIAttitude", "AIA_Friendly"))
 			
 			print("fruend")
-			
+			cyberscript.EntityManager[tag].attitudechanged = true
 			
 			ToggleImmortal(enti, false)
 		end
 	end
-	
+
+	function setPsycho(tag, friendtag)
+		
+		local enti = nil
+		local obj = nil 
+		local targets = nil 
+		
+		if(tag =="lookat"and objLook ~= nil) then 
+			
+			enti = objLook
+			obj = getEntityFromManagerById(objLook:GetEntityID())
+			
+			else
+			
+			
+			obj = getEntityFromManager(tag)
+			
+			enti = Game.FindEntityByID(obj.id)
+			
+			
+		end
+		
+		
+		if not friendPuppet then
+			targets = Game.GetPlayer()
+			else
+			if(target =="target") then 
+				
+				
+				targets = Game.FindEntityByID(selectTarget)
+				
+				else
+				
+				local obj2 = getEntityFromManager(friendtag)
+				targets = Game.FindEntityByID(obj2.id)
+				
+				
+			end
+		end
+		
+		if enti ~= nil and enti:IsVehicle() == false and targets ~= nil then
+			enti:GetAttitudeAgent():SetAttitudeGroup('HostileToEveryone')
+			enti:GetAttitudeAgent():SetAttitudeTowards(targets:GetAttitudeAgent(), EAIAttitude.AIA_Neutral)
+			cyberscript.EntityManager[tag].attitudechanged = true
+		end
+	end
 	
 	function setPassiveAgainstAttitudeGroup(tag,targetgroup, attitudegroup, attitudegrouptarget)
 		
@@ -2617,7 +2371,7 @@ if attitudeRegion then
 			Game['NPCPuppet::ChangeStanceState;GameObjectgamedataNPCStanceState'](enti, "Relaxed")
 			AIC:SetAIRole(aiRole)
 			enti.movePolicies:Toggle(true)
-			
+			cyberscript.EntityManager[entityTag].attitudechanged = true
 			
 			local entityGroup = {}
 			local targetAttGroup = {}
@@ -2680,6 +2434,9 @@ if attitudeRegion then
 			
 			
 			local obj = getEntityFromManager(entityTag)
+			
+			checkAttitudeCounter(obj)
+
 			local enti = Game.FindEntityByID(obj.id)
 			
 			if(enti ~= nil) then
@@ -2698,7 +2455,7 @@ if attitudeRegion then
 				
 				AIC:SetAIRole(aiRole)
 				enti.movePolicies:Toggle(true)
-				
+				cyberscript.EntityManager[entityTag].attitudechanged = true
 				
 				local entityGroup = {}
 				local targetAttGroup = {}
@@ -2753,51 +2510,9 @@ if attitudeRegion then
 	end
 	
 	
-	function setPsycho(tag, friendtag)
-		
-		local enti = nil
-		local obj = nil 
-		local targets = nil 
-		
-		if(tag =="lookat"and objLook ~= nil) then 
-			
-			enti = objLook
-			obj = getEntityFromManagerById(objLook:GetEntityID())
-			
-			else
-			
-			
-			obj = getEntityFromManager(tag)
-			enti = Game.FindEntityByID(obj.id)
-			
-			
-		end
-		
-		
-		if not friendPuppet then
-			targets = Game.GetPlayer()
-			else
-			if(target =="target") then 
-				
-				
-				targets = Game.FindEntityByID(selectTarget)
-				
-				else
-				
-				local obj2 = getEntityFromManager(friendtag)
-				targets = Game.FindEntityByID(obj2.id)
-				
-				
-			end
-		end
-		
-		if enti ~= nil and enti:IsVehicle() == false and targets ~= nil then
-			enti:GetAttitudeAgent():SetAttitudeGroup('HostileToEveryone')
-			enti:GetAttitudeAgent():SetAttitudeTowards(targets:GetAttitudeAgent(), EAIAttitude.AIA_Neutral)
-		end
-	end
+	
 end
-
+	
 if vehiculeRegion then 
 	--1 garage
 	--2 beta
@@ -3540,7 +3255,7 @@ if vehiculeRegion then
 					cmd.stopWhenTargetReached = stopWhenTargetReached
 					cmd.trafficTryNeighborsForStart   = true
 					cmd.trafficTryNeighborsForEnd    = true
-					print("tzetsts")
+					vehiculeobj.lastcmd = cmd
 					
 					
 					
@@ -3579,7 +3294,7 @@ if vehiculeRegion then
 				cmd.useKinematic   =useKinematic or true
 				cmd = cmd:Copy()
 				
-				
+				vehiculeobj.lastcmd = cmd
 				local AINPCCommandEvent = NewObject("handle:AINPCCommandEvent")
 				AINPCCommandEvent.command = cmd
 				vehicule:QueueEvent(AINPCCommandEvent)
@@ -3590,7 +3305,12 @@ if vehiculeRegion then
 			end
 			
 			function VehicleGoToXYZ(vehiculetag, x, y, z,minspeed,maxspeed, cleartraffic)
-				
+				print(vehiculetag)
+				print(x)
+				print(y)
+				print(z)
+				print(minspeed)
+				print(maxspeed)
 				
 				
 				local vehiculeobj =  getEntityFromManager(vehiculetag)
@@ -3623,6 +3343,7 @@ if vehiculeRegion then
 				cmd.useKinematic =useKinematic or true
 				cmd = cmd:Copy()
 				
+				vehiculeobj.lastcmd = cmd
 				
 				local AINPCCommandEvent = NewObject("handle:AINPCCommandEvent")
 				AINPCCommandEvent.command = cmd
@@ -3632,7 +3353,68 @@ if vehiculeRegion then
 				
 				
 			end
+
+
+			function VehicleCancelLastCommand(vehiculetag)
+				
+				
+				
+				local vehiculeobj =  getEntityFromManager(vehiculetag)
+				if(vehiculetag =="lookat") then 
+					
+					local entity = objLook
+					vehiculeobj = getEntityFromManagerById(objLook:GetEntityID())
+					
+					
+				end
+				
+				local vehicule = Game.FindEntityByID(vehiculeobj.id)
+				
+				if(vehiculeobj.lastcmd ~= nil) then
+					local test = vehicule:GetAIComponent():StopExecutingCommand(vehiculeobj.lastcmd,true)
+					print(tostring(test))
+					
+				end
+				
+				
+				
+				
+				
+				
+			end
+
+			function VehicleToggleCollision(vehiculetag,toggle)
+				
+				local vehicleSystem = Game.GetVehicleSystem():EnablePlayerVehicleCollision(toggle)
+				
+				-- local vehiculeobj =  getEntityFromManager(vehiculetag)
+				-- if(vehiculetag =="lookat") then 
+					
+				-- 	local entity = objLook
+				-- 	vehiculeobj = getEntityFromManagerById(objLook:GetEntityID())
+					
+					
+				-- end
+				
+				-- local vehicule = Game.FindEntityByID(vehiculeobj.id)
+				
+				-- if(toggle) then
+
+				-- 	vehicule:GetAIComponent():EnableCollider()
+				-- else
+				-- 	vehicule:GetAIComponent():DisableCollider()
+				-- end
+				
+				
+				
+				
+				
+				
+			end
 			
+
+
+
 			function VehicleChaseEntity(vehiculetag, entitytag, mindistance,maxdistance,startspeed)
 				
 				local entity = Game.GetPlayer()
@@ -3683,7 +3465,7 @@ if vehiculeRegion then
 				cmd.distanceMin = mindistance
 				cmd.distanceMax = maxdistance
 				cmd.forcedStartSpeed = startspeed
-				
+				vehiculeobj.lastcmd = cmd
 				
 				local AICommandEvent = NewObject("handle:AINPCCommandEvent")
 				AICommandEvent.command = cmd
@@ -3940,6 +3722,6 @@ if vehiculeRegion then
 			
 			
 			
-		end
+end
 		
 		

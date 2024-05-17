@@ -456,7 +456,9 @@ function scriptcheckTrigger(trigger)
 							if(entName ~= nil and entAppName ~= nil)then
 								for i,filter in ipairs(trigger.filter) do
 									
-									if(goodEntity == false and string.match(entName, filter) or string.match(entAppName, filter) or string.match(entDispName, filter) or filter == tostring(newent:GetEntityID().hash))then 
+									if(goodEntity == false and string.match(entName, filter) or 
+									(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet"))) or
+									string.match(entAppName, filter) or string.match(entDispName, filter) or filter == tostring(newent:GetEntityID().hash))then 
 										goodEntity = true
 									end
 								end
@@ -514,7 +516,9 @@ function scriptcheckTrigger(trigger)
 						if(entName ~= nil and entAppName ~= nil)then
 							for i,filter in ipairs(trigger.filter) do
 								
-								if(goodEntity == false and string.match(entName, filter) or string.match(entAppName, filter) or string.match(entDispName, filter) or filter == tostring(newent:GetEntityID().hash) or (filter == "vehicle" and newent:IsVehicle()))then 
+								if(goodEntity == false and string.match(entName, filter) or
+								(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet"))) or
+								 string.match(entAppName, filter) or string.match(entDispName, filter) or filter == tostring(newent:GetEntityID().hash) or (filter == "vehicle" and newent:IsVehicle()))then 
 									goodEntity = true
 								end
 							end
@@ -1861,6 +1865,8 @@ function scriptcheckTrigger(trigger)
 					result = true
 				end
 			end
+
+			
 		end
 		
 		if noderegion then
@@ -1975,6 +1981,9 @@ function scriptcheckTrigger(trigger)
 			end
 			if(trigger.name == "is_in_menu") then
 				result = inMenu
+			end
+			if(trigger.name == "is_phone_opened") then
+				result = GameController["NewHudPhoneGameController"]:IsPhoneActive()
 			end
 			if(trigger.name == "scanner_active") then
 				result = (inScanner ~= nil and inScanner == true)
@@ -2101,6 +2110,8 @@ function executeAction(action,tag,parent,index,source,executortag)
    	
    	if(action.tag == "this") then
    		action.tag = executortag
+		action.executortag = executortag
+		print("sss"..executortag)
 	end
    	
    	checkContext(action)
@@ -2197,10 +2208,37 @@ function executeAction(action,tag,parent,index,source,executortag)
 					cyberscript.GroupManager[action.tag].entities = {}
 				end
 				
+				if(action.name == "for_entity_in_group") then
+					
+						local group =getGroupfromManager(action.tag)
+						if group ~= nil then
+							for i=1, #group.entities do 
+								local entityTag = group.entities[i]
+								local obj = getEntityFromManager(entityTag)
+								if(#action.action > 0) then
+								
+									runActionList(action.action, entityTag.."_forentitygroup",source,false,entityTag,false)
+								end
+								
+							end
+						end
+						
+						
+						
+						
+					
+					
+					
+				end
+
 				if(action.name == "attitude_group_against_entity") then
 					local group =getGroupfromManager(action.tag)
 					for i=1, #group.entities do 
 						local entityTag = group.entities[i]
+						local obj = getEntityFromManager(entityTag)
+						checkAttitudeCounter(obj)
+
+						Cron.After(0.5, function()
 						if action.attitude == "hostile" then
 							setAggressiveAgainst(entityTag, action.entity)
 						end
@@ -2216,15 +2254,28 @@ function executeAction(action,tag,parent,index,source,executortag)
 						if action.attitude == "psycho" then
 							setPsycho(entityTag, action.entity)
 						end
+					end)
 					end
 				end
 				if(action.name == "attitude_group_against_group") then
+					local group =getGroupfromManager(action.tag)
+					for i=1, #group.entities do 
+						local entityTag = group.entities[i]
+						
+						
+						local obj = getEntityFromManager(entityTag)
+						
+						checkAttitudeCounter(obj)
+					end
+
+					Cron.After(0.5, function()
 					if action.attitude == "hostile" then
 						setAggressiveAgainstAttitudeGroup(action.tag, action.target, action.attitudegroup, action.attitudegrouptarget)
 					end
 					if action.attitude == "passive" then
 						setPassiveAgainstAttitudeGroup(action.tag, action.target, action.attitudegroup, action.attitudegrouptarget)
 					end
+					end)
 				end
 				if(action.name == "play_group_voice") then
 					local group =getGroupfromManager(action.tag)
@@ -2637,6 +2688,34 @@ function executeAction(action,tag,parent,index,source,executortag)
 						local position = getPositionFromParameter(action)
 						vehiculeobj.destination = position
 						VehicleGoToXYZ(action.tag, position.x,position.y,position.z,action.minspeed,action.maxspeed,action.cleartraffic)
+						
+					end
+				end
+
+				if(action.name == "vehicle_cancel_last_cmd") then
+					local vehiculeobj =  getTrueEntityFromManager(action.tag)
+					local vehicule = Game.FindEntityByID(vehiculeobj.id)
+					if(vehicule ~= nil) then
+						
+						
+						
+						
+						
+						VehicleCancelLastCommand(action.tag)
+						
+					end
+				end
+
+				if(action.name == "vehicle_toggle_collision") then
+					local vehiculeobj =  getTrueEntityFromManager(action.tag)
+					local vehicule = Game.FindEntityByID(vehiculeobj.id)
+					if(vehicule ~= nil) then
+						
+						
+						
+						
+						
+						VehicleToggleCollision(action.tag,action.value)
 						
 					end
 				end
@@ -4306,7 +4385,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 							end
 						end
 					end
-					local openAction = OpenMessengerNotificationAction.new()
+
+
+					local openAction = OpenPhoneMessageAction.new()
 					openAction.eventDispatcher = GameController["JournalNotificationQueue"]
 					local userData = PhoneMessageNotificationViewData.new()
 					userData.title = test
@@ -4335,6 +4416,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 									currentPhoneConversation.loaded = 0
 									currentPhoneConversation.speaker = conversation.speaker
 									phonecounter = -1
+									PhoneHotkeyController_UpdateData(GameController["PhoneHotkeyController"])
 									
 								end
 							end
@@ -4881,29 +4963,45 @@ function executeAction(action,tag,parent,index,source,executortag)
 					end
 				end
 				if(action.name == "track_mappin") then
-					if GameController["WorldMapMenuGameController"] ~= nil then
-						
-						
-						local mappin = getMappinByTag(action.tag)
-						if(mappin and mappin.controller ~= nil)then
-							
-							local startHub = StartHubMenuEvent.new()
+					local mappin = getMappinByTag(action.tag)
+					
+						if(mappin)then
+					local startHub = StartHubMenuEvent.new()
 							
 							local userData = MapMenuUserData.new()
 							userData.moveTo = Vector3.new(mappin.position.x, mappin.position.y, mappin.position.z)					
 							startHub:SetStartMenu("world_map",nil,userData)
-							Game.GetUISystem():QueueEvent(startHub)
 							
-							Cron.After(0.2, function()
-								
+							Game.GetUISystem():QueueEvent(startHub)
+							Cron.After(1, function()
+					if GameController["WorldMapMenuGameController"] ~= nil then
+						
+						
+						
+							
+						GameController["WorldMapMenuGameController"]:UpdateCustomFilter(gamedataWorldMapFilter.Quest,false)
+						GameController["WorldMapMenuGameController"]:TrackMappin(mappin.controller)
+						
+
+							Cron.After(5, function()
+								GameController["WorldMapMenuGameController"]:UpdateCustomFilter(gamedataWorldMapFilter.Quest,true)
 								GameController["WorldMapMenuGameController"]:TrackMappin(mappin.controller)
-								local closeHub = ForceCloseHubMenuEvent.new()
-								Game.GetUISystem():QueueEvent(closeHub)							
+								
+								Cron.After(2, function()
+									GameController["WorldMapMenuGameController"]:TrackMappin(mappin.controller)
+									
+									
+									local closeHub = ForceCloseHubMenuEvent.new()
+									Game.GetUISystem():QueueEvent(closeHub)							
+									
+								end)
+											
 								
 							end)
+						
 						end
-					end
-					
+					end)
+				end
 					
 				end
 				if(action.name == "untrack_mappin") then
@@ -6896,7 +6994,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 										if(enti ~= nil) then
 											
 											local actionb = deepcopy(cyberscript.actiontemplate["fake_lips_sync"])
-											actionb.duration = math.floor(cyberscript.cache["sound"][action.value].data.duration)-1
+											actionb.duration = math.floor(cyberscript.cache["sound"][action.value].data.duration)
 											actionb.tag = action.target
 											local actionlist = {}
 											actionlist[1] = actionb
@@ -7002,7 +7100,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 										if(enti ~= nil) then
 											
 											local actionb = deepcopy(cyberscript.actiontemplate["fake_lips_sync"])
-											actionb.duration = math.floor(cyberscript.cache["sound"][action.value].data.duration)-1
+											actionb.duration = math.floor(cyberscript.cache["sound"][action.value].data.duration)
 											actionb.tag = action.target
 											local actionlist = {}
 											actionlist[1] = actionb
@@ -7210,7 +7308,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 										if(enti ~= nil) then
 											
 											local actionb = deepcopy(cyberscript.actiontemplate["fake_lips_sync"])
-											actionb.duration = math.floor(cyberscript.cache["sound"][action.value].data.duration)-1
+											actionb.duration = math.floor(cyberscript.cache["sound"][action.value].data.duration)
 											actionb.tag = action.target
 											local actionlist = {}
 											actionlist[1] = actionb
@@ -7289,6 +7387,38 @@ function executeAction(action,tag,parent,index,source,executortag)
 						end
 						if(action.source == "faction") then
 							local gang = getFactionByTag(action.source_tag)
+							if(action.source_use_rival == true) then
+								gang = getFactionByTag(gang.rivals[1])
+							end
+							if(action.source_use_vip == true) then
+								if(#gang.vip > 0) then
+									local viptable = getVIPfromfactionbyscore(gang.tag)
+									if(#viptable > 0) then
+										local index = math.random(1,#viptable)
+										
+										chara = viptable[index]
+										else
+										
+										error("No VIP NPC for this faction")
+									end
+								end
+								else
+								--spdlog.error(dump(gang))
+								if(gang.spawnable_npc ~= nil and #gang.spawnable_npc > 0) then
+									local index = math.random(1,#gang.spawnable_npc)
+									chara = gang.spawnable_npc[index]
+									
+									else
+									
+									error("No Spawnable NPC for this faction")
+								end
+							end
+						end
+						if(action.source == "faction_random_list") then
+							local indexchara = math.random(1,#action.source_list)
+							
+							local gang = getFactionByTag(action.source_list[indexchara])
+							
 							if(action.source_use_rival == true) then
 								gang = getFactionByTag(gang.rivals[1])
 							end
@@ -7519,7 +7649,16 @@ function executeAction(action,tag,parent,index,source,executortag)
 								position.x = position.x + (i*0.5)
 								
 							end
-							spawnNPC(chara,action.appearance, tag, position.x, position.y ,position.z,action.spawnlevel,action.use_police_prevention_system,false,action.scriptlevel,action.useEntpath,nil,action.despawntimer,action.usecodeware,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview,action.dontregister)
+							local rot = EulerAngles.new(0,0,0)
+							if(action.yaw ~= nil) then
+							
+		
+							rot.roll = action.roll
+							rot.pitch = action.pitch
+							rot.yaw = action.yaw
+							end
+
+							spawnNPC(chara,action.appearance, tag, position.x, position.y ,position.z,action.spawnlevel,action.use_police_prevention_system,false,action.scriptlevel,action.useEntpath,rot,action.despawntimer,action.usecodeware,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview,action.dontregister)
 							if(action.group ~= nil and action.group ~= "") then
 								
 								if(cyberscript.GroupManager[action.group] == nil and action.create_group_if_not_exist == true) then
@@ -7658,7 +7797,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 								-- end)
 							end
 							
-							else
+							
 							
 							
 						end
@@ -7763,7 +7902,84 @@ function executeAction(action,tag,parent,index,source,executortag)
 						cyberscript.EntityManager[action.target]=nil
 					end		
 				end
+				
+				
+				if(action.name == "push_force_entity") then
+					local obj = getEntityFromManager(action.target)
+					local enti = Game.FindEntityByID(obj.id)
+					if(enti ~= nil) then
+						playerCamPos = Matrix.GetTranslation(Game.GetPlayer():GetFPPCameraComponent():GetLocalToWorld());
+						playerCamFwd = Matrix.GetDirectionVector(Game.GetPlayer():GetFPPCameraComponent():GetLocalToWorld());
+						playerCamPos_Vector = playerCamPos;
+						triggerOrigin = Vector4.Normalize(playerCamFwd);
+						totalPP = Vector4.Normalize(playerCamFwd);
+						triggerOrigin.x = playerCamPos_Vector.x + triggerOrigin.x * 0.10;
+						triggerOrigin.y = playerCamPos_Vector.y + triggerOrigin.y * 0.10;
+						triggerOrigin.z = playerCamPos_Vector.z+ triggerOrigin.z * 0.10 ;
+						triggerOrigin.w = playerCamPos_Vector.w + triggerOrigin.w * 0.10;
 						
+							totalPP.x = totalPP.x * action.x;
+							totalPP.y = totalPP.y * action.y;	
+							totalPP.z = totalPP.z * action.z;
+							
+						
+						enti.npcRagdollComponent.isEnabled = true 
+						enti:QueueEvent(CreateForceRagdollEvent("None"));
+						GameInstance.GetDelaySystem():DelayEvent(enti,CreateRagdollApplyImpulseEvent(triggerOrigin, totalPP, 900000000.00), 0.10, false);
+					end		
+				end
+
+				if(action.name == "player_blackwall_hand_anim") then
+					local player = Game.GetPlayer()
+					if StatusEffectSystem.ObjectHasStatusEffect(player, "GameplayRestriction.BodyCarryingWoundedSoldier") then
+						isCarryingWounded = true
+					end
+					if not isCarryingWounded then
+						Game.SetAnimWrapperWeight(Game.GetPlayer(), 'carry_woundedSoldier', 1.0)
+						forcedCarryingWounded = true
+					end
+					handAnim = player:GetBlackboard():GetInt(GetAllBlackboardDefs().BlackwallDeathAnim.handGestureAnimNumber)
+					if handAnim < 0 or handAnim == 5 then
+						handAnim = 0
+					end
+					adHocAnimEvent = AdHocAnimationEvent.new()
+					adHocAnimEvent.animationIndex = handAnim
+					adHocAnimEvent.useBothHands = true
+					adHocAnimEvent.unequipWeapon = true
+					player:QueueEvent(adHocAnimEvent)
+					player:GetBlackboard():SetInt(GetAllBlackboardDefs().BlackwallDeathAnim.handGestureAnimNumber, handAnim + 1)
+					Cron.After(1, { tick = 1 }, function()
+						if forcedCarryingWounded then
+							Game.SetAnimWrapperWeight(Game.GetPlayer(), 'carry_woundedSoldier', 0.0)
+							forcedCarryingWounded = false
+						end
+					end)
+				end
+
+				if(action.name == "pull_force_entity") then
+					local obj = getEntityFromManager(action.target)
+					local enti = Game.FindEntityByID(obj.id)
+					if(enti ~= nil) then
+						playerCamPos = Matrix.GetTranslation(Game.GetPlayer():GetFPPCameraComponent():GetLocalToWorld());
+						playerCamFwd = Matrix.GetDirectionVector(Game.GetPlayer():GetFPPCameraComponent():GetLocalToWorld());
+						playerCamPos_Vector = playerCamPos;
+						triggerOrigin = Vector4.Normalize(playerCamFwd);
+						totalPP = Vector4.Normalize(playerCamFwd);
+						triggerOrigin.x = playerCamPos_Vector.x + triggerOrigin.x * 0.10;
+						triggerOrigin.y = playerCamPos_Vector.y + triggerOrigin.y * 0.10;
+						triggerOrigin.z = playerCamPos_Vector.z + triggerOrigin.z * 0.10;
+						triggerOrigin.w = playerCamPos_Vector.w + triggerOrigin.w * 0.10;
+						
+							totalPP.x = totalPP.x * action.x *-1;
+							totalPP.y = totalPP.y * action.y *-1;	
+							totalPP.z = totalPP.z * action.z *-1;
+							
+						
+						enti.npcRagdollComponent.isEnabled = true 
+						enti:QueueEvent(CreateForceRagdollEvent("None"));
+						GameInstance.GetDelaySystem():DelayEvent(enti,CreateRagdollApplyImpulseEvent(triggerOrigin, totalPP, 900000000.00), 0.10, false);
+					end		
+				end
 						
 				
 				
@@ -7856,7 +8072,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						
 						
-						if(string.match(newent:ToString(), action.value) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), action.value) or string.match(newent:GetDisplayName(), action.value))then 
+						if(string.match(newent:ToString(), action.value) or
+						(action.value ~= "isnpc" or (action.value == "isnpc" and newent:IsA("ScriptedPuppet"))) or
+						string.match( Game.NameToString(newent:GetCurrentAppearanceName()), action.value) or string.match(newent:GetDisplayName(), action.value))then 
 							local entity = {}
 							entity.id = newent:GetEntityID()
 							entity.tag = action.tag
@@ -7902,7 +8120,10 @@ function executeAction(action,tag,parent,index,source,executortag)
 							if #action.filter > 0  then
 								for i,filter in ipairs(action.filter) do
 									
-									if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash) or (filter == "isnpc" and newent:IsA("ScriptedPuppet")) or (filter == "vehicle" and newent:IsVehicle()))then 
+									if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash) 
+									and (filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet")))
+									and (filter ~= "vehicle" or (filter == "vehicle" and newent:IsVehicle()))
+									)then 
 										local entity = {}
 										entity.id = newent:GetEntityID()
 										
@@ -7911,7 +8132,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 										for k,v in pairs(cyberscript.EntityManager) do
 											
 											if(v.id == entity.id) then
-												
+												print("delete k")
 												cyberscript.EntityManager[k] = nil
 											end
 											
@@ -8114,7 +8335,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 							if #action.filter > 0 then
 								for i,filter in ipairs(action.filter) do
 									
-									if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
+									if(string.match(newent:ToString(), filter) or 
+									 (filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet"))) or
+									string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
 										local entity = {}
 										entity.id = newent:GetEntityID()
 										
@@ -8441,7 +8664,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 										
 									end
 									
-									teleportTo(enti, position, rot,false)
+									teleportTo(enti, position, rot,(action.tag == "player"))
 									
 									
 									
@@ -8865,6 +9088,10 @@ function executeAction(action,tag,parent,index,source,executortag)
 				
 				
 				if(action.name == "attitude_entity_against_entity") then
+
+					local obj = getEntityFromManager(action.tag)
+					checkAttitudeCounter(obj)
+					Cron.After(0.5, function()
 					if action.attitude == "hostile" then
 						setAggressiveAgainst(action.tag, action.entity)
 					end
@@ -8880,6 +9107,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					if action.attitude == "psycho" then
 						setPsycho(action.tag, action.entity)
 					end
+				end)
 				end
 				
 				if(action.name == "set_relation_between_attitude") then
@@ -9170,16 +9398,16 @@ function executeAction(action,tag,parent,index,source,executortag)
 					table.insert(actionlist,actionb)
 					
 					
-					for i=1, (action.duration*3) do
+					for i=1, (action.duration*1) do
 						
 						if(i%2==0) then
-							possibility = {"Interested"}
-							val = math.random(50,70)
+							possibility = {"Terrified","Fear","Surprise"}
+							val = 40
 							else
 							
 							
-							possibility = {"Terrified","Fear"}
-							val = math.random(50,70)
+							possibility = {"Terrified","Fear","Surprise"}
+							val = 60
 							
 							
 							
@@ -9593,10 +9821,102 @@ function executeAction(action,tag,parent,index,source,executortag)
 					for _, v in ipairs(parts) do
 						local newent = v:GetComponent(v):GetEntity() 
 						
+						
+						
 						local goodEntity = false
 						
 						if(action.filter ~= nil and #action.filter > 0) then 
 							
+							
+							local entName = newent:ToString()
+							local entAppName = Game.NameToString(newent:GetCurrentAppearanceName())
+							local entDispName = newent:GetDisplayName()
+							
+							if(entName ~= nil and entAppName ~= nil)then
+								for i,filter in ipairs(action.filter) do
+									
+									if(goodEntity == false and string.match(entName, filter) or 
+									(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet"))) or
+									string.match(entAppName, filter) or string.match(entDispName, filter))then 
+										goodEntity = true
+									end
+								end
+							end
+							
+							
+							
+							else
+							
+							goodEntity = true
+							
+						end
+						
+						
+						local tag = "scripted_around_"..math.random(0,9999)
+						local obj = getEntityFromManager(tag)
+						local obj2 = getEntityFromManagerById(newent:GetEntityID()) 
+						print(dump(obj2))
+						if (obj.id == nil and goodEntity == true and obj2.id == nil) then
+							
+							print(#parts)
+							print(newent:GetDisplayName())
+							local entity = {}
+							entity.id = newent:GetEntityID()
+							entity.tag = tag
+							entity.tweak = "None"
+							entity.iscompanion = false
+							
+							cyberscript.EntityManager[tag]=entity
+							if(action.group == nil or action.group == "") then
+								
+								table.insert(cyberscript.GroupManager["temp_around_group"].entities,entity.tag)
+								
+								else
+								
+								
+								
+								if(cyberscript.GroupManager[action.group] ~= nil) then
+									table.insert(cyberscript.GroupManager[action.group].entities,entity.tag)
+									else
+									
+									error("no group founded")
+									
+								end
+								
+							end
+							obj = entity
+							
+							if(#action.action > 0) then
+								runActionList(action.action, tag.."_forentitylist", parent,source,false,entity.tag)							end
+						end
+						
+						
+						
+					end
+					
+					
+				end
+				if(action.name == "for_enemy_around_you") then
+					
+					player = Game.GetPlayer()
+					targetingSystem = Game.GetTargetingSystem()
+					parts = {}
+					local success= false
+					searchQuery = Game["TSQ_EnemyNPC;"]() -- Search ALL objects
+					searchQuery.maxDistance = action.range
+					success, parts = targetingSystem:GetTargetParts(Game.GetPlayer(), searchQuery)
+					
+					cyberscript.GroupManager["temp_enemy_around_group"] = {}
+					cyberscript.GroupManager["temp_enemy_around_group"].tag = "temp_enemy_around_group"
+					cyberscript.GroupManager["temp_enemy_around_group"].entities = {}
+					print(#parts)
+				
+					for _, v in ipairs(parts) do
+						local newent = v:GetComponent(v):GetEntity() 
+						local goodEntity = false
+						
+						if(action.filter ~= nil and #action.filter > 0) then 
+						
 							
 							local entName = newent:ToString()
 							local entAppName = Game.NameToString(newent:GetCurrentAppearanceName())
@@ -9620,7 +9940,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						end
 						
 						
-						local tag = "scripted_around_"..math.random(0,9999)
+						local tag = "scripted_enemy_around_"..math.random(0,9999)
 						local obj = getEntityFromManager(tag)
 						
 						if (obj.id == nil and goodEntity == true) then
@@ -9638,6 +9958,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 								table.insert(cyberscript.GroupManager["temp_around_group"].entities,entity.tag)
 								
 								else
+								
 								
 								
 								if(cyberscript.GroupManager[action.group] ~= nil) then
@@ -9663,7 +9984,6 @@ function executeAction(action,tag,parent,index,source,executortag)
 					
 					
 				end
-				
 				
 			end
 			
@@ -10229,6 +10549,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					end
 					
 				end
+				
 				if(action.name == "goto") then
 					local index = workerTable[tag]["index"]
 					local list = workerTable[tag]["action"]
@@ -10651,7 +10972,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						GameObjectEffectHelper.StartEffectEvent(enti, action.value)
 					end
 				end
-				if(action.name == "stop_effect") then
+				if(action.name == "stop_effect" or action.name == "stop_effect_test") then
 					local obj = getEntityFromManager(action.tag)
 					local enti = Game.FindEntityByID(obj.id)
 					if(enti ~= nil) then
@@ -10980,6 +11301,10 @@ function executeAction(action,tag,parent,index,source,executortag)
 					startHub:SetStartMenu(action.value)
 					Game.GetUISystem():QueueEvent(startHub)
 				end
+
+				if(action.name == "open_phone") then
+					GameController["NewHudPhoneGameController"].PhoneSystem:QueueRequest( UsePhoneRequest.new());
+				end
 				
 				
 				if(action.name == "close_menu") then
@@ -10995,9 +11320,11 @@ function executeAction(action,tag,parent,index,source,executortag)
 				end
 				if(action.name == "lock_conversation" or action.name == "lock_message") then
 					setScore(action.tag,"unlocked",0)
+					PhoneHotkeyController_UpdateData(GameController["PhoneHotkeyController"])
 				end
 				if(action.name == "unlock_conversation" or action.name == "unlock_message") then
 					setScore(action.tag,"unlocked",1)
+					PhoneHotkeyController_UpdateData(GameController["PhoneHotkeyController"])
 				end
 				
 				if(action.name == "open_map_menu_to_position") then
@@ -12856,7 +13183,7 @@ function getPositionFromParameter(action)
 	
 end
 
-function GeneratefromContext(context)
+function GeneratefromContext(item,context)
 	
 	local text = context.text
 	
@@ -12872,7 +13199,7 @@ function GeneratefromContext(context)
 				end
 				
 				local status, retval = pcall(function()
-					local value = GenerateTextFromContextValues(context, v)
+					local value = GenerateTextFromContextValues(context, v,item)
 					
 					if((type(value) == "number" or type(value) == "string" or type(value) == "boolean") and v.type ~= "object" and v.type ~= "list") then
 						text = text:gsub("##"..k, tostring(value)) 
@@ -12908,7 +13235,7 @@ function GeneratefromContext(context)
 				end
 				
 				
-				local value = GenerateTextFromContextValues(context, v)
+				local value = GenerateTextFromContextValues(context, v,item)
 				
 				if((type(value) == "number" or type(value) == "string" or type(value) == "boolean") and v.type ~= "object" and v.type ~= "list") then
 					text = text:gsub("##"..k, tostring(value)) 
@@ -12983,13 +13310,13 @@ function GeneratefromContext(context)
 	
 end
 
-function GenerateTextFromContextValues(context, v)
+function GenerateTextFromContextValues(context, v,source)
 	
 	local value = ""
 	
 	if(v.context_value ~= nil) then
 		
-		v[v.replace] = GenerateTextFromContextValues(context, context.values[v.context_value])
+		v[v.replace] = GenerateTextFromContextValues(context, context.values[v.context_value],source)
 		
 	end
 	
@@ -13882,6 +14209,14 @@ function GenerateTextFromContextValues(context, v)
 		value = v.value
 		
 	end
+
+	if(v.type == "props")then
+		
+		
+		
+		value = source[v.prop]
+		
+	end
 	
 	if(v.type == "random_text") then
 		
@@ -14110,6 +14445,15 @@ function GenerateTextFromContextValues(context, v)
 		value = v.value
 		
 	end
+
+	if(v.type == "executortag") then
+		
+		if(source.executortag ~= nil) then
+			print(source.executortag)
+			value = source.executortag
+		end
+		
+	end
 	
 	if(v.type == "trigger") then
 		value = checkTrigger(v.trigger)
@@ -14129,7 +14473,7 @@ function GenerateTextFromContextValues(context, v)
 			
 			
 			if item.trigger == nil or checkTriggerRequirement(item.requirement,item.trigger) then
-				local result = GenerateTextFromContextValues(context, item)
+				local result = GenerateTextFromContextValues(context, item,source)
 				
 				table.insert(list,result)
 				

@@ -376,7 +376,7 @@ function CheckandUpdateDatapack()
 					if (state == false) then
 						
 						DisableDatapack(k)
-						LoadDataPackCache()
+						UnloadDataPackCacheSingle(k)
 						else
 						
 						local enabled = arrayDatapack[k].enabled
@@ -394,6 +394,7 @@ function CheckandUpdateDatapack()
 			
 			if((table_contains(arrayDatapack[k].metadata.flags,"essential",false) == true)) then
 				EnableDatapack(k)
+				LoadDataPackCacheSingle(k)
 			end
 			
 			i = i +1
@@ -550,7 +551,7 @@ function loadAssetsObject()
 					
 					
 					imageobj.name = reader[i].name
-					imageobj.path="assets/"..objtype.."/"..reader[i].name
+					imageobj.path=namespace.."\\texture\\"..reader[i].name
 					imageobj.namespace = namespace
 					
 					
@@ -851,6 +852,29 @@ function flagChecker(myflag)
 	return result
 end
 
+function UnloadDataPackCacheSingle(k)
+	for i,objtype in ipairs(datapackObjectType) do
+		spdlog.error(objtype)
+		for tag,v in pairs(cyberscript.cache[objtype]) do 
+			
+			if(v.datapack == k)then
+				
+				logme(1,"delete "..tag)
+			
+				cyberscript.cache[objtype][tag] = nil
+				
+				
+			end
+		end
+
+	end
+	loadQuestsToUI()
+	getInteractGroup()
+	FillCharacterArchive()
+	
+	
+	calculatePOIList()
+end
 
 	function LoadDataPackCacheSingle(k)
 	
@@ -1079,11 +1103,8 @@ end
 								for i=1,#value do
 									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
-									cyberscript.cache["circuit"][value[i].tag] = {}
-									cyberscript.cache["circuit"][value[i].tag].data = value[i]
-									cyberscript.cache["circuit"][value[i].tag].file = path
-									cyberscript.cache["circuit"][value[i].tag].datapack = datapackname
-									cyberscript.cache["circuit"][value[i].tag].scripttype = objtype
+									makeTypeCachedObject(objtype,value[i],nil,path,datapackname)
+									
 								end
 							else
 								if(value.tag ~= nil) then
@@ -1104,26 +1125,20 @@ end
 								for i=1,#value do
 									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
-									cyberscript.cache["choice"][tostring(value[i].tag)] = {}
-									cyberscript.cache["choice"][tostring(value[i].tag)].data = value[i]
-									cyberscript.cache["choice"][tostring(value[i].tag)].file = path
-									cyberscript.cache["choice"][tostring(value[i].tag)].datapack = datapackname
-									cyberscript.cache["choice"][tostring(value[i].tag)].scripttype = objtype
-									if(cyberscript.cache["choice"][tostring(value[i].tag)]["data"] == nil) then
-										cyberscript.cache["choice"][tostring(value[i].tag)]["data"]["havequitoption"] = true
+									makeTypeCachedObject(objtype,value[i],nil,path,datapackname)
+									
+									if(cyberscript.cache[objtype][tostring(value[i].tag)]["data"] == nil) then
+										cyberscript.cache[objtype][tostring(value[i].tag)]["data"]["havequitoption"] = true
 									end
 								end
 							else
 								if(value.tag ~= nil) then
 									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 									rootpath = path
-									cyberscript.cache["choice"][tostring(value.tag)] = {}
-									cyberscript.cache["choice"][tostring(value.tag)].data = value
-									cyberscript.cache["choice"][tostring(value.tag)].file = path
-									cyberscript.cache["choice"][tostring(value.tag)].datapack = datapackname
-									cyberscript.cache["choice"][tostring(value.tag)].scripttype = objtype
-									if(cyberscript.cache["choice"][tostring(value.tag)]["data"] == nil) then
-										cyberscript.cache["choice"][tostring(value.tag)]["data"]["havequitoption"] = true
+									makeTypeCachedObject(objtype,value,nil,path,datapackname)
+									
+									if(cyberscript.cache[objtype][tostring(value.tag)]["data"] == nil) then
+										cyberscript.cache[objtype][tostring(value.tag)]["data"]["havequitoption"] = true
 									end
 								
 								end
@@ -1133,52 +1148,35 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["event"][value.tag] = {}
-							cyberscript.cache["event"][value.tag].data = value
-							cyberscript.cache["event"][value.tag].file = path
-							cyberscript.cache["event"][value.tag].datapack = datapackname
-							cyberscript.cache["event"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 						end
 						elseif(objtype == "faction") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["faction"][value.tag] = {}
-							cyberscript.cache["faction"][value.tag].data = value
-							cyberscript.cache["faction"][value.tag].file = path
-							cyberscript.cache["faction"][value.tag].datapack = datapackname
-							cyberscript.cache["faction"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "fixer") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["fixer"][value.tag] = {}
-							cyberscript.cache["fixer"][value.tag].data = value
-							cyberscript.cache["fixer"][value.tag].file = path
-							cyberscript.cache["fixer"][value.tag].datapack = datapackname
-							cyberscript.cache["fixer"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "functions") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-						
-							cyberscript.cache["functions"][value.tag] = {}
-							cyberscript.cache["functions"][value.tag].data = value
-							cyberscript.cache["functions"][value.tag].file = path
-							cyberscript.cache["functions"][value.tag].datapack = datapackname
-							cyberscript.cache["functions"][value.tag].scripttype = "functions"
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "help") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["help"][value.tag] = {}
-							cyberscript.cache["help"][value.tag].data = value
-							cyberscript.cache["help"][value.tag].file = path
-							cyberscript.cache["help"][value.tag].datapack = datapackname
-							cyberscript.cache["help"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "housing") then
 						for key, value in pairs(tabl) do 
@@ -1270,12 +1268,8 @@ end
 								end
 								
 								
+								makeTypeCachedObject(objtype,newobj,nil,path,datapackname)
 								
-								cyberscript.cache["housing"][newobj.tag] = {}
-								cyberscript.cache["housing"][newobj.tag].data = newobj
-								cyberscript.cache["housing"][newobj.tag].file = path
-								cyberscript.cache["housing"][newobj.tag].datapack = datapackname
-								cyberscript.cache["housing"][newobj.tag].scripttype = objtype
 								
 								if(statutfile == true) then logme(1,"Cyberscript : AMM housing : "..path..". Convertion successfull !") else logme(1,"Cyberscript : AMM housing : "..path..". Convertion failed !") end
 								
@@ -1283,11 +1277,8 @@ end
 								
 								if(value.tag ~= nil) then
 							
-								cyberscript.cache["housing"][value.tag] = {}
-								cyberscript.cache["housing"][value.tag].data = value
-								cyberscript.cache["housing"][value.tag].file = path
-								cyberscript.cache["housing"][value.tag].datapack = datapackname
-								cyberscript.cache["housing"][value.tag].scripttype = objtype
+									makeTypeCachedObject(objtype,value,nil,path,datapackname)
+								
 								
 								else
 								
@@ -1308,23 +1299,17 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["interact"][value.tag] = {}
-							cyberscript.cache["interact"][value.tag].data = value
 							cyberscript.cache["interact"][value.tag].data.group = datapackname
-							cyberscript.cache["interact"][value.tag].file = path
-							cyberscript.cache["interact"][value.tag].datapack = datapackname
-							cyberscript.cache["interact"][value.tag].scripttype = objtype
+							
 						end
 						elseif(objtype == "interfaces") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["interfaces"][value.tag] = {}
-							cyberscript.cache["interfaces"][value.tag].data = value
-							cyberscript.cache["interfaces"][value.tag].file = path
-							cyberscript.cache["interfaces"][value.tag].datapack = datapackname
-							cyberscript.cache["interfaces"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "lang") then
 						
@@ -1332,10 +1317,8 @@ end
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							cyberscript.cache["lang"][value.tag] = {}
-							cyberscript.cache["lang"][value.tag].data = value
-							cyberscript.cache["lang"][value.tag].file = path
-							cyberscript.cache["lang"][value.tag].datapack = datapackname
-							cyberscript.cache["lang"][value.tag].scripttype = "lang"
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						
 							
 						end
@@ -1343,12 +1326,8 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["mission"][value.tag] = {}
-							cyberscript.cache["mission"][value.tag].data = value
-							cyberscript.cache["mission"][value.tag].file = path
-							cyberscript.cache["mission"][value.tag].datapack = datapackname
-							cyberscript.cache["mission"][value.tag].scripttype = objtype
 							
 						end
 						elseif(objtype == "node") then
@@ -1358,11 +1337,8 @@ end
 								for i=1,#value do
 									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
-									cyberscript.cache["node"][tostring(value[i].tag)] = {}
-									cyberscript.cache["node"][tostring(value[i].tag)].data = value[i]
-									cyberscript.cache["node"][tostring(value[i].tag)].file = path
-									cyberscript.cache["node"][tostring(value[i].tag)].datapack = datapackname
-									cyberscript.cache["node"][tostring(value[i].tag)].scripttype = objtype
+									makeTypeCachedObject(objtype,value[i],nil,path,datapackname)
+									
 								end
 								
 							else
@@ -1382,8 +1358,9 @@ end
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["npc"][value.tag] = {}
-							cyberscript.cache["npc"][value.tag].data = value
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+						
+							
 							cyberscript.cache["npc"][value.tag].data.isspawn=false
 							cyberscript.cache["npc"][value.tag].data.init=false
 							cyberscript.cache["npc"][value.tag].data.spawnforced=false
@@ -1392,71 +1369,78 @@ end
 							cyberscript.cache["npc"][value.tag].data.dodeathaction=true
 							cyberscript.cache["npc"][value.tag].data.dodespawnaction=true
 							cyberscript.cache["npc"][value.tag].data.workinglocation=value.location
-							cyberscript.cache["npc"][value.tag].datapack = datapackname
-							cyberscript.cache["npc"][value.tag].file = path
-							cyberscript.cache["npc"][value.tag].scripttype = objtype
+							
 						end
 						elseif(objtype == "path") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-						
-							cyberscript.cache["path"][value.tag] = {}
-							cyberscript.cache["path"][value.tag].data = value
-							cyberscript.cache["path"][value.tag].file = path
-							cyberscript.cache["path"][value.tag].datapack = datapackname
-							cyberscript.cache["path"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "phone_dialog") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["phone_dialog"][value.tag] = {}
-							cyberscript.cache["phone_dialog"][value.tag].data = value
-							cyberscript.cache["phone_dialog"][value.tag].file = path
-							cyberscript.cache["phone_dialog"][value.tag].datapack = datapackname
-							cyberscript.cache["phone_dialog"][value.tag].scripttype = objtype
-							if(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.unlock == false ) then
-								if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked") == nil ) then
-									setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked",0)
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+						
+							setScore(value.tag,"unlocked",1)
+
+
+							
+							for i,conversation in ipairs(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation) do
+								if(getScoreKey(conversation.tag,"readed") == nil) then
+								
+									setScore(conversation.tag,"readed",0)
 								end
+								if(conversation.unlock == false ) then
+									if(getScoreKey(conversation.tag,"unlocked") == 0 or getScoreKey(conversation.tag,"unlocked") == nil ) then
+										setScore(conversation.tag,"unlocked",0)
+									end
 								else
-								if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked") == nil ) then
-									setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.tag,"unlocked",1)
-								end
-							end
-							for z =1, #cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation do
-								if(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].unlock == false ) then
-									if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked") == nil ) then
-										setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked",0)
+									if(getScoreKey(conversation.tag,"unlocked") == 0 or getScoreKey(conversation.tag,"unlocked") == nil) then
+										setScore(cconversation.tag,"unlocked",1)
 									end
+								end
+								for j,message in ipairs(conversation.message) do
+									if(getScoreKey(message.tag,"readed") == nil) then
+								
+										setScore(message.tag,"readed",0)
+									end
+									
+									if(message.unlock == false ) then
+										if(getScoreKey(message.tag,"unlocked") == 0 or getScoreKey(message.tag,"unlocked") == nil ) then
+											setScore(message.tag,"unlocked",0)
+										end
 									else
-									if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked") == nil) then
-										setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].tag,"unlocked",1)
-									end
-								end
-								for y=1, #cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message do
-									if(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].unlock == false ) then
-										if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked") == nil ) then
-											setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked",0)
-										end
-										else
-										if(getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked") == 0 or getScoreKey(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked") == nil) then
-											setScore(cyberscript.cache["phone_dialog"][tostring(value.tag)].data.conversation[z].message[y].tag,"unlocked",1)
+										if(getScoreKey(message.tag,"unlocked") == 0 or getScoreKey(message.tag,"unlocked") == nil) then
+											setScore(message.tag,"unlocked",1)
 										end
 									end
 								end
+									-- if(message.choices ~= nil) then
+									-- 	for k,choice in ipairs(message.choices) do
+									-- 		if(choice.unlock == false ) then
+									-- 			if(getScoreKey(choice.tag,"unlocked") == 0 or getScoreKey(choice.tag,"unlocked") == nil ) then
+									-- 				setScore(choice.tag,"unlocked",0)
+									-- 			end
+									-- 			else
+									-- 			if(getScoreKey(choice.tag,"unlocked") == 0 or getScoreKey(choice.tag,"unlocked") == nil) then
+									-- 				setScore(choice.tag,"unlocked",1)
+									-- 			end
+													
+												
+									-- 		end
+									-- 	end
+									-- end
 							end
 						end
 						elseif(objtype == "place") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["place"][value.tag] = {}
-							cyberscript.cache["place"][value.tag].data = value
-							cyberscript.cache["place"][value.tag].file = path
-							cyberscript.cache["place"][value.tag].datapack = datapackname
-							cyberscript.cache["place"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "poi") then
 						for key, value in pairs(tabl) do 
@@ -1465,33 +1449,24 @@ end
 							if(value.tag == nil) then
 								value.tag = key..tostring(math.random(1,99999))
 							end
-							cyberscript.cache["poi"][value.tag] = {}
-							cyberscript.cache["poi"][value.tag].data = value
-							cyberscript.cache["poi"][value.tag].file = path
-							cyberscript.cache["poi"][value.tag].datapack = datapackname
-							cyberscript.cache["poi"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "radio") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["radio"][value.tag] = {}
-							cyberscript.cache["radio"][value.tag].data = value
-							cyberscript.cache["radio"][value.tag].file = path
-							cyberscript.cache["radio"][value.tag].datapack = datapackname
-							cyberscript.cache["radio"][value.tag].namespace = datapackname
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+						
 							cyberscript.cache["radio"][value.tag].enabled = false
-							cyberscript.cache["radio"][value.tag].scripttype = objtype
+							
 						end
 						elseif(objtype == "shard") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["shard"][value.tag] = {}
-							cyberscript.cache["shard"][value.tag].data = value
-							cyberscript.cache["shard"][value.tag].file = path
-							cyberscript.cache["shard"][value.tag].datapack = datapackname
-							cyberscript.cache["shard"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
 						end
 						elseif(objtype == "sound") then
 						for key, value in pairs(tabl) do 
@@ -1501,11 +1476,8 @@ end
 								for i=1,#value do
 									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
-									cyberscript.cache["sound"][value[i].tag] = {}
-									cyberscript.cache["sound"][value[i].tag].data = value[i]
-									cyberscript.cache["sound"][value[i].tag].file = path
-									cyberscript.cache["sound"][value[i].tag].datapack = datapackname
-									cyberscript.cache["sound"][value[i].tag].scripttype = objtype
+									makeTypeCachedObject(objtype,value[i],nil,path,datapackname)
+									
 									
 								end
 								
@@ -1514,10 +1486,8 @@ end
 								if(value.tag ~= nil) then
 									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 									rootpath = path
-									cyberscript.cache["sound"][value.tag] = {}
-									cyberscript.cache["sound"][value.tag].data = value
-									cyberscript.cache["sound"][value.tag].file = path
-									cyberscript.cache["sound"][value.tag].scripttype = objtype
+									makeTypeCachedObject(objtype,value,nil,path,datapackname)
+									
 								end
 							end
 						end
@@ -1526,144 +1496,100 @@ end
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							cyberscript.cache["texture"][key] = {}
-							cyberscript.cache["texture"][key].data = path
-							cyberscript.cache["texture"][key].file = path
-							cyberscript.cache["texture"][key].scripttype = objtype
+							cyberscript.cache[objtype][key] = {}
+							
+							cyberscript.cache[objtype][key].datapack = datapackname
+							cyberscript.cache[objtype][key].scripttype = objtype
+							cyberscript.cache[objtype][key].data = path
+							cyberscript.cache[objtype][key].file = path
 						end
 						elseif(objtype == "scene") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							
-							cyberscript.cache["scene"][value.tag] = {}
-							cyberscript.cache["scene"][value.tag].data = value
-							cyberscript.cache["scene"][value.tag].file = path
-							cyberscript.cache["scene"][value.tag].datapack = datapackname
-							cyberscript.cache["scene"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+						
 						end
 						elseif(objtype == "housing_template") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["housing_template"][value.tag] = {}
-							cyberscript.cache["housing_template"][value.tag].data = value
-							cyberscript.cache["housing_template"][value.tag].file = path
-							cyberscript.cache["housing_template"][value.tag].datapack = datapackname
-							cyberscript.cache["housing_template"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "hud") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["hud"][value.tag] = {}
-							cyberscript.cache["hud"][value.tag].data = value
-							cyberscript.cache["hud"][value.tag].file = path
-							cyberscript.cache["hud"][value.tag].datapack = datapackname
-							cyberscript.cache["hud"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "setting") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["setting"][value.tag] = {}
-							cyberscript.cache["setting"][value.tag].data = value
-							cyberscript.cache["setting"][value.tag].file = path
-							cyberscript.cache["setting"][value.tag].datapack = datapackname
-							cyberscript.cache["setting"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "codex") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["codex"][value.tag] = {}
-							cyberscript.cache["codex"][value.tag].data = value
-							cyberscript.cache["codex"][value.tag].file = path
-							cyberscript.cache["codex"][value.tag].datapack = datapackname
-							cyberscript.cache["codex"][value.tag].scripttype = objtype
 						end
 						
 						elseif(objtype == "webpage") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["webpage"][value.tag] = {}
-							cyberscript.cache["webpage"][value.tag].data = value
-							cyberscript.cache["webpage"][value.tag].file = path
-							cyberscript.cache["webpage"][value.tag].datapack = datapackname
-							cyberscript.cache["webpage"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "email") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["email"][value.tag] = {}
-							cyberscript.cache["email"][value.tag].data = value
-							cyberscript.cache["email"][value.tag].file = path
-							cyberscript.cache["email"][value.tag].datapack = datapackname
-							cyberscript.cache["email"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "character") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
-							cyberscript.cache["character"][value.name] = {}
-							cyberscript.cache["character"][value.name].data = value
-							cyberscript.cache["character"][value.name].file = path
-							cyberscript.cache["character"][value.name].datapack = datapackname
-							cyberscript.cache["character"][value.name].scripttype = objtype
+							makeTypeCachedObject(objtype,value,"name",path,datapackname)
+							
 						end
 						elseif(objtype == "quickhack") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
-							cyberscript.cache["quickhack"][value.tag] = {}
-							cyberscript.cache["quickhack"][value.tag].data = value
-							cyberscript.cache["quickhack"][value.tag].file = path
-							cyberscript.cache["quickhack"][value.tag].datapack = datapackname
-							cyberscript.cache["quickhack"][value.tag].scripttype = objtype
 						end
 						elseif(objtype == "garage") then
 						for key, value in pairs(tabl) do 
 							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 							rootpath = path
 							
-							cyberscript.cache["garage"][value.tag] = {}
-							cyberscript.cache["garage"][value.tag].data = value
-							cyberscript.cache["garage"][value.tag].file = path
-							cyberscript.cache["garage"][value.tag].datapack = datapackname
-							cyberscript.cache["garage"][value.tag].scripttype = objtype
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 						end
 						elseif(objtype == "ai") then
 							for key, value in pairs(tabl) do 
 								local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 								rootpath = path
 								
-								cyberscript.cache["ai"][value.tag] = {}
-								cyberscript.cache["ai"][value.tag].data = value
-								cyberscript.cache["ai"][value.tag].file = path
-								cyberscript.cache["ai"][value.tag].datapack = datapackname
-								cyberscript.cache["ai"][value.tag].scripttype = objtype
+								makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							end
 					elseif(objtype == "aitemplate") then
 							for key, value in pairs(tabl) do 
 								local path = "datapack/"..datapackname.."/"..objtype.."/"..key
 								rootpath = path
 								
-								cyberscript.cache["aitemplate"][value.tag] = {}
-								cyberscript.cache["aitemplate"][value.tag].data = value
-								cyberscript.cache["aitemplate"][value.tag].file = path
-								cyberscript.cache["aitemplate"][value.tag].datapack = datapackname
-								cyberscript.cache["aitemplate"][value.tag].scripttype = objtype
+								makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							end
 					end
+					
 				end
 			
 			
@@ -1678,6 +1604,25 @@ end
 		}
 		
 	end
+
+function makeTypeCachedObject(objtype,value,field,path,datapackname)
+
+	local tag = value.tag
+	
+	if(field ~= nil) then
+		
+		tag = value[field]
+
+	end
+if(cyberscript.cache[objtype] == nil) then cyberscript.cache[objtype] = {} end
+	cyberscript.cache[objtype][tag] = {}
+	cyberscript.cache[objtype][tag].data = value
+	cyberscript.cache[objtype][tag].file = path
+	cyberscript.cache[objtype][tag].datapack = datapackname
+	cyberscript.cache[objtype][tag].scripttype = objtype
+
+end
+
 	function DisableDatapack(name)
 		
 		if(name ~= "default") then
@@ -1762,7 +1707,7 @@ end
 			local data = {}
 			checkContext(questos)
 			
-			
+			print(k)
 			
 			data.id = questos.tag
 			data.title = getLang(questos.title)
@@ -1990,11 +1935,11 @@ end
 				nativeSettings.addSwitch("/CMDT", regi.name, "index :"..i, regi.enabled, regi.enabled, function(state)
 					if (state == false) then
 						
-						DisableDatapack(name)
-						UnloadSpecificDatapack(regi.name)
+						DisableDatapack(regi.name)
+						UnloadDataPackCacheSingle(regi.name)
 						else
 						EnableDatapack(regi.name)
-						LoadSpecificDataPack(regi.name)
+						LoadDataPackCacheSingle(regi.name)
 					end
 				end)
 			end

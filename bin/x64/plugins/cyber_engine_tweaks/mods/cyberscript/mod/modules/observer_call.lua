@@ -60,25 +60,13 @@ function SetObserver()
 	
 	end)
 	
-	ObserveAfter('GenericNotificationController', 'SetNotificationData', function(self, notificationData)
-		 GenericNotificationController_SetNotificationData(self, notificationData)
-		
-	
-	end)
 	
 	
 	ObserveAfter('QuestDetailsPanelController', 'OnUpdateTrackedObjectiveEvent', function(self, e)
 		
 		 QuestDetailsPanelController_OnUpdateTrackedObjectiveEvent(self, e)
 	end)
-	--TODO
-	Override('QuestListHeaderController', 'Setup', function(self, titleLocKey,questType,wrappedMethod)
-		
-		
-		 QuestListHeaderController_Setup(self, titleLocKey,questType,wrappedMethod)
-		
-		
-	end)
+	
 	
 	
 	--QuestJournalUI
@@ -91,7 +79,31 @@ function SetObserver()
 		QuestTrackerGameController_OnTrackedEntryChanges(self)
 		
 	end)
+
+	ObserveAfter('PhoneHotkeyController', 'UpdateData', function(self)
+		
+		PhoneHotkeyController_UpdateData(self)
+		
+	end)
+	ObserveAfter('PhoneHotkeyController', 'CountMessages', function(self,convEntry, tracked)
+		PhoneHotkeyController_CountMessages(self,convEntry, tracked)
+		
+		
+	end)
+
+	ObserveAfter('PhoneHotkeyController', 'Initialize', function(self)
+		PhoneHotkeyController_Initialize(self)
+		
+		
+	end)
+
+	ObserveAfter('PhoneHotkeyController', 'OnPlayerAttach', function(self,player)
+		PhoneHotkeyController_Initialize(self)
+		
+		
+	end)
 	
+	--todotest
 	Override('QuestTrackerGameController', 'UpdateTrackerData', function(self, wrappedmethod)
 	
 		QuestTrackerGameController_UpdateTrackerData(self, wrappedmethod)
@@ -108,16 +120,6 @@ function SetObserver()
 	--QuestTrackerUI
 	
 	
-	ObserveAfter("ComputerMainLayoutWidgetController", "OnScreenSaverSpawned", function(this,widget,userData)
-		
-		 ComputerMainLayoutWidgetController_OnScreenSaverSpawned(this,widget,userData)
-
-	end)
-	ObserveAfter("ComputerMainLayoutWidgetController", "OnMailsMenuSpawned", function(this,widget,userData)
-		
-		 ComputerMainLayoutWidgetController_OnMailsMenuSpawned(this,widget,userData)
-
-	end)
 	
 	
 	
@@ -128,53 +130,7 @@ function SetObserver()
 	end)
 	
 	
-	--TODO
-	--perk
-	 ObserveAfter("CodexUtils", "ConvertToCodexData", function(this,journal, currentEntry, currentGroupIndex, stateFilter, newEntries, activeDataSync, useFallbackImages)
-		print(currentEntry.id)
-		-- PerksMainGameController_SetupLayout(this,screenType)
-	end)
 	
-	Override("PerkScreenController", "Setup", function(this,displayData, dataManager , startingIndex,wrappedMethod)
-	
-		PerkScreenController_Setup(this,displayData, dataManager , startingIndex,wrappedMethod)
-	end)
-	
-	ObserveAfter("PerkDisplayController", "Setup", function(this,displayData, dataManager, index)
-	
-		PerkDisplayController_Setup(this,displayData, dataManager , startingIndex)
-	end)
-		--perk
-	
-	
-	
-	ObserveAfter("ComputerMainLayoutWidgetController", "ShowMails", function(this)
-		
-		 ComputerInkGameController_ShowMails(this)
-
-	end)
-	
-	ObserveAfter("ComputerMenuWidgetController", "InitializeFiles", function(this,gameController,widgetsData)
-		ComputerMenuWidgetController_InitializeFiles(this,gameController,widgetsData)
-		
-
-	end)
-	
-	ObserveAfter("ComputerMenuWidgetController", "InitializeFilesThumbnails", function(this,gameController,widgetsData)
-		ComputerMenuWidgetController_InitializeFilesThumbnails(this,gameController,widgetsData)
-		
-
-	end)
-	
-	ObserveAfter("ComputerDocumentWidgetController", "Initialize", function(this,gameController,widgetsData)
-		ComputerDocumentWidgetController_Initialize(this,gameController,widgetsData)
-		
-
-	end)
-	
-	ObserveAfter("FullscreenVendorGameController", "PopulateVendorInventory", function(this)
-	 FullscreenVendorGameController_PopulateVendorInventory(this)
-	end)
 	
 	
 	
@@ -184,11 +140,6 @@ function SetObserver()
 
 	Observe("HUDProgressBarController", "Intro", function (this)
 		HUDProgressBarController_OnInitialize(this)
-	end)
-	
-	
-	ObserveAfter("AnimationControllerComponent", "ApplyFeature", function(this,obj,inputName,value,delay)
-	AnimationControllerComponent_ApplyFeature(this,obj,inputName,value,delay)
 	end)
 	
 	
@@ -222,61 +173,6 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	
-	ObserveAfter("PanzerHUDGameController", "OnUninitialize", function(this)
-	PanzerHUDGameController_OnUninitialize(this)
-	
-	
-	end)
-	
-	ObserveAfter("PanzerHUDGameController", "OnVehicleStateChanged", function(this)
-	
-	PanzerHUDGameController_OnVehicleStateChanged(this)
-	
-	
-	end)
-
-
-	ObserveAfter("PanzerHUDGameController", "OnPlayerVehicleStateChange", function(this)
-	
-	PanzerHUDGameController_OnPlayerVehicleStateChange(this)
-	
-	end)
-	
-	ObserveAfter("PanzerHUDGameController", "EvaluateUIState", function(this)
-	
-	PanzerHUDGameController_EvaluateUIState(this)
-	
-	end)
-	
-	ObserveAfter("PanzerHUDGameController", "OnForwardVehicleQuestEnableUIEvent", function(this)
-	
-	PanzerHUDGameController_OnForwardVehicleQuestEnableUIEvent(this)
-	
-	end)
-	
-	ObserveAfter("PanzerHUDGameController", "OnPlayerAttach", function(this)
-	
-	 PanzerHUDGameController_OnPlayerAttach(this)
-	
-	end)
-	
-	ObserveAfter("PanzerHUDGameController", "OnPlayerDetach", function(this)
-	
-	PanzerHUDGameController_OnPlayerDetach(this)
-	end)
-	
-	ObserveAfter("vehicleUIGameController", "OnVehiclePanzerBootupUIQuestEvent", function(this)
-	
-	vehicleUIGameController_OnVehiclePanzerBootupUIQuestEvent(this)
-	
-	end)
-
-	
-	--TODO
-	-- ObserveAfter("ChatBoxGameController", "OnInitialize", function(this)
-	
-	-- ChatBoxGameController_OnInitialize(this)
-	-- end)
 	ObserveAfter("HudPhoneAvatarController", "OnInitialize", function(this)
 	
 	 HudPhoneAvatarController_OnInitialize(this)
@@ -290,15 +186,6 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	 HudPhoneGameController_OnInitialize(this)
 	end)
-	--TODO
-	-- ObserveAfter("FlightController", "Activate", function(this)
-	-- FlightController_Activate(this)
-	
-	-- end)
-	
-	-- ObserveAfter("FlightController", "Deactivate", function(this)
-	-- FlightController_Deactivate(this)
-	-- end)
 	
 	ObserveAfter("PlayerPuppet", "ReactToHitProcess", function(this,hitEvent)
 	
@@ -370,67 +257,22 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	
 	
-	ObserveAfter('VehiclesManagerListItemController', 'OnDataChanged', function(this,value)
-		
-		
-		VehiclesManagerListItemController_OnDataChanged(this,value)
-		
-	end)
 	
-	ObserveAfter('VehiclesManagerListItemController', 'OnSelected', function(this,itemController,discreteNav)
-		
-		
-		VehiclesManagerListItemController_OnSelected(this,itemController,discreteNav)
-		
-	end)
 	
 	ObserveAfter('IncomingCallGameController', 'OnInitialize', function(this)
 		
 	IncomingCallGameController_OnInitialize(this)
 	end)
 	
-	ObserveAfter('IncomingCallGameController', 'GetIncomingContact', function(this,phoneCallInfo)
-		print("GetIncomingContact")
-	print(GameDump(phoneCallInfo))
-	end)
 	
-	ObserveAfter('IncomingCallGameController', 'OnPhoneCall', function(this,value)
-		print("OnPhoneCall")
-	print(GameDump(value))
-	end)
+	
 	
 	ObserveAfter('IncomingCallGameController', 'GetIncomingContact', function(this)
 		
 		 IncomingCallGameController_GetIncomingContact(this)
 	end)
 	
-	ObserveAfter('NewHudPhoneGameController', 'OnInitialize', function(this)
-		print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
-		GameController["NewHudPhoneGameController"] = this
-	end)
 	
-	ObserveAfter('NewHudPhoneGameController', 'OnIncommingCallSpawned', function(this,value)
-		
-	IncomingCallGameController_OnPhoneCall(this,value)
-	end)
-	
-	
-	ObserveAfter('NewHudPhoneGameController', 'HandleCall', function(this)
-		
-	IncomingCallGameController_HandleCall(this)
-	end)
-	
-	
-	ObserveAfter('NewHudPhoneGameController', 'UpdateHoloAudioCall', function(this)
-		
-	IncomingCallGameController_UpdateHoloAudioCall(this)
-	end)
-	
-	
-	ObserveAfter('NewHudPhoneGameController', 'SetPhoneFunction', function(this,newFunction)
-		
-	IncomingCallGameController_SetPhoneFunction(this,newFunction)
-	end)
 	
 	ObserveAfter('TutorialPopupGameController', 'OnInitialize', function(this)
 		
@@ -448,6 +290,11 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	ObserveAfter('WorldMapMenuGameController', 'OnInitialize', function(this)
+		WorldMapMenuGameController_OnInitialize(this)
+		
+	end)
+
+	ObserveAfter('WorldMapMenuGameController', 'OnEntityAttached', function(this)
 		WorldMapMenuGameController_OnInitialize(this)
 		
 	end)
@@ -478,11 +325,7 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	end)
 	
-	ObserveBefore("ShardsMenuGameController", "PopulateData", function(this)
-			
-		shardpopulate = true
-			
-	end)
+
 		
 	ObserveAfter("ShardsVirtualNestedListController", "SetData", function(this,data, keepToggledLevels, sortOnce)
 			
@@ -506,7 +349,7 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	ObserveBefore('WorldMapMenuGameController', 'OnSetUserData', function(this,userData )
-		WorldMapMenuGameController_OnSetUserData(this,userData)
+		
 			WorldMapMenuGameController_OnInitialize(this)
 		
 	end)
@@ -531,23 +374,19 @@ PanzerHUDGameController_OnInitialize(this)
 		BaseWorldMapMappinController_SelectMappin(self)
 	end)
 	
-	--region CyberScript Estates
+	
 	ObserveAfter('PhotoModeGridButton', 'ButtonStateChanged', function(this)
 		 PhotoModeGridButton_ButtonStateChanged(this)
 	
 	end)
-	--TODO
+	
 	ObserveAfter('BrowserController', 'Init', function(self,gameController)
 	
 	
 	 BrowserController_OnInitialize(self,gameController)
 	end)
 	
-	ObserveAfter('PopupsManager', 'OnShardRead', function(self,evt)
-	
-	
-	 PopupsManager_OnShardRead(self,evt)
-	end)
+
 	
 	ObserveAfter('WebPage', 'OnInitialize', function(self)
 	 WebPage_OnInitialize(self)
@@ -570,21 +409,11 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	
-	--endregion CyberScript Estates
+	
 	ObserveAfter('WorldMapTooltipController', 'SetData', function(self,data,menu)
 		WorldMapTooltipController_SetData(self,data,menu)
 	end)
-	-- ObserveAfter('MessengerNotification', 'OnInitialize', function(self)
-		-- PhoneMessagePopupGameController_OnHide(self,evt)
-	-- end)
 	
-	-- ObserveAfter('MessengerNotification', 'OnNotificationPaused', function(self)
-		-- MessengerNotification_OnAction(self)
-	-- end)
-	
-	-- ObserveAfter('PhoneMessagePopupGameController', 'OnShow', function(self,evt)
-		-- PhoneMessagePopupGameController_OnShow(self,evt)
-	-- end)
 	ObserveAfter('WorldMapTooltipContainer', 'SetData', function(self,target,data,menu)
 	
 	WorldMapTooltipContainer_SetData(self,target,data,menu)
@@ -640,9 +469,7 @@ PanzerHUDGameController_OnInitialize(this)
 		ChattersGameController_SetupLine(self) 
 	end)
 	
-	Observe('SubtitlesGameController','SetupLine', function(self) 
-		 SubtitlesGameController_SetupLine(self) 
-	end)
+
 	
 	Observe('BaseSubtitlesGameController','OnUninitialize', function(self) 
 		 BaseSubtitlesGameController_OnUninitialize(self) 
@@ -654,20 +481,8 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	
-	ObserveAfter('MessengerGameController','OnInitialize', function(this) 
-		MessengerGameController_PopulateData(this) 
-	end)
 	
 	
-	ObserveAfter('MessengerGameController','PopulateData', function(this) 
-		MessengerGameController_PopulateData(this) 
-	end)
-	
-	
-	
-	Observe('MessengerGameController','OnContactActivated', function(self,evt) 
-	MessengerGameController_OnContactActivated(self,evt) 
-	end)
 	
 	ObserveAfter('MessengerDialogViewController','SetVisited', function(this, records) 
 		MessengerDialogViewController_SetVisited(this, records) 
@@ -685,11 +500,11 @@ PanzerHUDGameController_OnInitialize(this)
 		MessengerDialogViewController_OnInitialize(this) 
 		
 	end)
-	
-	Override('PhoneMessagePopupGameController', 'SetupData', function(this,wrappedMethod)
-		PhoneMessagePopupGameController_SetupData(this,wrappedMethod)
+	--todotest
+	-- Override('PhoneMessagePopupGameController', 'SetupData', function(this,wrappedMethod)
+	-- 	PhoneMessagePopupGameController_SetupData(this,wrappedMethod)
 		
-	end)
+	-- end)
 	
 	
 	ObserveAfter('PhoneMessagePopupGameController', 'OnRefresh', function(this)
@@ -697,24 +512,21 @@ PanzerHUDGameController_OnInitialize(this)
 		
 	end)
 	
-	Observe('MessengerDialogViewController', 'ShowThread', function(self,thread)
-		MessengerDialogViewController_ShowThread(self,thread)
-	end)
+	-- Observe('MessengerDialogViewController', 'ShowThread', function(self,thread)
+	-- 	MessengerDialogViewController_ShowThread(self,thread)
+	-- end)
 	
-	Observe('MessengerDialogViewController', 'ShowDialog', function(self,contact)
-		MessengerDialogViewController_ShowDialog(self,contact)
-	end)
+	-- Observe('MessengerDialogViewController', 'ShowDialog', function(self,contact)
+	-- 	MessengerDialogViewController_ShowDialog(self,contact)
+	-- end)
 	
 	ObserveAfter('MessengerDialogViewController', 'UpdateData', function(self,animateLastMessage,setVisited)
 		MessengerDialogViewController_UpdateData(self,animateLastMessage,setVisited)
 	end)
+
 	
 	Observe('MessangerItemRenderer', 'GetData', function(self)
 		MessangerItemRenderer_GetData(self)
-	end)
-	
-	Observe('MessangerReplyItemRenderer', 'OnDataChanged', function(self,value)
-		MessangerReplyItemRenderer_OnDataChanged(self,value)
 	end)
 	
 	Observe('MessangerItemRenderer', 'OnJournalEntryUpdated', function(self,entry,extraData)
@@ -722,22 +534,16 @@ PanzerHUDGameController_OnInitialize(this)
 		end)
 	
 	
+	
 	Observe('MessangerReplyItemRenderer', 'OnJournalEntryUpdated', function(self,entry,extraData)
 		MessangerReplyItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
 	end)
+		
 	
 	
-	
-	
-	Observe('MessengerDialogViewController', 'ActivateSelectedReplyOption', function(self)
-		MessengerDialogViewController_ActivateSelectedReplyOption(self)
-	end)
 	Observe('MessengerDialogViewController', 'ActivateReply', function(self,target)
 		MessengerDialogViewController_ActivateReply(self,target)
 	end)
-	Observe('MessengerDialogViewController', 'OnPlayerReplyActivated', function(self,index,target)
-		MessengerDialogViewController_OnPlayerReplyActivated(self,index,target)
-	end)
 	
 	
 	
@@ -747,21 +553,27 @@ PanzerHUDGameController_OnInitialize(this)
 	
 	
 	
-	Observe('MenuScenario_HubMenu', 'OnSelectMenuItem', function(_, menuItemData)
-		MenuScenario_HubMenu_OnSelectMenuItem(_, menuItemData)
-	end)
 	
 	
 	
-	Override("PhoneDialerLogicController", "PopulateListData", function(this,contactDataArray,selectIndex, itemHash,wrappedMethod)
+	ObserveAfter("PhoneDialerLogicController", "PopulateListData", function(this,contactDataArray,selectIndex, itemHash)
 		
-		PhoneDialerGameController_PopulateData(this,contactDataArray,selectIndex, itemHash,wrappedMethod)
+		PhoneDialerGameController_PopulateData(this,contactDataArray,selectIndex, itemHash)
 	end)
 	
 	ObserveAfter('NewHudPhoneGameController','CallSelectedContact', function(this,contactData)
 		PhoneDialerGameController_CallSelectedContact_Observer(this,contactData)
 		
 	end)
+
+
+	
+	ObserveAfter('NewHudPhoneGameController','OnSmsMessageLostFocus', function(this,evt)
+		NewHudPhoneGameController_ToggleShowAllMessages(this,nil)
+	
+		
+	end)
+	
 	
 	ObserveAfter('NewHudPhoneGameController','SetScreenType', function(this,type)
 		NewHudPhoneGameController_ToggleShowAllMessages(this,type)
@@ -790,6 +602,11 @@ PanzerHUDGameController_OnInitialize(this)
 		NewHudPhoneGameController_RefreshSmsMessager(this,contactData)
 		
 	end)
+
+	ObserveAfter('NewHudPhoneGameController','OnContactSelectionChanged', function(this,evt)
+		NewHudPhoneGameController_OnContactSelectionChanged(this,evt)
+		
+	end)
 	
 	ObserveAfter('NewHudPhoneGameController','FocusSmsMessenger', function(this)
 		NewHudPhoneGameController_FocusSmsMessenger(this)
@@ -805,48 +622,30 @@ PanzerHUDGameController_OnInitialize(this)
 		PhoneSystem_OnTriggerCall(this, request)
 	end)
 	
-	ObserveAfter('PhoneSystem','TriggerCall', function (this, callMode, isAudio, contactName, isPlayerCalling, callPhase, isPlayerTriggered, isRejectable, showAvatar, callVisuals) 
-		PhoneSystem_TriggerCall(this, callMode, isAudio, contactName, isPlayerCalling, callPhase, isPlayerTriggered, isRejectable, showAvatar, callVisuals) 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	Observe("NewHudPhoneGameController", "OnMenuUpdate", function(this) 
+		NewHudPhoneGameController_FocusSmsMessenger(this)  
+	end)
+
+	Observe("NewHudPhoneGameController", "OnPlayerAttach", function(this) 
+		NewHudPhoneGameController_FocusSmsMessenger(this)  
+	end)
+
+	Observe("NewHudPhoneGameController", "OnInitialize", function(this) 
+		NewHudPhoneGameController_FocusSmsMessenger(this) 
 	end)
 	
-	ObserveAfter('PhoneSystem','OnUsePhone', function(this, request)
-		 PhoneSystem_OnUsePhone(this, request)
-		
-	end)
-	
-	Observe('PhoneDialerLogicController', 'Show', function(this)
-		 PhoneDialerGameController_Show(this)
-	end)
-	
-	Observe('PhoneDialerLogicController', 'Hide', function()
-		PhoneDialerGameController_Hide()
-	end)
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	Observe('VehicleRadioPopupGameController', 'VirtualListReady', function(self)
-		VehicleRadioPopupGameController_VirtualListReady(self)
-	end)
-	
-	Observe('VehicleSummonWidgetGameController', 'OnVehicleSummonStateChanged', function(state,value ) 
-		
-		VehicleSummonWidgetGameController_OnVehicleSummonStateChanged(state,value ) 
-	end)
 	
 	Observe('PopupsManager', 'OnPlayerAttach', function(self)
 		
@@ -858,27 +657,7 @@ PanzerHUDGameController_OnInitialize(this)
 		 PopupsManager_OnPlayerDetach()
 	end)
 	
-	Observe('RadioStationListItemController', 'OnDataChanged', function(self,value)
-		RadioStationListItemController_OnDataChanged(self,value)
-	end)
 	
-	ObserveAfter('VehicleRadioPopupGameController', 'Activate', function(self)
-		VehicleRadioPopupGameController_Activate(self)
-	end)
-	
-	Observe('VehicleRadioPopupGameController', 'OnScrollChanged', function(self)
-		 VehicleRadioPopupGameController_OnScrollChanged(self)
-		
-	end)
-	
-	ObserveBefore('RadioStationListItemController', 'OnSelected', function(self,itemController,discreteNav)
-		
-		RadioStationListItemController_OnSelected(self,itemController,discreteNav)
-	end)
-	
-	Observe('VehicleRadioPopupGameController', 'OnClose', function()
-		 VehicleRadioPopupGameController_OnClose()
-	end)
 	
 	Observe('PlayerPuppet', 'OnDeath', function()
 		PlayerPuppet_OnDeath()
@@ -900,10 +679,7 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	
-	Observe('CaptionImageIconsLogicController', 'OnInitialize',function(self,backgroundColor,iconColor)
-		CaptionImageIconsLogicController_OnInitialize(self,backgroundColor,iconColor)
-		
-	end)
+	
 	
 	
 	ObserveAfter('ShardNotificationController', 'OnInitialize', function(self)
@@ -934,24 +710,13 @@ PanzerHUDGameController_OnInitialize(this)
 		gameuiInGameMenuGameController_SpawnMenuInstanceEvent(self)
 	end)
 	
-	Observe('PopupsManager', 'ShowPhoneMessage', function(self)
-		
-		
-		 PopupsManager_ShowPhoneMessage(self)
-		
-		
-	end)
+	
 	
 	Observe('PopupsManager', 'OnMessagePopupUseCloseRequest', function(self)
 		PopupsManager_OnMessagePopupUseCloseRequest(self)
 		
 	end)
-	
-	Observe('QuestCodexLinkController', 'Setup', function(self)
-		
-		QuestCodexLinkController_Setup(self)
-		
-	end)
+
 	
 	
 end
@@ -1033,9 +798,9 @@ function SetOverrider()
 		
 	 end)
 	--TODO
-	Override("PreventionSpawnSystem", "SpawnRequestFinished", function(this,requestResult,wrappedMethod)
-		PreventionSpawnSystem_SpawnCallback(this,requestResult,wrappedMethod)
-	end)
+	-- Override("PreventionSpawnSystem", "SpawnRequestFinished", function(this,requestResult,wrappedMethod)
+	-- 	PreventionSpawnSystem_SpawnCallback(this,requestResult,wrappedMethod)
+	-- end)
 	 
 	Override("QuestMappinLinkController", "Setup", function(this,mappinEntry,mappinHash,jumpTo,isTracked,wrappedMethod)
 
@@ -1065,13 +830,7 @@ function SetOverrider()
 	end)
 	
 	
-	Override('PlayerPuppet', 'OnLookAtObjectChangedEvent', function(this)
-		PlayerPuppet_OnLookAtObjectChangedEvent(this)
-	end)
 	
-	Override('NcartTimetableControllerPS', 'UpdateCurrentTimeToDepart', function(self,wrappedMethod)
-		 NcartTimetableControllerPS_UpdateCurrentTimeToDepart(self,wrappedMethod)
-	end)
 	
 	Override('PhoneDialerGameController','CallSelectedContact',function(this, wrappedMethod)
 		
@@ -1079,22 +838,9 @@ function SetOverrider()
 	end
 	)
 	
-	Override('DoubleJumpDecisions','EnterCondition',function(this,stateContext,scriptInterface, wrappedMethod)
-		
-		local value = DoubleJumpDecisions_EnterCondition(this,stateContext,scriptInterface, wrappedMethod)
-		return value
-	end)
-	
-	Override('LocomotionAirEvents','OnUpdate',function(this,timeDelta, stateContext, scriptInterface, wrappedMethod)
-		
-		 LocomotionAirEvents_OnUpdate(this,timeDelta, stateContext, scriptInterface, wrappedMethod)
-	end)
 	
 	
-	Override('WorldMapMenuGameController','OnGangListItemSpawned', function(self,gangWidget,userData) 
-		WorldMapMenuGameController_OnGangListItemSpawned(self,gangWidget,userData) 
-			WorldMapMenuGameController_OnInitialize(self)
-	end)
+	
 	--TODO
 	-- Override('WorldMapMenuGameController','OnSelectedDistrictChanged', function(self,oldDistrict,newDistrict) 
 		 -- WorldMapMenuGameController_OnSelectedDistrictChanged(self,oldDistrict,newDistrict) 
@@ -1108,92 +854,6 @@ function SetOverrider()
 	
 	
 	
-	Override('ComputerMainLayoutWidgetController', 'InitializeMenuButtons', function(this, gameController, widgetsData,wrappedMethod)
-		ComputerMainLayoutWidgetController_InitializeMenuButtons(this, gameController, widgetsData,wrappedMethod)
-	end)
-	
-	Override('ComputerMainLayoutWidgetController', 'ShowInternet', function(this, startingPage,wrappedMethod)
-	
-		ComputerMainLayoutWidgetController_ShowInternet(this, startingPage,wrappedMethod)
-	end)
-	
-	--TODO
-	-- Override('VehiclesManagerDataHelper', 'GetVehicles', function(this,player, wrappedMethod)
-		-- --print("test helper")
-		-- VehiclesManagerDataHelper_GetVehicles(this,player, wrappedMethod)
-	-- end)
-	
-	Override('VehiclesManagerPopupGameController', 'Activate', function(this, wrappedMethod)
-	
-		VehiclesManagerPopupGameController_Activate(this, wrappedMethod)
-	end)
-	
-	Override('VehiclesManagerPopupGameController', 'SetupData', function(this, wrappedMethod)
-	
-		VehiclesManagerPopupGameController_SetupData(this, wrappedMethod)
-	end)
-	
-	
-	Override('VehiclesManagerListItemController', 'OnDataChanged', function(this,value, wrappedMethod)
-	
-		VehiclesManagerListItemController_OnDataChanged(this,value, wrappedMethod)
-	end)
-	
-	--Vendors
-	
-	-- Override("VendorHubMenuGameController", "OnSetUserData", function(this,userData,wrappedMethod)
-		-- if(objLook ~= nil) then
-			-- local entid = objLook:GetEntityID()
-			-- local entity = getEntityFromManagerById(entid)
-			-- if(entity.id ~= nil) and VendorsStockManager[entity.tag] ~= nil then
-			  -- local vendorData = userData.data
-			  -- this.vendorUserData = VendorUserData.new()
-			  -- this.vendorUserData.vendorData = vendorPanelData
-			  -- this.player = this:GetPlayerControlledObject()
-			  -- this.PDS = GameInstance.GetScriptableSystemsContainer():Get("PlayerDevelopmentSystem")
-			  -- this.VendorDataManager = VendorDataManager.new()
-			  -- logme(1,"sell01")
-			  -- --this.VendorDataManager:Initialize(this:GetPlayerControlledObject(), objLook:GetEntityID())
-			-- this.VendorDataManager.TimeToCompletePurchase = 0
-			-- this.VendorDataManager.VendorObject = objLook
-			-- this.VendorDataManager.VendorID =  getVendorId()
-			-- MarketSystem.OnVendorMenuOpen(this.VendorDataManager.VendorObject)
-			
-			
-			  -- requestStatsEvent = RequestStatsBB.new()
-			    -- logme(1,"sell02")
-			  -- requestStatsEvent:Set(this.player)
-			    -- logme(1,"sell03")
-			  -- this.PDS:QueueRequest(requestStatsEvent)
-			    -- logme(1,"sell04")
-			  -- this:Init()
-			    -- logme(1,"sell05")
-			-- --print("sell01")
-			-- else
-					
-					
-					-- wrappedMethod(userData)
-			-- end
-			-- else
-					
-					
-					-- wrappedMethod(userData)
-		-- end
-	-- end)
-
-	
-	-- Override("RipperdocIdPanel", "SetName", function(this,vendorName,wrappedMethod)
-		-- RipperdocIdPanel_SetName(this,vendorName,wrappedMethod)
-	-- end)
-	
-	-- Override("VendorHubMenuGameController", "SetupTopBar", function(this,wrappedMethod)
-		-- VendorHubMenuGameController_SetupTopBar(this,wrappedMethod)
-	-- end)
-	
-	-- Override("FullscreenVendorGameController", "PopulateVendorInventory", function(this,wrappedMethod)
-		
-		-- FullscreenVendorGameController_PopulateVendorInventory(this,wrappedMethod)
-	-- end)
 	
 	
 	---Scanner
@@ -1240,24 +900,17 @@ function SetOverrider()
 		--print("RefreshLayout")
 	end)
 	
+	
 	Override('QuickhacksListGameController', 'PopulateData', function(this,data,wrappedMethod)
 		QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
 	end)
 	
 	
-	Override('QuickhacksListGameController', 'ResetQuickhackSelection', function(this,wrappedMethod)
-		QuickhacksListGameController_ResetQuickhackSelection(this,wrappedMethod)
-	end)
 	
 	
 	
-	Override('QuickhacksListGameController', 'OnAction', function(this,action,consumer,wrappedMethod)
-		QuickhacksListGameController_OnAction(this,action,consumer,wrappedMethod)
-		
-	end)
-	
-	Override('QuickhacksListGameController', 'ApplyQuickHack', function(this,shouldUseUI,wrappedMethod)
-		QuickhacksListGameController_ApplyQuickHack(this,shouldUseUI,wrappedMethod)
+	ObserveAfter('QuickhacksListGameController', 'ApplyQuickHack', function(this,shouldUseUI)
+		QuickhacksListGameController_ApplyQuickHack(this,shouldUseUI)
 		
 	end)
 	
@@ -1266,44 +919,16 @@ function SetOverrider()
 		
 	end)
 	
-	Override('QuickhacksListGameController', 'SetVisibility', function(this,value,wrappedMethod)
-		QuickhacksListGameController_SetVisibility(this,value,wrappedMethod)
-		
-	end)
-	
-	Override('QuickhacksListGameController', 'OnMemoryPercentUpdate', function(this,value, wrappedMethod)
-		QuickhacksListItemController_OnMemoryPercentUpdate(this,value, wrappedMethod)
-	end)
-	
-	Override('QuickhacksListGameController', 'UpdateQuickhacksMemoryBarSize', function(this,size, wrappedMethod)
-		QuickhacksListItemController_UpdateQuickhacksMemoryBarSize(this,size, wrappedMethod)
-	end)
-	
-	---Scanner
-	
-	Override('QuickhacksListItemController', 'UpdateState', function(this, wrappedMethod)
-		QuickhacksListItemController_UpdateState(this, wrappedMethod)
-	end)
-	
-	Override('QuickhacksListItemController', 'PlayChoiceAcceptedAnimation', function(this, wrappedMethod)
-		QuickhacksListItemController_PlayChoiceAcceptedAnimation(this, wrappedMethod)
-	end)
+
 	
 	
-	
-	
-	-- Override('BrowserController', 'TryGetWebsiteData', function(this, address, wrappedMethod)
-	
-		-- BrowserController_TryGetWebsiteData(thos, address, wrappedMethod)
-		
-	-- end)
 	Override('BrowserController', 'LoadWebPage', function(self,address,wrappedMethod)
 	 BrowserController_LoadWebPage(self,address,wrappedMethod)
 	
 	end)
-	Override('WorldMapMenuGameController', 'ShowGangsInfo', function(self,district)
+	Override('WorldMapMenuGameController', 'ShowGangsInfo', function(self,district,sub)
 		
-		WorldMapMenuGameController_ShowGangsInfo(self,district)
+		WorldMapMenuGameController_ShowGangsInfo(self,district,sub)
 			WorldMapMenuGameController_OnInitialize(self)
 	end)
 	
@@ -1311,6 +936,22 @@ function SetOverrider()
 		ComputerInkGameController_ShowMenuByName(this, elementName, wrappedMethod)
 		
 	end)
+
+
+
+		
+	ObserveAfter('MessengerNotification', 'OnActionTriggered', function(self)
+		
+		MessengerNotification_OnAction(self)
+		
+	end)
+
+	Observe('VehicleSummonWidgetGameController', 'OnVehicleSummonStateChanged', function(state,value ) 
+		
+		VehicleSummonWidgetGameController_OnVehicleSummonStateChanged(state,value ) 
+	end)
+		
+
 	
 end
 ---Observer and Overrider---

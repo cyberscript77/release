@@ -759,7 +759,9 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 		if mainrefreshstep7 then
 		if (tick % 120 == 0) then --every 2 second
 			playRadio()
-			
+			-- if(GameController["PhoneHotkeyController"] ~= nil) then
+			-- 	PhoneHotkeyController_UpdateData(GameController["PhoneHotkeyController"])
+			-- end
 		end
 		end
 		
@@ -888,30 +890,8 @@ function inGameInit() -- init some function after save loaded
 		
 		
 		InfiniteStamina(InfiniteStaminas)
-		if(UnlimitedCarryLimit) then 
-			Game.GetStatsSystem():AddModifier(Game.GetPlayer():GetEntityID(),RPGManager.CreateStatModifier(gamedataStatType.CarryCapacity,gameStatModifierType.Additive,99999999))
-		end
-		if(InfiniteAmmo) then
-				Game.GetInventoryManager().AddEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
-				local player = Game.GetPlayer()
-				local activeWeapon = GameObject.GetActiveWeapon(player)
-				-- The gist behind this is:
-				-- Reload the weapon in 0 seconds, end the reload
-				if(activeWeapon ~= nil) then
-				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
-				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
-				end
-			else
-				Game.GetInventoryManager().RemoveEquipmentStateFlag(Game.GetInventoryManager(),gameEEquipmentManagerState.InfiniteAmmo)
-				local player = Game.GetPlayer()
-				local activeWeapon = GameObject.GetActiveWeapon(player)
-				-- The gist behind this is:
-				-- Reload the weapon in 0 seconds, end the reload
-				if(activeWeapon ~= nil) then
-				GameObject.GetActiveWeapon(player).StartReload(activeWeapon,0)
-				GameObject.GetActiveWeapon(player).StopReload(activeWeapon,gameweaponReloadStatus.Standard)
-				end
-			end
+		
+	
 			
 		
 			
@@ -958,8 +938,8 @@ function inGameInit() -- init some function after save loaded
 				end
 			end
 		end
-		
-		if(cstag ~= "")then
+		logme(1,"entid "..dump(entid))
+		if(cstag ~= "" and Game.FindEntityByID(entid):GetRecordID() ~= nil and cyberscript.entitieshash[tostring(Game.FindEntityByID(entid):GetRecordID().hash)] ~= nil)then
 		
 			local entity = {}
 			entity.id = entid
@@ -1006,7 +986,7 @@ function inGameInit() -- init some function after save loaded
 	local blackboardPSM = Game.GetBlackboardSystem():GetLocalInstanced(Game.GetPlayer():GetEntityID(), blackboardDefs.PlayerStateMachine)
 	blackboardPSM:SetInt(blackboardDefs.PlayerStateMachine.SceneTier, 1, true) -- GameplayTier.Tier1_FullGameplay 
 	--Game.GetTimeSystem():SetTimeDilation("cyberscript", 0)
-	 QuestManager.UntrackObjective()
+	 
 	
 	currentObjectiveId = 0
 	inkCompoundRef.RemoveAllChildren(GameController["QuestTrackerGameController"].ObjectiveContainer)
@@ -2074,7 +2054,27 @@ function checkFixer()
 			
 			
 			oldfixer = deepcopy(currentfixer,nil)
+			if(fixerIsSpawn == false and currentfixer.exist == false and currentfixer.npcexist == false and cyberscript.EntityManager[currentfixer.tag] == nil) then
+				print(currentfixer.tag)
+				
+				
+				local twkVehi = TweakDBID.new(currentfixer.tweakid)
+				
+				
+				
+				
+				if cyberscript.EntityManager[currentfixer.tag] == nil then
+					cyberscript.EntityManager[currentfixer.tag] = {}
+					if currentfixer.appearance == nil then currentfixer.appearance = "" end
+				spawnNPC(currentfixer.tweakid,currentfixer.appearance, currentfixer.tag, currentfixer.x, currentfixer.y, currentfixer.z, 42, false, false, nil, false, nil,0,true,true,true,true,true)
+				logme(1,"Cyberscript : Spawn Fixer :"..currentfixer.tag)
+				end
+				
 			
+				   
+				   
+				   
+			end	
 			
 			-- if(currentfixer.exist == false and currentfixer.npcexist == false and fixerIsSpawn == false) then
 				-- ------print("spawn")
@@ -2173,7 +2173,7 @@ function checkContext(item)
 						
 						
 						local path =  splitDot(k, ".")
-						setValueToTablePath(item, path, GeneratefromContext(u))
+						setValueToTablePath(item, path, GeneratefromContext(item,u))
 						
 					end
 				end
@@ -2186,7 +2186,7 @@ function checkContext(item)
 					local path =  splitDot(k, ".")
 					
 					
-					setValueToTablePath(item, path, GeneratefromContext(u))
+					setValueToTablePath(item, path, GeneratefromContext(item,u))
 				end
 			end
 		end
@@ -4760,6 +4760,12 @@ function getTextureByTag(tag)
 	return nil
 end		
 
+
+function printbool(bool)
+
+	print(tostring(bool))
+
+end
 
 function refreshUIWidgetController(active)
 	if active == true then

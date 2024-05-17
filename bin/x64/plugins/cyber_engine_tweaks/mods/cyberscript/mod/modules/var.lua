@@ -227,7 +227,8 @@ function resetVar()
 		"quickhack",
 		"garage",
 		"ai",
-		"aitemplate"
+		"aitemplate",
+        "tweakflat"
 		
 	}
 	cacheupdate = false
@@ -317,20 +318,18 @@ function resetVar()
 	pathOffsetY = 0
 	pathOffsetZ = 0
 	enableCustomQuest = true
-	InfiniteDoubleJump = false
-	numberOfMultiJumps = 100
-	DisableFallDamage = false
+	
 	Immortal = false
 	InfiniteStaminas = false
-	InfiniteAmmo = false
+	
 	RamUpgrade = false
 	
+    
 	Player_Sprint_Multiplier = 1	--Default is 1 IMPORTANT as of 1.3, movement speed is capped somewhere.
 	Player_Run_Multiplier = 1 --Default 1
 	Jump_Height = 1 --Default 1
 	Double_Jump_Height = 1 --Default 1
-	UltraSpeedDodge = false
-	UnlimitedCarryLimit = false
+	
 	CurrentStock = nil
 	moveRoll=0
 	movePitch=0
@@ -549,7 +548,7 @@ function resetVar()
 	
 	possibleFaction = { "Arasaka", "Militech", "KangTao", "Nomad"}
 	
-	npcsource = { "npc", "current_star", "faction", "current_district_leader", "current_subdistrict_leader", "district_leader", "subdistrict_leader", "random","from_list","district_rival","subdistrict_rival","current_district_rival","current_subdistrict_rival"}
+	npcsource = { "npc", "current_star", "faction","faction_random_list", "current_district_leader", "current_subdistrict_leader", "district_leader", "subdistrict_leader", "random","from_list","district_rival","subdistrict_rival","current_district_rival","current_subdistrict_rival"}
 	npcposition = { 
 		"at", 
 		"relative_to_entity", 

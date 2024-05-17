@@ -1741,7 +1741,7 @@ return {
 		["create_group_if_not_exist"] = false,
 		["source"] = "npc",
 		["source_tag"] = "Character.Judy",
-		["source_helper"] = "npc||current_star||faction||current_district_leader||current_subdistrict_leader||district_leader||subdistrict_leader||random||from_list||district_rival||subdistrict_rival||current_district_rival||current_subdistrict_rival||custom_npc",
+		["source_helper"] = "npc||current_star||faction||faction_random_list||current_district_leader||current_subdistrict_leader||district_leader||subdistrict_leader||random||from_list||district_rival||subdistrict_rival||current_district_rival||current_subdistrict_rival||custom_npc",
 		["source_use_rival"] = false,
 		["source_tag_helper"] = "Character.Judy||faction_mox||district_westbrook||NorthOaks",
 		["position_way"] = "normal",
@@ -1989,7 +1989,7 @@ return {
  The filter will check in the name, display name and appearance of the entity \
  The founded entities will be registred in script manager and added in an group called temp_around_group. \
  Fill the action list will perform theses action to each founded entities.",
-		["helperTitle"] = "Variable : Concatenate Variable with Score",
+		["helperTitle"] = "Entity : For Entity around you",
 		["group"] = "",
 		["name"] = "for_entity_around_you",
 		["filter"] = {
@@ -1998,6 +1998,31 @@ return {
 		},
 		["action"] = {
 		},
+	},
+	["for_enemy_around_you"] = {
+		["range"] = 5,
+		["helper"] = "This action will register each enemies founded in the player's view in an determined range and filter. \
+ leave filter at [] for take all. \
+ The filter will check in the name, display name and appearance of the entity \
+ The founded entities will be registred in script manager and added in an group called temp_around_group. \
+ Fill the action list will perform theses action to each founded entities.",
+		["helperTitle"] = "Entity : For Enemies around you",
+		["group"] = "",
+		["name"] = "for_enemy_around_you",
+		["filter"] = {
+			"mox",
+			"npc",
+		},
+		["action"] = {
+		},
+	},
+	["for_entity_in_group"] = {
+		
+		["helper"] = "This action will apply a sub actionlist to each entity in a group. In the subactionlist, use the tag 'this'",
+		["helperTitle"] = "Group : For each entity in group",
+		["tag"] = "mygroup",
+		["name"] = "for_entity_in_group",
+		["action"] = {},
 	},
 	["pause_sound_channel"] = {
 		["helper"] = "This action will use Sound Manager Mod to pause a channel (sound, music or env) ",
@@ -2982,6 +3007,13 @@ return {
 		["name"] = "stop_effect",
 		["tag"] = "lookat",
 	},
+	["stop_effect_test"] = {
+		["helper"] = "This action will stop an FX animation to the target",
+		["helperTitle"] = "UI : Stop FX TEST",
+		["value"] = "blackout",
+		["name"] = "stop_effect_test",
+		["tag"] = "lookat",
+	},
 	["delete_scannerdata"] = {
 		["helper"] = "This action will delete Scanner Data",
 		["tag"] = "judy01",
@@ -3093,6 +3125,11 @@ return {
 		["name"] = "open_menu",
 		["helperTitle"] = "Interface : Open Menu",
 		["helper"] = "This action will open the menu ",
+	},
+	["open_phone"] = {
+		["name"] = "open_phone",
+		["helperTitle"] = "Interface : Open Phone",
+		["helper"] = "This action will open the phone ",
 	},
 	["do_random_function"] = {
 		["helper"] = "This action will do a random function in the list",
@@ -4081,4 +4118,47 @@ return {
 		["helperTitle"] = "Entity : Stop in Workspot",
 		["name"] = "stop_in_workspot",
 	},
+
+	["vehicle_cancel_last_cmd"] = {
+		["helper"] = "This action stop the last command of an vehicle if it exist",
+		["tag"] = "metroVeh",
+		["helperTitle"] = "Vehicle : Cancel last command",
+		["name"] = "vehicle_cancel_last_cmd",
+	},
+
+	["vehicle_toggle_collision"] = {
+		["helper"] = "This action toggle Collision of an vehicle",
+		["tag"] = "metroVeh",
+		["value"] = true,
+		["helperTitle"] = "Vehicle : Toggle Collision",
+		["name"] = "vehicle_toggle_collision",
+	},
+
+	["push_force_entity"] = {
+		["helper"] = "This action will Push force an entity",
+		["target"] = "judy01",
+		["x"] = 100,
+		["y"] = 100,
+		["z"] = 100,
+		["helperTitle"] = "Entity : Push Force",
+		["name"] = "push_force_entity",
+	},
+
+	["pull_force_entity"] = {
+		["helper"] = "This action will Pull force an entity",
+		["target"] = "judy01",
+		["x"] = 100,
+		["y"] = 100,
+		["z"] = 100,
+		["helperTitle"] = "Entity : Pull Force",
+		["name"] = "pull_force_entity",
+	},
+
+	["player_blackwall_hand_anim"] = {
+		["helper"] = "This action will do the Player blackwall hand animation",
+		["helperTitle"] = "Player : Blackwall hand animation",
+		["name"] = "player_blackwall_hand_anim",
+	},
+
+	
 }

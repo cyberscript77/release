@@ -64,10 +64,10 @@ function input.onUpdate(deltaTime)
             -- end
 			
 			 for _, key in pairs(binding.keys) do
-					--print(dump(key))
+					
 				if not key[3] then
 					input.activeKeys[key[1]] = nil
-					--print("nil")
+					
 				end
                 
             end
