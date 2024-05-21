@@ -1,5 +1,7 @@
 
 function WorldMapMenuGameController_GetDistrictAnimation(thos,view ,show)
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	if(show == true or view == gameuiEWorldMapDistrictView.None) then
 		
@@ -21,6 +23,8 @@ end
 
 
 function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdistrict)
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	if(subdistrict ~= gamedataDistrict.Invalid) then
 		mapSubDistrict = subdistrict
@@ -47,6 +51,7 @@ end
 
 function WorldMapMenuGameController_OnSelectedDistrictChanged(thos,oldDistrict,newDistrict)
 	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	
 	
@@ -77,6 +82,8 @@ function WorldMapMenuGameController_OnSelectedDistrictChanged(thos,oldDistrict,n
 end
 
 function WorldMapMenuGameController_OnZoomLevelChanged(thos,oldLevel,newLevel)
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	
 	local zoomlevel = thos:GetCurrentZoom()
@@ -93,6 +100,7 @@ end
 
 function BaseWorldMapMappinController_SelectMappin(self)
 	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	GameController["BaseWorldMapMappinController"]  = self
@@ -256,6 +264,7 @@ end
 
 function WorldMapTooltipController_SetData(self,data,menu)
 	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	local mappinVariant = nil
 	
@@ -311,6 +320,8 @@ function WorldMapTooltipController_SetData(self,data,menu)
 end
 
 function WorldMapTooltipContainer_SetData(self,target,data,menu)
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	local displayXYZ = getUserSetting("displayXYZ")
 	local mappinVariant = nil
@@ -378,6 +389,8 @@ function WorldMapTooltipContainer_SetData(self,target,data,menu)
 end
 
 function WorldMapMenuGameController_UntrackCustomPositionMappin(self)
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	ActivecustomMappin = nil
 	--logme(2,"obs3")

@@ -837,6 +837,8 @@ end
 
 
 function TrackQuestNotificationAction_TrackFirstObjective(thos,questEntry)
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	
 	if(questEntry ~= nil)then

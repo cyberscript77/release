@@ -103,29 +103,34 @@ end
 
 
 function IncomingCallGameController_OnInitialize(thos)
+	
 	if(observerthread4  == true or moddisabled == true)    then return end
 	
 	GameController["IncomingCallGameController"]  = thos
 end
 
 function IncomingCallGameController_GetIncomingContact(thos)
+	
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["IncomingCallGameController"]  = thos
 end
 
 
 function TutorialPopupGameController_OnInitialize(thos)
+	
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["TutorialPopupGameController"]  = thos
 end
 
 function TutorialPopupGameController_OnPlayerAttach(thos,playerPuppet)
+	
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["TutorialPopupGameController"]  = thos
 end
 
 
 function WorldMapMenuGameController_OnInitialize(this)
+	
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["WorldMapMenuGameController"]  = this
 	
@@ -135,18 +140,21 @@ end
 
 function JournalNotificationQueue_OnMenuUpdate(self)
 	----logme(2,"obs2")
+	
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["JournalNotificationQueue"]  = self
 end
 
 function JournalNotificationQueue_OnInitialize(self)
 	----logme(2,"obs2")
+	
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["JournalNotificationQueue"]  = self
 end
 
 
 function BraindanceGameController_OnInitialize(self)
+	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	GameController["BraindanceGameController"]  = self
 	
@@ -159,6 +167,7 @@ end
 
 
 function interactionWidgetGameController_OnInitialize(self)
+	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	Cron.NextTick(function()
 		
@@ -168,6 +177,7 @@ function interactionWidgetGameController_OnInitialize(self)
 end
 
 function ChattersGameController_OnInitialize(self) 
+	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	GameController["ChattersGameController"]  = self
 	
@@ -176,6 +186,7 @@ function ChattersGameController_OnInitialize(self)
 end
 
 function ChattersGameController_OnPlayerAttach(self,playerGameObject) 
+	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	GameController["ChattersGameController"]  = self
 	
@@ -183,6 +194,7 @@ function ChattersGameController_OnPlayerAttach(self,playerGameObject)
 end
 
 function SubtitlesGameController_OnInitialize(self) 
+	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	GameController["SubtitlesGameController"]  = self
 
@@ -190,6 +202,8 @@ end
 
 
 function interactionWidgetGameController_OnItemSpawned(self)
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	if(GameController["interactionWidgetGameController"] == nil) then
 		Cron.NextTick(function()
@@ -201,6 +215,8 @@ function interactionWidgetGameController_OnItemSpawned(self)
 end
 
 function ChattersGameController_SetupLine(self) 
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	if(currentChattersGameController == nil) then
 		--logme(2,"obs99")
@@ -214,6 +230,8 @@ end
 
 
 function BaseSubtitlesGameController_OnUninitialize(self) 
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	currentChattersGameController = nil
 	currentSubtitlesGameController = nil
@@ -221,18 +239,24 @@ end
 
 
 function MessengerGameController_OnInitialize(this) 
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["MessengerGameController"] = this
 end
 
 
 function PopupsManager_OnPlayerAttach(self)
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	GameController["PopupsManager"]  = self
 end
 
 function PopupsManager_OnPlayerDetach()
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	radiopopup = nil
 end
@@ -250,22 +274,30 @@ function gameuiInGameMenuGameController_SpawnMenuInstanceEvent(self) -- Get Cont
 end
 
 function NewHudPhoneGameController_ShowSelectedContactMessages(this,contactData) 
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["NewHudPhoneGameController"] = this
 end
 
 function NewHudPhoneGameController_GotoSmsMessenger(this,contactData) 
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["NewHudPhoneGameController"] = this
 	
 end
 
 function NewHudPhoneGameController_FocusSmsMessenger(this) 
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["NewHudPhoneGameController"] = this
 end
 
 function NewHudPhoneGameController_OnSmsMessageGotFocus(this,evt)
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["NewHudPhoneGameController"] = this
 	
@@ -273,11 +305,15 @@ function NewHudPhoneGameController_OnSmsMessageGotFocus(this,evt)
 end
 
 function NewHudPhoneGameController_ExecuteAction(this,types) 
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["NewHudPhoneGameController"] = this
 end
 
 function MessengerDialogViewController_AttachJournalManager(thos, journalManager) 
+	
+
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	GameController["MessengerDialogViewController"]  = thos
@@ -287,6 +323,8 @@ end
 
 
 function NewHudPhoneGameController_RefreshSmsMessager(this,contactData) 
+	
+
 	if(observerthread4  == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))    then return end
 	GameController["NewHudPhoneGameController"] = this
 	
@@ -295,6 +333,8 @@ end
 
 
 function MessengerDialogViewController_OnInitialize(thos) 
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	GameController["MessengerDialogViewController"]  = thos

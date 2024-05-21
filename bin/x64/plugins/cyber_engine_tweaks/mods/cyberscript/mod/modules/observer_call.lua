@@ -375,11 +375,8 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 	
-	ObserveAfter('PhotoModeGridButton', 'ButtonStateChanged', function(this)
-		 PhotoModeGridButton_ButtonStateChanged(this)
 	
-	end)
-	
+		
 	ObserveAfter('BrowserController', 'Init', function(self,gameController)
 	
 	
@@ -786,11 +783,6 @@ function SetOverrider()
 	end)
 	
 	
-	ObserveAfter("DeviceMappinsContainer", "Initialize", function(this)
-		
-		 DeviceMappinsContainer_EvaluatePositions(this)
-
-	end)
 	
 	 ObserveAfter("SmartWindowInkGameController", "InitializeMainLayout", function(this)
 		

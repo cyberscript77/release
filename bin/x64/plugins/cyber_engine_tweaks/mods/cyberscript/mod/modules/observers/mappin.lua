@@ -65,6 +65,7 @@ end
 
 function MappinBaseController_SetRootVisible(this,mappin, mappinVariant, customData)
 	
+
 	if(observerthread4 == true or moddisabled  == true)  then return  end
 	local mappinType = mappin:GetVariant()
 	local wordpos = mappin:GetWorldPosition()

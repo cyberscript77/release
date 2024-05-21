@@ -1,10 +1,6 @@
 
 
-function PhotoModeGridButton_ButtonStateChanged(thos)
-	if(observerthread4 == true or moddisabled  == true)   then return end
-	----print(NameToString(thos.currentImagePart))
-	
-end
+
 function BrowserController_OnInitialize(self,gameController)
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
@@ -15,13 +11,9 @@ end
 
 
 
-function DeviceMappinsContainer_EvaluatePositions(this)
-	if(observerthread4  == true or moddisabled == true)    then return end
-	------print("DeviceMappinsContainer_EvaluatePositions")
-	
-end
 
 function SmartWindowInkGameController_InitializeMainLayout(this)
+	
 	if(observerthread4 == true or moddisabled  == true)  then return  end
 	Cron.After(1, function()
 		
@@ -51,6 +43,7 @@ end
 
 
 function WebPage_OnInitialize(self)
+	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	GameController["WebPage"]  = self
 end
@@ -4457,6 +4450,7 @@ end
 
 
 function BrowserController_OnPageSpawned(thos, widget, userData)
+	
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	GameController["BrowserController"]  = thos
 	-- if(CurrentAddress == "CyberScript") then

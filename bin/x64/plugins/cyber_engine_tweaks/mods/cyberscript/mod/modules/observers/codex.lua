@@ -1,6 +1,7 @@
 
 
 function CodexGameController_PopulateData(thos)
+	
 	if(observerthread4  == true or moddisabled == true)    then return end
 	if(thos.f_sortOrder ~= nil or thos.sortOrder ~= nil) then
 		

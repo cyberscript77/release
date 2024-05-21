@@ -3,6 +3,7 @@
 
 --load the conversation header
 function NewHudPhoneGameController_ToggleShowAllMessages(this,types) 
+
 	if(observerthread4  == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))    then return end
 	GameController["NewHudPhoneGameController"] = this
 	local dots = ContactData.new()
@@ -121,6 +122,8 @@ end
 
 --handle change of contact conversation
 function NewHudPhoneGameController_OnContactSelectionChanged(this,evt)
+	
+
 	if(observerthread4  == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))    then return end
 	GameController["NewHudPhoneGameController"] = this
 	print("NewHudPhoneGameController_OnContactSelectionChanged")
@@ -150,6 +153,8 @@ end
 
 --load of message UI item when open conversation of contact
 function MessengerDialogViewController_SetVisited(thos, records) 
+
+
 	if(observerthread4 == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))   then return end
 	
 	local messages = thos.messages
@@ -259,7 +264,8 @@ end
 
 --load the entry of message and the refresh of typing
 function MessengerDialogViewController_UpdateData(self,animateLastMessage,setVisited)
-	
+
+
 	
 	if(observerthread4  == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))    then return end
 	Cron.After(0.5,function()
@@ -361,7 +367,8 @@ end
 
 --load the ui of messages UI items
 function MessangerItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
-	
+
+
 	
 	if(observerthread4 == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))   then return end
 	Cron.After(0.1,function()
@@ -429,6 +436,8 @@ end
 
 --load the ui of reply UI items
 function MessangerReplyItemRenderer_OnJournalEntryUpdated(self,entry,extraData)
+
+
 	Cron.After(0.1,function()
 	
 	if(observerthread4 == true or moddisabled  == true)   then return end
@@ -487,7 +496,8 @@ end
 
 --fire the reply
 function MessengerDialogViewController_ActivateReply(self,target)
-	
+
+
 	if(observerthread4 == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))   then return end
 	local choicepress = false
 	if(currentPhoneConversation ~= nil) then
@@ -520,30 +530,34 @@ end
 
 --fire reload from reply
 function MessangerItemRenderer_GetData(self)
+
+
 	if(observerthread4 == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))   then return end
-	Cron.NextTick(function()
-		local choicepress = false
-		
-		if(currentPhoneConversation ~= nil) then
-			for i = 1, #currentPhoneConversation.currentchoices do
-				
-				if(tostring(getLang(currentPhoneConversation.currentchoices[i].text)) == tostring(self.labelPathRef:GetText())) then
-					choicepress = true
+	if(GameController["NewHudPhoneGameController"] ~= nil and GameController["NewHudPhoneGameController"]:IsPhoneActive()) then
+		Cron.NextTick(function()
+			local choicepress = false
+			
+			if(currentPhoneConversation ~= nil) then
+				for i = 1, #currentPhoneConversation.currentchoices do
 					
-					if choicepress == true then
+					if(tostring(getLang(currentPhoneConversation.currentchoices[i].text)) == tostring(self.labelPathRef:GetText())) then
+						choicepress = true
 						
-						GameController["MessengerDialogViewController"]:UpdateData()
-						
-						break
+						if choicepress == true then
+							
+							GameController["MessengerDialogViewController"]:UpdateData()
+							
+							break
+						end
 					end
 				end
+				
 			end
-			
-		end
-		if(GameController["PhoneHotkeyController"] ~= nil)then
-			PhoneHotkeyController_UpdateData(GameController["PhoneHotkeyController"])
-		end
-	end)
+			if(GameController["PhoneHotkeyController"] ~= nil)then
+				PhoneHotkeyController_UpdateData(GameController["PhoneHotkeyController"])
+			end
+		end)
+	end
 end
 
 
@@ -554,9 +568,11 @@ end
 --Add contact
 function PhoneDialerGameController_PopulateData(thos,contactDataArray, selectIndex, itemHash)
 	
-	
+
+
 	
 	if(GameController["NewHudPhoneGameController"].screenType ==  PhoneScreenType.Contacts) then
+		
 		refreshContact()
 		
 		
@@ -626,7 +642,8 @@ end
 
 --selected contact call
 function PhoneDialerGameController_CallSelectedContact_Observer(thos,contactData)
-	
+
+
 	GameController["NewHudPhoneGameController"] = thos
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
@@ -760,6 +777,8 @@ end
 
 --IncomingCall
 function PhoneSystem_OnTriggerCall(thos, request)
+
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	local contactName = request.addressee
@@ -817,6 +836,8 @@ end
 
 --open phone for custom phone notif 
 function PhoneMessagePopupGameController_SetupData(this,wrappedMethod)
+
+
 	if(observerthread4 == true or moddisabled == true or (phonetest ~= true and phonetest ~= nil))   then return end
 	
 	GameController["PhoneMessagePopupGameController"] = this

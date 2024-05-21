@@ -222,6 +222,8 @@ end
 
 
 function NPCPuppet_SendAfterDeathOrDefeatEvent(target)
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	local obj = getEntityFromManagerById(target:GetEntityID())
@@ -254,6 +256,8 @@ function NPCPuppet_SendAfterDeathOrDefeatEvent(target)
 end
 
 function VehicleSummonWidgetGameController_OnVehicleSummonStateChanged(state,value ) 
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	local vehicleSummonDef = Game.GetAllBlackboardDefs().VehicleSummonData
 	local vehicleSummonBB = Game.GetBlackboardSystem():Get(vehicleSummonDef)

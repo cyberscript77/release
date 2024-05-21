@@ -4,6 +4,8 @@
 
 
 function interactionItemLogicController_SetData(self,data,skillcheck)
+	
+
 	if(observerthread4 == true or moddisabled  == true)  then return  end
 	if(cyberscript.cache["interact"][data.localizedName] ~= nil) then
 		local interact = cyberscript.cache["interact"][data.localizedName].data
@@ -44,6 +46,7 @@ end
 
 function DialogChoiceLogicController_UpdateView(self,wrappedMethod)
 	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	if(currentDialogHub ~= nil and self.ActiveTextRef ~= nil) then
 		

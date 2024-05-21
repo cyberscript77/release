@@ -71,6 +71,8 @@ function PlayerPuppet_OnBeingTarget(thos,evt)
 end 
 
 function PlayerPuppet_OnGameAttached(thos)
+	
+
 	if(observerthread4  == true or moddisabled == true)    then return end
 	GameController["PlayerPuppet"]  = thos
 	startListeners(thos)
@@ -79,6 +81,8 @@ end
 
 
 function PlayerPuppet_OnDeath()
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	isdead = true
 end

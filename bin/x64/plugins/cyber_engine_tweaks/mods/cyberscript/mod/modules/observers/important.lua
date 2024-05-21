@@ -1,6 +1,7 @@
 
 function QuestTrackerGameController_OnInitialize()
 	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	
 	
@@ -13,6 +14,8 @@ function QuestTrackerGameController_OnInitialize()
 end
 
 function QuestTrackerGameController_OnUninitialize()
+	
+
 	if(observerthread4 == true or moddisabled  == true)   then return end
 	if Game.GetPlayer() == nil then
 		--logme(2,'Game Session Ended')
@@ -24,7 +27,9 @@ function QuestTrackerGameController_OnUninitialize()
 end
 
 
-function SettingsMainGameController_RequestClose (_, _, target) -- Check if activated button is the custom mods button
+function SettingsMainGameController_RequestClose (_, _, target) 
+	
+	-- Check if activated button is the custom mods button
 	if(observerthread4  == true or moddisabled == true)    then return end
 	
 	local sessionFile = io.open("user/settings/cyberscript.json", 'w')
