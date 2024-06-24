@@ -47,11 +47,10 @@ function SetObserver()
 		
 		 questLogGameController_OnRequestChangeTrackedObjective(self,e)
 	end)
-	--TODO
-	---@param self QuestListItemController
-	ObserveAfter('QuestListItemController', 'UpdateDistance', function(self)
-		QuestListItemController_UpdateDistance(self)
-		end)
+	---@param self SimpleQuestListItemController
+	ObserveAfter('SimpleQuestListItemController', 'UpdateDistancesText', function(self)
+		SimpleQuestListItemController_UpdateDistancesText(self)
+	end)
 	---@param self QuestDetailsPanelController
 	---@param questData JournalQuest
 	ObserveAfter('QuestDetailsPanelController', 'Setup', function(self, questData)
@@ -182,9 +181,9 @@ PanzerHUDGameController_OnInitialize(this)
 	 HudPhoneGameController_OnInitialize(this)
 	end)
 	
-	ObserveAfter("HudPhoneGameController", "ShowAvatar", function(this)
+	ObserveAfter("HudPhoneAvatarController", "ShowAvatar", function(this,showAvatar)
 	
-	 HudPhoneGameController_OnInitialize(this)
+	 HudPhoneAvatarController_ShowAvatar(this,showAvatar)
 	end)
 	
 	ObserveAfter("PlayerPuppet", "ReactToHitProcess", function(this,hitEvent)
@@ -333,12 +332,12 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 
-	--TODO
-	ObserveAfter('WorldMapMenuGameController', 'OnSelectedDistrictChanged', function(this,oldDistrict,newDistrict)
-		
-		
-		
-		WorldMapMenuGameController_OnSelectedDistrictChanged(this,oldDistrict,newDistrict)
+	--Updated this from OnSelectedDistrictChanged to OnDistrictViewChanged for 2.0, 
+	--but it is acting as a stub for now since the override here actually isn't doing anything differently from the original method.
+	--TODO: Update or remove this so we aren't overriding when not necessary.
+	Override('WorldMapMenuGameController', 'OnDistrictViewChanged', function(this,oldView,newView)
+
+		WorldMapMenuGameController_OnDistrictViewChanged(this,oldView,newView)
 			WorldMapMenuGameController_OnInitialize(this)
 	end)
 	
@@ -384,10 +383,10 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 
-	
-	ObserveAfter('WebPage', 'OnInitialize', function(self)
-	 WebPage_OnInitialize(self)
-	end)
+	--No longer needed as of 2.0, use BrowserGameController
+	-- ObserveAfter('WebPage', 'OnInitialize', function(self)
+	 -- WebPage_OnInitialize(self)
+	-- end)
 	
 	
 	ObserveAfter('WebPage', 'FillPageFromJournal', function(self,page)
