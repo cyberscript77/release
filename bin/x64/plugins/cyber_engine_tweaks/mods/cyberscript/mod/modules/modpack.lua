@@ -1394,7 +1394,7 @@ end
 									setScore(conversation.tag,"readed",0)
 								end
 								if(conversation.unlock == false ) then
-									if(getScoreKey(conversation.tag,"unlocked") == 0 or getScoreKey(conversation.tag,"unlocked") == nil ) then
+									if(getScoreKey(conversation.tag,"unlocked") == 1 or getScoreKey(conversation.tag,"unlocked") == nil ) then
 										setScore(conversation.tag,"unlocked",0)
 									end
 								else
@@ -1409,7 +1409,7 @@ end
 									end
 									
 									if(message.unlock == false ) then
-										if(getScoreKey(message.tag,"unlocked") == 0 or getScoreKey(message.tag,"unlocked") == nil ) then
+										if(getScoreKey(message.tag,"unlocked") == 1 or getScoreKey(message.tag,"unlocked") == nil ) then
 											setScore(message.tag,"unlocked",0)
 										end
 									else
