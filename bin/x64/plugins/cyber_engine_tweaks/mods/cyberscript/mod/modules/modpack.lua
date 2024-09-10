@@ -1399,7 +1399,7 @@ end
 									end
 								else
 									if(getScoreKey(conversation.tag,"unlocked") == 0 or getScoreKey(conversation.tag,"unlocked") == nil) then
-										setScore(cconversation.tag,"unlocked",1)
+										setScore(conversation.tag,"unlocked",1)
 									end
 								end
 								for j,message in ipairs(conversation.message) do
