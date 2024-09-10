@@ -342,7 +342,7 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 			firstexecutionshard = nil
 			end
 		else
-			if( GameController["NewHudPhoneGameController"]:IsPhoneActive() == true) then
+			if(GameController["NewHudPhoneGameController"] ~= nil and GameController["NewHudPhoneGameController"]:IsPhoneActive() == true) then
 				inMenu = true
 				ActiveMenu = "Phone"
 				ActiveSubMenu = "Phone"
