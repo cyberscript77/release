@@ -199,6 +199,27 @@ return {
 		["name"] = "quest_fact",
 		["help"] = " gameaffinity.json",
 	},
+	["tracked_native_quest"] = {
+		["helper"] = "This trigger will be triggered when player is tracking an native quest",
+		["helperTitle"] = "Quest : Game Quest is tracked",
+		["value"] = "q00_test",
+		["name"] = "tracked_native_quest",
+		["help"] = " gameaffinity.json",
+	},
+	["tracked_native_phase"] = {
+		["helper"] = "This trigger will be triggered when player is tracking an native phase",
+		["helperTitle"] = "Quest : Game Phase is tracked",
+		["value"] = "q00_test",
+		["name"] = "tracked_native_phase",
+		["help"] = " gameaffinity.json",
+	},
+	["tracked_native_objective"] = {
+		["helper"] = "This trigger will be triggered when player is tracking an native objective",
+		["helperTitle"] = "Quest : Game Objective is tracked",
+		["value"] = "q00_test",
+		["name"] = "tracked_native_objective",
+		["help"] = " gameaffinity.json",
+	},
 	["entity_looked_is_gangfriendly"] = {
 		["helper"] = "This trigger will be triggered when the entity that you look at has  positive gang affinity",
 		["helperTitle"] = "Entity : Looked Entity is Gang Friendly",

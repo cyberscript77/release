@@ -346,7 +346,7 @@ function SetNextDialog(tag,source)
 		
 		
 	else
-		local diag = cyberscript.cache["choice"][tag].data
+		local diag = deepcopy(cyberscript.cache["choice"][tag].data)
 		
 		
 		

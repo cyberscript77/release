@@ -3255,7 +3255,7 @@ if vehiculeRegion then
 					cmd.stopWhenTargetReached = stopWhenTargetReached
 					cmd.trafficTryNeighborsForStart   = true
 					cmd.trafficTryNeighborsForEnd    = true
-					vehiculeobj.lastcmd = cmd
+					VehicleManageCmd(vehiculeobj,cmd)
 					
 					
 					
@@ -3294,7 +3294,7 @@ if vehiculeRegion then
 				cmd.useKinematic   =useKinematic or true
 				cmd = cmd:Copy()
 				
-				vehiculeobj.lastcmd = cmd
+				VehicleManageCmd(vehiculeobj,cmd)
 				local AINPCCommandEvent = NewObject("handle:AINPCCommandEvent")
 				AINPCCommandEvent.command = cmd
 				vehicule:QueueEvent(AINPCCommandEvent)
@@ -3343,7 +3343,7 @@ if vehiculeRegion then
 				cmd.useKinematic =useKinematic or true
 				cmd = cmd:Copy()
 				
-				vehiculeobj.lastcmd = cmd
+				VehicleManageCmd(vehiculeobj,cmd)
 				
 				local AINPCCommandEvent = NewObject("handle:AINPCCommandEvent")
 				AINPCCommandEvent.command = cmd
@@ -3371,8 +3371,9 @@ if vehiculeRegion then
 				local vehicule = Game.FindEntityByID(vehiculeobj.id)
 				
 				if(vehiculeobj.lastcmd ~= nil) then
-					local test = vehicule:GetAIComponent():StopExecutingCommand(vehiculeobj.lastcmd,true)
-					print(tostring(test))
+					vehicule:GetAIComponent():CancelCommand(vehiculeobj.lastcmd);
+					vehicule:GetAIComponent():StopExecutingCommand(vehiculeobj.lastcmd,true)
+					cyberscript.EntityManager[vehiculeobj.tag].lastcmd = nil
 					
 				end
 				
@@ -3413,7 +3414,16 @@ if vehiculeRegion then
 			end
 			
 
+			function VehicleManageCmd(vehiculeobj,cmd)
 
+				if(vehiculeobj.lastcmd ~= nil) then
+					
+					VehicleCancelLastCommand(vehiculeobj.tag)
+					cyberscript.EntityManager[vehiculeobj.tag].lastcmd = cmd
+				end
+
+
+			end
 
 			function VehicleChaseEntity(vehiculetag, entitytag, mindistance,maxdistance,startspeed)
 				
@@ -3465,7 +3475,8 @@ if vehiculeRegion then
 				cmd.distanceMin = mindistance
 				cmd.distanceMax = maxdistance
 				cmd.forcedStartSpeed = startspeed
-				vehiculeobj.lastcmd = cmd
+
+				VehicleManageCmd(vehiculeobj,cmd)
 				
 				local AICommandEvent = NewObject("handle:AINPCCommandEvent")
 				AICommandEvent.command = cmd

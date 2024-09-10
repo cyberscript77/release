@@ -1865,7 +1865,40 @@ function scriptcheckTrigger(trigger)
 					result = true
 				end
 			end
+			if(trigger.name == "tracked_native_quest") then
+				local objective = Game.GetJournalManager():GetTrackedEntry()
+				if objective ~= nil then
+					local phase = Game.GetJournalManager():GetParentEntry(objective)
+					local quest = Game.GetJournalManager():GetParentEntry(phase)
+					return quest.id == trigger.value
+					
+					
+					
+				end
+			end
 
+			if(trigger.name == "tracked_native_phase") then
+				local objective = Game.GetJournalManager():GetTrackedEntry()
+				if objective ~= nil then
+					local phase = Game.GetJournalManager():GetParentEntry(objective)
+					
+					return phase.id == trigger.value
+					
+					
+					
+				end
+			end
+
+			if(trigger.name == "tracked_native_objective") then
+				local objective = Game.GetJournalManager():GetTrackedEntry()
+				if objective ~= nil then
+					
+					return objective.id == trigger.value
+					
+					
+					
+				end
+			end
 			
 		end
 		

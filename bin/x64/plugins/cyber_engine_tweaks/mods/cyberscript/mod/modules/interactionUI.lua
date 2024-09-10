@@ -60,7 +60,7 @@ function ui.showHub() -- Shows the hub previously set using setupHub()
     ui.baseControler = GameController["InteractionUIBase"]
 	
 	if not ui.hub or not ui.baseControler then return end
-	print(GameDump(ui.hub))
+	
     local data = DialogChoiceHubs.new()
     data.choiceHubs = {ui.hub}
 
