@@ -41,12 +41,12 @@ function SmartWindowInkGameController_InitializeMainLayout(this)
 	end)
 end
 
-
-function WebPage_OnInitialize(self)
+--No longer needed as of 2.0, use BrowserGameController
+-- function WebPage_OnInitialize(self)
 	
-	if(observerthread4 == true or moddisabled  == true)   then return end
-	GameController["WebPage"]  = self
-end
+	-- if(observerthread4 == true or moddisabled  == true)   then return end
+	-- GameController["WebPage"]  = self
+-- end
 
 
 function WebPage_FillPageFromJournal(self,page)

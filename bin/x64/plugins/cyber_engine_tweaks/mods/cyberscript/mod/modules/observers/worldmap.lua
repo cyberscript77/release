@@ -48,38 +48,26 @@ function WorldMapMenuGameController_OnUpdateHoveredDistricts(thos,district,subdi
 	
 end
 
-
-function WorldMapMenuGameController_OnSelectedDistrictChanged(thos,oldDistrict,newDistrict)
-	
-
+--As of 2.0 this is now called WorldMapMenuGameController_OnDistrictViewChanged, 
+--and uses gameuiEWorldMapDistrictView for the arguments (which is an enum of: None,Districts,Subdistricts)
+--gameDataDistrict is another enum which is a list of possible districts (and 'Invalid').
+--Since WorldMapMenuGameController_OnUpdateHoveredDistricts already handles updating the mapSubDistrict,
+--and ShowGangsInfo already happens downstream, then this is likely no longer needed.
+--I'm leaving this in as a stub that adds nothing new to the overridden method, 
+--but a todo will suffice for now until we want to repurpose this or change how we're updating districts.
+--TODO: Update this method or comment it out so that we aren't overriding when not necessary
+function WorldMapMenuGameController_OnDistrictViewChanged(this,oldView,newView)
 	if(observerthread4  == true or moddisabled == true)    then return end
 	
-	
-	if(currentMapDistrictView == gameuiEWorldMapDistrictView.Districts or currentMapDistrictView == nil or newDistrict == gamedataDistrict.Invalid) then
-		
-		
-		inkWidgetRef.SetVisible(thos.subdistrictNameText, false)
-		
-		else
-		
-		inkWidgetRef.SetVisible(thos.subdistrictNameText, true)
-		
+	if(oldView ~= gameuiEWorldMapDistrictView.None) then
+		PlayLibraryAnimation(GetDistrictAnimation(oldView, false))
 	end
 	
-	if(currentMapDistrictView == gameuiEWorldMapDistrictView.Districts or currentMapDistrictView == nil ) then
-		
-		
-		mapSubDistrict = nil
-		
-		else
-		
-		mapSubDistrict = newDistrict
-		thos:ShowGangsInfo(mapDistrict)
-		
+	if(newView ~= gameuiEWorldMapDistrictView.None) then
+		PlayLibraryAnimation(GetDistrictAnimation(newView, true))
 	end
-	
-	
 end
+	
 
 function WorldMapMenuGameController_OnZoomLevelChanged(thos,oldLevel,newLevel)
 	
@@ -397,11 +385,11 @@ function WorldMapMenuGameController_UntrackCustomPositionMappin(self)
 end
 
 
-
-function WorldMapMenuGameController_OnSelectedDistrictChanged(self,oldDistrict,newDistrict) 
-	if(observerthread5 == true or moddisabled  == true)  then return  end
-	self:ShowGangsInfo(newDistrict)
-end
+--Deprecated, now using OnDistrictViewChanged instead
+-- function WorldMapMenuGameController_OnSelectedDistrictChanged(self,oldDistrict,newDistrict) 
+	-- if(observerthread5 == true or moddisabled  == true)  then return  end
+	-- self:ShowGangsInfo(newDistrict)
+-- end
 
 function WorldMapGangItemController_SetData(self,affiliationRecord) 
 	if(observerthread5 == true or moddisabled  == true)  then return  end

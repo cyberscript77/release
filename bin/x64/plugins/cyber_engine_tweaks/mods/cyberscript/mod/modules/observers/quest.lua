@@ -53,9 +53,35 @@ function SimpleQuestListItemController_OnDataChanged(this,data)
 		inkTextRef.SetText(this.defaultDistance, "55m");
 		inkTextRef.SetText(this.trackedDistance, "55m");
 	end
-	
-	
 end 
+
+
+--Slightly modified from the deprecated QuestListItemController_UpdateDistance observer
+function SimpleQuestListItemController_UpdateDistancesText(self)
+	if (observerthread1 == true or moddisabled == true)    then return end
+	
+	Cron.NextTick(function()
+		if(self.data ~= nil) then
+			local questId = self.data.questData.GetId()
+			
+			if QuestManager.IsKnownQuest(questId) then
+				local questDef = QuestManager.GetQuest(questId)
+				
+				inkTextRef.SetText(self.title, getLang(questDef.title))
+				if(questDef.metadata.district < 119) then
+					local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.' .. QuestManager.getDistrictName(questDef.metadata.district))
+					inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
+					inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
+					else
+					local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.program_generic')
+					inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
+					inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
+				end
+			end
+		end
+	end)
+end
+
 
 function questLogGameController_BuildQuestList(self)
 	if(observerthread1  == true or moddisabled == true)    then return end
@@ -236,31 +262,33 @@ function questLogGameController_OnRequestChangeTrackedObjective(self,e)
 	
 end
 
-function QuestListItemController_UpdateDistance(self)
-	if(observerthread1  == true or moddisabled == true)    then return end
-	Cron.NextTick(function()
-		
-		if(self.data ~= nil) then
-			local questId = self.data.questData.id
-			
-			if QuestManager.IsKnownQuest(questId) then
-				local questDef = QuestManager.GetQuest(questId)
-				
-				inkTextRef.SetText(self.title, getLang(questDef.title))
-				if(questDef.metadata.district < 119) then
-					local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.' .. QuestManager.getDistrictName(questDef.metadata.district))
-					inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
-					inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
-					else
-					local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.program_generic')
-					inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
-					inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
-				end
-			end
-		end
-	end)
-	
-end
+
+--This is unused since 2.0, refer to SimpleQuestListItemController_UpdateDistancesText
+--function QuestListItemController_UpdateDistance(self)
+--	if(observerthread1  == true or moddisabled == true)    then return end
+--	Cron.NextTick(function()
+--		
+--		if(self.data ~= nil) then
+--			local questId = self.data.questData.id
+--			
+--			if QuestManager.IsKnownQuest(questId) then
+--				local questDef = QuestManager.GetQuest(questId)
+--				
+--				inkTextRef.SetText(self.title, getLang(questDef.title))
+--				if(questDef.metadata.district < 119) then
+--					local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.' .. QuestManager.getDistrictName(questDef.metadata.district))
+--					inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
+--					inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
+--					else
+--					local districtIconRecord = TweakDBInterface.GetUIIconRecord('UIIcon.program_generic')
+--					inkImageRef.SetAtlasResource(self.districtIcon, districtIconRecord:AtlasResourcePath())
+--					inkImageRef.SetTexturePart(self.districtIcon, districtIconRecord:AtlasPartName())
+--				end
+--			end
+--		end
+--	end)
+--	
+--end
 
 
 function QuestDetailsPanelController_Setup(self, questData)

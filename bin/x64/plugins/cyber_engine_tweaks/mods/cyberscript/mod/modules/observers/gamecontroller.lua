@@ -44,25 +44,23 @@ end
 
 
 
-function HudPhoneAvatarController_OnInitialize(thos)
+function HudPhoneAvatarController_OnInitialize(this)
 	if(observerthread3  == true or moddisabled == true)    then return end
-	GameController["HudPhoneAvatarController"]  = thos
+	GameController["HudPhoneAvatarController"] = this
 end
-function HudPhoneGameController_OnInitialize(thos)
+function HudPhoneGameController_OnInitialize(this)
 	if(observerthread3  == true or moddisabled == true)    then return end
-	GameController["HudPhoneGameController"]  = thos
+	GameController["HudPhoneGameController"] = this
 end
 
 
-
-
-function HudPhoneAvatarController_OnInitialize(thos)
+function HudPhoneAvatarController_ShowAvatar(this,showAvatar)
 	if(observerthread3  == true or moddisabled == true)    then return end
-	GameController["HudPhoneAvatarController"]  = thos
-end
-function HudPhoneGameController_OnInitialize(thos)
-	if(observerthread3  == true or moddisabled == true)    then return end
-	GameController["HudPhoneGameController"]  = thos
+	
+	--This is already set by the OnInitialize
+	--GameController["HudPhoneAvatarController"] = this
+	
+	hudPhoneShowAvatar = showAvatar
 end
 
 

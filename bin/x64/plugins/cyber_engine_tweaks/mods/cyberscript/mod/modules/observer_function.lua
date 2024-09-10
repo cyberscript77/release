@@ -4,6 +4,7 @@ cyberscript.module = cyberscript.module +1
 ---Observer and Overrider---
 
 local myucurrentQuestData = nil
+local hudPhoneShowAvatar = false --Set by HudPhoneAvatarController_ShowAvatar
 
 observerthread1 = false
 observerthread2 = false
