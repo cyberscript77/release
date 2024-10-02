@@ -463,6 +463,7 @@ function QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
 	if(observerthread5 == true or moddisabled  == true)  then return wrappedMethod(data)  end
 	
 	local index = this.listController:GetSelectedIndex()
+	index = index ~= -1 and index or 0
 	logme(1,dump(data))
 	wrappedMethod(data)
 	
