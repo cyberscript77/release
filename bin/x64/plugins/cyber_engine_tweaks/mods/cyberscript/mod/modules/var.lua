@@ -141,7 +141,7 @@ function resetVar()
 	AutoAmbush = true
 	GangWarsEnabled = true
 	AutoRefreshDatapack = true
-	displayXYZset = false
+
 	playerNoticed = false
 	playerTargeted = false
 	entityTargetPlayer = {}
@@ -231,6 +231,9 @@ function resetVar()
         "tweakflat"
 		
 	}
+
+    cyberscript.datapackObjectType = datapackObjectType
+    
 	cacheupdate = false
 	passwordView =ImGuiInputTextFlags.Password
 	menuName = "CyberScript"
@@ -476,7 +479,7 @@ function resetVar()
 	
 	
 	gameStatModifierType = {"Additive","AdditiveMultiplier","Multiplier"}
-	newgroupinteractUI =true
+	
 	
 	currentLoadedTexture = {}
 	
@@ -3676,7 +3679,7 @@ function resetVar()
 	currentShardNotificationController = nil
 	
 	currentPhoneConversation = nil
-	currentController = "gamepad"
+	currentController = false
 	currentChattersGameController = nil
 	currentSubtitlesGameController = nil
 	
@@ -3787,28 +3790,7 @@ function resetVar()
 	showFactionAffinityHud = true
 	
 	
-	if(file_exists("net/userLogin.txt"))then
-		
-		local f = io.open("net/userLogin.txt")
-		local lines = f:read("*a")
-		
-		if(lines ~= "" ) then
-			pcall(function ()
-				local obj = trydecodeJSOn(lines,f,"net/userLogin.txt")
-				
-				myTag = obj.login
-				myPassword = obj.password
-			end)
-		end
-		
-		f:close()
-		
-		RememberMe = true
-		
-		
-	end
-	--logme(10,"CyberScript: variable module loaded")
-	--logme(2,"Variables init finish")
+	
 	
 	
 	

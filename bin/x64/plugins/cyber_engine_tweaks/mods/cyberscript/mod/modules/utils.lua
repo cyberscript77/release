@@ -1699,7 +1699,7 @@ function setNewFixersPoint()
 	
 	
 	for k,v in pairs(cyberscript.cache["fixer"]) do
-		if(mappinManager[cyberscript.cache["fixer"][k].data.tag] == nil and enableLocation == true and v.data.exist == false) then
+		if(mappinManager[cyberscript.cache["fixer"][k].data.tag] == nil and showcyberscriptfixeronmap == true and v.data.exist == false) then
 			
 			registerMappin(cyberscript.cache["fixer"][k].data.x,cyberscript.cache["fixer"][k].data.y,cyberscript.cache["fixer"][k].data.z,cyberscript.cache["fixer"][k].data.tag,'FixerVariant',true,false,"Fixer",nil,cyberscript.cache["fixer"][k].data.name,cyberscript.cache["fixer"][k].data.name,nil,nil,0)
 	  end
@@ -1775,8 +1775,13 @@ function entEntityIDDraw(entEntityID)
 	ImGui.Indent()
 	
 	-- Properties
-	ImGui.Text("hash: " .. tostring(entEntityID:GetEntityID().hash))
-	ImGui.Text("record hash: " .. tostring(entEntityID:GetRecordID().hash))
+	ImGui.Text("hash: ") ImGui.SameLine() ImGui.InputText("##hash"..tostring(entEntityID:GetEntityID().hash), tostring(entEntityID:GetEntityID().hash), 5000, ImGuiInputTextFlags.ReadOnly) 
+
+	ImGui.Text("record hash: ") ImGui.SameLine() ImGui.InputText("##recordhash"..tostring(entEntityID:GetRecordID().hash), tostring(entEntityID:GetRecordID().hash), 5000, ImGuiInputTextFlags.ReadOnly) 
+
+
+	
+
 	ImGui.Unindent()
 end
 

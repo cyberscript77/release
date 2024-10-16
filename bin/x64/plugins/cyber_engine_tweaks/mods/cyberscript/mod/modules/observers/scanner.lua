@@ -1,3 +1,6 @@
+--Scanner
+
+
 
 function ScannervehicleGameController_OnVehicleInfoChanged(thos, value,wrappedMethod)
 	if(observerthread5 == true or moddisabled  == true)  then return wrappedMethod(value)  end
@@ -457,14 +460,16 @@ end
 
 
 
+--Quickhack
+
 
 function QuickhacksListGameController_PopulateData(this,data,wrappedMethod)
-	print("step 00")
+	
 	if(observerthread5 == true or moddisabled  == true)  then return wrappedMethod(data)  end
 	
 	local index = this.listController:GetSelectedIndex()
 	index = index ~= -1 and index or 0
-	logme(1,dump(data))
+
 	wrappedMethod(data)
 	
 	
@@ -569,21 +574,7 @@ function QuickhacksListGameController_OnQuickhackStarted(this,value,wrappedMetho
 	if(observerthread5 == true or moddisabled  == true)  then return wrappedMethod(value) end
 	wrappedMethod(value)
 	
-	-- if value.shouldReveal then
-	-- 	logme(1,dump(value.commands))
-	-- 	if (not value.shouldReveal or this:GetPlayerControlledObject():GetHudManager():GetActiveMode() ~= ActiveMode.FOCUS) then
-	-- 	  logme(1,"bad condition 01")
-	-- 	end
-	-- 	if IsDefined(value.lookAtObject) then
-	-- 		logme(1,"goood condition 01")
-	-- 	else
-	-- 		logme(1,"bad condition 02")
-	-- 	end
-		
-	--   else 
-	-- 	logme(1,"bad condition 03")
-	--   end
-
+	
 
 	if this.selectedData ~= nil and string.match(NameToString(this.selectedData.actionOwnerName),"cyberscript_hack:") then
 		

@@ -110,10 +110,8 @@ local function onWheelScroll(_, evt)
 		local scrollArea = evt:GetCurrentTarget()
 		local scrollPosition = getScrollPosition(scrollArea)
 		
-		local myScrollSpeed = getUserSetting("ScrollSpeed")
-		if(myScrollSpeed == nil) then
-			myScrollSpeed = 0.020
-		end
+		local myScrollSpeed = ScrollSpeed
+		
 			
 		scrollPosition = scrollPosition - myScrollSpeed *  evt:GetAxisData()
 		scrollPosition = math.max(scrollPosition, 0)

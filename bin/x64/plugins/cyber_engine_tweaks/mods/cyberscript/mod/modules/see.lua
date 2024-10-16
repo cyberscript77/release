@@ -165,7 +165,7 @@ function scriptcheckTrigger(trigger)
 							string.match(tarName, trigger.value) or
 							string.match(appName, trigger.value) or 
 							string.match(dipName, trigger.value) or 
-						(trigger.value == "isnpc" and objLook:IsA("ScriptedPuppet")))then 
+						(trigger.value == "isnpc" and objLook:IsA("NPCPuppet")))then 
 						result = true
 						end
 					end
@@ -456,9 +456,13 @@ function scriptcheckTrigger(trigger)
 							if(entName ~= nil and entAppName ~= nil)then
 								for i,filter in ipairs(trigger.filter) do
 									
-									if(goodEntity == false and string.match(entName, filter) or 
-									(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet"))) or
-									string.match(entAppName, filter) or string.match(entDispName, filter) or filter == tostring(newent:GetEntityID().hash))then 
+									if(goodEntity == false and 
+								(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("NPCPuppet"))) and
+								string.match(entName, filter) ~= nil or
+								 string.match(entAppName, filter) ~= nil or 
+								 string.match(entDispName, filter) ~= nil or 
+								 filter == tostring(newent:GetEntityID().hash) or (filter == "vehicle" and newent:IsVehicle()))then 
+							
 										goodEntity = true
 									end
 								end
@@ -508,17 +512,31 @@ function scriptcheckTrigger(trigger)
 						local entName = newent:ToString()
 						local entAppName = Game.NameToString(newent:GetCurrentAppearanceName())
 						local entDispName = newent:GetDisplayName()
-						if(trigger.output) then
-							--print(entName)
-							--print(entAppName)
-							--print(entDispName)
-						end
+						
 						if(entName ~= nil and entAppName ~= nil)then
 							for i,filter in ipairs(trigger.filter) do
 								
-								if(goodEntity == false and string.match(entName, filter) or
-								(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet"))) or
-								 string.match(entAppName, filter) or string.match(entDispName, filter) or filter == tostring(newent:GetEntityID().hash) or (filter == "vehicle" and newent:IsVehicle()))then 
+								if(goodEntity == false and 
+								(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("NPCPuppet"))) and
+								string.match(entName, filter) ~= nil or
+								 string.match(entAppName, filter) ~= nil or 
+								 string.match(entDispName, filter) ~= nil or 
+								 filter == tostring(newent:GetEntityID().hash) or (filter == "vehicle" and newent:IsVehicle()))then 
+							
+									if(trigger.output) then
+										print(tostring(goodEntity == false))
+										print(tostring((filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("NPCPuppet")))))
+										print(tostring(string.match(entName, filter)))
+										print(tostring(string.match(entAppName, filter)))
+										print(tostring(string.match(entDispName, filter)))
+										print(tostring(filter == tostring(newent:GetEntityID().hash)))
+										print((filter == "vehicle" and newent:IsVehicle()))
+
+										print(dump(trigger.filter))
+										print(entName)
+										print(entAppName)
+											print(entDispName)
+									end
 									goodEntity = true
 								end
 							end
@@ -2073,7 +2091,7 @@ function scriptcheckTrigger(trigger)
 		
 		if frameworkregion then
 			if(trigger.name =="datapack_is_enabled")then
-				if( arrayDatapack[trigger.tag] ~= nil and  arrayDatapack[trigger.tag].enabled == true) then
+				if( arrayDatapack[trigger.tag] ~= nil) then
 					
 					result = true
 					
@@ -4717,11 +4735,36 @@ function executeAction(action,tag,parent,index,source,executortag)
 				end
 				if(action.name == "mod_statpool") then
 					--https://nativedb.red4ext.com/gamedataStatPoolType
-					Game.GetStatPoolsSystem():RequestSettingStatPoolValue(Game.GetPlayer():GetEntityID(), Enum.new('gamedataStatPoolType', action.value), action.score, Game.GetPlayer(), action.perc);
+					if(action.tag == nil) then
+
+						action.tag = "player"
+					end
+					local obj = getEntityFromManager(action.tag)
+					local enti = Game.FindEntityByID(obj.id)
+					
+					if(enti ~= nil) then
+						Game.GetStatPoolsSystem():RequestSettingStatPoolValue(enti:GetEntityID(), Enum.new('gamedataStatPoolType', action.value), action.score, Game.GetPlayer(), action.perc);
+						else
+						error("can't apply mod_statpool to this entity")
+					end
+
+					
 				end
 				if(action.name == "mod_statpool_max") then
 					--https://nativedb.red4ext.com/gamedataStatPoolType
-					Game.GetStatPoolsSystem():RequestSettingStatPoolMaxValue(Game.GetPlayer():GetEntityID(), Enum.new('gamedataStatPoolType', action.value), Game.GetPlayer());
+					if(action.tag == nil) then
+
+						action.tag = "player"
+					end
+					local obj = getEntityFromManager(action.tag)
+					local enti = Game.FindEntityByID(obj.id)
+					
+					if(enti ~= nil) then
+						Game.GetStatPoolsSystem():RequestSettingStatPoolMaxValue(enti:GetEntityID(), Enum.new('gamedataStatPoolType', action.value), Game.GetPlayer());
+						else
+						error("can't apply mod_statpool to this entity")
+					end
+
 				end
 				
 				if(action.name == "set_attribute") then
@@ -5203,6 +5246,38 @@ function executeAction(action,tag,parent,index,source,executortag)
 					Game.GetWeatherSystem():ResetWeather(action.value);;
 				end
 				
+				if(action.name == "set_tweak") then
+					TweakDB:SetFlat(action.source, action.value)
+				end
+
+				if(action.name == "set_noupdate_tweak") then
+					TweakDB:SetFlatNoUpdate(action.source, action.value)
+				end
+
+				if(action.name == "update_tweak") then
+					TweakDB:Update(action.source)
+				end
+
+				if(action.name == "set_by_get_tweak") then
+					TweakDB:SetFlat(action.source, TweakDB:GetFlat(action.value))
+				end
+
+				if(action.name == "set_by_get_noupdate_tweak") then
+					TweakDB:SetFlatNoUpdate(action.source, TweakDB:GetFlat(action.value))
+				end
+
+				if(action.name == "clone_tweak") then
+					TweakDB:CloneRecord(action.source, action.value)
+				end
+
+				if(action.name == "create_tweak") then
+					TweakDB:CreateRecord(action.source, action.value)
+				end
+
+				if(action.name == "delete_tweak") then
+					TweakDB:DeleteRecord(action.source)
+				end
+
 				
 				
 			end
@@ -8105,8 +8180,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						
 						
-						if(string.match(newent:ToString(), action.value) or
-						(action.value ~= "isnpc" or (action.value == "isnpc" and newent:IsA("ScriptedPuppet"))) or
+						if((action.value ~= "isnpc" or (action.value == "isnpc" and newent:IsA("NPCPuppet"))) and 
+						string.match(newent:ToString(), action.value) or
+						
 						string.match( Game.NameToString(newent:GetCurrentAppearanceName()), action.value) or string.match(newent:GetDisplayName(), action.value))then 
 							local entity = {}
 							entity.id = newent:GetEntityID()
@@ -8153,8 +8229,12 @@ function executeAction(action,tag,parent,index,source,executortag)
 							if #action.filter > 0  then
 								for i,filter in ipairs(action.filter) do
 									
-									if(string.match(newent:ToString(), filter) or string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash) 
-									and (filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet")))
+									if(	(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("NPCPuppet"))) and 
+									string.match(newent:ToString(), filter) or
+									string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or
+									string.match(newent:GetDisplayName(), filter) or
+									filter == tostring(newent:GetEntityID().hash) 
+									
 									and (filter ~= "vehicle" or (filter == "vehicle" and newent:IsVehicle()))
 									)then 
 										local entity = {}
@@ -8368,9 +8448,12 @@ function executeAction(action,tag,parent,index,source,executortag)
 							if #action.filter > 0 then
 								for i,filter in ipairs(action.filter) do
 									
-									if(string.match(newent:ToString(), filter) or 
-									 (filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet"))) or
-									string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or string.match(newent:GetDisplayName(), filter) or filter == tostring(newent:GetEntityID().hash))then 
+									if(	(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("NPCPuppet"))) and 
+									string.match(newent:ToString(), filter) or 
+									
+									string.match( Game.NameToString(newent:GetCurrentAppearanceName()), filter) or 
+									string.match(newent:GetDisplayName(), filter) or 
+									filter == tostring(newent:GetEntityID().hash))then 
 										local entity = {}
 										entity.id = newent:GetEntityID()
 										
@@ -8661,9 +8744,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 								
 								
 								
-								else
-								error("bad character or position. character tweak : "..chara.." position : "..dump(position))
-							end
+								end
 							
 							
 							
@@ -8701,9 +8782,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 									
 									
 									
-									else
-									error("bad character or position. character tweak : "..action.tag.." position : "..dump(position))
-								end
+									end
 								
 								
 								
@@ -8734,9 +8813,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 								
 								
 								
-								else
-								error("bad character or position. character tweak : "..action.tag.." position : "..dump(position))
-							end
+								end
 							
 							
 							
@@ -9868,8 +9945,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 							if(entName ~= nil and entAppName ~= nil)then
 								for i,filter in ipairs(action.filter) do
 									
-									if(goodEntity == false and string.match(entName, filter) or 
-									(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("ScriptedPuppet"))) or
+									if(goodEntity == false and 	(filter ~= "isnpc" or (filter == "isnpc" and newent:IsA("NPCPuppet"))) and
+									 string.match(entName, filter) or 
+									
 									string.match(entAppName, filter) or string.match(entDispName, filter))then 
 										goodEntity = true
 									end
@@ -10830,7 +10908,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 				
 			
 			
-			if(action.name == "register_position") then
+				if(action.name == "register_position") then
 				
 					local position = {}
 					local position = getPositionFromParameter(action)
@@ -11320,12 +11398,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 					GameController["BrowserController"]:LoadWebPage(action.address)
 				end
 				
-				if(action.name == "open_datapack_group_ui") then
-					
-					ActivatedGroup()
-				end
 				
-				if(action.name == "open_datapack_group_ui2") then
+				
+				if(action.name == "open_datapack_group_ui" or action.name == "open_datapack_group_ui2") then
 					
 					ActivatedGroup2()
 				end
@@ -11346,7 +11421,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 				end
 				if(action.name == "close_interface") then
 					--	openInterface = false
-					ScrollSpeed = getUserSetting("ScrollSpeed")
+				
 					currentInterface = nil
 					buttonsData = {}
 					UIPopupsManager.ClosePopup()
@@ -12992,8 +13067,7 @@ function getPositionFromParameter(action)
 				position.y = node.y
 				position.z = node.z
 			end
-			else
-			error(getLang("see_action_nonode")..action.position_tag)
+			
 		end
 	end
 	if(action.position == "poi") then
@@ -13062,8 +13136,7 @@ function getPositionFromParameter(action)
 			position.y = currentpoi.y
 			position.z = currentpoi.z
 			
-			else
-			error("can't find current poi")
+			
 			end
 		end
 	end
@@ -13076,8 +13149,7 @@ function getPositionFromParameter(action)
 				position.x = mappin.x
 				position.y = mappin.y
 				position.z = mappin.z
-				else
-				error(getLang("see_action_nocurrentmappin"))
+			
 			end
 			else
 			local mappin = getMappinByTag(action.position_tag)
@@ -13085,8 +13157,7 @@ function getPositionFromParameter(action)
 				position.x = mappin.position.x
 				position.y = mappin.position.y
 				position.z = mappin.position.z
-				else
-				error(getLang("see_action_nomappin")..action.position_tag)
+				
 			end
 		end
 	end
@@ -13100,8 +13171,7 @@ function getPositionFromParameter(action)
 				position.x = ActiveFastTravelMappin.position.x
 				position.y = ActiveFastTravelMappin.position.y
 				position.z = ActiveFastTravelMappin.position.z
-				else
-				error(getLang("see_action_nocurrentfasttravel"))
+				
 			end
 			
 			else
@@ -13120,8 +13190,7 @@ function getPositionFromParameter(action)
 				position.x = tempos.x
 				position.y = tempos.y
 				position.z = tempos.z
-				else
-				error(getLang("see_action_nofasttravel")..action.position_tag)
+				
 			end	
 			
 			
@@ -13148,8 +13217,7 @@ function getPositionFromParameter(action)
 					position.y = currentHouse.exit_y
 					position.z = currentHouse.exit_z
 				end
-				else
-				error("can't find an current custom place")
+				
 			end
 			else
 			house = getHouseByTag(action.position_tag)
@@ -13169,8 +13237,7 @@ function getPositionFromParameter(action)
 					position.y = house.exit_y
 					position.z = house.exit_z
 				end
-				else
-				error("can't find an custom place with tag : "..action.position_tag)
+				
 			end
 		end
 		
@@ -13185,8 +13252,7 @@ function getPositionFromParameter(action)
 				position.x = currentRoom.x
 				position.y = currentRoom.y
 				position.z = currentRoom.z
-				else
-				error("can't find an current custom room")
+				
 			end		
 			
 			else
@@ -13195,8 +13261,7 @@ function getPositionFromParameter(action)
 				position.x = room.x
 				position.y = room.y
 				position.z = room.z
-				else
-				error("can't find an custom room with tag : "..action.position_tag.." for the house with tag :"..action.position_house_tag)
+				
 			end
 			
 		end
@@ -13943,11 +14008,9 @@ function GenerateTextFromContextValues(context, v,source)
 					}
 					value = stations[ps.activeStation]
 				end
-				else
-				--spdlog.error("Context : No Entity Founded for "..v.tag)
+				
 			end
-			else
-			--spdlog.error("Context : No Entity Founded for "..v.tag)
+			
 		end
 	end
 	
@@ -14476,6 +14539,12 @@ function GenerateTextFromContextValues(context, v,source)
 	if(v.type == "object") then
 		
 		value = v.value
+		
+	end
+
+	if(v.type == "tweakdb") then
+		
+		value = TweakDB:GetFlat(v.value)
 		
 	end
 

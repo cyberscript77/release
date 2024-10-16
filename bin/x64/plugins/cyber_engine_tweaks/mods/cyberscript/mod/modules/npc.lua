@@ -334,7 +334,7 @@ if spawnRegion then
 		
 	end
 	
-	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation,despawntimer,codeware,persistState,persistSpawn,AlwaysSpawned,SpawnInView,dontregister)
+	function spawnNPC(chara,appearance, tag, x, y ,z, spawnlevel, isprevention, isMPplayer, scriptlevel, isitem, rotation,despawntimer,codeware,persistState,persistSpawn,AlwaysSpawned,SpawnInView,dontregister,name)
 		
 		
 		
@@ -408,6 +408,9 @@ if spawnRegion then
 				print(dontregister)
 						local entity = {}
 						entity.id = NPC
+						if(name ~= nil and name ~= "") then
+							entity.name = name
+						end
 						entity.spawntimespan = os.time(os.date("!*t"))+0
 						entity.despawntimespan = os.time(os.date("!*t"))+despawntimer
 						entity.spawnlocation = postp

@@ -221,7 +221,7 @@ function ChattersGameController_SetupLine(self)
 		Cron.NextTick(function()
 			
 			GameController["ChattersGameController"]  = self
-			logme(2,"Chat Sub Controller Init")
+			--logme(2,"Chat Sub Controller Init")
 		end)
 	end
 end

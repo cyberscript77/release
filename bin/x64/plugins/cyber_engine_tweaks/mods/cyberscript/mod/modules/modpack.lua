@@ -67,439 +67,118 @@ cyberscript.module = cyberscript.module +1
 	end
 end
 
-function exportCompiledDatapack(msg)
-	
-	local directories = {}
-	local reader = dir("datapack")
-	for i=1, #reader do 
-		if(tostring(reader[i].type) == "directory") then
-			
-			table.insert(directories,reader[i].name)
-		end
-	end
-	
-	
-	for i=1, #directories do
-		exportCompiledDatapackFolder(k,msg)
-	end
-end
 
-
-function exportCompiledDatapackFolder(directories,msg)
+-- function exportCompiledDatapackFolder(directories,msg)
 	
-		local k = directories
-		local file = io.open("user/cache/"..k..".lua", "w")	
-		--file:write('logme(10,'..k..' Cache Loaded) return ')
-		if(file ~= nil) then
-		file:write('return ')
-		file:write(exportDatapackArray(arrayDatapack[k]))
-		file:close()
+-- 		local k = directories
+-- 		local file = io.open("user/cache/"..k..".lua", "w")	
+-- 		--file:write('logme(10,'..k..' Cache Loaded) return ')
+-- 		if(file ~= nil) then
+-- 		file:write('return ')
+-- 		file:write(exportDatapackArray(arrayDatapack[k]))
+-- 		file:close()
 		
 		
-		logme(1,k.." "..getLang("datapack_datapack_created")..msg,true)
-		end
+-- 		logme(1,k.." : "..msg,true)
+-- 		end
 	
-end
-
-function ImportDataPackFolder(directories)
-
-		local path = "datapack/"..directories.."/desc.json"
-		local flo = io.open(path)
-		local lines = flo:read("*a")
-		local jsonf = trydecodeJSOn(lines,flo,path)
-		flo:close()
-		arrayDatapack[directories] = {}
-		arrayDatapack[directories].metadata=jsonf
-		
-		arrayDatapack[directories].cachedata={}
-		arrayDatapack[directories].cachedata.CacheVersion=cacheVersion
-		arrayDatapack[directories].cachedata.modVersion=cyberscript.version
-		
-		if(DatapackChecker(jsonf) == true) then
-			try {
-				function()
-					loadDatapackObject(directories)
-					logme(2,"Creating cache for "..directories)
-					
-					
-					
-				end,
-				catch {
-					function(error)
-						logme(1,getLang("datapack_error_import")..directories..') '..error,true)
-						
-						arrayDatapack[directories] = nil
-					end
-				}
-			}
-		end
-
-end
+-- end
 
 
 
 function ImportDataPack()
-	--logme(1,"Registering MissionPack...")
-	local count = 0
-	res = false
 	
+
 	local directories = {}
+		
+		
+	--we load the directories from datapack registry
 	
-	
-	
-	local reader = dir("datapack")
-	if(reader ~= nil) then
-	for i=1, #reader do 
-		if(tostring(reader[i].type) == "directory") then
+	for k,v in ipairs(cyberscript.datapackRegistry) do 
+		
+			table.insert(directories,v)
+		
+	end
+
+
+
+	--for each directories
+	for i,u in ipairs(directories) do
+				
+		-- we check if there is an existing cache
+		
+		
+		local mod =  GetMod(u)
+		local datapack = {}
+
+		if mod ~= nil then 
 			
-			table.insert(directories,reader[i].name)
+			datapack = mod.compile()
+			arrayDatapack[u] = datapack
+			arrayDatapack[u].enabled= true
+			logme(1,"Cyberscript : "..u.." Registred !")
+			
+		else 
+			print("ERROR : "..u.." mod not found !")
+				
 		end
+
+		
+	
+		
+		
+		
 	end
-	
-	arrayDatapack = {}
-	
-	
-	
-	if(#directories > 0) then
-		for i = 1, #directories do
-			
-			ImportDataPackFolder(directories[i])
-			exportCompiledDatapackFolder(directories[i],"From Create")
-			
-		end
-	
-	end
-	end
+
+
+
+
+
+
+
 
 
 end
 
-function RecoverDatapack()
-	
-	arrayDatapack = {}
-	
-	arrayDatapack.CacheVersion = cacheVersion
-	arrayDatapack.modVersion = cyberscript.version
-	
-	local path = "datapack/default/desc.json"
-	local flo = io.open(path)
-	local lines = flo:read("*a")
-	local jsonf = trydecodeJSOn(lines,flo,path)
-	flo:close()
-	
-	
-	if(DatapackChecker(jsonf) == true) then
-	try {
-		function()
-			loadDatapackObject("default")
+
+
+
+
+
+function ImportDataPackSingle(tag)
+	local mod =  GetMod(tag)
+	local datapack = {}
+
+	if mod ~= nil then 
+		
+		datapack = mod.compile()
+		arrayDatapack[tag] = datapack
+		arrayDatapack[tag].enabled= true
+		logme(1,"Cyberscript : "..tag.." Registred !")
+		
+	else 
+		print("ERROR : "..tag.." mod not found !")
 			
-			arrayDatapack["default"].enabled = true
-			
-			
-			exportCompiledDatapack("From Recover")
-			
-			
-			
-			LoadDataPackCache()
-			
-			
-			logme(1,getLang("datapack_recover"),true)
-			
-			
-		end,
-		catch {
-			function(error)
-				logme(1,getLang("datapack_recover_fail")..error,true)
-				
-			end
-		}
-	}
-	else
-	logme(1,getLang("datapack_wrong_default")..tostring(lines),true)
-	error(getLang("datapack_wrong_default")..tostring(lines))
-	
 	end
-	
-	
-	
-	
 	
 end
 
-function CheckandUpdateDatapack()
 
-	if(arrayDatapack ~= nil) then 
-	local directories = {}
-	loadAssetsObject()
-	if(arrayDatapack["default"] ~= nil) then 
-	
-	end
-	
-	if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil  ) then
-		nativeSettings.data["CMDT"].options = {}
-		else
-		nativeSettings.addTab("/CMDT", "CyberScript Mods Manager") -- Add our mods tab (path, label)
-		nativeSettings.data["CMDT"].options = {}
-	end
-	
-	local reader = dir("datapack")
-	if(reader ~= nil) then
-	for i=1, #reader do 
-		if(tostring(reader[i].type) == "directory") then
-			
-			table.insert(directories,reader[i].name)
-		
-		end
-	end
-		
-	local haveupdate = false 
-	
-	for i=1, #directories do
-		local k = directories[i]
-		
-		
-		
-		local jsondesc = nil
-		
-		
-		if(arrayDatapack[k] == nil)then
-			arrayDatapack[k] = {}
-			arrayDatapack[k].state = "new"
-		end
-		
-		
-		
-		if( file_exists("datapack/"..k.."/desc.json") ) then
-			local path = "datapack/"..k.."/desc.json"
-			local desc = io.open(path)
-			lines = desc:read("*a")
-			jsondesc = trydecodeJSOn(lines,desc,path)
-			
-			desc:close()
-			
-			
-			
-			else
-			
-			logme(1,"No DESC FOR "..k,true)
-			arrayDatapack[k] = nil
-		end
-		
-		
-		
-		
-		if(
-			jsondesc ~= nil 
-			
-			and 
-			
-			(
-					
-					(
-						(arrayDatapack[k] ~= nil and (
-							(arrayDatapack[k].metadata ~= nil and jsondesc.version ~= arrayDatapack[k].metadata.version) 
-							or (arrayDatapack[k].metadata ~= nil and table_contains(arrayDatapack[k].metadata.flags,"compile",false) == true and 
-								DatapackChecker(arrayDatapack[k].metadata) == true ) or 
-								arrayDatapack[k].state == "new"))
-					
-					or
-						arrayDatapack[k] == nil 
-					
-					
-					)
-			)
-		) 
-		then
-			
-			local isenabled = false
-			haveupdate = true
-			arrayDatapack[k].metadata=jsondesc
-			if((arrayDatapack[k] ~= nil and arrayDatapack[k].enabled == true)) then
-				
-				isenabled = true
-				
-			end
-			
-			
-			
-			
-			
-		
-				try {
-					function()
-						loadDatapackObject(k)
-						arrayDatapack[k].enabled = isenabled
-						arrayDatapack[k].state = nil
-						logme(1,getLang("datapack_updated_01")..k..getLang("datapack_updated_02"),true)
-						arrayDatapack[k].cachedata={}
-						arrayDatapack[k].cachedata.CacheVersion=cacheVersion
-						arrayDatapack[k].cachedata.modVersion=cyberscript.version
-						exportCompiledDatapackFolder(k,"Updated cache")
-							
-						
-					end,
-					catch {
-						function(error)
-							logme(1,getLang("datapack_error_import")..k..') '..error,true)
-							arrayDatapack[k] = nil
-							
-						end
-					}
-				}
-			
-			else
-			
-		
-			
-			
-				local test1 = jsondesc ~= nil 
-				local test2 = (arrayDatapack[k] ~= nil and ((table_contains(arrayDatapack[k].metadata.flags,"compile",false) == true and DatapackChecker(arrayDatapack[k].metadata) == true ) ))
-				local test3 = arrayDatapack[k] == nil 
-				
-				logme(1,"Can't load "..k.." from the cache : \n | jsondesc is not null : "..tostring(test1).." \n | datapack have required flag: "..tostring(test2).." \n | datapack is null : "..tostring(test3),true)
-				
-			 
-		end
-		
-		
-	
-	end
-	
-	local i = 1
-	for k,v in pairs(arrayDatapack) do
-		
-		local status, retval = pcall(function()
-		if('table' == type(v)) then
-			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil and (table_contains(arrayDatapack[k].metadata.flags,"essential",false) == false)) then
-		
-				nativeSettings.addSwitch("/CMDT", k, arrayDatapack[k].metadata.version, arrayDatapack[k].enabled, arrayDatapack[k].enabled, function(state)
-					if (state == false) then
-						
-						DisableDatapack(k)
-						UnloadDataPackCacheSingle(k)
-						else
-						
-						local enabled = arrayDatapack[k].enabled
-						loadDatapackObject(k)
-						arrayDatapack[k].enabled = true
-						arrayDatapack[k].state = nil
-						arrayDatapack[k].cachedata={}
-						arrayDatapack[k].cachedata.CacheVersion=cacheVersion
-						arrayDatapack[k].cachedata.modVersion=cyberscript.version
-						EnableDatapack(k)
-						LoadDataPackCacheSingle(k)
-					end
-				end)
-			end
-			
-			if((table_contains(arrayDatapack[k].metadata.flags,"essential",false) == true)) then
-				EnableDatapack(k)
-				LoadDataPackCacheSingle(k)
-			end
-			
-			i = i +1
-		end
-			
-		end)
-		
-		if status == false then
-											
-											
-								
-											logme(1,getLang("Modpack Setting Error") .. retval.." Modpack : "..k.."value : "..tostring(arrayDatapack[k].enabled))
-											--Game.GetPlayer():SetWarningMessage("CyberScript Scripting error, check the log for more detail")
-											
-										end
-										
-		
-		end
-	end
-	
-	
-	
-	
-	end
-end
-function loadDatapackObject(namespace)
-	
-	arrayDatapack[namespace].enabled = false
-	
-	if(namespace == "default") then
-		
-		arrayDatapack[namespace].enabled = true
-	end
-	
-	
-	
-	
-	
-	for i=1,#datapackObjectType do
-		local objtype = datapackObjectType[i]
-	
-		local reader = dir("datapack/"..namespace.."/"..objtype)
-		if(reader ~= nil) then
-			arrayDatapack[namespace][objtype] = {}
-			for i=1, #reader do 
-				if(objtype == "texture") then
-					
-					if(tostring(reader[i].type) == "file" and 
-						(
-							string.match(tostring(reader[i].name), ".jpg") or 
-							string.match(tostring(reader[i].name), ".jpeg") or 
-							string.match(tostring(reader[i].name), ".png")or 
-							string.match(tostring(reader[i].name), ".bmp")
-						)
-					) then
-					
-					local imageobj = {}
-					
-					
-					imageobj.name = reader[i].name
-					imageobj.path="datapack/"..namespace.."/"..objtype.."/"..reader[i].name
-					imageobj.file="datapack/"..namespace.."/"..objtype.."/"..reader[i].name
-					imageobj.namespace = namespace
-					
-					
-					
-					arrayDatapack[namespace][objtype][tostring(reader[i].name)] = {}
-					arrayDatapack[namespace][objtype][tostring(reader[i].name)] = imageobj
-					
-					end
-					
-					
-					
-					else
-					
-					if(tostring(reader[i].type) == "file" and string.match(tostring(reader[i].name), ".json")) then
-						
-						local foo = io.open("datapack/"..namespace.."/"..objtype.."/"..reader[i].name)
-						local lines = foo:read("*a")
-						if(lines ~= "") then
-							local jsonf = trydecodeJSOn(lines,foo,"datapack/"..namespace.."/"..objtype.."/"..reader[i].name)
-							arrayDatapack[namespace][objtype][tostring(reader[i].name)] = {}
-							arrayDatapack[namespace][objtype][tostring(reader[i].name)] = jsonf
-							
-							else
-							res = false
-							
-						end
-								foo:close()
-					end
-					
-					
-					
-				end
-			end
-		end
-	end
-end
+
+
+
+
+
+
+
+--cache manipulation
 
 function loadAssetsObject()
 	
 
 	local namespace = "cyberscript"
 	arrayDatapack[namespace] = {}
-	arrayDatapack[namespace].enabled = true
+	
 	arrayDatapack[namespace].metadata = {}
 	arrayDatapack[namespace].metadata.name = "Default Assets"
 	arrayDatapack[namespace].metadata.desc = "Default Assets"
@@ -596,25 +275,6 @@ function loadAssetsObject()
 end
 
 
-
-
-function DeleteDatapackFromCache(tag)
-	
-	if(arrayDatapack[tag]~= nil) then
-		arrayDatapack[tag] = nil
-		if(name ~= "default") then
-			arrayDatapack[tag] = nil
-		end
-	end
-	
-	
-	if(file_exists('user/cache/'..tag..'.lua') == true) then
-						
-			os.remove('user/cache/'..tag..'.lua')
-			--print(tag.." datapack no longer exist, deleting cache...")
-		
-	end
-end
 
 function DatapackChecker(desc)
 	local result = true
@@ -871,19 +531,19 @@ function UnloadDataPackCacheSingle(k)
 	loadQuestsToUI()
 	getInteractGroup()
 	FillCharacterArchive()
-	
+	FillTweakFlatArchive()
 	
 	calculatePOIList()
 end
 
-	function LoadDataPackCacheSingle(k)
+function LoadDataPackCacheSingle(k)
 	
 	
 	
 	
 	
 			local v = arrayDatapack[k]
-			if('table' == type(v) and v.enabled ~= nil and v.enabled == true) then
+			if('table' == type(v)) then
 				
 				if(DatapackChecker(v.metadata)) then
 				
@@ -929,15 +589,15 @@ end
 	loadQuestsToUI()
 	getInteractGroup()
 	FillCharacterArchive()
-	
+	FillTweakFlatArchive()
 	
 	calculatePOIList()
 	
-	end
+end
 
 
 	
-	function LoadDataPackCache()
+function LoadDataPackCache()
 	
 	
 	cyberscript.cache = {}
@@ -954,7 +614,7 @@ end
 	
 	
 			for k,v in pairs(arrayDatapack) do
-				if('table' == type(v) and v.enabled ~= nil and v.enabled == true) then
+				if('table' == type(v)) then
 					
 					if(DatapackChecker(v.metadata)) then
 					
@@ -965,7 +625,7 @@ end
 						
 						
 							if(arrayDatapack[k][objtype] ~= nil) then
-								
+								logme(1,"Loading "..objtype.." for "..k,true)
 								try {
 									function()
 								FillList(objtype,arrayDatapack[k][objtype],k)
@@ -1001,13 +661,14 @@ end
 	loadQuestsToUI()
 	getInteractGroup()
 	FillCharacterArchive()
+	FillTweakFlatArchive()
 	buildnativesetting()
 	
 	calculatePOIList()
 
-	end
+end
 	
-	function calculatePOIList()
+function calculatePOIList()
 	
 	poi_district = {}
 	poi_subdistrict = {}
@@ -1087,10 +748,10 @@ end
 	
 	
 	
-	end
+end
 	
 	
-	function FillList(objtype,tabl, datapackname)
+function FillList(objtype,tabl, datapackname)
 		local rootpath = ""
 		try {
 			function()
@@ -1101,14 +762,14 @@ end
 							
 							if(#value > 0) then
 								for i=1,#value do
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
+									local path = "datapack/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
 									makeTypeCachedObject(objtype,value[i],nil,path,datapackname)
 									
 								end
 							else
 								if(value.tag ~= nil) then
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+									local path = "datapack/"..objtype.."/"..key
 									rootpath = path
 									cyberscript.cache["circuit"][value.tag] = {}
 									cyberscript.cache["circuit"][value.tag].data = value
@@ -1123,7 +784,7 @@ end
 							
 							if(#value > 0) then
 								for i=1,#value do
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
+									local path = "datapack/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
 									makeTypeCachedObject(objtype,value[i],nil,path,datapackname)
 									
@@ -1133,7 +794,7 @@ end
 								end
 							else
 								if(value.tag ~= nil) then
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+									local path = "datapack/"..objtype.."/"..key
 									rootpath = path
 									makeTypeCachedObject(objtype,value,nil,path,datapackname)
 									
@@ -1146,34 +807,34 @@ end
 						end
 						elseif(objtype == "event") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 						end
 						elseif(objtype == "faction") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "fixer") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "functions") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "help") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
@@ -1183,7 +844,7 @@ end
 						
 							
 							
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							
 							
@@ -1297,7 +958,7 @@ end
 						end
 						elseif(objtype == "interact") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
@@ -1306,7 +967,7 @@ end
 						end
 						elseif(objtype == "interfaces") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
@@ -1314,7 +975,7 @@ end
 						elseif(objtype == "lang") then
 						
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							cyberscript.cache["lang"][value.tag] = {}
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
@@ -1324,7 +985,7 @@ end
 						end
 						elseif(objtype == "mission") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
@@ -1335,7 +996,7 @@ end
 							
 							if(#value > 0) then
 								for i=1,#value do
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
+									local path = "datapack/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
 									makeTypeCachedObject(objtype,value[i],nil,path,datapackname)
 									
@@ -1343,7 +1004,7 @@ end
 								
 							else
 								if(value.tag ~= nil) then
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+									local path = "datapack/"..objtype.."/"..key
 									rootpath = path
 									cyberscript.cache["node"][tostring(value.tag)] = {}
 									cyberscript.cache["node"][tostring(value.tag)].data = value
@@ -1356,7 +1017,7 @@ end
 						end
 						elseif(objtype == "npc") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 						
@@ -1373,14 +1034,14 @@ end
 						end
 						elseif(objtype == "path") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "phone_dialog") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 						
@@ -1437,14 +1098,14 @@ end
 						end
 						elseif(objtype == "place") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "poi") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							if(value.tag == nil) then
 								value.tag = key..tostring(math.random(1,99999))
@@ -1454,7 +1115,7 @@ end
 						end
 						elseif(objtype == "radio") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 						
@@ -1463,7 +1124,7 @@ end
 						end
 						elseif(objtype == "shard") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
@@ -1474,7 +1135,7 @@ end
 							
 							if(#value > 0) then
 								for i=1,#value do
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..value[i].tag..".json"
+									local path = "datapack/"..objtype.."/"..value[i].tag..".json"
 									rootpath = path
 									makeTypeCachedObject(objtype,value[i],nil,path,datapackname)
 									
@@ -1484,7 +1145,7 @@ end
 								
 							else
 								if(value.tag ~= nil) then
-									local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+									local path = "datapack/"..objtype.."/"..key
 									rootpath = path
 									makeTypeCachedObject(objtype,value,nil,path,datapackname)
 									
@@ -1493,7 +1154,7 @@ end
 						end
 						elseif(objtype == "texture") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							
 							cyberscript.cache[objtype][key] = {}
@@ -1505,35 +1166,35 @@ end
 						end
 						elseif(objtype == "scene") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 						
 						end
 						elseif(objtype == "housing_template") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "hud") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "setting") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "codex") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
@@ -1541,49 +1202,56 @@ end
 						
 						elseif(objtype == "webpage") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "email") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "character") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,"name",path,datapackname)
 							
 						end
+						elseif(objtype == "tweakflat") then
+						for key, value in pairs(tabl) do 
+							local path = "datapack/"..objtype.."/"..key
+							rootpath = path
+							makeTypeCachedObject(objtype,value,nil,path,datapackname)
+							
+						end
 						elseif(objtype == "quickhack") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							
 						end
 						elseif(objtype == "garage") then
 						for key, value in pairs(tabl) do 
-							local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+							local path = "datapack/"..objtype.."/"..key
 							rootpath = path
 							
 							makeTypeCachedObject(objtype,value,nil,path,datapackname)
 						end
 						elseif(objtype == "ai") then
 							for key, value in pairs(tabl) do 
-								local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+								local path = "datapack/"..objtype.."/"..key
 								rootpath = path
 								
 								makeTypeCachedObject(objtype,value,nil,path,datapackname)
 							end
 					elseif(objtype == "aitemplate") then
 							for key, value in pairs(tabl) do 
-								local path = "datapack/"..datapackname.."/"..objtype.."/"..key
+								local path = "datapack/"..objtype.."/"..key
 								rootpath = path
 								
 								makeTypeCachedObject(objtype,value,nil,path,datapackname)
@@ -1603,7 +1271,7 @@ end
 			
 		}
 		
-	end
+end
 
 function makeTypeCachedObject(objtype,value,field,path,datapackname)
 
@@ -1614,134 +1282,150 @@ function makeTypeCachedObject(objtype,value,field,path,datapackname)
 		tag = value[field]
 
 	end
-if(cyberscript.cache[objtype] == nil) then cyberscript.cache[objtype] = {} end
-	cyberscript.cache[objtype][tag] = {}
-	cyberscript.cache[objtype][tag].data = value
-	cyberscript.cache[objtype][tag].file = path
-	cyberscript.cache[objtype][tag].datapack = datapackname
-	cyberscript.cache[objtype][tag].scripttype = objtype
+	if(cyberscript.cache[objtype] == nil) then cyberscript.cache[objtype] = {} end
+		cyberscript.cache[objtype][tag] = {}
+		cyberscript.cache[objtype][tag].data = value
+		cyberscript.cache[objtype][tag].file = path
+		cyberscript.cache[objtype][tag].datapack = datapackname
+		cyberscript.cache[objtype][tag].scripttype = objtype
+
+		if(objtype == "setting") then
+			logme(1,dump(value),true)
+		end
 
 end
 
-	function DisableDatapack(name)
-		
-		if(name ~= "default") then
-			arrayDatapack[name].enabled = false
+function FillTweakFlatArchive()
+
+	for k, tweak in pairs(cyberscript.cache["tweakflat"]) do
+	
+
+		for source, object in pairs(tweak.data.tweak) do
 			
+			if(object.type == "set") then
 			
+				TweakDB:SetFlat(source, object.value)
+			end
+
+			if(object.type == "setnoupdate") then
 			
-			exportCompiledDatapackFolder(name,name.." datapack : Update Disable state to cache")
-		
+				TweakDB:SetFlatNoUpdate(source, object.value)
+			end
+
+			if(object.type == "update") then
+			
+				TweakDB:Update(source)
+			end
+
+			if(object.type == "setbyget") then
+			
+				TweakDB:SetFlat(source, TweakDB:GetFlat(object.value))
+			end
+
+			if(object.type == "setbygetnoupdate") then
+			
+				TweakDB:SetFlatNoUpdate(source, object.value)
+			end
+			
+			if(object.type == "clone") then
+			
+				TweakDB:CloneRecord(source, object.value)
+			end
+
+			if(object.type == "create") then
+			
+				TweakDB:CreateRecord(source, object.value)
+			end
+
+			if(object.type == "delete") then
+			
+				TweakDB:DeleteRecord(source)
+			end
+			
+			logme(1,"Cyberscript - Mod "..k.." : Applied tweak for "..source)	
+			
 		end
+	
 		
 	end
-	function EnableDatapack(name)
-		
-		arrayDatapack[name].enabled = true
-		
-		
-		
-		exportCompiledDatapackFolder(name,name.." datapack : Update Enable state to cache")
-		
-		
-		
-	end
+end
 	
 	
-	
-	function FillCharacterArchive()
-	
+function FillCharacterArchive()
+
 	for k, ent in pairs(cyberscript.cache["character"]) do
-		
-		TweakDB:CloneRecord(ent.data.name, ent.data.source)
+	
+	TweakDB:CloneRecord(ent.data.name, ent.data.source)
+	
+	
+	if(ent.data.model ~= nil) then
+			TweakDB:SetFlats(ent.data.name,{
+			voiceTag = TweakDB:GetFlat(ent.data.model..".voiceTag"),
+			displayName = TweakDB:GetFlat(ent.data.model..".displayName"),
+			alternativeDisplayName = TweakDB:GetFlat(ent.data.model..".alternativeDisplayName"),
+			alternativeFullDisplayName = TweakDB:GetFlat(ent.data.model..".alternativeFullDisplayName"),
+			fullDisplayName = TweakDB:GetFlat(ent.data.model..".fullDisplayName"),
+			affiliation =  TweakDB:GetFlat(ent.data.model..".affiliation"),
+			statPools =  TweakDB:GetFlat(ent.data.model..".statPools")
+		})
+	end
+
+	if(ent.data.path ~= nil) then
+
 		TweakDB:SetFlat(ent.data.name..".entityTemplatePath", ent.data.path)
-		if(ent.data.model ~= nil) then
-				TweakDB:SetFlats(ent.data.name,{
-				voiceTag = TweakDB:GetFlat(ent.data.model..".voiceTag"),
-				displayName = TweakDB:GetFlat(ent.data.model..".displayName"),
-				alternativeDisplayName = TweakDB:GetFlat(ent.data.model..".alternativeDisplayName"),
-				alternativeFullDisplayName = TweakDB:GetFlat(ent.data.model..".alternativeFullDisplayName"),
-				fullDisplayName = TweakDB:GetFlat(ent.data.model..".fullDisplayName"),
-				affiliation =  TweakDB:GetFlat(ent.data.model..".affiliation"),
-				statPools =  TweakDB:GetFlat(ent.data.model..".statPools"),
-			})
-		end
-		
-		
-		print("Making Character "..ent.data.name)
-		print("Falt Character "..GameDump(TweakDB:GetFlat(ent.data.name..".entityTemplatePath")))
-		local parent = {}
-		for i,v in ipairs(cyberscript.entities) do
-		
-			if(v.entity_tweak == ent.data.source) then parent = deepcopy(v, nil) end
-		
-		end
-					
-		
-		parent.entity_id = TweakDBID.new(ent.data.name).hash
-		parent.entity_entname = ent.data.path
-		parent.entity_name = ent.data.name
+
+	end
+
+	if(ent.data.rarity ~= nil) then
+
+		TweakDB:SetFlat(ent.data.name..".rarity", "NPCRarity."..ent.data.rarity)
+
+	end
+	
+	
+	print("Making Character "..ent.data.name)
+	print("Falt Character "..GameDump(TweakDB:GetFlat(ent.data.name..".entityTemplatePath")))
+	local parent = {}
+	for i,v in ipairs(cyberscript.entities) do
+	
+		if(v.entity_tweak == ent.data.source) then parent = deepcopy(v, nil) break end
+	
+	end
+				
+	
+	parent.entity_id = TweakDBID.new(ent.data.name).hash
+	parent.entity_entname = ent.data.path
+	parent.entity_name = ent.data.name
+	if(ent.data.path ~= nil)then
 		parent.entity_entpath = ent.data.path
-		parent.entity_tweak = ent.data.name
-		
-		local caninsert = true
-		
-		for i,v in ipairs(cyberscript.entities) do
-		
-			if(v.entity_id == parent.entity_id) then caninsert = false end
-		
-		end
-		
-		if caninsert == true then table.insert(cyberscript.entities,parent)end
-		
-					
-					
-				
 	end
+	parent.entity_tweak = ent.data.name
+	
+	local caninsert = true
+	
+	for i,v in ipairs(cyberscript.entities) do
+	
+		if(v.entity_id == parent.entity_id) then caninsert = false end
 	
 	end
 	
-	function loadQuestsToUI()
-		for k,v in pairs(cyberscript.cache["mission"]) do
-			local questos = cyberscript.cache["mission"][k].data
-			local data = {}
-			checkContext(questos)
-			
-			print(k)
-			
-			data.id = questos.tag
-			data.title = getLang(questos.title)
-			data.description = getLang(questos.content)
-			data.extra = questos.extra
-			data.metadata = {}
-			data.metadata.level = questos.recommandedlevel
-			data.metadata.questType = questos.questtype
-			data.metadata.district =  questos.district
-			data.objectives = {}
-			for i=1,#questos.objectives do 
-				local irpobj = questos.objectives[i]
-				checkContext(irpobj)
-			
+	if caninsert == true then table.insert(cyberscript.entities,parent)end
+	
 				
-				local obj = irpobj
-				obj.id = irpobj.tag
-				obj.title = getLang(irpobj.title)
-				obj.isOptional = irpobj.isoptionnal
-				obj.state = irpobj.state
-				table.insert(data.objectives,obj)
-			end
-			QuestManager.AddQuest(data)
-			QuestManager.MarkQuestAsInactive(questos.tag)
-			for i=1,#questos.objectives do 
-				local irpobj = questos.objectives[i]
-				QuestManager.MarkObjectiveAs(irpobj.tag, irpobj.state)
-			end
-		end
+				
+			
 	end
-	function loadQuestToUI(quest)
-		local questos = quest
+	
+end
+	
+function loadQuestsToUI()
+	for k,v in pairs(cyberscript.cache["mission"]) do
+		local questos = cyberscript.cache["mission"][k].data
 		local data = {}
 		checkContext(questos)
+		
+		print(k)
+		
 		data.id = questos.tag
 		data.title = getLang(questos.title)
 		data.description = getLang(questos.content)
@@ -1754,7 +1438,9 @@ end
 		for i=1,#questos.objectives do 
 			local irpobj = questos.objectives[i]
 			checkContext(irpobj)
-			local obj = {}
+		
+			
+			local obj = irpobj
 			obj.id = irpobj.tag
 			obj.title = getLang(irpobj.title)
 			obj.isOptional = irpobj.isoptionnal
@@ -1768,230 +1454,167 @@ end
 			QuestManager.MarkObjectiveAs(irpobj.tag, irpobj.state)
 		end
 	end
-	
-	
-	function readInstalledDatapack()
-		readRegisteredMissionPackFolder()
+end
+function loadQuestToUI(quest)
+	local questos = quest
+	local data = {}
+	checkContext(questos)
+	data.id = questos.tag
+	data.title = getLang(questos.title)
+	data.description = getLang(questos.content)
+	data.extra = questos.extra
+	data.metadata = {}
+	data.metadata.level = questos.recommandedlevel
+	data.metadata.questType = questos.questtype
+	data.metadata.district =  questos.district
+	data.objectives = {}
+	for i=1,#questos.objectives do 
+		local irpobj = questos.objectives[i]
+		checkContext(irpobj)
+		local obj = {}
+		obj.id = irpobj.tag
+		obj.title = getLang(irpobj.title)
+		obj.isOptional = irpobj.isoptionnal
+		obj.state = irpobj.state
+		table.insert(data.objectives,obj)
 	end
-	
-	
-	function initDistrict()
-		--logme(1,"Importing District...")
-		local f = assert(io.open("mod/data/districts.json"))
-		lines = f:read("*a")
-		encdo = lines
-		tableDis = {}
-		tableDis = trydecodeJSOn(lines,f,"mod/data/districts.json")
-		--logme(1,"District Imported")
-		f:close()
-		return tableDis
+	QuestManager.AddQuest(data)
+	QuestManager.MarkQuestAsInactive(questos.tag)
+	for i=1,#questos.objectives do 
+		local irpobj = questos.objectives[i]
+		QuestManager.MarkObjectiveAs(irpobj.tag, irpobj.state)
 	end
-	function initVehicles()
-		--logme(1,"Importing District...")
-		local f = assert(io.open("mod/data/vehicles.json"))
-		local lines = f:read("*a")
-		local encdo = lines
-		local tableDis = {}
-		tableDis = trydecodeJSOn(lines,f,"mod/data/vehicles.json")
-		--logme(1,"District Imported")
-		f:close()
+end
+	
+
+
+function initDistrict()
+	--logme(1,"Importing District...")
+	local f = assert(io.open("mod/data/districts.json"))
+	lines = f:read("*a")
+	encdo = lines
+	tableDis = {}
+	tableDis = trydecodeJSOn(lines,f,"mod/data/districts.json")
+	--logme(1,"District Imported")
+	f:close()
+	return tableDis
+end
+function initVehicles()
+	--logme(1,"Importing District...")
+	local f = assert(io.open("mod/data/vehicles.json"))
+	local lines = f:read("*a")
+	local encdo = lines
+	local tableDis = {}
+	tableDis = trydecodeJSOn(lines,f,"mod/data/vehicles.json")
+	--logme(1,"District Imported")
+	f:close()
+	
+	for i,v in ipairs(tableDis) do
 		
-		for i,v in ipairs(tableDis) do
-			
-			arrayVehicles2[tostring(TweakDBID.new(v))] = v
-		
-		end
-		
-		return tableDis
+		arrayVehicles2[tostring(TweakDBID.new(v))] = v
+	
 	end
-	function initGameSounds()
-		--logme(1,"Importing District...")
-		local f = assert(io.open("mod/data/gamesounds.json"))
-		local lines = f:read("*a")
-		local encdo = lines
-		local tableDis = {}
-		tableDis = trydecodeJSOn(lines,f,"mod/data/gamesounds.json")
-		--logme(1,"District Imported")
-		f:close()
-		return tableDis
-	end
-	function initAttitudeGroup()
-		local tableDis = {}
-		local reader = dir("mod/data/attitudegroup/")
-		if(reader ~= nil) then
-			for i=1, #reader do 
-				if(tostring(reader[i].type) == "file" and string.match(tostring(reader[i].name), ".json")) then
-					local f = io.open("mod/data/attitudegroup/"..reader[i].name)
-					local lines = f:read("*a")
-					if(lines ~= "") then
-						local jsonf = trydecodeJSOn(lines,f,"mod/data/attitudegroup/"..reader[i].name)
-						table.insert(tableDis, jsonf)
-					end
-					f:close()
+	
+	return tableDis
+end
+function initGameSounds()
+	--logme(1,"Importing District...")
+	local f = assert(io.open("mod/data/gamesounds.json"))
+	local lines = f:read("*a")
+	local encdo = lines
+	local tableDis = {}
+	tableDis = trydecodeJSOn(lines,f,"mod/data/gamesounds.json")
+	--logme(1,"District Imported")
+	f:close()
+	return tableDis
+end
+function initAttitudeGroup()
+	local tableDis = {}
+	local reader = dir("mod/data/attitudegroup/")
+	if(reader ~= nil) then
+		for i=1, #reader do 
+			if(tostring(reader[i].type) == "file" and string.match(tostring(reader[i].name), ".json")) then
+				local f = io.open("mod/data/attitudegroup/"..reader[i].name)
+				local lines = f:read("*a")
+				if(lines ~= "") then
+					local jsonf = trydecodeJSOn(lines,f,"mod/data/attitudegroup/"..reader[i].name)
+					table.insert(tableDis, jsonf)
 				end
+				f:close()
 			end
 		end
-		--logme(1,"Importing District...")
-		return tableDis
 	end
-	function initFastTravel()
-		
-		--logme("Importing District...")
-		
-		local f = assert(io.open("mod/data/fasttravelmarkref.json"))
-		
-		lines = f:read("*a")
-		
-		encdo = lines
-		
-		tableDis = {}
-		
-		tableDis = trydecodeJSOn(lines,f,"mod/data/fasttravelmarkref.json")
-		
-		
-		
-		
-		
-		
-		
-		--logme("District Imported")
-		f:close()
-		return tableDis
-		
-		
-	end
+	--logme(1,"Importing District...")
+	return tableDis
+end
+function initFastTravel()
 	
-	function initPath()
-		for k,v in pairs(arrayDatapack) do
-			if('table' == type(v) and v.enabled ~= nil and v.enabled == true) then
-				local reader = dir("datapack/"..k.."/path")
-				if(reader ~= nil) then
-					for i=1, #reader do 
-						local f = io.open("datapack/"..k.."/".."path".."/"..reader[i].name)
-						local lines = f:read("*a")
-						if(lines ~= "") then
-							
-							local path = "datapack/"..k.."/".."path".."/"..reader[i].name
-							
-							local jsonf = trydecodeJSOn(lines,f,path)
-							
-							cyberscript.cache["path"][jsonf.tag] = {}
-							cyberscript.cache["path"][jsonf.tag].data = jsonf
-							cyberscript.cache["path"][jsonf.tag].file = path
-							cyberscript.cache["path"][jsonf.tag].datapack = k
-							f:close()
-							else
-							res = false
-							f:close()
-						end
+	--logme("Importing District...")
+	
+	local f = assert(io.open("mod/data/fasttravelmarkref.json"))
+	
+	lines = f:read("*a")
+	
+	encdo = lines
+	
+	tableDis = {}
+	
+	tableDis = trydecodeJSOn(lines,f,"mod/data/fasttravelmarkref.json")
+	
+	
+	
+	
+	
+	
+	
+	--logme("District Imported")
+	f:close()
+	return tableDis
+	
+	
+end
+
+function initPath()
+	for k,v in pairs(arrayDatapack) do
+		if('table' == type(v)) then
+			local reader = dir("datapack/"..k.."/path")
+			if(reader ~= nil) then
+				for i=1, #reader do 
+					local f = io.open("datapack/"..k.."/".."path".."/"..reader[i].name)
+					local lines = f:read("*a")
+					if(lines ~= "") then
 						
+						local path = "datapack/"..k.."/".."path".."/"..reader[i].name
 						
+						local jsonf = trydecodeJSOn(lines,f,path)
 						
+						cyberscript.cache["path"][jsonf.tag] = {}
+						cyberscript.cache["path"][jsonf.tag].data = jsonf
+						cyberscript.cache["path"][jsonf.tag].file = path
+						cyberscript.cache["path"][jsonf.tag].datapack = k
+						f:close()
+						else
+						res = false
+						f:close()
 					end
+					
+					
 					
 				end
 				
 			end
+			
 		end
-		
-		
 	end
 	
 	
-	
-	
-	
-	function readToImport() --Obsolete
-		local directories = {}
-		if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil  ) then
-			nativeSettings.data["CMDT"].options = {}
-		end
-		local reader = dir("datapack")
-		for i=1, #reader do 
-			if(tostring(reader[i].type) == "directory") then
-				table.insert(directories,reader[i].name)
-			end
-		end
-		for i=1, #directories do
-			local isnew = true
-			local registeritem = nil
-			for z=1,#register do
-				if(register[z].name == directories[i]) then
-					registeritem = register[z]
-				end
-			end
-			local regi = {}
-			if(registeritem == nil) then
-				regi.name = directories[i]
-				regi.enabled = false
-				table.insert(register,regi)
-				else
-				regi = registeritem
-			end
-			if(regi.enabled == nil) then
-				regi.enabled = false
-			end
-			if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil) then
-				nativeSettings.addSwitch("/CMDT", regi.name, "index :"..i, regi.enabled, regi.enabled, function(state)
-					if (state == false) then
-						
-						DisableDatapack(regi.name)
-						UnloadDataPackCacheSingle(regi.name)
-						else
-						EnableDatapack(regi.name)
-						LoadDataPackCacheSingle(regi.name)
-					end
-				end)
-			end
-		end
-		local toremove = {}
-		for z=1,#register do
-			local exist = false
-			for i=1, #directories do
-				if(register[z].name == directories[i]) then
-					exist = true
-				end
-			end
-			if(exist == false) then
-				table.insert(toremove,register[z].name)
-			end
-		end
-		for i=1,#toremove do
-			local candoit = true
-			for z=1,#register do
-				if(candoit == true) then
-					if(register[z].name == toremove[i]) then
-						table.remove(register,z)
-						candoit = false
-					end
-				end
-			end
-		end
-		local file2 = assert(io.open("datapack/register.json", "w"))
-		local stringg2 = JSON:encode_pretty(register)
-		file2:write(stringg2)
-		file2:close()
-	end	
-	
-	function readRegisteredMissionPackFolder()
-		local register = {}
-		if( file_exists("datapack/register.json") ) then
-			local flo = io.open("datapack/register.json")
-			lines = flo:read("*a")
-			if(lines ~= "") then
-				register = trydecodeJSOn(lines,flo,"datapack/register.json")
-				logme(1,"you have already "..#register.." missionpack registered")
-				res=true
-				else
-				res = false
-				register = {}
-				logme(1,"register file is empty")
-			end
-			flo:close()
-		end 
-		return register
-	end
-	
-	
+end
+
+
+
+
+
+
+
 	
 		

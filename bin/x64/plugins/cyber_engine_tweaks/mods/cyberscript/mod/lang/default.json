@@ -1030,7 +1030,7 @@
 
         "ui_setting_gameplay": "Gameplay",
 
-        "ui_setting_gameplay_controller": "Use Gamepad Configuration Controller mode",
+        "ui_setting_gameplay_controller": "Do you play with gamepad ? (reload save to change effect, this will change the cyberscript loaded keybinding configuration)",
 
         "ui_setting_gameplay_radio": "Custom Radio Volume",
 

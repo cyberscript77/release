@@ -128,6 +128,12 @@ function SetObserver()
 
 	end)
 	
+
+	ObserveAfter("BossHealthBarGameController", "RegisterToNewBoss", function(this)
+		
+		BossHealthBarGameController_RegisterToNewBoss(this)
+
+   end)
 	
 	
 	
@@ -283,10 +289,7 @@ PanzerHUDGameController_OnInitialize(this)
 		TutorialPopupGameController_OnPlayerAttach(this,playerPuppet)
 	end)
 	
-	ObserveBefore('WorldMapMenuGameController', 'GetDistrictAnimation', function(this,view ,show)
-		WorldMapMenuGameController_GetDistrictAnimation(this,view ,show)
-			WorldMapMenuGameController_OnInitialize(this)
-	end)
+	
 	
 	ObserveAfter('WorldMapMenuGameController', 'OnInitialize', function(this)
 		WorldMapMenuGameController_OnInitialize(this)
@@ -298,10 +301,7 @@ PanzerHUDGameController_OnInitialize(this)
 		
 	end)
 	
-	ObserveAfter('WorldMapMenuGameController', 'GetDistrictAnimation', function(this,view ,show)
-		 WorldMapMenuGameController_GetDistrictAnimation(this,view ,show)
-		 	WorldMapMenuGameController_OnInitialize(this)
-	end)
+	
 	
 	ObserveAfter('TrackQuestNotificationAction', 'TrackFirstObjective', function(this,questEntry)
 		
@@ -309,10 +309,6 @@ PanzerHUDGameController_OnInitialize(this)
 		TrackQuestNotificationAction_TrackFirstObjective(this,questEntry)
 	end)
 	
-	ObserveAfter('WorldMapMenuGameController', 'OnUpdateHoveredDistricts', function(this,district,subdistrict)
-		WorldMapMenuGameController_OnUpdateHoveredDistricts(this,district,subdistrict)
-			WorldMapMenuGameController_OnInitialize(this)
-	end)
 	
 	ObserveBefore("ShardItemVirtualController", "OnToggledOn", function (this)
 		
@@ -332,20 +328,7 @@ PanzerHUDGameController_OnInitialize(this)
 	end)
 	
 
-	--Updated this from OnSelectedDistrictChanged to OnDistrictViewChanged for 2.0, 
-	--but it is acting as a stub for now since the override here actually isn't doing anything differently from the original method.
-	--TODO: Update or remove this so we aren't overriding when not necessary.
-	Override('WorldMapMenuGameController', 'OnDistrictViewChanged', function(this,oldView,newView)
-
-		WorldMapMenuGameController_OnDistrictViewChanged(this,oldView,newView)
-			WorldMapMenuGameController_OnInitialize(this)
-	end)
 	
-	ObserveAfter('WorldMapMenuGameController', 'OnZoomLevelChanged', function(this,oldLevel,newLevel)
-		
-		WorldMapMenuGameController_OnZoomLevelChanged(this,oldLevel,newLevel)
-			WorldMapMenuGameController_OnInitialize(this)
-	end)
 	
 	ObserveBefore('WorldMapMenuGameController', 'OnSetUserData', function(this,userData )
 		
@@ -838,10 +821,6 @@ function SetOverrider()
 		 	-- WorldMapMenuGameController_OnInitialize(self)
 	-- end)
 	
-	Override('WorldMapGangItemController','SetData', function(self,affiliationRecord) 
-		
-		WorldMapGangItemController_SetData(self,affiliationRecord) 
-	end)
 	
 	
 	
@@ -917,11 +896,7 @@ function SetOverrider()
 	 BrowserController_LoadWebPage(self,address,wrappedMethod)
 	
 	end)
-	Override('WorldMapMenuGameController', 'ShowGangsInfo', function(self,district,sub)
-		
-		WorldMapMenuGameController_ShowGangsInfo(self,district,sub)
-			WorldMapMenuGameController_OnInitialize(self)
-	end)
+	
 	
 	Override('ComputerInkGameController', 'ShowMenuByName', function(this, elementName,wrappedMethod)
 		ComputerInkGameController_ShowMenuByName(this, elementName, wrappedMethod)

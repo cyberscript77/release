@@ -8,10 +8,6 @@ function BrowserController_OnInitialize(self,gameController)
 	GameController["BrowserGameController"]  = self
 end
 
-
-
-
-
 function SmartWindowInkGameController_InitializeMainLayout(this)
 	
 	if(observerthread4 == true or moddisabled  == true)  then return  end
@@ -27,11 +23,6 @@ function SmartWindowInkGameController_InitializeMainLayout(this)
 					v.widget = this.rootWidget
 					
 					
-					-- if v.interface ~= nil then
-					-- v.widget :RemoveAllChildren()
-					-- makeCustomInterface(v.widget,cyberscript.cache["interfaces"][v.interface].data)
-					
-					-- end
 					
 					break
 				end
@@ -40,13 +31,6 @@ function SmartWindowInkGameController_InitializeMainLayout(this)
 		end
 	end)
 end
-
---No longer needed as of 2.0, use BrowserGameController
--- function WebPage_OnInitialize(self)
-	
-	-- if(observerthread4 == true or moddisabled  == true)   then return end
-	-- GameController["WebPage"]  = self
--- end
 
 
 function WebPage_FillPageFromJournal(self,page)
@@ -4479,15 +4463,6 @@ function BrowserController_OnPageSpawned(thos, widget, userData)
 	
 end
 
-
-
-
-
-function ComputerInkGameController_ResolveBreadcrumbLevel(thos,  wrappedMethod) 
-	if(observerthread5 == true or moddisabled  == true)   then return wrappedMethod() end
-	------print("test")
-	wrappedMethod()
-end
 
 function ComputerInkGameController_ShowMenuByName(thos, elementName, wrappedMethod)
 	

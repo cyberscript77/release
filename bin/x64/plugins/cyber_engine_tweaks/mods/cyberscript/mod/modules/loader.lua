@@ -178,6 +178,7 @@ function loadModule()
 	loadQuestsToUI()
 	getInteractGroup()
 	FillCharacterArchive()
+	FillTweakFlatArchive()
 	calculatePOIList()
 	buildnativesetting()
 	end

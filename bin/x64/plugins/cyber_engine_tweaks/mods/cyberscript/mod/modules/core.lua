@@ -51,8 +51,7 @@ end
 
 
 function ModInitialisation()
-	
-	
+
 	
 	
 	--version of compiled cache
@@ -73,14 +72,30 @@ function ModInitialisation()
 	arrayUserSetting = {}
 	arrayUserInput = {}
 	arrayUserInput = {
-            ["cyberscriptOpenGroup_1"] = "IK_Pad_DigitLeft", -- Key 1' keycode of the "mkbBinding"
-            ["cyberscriptOpenGroup_2"] = "IK_Pad_DigitLeft",
-			["cyberscriptOpenGroup_3"] = "IK_Pad_DigitLeft",
-            ["cyberscriptOpenGroup_1"] = true, -- Is Key 1 of the "mkbBinding" a hold down key?
-            ["cyberscriptOpenGroup_2"] = false,
-			["cyberscriptOpenGroup_3"] = false,
-            ["cyberscriptOpenGroup_keys"] = 1 -- How many of the keys are currently being used for the binding "mkbBinding"?
-        }
+		["cyberscriptOpenGroup"] =
+			{
+				["keyboard"]=
+					{
+						["key_1"] = "IK_Pad_DigitLeft", -- Key 1' keycode of the "mkbBinding"
+						["key_2"] = "IK_Pad_DigitLeft",
+						["key_3"] = "IK_Pad_DigitLeft",
+						["hold_1"] = true, -- Is Key 1 of the "mkbBinding" a hold down key?
+						["hold_2"] = false,
+						["hold_3"] = false,
+						["keys"] = 1 -- How many of the keys are currently being used for the binding "mkbBinding"?
+					},
+				["gamepad"]=
+					{
+						["key_1"] = "IK_Pad_DigitLeft", -- Key 1' keycode of the "mkbBinding"
+						["key_2"] = "IK_Pad_DigitLeft",
+						["key_3"] = "IK_Pad_DigitLeft",
+						["hold_1"] = true, -- Is Key 1 of the "mkbBinding" a hold down key?
+						["hold_2"] = false,
+						["hold_3"] = false,
+						["keys"] = 1 -- How many of the keys are currently being used for the binding "mkbBinding"?
+					}
+			}
+	}
 	currentSave.arrayHouseStatut = {}
 	currentSave.arrayHousing = {}
 	currentSave.arrayPlayerItems = {}
@@ -104,48 +119,7 @@ function ModInitialisation()
 	
 	CompiledDatapack = {}
 	
-	local reader =dir("user/cache")
-	if(reader ~= nil) then
-	for i,v in ipairs(reader) do 
-		if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
-			
-			local result,msgerror = pcall(function()
-			
-			local file =io.open('user/cache/'..reader[i].name)
-			local size = file:seek("end")    -- get file size
-			file:close()
-			
-			if size > 100 and size < 10000000 then
-				
-				CompiledDatapack[reader[i].name] =  dofile('user/cache/'..reader[i].name)
-				
-				else
-				
-				local msg = " is too big. The cache file will not be loaded.."
-				
-				if(size < 100) then
-					
-					local msg = "is too small. The cache file will not be loaded.."
-					
-				end
-				
-				logme(2,"Size of the cache "..reader[i].name..msg)
-				
-			end
-			end)
-			
-			
-			if(result == false) then
-				
-				logme(1,msgerror,true)
-			
-			end
-			
-			
-			
-		end
-	end
-	end
+	
 	-- File Checking for Init
 	if file_exists("desc.json") then
 		local f = io.open("desc.json")
@@ -218,14 +192,34 @@ function SaveLoading()
 	
 	arrayUserInput = {}
 	arrayUserInput = {
-            ["cyberscriptOpenGroup_1"] = "IK_Pad_DigitLeft", -- Key 1' keycode of the "mkbBinding"
-            ["cyberscriptOpenGroup_2"] = "IK_Pad_DigitLeft",
-			["cyberscriptOpenGroup_3"] = "IK_Pad_DigitLeft",
-            ["cyberscriptOpenGroup_1"] = false, -- Is Key 1 of the "mkbBinding" a hold down key?
-            ["cyberscriptOpenGroup_2"] = false,
-			["cyberscriptOpenGroup_3"] = false,
-            ["cyberscriptOpenGroup_keys"] = 1 -- How many of the keys are currently being used for the binding "mkbBinding"?
-        }
+		["cyberscriptOpenGroup"] =
+			{
+				["keyboard"]=
+					{
+						["key_1"] = "IK_Pad_DigitLeft", -- Key 1' keycode of the "mkbBinding"
+						["key_2"] = "IK_Pad_DigitLeft",
+						["key_3"] = "IK_Pad_DigitLeft",
+						["hold_1"] = true, -- Is Key 1 of the "mkbBinding" a hold down key?
+						["hold_2"] = false,
+						["hold_3"] = false,
+						["keys"] = 1 -- How many of the keys are currently being used for the binding "mkbBinding"?
+					},
+				["gamepad"]=
+					{
+						["key_1"] = "IK_Pad_DigitLeft", -- Key 1' keycode of the "mkbBinding"
+						["key_2"] = "IK_Pad_DigitLeft",
+						["key_3"] = "IK_Pad_DigitLeft",
+						["hold_1"] = true, -- Is Key 1 of the "mkbBinding" a hold down key?
+						["hold_2"] = false,
+						["hold_3"] = false,
+						["keys"] = 1 -- How many of the keys are currently being used for the binding "mkbBinding"?
+					}
+			}
+	}
+
+
+
+
 	if file_exists("user/settings/userinput.json") then
 		local f = io.open("user/settings/userinput.json")
 		lines = f:read("*a")
@@ -243,10 +237,8 @@ function SaveLoading()
 	currentController = getUserSettingWithDefault("currentController",currentController)
 	AmbushMin = getUserSettingWithDefault("AmbushMin",AmbushMin)
 	CurrentPOIDetectionRange = getUserSettingWithDefault("CurrentPOIDetectionRange",CurrentPOIDetectionRange)
-	enableLocation = getUserSettingWithDefault("enableLocation",enableLocation)
-	showFactionAffinityHud = getUserSettingWithDefault("showFactionAffinityHud",showFactionAffinityHud)
-	displayXYZset = getUserSettingWithDefault("displayXYZ",displayXYZset)
-	ScrollSpeed = getUserSettingWithDefault("ScrollSpeed",ScrollSpeed)
+	
+
 	enableCustomQuest =  getUserSettingWithDefault("enableCustomQuest",enableCustomQuest)
 	AutoRefreshDatapack = getUserSettingWithDefault("AutoRefreshDatapack",AutoRefreshDatapack)
 	
@@ -264,11 +256,10 @@ function SaveLoading()
 	
 	debugLog = getUserSettingWithDefault("debugLog",debugLog)
 	showcyberscriptfixeronmap = getUserSettingWithDefault("showcyberscriptfixeronmap",showcyberscriptfixeronmap)
-	newgroupinteractUI = getUserSettingWithDefault("newgroupinteractUI",newgroupinteractUI)
-
+	
 	logrecordlevel = getUserSettingWithDefault("logrecordlevel",logrecordlevel)
 
-	
+	holdTime = getUserSettingWithDefault("holdTime",holdTime)
 	
 	
 	SetFlatFromSetting()
@@ -342,7 +333,7 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 			firstexecutionshard = nil
 			end
 		else
-			if(GameController["NewHudPhoneGameController"] ~= nil and GameController["NewHudPhoneGameController"]:IsPhoneActive() == true) then
+			if(GameController["NewHudPhoneGameController"] ~= nil and GameController["NewHudPhoneGameController"]:IsA('NewHudPhoneGameController') and GameController["NewHudPhoneGameController"]:IsPhoneActive() == true) then
 				inMenu = true
 				ActiveMenu = "Phone"
 				ActiveSubMenu = "Phone"
@@ -381,16 +372,7 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 	interactionUI_init()
 	inputManager.onInit()
 	eventCatcher = sampleStyleManagerGameController.new()
-	local datapackresult,datapackerror  = pcall(function()
-	DatapackLoading()
-	end)
 	
-	if datapackresult == false then
-		
-		
-	logme(1,"!!!!! CYBERSCRIPT : ERROR IN DATAPACK LOADING" .. datapackerror)
-		
-end
 		
 	
 	if(ModIsLoaded) then
@@ -416,110 +398,19 @@ end
 		CName.add("Available Quests")
 	end
 end
+
 function DatapackLoading() --handle the loading and creation of cache for datapack in datapack
 	
-	local reader =dir("user/cache")
 	
-	--if there is existing cache
-	if(reader ~= nil and #reader > 0 ) then
-		logme(2,getLang("compilefound"))
-		
 		
 		
 		
 		local haveerror = false
 		
-		arrayDatapack = {}
+		
 		loadAssetsObject()
-		
-		local directories = {}
-		
-		
-		--we load the directories from datapack
-		local reader = dir("datapack")
-		for i=1, #reader do 
-			if(tostring(reader[i].type) == "directory") then
-				
-				table.insert(directories,reader[i].name)
-			end
-		end
-		
-		
-		--for each directories
-		for i,u in ipairs(directories) do
-			
-			-- we check if there is an existing cache
-			local v = CompiledDatapack[u..".lua"]
-			
-			
-			try {
-				function()
-					
-					--if datapack cache is not good or doesn't exist, we create an new cache and added it to arrayDatapack
-					if(v == nil or v.cachedata == nil or v.cachedata.CacheVersion== nil or v.cachedata.modVersion== nil  or v.cachedata.CacheVersion ~= cacheVersion or v.cachedata.modVersion ~= cyberscript.version) then
-						if(file_exists("datapack/"..u.."/desc.json") == true) then
-							ImportDataPackFolder(u)
-							exportCompiledDatapackFolder(u,"Created Cache")
-							logme(2,u.." "..getLang("compileoutdated"))
-							
-						end
-						
-						else
-						--if datapack cache is good, we added it to arrayDatapack from the compiled lua cache
-						logme(2,u.." "..getLang("compileuptodate"))
-						arrayDatapack[u] = v
-					end
-					
-					
-					--if the desc.json doesnt exist
-					if(file_exists("datapack/"..u.."/desc.json") == false) then
-						
-						
-						--if there is no desc json but an cache,
-						if(file_exists('user/cache/'..u..'.lua') == true) then
-							--we delete the cache (means no datapack in the datapack folder)
-							os.remove('user/cache/'..u..'.lua')
-							logme(2,u.." datapack no longer exist, deleting cache...")
-							
-						end
-						
-					end
-					
-					
-					
-					
-					
-					
-				end,
-				catch {
-					function(error)
-						logme(1,getLang("datatpackimporterror").."("..u..")"..error)
-						
-						
-						haveerror = true
-					end
-				}
-			}
-			
-			
-			
-			
-			
-		end
-		
-		--if an error occur, we only load the default datapack
-		if(haveerror == true) then
-			
-			--RecoverDatapack()
-			
-		end
-		
-		logme(1,getLang("compileloaded"))
-		
-		else
-		--if there is no cache, we create an new cache for each directories in datapack
 		ImportDataPack()
-	end
+	
 	
 	
 	
@@ -554,12 +445,6 @@ function initCore() --Setup session, mod/external observer and trigger mod core 
 	
 	
 	
-	if(nativeSettings ~= nil and nativeSettings.data["CMDT"] ~= nil  ) then
-		nativeSettings.data["CMDT"].options = {}
-		else
-		nativeSettings.addTab("/CMDT", "CyberScript Mods Manager") -- Add our mods tab (path, label)
-		nativeSettings.data["CMDT"].options = {}
-	end
 	
 	
 	
@@ -572,7 +457,7 @@ function initCore() --Setup session, mod/external observer and trigger mod core 
 	
 	
 	logme(2,"CyberScript version "..cyberscript.version..cyberscript.channel)
-	logme(1,"CyberScript Initialissssation...")
+	logme(1,"CyberScript Initialisation...")
 	
 	
 	
@@ -621,7 +506,6 @@ function initCore() --Setup session, mod/external observer and trigger mod core 
 	
 	
 	
-	CheckandUpdateDatapack()
 	LoadDataPackCache()
 	SaveLoading()
 	
@@ -639,7 +523,6 @@ end
 
 function shutdownManager() -- setup some function at shutdown
 	
-	CheckandUpdateDatapack()
 	UIPopupsManager.ClosePopup()
 	for k,v in pairs(mappinManager) do
 		deleteMappinByTag(k)
@@ -753,7 +636,7 @@ end
 -- ------------------------------------------------------------------
 
 registerForEvent("onInit", function()
-	
+	arrayDatapack = {}
 	--TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	JSON = dofile("mod/external/json.lua")
 	
@@ -762,7 +645,7 @@ registerForEvent("onInit", function()
 			listenPlayerInput(action)
 			
 	end)
-	
+	holdTime = 1
 	loadexternal()
 	
 	cyberscript.var = dofile('mod/modules/var.lua')
@@ -844,414 +727,3 @@ registerForEvent("onTweak", function()
 	
 end)
 
-
--- -- -------------------------------HotKey------------------------------
--- registerHotkey("cycleCustomInteract", "Cycle Custom Interact", function()
-	-- if(newgroupinteractUI) then
-	-- cycleInteract2()
-	-- else
-	-- cycleInteract()
-	-- end
--- end
--- )
--- registerHotkey("push", "push", function()
-	-- objectDist = objectDist + 0.5
-	-- logme(10,objectDist)
--- end
--- )
--- registerHotkey("pull", "pull", function()
-	-- objectDist = objectDist - 0.5
-	-- logme(10,objectDist)
--- end
--- )
--- registerHotkey("selectcurrentInteractGroup1", "Select 1 Interact Group", function()
-	-- currentInteractGroupIndex = 1
-	-- cycleInteractgroup()
--- end
--- )
--- registerHotkey("selectcurrentInteractGroup2", "Select 2 Interact Group", function()
-	-- currentInteractGroupIndex = 2
-	-- cycleInteractgroup()
--- end
--- )
--- registerHotkey("selectcurrentInteractGroup3", "Select 3 Interact Group", function()
-	-- currentInteractGroupIndex = 3
-	-- cycleInteractgroup()
--- end
--- )
--- registerHotkey("selectcurrentInteractGroup4", "Select 4 Interact Group", function()
-	-- currentInteractGroupIndex = 4
-	-- cycleInteractgroup()
--- end
--- )
--- registerHotkey("selectcurrentInteractGroup5", "Select 5 Interact Group", function()
-	-- currentInteractGroupIndex = 5
-	-- cycleInteractgroup()
--- end
--- )
--- registerHotkey("openRadioPopup", "Open radio popup", function()
-	-- openRadio()
--- end
--- )
--- registerHotkey("housingXp", "Housing : X+", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true				
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- objpos.x = objpos.x + 0.05
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingXm", "Housing : X-", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true							
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- objpos.x = objpos.x - 0.05
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingYp", "Housing : Y+", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- objpos.y = objpos.y + 0.05
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingYm", "Housing : Y-", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- objpos.y = objpos.y - 0.05
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingZp", "Housing : Z+", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- objpos.z = objpos.z + 0.05
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingZm", "Housing : Z-", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- objpos.z = objpos.z - 0.05
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingRollp", "Housing : Roll+", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- angle.roll = angle.roll + 5
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingRollm", "Housing : Roll-", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- angle.roll = angle.roll - 5
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingPitchp", "Housing : Pitch+", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- angle.pitch = angle.pitch +5
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingPitchm", "Housing : Pitch-", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- angle.pitch = angle.pitch -5
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingYawp", "Housing : Yaw+", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = entity:GetWorldPosition()
-				-- local worldpos = Game.GetPlayer():GetWorldTransform()
-				-- local qat = entity:GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- angle.yaw = angle.yaw + 5
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingYawm", "Housing : Yaw-", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- if(entity ~= nil) then
-					-- local objpos = entity:GetWorldPosition()
-					-- local worldpos = Game.GetPlayer():GetWorldTransform()
-					-- local qat = entity:GetWorldOrientation()
-					-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-					-- angle.yaw = angle.yaw - 5 
-					-- updateItemPosition(selectedItem, objpos, angle, true)
-					-- cetkeyused = false
-				-- end
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingMovetoPlayer", "Housing : Move To Player", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- local objpos = Game.GetPlayer():GetWorldPosition()
-				-- local qat = Game.GetPlayer():GetWorldOrientation()
-				-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-				-- updateItemPosition(selectedItem, objpos, angle, true)
-				-- cetkeyused = false
-			-- end
-		-- end
-	-- end
--- end)
--- registerHotkey("housingRemove", "Housing : Remove", function()
-	-- if(cetkeyused == false)then
-		-- if(selectedItem ~= nil) then
-			-- local entity = Game.FindEntityByID(selectedItem.entityId)
-			-- if(entity ~= nil) then		
-				-- cetkeyused = true			
-				-- for i =1, #currentSave.arrayPlayerItems do
-					-- local mitem = currentSave.arrayPlayerItems[i]
-					-- if(mitem.Tag == selectedItem.Tag) then
-						-- Game.FindEntityByID(selectedItem.entityId):GetEntity():Destroy()
-						-- logme(10,"toto")
-						-- updatePlayerItemsQuantity(mitem,1)
-						-- deleteHousing(selectedItem.Id)
-						-- local index = getItemEntityIndexFromManager(selectedItem.entityId)
-						-- --despawnItem(selectedItem.Id)
-						-- table.remove(currentItemSpawned,index)
-						-- Cron.After(1, function()
-							-- selectedItem = nil
-						-- end)
-					-- end
-				-- end
-				-- cetkeyused = false
-				-- else
-				-- logme(10,"nope")
-			-- end
-		-- end				
-	-- end
--- end)
--- registerHotkey("housingcycleplaced", "Housing : Cycle Through placed items", function()
-	-- selectedItem = nil
-	-- if(selectedItem == nil) then
-		-- selectedItem = currentItemSpawned[currentselectedItemIndex]
-		-- Game.GetPlayer():SetWarningMessage("Current Selected Item : "..currentItemSpawned[currentselectedItemIndex].Title)
-		-- currentselectedItemIndex = currentselectedItemIndex+1
-		-- if(currentselectedItemIndex > #currentItemSpawned) then
-			-- currentselectedItemIndex = 1
-		-- end
-	-- end
--- end)
--- registerHotkey("hideCustomInteract", "Hide Custom Interact", function()
-	-- hideInteract()
--- end
--- )
--- registerHotkey("saveLocationInput", "Save location to file in json/report", function()
-	-- savelocation = {}
-	-- savelocation.locations = {}
-	-- savelocation.desc = "location_"..math.random(0,59656518543133)
-	-- savelocation.isFor = ""
-	-- savelocation.tag = desc
-	-- local location = {}
-	-- local inVehicule = false
-	-- inVehicule = Game.GetWorkspotSystem():IsActorInWorkspot(Game.GetPlayer())
-	-- location.x = curPos.x
-	-- location.y = curPos.y
-	-- location.z = curPos.z
-	-- local qat = Game.GetPlayer():GetWorldOrientation()
-	-- local angle = GetSingleton('Quaternion'):ToEulerAngles(qat)
-	-- location.pitch = angle.pitch
-	-- location.roll = angle.roll
-	-- location.yaw = angle.yaw
-	-- location.inVehicule = inVehicule
-	-- location.Tag = currentDistricts2.Tag
-	-- if currentDistricts2 ~= nil and #currentDistricts2.districtLabels >0 then
-		-- for i, currentDistricts2 in ipairs(currentDistricts2.districtLabels) do
-			-- if i == 1 then
-				-- location.district = currentDistricts2
-				-- else
-				-- location.subdistrict = currentDistricts2
-			-- end
-		-- end
-	-- end
-	-- table.insert(savelocation.locations,location)
-	-- local file = io.open("json/report/"..savelocation.desc..".json", "w")
-	-- local stringg = JSON:encode_pretty(savelocation)
-	-- logme(10,stringg)
-	-- file:write(stringg)
-	-- file:close()
--- end
--- )
-
-
--- registerHotkey("toogleview", 'Toggle View', function()
-	-- if lastView == nil or lastView == 1 then--Normal View
-		-- local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-		-- fppComp:SetLocalPosition(Vector4:new(0.0, 0.0, 0.0, 1.0))
-		-- local isFemale = GetPlayerGender()
-		-- if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
-		-- local headItem = string.format("Items.CharacterCustomization%sHead", gender)
-		-- local ts = Game.GetTransactionSystem()
-		-- local gameItemID = GetSingleton('gameItemID')
-		-- local tdbid = TweakDBID.new(headItem)
-		-- local itemID = gameItemID:FromTDBID(tdbid)
-		-- if(AVisIn == false) then
-			-- EquipItemOnPlayer(headItem, "TppHead")
-		-- end
-		-- lastView = 2
-		-- elseif lastView == 2 then -- 3rd Person View near
-		-- local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-		-- fppComp:SetLocalPosition(Vector4:new(0.0, -3.0, 0, 1.0))
-		-- local isFemale = GetPlayerGender()
-		-- if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
-		-- local headItem = string.format("Items.CharacterCustomization%sHead", gender)
-		-- local ts = Game.GetTransactionSystem()
-		-- local gameItemID = GetSingleton('gameItemID')
-		-- local tdbid = TweakDBID.new(headItem)
-		-- local itemID = gameItemID:FromTDBID(tdbid)
-		-- if(AVisIn == false) then
-			-- Game.AddToInventory(headItem, 1)
-			-- EquipItemOnPlayer(headItem, "TppHead")
-		-- end
-		-- lastView = 3
-		-- elseif lastView == 3 then -- 3rd Person View far
-		-- local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-		-- fppComp:SetLocalPosition(Vector4:new(0.0, -12.0, 1.5, 1.0))
-		-- local isFemale = GetPlayerGender()
-		-- if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
-		-- local headItem = string.format("Items.CharacterCustomization%sHead", gender)
-		-- local ts = Game.GetTransactionSystem()
-		-- local gameItemID = GetSingleton('gameItemID')
-		-- local tdbid = TweakDBID.new(headItem)
-		-- local itemID = gameItemID:FromTDBID(tdbid)
-		-- if(AVisIn == false) then
-			-- EquipItemOnPlayer(headItem, "TppHead")
-		-- end
-		-- lastView = 4
-		-- elseif lastView == 4 then -- 3rd Person View very far
-		-- local fppComp = Game.GetPlayer():GetFPPCameraComponent()
-		-- fppComp:SetLocalPosition(Vector4:new(0.0, -22.0, 5.5, 1.0))
-		-- local isFemale = GetPlayerGender()
-		-- if isFemale == "_Female" then gender = 'Wa' else gender = 'Ma' end
-		-- local headItem = string.format("Items.CharacterCustomization%sHead", gender)
-		-- local ts = Game.GetTransactionSystem()
-		-- local gameItemID = GetSingleton('gameItemID')
-		-- local tdbid = TweakDBID.new(headItem)
-		-- local itemID = gameItemID:FromTDBID(tdbid)
-		-- if(AVisIn == false) then
-			-- EquipItemOnPlayer(headItem, "TppHead")
-		-- end
-		-- lastView = 1
-	-- end
--- end)

@@ -1434,6 +1434,7 @@ return {
 		["helper"] = "This action will change the stat to the current value",
 		["score"] = 20,
 		["value"] = "Health",
+		["tag"] = "judy",
 		["name"] = "mod_statpool",
 		["perc"] = true,
 		["helperTitle"] = "Stat : Change Statpool",
@@ -1794,6 +1795,7 @@ return {
 		},
 		["position_tag"] = "judy01",
 		["tag"] = "blue01",
+		["npcname"] = "Judy",
 		["x"] = 0,
 		["use_police_prevention_system"] = false,
 		["usecodeware"] =  true,
@@ -3516,6 +3518,8 @@ return {
 	["mod_statpool_max"] = {
 		["value"] = "Health",
 		["name"] = "mod_statpool_max",
+		["tag"] = "judy",
+		["score"] = 50,
 		["helperTitle"] = "Stat : Set Stat to max",
 		["helper"] = "This action will change the stat to the max value",
 	},
@@ -4154,11 +4158,71 @@ return {
 		["name"] = "pull_force_entity",
 	},
 
-	["player_blackwall_hand_anim"] = {
-		["helper"] = "This action will do the Player blackwall hand animation",
-		["helperTitle"] = "Player : Blackwall hand animation",
-		["name"] = "player_blackwall_hand_anim",
+	["set_tweak"] = {
+		["helper"] = "This action will set a TweakDB flat by name and update it.",
+		["helperTitle"] = "TweakDB : Set flat",
+		["name"] = "set_tweak",
+		["source"] = "Cyberscript.myboss.rarity",
+		["value"] = "NPCRarity.Elite",
 	},
+
+	["set_noupdate_tweak"] = {
+		["helper"] = "This action will set a TweakDB flat by name and WILL NOT update it.",
+		["helperTitle"] = "TweakDB : Set flat (No Update)",
+		["name"] = "set_noupdate_tweak",
+		["source"] = "Cyberscript.myboss.rarity",
+		["value"] = "NPCRarity.Elite",
+	},
+
+	["update_tweak"] = {
+		["helper"] = "This action will update a TweakDB flat by name.",
+		["helperTitle"] = "TweakDB : Update",
+		["name"] = "update_tweak",
+		["source"] = "Cyberscript.myboss.rarity"
+	},
+
+	["set_by_get_tweak"] = {
+		["helper"] = "This action will set a TweakDB flat from another TweakDB flat by name and update it.",
+		["helperTitle"] = "TweakDB : Set flat by get",
+		["name"] = "set_by_get_tweak",
+		["source"] = "Cyberscript.myboss.rarity",
+		["value"] = "Cyberscript.myboss2.rarity",
+	},
+
+	["set_by_get_noupdate_tweak"] = {
+		["helper"] = "This action will set a TweakDB flat from another TweakDB flat by name and WILL NOT update it.",
+		["helperTitle"] = "TweakDB : Set flat by get (No Update)",
+		["name"] = "set_by_get_noupdate_tweak",
+		["source"] = "Cyberscript.myboss.rarity",
+		["value"] = "Cyberscript.myboss2.rarity",
+	},
+
+	["clone_tweak"] = {
+		["helper"] = "This action will Clone an existing record from another TweakDB to a flat by name.",
+		["helperTitle"] = "TweakDB : Clone Record",
+		["name"] = "clone_tweak",
+		["source"] = "Cyberscript.EntityA",
+		["value"] = "Cyberscript.EntityB",
+	},
+
+	["create_tweak"] = {
+		["helper"] = "This action will create a new TweakDB record by name. value is the recordTypeName",
+		["helperTitle"] = "TweakDB : Create Record",
+		["name"] = "create_tweak",
+		["source"] = "DualBasePoolEntry",
+		["value"] = "gamedataNPCEquipmentItemsPoolEntry_Record",
+	},
+
+	["delete_tweak"] = {
+		["helper"] = "This action will delete a TweakDB record by name. value is the recordTypeName",
+		["helperTitle"] = "TweakDB : Delete Record",
+		["name"] = "delete_tweak",
+		["source"] = "DualBasePoolEntry"
+	},
+
+
+
+	
 
 	
 }

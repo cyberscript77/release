@@ -45,7 +45,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 					ExecPauseMenu =  true
 					
 					loadModule()
-					CheckandUpdateDatapack()
+					
 					LoadDataPackCache()
 					
 					
@@ -464,7 +464,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 			refreshUIWidget()
 			
 			if curPos ~= nil and displayHUD["main_root_default"] ~= nil then
-				if(enableLocation == true) then
+				
 					
 					
 					
@@ -561,63 +561,63 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 						
 						
 						
-						if(showFactionAffinityHud == true) then
-							
-							displayHUD["factionwidget"]:RemoveAllChildren()
-							
-							displayHUD["factionwidget"]:SetVisible(((not inScanner) and GameController["HUDManager"].state == HUDState.ACTIVATED ))
 						
-							if(currentDistricts2.districtLabels ~= nil and #currentDistricts2.districtLabels > 0) then
-								local gangslist = {}
-								if(#currentDistricts2.districtLabels > 1) then
-									local gangs = getGangfromDistrict(currentDistricts2.districtLabels[2],20)
-									
-									if(#gangs > 0) then
-										for i=1,#gangs do
-											if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
-												table.insert(gangslist,gangs[i])
-												
+							if(displayHUD["factionwidget"]~= nil)then
+								displayHUD["factionwidget"]:RemoveAllChildren()
+								
+								displayHUD["factionwidget"]:SetVisible(((not inScanner) and GameController["HUDManager"].state == HUDState.ACTIVATED ))
+							
+								if(currentDistricts2.districtLabels ~= nil and #currentDistricts2.districtLabels > 0) then
+									local gangslist = {}
+									if(#currentDistricts2.districtLabels > 1) then
+										local gangs = getGangfromDistrict(currentDistricts2.districtLabels[2],20)
+										
+										if(#gangs > 0) then
+											for i=1,#gangs do
+												if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
+													table.insert(gangslist,gangs[i])
+													
+												end
 											end
 										end
-									end
-									else
-									local gangs = getGangfromDistrict(currentDistricts2.districtLabels[1],20)
-									
-									if(#gangs > 0) then
-										for i=1,#gangs do
-											if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
-												table.insert(gangslist,gangs[i])
-												
+										else
+										local gangs = getGangfromDistrict(currentDistricts2.districtLabels[1],20)
+										
+										if(#gangs > 0) then
+											for i=1,#gangs do
+												if(getScoreKey("Affinity",gangs[i].tag) ~= nil) then
+													table.insert(gangslist,gangs[i])
+													
+												end
 											end
 										end
-									end
-									
-								end
-								
-								if(#gangslist > 0) then
-									for i,v in ipairs(gangslist) do
-										
-										
-										local gang = getFactionByTag(v.tag)
-										
-										local top = (i*50)
-										locationWidgetPlace_top = locationWidgetFactionDisctrict_top + (i*50) + 50
-										
-										local isleader = (i==1)
-										
-										displayGangScoreWidget(getScoreKey("Affinity",v.tag),gang.name,displayHUD["factionwidget"],top,isleader)
-										
 										
 									end
 									
+									if(#gangslist > 0) then
+										for i,v in ipairs(gangslist) do
+											
+											
+											local gang = getFactionByTag(v.tag)
+											
+											local top = (i*50)
+											locationWidgetPlace_top = locationWidgetFactionDisctrict_top + (i*50) + 50
+											
+											local isleader = (i==1)
+											
+											displayGangScoreWidget(getScoreKey("Affinity",v.tag),gang.name,displayHUD["factionwidget"],top,isleader)
+											
+											
+										end
+										
+									end
+									
+									
+									
 								end
-								
-								
-								
+							
 							end
-							
-							
-						end
+						
 						
 						
 						
@@ -663,7 +663,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 					end
 						displayHUD["main_root_default"]:SetVisible(false)
 					end
-				end
+				
 				
 			end	
 			
@@ -813,7 +813,7 @@ end
 
 function inGameInit() -- init some function after save loaded
 	loadHUD()
-	CheckandUpdateDatapack()
+	
 	LoadDataPackCache()
 	candrwMapPinFixer= false
 	cancheckmission = true
@@ -1038,7 +1038,17 @@ function refresh(delta) -- update event (include thread refresh action and Quest
 				Cron.Update(delta)
 				if(tick > 60)then
 					if(tick >= 61 and tick <= 62 and draw == false)then
-						
+						local datapackresult,datapackerror  = pcall(function()
+							DatapackLoading()
+							LoadDataPackCache()
+							end)
+							
+							if datapackresult == false then
+								
+								
+							logme(1,"!!!!! CYBERSCRIPT : ERROR IN DATAPACK LOADING" .. datapackerror)
+								
+							end
 						inGameInit() --first playable frame
 						
 					end
@@ -4266,23 +4276,25 @@ function getExpression(name)
 	
 end
 
-function getEntityFromManagerById(Id)
+function getEntityFromManagerById(Id, avoid)
 	local obj = {}
 	obj.id = nil
 	for k,v in pairs(cyberscript.EntityManager) do
 		
 		local enti = v
 		
+		if(avoid == nil or avoid == false or (avoid == true and k ~= "lookatentity" and k ~= "lookatnpc")) then
 		
-		
-		if type(enti.id) ~= "number" then
-			
-			if(enti.id ~= nil and Id ~= nil and enti.id.hash == Id.hash) then
-				obj = v
+			if type(enti.id) ~= "number" then
 				
+				if(enti.id ~= nil and Id ~= nil and enti.id.hash == Id.hash) then
+					obj = v
+					
+					
+				end
 				
 			end
-			
+
 		end
 		
 		

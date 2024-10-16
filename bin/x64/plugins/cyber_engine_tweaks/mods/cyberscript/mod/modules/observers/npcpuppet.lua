@@ -296,3 +296,11 @@ function VehicleSummonWidgetGameController_OnVehicleSummonStateChanged(state,val
 	end
 	
 end
+
+function BossHealthBarGameController_RegisterToNewBoss(thos)
+	local obj = getEntityFromManagerById(thos.boss:GetEntityID(),true)
+
+	if(obj.id ~= nil and obj.name ~= nil and obj.name ~= "")then
+		inkTextRef.SetText(thos.bossName, obj.name);
+	end
+end

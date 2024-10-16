@@ -16,8 +16,6 @@ function PlayerPuppet_ReactToHitProcess(thos,hitEvent)
 	
 end
 
-
-
 function PlayerPuppet_SetEntityNoticedPlayerBBValue(thos,b)
 	if(observerthread3  == true or moddisabled == true)    then return end
 	playerNoticed = b
@@ -32,7 +30,7 @@ function PlayerPuppet_OnBeingTarget(thos,evt)
 		local indextoremove = 0
 		for i,v in ipairs(entityTargetPlayer) do
 			
-			if(evt.objectThatTargets:IsA("entEntity") and evt.objectThatTargets:GetEntityID()==v:GetEntityID()) then
+			if(evt.objectThatTargets:IsA("entEntity") and v:IsA("entEntity") and evt.objectThatTargets:GetEntityID()==v:GetEntityID()) then
 				
 				indextoremove = i
 				break
@@ -77,8 +75,6 @@ function PlayerPuppet_OnGameAttached(thos)
 	GameController["PlayerPuppet"]  = thos
 	startListeners(thos)
 end
-
-
 
 function PlayerPuppet_OnDeath()
 	

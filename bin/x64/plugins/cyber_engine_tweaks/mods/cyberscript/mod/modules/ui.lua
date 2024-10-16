@@ -374,15 +374,20 @@ end
 
 function createdefaultOption(tag,maxkey)
 	local defaultinput = {}
-	
+	defaultinput[tag] = {}
+	defaultinput[tag]["keyboard"] = {}
+	defaultinput[tag]["gamepad"] = {}
 	for i=1,maxkey do
 	
-		defaultinput[tag.."_"..i] = "IK_F1"
-		defaultinput[tag.."_hold_"..i] = false
+		defaultinput[tag]["keyboard"]["key_"..i] = "IK_F1"
+		defaultinput[tag]["keyboard"]["hold_"..i] = false
+		defaultinput[tag]["gamepad"]["key_"..i] = "IK_F1"
+		defaultinput[tag]["gamepad"]["hold_"..i] = false
 	
 	end
 	
-	 defaultinput[tag.."_keys"] = 1
+	defaultinput[tag]["keyboard"]["keys"] = 1
+	defaultinput[tag]["gamepad"]["keys"] = 1
 	
    return defaultinput
 end
@@ -894,64 +899,121 @@ end
 function buildnativesetting()
 		nativeSettings.data["CSKEYBIND"] = nil
 		nativeSettings.addTab("/CSKEYBIND", getLang("CyberScript KeyBinding"))
-		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", getLang("Gameplay"))
+		local controller = "Keyboard"
+
+    if(currentController == true)then
+        controller = "Gamepad"
+    end
+		
+		nativeSettings.addSubcategory("/CSKEYBIND/InfoController","Current controller configuration : "..controller) -- Optional: Add a subcategory (path, label), you can add as many as you want
+		nativeSettings.addSubcategory("/CSKEYBIND/InfoKeybind", "Every Keybinding change need a reload") -- Optional: Add a subcategory (path, label), you can add as many as you want
+		
+		nativeSettings.addSubcategory("/CSKEYBIND/keybindConfig", getLang("Keybind Configuration"))
+
+		nativeSettings.addSwitch("/CSKEYBIND/keybindConfig",  getLang("ui_setting_gameplay_controller"),  getLang("ui_setting_gameplay_controller"),  currentController, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			currentController = state 
+			updateUserSetting("currentController", state)
+		end)
+
+		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", "Open Interact Menu")
 		
 		local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
 		info.keybindLabel = "Key for open group Interact Menu #" -- Label of each key, will be followed by the key number, e.g. "Key 1"
 		info.keybindDescription = "Keybind for open group Interact Menu" -- Description that'll be displayed for all the bindings keys
-		info.supportsHold = false -- Whether to show the hold switches for this bindings keys
+		info.supportsHold = true -- Whether to show the hold switches for this bindings keys
 		info.isHoldLabel = "Hold the key ?"
-		info.isHoldDescription = "Key need to be holded for trigger the event"
+		info.isHoldDescription = "Key need to be holded for trigger the menu"
 		info.id = "cyberscriptOpenGroup" -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
 		info.maxKeys = 3 -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
-		info.maxKeysLabel = "Hotkey Keys Amount" -- Label for the binding's key amount slider
-		info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the Group Menu to be activated" -- Description for the binding's key amount slider
+		info.maxKeysLabel = "Max keys that can be bounded for trigger the menu" -- Label for the binding's key amount slider
+		info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the hotkey to be activated" -- Description for the binding's key amount slider
 		info.nativeSettingsPath = "/CSKEYBIND/gameplay" -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
 		info.defaultOptions = createdefaultOption("cyberscriptOpenGroup",3) -- Table containing the default options
-		info.savedOptions = arrayUserInput -- Table containing the current options
+		
+		
+		if(arrayUserInput[info.id] ~= nil) then
+			info.savedOptions = {}
+			info.savedOptions[info.id] = {}
+			info.savedOptions[info.id] = arrayUserInput[info.id]-- Table containing the current options
+		else
+			arrayUserInput[info.id] =info.defaultOptions[info.id]
+		end
 		info.forceHold = false
 		info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
 			 -- Store changed value
-			 print("Changed KEYBIND of", name)
-			 print("Changed KEYBIND to", value)
-			arrayUserInput[name] = value
-		end
-		info.callback = function() -- Callback for when the binding has been activated
 			
-			if(newgroupinteractUI) then
-				cycleInteract2()
+			 
+			if((currentController)) then
+
+				arrayUserInput[info.id]["gamepad"][name] = value
 			else
-				cycleInteract()
+				arrayUserInput[info.id]["keyboard"][name] = value
 			end
 		end
+		info.callback = function() -- Callback for when the binding has been activated
+			cycleInteract2()
+		end
 		inputManager.addNativeSettingsBinding(info) 
+
+		nativeSettings.addSubcategory("/CSKEYBIND/holdTime", "Keybinding behavior")
+		nativeSettings.addRangeFloat("/CSKEYBIND/holdTime", "Keybinding Hold Time", "How long in second you need to hold the combo/key", 0.5, 100, 0.10, "%.2f", holdTime, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
+			holdTime = value
+			updateUserSetting("holdTime", value)
+		end)
+
+
 		
 	-- Add our mods tab (path, label)
 	if(isEmpty(cyberscript.cache["setting"]) == false) then
-		nativeSettings.data["CMCUSTOM"] = nil
-		nativeSettings.addTab("/CMCUSTOM", getLang("ui_setting_customsetting")) -- Add our mods tab (path, label)
-		if cyberscript.cache["setting"] ~= nil then
+		
+		local controller = "Keyboard"
+
+		if(currentController == true)then
+			controller = "Gamepad"
+		end
+			local tabledone = {}
+	
 			for k,v in pairs(cyberscript.cache["setting"]) do
-				local setting = v.data
+
 				
-				if nativeSettings.data["CMCUSTOM"].subcategories[setting.category] == nil then
-					nativeSettings.addSubcategory("/CMCUSTOM/"..setting.category, setting.categorylibelle) -- Optional: Add a subcategory (path, label), you can add as many as you want
+				local setting = v.data
+				local cat = "/CMCUSTOM_"..v.datapack:gsub("%s+", "_")
+				local subcat = cat.."/"..k		
+				
+				if tabledone[v.datapack] == nil then
 					
+						nativeSettings.addTab(cat, v.datapack) -- Add our mods tab (path, label)
+						nativeSettings.addSubcategory(cat.."/InfoController", "This mod is powered by CyberScript.".." Current controller configuration : "..controller) -- Optional: Add a subcategory (path, label), you can add as many as you want
+						
+
+						tabledone[v.datapack]={}
+	
+				end
+				if not nativeSettings.pathExists(cat.."/"..k) then 
+					local label = setting.tag 
+					if(setting.label ~= nil ) then
+						label = setting.label
+					end
+
+					nativeSettings.addSubcategory(subcat, label) -- Optional: Add a subcategory (path, label), you can add as many as you want
+						
 				end
 				
+				
 				if setting.type == "button" then
-					nativeSettings.addButton("/CMCUSTOM/"..setting.category, setting.label, setting.description,setting.buttonlabel, setting.textsize, function()
+					nativeSettings.addButton(subcat, setting.label, setting.description,setting.buttonlabel, setting.textsize, function()
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
 						
 					end)
 				end
 				
 				if setting.type == "toggle" then
-					nativeSettings.addSwitch("/CMCUSTOM/"..setting.category, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+					print(tostring(setting.variable.tag))
+					print(tostring(setting.variable.key))
+					print(tostring(value))
+					nativeSettings.addSwitch(subcat, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						setVariable(setting.variable.tag,setting.variable.key,value)
-						--print(tostring(setting.variable.tag))
-						--print(tostring(setting.variable.key))
-						--print(tostring(value))
+						
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
 						
 					end)
@@ -959,7 +1021,7 @@ function buildnativesetting()
 				
 				if setting.type == "sliderInt" then
 				
-					nativeSettings.addRangeInt("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+					nativeSettings.addRangeInt(subcat, setting.label, setting.description, setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						
 						setScore(setting.target.tag,setting.target.key,value)
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
@@ -970,7 +1032,7 @@ function buildnativesetting()
 				
 				
 				if setting.type == "sliderFloat" then
-					nativeSettings.addRangeFloat("/CMCUSTOM/"..setting.category, setting.label, setting.description, setting.min, setting.max, setting.step,"%.2f", getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+					nativeSettings.addRangeFloat(subcat, setting.label, setting.description, setting.min, setting.max, setting.step,"%.2f", getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						
 						setScore(setting.target.tag,setting.target.key,value)
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
@@ -979,7 +1041,7 @@ function buildnativesetting()
 				end
 				
 				if setting.type == "sliderText" then
-					nativeSettings.addSelectorString("/CMCUSTOM/"..setting.category, setting.label, setting.description, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue), setting.defaultvalue, function(value)
+					nativeSettings.addSelectorString(subcat, setting.label, setting.description, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue), setting.defaultvalue, function(value)
 						
 						setScore(setting.target.tag,setting.target.key,getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue)[value])
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
@@ -991,20 +1053,35 @@ function buildnativesetting()
 					local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
 					info.keybindLabel = setting.label -- Label of each key, will be followed by the key number, e.g. "Key 1"
 					info.keybindDescription = setting.description -- Description that'll be displayed for all the bindings keys
-					info.supportsHold = setting.hold -- Whether to show the hold switches for this bindings keys
+					info.supportsHold = true -- Whether to show the hold switches for this bindings keys
 					info.isHoldLabel = "Hold the key ?"
 					info.isHoldDescription = "Key need to be holded for trigger the event"
 					info.id = setting.tag -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
-					info.maxKeys = setting.maxkeys -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
+					info.maxKeys = 3 -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
 					info.maxKeysLabel = "Max keys that can be bounded for trigger the event" -- Label for the binding's key amount slider
 					info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the hotkey to be activated" -- Description for the binding's key amount slider
-					info.nativeSettingsPath = "/CMCUSTOM/"..setting.category, setting.categorylibelle -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
+					info.nativeSettingsPath = subcat -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
 					info.defaultOptions = createdefaultOption(setting.tag,setting.maxkeys) -- Table containing the default options
-					info.savedOptions = arrayUserInput -- Table containing the current options
-					info.forceHold = setting.forcehold
+					
+					if(arrayUserInput[info.id] ~= nil) then
+						info.savedOptions = {}
+						info.savedOptions[info.id] = {}
+						info.savedOptions[info.id] = arrayUserInput[info.id]
+						info.savedOptions[info.id] = arrayUserInput[info.id]-- Table containing the current options
+					else
+					
+						arrayUserInput[info.id] =info.defaultOptions[info.id]
+					end
+					info.forceHold = false
 					info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
 						-- Store changed value
-							arrayUserInput[name] = value
+						if(currentController) then
+
+							arrayUserInput[info.id]["gamepad"][name] = value
+						else
+							arrayUserInput[info.id]["keyboard"][name] = value
+						end
+							
 					end
 					info.callback = function() -- Callback for when the binding has been activated
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
@@ -1025,11 +1102,11 @@ function buildnativesetting()
 					inputManager.addNativeSettingsBinding(info) 
 					
 				end
+
+				-- logme(1,"result : "..exportDatapackArray(nativeSettings.data),true)
 			end
-		end
-		else
 		
-		nativeSettings.data["CMCUSTOM"] = nil
+		
 	end
 	
 	
@@ -1067,9 +1144,7 @@ function makeNativeSettings()
 		AutoAmbush == nil or
 		AmbushEnabled== nil or
 		AmbushMin== nil or
-		enableLocation== nil or
-		showFactionAffinityHud== nil or
-		displayXYZset== nil or
+		
 		
 		Player_Sprint_Multiplier==nil or
 		Player_Run_Multiplier==nil or
@@ -1081,9 +1156,6 @@ function makeNativeSettings()
 	obj.AutoAmbush = tostring(AutoAmbush)
 	obj.AmbushEnabled = tostring(AutoAmbush)
 	obj.ScriptedEntityAffinity = tostring(ScriptedEntityAffinity)
-	obj.enableLocation = tostring(enableLocation)
-	obj.showFactionAffinityHud = tostring(showFactionAffinityHud)
-	obj.displayXYZset = tostring(displayXYZset)
 	
 	obj.Player_Sprint_Multiplier = tostring(Player_Sprint_Multiplier)
 	obj.Player_Run_Multiplier = tostring(Player_Run_Multiplier)
@@ -1099,20 +1171,16 @@ function makeNativeSettings()
 		
 		nativeSettings.addSubcategory("/CM/general", getLang("General")) -- Optional: Add a subcategory (path, label), you can add as many as you want
 		
-		settingsTables["disabled"] =  
+		
 		nativeSettings.addSwitch("/CM/general",  getLang("Disable CyberScript"),  getLang("Disable CyberScript"), moddisabled, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			moddisabled = state
 			updateUserSetting ("moddisabled", moddisabled)
 		end)
 		
 		
-		nativeSettings.addSubcategory("/CM/gameplay", getLang("ui_setting_gameplay")) -- Optional: Add a subcategory (path, label), you can add as many as you want
+	
 		
-		settingsTables["gamepad"] =  
-		nativeSettings.addSwitch("/CM/gameplay",  getLang("ui_setting_gameplay_controller"),  getLang("ui_setting_gameplay_controller"), currentController == "gamepad", false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			currentController = state == false and "mouse" or "gamepad"
-			updateUserSetting("currentController", state)
-		end)
+	
 		
 		
 		
@@ -1142,34 +1210,17 @@ function makeNativeSettings()
 		
 		nativeSettings.addSubcategory("/CM/hud",getLang("ui_setting_display"))
 		
-		nativeSettings.addSwitch("/CM/hud", getLang("ui_setting_display_hud"), getLang("ui_setting_display_hud"), enableLocation, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			enableLocation = state
-			updateUserSetting("enableLocation", state)
-		end)
-		
-		nativeSettings.addSwitch("/CM/hud", getLang("ui_setting_display_hud_gang"), getLang("ui_setting_display_hud_gang"), showFactionAffinityHud, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			showFactionAffinityHud = state
-			updateUserSetting("showFactionAffinityHud", state)
-		end)
-		
-		nativeSettings.addSwitch("/CM/hud", getLang("ui_setting_display_hud_xyz"), getLang("ui_setting_display_hud_xyz"), displayXYZset, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			displayXYZset = state
-			updateUserSetting("displayXYZ", displayXYZset)
-		end)
 		
 		
-		nativeSettings.addRangeFloat("/CM/hud", getLang("ui_setting_gameplay_scroll"),  getLang("ui_setting_gameplay_scroll"), 0.001, 0.1, 0.001, "%.3f", ScrollSpeed, ScrollSpeed, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
-			pcall(function() 
-				ScrollSpeed = tonumber(string.format("%.3f", value))
-				updateUserSetting("ScrollSpeed", ScrollSpeed)
-			end)
-		end)
+
+		
+		
 		
 		
 		nativeSettings.addSwitch("/CM/hud", getLang("Show Cyberscript Fixer on Map"), getLang("Show Cyberscript Fixer on Map"), showcyberscriptfixeronmap, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			showcyberscriptfixeronmap = state
 			updateUserSetting("showcyberscriptfixeronmap", state)
-			if(showcyberscriptfixeronmap) then
+			if(state) then
 				setNewFixersPoint()
 				else
 				removeFixersPoint() 
@@ -1177,18 +1228,11 @@ function makeNativeSettings()
 		end)
 		
 		
-		nativeSettings.addSwitch("/CM/hud", getLang("Mods interacts displayed as dialog"), getLang("Mods interacts displayed as dialog"), newgroupinteractUI, true, function(state) -- path, label, desc, currentValue, defaultValue, callback"), enableLocation, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			newgroupinteractUI = state
-			updateUserSetting("newgroupinteractUI", state)
-			
-		end)
+		
 		
 		nativeSettings.addSubcategory("/CM/quests",getLang("Quest setting"))
 		
-		nativeSettings.addButton("/CM/quests", getLang("ui_setting_actions_untrackquest"), getLang("ui_setting_actions_untrackquest"),"Untrack", 45, function()
-			Game.GetJournalManager():TrackEntry(JournalEntry.new())
-			
-		end)
+		
 		
 		nativeSettings.addSwitch("/CM/quests", getLang("Enable Custom Quest"), getLang("Enable Custom Quest"), enableCustomQuest, true, function(state) -- path, label, desc, currentValue, defaultValue, callback
 			enableCustomQuest = state
@@ -1202,12 +1246,7 @@ function makeNativeSettings()
 			
 		end)
 		
-		nativeSettings.addButton("/CM/quests", getLang("ui_setting_actions_cleanthemess"), getLang("ui_setting_actions_cleanthemess"), "Clean the mess", 45, function()
-			
-			despawnAll()
-			workerTable = {}
-			
-		end)
+		
 		
 		
 		
@@ -1262,34 +1301,28 @@ function makeNativeSettings()
 		end)
 		
 		nativeSettings.addButton("/CM/modsetting", getLang("ui_setting_actions_refresh"), getLang("ui_setting_actions_refresh"), "Refresh", 45, function()
-			CheckandUpdateDatapack()
+			
 			LoadDataPackCache()
 			logme(2,"CyberScript : Datapack Cache refreshed")
 			
 		end)
-		
-		nativeSettings.addButton("/CM/modsetting", getLang("ui_setting_actions_rebuild"), getLang("ui_setting_actions_rebuild"), "Rebuild", 45, function()
+
+		nativeSettings.addButton("/CM/modsetting", getLang("ui_setting_actions_cleanthemess"), getLang("ui_setting_actions_cleanthemess"), "Clean the mess", 45, function()
 			
-			local reader = dir("user/cache")
-			
-			for i=1, #reader do 
-				if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
-					
-					os.remove('user/cache/'..reader[i].name)
-					
-					
-					
-					
-				end
-			end
-			
-			
-			ImportDataPack()
-			CheckandUpdateDatapack()
-			LoadDataPackCache()
-			logme(2, getLang("ui_setting_actions_rebuild_done"))
+			despawnAll()
+			workerTable = {}
 			
 		end)
+
+		nativeSettings.addButton("/CM/modsetting", "Reload Cyberscript mods", "Reload Cyberscript mods", "Reload Cyberscript mods", 45, function()
+			
+			ImportDataPack()
+			LoadDataPackCache()
+			logme(2,"CyberScript : Datapack Cache reload")
+			
+		end)
+		
+		
 		
 		nativeSettings.addButton("/CM/modsetting", "!!! Reset the mod !!! ", "WARNING : Will totaly delete downloaded Mods, cache and session", "Reset the mod", 45, function()
 			
@@ -1311,12 +1344,14 @@ function makeNativeSettings()
 					
 				end
 			end
+
+			local reader = dir("user/settings")
 			
-			local reader = dir("datapack")
+			
 			for i=1, #reader do 
-				if(tostring(reader[i].type) == "directory") then
+				if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 					
-					os.remove('datapack/'..reader[i].name)
+					os.remove('user/settings/'..reader[i].name)
 					
 					
 					
@@ -1324,11 +1359,15 @@ function makeNativeSettings()
 				end
 			end
 			
-			local reader = dir("user/cache")
+			
+			
+			
+
+			local reader = dir("user/editor_output")
 			for i=1, #reader do 
 				if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
 					
-					os.remove('user/cache/'..reader[i].name)
+					os.remove('user/editor_output/'..reader[i].name)
 					
 					
 					
@@ -1522,8 +1561,6 @@ function makeNativeSettings()
 		
 		
 		
-		logme(1,result)
-		
 		nativeSettings.addSubcategory("/CM/gameplay00", "sssOoops there is an error in CyberScript Setting !")
 		nativeSettings.addSubcategory("/CM/gameplay01", "Try rebuild the cache and reload the mod/save/game !")
 		nativeSettings.addSubcategory("/CM/gameplay02", "Send quest_mod.log to discord Admin on Cyberscript Discord !")
@@ -1553,30 +1590,9 @@ function makeNativeSettings()
 				end
 			end
 			
-			local reader = dir("datapack")
-			for i=1, #reader do 
-				if(tostring(reader[i].type) == "directory") then
-					
-					os.remove('datapack/'..reader[i].name)
-					
-					
-					
-					
-				end
-			end
 			
-			local reader = dir("user/cache")
-			for i=1, #reader do 
-				if(tostring(reader[i].type) ~= "directory" and reader[i].name ~= "placeholder") then
-					
-					os.remove('user/cache/'..reader[i].name)
-					
-					
-					
-					
-				end
-			end
 			
+		
 			
 			ImportDataPack()
 			LoadDataPackCache()
@@ -1871,271 +1887,7 @@ function BuyedItemsUI()
 	end
 end
 
-function ActivatedGroup()
-	if(newgroupinteractUI == false) then
-		currentInterface = nil
-		
-		local ui = {}
-		ui.title = getLang("Select active Interactions Group")
-		ui.tag = "datapack_current"
-		ui.controls = {}
-		
-		if(#currentInteractGroup > 0 ) then
-			
-			
-			local area = {}
-			area.type = "area"
-			area.tag =	"main_area"
-			area.rotation = 0
-			area.anchor = 15
-			area.fittocontent = true
-			area.trigger = {}
-			area.trigger.auto = {}
-			area.trigger.auto.name = "auto"
-			area.requirement = {}
-			local requirement = {}
-			table.insert(requirement,"auto")
-			table.insert(area.requirement,requirement)
-			area.margin = {}
-			area.margin.top = 0
-			area.margin.left = 0
-			area.size = {}
-			area.size.width = 1500
-			area.size.height = 1000
-			area.scale = {}
-			area.scale.width = 1
-			area.scale.height = 1
-			table.insert(ui.controls,area)
-			
-			local area = {}
-			area.type = "area"
-			area.tag =	"container"
-			area.parent =	"main_area"
-			area.rotation = 0
-			area.anchor = 0
-			area.opacity = 1
-			area.visible = true
-			area.fittocontent = true
-			area.trigger = {}
-			area.trigger.auto = {}
-			area.trigger.auto.name = "auto"
-			area.requirement = {}
-			local requirement = {}
-			table.insert(requirement,"auto")
-			table.insert(area.requirement,requirement)
-			area.margin = {}
-			area.margin.top = 0
-			area.margin.left = 0
-			area.size = {}
-			area.size.width = 1500
-			area.size.height = 1000
-			area.scale = {}
-			area.scale.width = 1
-			area.scale.height = 1
-			table.insert(ui.controls,area)
-			
-			
-			local area = {}
-			area.type = "vertical_area"
-			area.tag =	"main_vertical"
-			area.parent = "container"
-			area.rotation = 0
-			area.anchor = 0
-			area.opacity = 1
-			area.visible = true
-			area.fittocontent = false
-			area.trigger = {}
-			area.trigger.auto = {}
-			area.trigger.auto.name = "auto"
-			area.requirement = {}
-			local requirement = {}
-			table.insert(requirement,"auto")
-			table.insert(area.requirement,requirement)
-			area.margin = {}
-			area.margin.top = 0
-			area.margin.left = 0
-			area.childmargin = {}
-			area.childmargin.top = 0
-			area.childmargin.left = 0
-			area.size = {}
-			area.size.width = 1500
-			area.size.height = 1000
-			area.scale = {}
-			area.scale.width = 1
-			area.scale.height = 1
-			table.insert(ui.controls,area)
-			
-			local label = {}
-			label.type = "label"
-			label.tag ="selected_group_lbl"
-			label.trigger = {}
-			label.trigger.auto = {}
-			label.trigger.auto.name = "auto"
-			label.parent = "main_vertical"
-			label.margin = {}
-			label.style = {}
-			label.anchor = 1
-			label.margin.top = 5
-			label.style.fontsize = 45
-			label.requirement = {}
-			label.textcolor = {}
-			label.textcolor.red = 52
-			label.textcolor.green = 235
-			label.textcolor.blue = 235
-			
-			
-			local requirement = {}
-			table.insert(requirement,"auto")
-			table.insert(label.requirement,requirement)
-			
-			label.text =  "Selected : "..currentInteractGroup[currentInteractGroupIndex]
-			table.insert(ui.controls,label)
-			
-			local area = {}
-			area.type = "area"
-			area.tag =	"scrollercontainer"
-			area.parent =	"main_vertical"
-			area.rotation = 0
-			area.anchor = 0
-			area.opacity = 1
-			area.visible = true
-			area.fittocontent = false
-			area.trigger = {}
-			area.trigger.auto = {}
-			area.trigger.auto.name = "auto"
-			area.requirement = {}
-			local requirement = {}
-			table.insert(requirement,"auto")
-			table.insert(area.requirement,requirement)
-			area.margin = {}
-			area.margin.top = 0
-			area.margin.left = 0
-			area.size = {}
-			area.size.width = 1500
-			area.size.height = 200
-			area.scale = {}
-			area.scale.width = 1
-			area.scale.height = 1
-			table.insert(ui.controls,area)
-			
-			local area = {}
-			area.type = "scrollarea"
-			area.tag =	"datapack_current_scroll"
-			area.trigger = {}
-			area.trigger.auto = {}
-			area.trigger.auto.name = "auto"
-			area.parent = "scrollercontainer"
-			area.requirement = {}
-			area.dynamic = {}
-			local requirement = {}
-			table.insert(requirement,"auto")
-			table.insert(area.requirement,requirement)
-			area.action = {}
-			area.margin = {}
-			
-			area.style = {}
-			area.size = {}
-			area.fittocontent = false
-			area.anchor = 0
-			
-			area.size.width = 1500
-			area.size.height = 600
-			area.scale = {}
-			area.scale.width = 1
-			area.scale.height = 1
-			table.insert(ui.controls,area)
-			
-			
-			local area = {}
-			area.type = "vertical_area"
-			area.tag =	"datapack_current_varea"
-			area.trigger = {}
-			area.trigger.auto = {}
-			area.trigger.auto.name = "auto"
-			area.requirement = {}
-			local requirement = {}
-			table.insert(requirement,"auto")
-			table.insert(area.requirement,requirement)
-			area.action = {}
-			area.margin = {}
-			area.style = {}
-			area.size = {}
-			area.fittocontent = false
-			area.anchor = 0
-			area.parent = "datapack_current_scroll"
-			area.style.fontsize = 30
-			area.size.width = 1500
-			area.size.height = 600
-			area.scale = {}
-			area.scale.width = 1
-			area.scale.height = 1
-			table.insert(ui.controls,area)
-			
-			
-			for i = 1, #currentInteractGroup do 
-				
-				
-				local buttons = {}
-				buttons.type = "button"
-				buttons.title = "Choose "..currentInteractGroup[i]
-				buttons.tag =currentInteractGroup[i].."_button_"..i
-				buttons.trigger = {}
-				buttons.trigger.auto = {}
-				buttons.trigger.auto.name = "auto"
-				buttons.requirement = {}
-				buttons.dynamic = {}
-				local requirement = {}
-				table.insert(requirement,"auto")
-				table.insert(buttons.requirement,requirement)
-				buttons.action = {}
-				buttons.margin = {}
-				buttons.style = {}
-				buttons.parent = "datapack_current_varea"
-				buttons.style.fontsize = 35
-				buttons.size = {}
-				buttons.size.width = 1200
-				buttons.size.height = 100
-				buttons.scale = {}
-				buttons.scale.width = 1
-				buttons.scale.height = 1
-				buttons.anchor = 0
-				
-				local spawn_item = {}
-				spawn_item.name = "set_datapack_group_index" 
-				spawn_item.value = i
-				table.insert(buttons.action,spawn_item)
-				
-				local close_action = {}
-				close_action.name = "close_interface" 
-				table.insert(buttons.action,close_action)
-				
-				table.insert(ui.controls,buttons)
-			end
-			currentInterface = ui
-			
-			if UIPopupsManager.IsReady() then
-				
-				local notificationData = ShardReadPopupData.new()
-				notificationData.notificationName = 'base\\gameplay\\gui\\widgets\\notifications\\shard_notification.inkwidget'
-				notificationData.queueName = 'modal_popup'
-				
-				
-				notificationData.requiredGameState = "inkGameState";
-				notificationData.isBlocking = true;
-				notificationData.useCursor = true;
-				notificationData.title = "Cyberscript Manager";
-				notificationData.text = "Choose a group";
-				notificationData.isCrypted = false;
-				
-				UIPopupsManager.ShowPopup(notificationData)
-				else
-				Game.GetPlayer():SetWarningMessage("Open and close Masqsqsqin menu before call an popup.")
-			end
-		end
-		
-	end
-	
-end
+
 
 
 function ActivatedGroup2()
@@ -2145,7 +1897,7 @@ function ActivatedGroup2()
 	dialog.requirement = {}
 	dialog.desc = ""
 	dialog.tag = "ActivatedGroup2"
-	dialog.speaker = "Interactions Group Selected : "..currentInteractGroup[currentInteractGroupIndex]
+	dialog.speaker = "Choose a mod "
 	dialog.context = {}
 	dialog.options = {}
 	
@@ -2665,17 +2417,10 @@ function cycleInteractgroup()
 end
 
 function hideInteract()
-	if(newgroupinteractUI == false) then
-	if candisplayInteract then
-		currentPossibleInteractChunkIndex = 0
-		
-		createInteraction(false)
-		candisplayInteract = false
-	end
-	else
+	
 	
 		interactionUI.hideHub()
-	end
+	
 end
 
 

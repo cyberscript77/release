@@ -20,10 +20,10 @@ function PlaySound(sound,isradio,needrepeat,entity)
 		end
 	
 	end
-	
-	local audioEvent = SoundPlayEvent.new()
-	audioEvent.soundName = playsound
-	entity:QueueEvent(audioEvent)
+	Game.GetAudioSystem():Play(playsound);
+	-- local audioEvent = SoundPlayEvent.new()
+	-- audioEvent.soundName = playsound
+	-- entity:QueueEvent(audioEvent)
 	local times = os.date()
 	
 	cyberscript.soundmanager[sound.tag] = {}
@@ -59,9 +59,11 @@ function PlaySoundAtEntity(sound,isradio,needrepeat,tag)
 	if(obj ~= nil) then
 		local enti = Game.FindEntityByID(obj.id)
 		if(enti ~= nil) then
-			local audioEvent = SoundPlayEvent.new()
-			audioEvent.soundName = playsound
-			enti:QueueEvent(audioEvent)
+
+			Game.GetAudioSystem():PlayOnEmitter(playsound,enti,CName.new(tag));
+			-- local audioEvent = SoundPlayEvent.new()
+			-- audioEvent.soundName = playsound
+			-- enti:QueueEvent(audioEvent)
 			local times = os.date()
 			
 			cyberscript.soundmanager[sound.tag] = {}
@@ -94,11 +96,11 @@ function Stop(sound)
 		-- end
 	
 	-- end
+	Game.GetAudioSystem():Stop(playsound);
 	
-	
-	local audioEvent = SoundStopEvent.new()
-	audioEvent.soundName = playsound
-	Game.GetPlayer():QueueEvent(audioEvent)
+	-- local audioEvent = SoundStopEvent.new()
+	-- audioEvent.soundName = playsound
+	-- Game.GetPlayer():QueueEvent(audioEvent)
 	cyberscript.soundmanager[sound] = nil
 	
 	

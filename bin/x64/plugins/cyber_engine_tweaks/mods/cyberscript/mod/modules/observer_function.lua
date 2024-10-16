@@ -28,7 +28,6 @@ cyberscript.observers.phone = dofile('mod/modules/observers/phone.lua')
 cyberscript.observers.player = dofile('mod/modules/observers/player.lua')
 cyberscript.observers.quest = dofile('mod/modules/observers/quest.lua')
 cyberscript.observers.scanner = dofile('mod/modules/observers/scanner.lua')
-cyberscript.observers.setting = dofile('mod/modules/observers/setting.lua')
 cyberscript.observers.subtitle = dofile('mod/modules/observers/subtitle.lua')
 cyberscript.observers.worldmap = dofile('mod/modules/observers/worldmap.lua')
 
@@ -124,7 +123,7 @@ function listenPlayerInput(action)
 	
 	
 	pcall(function()
-		if currentHelp ~= nil and currentHelpIndex ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad")then
+		if currentHelp ~= nil and currentHelpIndex ~= nil and (actionName == "cancel" and actionType == "BUTTON_RELEASED" and currentController == true) or ((actionName == "proceed_popup") and actionType == "BUTTON_RELEASED" and currentController == false)then
 			
 			local actionlisth = {}
 			local actionh = {}
@@ -148,7 +147,7 @@ function listenPlayerInput(action)
 			end		
 		end
 	end)
-	if currentHelp ~= nil and (actionName == "close_tutorial" and actionType == "BUTTON_RELEASED" and currentController == "gamepad") or ((actionName == "activate" or actionName == "close_tutorial") and actionType == "BUTTON_RELEASED" and currentController ~= "gamepad") then
+	if currentHelp ~= nil and (actionName == "close_tutorial" and actionType == "BUTTON_RELEASED" and currentController == true) or ((actionName == "activate" or actionName == "close_tutorial") and actionType == "BUTTON_RELEASED" and currentController == false) then
 		
 		local actionlisth = {}
 		local actionh = {}
@@ -172,10 +171,6 @@ function listenPlayerInput(action)
 		end)
 	end
 	
-	if ((string.find(tostring(actionName), "down_button") and currentDialogHub == nil and actionType == "BUTTON_RELEASED" and currentController == "gamepad")) then
-		
-		cycleInteract2()
-	end
 	
 	if((actionType == "BUTTON_RELEASED" or actionType == "BUTTON_PRESSED") and (string.find(tostring(actionName), "hoiceScrollUp") or string.find(tostring(actionName), "hoiceScrollDown") or string.find(tostring(actionName), "up_button") or string.find(tostring(actionName), "down_button") or string.find(tostring(actionName), "hoice1") or string.find(tostring(actionName), "hoice2") or string.find(tostring(actionName), "hoice3") or string.find(tostring(actionName), "hoice4")))then 
 		
