@@ -1891,13 +1891,16 @@ function scriptcheckTrigger(trigger)
 					filter.succeeded = true;
 					context.stateFilter = filter;
 					local quest = Game.GetJournalManager():GetQuests(context)
-					local result = false
+					
 					for i,v in ipairs(quest) do
-						if ( v.id == trigger.value) then
+						
+						if ( tostring(v.id) == trigger.value) then
 							result = true
 							break
 						end
 					end
+
+
 			end
 
 			if(trigger.name == "completed_native_phase") then
@@ -1906,7 +1909,7 @@ function scriptcheckTrigger(trigger)
 					filter.succeeded = true;
 					context.stateFilter = filter;
 					local quest = Game.GetJournalManager():GetQuests(context)
-					local result = false
+					
 					for i,v in ipairs(quest) do
 						if( v.id == trigger.questvalue) then
 							local children = Game.GetJournalManager():GetChildren(v,filter)
@@ -1919,7 +1922,7 @@ function scriptcheckTrigger(trigger)
 
 						end
 					end
-					return result
+					
 
 			end
 
@@ -1929,7 +1932,7 @@ function scriptcheckTrigger(trigger)
 				filter.succeeded = true;
 				context.stateFilter = filter;
 				local quest = Game.GetJournalManager():GetQuests(context)
-				local result = false
+				
 				for i,v in ipairs(quest) do
 					if( v.id == trigger.questvalue) then
 						local children = Game.GetJournalManager():GetChildren(v,filter)
@@ -1948,7 +1951,7 @@ function scriptcheckTrigger(trigger)
 
 					end
 				end
-				return result
+				
 
 		end
 
@@ -2500,6 +2503,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 					for i=1, #group.entities do 
 						local entityTag = group.entities[i]
 						local obj = getEntityFromManager(entityTag)
+						print(obj.tag)
 						local enti = Game.FindEntityByID(obj.id)
 						if(enti ~= nil) then
 							StatusEffectHelper.ApplyStatusEffectForTimeWindow(enti, TweakDBID.new(action.value),obj.id, 0,1000)
@@ -10085,27 +10089,50 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						
 						local tag = "scripted_around_"..math.random(0,9999)
-						local obj = getEntityFromManager(tag)
+						
 						local obj2 = getEntityFromManagerById(newent:GetEntityID(),true) 
-						print(dump(obj2))
-						if (obj.id == nil and goodEntity == true and obj2.id == nil) then
+						
+					
+						if (cyberscript.EntityManager[tag] == nil and goodEntity == true) then
 							
-							print(#parts)
-							print(newent:GetDisplayName())
 							local entity = {}
-							entity.id = newent:GetEntityID()
-							entity.tag = tag
-							entity.tweak = "None"
-							entity.iscompanion = false
+							if(obj2.id == nil) then
+								
+			
+									print(#parts)
+									print(newent:GetDisplayName())
+									
+									entity.id = newent:GetEntityID()
+									entity.tag = tag
+									entity.tweak = "None"
+									entity.iscompanion = false
+									
+									cyberscript.EntityManager[tag]=entity
+
+
+									if(obj2.id ~= nil) then -- means it exist already in manager
+								
+										cyberscript.EntityManager[tag].primarytag = obj2.tag
+										entity.primarytag = obj2.tag
+									end
+
+								else
+									
+									entity.tag = obj2.tag
+
+								
+							end
 							
-							cyberscript.EntityManager[tag]=entity
+							
+
 							if(action.group == nil or action.group == "") then
+								
 								
 								table.insert(cyberscript.GroupManager["temp_around_group"].entities,entity.tag)
 								
-								else
 								
 								
+							else
 								
 								if(cyberscript.GroupManager[action.group] ~= nil) then
 									table.insert(cyberscript.GroupManager[action.group].entities,entity.tag)
@@ -10116,7 +10143,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 								end
 								
 							end
-							obj = entity
+							
 							
 							if(#action.action > 0) then
 								runActionList(action.action, tag.."_forentitylist", parent,source,false,entity.tag)							end
@@ -10125,9 +10152,9 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						
 					end
+					end
 					
-					
-				end
+				
 				if(action.name == "for_enemy_around_you") then
 					
 					player = Game.GetPlayer()
@@ -10175,23 +10202,49 @@ function executeAction(action,tag,parent,index,source,executortag)
 						local tag = "scripted_enemy_around_"..math.random(0,9999)
 						local obj = getEntityFromManager(tag)
 						
-						if (obj.id == nil and goodEntity == true) then
-							
+						
+
+
+						if (cyberscript.EntityManager[tag] == nil and goodEntity == true) then
 							
 							local entity = {}
-							entity.id = newent:GetEntityID()
-							entity.tag = tag
-							entity.tweak = "None"
-							entity.iscompanion = false
+							if(obj2.id == nil) then
+								
+			
+									print(#parts)
+									print(newent:GetDisplayName())
+									
+									entity.id = newent:GetEntityID()
+									entity.tag = tag
+									entity.tweak = "None"
+									entity.iscompanion = false
+									
+									cyberscript.EntityManager[tag]=entity
+
+
+									if(obj2.id ~= nil) then -- means it exist already in manager
+								
+										cyberscript.EntityManager[tag].primarytag = obj2.tag
+										entity.primarytag = obj2.tag
+									end
+
+								else
+									
+									entity.tag = obj2.tag
+
+								
+							end
 							
-							cyberscript.EntityManager[tag]=entity
+							
+
 							if(action.group == nil or action.group == "") then
+								
 								
 								table.insert(cyberscript.GroupManager["temp_around_group"].entities,entity.tag)
 								
-								else
 								
 								
+							else
 								
 								if(cyberscript.GroupManager[action.group] ~= nil) then
 									table.insert(cyberscript.GroupManager[action.group].entities,entity.tag)
@@ -10202,12 +10255,10 @@ function executeAction(action,tag,parent,index,source,executortag)
 								end
 								
 							end
-							obj = entity
+							
 							
 							if(#action.action > 0) then
-								
-								runSubActionList(action.action, tag.."_forentitylist",parent,source,false,entity.tag,false)
-							end
+								runActionList(action.action, tag.."_forentitylist", parent,source,false,entity.tag)							end
 						end
 						
 						

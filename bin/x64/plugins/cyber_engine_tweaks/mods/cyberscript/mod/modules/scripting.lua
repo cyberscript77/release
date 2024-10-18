@@ -126,7 +126,7 @@ function mainThread(active)-- update event when mod is ready and in game (main t
 							
 						end
 						
-						local obj = getEntityFromManagerById(objLook:GetEntityID())
+						local obj = getEntityFromManagerById(objLook:GetEntityID(),true)
 						
 						if(obj.id ~= nil and obj.tag ~= "lookatnpc") then
 							cyberscript.EntityManager["lookatentity"].tag = obj.tag
@@ -4184,6 +4184,26 @@ function getEntityFromManager(tag)
 		
 		
 	end
+
+	if(enti ~= nil and enti.primarytag ~= nil) then
+		
+		
+		
+		
+		
+		local enti = cyberscript.EntityManager[enti.primarytag]
+		
+		if(enti ~= nil) then
+			
+			obj = enti
+			
+		end	
+		
+		
+		
+		
+		
+	end
 	
 	if(tag == "mounted_vehicle" ) then
 		
@@ -4223,17 +4243,19 @@ function getTrueEntityFromManager(tag)
 	
 	
 	local enti = cyberscript.EntityManager[tag]
-	if(tag == "lookatentity") then
+	
+
+	if(tag == "lookatentity" or tag == "last_spawned") then
 		
 		
 		
 		
 		
-		local enti = cyberscript.EntityManager[cyberscript.EntityManager["lookatEntity"].tag]
+		local enti = cyberscript.EntityManager[cyberscript.EntityManager[tag].tag]
 		
 		if(enti ~= nil) then
 			
-			return enti
+			obj = enti
 			
 		end	
 		
@@ -4242,6 +4264,55 @@ function getTrueEntityFromManager(tag)
 		
 		
 	end
+
+	if(enti ~= nil and enti.primarytag ~= nil) then
+		
+		
+		
+		
+		
+		local enti = cyberscript.EntityManager[enti.primarytag]
+		
+		if(enti ~= nil) then
+			
+			obj = enti
+			
+		end	
+		
+		
+		
+		
+		
+	end
+
+	if(tag == "mounted_vehicle" ) then
+		
+		if Game['GetMountedVehicle;GameObject'](Game.GetPlayer()) ~= nil then
+			
+			
+			
+			
+			local enti = cyberscript.EntityManager["mounted_vehicle"]
+			if (enti ~= nil) and type(enti.id) ~= "number" then
+				
+				if(enti.id ~= nil and enti.id.hash == Game['GetMountedVehicle;GameObject'](Game.GetPlayer()):GetEntityID().hash) then
+					obj = enti
+				end
+				
+			end	
+			
+			
+			if(obj.id == nil) then
+				obj.id = Game['GetMountedVehicle;GameObject'](Game.GetPlayer()):GetEntityID()
+				obj.tag = "mounted_vehicle"
+				obj.tweak = nil
+				else
+				--		obj.tag = "lookat"
+			end
+			
+		end
+	end
+	
 	
 	if((enti ~= nil) and enti.tag == tag) then
 		return enti
@@ -4306,6 +4377,10 @@ function getEntityFromManagerById(Id, avoid)
 		
 		
 	end
+	if(obj.id ~= nil and obj.primarytag ~= nil) then
+		obj = cyberscript.EntityManager[obj.primarytag]
+	end
+
 	return obj
 	
 end
