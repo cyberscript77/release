@@ -1790,6 +1790,8 @@ return {
 		["position_house_way"] = "default",
 		["position_distance"] = 5,
 		["position_poi_use_location_tag"] = false,
+		["amountoffsetx"] = 0,
+		["amountoffsety"] = 0,
 		["source_list"] = {
 			"Character.Judy",
 		},
@@ -1882,6 +1884,8 @@ return {
 		["position_node_usegameplay"] = false,
 		["appears_from_behind"] = false,
 		["spawn_system"] = 4,
+		["amountoffsetx"] = 0,
+		["amountoffsety"] = 0,
 		["fakeav"] = false,
 		["wait_for_vehicle"] = false,
 		["source_gang"] = "faction_mox",
@@ -4220,8 +4224,15 @@ return {
 		["source"] = "DualBasePoolEntry"
 	},
 
+	["change_journal_entry_state_by_hash"] = {
+		["helper"] = "This action will change a journal entry to a state. 0 = Undefined, 1 = Inactive, 2 = Active, 3 = Success, 4 =  Failed",
+		["helperTitle"] = "Quest : Change Journal entry to state",
+		["name"] = "change_journal_entry_state_by_hash",
+		["hash"] = -1655870506,
+		["state"] = 3,
+		["notify"] = true
 
-
+	},
 	
 
 	

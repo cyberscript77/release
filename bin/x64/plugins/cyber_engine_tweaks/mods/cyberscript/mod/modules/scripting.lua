@@ -2940,6 +2940,12 @@ function getPath(tag)
 	
 end
 
+function tablelength(T)
+	local count = 0
+	for _ in pairs(T) do count = count + 1 end
+	return count
+  end
+
 function getPOI(tag)
 	
 	
@@ -3311,8 +3317,7 @@ function sortPositionsByDistance(positions, targetPosition, bucketCount,range)
     -- Calculate and place positions into buckets based on distance
     for _, position in ipairs(positions) do
         local distance = calculateDistance(position, targetPosition)
-		-- print("distance : "..distance)
-		-- print("range : "..range)
+		
 		if(distance >= 0 and distance <= range) then
 			local bucketIndex = distance+1
 			
@@ -3322,7 +3327,6 @@ function sortPositionsByDistance(positions, targetPosition, bucketCount,range)
 		end
     end
 	
-	table.sort(buckets)
 	
     -- Concatenate the buckets to get the sorted positions
     local sortedPositions = {}
@@ -4283,7 +4287,7 @@ function getEntityFromManagerById(Id, avoid)
 		
 		local enti = v
 		
-		if(avoid == nil or avoid == false or (avoid == true and k ~= "lookatentity" and k ~= "lookatnpc")) then
+		if( avoid == false or ((avoid == nil or avoid == true) and k ~= "lookatentity" and k ~= "lookatnpc")) then
 		
 			if type(enti.id) ~= "number" then
 				

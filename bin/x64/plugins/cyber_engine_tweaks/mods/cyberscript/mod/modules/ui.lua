@@ -897,93 +897,40 @@ function openanpage(page)
 	irpmenu[page] = true
 end
 function buildnativesetting()
-		nativeSettings.data["CSKEYBIND"] = nil
-		nativeSettings.addTab("/CSKEYBIND", getLang("CyberScript KeyBinding"))
-		local controller = "Keyboard"
-
-    if(currentController == true)then
-        controller = "Gamepad"
-    end
-		
-		nativeSettings.addSubcategory("/CSKEYBIND/InfoController","Current controller configuration : "..controller) -- Optional: Add a subcategory (path, label), you can add as many as you want
-		nativeSettings.addSubcategory("/CSKEYBIND/InfoKeybind", "Every Keybinding change need a reload") -- Optional: Add a subcategory (path, label), you can add as many as you want
-		
-		nativeSettings.addSubcategory("/CSKEYBIND/keybindConfig", getLang("Keybind Configuration"))
-
-		nativeSettings.addSwitch("/CSKEYBIND/keybindConfig",  getLang("ui_setting_gameplay_controller"),  getLang("ui_setting_gameplay_controller"),  currentController, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
-			currentController = state 
-			updateUserSetting("currentController", state)
-		end)
-
-		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", "Open Interact Menu")
-		
-		local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
-		info.keybindLabel = "Key for open group Interact Menu #" -- Label of each key, will be followed by the key number, e.g. "Key 1"
-		info.keybindDescription = "Keybind for open group Interact Menu" -- Description that'll be displayed for all the bindings keys
-		info.supportsHold = true -- Whether to show the hold switches for this bindings keys
-		info.isHoldLabel = "Hold the key ?"
-		info.isHoldDescription = "Key need to be holded for trigger the menu"
-		info.id = "cyberscriptOpenGroup" -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
-		info.maxKeys = 3 -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
-		info.maxKeysLabel = "Max keys that can be bounded for trigger the menu" -- Label for the binding's key amount slider
-		info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the hotkey to be activated" -- Description for the binding's key amount slider
-		info.nativeSettingsPath = "/CSKEYBIND/gameplay" -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
-		info.defaultOptions = createdefaultOption("cyberscriptOpenGroup",3) -- Table containing the default options
-		
-		
-		if(arrayUserInput[info.id] ~= nil) then
-			info.savedOptions = {}
-			info.savedOptions[info.id] = {}
-			info.savedOptions[info.id] = arrayUserInput[info.id]-- Table containing the current options
-		else
-			arrayUserInput[info.id] =info.defaultOptions[info.id]
-		end
-		info.forceHold = false
-		info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
-			 -- Store changed value
-			
-			 
-			if((currentController)) then
-
-				arrayUserInput[info.id]["gamepad"][name] = value
-			else
-				arrayUserInput[info.id]["keyboard"][name] = value
-			end
-		end
-		info.callback = function() -- Callback for when the binding has been activated
-			cycleInteract2()
-		end
-		inputManager.addNativeSettingsBinding(info) 
-
-		nativeSettings.addSubcategory("/CSKEYBIND/holdTime", "Keybinding behavior")
-		nativeSettings.addRangeFloat("/CSKEYBIND/holdTime", "Keybinding Hold Time", "How long in second you need to hold the combo/key", 0.5, 100, 0.10, "%.2f", holdTime, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
-			holdTime = value
-			updateUserSetting("holdTime", value)
-		end)
-
-
-		
+	if(nativeSettings.pathExists("CSKEYBIND/InfoController")) then
+		--update current controller label
+		nativeSettings["CSKEYBIND"].subcategories["InfoController"].label = "Current controller configuration : "..currentControllerName
+	end
 	-- Add our mods tab (path, label)
 	if(isEmpty(cyberscript.cache["setting"]) == false) then
 		
-		local controller = "Keyboard"
-
-		if(currentController == true)then
-			controller = "Gamepad"
-		end
 			local tabledone = {}
+
+			--delete existing then redo
+			for k,v in pairs(cyberscript.cache["setting"]) do
+
+				local cat = "/CSCUSTOM_"..v.datapack:gsub("%s+", "_")
+				if nativeSettings[cat] ~= nil then 
+						
+					nativeSettings[cat] = nil
+
+				end
+			end
+			
 	
 			for k,v in pairs(cyberscript.cache["setting"]) do
 
 				
 				local setting = v.data
-				local cat = "/CMCUSTOM_"..v.datapack:gsub("%s+", "_")
+				local cat = "/CSCUSTOM_"..v.datapack:gsub("%s+", "_")
 				local subcat = cat.."/"..k		
+
+				
 				
 				if tabledone[v.datapack] == nil then
 					
 						nativeSettings.addTab(cat, v.datapack) -- Add our mods tab (path, label)
-						nativeSettings.addSubcategory(cat.."/InfoController", "This mod is powered by CyberScript.".." Current controller configuration : "..controller) -- Optional: Add a subcategory (path, label), you can add as many as you want
+						nativeSettings.addSubcategory(cat.."/InfoController", "This mod is powered by CyberScript.".." Current controller configuration : "..currentControllerName) -- Optional: Add a subcategory (path, label), you can add as many as you want
 						
 
 						tabledone[v.datapack]={}
@@ -1075,12 +1022,10 @@ function buildnativesetting()
 					info.forceHold = false
 					info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
 						-- Store changed value
-						if(currentController) then
 
-							arrayUserInput[info.id]["gamepad"][name] = value
-						else
-							arrayUserInput[info.id]["keyboard"][name] = value
-						end
+						saveUserInput(info.id,name,value)
+
+						
 							
 					end
 					info.callback = function() -- Callback for when the binding has been activated
@@ -1112,6 +1057,12 @@ function buildnativesetting()
 	
 	
 	
+end
+
+function saveUserInput(id,name,value)
+		
+		arrayUserInput[id][currentControllerid][name] = value
+
 end
 function getcurrentpage()
 	
@@ -1554,7 +1505,90 @@ function makeNativeSettings()
 
 
 		nativeSettings.addTab("/CSKEYBIND", getLang("Cyberscript KeyBinding")) -- Add our mods tab (path, label)
-		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", getLang("Gameplay"))
+		
+		nativeSettings.addSubcategory("/CSKEYBIND/InfoController","Current controller configuration : "..currentControllerName) -- Optional: Add a subcategory (path, label), you can add as many as you want
+		nativeSettings.addSubcategory("/CSKEYBIND/InfoKeybind", "Every Keybinding change need a reload") -- Optional: Add a subcategory (path, label), you can add as many as you want
+		nativeSettings.addSubcategory("/CSKEYBIND/keybindConfig", getLang("Keybind Configuration"))
+
+		nativeSettings.addSwitch("/CSKEYBIND/keybindConfig",  getLang("ui_setting_gameplay_controller"),  getLang("ui_setting_gameplay_controller"),  currentController, false, function(state) -- path, label, desc, currentValue, defaultValue, callback
+			currentController = state 
+			updateUserSetting("currentController", state)
+			
+			currentControllerName = "Keyboard"
+			currentControllerid = "keyboard"
+
+			if(currentController == true)then
+				currentControllerName = "Gamepad"
+				currentControllerid = "gamepad"
+			end
+
+			
+
+			
+		end)
+
+		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", "Open Interact Menu")
+		
+		local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
+		info.keybindLabel = "Key for open group Interact Menu #" -- Label of each key, will be followed by the key number, e.g. "Key 1"
+		info.keybindDescription = "Keybind for open group Interact Menu" -- Description that'll be displayed for all the bindings keys
+		info.supportsHold = true -- Whether to show the hold switches for this bindings keys
+		info.isHoldLabel = "Hold the key ?"
+		info.isHoldDescription = "Key need to be holded for trigger the menu"
+		info.id = "cyberscriptOpenGroup" -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
+		info.maxKeys = 3 -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
+		info.maxKeysLabel = "Max keys that can be bounded for trigger the menu" -- Label for the binding's key amount slider
+		info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the hotkey to be activated" -- Description for the binding's key amount slider
+		info.nativeSettingsPath = "/CSKEYBIND/gameplay" -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
+		 -- Table containing the default options
+		local defaultinput = {}
+		defaultinput["cyberscriptOpenGroup"] = {}
+		defaultinput["cyberscriptOpenGroup"]["keyboard"] = {}
+		defaultinput["cyberscriptOpenGroup"]["gamepad"] = {}
+		for i=1,3 do
+		
+			defaultinput["cyberscriptOpenGroup"]["keyboard"]["key_"..i] = "IK_Y"
+			defaultinput["cyberscriptOpenGroup"]["keyboard"]["hold_"..i] = false
+			defaultinput["cyberscriptOpenGroup"]["gamepad"]["key_"..i] = "IK_Y"
+			defaultinput["cyberscriptOpenGroup"]["gamepad"]["hold_"..i] = false
+		
+		end
+		
+		defaultinput["cyberscriptOpenGroup"]["keyboard"]["keys"] = 1
+		defaultinput["cyberscriptOpenGroup"]["gamepad"]["keys"] = 1
+
+		info.defaultOptions = defaultinput
+		
+		if(arrayUserInput[info.id] ~= nil) then
+			info.savedOptions = {}
+			info.savedOptions[info.id] = {}
+			info.savedOptions[info.id] = arrayUserInput[info.id]-- Table containing the current options
+		else
+			arrayUserInput[info.id] =info.defaultOptions[info.id]
+		end
+		info.forceHold = false
+		info.saveCallback = function(name, value) -- Callback for when anything about the binding gets changed, gets the changed variable's generated name + the value
+			 -- Store changed value
+
+			 saveUserInput(info.id,name,value)
+			 
+			
+		end
+		info.callback = function() -- Callback for when the binding has been activated
+			cycleInteract2()
+		end
+		inputManager.addNativeSettingsBinding(info) 
+
+		nativeSettings.addSubcategory("/CSKEYBIND/holdTime", "Keybinding behavior")
+		nativeSettings.addRangeFloat("/CSKEYBIND/holdTime", "Keybinding Hold Time", "How long in second you need to hold the combo/key", 0.5, 100, 0.10, "%.2f", holdTime, 1, function(value) -- path, label, desc, min, max, step, currentValue, defaultValue, callback
+			holdTime = value
+			updateUserSetting("holdTime", value)
+		end)
+
+
+
+
+
 	end)
 	
 	if status == false then
@@ -2030,26 +2064,26 @@ function cycleInteract2()
 	
 	table.insert(dialog.options,options)
 	
-	if(#dialog.options > 0) then
+	
 		
-		local options = {}
-		options.requirement = nil
-		options.trigger = nil
-		options.description = "Exit"
-		options.action = {}
-		
-		
-		options.action[1] = {}
-		options.action[1].name = "nothing"
-		
-		
-		
-		
-		
-		table.insert(dialog.options,options)
-		--print("mark2")
-		createDialog(dialog)
-	end
+	local options = {}
+	options.requirement = nil
+	options.trigger = nil
+	options.description = "Exit"
+	options.action = {}
+	
+	
+	options.action[1] = {}
+	options.action[1].name = "nothing"
+	
+	
+	
+	
+	
+	table.insert(dialog.options,options)
+	--print("mark2")
+	createDialog(dialog)
+	
 	
 end
 function Activatedshard(shard)

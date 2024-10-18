@@ -667,7 +667,7 @@ function LoadDataPackCache()
 	calculatePOIList()
 
 end
-	
+
 function calculatePOIList()
 	
 	poi_district = {}

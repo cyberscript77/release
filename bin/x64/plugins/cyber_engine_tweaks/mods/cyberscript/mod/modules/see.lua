@@ -1883,6 +1883,75 @@ function scriptcheckTrigger(trigger)
 					result = true
 				end
 			end
+			
+
+			if(trigger.name == "completed_native_quest") then
+				local context = JournalRequestContext.new()
+					local filter = JournalRequestStateFilter.new()
+					filter.succeeded = true;
+					context.stateFilter = filter;
+					local quest = Game.GetJournalManager():GetQuests(context)
+					local result = false
+					for i,v in ipairs(quest) do
+						if ( v.id == trigger.value) then
+							result = true
+							break
+						end
+					end
+			end
+
+			if(trigger.name == "completed_native_phase") then
+					local context = JournalRequestContext.new()
+					local filter = JournalRequestStateFilter.new()
+					filter.succeeded = true;
+					context.stateFilter = filter;
+					local quest = Game.GetJournalManager():GetQuests(context)
+					local result = false
+					for i,v in ipairs(quest) do
+						if( v.id == trigger.questvalue) then
+							local children = Game.GetJournalManager():GetChildren(v,filter)
+							for j,c in ipairs(children) do
+								if ( c.id == trigger.value) then
+									result = true
+									break
+								end
+							end
+
+						end
+					end
+					return result
+
+			end
+
+			if(trigger.name == "completed_native_objective") then
+				local context = JournalRequestContext.new()
+				local filter = JournalRequestStateFilter.new()
+				filter.succeeded = true;
+				context.stateFilter = filter;
+				local quest = Game.GetJournalManager():GetQuests(context)
+				local result = false
+				for i,v in ipairs(quest) do
+					if( v.id == trigger.questvalue) then
+						local children = Game.GetJournalManager():GetChildren(v,filter)
+						for j,c in ipairs(children) do
+							if ( c.id == trigger.phasevalue) then
+								local children2 = Game.GetJournalManager():GetChildren(c,filter)
+								for k,o in ipairs(children2) do
+									if ( o.id == trigger.value) then
+										result = true
+										break
+									end
+								end
+								break
+							end
+						end
+
+					end
+				end
+				return result
+
+		end
+
 			if(trigger.name == "tracked_native_quest") then
 				local objective = Game.GetJournalManager():GetTrackedEntry()
 				if objective ~= nil then
@@ -2624,11 +2693,18 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						if(chara ~= "" and position.x ~= nil) then
 							if(action.amount > 1) then
+								if(action.amountoffsetx ~= nil and action.amountoffsetx ~= 0) then
+									position.x = position.x + (i * action.amountoffsetx)
+								else
+									position.x = position.x + (i * 0.5)
+								end
+
+								if(action.amountoffsety ~= nil and action.amountoffsety ~= 0) then
+									
+									position.y = position.y + (i * action.amountoffsety)
 								
-								position.x = position.x + (i*0.5)
-								
+								end
 							end
-							
 							spawnVehicleV2(chara,action.appearance,tag, position.x, position.y ,position.z,action.spawnlevel,action.spawn_system,action.isAV,action.appears_from_behind,false,action.wait_for_vehicle, action.scriptlevel, action.wait_for_vehicle_second,action.fakeav,action.despawntimer,action.persiststate,action.persistspawn,action.alwaysspawned,action.spawninview,action.dontregister,rotation)
 							if(action.group ~= nil and action.group ~= "") then
 								
@@ -5278,6 +5354,41 @@ function executeAction(action,tag,parent,index,source,executortag)
 					TweakDB:DeleteRecord(action.source)
 				end
 
+				if(action.name == "change_journal_entry_state_by_hash") then
+					local state = gameJournalEntryState.Undefined
+					
+					
+
+					if(action.state == 1) then
+					
+						state = gameJournalEntryState.Inactive
+					end
+
+					if(action.state == 2) then
+					
+						state = gameJournalEntryState.Active
+					end
+
+					if(action.state == 3) then
+					
+						state = gameJournalEntryState.Succeeded
+					end
+
+					if(action.state == 4) then
+					
+						state = gameJournalEntryState.Failed
+					
+					end
+					local notify = JournalNotifyOption.DoNotNotify
+					if(action.notify == true) then
+					
+						notify = JournalNotifyOption.Notify
+					end
+
+					Game.GetJournalManager():ChangeEntryStateByHash(action.hash, state, notify)
+		
+				end
+
 				
 				
 			end
@@ -7752,10 +7863,20 @@ function executeAction(action,tag,parent,index,source,executortag)
 						local position = getPositionFromParameter(action)
 						
 						if(chara ~= "" and chara ~= nil and position.x ~= nil) then
+							
+
 							if(action.amount > 1) then
+								if(action.amountoffsetx ~= nil and action.amountoffsetx ~= 0) then
+									position.x = position.x + (i * action.amountoffsetx)
+								else
+									position.x = position.x + (i * 0.5)
+								end
+
+								if(action.amountoffsety ~= nil and action.amountoffsety ~= 0) then
+									
+									position.y = position.y + (i * action.amountoffsety)
 								
-								position.x = position.x + (i*0.5)
-								
+								end
 							end
 							local rot = EulerAngles.new(0,0,0)
 							if(action.yaw ~= nil) then
@@ -9965,7 +10086,7 @@ function executeAction(action,tag,parent,index,source,executortag)
 						
 						local tag = "scripted_around_"..math.random(0,9999)
 						local obj = getEntityFromManager(tag)
-						local obj2 = getEntityFromManagerById(newent:GetEntityID()) 
+						local obj2 = getEntityFromManagerById(newent:GetEntityID(),true) 
 						print(dump(obj2))
 						if (obj.id == nil and goodEntity == true and obj2.id == nil) then
 							

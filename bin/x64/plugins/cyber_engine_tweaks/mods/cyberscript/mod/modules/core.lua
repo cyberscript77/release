@@ -190,7 +190,7 @@ function SaveLoading()
 		
 	end
 	
-	arrayUserInput = {}
+	
 	arrayUserInput = {
 		["cyberscriptOpenGroup"] =
 			{
@@ -235,6 +235,16 @@ function SaveLoading()
 	moddisabled = getUserSettingWithDefault("moddisabled",moddisabled)
 	
 	currentController = getUserSettingWithDefault("currentController",currentController)
+	currentControllerName = "Keyboard"
+	currentControllerid = "keyboard"
+
+	if(currentController == true)then
+		currentControllerName = "Gamepad"
+		currentControllerid = "gamepad"
+	end
+
+	
+
 	AmbushMin = getUserSettingWithDefault("AmbushMin",AmbushMin)
 	CurrentPOIDetectionRange = getUserSettingWithDefault("CurrentPOIDetectionRange",CurrentPOIDetectionRange)
 	
@@ -320,7 +330,7 @@ end
 
 function setupCore() --Setup environnement (DatapackLoading, observer, overrider)
 	
-	
+	inputManager.onInit()
 	GameUI.Listen(function(state)
 		
 		if(state.submenu == "Stats") then
@@ -370,7 +380,7 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 	SetObserver()
 	
 	interactionUI_init()
-	inputManager.onInit()
+	
 	eventCatcher = sampleStyleManagerGameController.new()
 	
 		
@@ -381,6 +391,7 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 		GameSession.Persist(currentSave, true)
 		GameSession.OnLoad(function() 
 			reloadDB()
+			inputManager.onShutdown()
 			for k,v in pairs(mappinManager) do
 				deleteMappinByTag(k)
 			end
@@ -389,9 +400,9 @@ function setupCore() --Setup environnement (DatapackLoading, observer, overrider
 				GameIsLoaded = true
 				reloadCET = false
 			end
-			inputManager.onShutdown()
-			initCore()
 			inputManager.onInit()
+			initCore()
+			
 		end) 
 		initCore()
 		
@@ -637,6 +648,8 @@ end
 
 registerForEvent("onInit", function()
 	arrayDatapack = {}
+	currentControllerid = "keyboard"
+	currentControllerName = "Keyboard"
 	--TweakDB:SetFlat("PreventionSystem.setup.totalEntitiesLimit", 999999)
 	JSON = dofile("mod/external/json.lua")
 	
@@ -725,5 +738,11 @@ registerForEvent("onTweak", function()
 	
 	
 	
+end)
+
+
+
+registerHotkey('OpenInteractMenu', 'Open Interact Menu (CET mode)', function()
+	cycleInteract2()
 end)
 
