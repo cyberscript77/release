@@ -170,6 +170,8 @@ function SaveLoading()
 	if GameIsLoaded == true and #currentSave.arrayAffinity > 0 then
 		loadUIsetting()
 	end
+
+	
 	
 	if #currentSave.garage > 0 then
 		for i=1, #currentSave.garage do
@@ -313,6 +315,22 @@ function SaveLoading()
 		currentSave.Variable["player"]["current_gang"] = "faction_mox"
 		
 	end
+
+	if (currentSave.Variable["game"] == nil) then
+		currentSave.Variable["game"] ={}
+		
+
+	end
+	if (currentSave.Variable["game"]["loaded_gang_affinity"] == nil) then
+		
+		currentSave.Variable["game"]["loaded_gang_affinity"] = true
+		GangAffinityCalculator()
+		initGangRelation()
+		initGangDistrictScore()
+
+	end
+
+	
 	loadModule()
 	
 	makeNativeSettings()

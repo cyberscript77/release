@@ -632,7 +632,17 @@
         "editor_Housing_apply_template_multi": "Apply Template to Current Multiplayer Place",
         "editor_Housing_clear_all_multi": "Clear Multiplayer Place Items (BE CAREFUL, it delele all !)",
 
-        "mission_start_look_map": ". Look at you map for track the objective"
+        "mission_start_look_map": ". Look at you map for track the objective",
+        "setting_open_menu":"Key for open group Interact Menu #",
+        "setting_open_menu_desc":"Keybind for open group Interact Menu",
+      
+
+
+
+        "setting_hold_key":"Hold the key ?",
+        "setting_hold_key_desc":"Key need to be holded for trigger the event",
+        "setting_max_key":"Max keys that can be bounded for trigger the event",
+        "setting_max_key_desc":"Changes how many keys this hotkey has, all of them have to pressed for the hotkey to be activated"
 
     }
 

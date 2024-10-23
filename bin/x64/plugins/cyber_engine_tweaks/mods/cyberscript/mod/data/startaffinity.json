@@ -4,7 +4,7 @@
         "factionscore":
         [
 			{
-                "faction": "faction_scavenger",
+                "faction": "faction_scavengers",
                 "value": -10
             }
         ],
@@ -87,7 +87,7 @@
         "factionscore":
         [
 			{
-                "faction": "faction_scavenger",
+                "faction": "faction_scavengers",
                 "value": -10
             },
 			{

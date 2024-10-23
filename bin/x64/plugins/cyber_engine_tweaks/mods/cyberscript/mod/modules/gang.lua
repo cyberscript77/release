@@ -620,8 +620,8 @@ function GangAffinityCalculator()
 				
 				for y=1,#affinity.factionscore  do
 					local factionScore = affinity.factionscore[y]
-					
-					addFactionScoreByTagScore(factionScore.data,factionScore.value)
+					logme(10,"added affinity "..factionScore.faction.." value "..factionScore.value)
+					addFactionScoreByTagScore(factionScore.faction,factionScore.value)
 				
 				end
 				

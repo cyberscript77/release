@@ -2961,7 +2961,13 @@ function executeAction(action,tag,parent,index,source,executortag)
 				end
 				
 				if(action.name == "set_variable") then
-					setVariable(action.variable,action.key,action.value)
+					local text = action.value
+
+					if(action.type ~= nil and action.type == "lang") then
+						text = getLang(action.value)
+					end
+					
+					setVariable(action.variable,action.key,text)
 				end
 				
 				
@@ -4871,36 +4877,37 @@ function executeAction(action,tag,parent,index,source,executortag)
 				
 				
 				if(action.name == "wanted_level") then
-					local preventionSystem = Game.GetScriptableSystemsContainer():Get("PreventionSystem")
-					preventionSystem:SetHeatStage(action.value)
-					preventionSystem:OnHeatChanged()
-					if(action.value == 0) then
+					-- local preventionSystem = Game.GetScriptableSystemsContainer():Get("PreventionSystem")
+					-- preventionSystem:SetHeatStage(action.value)
+					-- preventionSystem:OnHeatChanged()
+					-- if(action.value == 0) then
 						
 						
-						if preventionSystem:IsChasingPlayer() then
+					-- 	if preventionSystem:IsChasingPlayer() then
 							
 							
-							preventionSystem.systemDisabled = false
-							preventionSystem:WhipeBlinkData()
-							preventionSystem:ChangeAgentsAttitude(EAIAttitude.AIA_Neutral)
-							preventionSystem:WakeUpAllAgents(false)
-							preventionSystem:WhipeHitNPC()
-							preventionSystem:DespawnAllPolice()
-							preventionSystem:RemovePlayerFromSecuritySystemBlacklist()
-							preventionSystem:CancelAllDelayedEvents()
-							preventionSystem.isHidingFromPolice = false
-							preventionSystem.generalPercent = 0
+					-- 		preventionSystem.systemDisabled = false
+					-- 		preventionSystem:WhipeBlinkData()
+					-- 		preventionSystem:ChangeAgentsAttitude(EAIAttitude.AIA_Neutral)
+					-- 		preventionSystem:WakeUpAllAgents(false)
+					-- 		preventionSystem:WhipeHitNPC()
+					-- 		preventionSystem:DespawnAllPolice()
+					-- 		preventionSystem:RemovePlayerFromSecuritySystemBlacklist()
+					-- 		preventionSystem:CancelAllDelayedEvents()
+					-- 		preventionSystem.isHidingFromPolice = false
+					-- 		preventionSystem.generalPercent = 0
 							
-							for _, veh in ipairs(preventionSystem.vehicles) do
-								if preventionSystem:IsVehicleValid(veh) then
-									Game.GetPreventionSpawnSystem():JoinTraffic(veh)
-								end
-							end
+					-- 		for _, veh in ipairs(preventionSystem.vehicles) do
+					-- 			if preventionSystem:IsVehicleValid(veh) then
+					-- 				Game.GetPreventionSpawnSystem():JoinTraffic(veh)
+					-- 			end
+					-- 		end
 							
-							local playergroup = Game.GetPlayer():GetAttitudeAgent():GetAttitudeGroup()
-							Game.GetAttitudeSystem():SetAttitudeGroupRelationPersistent("police", playergroup, EAIAttitude.AIA_Neutral)
-						end
-					end
+					-- 		local playergroup = Game.GetPlayer():GetAttitudeAgent():GetAttitudeGroup()
+					-- 		Game.GetAttitudeSystem():SetAttitudeGroupRelationPersistent("police", playergroup, EAIAttitude.AIA_Neutral)
+					-- 	end
+					-- end
+					Game.GetScriptableSystemsContainer():Get("PreventionSystem"):OnSetWantedLevel(SetWantedLevel.new({wantedLevel =action.value }))
 				end
 				if(action.name == "change_zone") then
 					if(action.value == "safe") then

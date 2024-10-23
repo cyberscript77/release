@@ -4767,13 +4767,6 @@ function getLang(text)
 			
 		end
 		
-		
-		
-		
-	
-		
-		
-		
 	end	
 	
 	if(lang["default"] ~= nil and lang["default"][text] ~= nil and lang["default"][text] ~= "" )then

@@ -1,7 +1,7 @@
 	[{
 			"fact": "q001_tt_put_girl_stretchers",
 			"factionscore": [{
-				"faction": "faction_scavenger",
+				"faction": "faction_scavengers",
 				"value": -1
 			}],
 			"npcscore": []
@@ -86,7 +86,7 @@
 		{
 			"fact": "q105_done",
 			"factionscore": [{
-				"faction": "faction_scavenger",
+				"faction": "faction_scavengers",
 				"value": -5
 			}, {
 				"faction": "faction_mox",

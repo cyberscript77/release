@@ -158,7 +158,7 @@ function refreshUIWidget()
 						
 						if(control.split and control.split > 0) then
 							
-							local desctab = splitByChunk(control.data.text, control.data.split)
+							local desctab = splitByChunk(getLang(control.data.text), control.data.split)
 							local descc = ""
 							
 							for y=1,#desctab do
@@ -171,8 +171,8 @@ function refreshUIWidget()
 							end
 							else
 							
-							if(control.ink:GetText() ~= control.data.text) then
-								control.ink:SetText(control.data.text)
+							if(control.ink:GetText() ~= getLang(control.data.text)) then
+								control.ink:SetText(getLang(control.data.text))
 							end
 							
 						end
@@ -582,13 +582,13 @@ function makeCustomInterface(parentroot,interface)
 					
 					if(control.split and control.split > 0) then
 						
-						local desctab = splitByChunk(control.text, control.split)
+						local desctab = splitByChunk(getLang(control.text), control.split)
 						local descc = desctab
 						
 						
 						widgetcontrol:SetText(descc)
 						else
-						widgetcontrol:SetText(control.text)
+						widgetcontrol:SetText(getLang(control.text))
 					end
 					
 					widgetcontrol:SetFontFamily('base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily')
@@ -939,7 +939,7 @@ function buildnativesetting()
 				if not nativeSettings.pathExists(cat.."/"..k) then 
 					local label = setting.tag 
 					if(setting.label ~= nil ) then
-						label = setting.label
+						label = getLang(setting.label)
 					end
 
 					nativeSettings.addSubcategory(subcat, label) -- Optional: Add a subcategory (path, label), you can add as many as you want
@@ -948,17 +948,15 @@ function buildnativesetting()
 				
 				
 				if setting.type == "button" then
-					nativeSettings.addButton(subcat, setting.label, setting.description,setting.buttonlabel, setting.textsize, function()
+					nativeSettings.addButton(subcat, getLang(setting.label), getLang(setting.description),setting.buttonlabel, setting.textsize, function()
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
 						
 					end)
 				end
 				
 				if setting.type == "toggle" then
-					print(tostring(setting.variable.tag))
-					print(tostring(setting.variable.key))
-					print(tostring(value))
-					nativeSettings.addSwitch(subcat, setting.label, setting.description, getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+				
+					nativeSettings.addSwitch(subcat, getLang(setting.label), getLang(setting.description), getVariableKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						setVariable(setting.variable.tag,setting.variable.key,value)
 						
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
@@ -968,7 +966,7 @@ function buildnativesetting()
 				
 				if setting.type == "sliderInt" then
 				
-					nativeSettings.addRangeInt(subcat, setting.label, setting.description, setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+					nativeSettings.addRangeInt(subcat, getLang(setting.label), getLang(setting.description), setting.min, setting.max, setting.step, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						
 						setScore(setting.target.tag,setting.target.key,value)
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
@@ -979,7 +977,7 @@ function buildnativesetting()
 				
 				
 				if setting.type == "sliderFloat" then
-					nativeSettings.addRangeFloat(subcat, setting.label, setting.description, setting.min, setting.max, setting.step,"%.2f", getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
+					nativeSettings.addRangeFloat(subcat, getLang(setting.label), getLang(setting.description), setting.min, setting.max, setting.step,"%.2f", getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.defaultvalue), setting.defaultvalue, function(value)
 						
 						setScore(setting.target.tag,setting.target.key,value)
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
@@ -988,7 +986,7 @@ function buildnativesetting()
 				end
 				
 				if setting.type == "sliderText" then
-					nativeSettings.addSelectorString(subcat, setting.label, setting.description, getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue), setting.defaultvalue, function(value)
+					nativeSettings.addSelectorString(subcat, getLang(setting.label), getLang(setting.description), getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue), setting.defaultvalue, function(value)
 						
 						setScore(setting.target.tag,setting.target.key,getScoreKeyWithDefault(setting.variable.tag,setting.variable.key,setting.variable.defaultvalue)[value])
 						runActionList(setting.action, setting.tag, "interact",false,"nothing",true)
@@ -998,15 +996,15 @@ function buildnativesetting()
 				
 				if setting.type == "input" then
 					local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
-					info.keybindLabel = setting.label -- Label of each key, will be followed by the key number, e.g. "Key 1"
-					info.keybindDescription = setting.description -- Description that'll be displayed for all the bindings keys
+					info.keybindLabel = getLang(setting.label) -- Label of each key, will be followed by the key number, e.g. "Key 1"
+					info.keybindDescription = getLang(setting.description) -- Description that'll be displayed for all the bindings keys
 					info.supportsHold = true -- Whether to show the hold switches for this bindings keys
-					info.isHoldLabel = "Hold the key ?"
-					info.isHoldDescription = "Key need to be holded for trigger the event"
+					info.isHoldLabel = getLang("setting_hold_key")
+					info.isHoldDescription = getLang("setting_hold_key_desc")
 					info.id = setting.tag -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
 					info.maxKeys = 3 -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
-					info.maxKeysLabel = "Max keys that can be bounded for trigger the event" -- Label for the binding's key amount slider
-					info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the hotkey to be activated" -- Description for the binding's key amount slider
+					info.maxKeysLabel = getLang("setting_max_key") -- Label for the binding's key amount slider
+					info.maxKeysDescription = getLang("setting_max_key_desc")
 					info.nativeSettingsPath = subcat -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
 					info.defaultOptions = createdefaultOption(setting.tag,setting.maxkeys) -- Table containing the default options
 					
@@ -1530,15 +1528,15 @@ function makeNativeSettings()
 		nativeSettings.addSubcategory("/CSKEYBIND/gameplay", "Open Interact Menu")
 		
 		local info = inputManager.createBindingInfo() -- Create an info table that holds information for a binding, makes it easier to reuse later
-		info.keybindLabel = "Key for open group Interact Menu #" -- Label of each key, will be followed by the key number, e.g. "Key 1"
-		info.keybindDescription = "Keybind for open group Interact Menu" -- Description that'll be displayed for all the bindings keys
+		info.keybindLabel =  getLang("setting_open_menu") -- Label of each key, will be followed by the key number, e.g. "Key 1"
+		info.keybindDescription =  getLang("setting_open_menu_desc") -- Description that'll be displayed for all the bindings keys
 		info.supportsHold = true -- Whether to show the hold switches for this bindings keys
-		info.isHoldLabel = "Hold the key ?"
-		info.isHoldDescription = "Key need to be holded for trigger the menu"
-		info.id = "cyberscriptOpenGroup" -- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
+		info.isHoldLabel = getLang("setting_hold_key")
+		info.isHoldDescription = getLang("setting_hold_key_desc")
+		info.id ="cyberscriptOpenGroup"-- Unique id for the binding, used for the savedOptions/defaultOptions tables and the saveCallback. See above for more details
 		info.maxKeys = 3 -- Maximum amount of keys for this binding, shows a slider if it is bigger than 1
-		info.maxKeysLabel = "Max keys that can be bounded for trigger the menu" -- Label for the binding's key amount slider
-		info.maxKeysDescription = "Changes how many keys this hotkey has, all of them have to pressed for the hotkey to be activated" -- Description for the binding's key amount slider
+		info.maxKeysLabel = getLang("setting_max_key") -- Label for the binding's key amount slider
+		info.maxKeysDescription = getLang("setting_max_key_desc")
 		info.nativeSettingsPath = "/CSKEYBIND/gameplay" -- Native settings path for where to add the bindigs options, if it is a multikey binding it has to be a seperate subcategory
 		 -- Table containing the default options
 		local defaultinput = {}

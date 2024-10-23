@@ -582,50 +582,37 @@ end
 
 
 function setVariable(tag,key,score)
-	if(type(score) == "string") then
-		if(currentSave.Variable[tag] == nil) then
+	if(currentSave.Variable[tag] == nil) then
 		
 		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = ""
 		
-		end
-		
-		currentSave.Variable[tag][key] = score
 	end
+	currentSave.Variable[tag][key] = {}
+	currentSave.Variable[tag][key] = score
+	-- if(type(score) == "string") then
+		
+		
+	-- 	currentSave.Variable[tag][key] = score
+	-- end
 	
-	if(type(score) == "number") then
+	-- if(type(score) == "number") then
 	
-		if(currentSave.Variable[tag] == nil) then
 		
 		
-		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = 0
-		
-		end 
-		
-		currentSave.Variable[tag][key] = score
+	-- 	currentSave.Variable[tag][key] = score
 
-	end
+	-- end
 	
-	if(type(score) == "boolean") then
-		if(currentSave.Variable[tag] == nil) then
+	-- if(type(score) == "boolean") then
 		
-		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = true
-		end
 		
-		currentSave.Variable[tag][key] = score
-	end
+	-- 	currentSave.Variable[tag][key] = score
+	-- end
 	
-	if(type(score) ~= "string" and type(score) ~= "number" and type(score) ~= "boolean" ) then
-		if(currentSave.Variable[tag] == nil) then
+	-- if(type(score) ~= "string" and type(score) ~= "number" and type(score) ~= "boolean" ) then
 		
-		currentSave.Variable[tag] = {}
-		currentSave.Variable[tag][key] = {}
-		end
-		
-		currentSave.Variable[tag][key] = score
-	end
+	-- 	currentSave.Variable[tag][key] = score
+	-- end
 end
 
 function getVariableKey(tag,key)
