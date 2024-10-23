@@ -9829,26 +9829,28 @@ function executeAction(action,tag,parent,index,source,executortag)
 				if(action.name == "set_timedilationforplayer") then
 					TimeDilationHelper.SetTimeDilationOnPlayer(Game.GetPlayer(), "see_engine", action.value, 99999, "", "");
 				end
+
+				if(action.name == "unset_timedilationforplayer") then
+					TimeDilationHelper.UnSetTimeDilationOnPlayer(Game.GetPlayer(),"see_engine");
+				end
 				
 				if(action.name == "ignore_timedilatationforplayer") then
 					Game.GetTimeSystem():SetIgnoreTimeDilationOnLocalPlayerZero(action.value)  
 				end
 				
-				if(action.name == "unset_timedilation_for_entity") then
-					local obj = getEntityFromManager(action.tag)
-					if(obj ~= nil ) then
-						local enti = Game.FindEntityByID(obj.id)
-						
-						if enti ~= nil then
-							TimeDilationHelper.UnsetIndividualTimeDilation(enti, "");
-						end
-					end
-				end
+				
 				
 				if(action.name == "set_timedilation") then
-					Game.GetTimeSystem():SetTimeDilation("cyberscript", action.value)
+					
 					Game.GetTimeSystem():SetTimeDilation("cyberscript", action.value);
 				end
+				if(action.name == "unset_timedilation") then
+					
+					Game.GetTimeSystem():UnsetTimeDilation("cyberscript");
+					Game.GetTimeSystem():SetIgnoreTimeDilationOnLocalPlayerZero(false)  
+				end
+
+
 				if(action.name == "set_timedilation_for_entity") then
 					
 					local obj = getEntityFromManager(action.tag)
@@ -9862,6 +9864,21 @@ function executeAction(action,tag,parent,index,source,executortag)
 						end
 					end
 				end
+				if(action.name == "unset_timedilation_for_entity") then
+					
+					local obj = getEntityFromManager(action.tag)
+					if(obj ~= nil ) then
+						local enti = Game.FindEntityByID(obj.id)
+						
+						if enti ~= nil then
+							
+							TimeDilationHelper.UnsetIndividualTimeDilation(enti);
+							
+						end
+					end
+				end
+
+
 				if(action.name == "change_camera_position") then
 					local fppComp = Game.GetPlayer():GetFPPCameraComponent()
 					fppComp:SetLocalPosition(Vector4:new(action.x, action.y, action.z, 1.0))

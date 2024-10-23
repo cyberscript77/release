@@ -4233,6 +4233,21 @@ return {
 		["notify"] = true
 
 	},
+
+	["unset_timedilation"] = {
+		["helper"] = "This action will unset the time dilatation",
+		["helperTitle"] = "Game : Unset Time Dilatation",
+		["name"] = "unset_timedilation"
+	},
+
+	["unset_timedilationforplayer"] = {
+	
+		["name"] = "unset_timedilationforplayer",
+		["helperTitle"] = "Game : Unset Time Dilatation for Player",
+		["helper"] = "This action will unset current time dilatation only for player",
+	},
+
+	
 	
 
 	
