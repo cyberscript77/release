@@ -5029,13 +5029,13 @@ function refreshModVariable(active)
 		setVariable("player_rotation","yaw",ftos(curRot.yaw))
 		setVariable("player_rotation","pitch",ftos(curRot.pitch))
 		setVariable("player_rotation","roll",ftos(curRot.roll))
-		
-		
-		setVariable("game_time","day",GetSingleton('GameTime'):Days(gameTime))
-		setVariable("game_time","hour",GetSingleton('GameTime'):Hours(gameTime))
-		setVariable("game_time","min",GetSingleton('GameTime'):Minutes(gameTime))
-		setVariable("game_time","sec",GetSingleton('GameTime'):Seconds(gameTime))
-		
+
+		--Fix by Zoliquen and Gilgamesh
+		setVariable("game_time","day", currentTime.day)
+		setVariable("game_time","hour", currentTime.hour)
+		setVariable("game_time","min", currentTime.min)
+		setVariable("game_time","sec", currentTime.sec)
+		--End of fix
 		
 		
 		setScore("player","money",getStackableItemAmount("Items.money"))
