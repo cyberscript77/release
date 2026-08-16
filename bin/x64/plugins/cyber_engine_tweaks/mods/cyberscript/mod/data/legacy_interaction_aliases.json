@@ -1,0 +1,10 @@
+{
+  "_comment": "B-14 fix: Backward-compatibility alias map for Cyberscript interactions and menu options. v5.1.4 renamed default interactions and menu options, which silently broke downstream mods that referenced the old names. This file maps old names -> new names so legacy JSON actions continue to fire. Cyberscript loads this file at cache-build time and registers each old tag as an alias pointing at the new tag's cached data. To add your own aliases, add entries below (old name as key, new name as value). Both names will then resolve to the same cached interaction.",
+  "_format": "key = old interaction tag (string), value = new interaction tag (string)",
+  "_example": {
+    "old_interaction_name": "new_interaction_name",
+    "open_phone": "open_phone_menu"
+  },
+  "aliases": {
+  }
+}

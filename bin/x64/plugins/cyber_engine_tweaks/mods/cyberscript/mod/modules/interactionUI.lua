@@ -108,38 +108,71 @@ function ui.update() -- Run ever frame to avoid unwanted changes
 end
 
 function ui.OnAction(action)
-	
+	-- B-02 fix: wrap the whole action handler in pcall so an exception in a
+	-- hub callback (or in Game.GetPlayer() / StatusEffectHelper when the
+	-- player is mid-death/revive) can NEVER leave `hubShown` stuck true.
+	-- A stuck `hubShown` swallows every subsequent menu navigation input
+	-- and is the root cause of the widespread "cannot navigate menus" bug
+	-- (GH #20 / #16). On exception we forcibly reset the interaction UI
+	-- state so the next frame is clean. Also moves the NoCombat cleanup
+	-- out of the callback-success branch so it always fires on ChoiceApply
+	-- (B-05 partial fix).
 	 if interactionUI.input or not interactionUI.hubShown then return end
-        local actionName = Game.NameToString(action:GetName(action))
-        local actionType = action:GetType(action).value
 
-        if actionName == 'ChoiceScrollUp' then
-            if actionType == 'BUTTON_PRESSED'then
-                interactionUI.selectedIndex = interactionUI.selectedIndex - 1
-                if interactionUI.selectedIndex < 0 then
-                    interactionUI.selectedIndex = #interactionUI.hub.choices - 1
-                end
-                interactionUI.input = true
-            end
-        elseif actionName == 'ChoiceScrollDown' then
-            if actionType == 'BUTTON_PRESSED'then
-                interactionUI.selectedIndex = interactionUI.selectedIndex + 1
-                if interactionUI.selectedIndex > #interactionUI.hub.choices - 1 then
-                    interactionUI.selectedIndex = 0
-                end
-                interactionUI.input = true
-            end
-        elseif actionName == 'ChoiceApply' then
-            if actionType == 'BUTTON_PRESSED'then
-                if interactionUI.callbacks[interactionUI.selectedIndex + 1] then
-                    interactionUI.callbacks[interactionUI.selectedIndex + 1]()
-					
-					StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
-                end
-                interactionUI.input = true
-            end
-        end
+	local ok, err = pcall(function()
+		local actionName = Game.NameToString(action:GetName(action))
+		local actionType = action:GetType(action).value
 
+		if actionName == 'ChoiceScrollUp' then
+			if actionType == 'BUTTON_PRESSED'then
+				interactionUI.selectedIndex = interactionUI.selectedIndex - 1
+				if interactionUI.selectedIndex < 0 then
+					interactionUI.selectedIndex = #interactionUI.hub.choices - 1
+				end
+				interactionUI.input = true
+			end
+		elseif actionName == 'ChoiceScrollDown' then
+			if actionType == 'BUTTON_PRESSED'then
+				interactionUI.selectedIndex = interactionUI.selectedIndex + 1
+				if interactionUI.selectedIndex > #interactionUI.hub.choices - 1 then
+					interactionUI.selectedIndex = 0
+				end
+				interactionUI.input = true
+			end
+		elseif actionName == 'ChoiceApply' then
+			if actionType == 'BUTTON_PRESSED'then
+				-- B-05 partial fix: clear NoCombat on EVERY ChoiceApply, not
+				-- only when a callback exists. Second Heart revive + open hub
+				-- would otherwise leave NoCombat stuck (GH #20 / NexusMods
+				-- "Inventory/map not working after using 'Second Heart'").
+				pcall(function()
+					if Game.GetPlayer() then
+						StatusEffectHelper.RemoveStatusEffect(Game.GetPlayer(), "GameplayRestriction.NoCombat")
+					end
+				end)
+				if interactionUI.callbacks[interactionUI.selectedIndex + 1] then
+					interactionUI.callbacks[interactionUI.selectedIndex + 1]()
+				end
+				interactionUI.input = true
+			end
+		end
+	end)
+
+	if not ok then
+		logme(1, "[Cyberscript] interactionUI.OnAction caught error: " .. tostring(err))
+		-- Force-reset so a thrown callback can never freeze the hub.
+		interactionUI.input = false
+		interactionUI.hubShown = false
+		-- Best-effort hide; ignore if the controller is gone.
+		pcall(function()
+			if interactionUI.hub and interactionUI.baseControler then
+				local data = DialogChoiceHubs.new()
+				interactionUI.baseControler:UpdateDialogsData(data)
+				interactionUI.baseControler:OnInteractionsChanged()
+				interactionUI.baseControler:UpdateListBlackboard()
+			end
+		end)
+	end
 end
 
 function ui.OnDialogsSelectIndex( idx, wrapped)

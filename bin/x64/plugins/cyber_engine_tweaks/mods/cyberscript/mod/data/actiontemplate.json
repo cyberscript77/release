@@ -629,9 +629,15 @@
   },
   "vehicle_add_to_traffic": {
     "helperTitle": "Vehicle : Add to Traffic",
-    "helper": "This action will change vehicle as traffic",
+    "helper": "This action will change vehicle as traffic. Optional: min_speed, max_speed, cleartraffic, x/y/z (or position). Defaults: min_speed=1, max_speed=5, cleartraffic=true, position=0,0,0.",
     "tag": "myvehiculetag",
-    "name": "vehicle_add_to_traffic"
+    "name": "vehicle_add_to_traffic",
+    "minspeed": 1,
+    "maxspeed": 5,
+    "cleartraffic": true,
+    "x": 0,
+    "y": 0,
+    "z": 0
   },
   "getSalaryFromCurrentRent": {
     "helperTitle": "House : Get Salary from current place",
